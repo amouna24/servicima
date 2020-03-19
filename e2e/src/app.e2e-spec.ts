@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display WIDIGITAL', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('WIDIGITAL !');
+    expect(page.getTitleText()).toEqual('WIDIGITAL local !');
   });
 
   afterEach(async () => {

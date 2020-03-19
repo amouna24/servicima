@@ -105,13 +105,13 @@ test:
   script:
     - tar -xzf install.tgz ./node_modules
     - npm run build:ci:${ENV}
-    - tar czf build.tgz ./dist/${GCP_REPOSITORY}
+    - tar czf build-${ENV}.tgz ./dist/${GCP_REPOSITORY}
   environment:
     name: $ENV
   artifacts:
     paths:
       - install.tgz
-      - build.tgz
+      - build-${ENV}.tgz
     expire_in: 1 month
   except:
     - schedules
@@ -135,6 +135,7 @@ build_prod:
   <<: *prod
   <<: *build
   <<: *master
+  <<: *manual
 
 
 
@@ -147,7 +148,7 @@ build_prod:
     - gcloud --quiet components update
     - gcloud version
     - gcloud auth activate-service-account --key-file ./deploy/widigital-ci.json
-    - tar -xzf build.tgz ./dist && rm build.tgz
+    - tar -xzf build-${ENV}.tgz ./dist && rm build-${ENV}.tgz
     - cd ./dist/${GCP_REPOSITORY}/ && gsutil cp -r ./ gs://${GCP_REPOSITORY}-${ENV}.${DOMAIN}
   environment:
     name: $ENV
@@ -165,12 +166,16 @@ deploy_branches:
   <<: *deploy
   <<: *branches
   <<: *manual
+  dependencies:
+    - build_branches
 
 deploy_develop:
   <<: *version_snapshot
   <<: *dev
   <<: *deploy
   <<: *develop
+  dependencies:
+    - build_develop
 
 deploy_valid:
   <<: *version
@@ -178,6 +183,8 @@ deploy_valid:
   <<: *deploy
   <<: *master
   <<: *manual
+  dependencies:
+    - build_valid
 
 deploy_prod:
   <<: *version
@@ -185,6 +192,8 @@ deploy_prod:
   <<: *deploy
   <<: *master
   <<: *manual
+  dependencies:
+    - build_prod
 
 
 # Test e2e
