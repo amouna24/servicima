@@ -90,7 +90,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "sourceMap": true,
+            "codeCoverage": true
           }
         },
         "lint": {
@@ -119,6 +121,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "angular-bootstrap"
+    }
+  },
+  "defaultProject": "angular-bootstrap",
+  "cli": {
+    "analytics": "103d4cf6-775d-461e-aefa-755ef3b5412e"
+  }
 }
