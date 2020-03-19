@@ -1,10 +1,21 @@
 {
   "name": "angular-bootstrap",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/widigital-group/angular-bootstrap"
+  },
+  "homepage": "https://gitlab.com/widigital-group/angular-bootstrap",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ci:prod": "ng build --prod",
+    "build:ci:valid": "ng build --prod --configuration=valid",
+    "build:ci:dev": "ng build --prod --configuration=dev",
     "test": "ng lint && ng test",
     "test:ci": "ng lint && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",

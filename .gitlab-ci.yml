@@ -1,0 +1,198 @@
+stages:
+  - install
+  - test
+  - build
+  - deploy
+  - e2e
+
+variables:
+  GCP_REPOSITORY: angular-bootstrap
+  GCP_PROJECT: widigital-ci
+  DOMAIN: servicima.com
+  IMAGE_NAME: weboaks/node-karma-protractor-chrome:alpine
+  IMAGE_GCLOUD: google/cloud-sdk:alpine
+
+  # Environments
+
+.dev: &dev
+  variables:
+    ENV: dev
+
+.valid: &valid
+  variables:
+    ENV: valid
+
+.prod: &prod
+  variables:
+    ENV: prod
+
+# Branches
+
+.develop: &develop
+  only:
+    - develop
+
+.branches: &branches
+  except:
+    - develop
+    - master
+
+.master: &master
+  only:
+    - master
+
+# Misc
+
+.manual: &manual
+  when: manual
+
+# Set version project
+
+.version_branch: &version_branch
+  before_script:
+    - apk update && apk add git
+    - apk update && apk add jq
+    - COMMIT_UPPER_CASE=`git log -1 --pretty=%B | sed 's/ //g; s/\[//g; s/\]//g; s/-//g; y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+    - VERSION=`cat ./package.json | jq -r .version`
+    - VERSION=${VERSION}-${COMMIT_UPPER_CASE}-SNAPSHOT
+    - echo ${VERSION}
+
+.version_snapshot: &version_snapshot
+  before_script:
+    - apk update && apk add jq
+    - VERSION=`cat ./package.json | jq -r .version`
+    - VERSION=${VERSION}-SNAPSHOT
+    - echo ${VERSION}
+
+.version:  &version
+  before_script:
+    - apk update && apk add jq
+    - VERSION=`cat ./package.json | jq -r .version`
+    - echo ${VERSION}
+# Stages
+
+install:
+  stage: install
+  image: ${IMAGE_NAME}
+  script:
+    - npm install
+    - tar czf install.tgz ./node_modules
+  artifacts:
+    paths:
+      - install.tgz
+    expire_in: 1 month
+
+# Test
+test:
+  stage: test
+  image: ${IMAGE_NAME}
+  dependencies:
+    - install
+  script:
+    - tar -xzf install.tgz ./node_modules
+    - npm run test:ci
+  artifacts:
+    paths:
+      - install.tgz
+    expire_in: 1 month
+
+# Build
+.build: &build
+  image: ${IMAGE_NAME}
+  stage: build
+  dependencies:
+    - test
+  script:
+    - tar -xzf install.tgz ./node_modules
+    - npm run build:ci:${ENV}
+    - tar czf build.tgz ./dist/${GCP_REPOSITORY}
+  environment:
+    name: $ENV
+  artifacts:
+    paths:
+      - install.tgz
+      - build.tgz
+    expire_in: 1 month
+  except:
+    - schedules
+
+build_branches:
+  <<: *dev
+  <<: *build
+  <<: *branches
+
+build_develop:
+  <<: *dev
+  <<: *build
+  <<: *develop
+
+build_valid:
+  <<: *valid
+  <<: *build
+  <<: *master
+
+build_prod:
+  <<: *prod
+  <<: *build
+  <<: *master
+
+
+
+# Deploy
+.deploy: &deploy
+  image: ${IMAGE_GCLOUD}
+  stage: deploy
+  script:
+    - sed -i -e "s/KEY1_GITLAB_CI/${KEY1}/g" ./deploy/widigital-ci.json
+    - gcloud --quiet components update
+    - gcloud version
+    - gcloud auth activate-service-account --key-file ./deploy/widigital-ci.json
+    - tar -xzf build.tgz ./dist && rm build.tgz
+    - cd ./dist/${GCP_REPOSITORY}/ && gsutil cp -r ./ gs://${GCP_REPOSITORY}-${ENV}.${DOMAIN}
+  environment:
+    name: $ENV
+  except:
+    - schedules
+  artifacts:
+    paths:
+      - install.tgz
+    expire_in: 1 month
+
+
+deploy_branches:
+  <<: *version_branch
+  <<: *dev
+  <<: *deploy
+  <<: *branches
+  <<: *manual
+
+deploy_develop:
+  <<: *version_snapshot
+  <<: *dev
+  <<: *deploy
+  <<: *develop
+
+deploy_valid:
+  <<: *version
+  <<: *valid
+  <<: *deploy
+  <<: *master
+  <<: *manual
+
+deploy_prod:
+  <<: *version
+  <<: *prod
+  <<: *deploy
+  <<: *master
+  <<: *manual
+
+
+# Test e2e
+#e2e:
+#  <<: *manual
+#  stage: e2e
+#  image: ${IMAGE_NAME}
+#  script:
+#    - tar -xzf install.tgz ./node_modules && rm install.tgz
+#    - npm run e2e:ci
+

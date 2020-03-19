@@ -8,7 +8,7 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display WIDIGITAL', () => {
     page.navigateTo();
     expect(page.getTitleText()).toEqual('WIDIGITAL !');
   });

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "widigital-ci",
+  "private_key_id": "c0740d6edbd0da619730813d38438d920b7ec913",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nKEY1_GITLAB_CI\nyCiX96U1jmARpYOT8In+/VHw5aHeus3aLDyT1En4yndet0XIqfkZbMSn7YVWCz7c\ndWIHv3AaNkh1oBf6JNdcIb0wZDMHQFRNdKAlfpPZsXbYsoNsR2d76TgVnlL/gAkD\nxtGrnkCe39PAOTKIfEAHvbCxqA09z10b5NK874o/3eYGgf2aasUvkLRe9Tr8hl0/\nRdUmPIqmLWTnhj3/Vp++40HQfmGk3i7dp+wNXDm7NuqVEhRWw43fVyy6XO9mVbml\nEZG0HQxxE1MDdnDWxKzpaKgDxx7qAmGp6nct6SbK+c9N0c4ji7BBTQ5xIXS1tCJK\nx34EhvaXAgMBAAECggEAQo1uaLuJqntawU7c5Vpj41ifBFjZkPo0iMNOpOtDYZVZ\nPIYAr35U/bcfjkYUZb3l5q8BsVe0vZj2fbISEnyL7FNt2KUnSOgpo+8AhQJHnbOd\na/L7vSKgBhEr1rJaby8hLhByxKAu7+Vo5bayOg/rzk9lemc+9XQrEzsAicydbc1G\ndyjoY+dBesRDeGxoZUVy/tb8+EWcAovEtfSu0oQZuigm7JkXmqOnA76sKcK8LRt7\nKJWkhQdXMbSSS+rzZb1C6K9Vj3efIaIoZdeho+j6yuCHCgK1wCytLBTKR+nm7LzO\nLsQIIXwxTo+59JEK6cH+UxKYKSO1/zKSWGIQyUp8AQKBgQD2opjVOD9zltUs5aCp\nGygpgdahXYKD701yAJqj1zEWULj8x5+qrBzHAMG8vq5XGk2ujVMBDVz+meI4MN7h\nvVAvsAEC6Nyf3Mk8/pB5enO/KCViPFJcwKCP2UBdQrnYVUtXslTfVWrcsMHaNGex\nc7Lf3QNxn5TEW+s+Bm2ottQPFwKBgQDe7hXkPvTmLYZmk5hbYks6J+2o7IpPRzZO\nZ/Ku7Hr88/ZihKWG0s6GTtM2mu2QnolWdiOj620M7dn3UGsTVAJcWFpe4QRJXqwt\nfEypJemomoXxc6sDw2p827E2X8hciEOISIlaqbI9qdyvNWmDdw8Eqt5sAxEpiDez\n+XeElWkEgQKBgDLyj6OsBN95zvuBS9ji9T7txUp8KJPcgSEFouwpbchwUGZXTlJR\nT3iEXYEB2r2/f0CJjRXwjr9BRovY/JGhK8lOEEdrlvenAiMJawrNEs/wGRjb4R+r\n4v8UH8mkGQPpSrEI86NW38ZK9SCAJtNvVQoNe8Ki9nZBjqy3Yzuw2MltAoGAGj5G\n33a11772Om8XmXJpzq/Sn3cxFQIaF4LPI9583/hMQe7BmayJWXBAFwaH/uVa343K\nxko5rTL23NFfuYfDO2G/SboNiiGV/UjLsYHgDtQZ/oGSWUAQ8h/erbr62EHGSW3Y\nlY6yh+XOL+YGxM4oO3Ft+6MkyxHZFNvCQR5hnYECgYEA21ALMlAwGvnMLb3wUO1y\nxZXFGB3suNeRKNtQ46YiHNAGpkjOpKbPRNIIwaF93HEiEiKJXPKNnVbtE33NXq/9\nLRnrnng2/mBLNkVc+r3MZd4EeGMHEgtY31nqq1p3FCJsvY5c37/gILApwFqiyiFA\nyxcD09ra274QccRZ5PS4zd0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gitlab-ci@widigital-ci.iam.gserviceaccount.com",
+  "client_id": "105448263737349353091",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gitlab-ci%40widigital-ci.iam.gserviceaccount.com"
+}
