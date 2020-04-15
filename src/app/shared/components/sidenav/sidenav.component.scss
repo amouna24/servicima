@@ -1,0 +1,279 @@
+.more-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.mat-icon-button {
+    background-image: linear-gradient(to top, #4fbd02, #5fc604, #6ece06, #7cd709, #8bdf0d);
+    background-size: cover;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 10px;
+}
+
+.dashboard-card-content {
+    text-align: center;
+}
+
+.conteneurtop {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 85%;
+    align-items: center;
+}
+.svcmaIcon {
+    color: #ffffff;
+}
+.menuList {
+    background-color: rgb(51, 51, 51);
+    margin: 1px;
+}
+.menuList:hover {
+    background-color: rgb(242, 187, 19);
+}
+.navicon {
+    box-shadow: rgba(9, 30, 66, 0.08) 0 0 0 1px, rgba(9, 30, 66, 0.08) 0 2px 4px 1px;
+    color: rgb(107, 119, 140);
+    cursor: pointer;
+    height: 24px;
+    opacity: 1;
+    position: absolute;
+    top: 32px;
+    transform: translate(-50%);
+    width: 24px;
+    background: 0 center white;
+    border-width: 0;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 50%;
+    outline: 0;
+    padding: 0;
+    transition: background-color 100ms linear 0s, color 100ms linear 0s, opacity 300ms cubic-bezier(0.2, 0, 0, 1) 0s,
+        transform 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
+}
+
+.WHQjx {
+    color: currentcolor;
+    display: inline-block;
+    fill: rgb(255, 255, 255);
+    flex-shrink: 0;
+    line-height: 1;
+}
+.conteneurbottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    bottom: 0;
+}
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.itemlist {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.14286;
+    color: rgb(222, 235, 255);
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.home {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.14286;
+    color: rgb(37, 37, 37);
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.searchField {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.14286;
+    color: rgb(222, 235, 255);
+    flex: 1 1 auto;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+.example-is-mobile .example-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+h1.example-app-name {
+    margin-left: 8px;
+}
+
+.example-sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+           causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+           `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.col:last-child {
+    margin-right: 0;
+}
+
+.full-width {
+    width: 100%;
+}
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 81%;
+    width: 99%;
+
+    .menu-list {
+        flex: 1;
+        justify-content: normal;
+    }
+
+    .icon {
+        padding: 0 10px 0 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .label {
+        margin: 0;
+    }
+
+    .active-list-item {
+        span , .icon {
+            color: #ffd800 ;
+        }
+    }
+}
+
+.menuColor {
+    margin: 1px;
+    border-bottom: 0.02px inset #d3d3d340;
+}
+
+.menuColor:hover {
+    color: #ffd800;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: stretch;
+    align-items: stretch;
+    height: 100%;
+    width: 99%;
+    text-transform: uppercase;
+}
+
+.flex-item:nth-child(1) {
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+}
+
+.flex-item:nth-child(2) {
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+}
+
+.example-header-image {
+    /*background-image: url('../../../assets/img/aminesboui.jpg');*/
+    background-size: cover;
+}
+.companyTitle {
+    font-size: 28px;
+    font-style: oblique;
+    font-family: Montserrat;
+    margin-left: -6px;
+}
+.companyTitle1 {
+    font-size: 13px;
+    font-style: oblique;
+    font-family: Montserrat;
+    font-weight: bold;
+}
+.companyTitle2 {
+    font-size: 13px;
+    font-style: oblique;
+    font-family: Montserrat;
+    font-weight: bold;
+}
+.example-header-not {
+    background-size: cover;
+}
+
+/* NEW */
+.SERVICIMA {
+    width: 113px;
+    height: 27px;
+    margin: 0 auto;
+    object-fit: contain;
+    font-family: Montserrat;
+    font-size: 36px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.58;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+.Ellipse-1 {
+    width: 4px;
+    height: 4px;
+    margin-left: 125px;
+    /* margin: 0 auto; */
+    -o-object-fit: contain;
+    object-fit: contain;
+    background-color: #ffd800;
+}
+
+.SPAN {
+    -o-object-fit: contain;
+    object-fit: contain;
+    font-family: Montserrat;
+    font-size: 11.5px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+}
+.span:hover {
+    background-color: transparent;
+    color: yellow;
+}

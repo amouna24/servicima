@@ -1,0 +1,62 @@
+<button mat-icon-button (click)="toggleSideNav()" [@buttonAnimation]="sidebarState">
+    <mat-icon style="color: #ffffff;">{{icontoShow}}</mat-icon>
+</button>
+<div class="sidebar-menu" [@onSideNavChange]="sidebarState">
+    <mat-nav-list class="menu-list">
+        <mat-list-item class="itemlist" [@nameAnimation]="sidebarState">
+            <div class="col" style="margin-left: 5px">
+                <div class="row">
+                    <img src="assets/ellipse-1.png" srcset="assets/ellipse-1@2x.png 2x,
+               assets/ellipse-1@3x.png 3x" class="Ellipse-1" alt="">
+                </div>
+                <div class="row">
+                    <img src="assets/servicima.png" srcset="assets/servicima@2x.png 2x,
+               assets/servicima@3x.png 3x" class="SERVICIMA" alt="">
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-divider style="margin-top: 8px;
+          background-color: rgb(245, 245, 245);"></mat-divider>
+        <div class="flex-container">
+            <div class="flex-item">
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/manager/dashboard"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">dashboard</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">dashboard</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/application" title="Application"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">settings_applications</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">OUTSOURSING</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/mailmodels" title="Mailing"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">show_chart</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">BILLS</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">recent_actors</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">HUMAN RESSOURCES</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">folder_shared</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">CONTRACTS</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">settings</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">ADMINISTRATION</span>
+                </a>
+                <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
+                    class="menuColor wid-admin-font-Button">
+                    <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">event_note</mat-icon>
+                    <span class="label SPAN" [@labelAnimation]="sidebarState">TIMESHEET</span>
+                </a>
+            </div>
+            <div class="flex-item">
+            </div>
+        </div>
+    </mat-nav-list>
+</div>

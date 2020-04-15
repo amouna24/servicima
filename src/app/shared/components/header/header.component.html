@@ -1,0 +1,66 @@
+<mat-toolbar style="min-width:53px; background-color: rgb(255,255,255); border-bottom: 0.1px inset lightgray;">
+    <div class="flex-containerr">
+        <div class="flex-itemm row">
+            <div class="search">
+                <div id="search-container">
+                  <input type="text" required>
+                </div>
+              </div>
+        </div>
+        <div class="flex-itemm">
+            <div class="row">
+                <div class="col" style="width: 70px; border-right: 1px inset;">
+                    <div style=" cursor: pointer;" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
+                        <img src="assets/img/avatar.png" alt="" class="user-avatar">
+                    </div>
+                    <mat-menu #matUserMenu="matMenu" xPosition="before">
+                        <button mat-menu-item>MyAccount</button>
+                        <button mat-menu-item>Logout</button>
+                    </mat-menu>
+                </div>
+                <div class="col">
+                    <button mat-icon-button class=" example-header-not" [matMenuTriggerFor]="menu"
+                        aria-label="Toggle menu">
+                        <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
+                            notifications_none
+                        </mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu" xPosition="before">
+                        <button mat-menu-item>Notification one</button>
+                        <button mat-menu-item>Notification two</button>
+                    </mat-menu>
+                </div>
+                <div class="col">
+                    <button mat-icon-button class=" example-header-not" [matMenuTriggerFor]="message"
+                        aria-label="Toggle menu">
+                        <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
+                            message
+                        </mat-icon>
+                    </button>
+                    <mat-menu #message="matMenu" xPosition="before">
+                        <button mat-menu-item>Message One</button>
+                        <button mat-menu-item>Message Two</button>
+                    </mat-menu>
+                </div>
+                <div class="col" style="width: 70px; border-right: 1px inset;">
+                    <button mat-icon-button class=" example-header-not" [matMenuTriggerFor]="settings"
+                        aria-label="Toggle menu">
+                        <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
+                            settings
+                        </mat-icon>
+                    </button>
+                    <mat-menu #settings="matMenu" xPosition="before">
+                        <button mat-menu-item>Settings One</button>
+                        <button mat-menu-item>Settings Two</button>
+                    </mat-menu>
+                </div>
+                <div class="col">
+                    <button mat-icon-button class=" example-header-not">
+                        <mat-icon class="toolbar-icon">exit_to_app
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-toolbar>
