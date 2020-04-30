@@ -1,216 +1,117 @@
-.title {
-    flex: 1 1 auto;
-    text-align: center;
-}
-
+/* flex responsive */
 .row {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .col {
-    flex: 1;
-    margin-right: 20px;
+  flex: 1;
+  margin-right: 20px;
 }
 
 .col:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
-.flex-containerr {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-content: stretch;
-    align-items: stretch;
-    height: 67%;
-    width: 100%;
-}
-.connecteduser {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.14286;
-    color: rgb(222, 235, 255);
-    flex: 1 1 auto;
-    font-size: 11px;
-    overflow: hidden;
-}
-.flex-itemm:nth-child(1) {
-    order: 0;
-    flex: 0 1 auto;
-    align-self: auto;
+/* container */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: stretch;
+  align-items: stretch;
+  height: 67%;
+  width: 100%;
 }
 
-.flex-itemm:nth-child(2) {
-    order: 0;
-    flex: 0 1 auto;
-    align-self: auto;
+.flex-item:nth-child(1) {
+  order: 0;
+  flex: 0 1 auto;
+  align-self: auto;
 }
 
-.example-header-image {
-    /*background-image: url("./src/assets/aminesboui.jpg");*/
-    background-size: cover;
-}
-.example-header-not {
-    background-size: cover;
-}
-.conteneurtop {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 85%;
-    align-items: center;
-}
-.navicon {
-    box-shadow: rgba(9, 30, 66, 0.08) 0px 0px 0px 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
-    color: rgb(107, 119, 140);
-    cursor: pointer;
-    height: 24px;
-    opacity: 1;
-    position: absolute;
-    top: 32px;
-    transform: translate(-50%);
-    width: 24px;
-    background: 0px center white;
-    border-width: 0px;
-    border-style: initial;
-    border-color: initial;
-    border-image: initial;
-    border-radius: 50%;
-    outline: 0px;
-    padding: 0px;
-    transition: background-color 100ms linear 0s, color 100ms linear 0s, opacity 300ms cubic-bezier(0.2, 0, 0, 1) 0s,
-        transform 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
-}
-.navicon2 {
-    position: absolute;
-    left: -8px;
-    right: -12px;
-    bottom: -8px;
-    top: -8px;
-}
-.WHQjx {
-    color: currentcolor;
-    display: inline-block;
-    fill: rgb(255, 255, 255);
-    flex-shrink: 0;
-    line-height: 1;
-}
-.conteneurbottom {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    bottom: 0;
-}
-.example-container {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-.itemlist {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.14286;
-    color: rgb(222, 235, 255);
-    flex: 1 1 auto;
-    overflow: hidden;
+.flex-item:nth-child(2) {
+  order: 0;
+  flex: 0 1 auto;
+  align-self: auto;
 }
 
-.example-is-mobile .example-toolbar {
-    position: fixed;
-    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-    z-index: 2;
+/* extra-menu */
+.extra-menu {
+  background-size: cover;
 }
 
-h1.example-app-name {
-    margin-left: 8px;
-}
-
-.example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-         causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-    flex: 1;
-}
-
-.example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-         `<body>` to be our scrolling element for mobile layouts. */
-    flex: 1 0 auto;
-}
+/* Header Toolbar Icon */
 .toolbar-icon {
-    color: rgb(176, 177, 172);
-    font-size: 20px;
+  color: rgb(176, 177, 172);
+  font-size: 20px;
 }
+/* User Image */
 .user-avatar {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    margin-top: 4px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-top: 4px;
 }
-
+/* Search Bar */
 .search {
-    cursor: pointer;
-    padding: 0 20px;
+  cursor: pointer;
+  padding: 0 20px;
 }
 
 .search > div {
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
 }
 
 .search > div:after {
-    content: "";
-    background: #b0b1ac;
-    width: 2px;
-    height: 7px;
-    position: absolute;
-    top: 21px;
-    right: 0px;
-    transform: rotate(140deg);
+  content: "";
+  background: #b0b1ac;
+  width: 2px;
+  height: 7px;
+  position: absolute;
+  top: 21px;
+  right: 0px;
+  transform: rotate(140deg);
 }
 .search > div:focus-within::after {
-    top: 30px;
+  top: 30px;
 }
 
 .search > div::after > input:valid {
-    top: 30px;
+  top: 30px;
 }
 
 .search > div > input {
-    color: #b0b1ac;
-    cursor: pointer;
-    background: transparent;
-    width: 3px;
-    height: 3px;
-    padding: 3px;
-    border: solid 2px #b0b1ac;
-    outline: none;
-    border-radius: 32px;
-    transition: width 0.5s, height 0.2s;
+  color: #b0b1ac;
+  cursor: pointer;
+  background: transparent;
+  width: 3px;
+  height: 3px;
+  padding: 3px;
+  border: solid 2px #b0b1ac;
+  outline: none;
+  border-radius: 32px;
+  transition: width 0.5s, height 0.2s;
 }
 
 .search > div > input::placeholder {
-    color: #efefef;
-    opacity: 1;
+  color: #efefef;
+  opacity: 1;
 }
 
 .search > div > input::-ms-placeholder {
-    color: #efefef;
+  color: #efefef;
 }
 
 .search > div > input::-ms-input-placeholder {
-    color: #efefef;
+  color: #efefef;
 }
 
 .search > div > input:focus,
 .search > div > input:valid {
-    cursor: auto;
-    height: 25px;
-    width: 350px;
-    padding: 5px 15px;
+  cursor: auto;
+  height: 25px;
+  width: 350px;
+  padding: 5px 15px;
 }
