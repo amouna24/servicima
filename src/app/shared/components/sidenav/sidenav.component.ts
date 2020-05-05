@@ -4,8 +4,6 @@ import {
   iconAnimation,
   labelAnimation,
   nameAnimation,
-  notifAnimation,
-  notiffAnimation,
   buttonAnimation
 } from '../../animations/animations';
 import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
@@ -19,8 +17,6 @@ import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
     iconAnimation(),
     labelAnimation(),
     nameAnimation(),
-    notifAnimation(),
-    notiffAnimation(),
     buttonAnimation()
   ]
 })
