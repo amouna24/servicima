@@ -26,7 +26,7 @@ import { DOCUMENT } from '@angular/common';
   encapsulation: ViewEncapsulation.None
 })
 export class SpinnerComponent implements OnDestroy {
-  public isSpinnerVisible = true;
+  public isSpinnerVisible = false;
 
   @Input() public backgroundColor = 'rgba(0, 115, 170, 0.69)';
 

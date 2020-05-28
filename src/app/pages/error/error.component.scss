@@ -1,11 +1,11 @@
-@import 'src/assets/styles/variables.scss';
+@import "src/assets/styles/variables.scss";
 
-#notfound {
+#error {
     position: relative;
     height: 100vh;
 }
 
-#notfound .notfound {
+#error .error {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -14,21 +14,21 @@
     transform: translate(-50%, -50%);
 }
 
-.notfound {
+.error {
     max-width: 520px;
     width: 100%;
     line-height: 1.4;
     text-align: center;
 }
 
-.notfound .notfound-404 {
+.error .error-500 {
     position: relative;
     height: 200px;
     margin: 0px auto 20px;
     z-index: -1;
 }
 
-.notfound .notfound-404 h1 {
+.error .error-500 h1 {
     font-family: "Montserrat", sans-serif;
     font-size: 236px;
     font-weight: 200;
@@ -43,14 +43,14 @@
     transform: translate(-50%, -50%);
 }
 
-.notfound .notfound-404 h2 {
+.error .error-500 h2 {
     font-family: "Montserrat", sans-serif;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 400;
     text-transform: uppercase;
-    color: #211b19;
+    color: $dangerColor;
     background: #fff;
-    padding: 10px 5px;
+    padding: 10px 0;
     margin: auto;
     display: inline-block;
     position: absolute;
@@ -59,7 +59,7 @@
     right: 0;
 }
 
-.notfound a {
+.error a {
     font-family: "Montserrat", sans-serif;
     display: inline-block;
     font-weight: 700;
@@ -73,28 +73,28 @@
     transition: 0.2s all;
 }
 
-.notfound a:hover {
+.error a:hover {
     background-image: $primaryHorizontalGradient;
 }
 
 @media only screen and (max-width: 767px) {
-    .notfound .notfound-404 h1 {
+    .error .error-500 h1 {
         font-size: 148px;
     }
 }
 
 @media only screen and (max-width: 480px) {
-    .notfound .notfound-404 {
+    .error .error-500 {
         height: 148px;
         margin: 0px auto 10px;
     }
-    .notfound .notfound-404 h1 {
+    .error .error-500 h1 {
         font-size: 86px;
     }
-    .notfound .notfound-404 h2 {
+    .error .error-500 h2 {
         font-size: 16px;
     }
-    .notfound a {
+    .error a {
         padding: 7px 15px;
         font-size: 14px;
     }

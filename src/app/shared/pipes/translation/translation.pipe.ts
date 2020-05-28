@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TranslationService } from 'src/app/core/services/translation/translation.service';
+import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
 
 @Pipe({
   name: 'translation',
@@ -7,9 +8,10 @@ import { TranslationService } from 'src/app/core/services/translation/translatio
 })
 export class TranslationPipe implements PipeTransform {
 
-  constructor(private translationServ: TranslationService) {}
+  constructor(private translationServ: TranslationService, private locals: LocalStorageService) {}
 
   transform(key: any): any {
+    console.log('transform');
     return this.translationServ.data[key] || key;
   }
 

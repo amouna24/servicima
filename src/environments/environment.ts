@@ -5,6 +5,15 @@
 export const environment = {
   production: false,
   env: 'local',
+  translateApiURL: 'http://localhost:8080/translate',
+  languageApiURL: 'http://localhost:8090/language',
+  credentialsApiURL: 'http://localhost:8010/credentials',
+  companyApiURL: 'http://localhost:8012/company',
+  refDataApiUrl: 'http://localhost:8008/refdata',
+  refTypeApiUrl: 'http://localhost:8000/reftype',
+  applicationApiUrl: 'http://localhost:8007/application',
+  loadAuthStarterDataApiUrl: 'http://localhost:8015/loadauthstarterdata',
+  zipeCode: 'https://vicopo.selfbuild.fr/cherche',
 };
 
 /*
