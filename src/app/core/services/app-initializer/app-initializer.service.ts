@@ -24,7 +24,7 @@ export class AppInitializerService {
         return data;
       }).catch(
         err => {
-          this.router.navigate(['/notfound']);
+          this.router.navigate(['/error']);
         }
       );
 

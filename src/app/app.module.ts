@@ -11,6 +11,7 @@ import { LocalStorageService } from './core/services/storage/local-storage.servi
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpReqInterceptorService } from './core/services/http-req-interceptor/http-req-interceptor.service';
 import { AppInitializerService } from './core/services/app-initializer/app-initializer.service';
+import { ErrorComponent } from './pages/error/error.component';
 
 export function setupApp(
   translationServ: TranslationService, localStorageServ: LocalStorageService, appInitServ: AppInitializerService): Function {
@@ -25,6 +26,7 @@ export function setupApp(
   declarations: [
     AppComponent,
     NotFoundComponent,
+    ErrorComponent,
   ],
   imports: [
     CommonModule,
