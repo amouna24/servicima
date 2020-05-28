@@ -3,13 +3,14 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 
 @Injectable()
 export class HttpReqInterceptorService implements HttpInterceptor {
   updatedRequest: any;
   companyId: string;
-  constructor() { }
+  constructor(private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // clone http request

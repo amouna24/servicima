@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslationService } from '../translation/translation.service';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { environment } from '../../../../environments/environment';
 export class AppInitializerService {
 
   constructor(private translateServ: TranslationService, private http: HttpClient,
-    private localStorageServ: LocalStorageService) { }
+    private localStorageServ: LocalStorageService, private router: Router) { }
 
   initializeApp(): Promise<any> {
     const promise = this.http.get(environment.loadAuthStarterDataApiUrl)
@@ -21,7 +22,11 @@ export class AppInitializerService {
         this.localStorageServ.setItem('language', lang['LanguageKey']['language_code']);
         this.translateServ.use(lang['LanguageKey']['language_code']);
         return data;
-      });
+      }).catch(
+        err => {
+          this.router.navigate(['/notfound']);
+        }
+      );
 
     return promise;
   }
