@@ -8,15 +8,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { TranslationService } from './core/services/translation/translation.service';
 import { LocalStorageService } from './core/services/storage/local-storage.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpReqInterceptorService } from './core/services/http-req-interceptor/http-req-interceptor.service';
+import { AppInitializerService } from './core/services/app-initializer/app-initializer.service';
 
-export function setupTranslateFactory(
-  translationServ: TranslationService, localStorageServ: LocalStorageService): Function {
-  if (localStorageServ.getItem('lang') !== null) {
-    return () => translationServ.use(localStorageServ.getItem('lang'));
-  } else {
-    return () => translationServ.use('en');
-  }
+export function setupApp(
+  translationServ: TranslationService, localStorageServ: LocalStorageService, appInitServ: AppInitializerService): Function {
+    if (localStorageServ.getItem('data') !== null) {
+      return () => translationServ.use(translationServ.getUsedLanguage());
+    } else {
+      return () => appInitServ.initializeApp();
+    }
 }
 
 @NgModule({
@@ -35,8 +37,13 @@ export function setupTranslateFactory(
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: setupTranslateFactory,
-      deps: [TranslationService, LocalStorageService],
+      useFactory: setupApp,
+      deps: [TranslationService, LocalStorageService, AppInitializerService],
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpReqInterceptorService,
       multi: true
     },
   ],
