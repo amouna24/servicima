@@ -1,0 +1,70 @@
+.container {
+  width: 98%;
+}
+.mat-form-field {
+  font-size: 12px;
+  flex-grow: 1;
+}
+
+.wid-form {
+  display: flex;
+  padding-top: 6px;
+  margin-left: 1%;
+  width: 95%;
+}
+
+.title {
+  margin-left: 1%;
+  margin-top: 2%;
+  font-size: 20px;
+  font-weight: bold;
+}
+.container-form {
+  height: 53%;
+}
+
+.form-class-button {
+  width: 32%;
+  margin-left: 1%;
+}
+.form-class {
+  width: 100%;
+  margin-left: 1%;
+}
+.label {
+  margin-left: 2%;
+  width: 100%;
+  object-fit: contain;
+  font-family: Rubik, serif;
+  font-size: 15px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.6px;
+  text-align: left;
+  color: #b0bac9;
+}
+
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+[type="file"] + label {
+  border: none;
+  border-radius: 1px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: inherit;
+  outline: none;
+  padding: 0.5rem 30px;
+  vertical-align: middle;
+  &.btn-2 {
+    background-color: #8dde06;
+    border-radius: 50px;
+    overflow: hidden;
+  }
+}

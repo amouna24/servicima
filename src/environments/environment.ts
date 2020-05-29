@@ -14,6 +14,8 @@ export const environment = {
   applicationApiUrl: 'http://localhost:8007/application',
   loadAuthStarterDataApiUrl: 'http://localhost:8015/loadauthstarterdata',
   zipeCode: 'https://vicopo.selfbuild.fr/cherche',
+  getUserInfosApiUrl: 'http://localhost:8015/getuserinfos',
+  userApiUrl: 'http://localhost:8013/user',
 };
 
 /*
