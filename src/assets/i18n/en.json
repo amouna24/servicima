@@ -1,27 +1,3 @@
 {
-    "test": "test translation goes here",
-    "user.save": "save",
-    "user.changepwd": "change password",
-    "user.desactivate": "desactivate",
-    "user.returnlist": "return to list",
-    "user.profilepicture": "profile picture",
-    "user.downloadimage": "download image",
-    "user.firstname": "firstname",
-    "user.lastname": "lastname",
-    "user.gender": "gender",
-    "user.jobtitle": "jobtitle",
-    "user.login": "login",
-    "user.email": "email",
-    "user.personalphone": "personal phone",
-    "user.businessphone": "business phone",
-    "user.languages": "language",
-    "user.user_type": "profile type",
-    "user.homecompany": "home company",
-    "user.linkedinaccount": "linkedin account",
-    "user.twitteraccount": "twitter account",
-    "user.youtubeaccount": "youtube account",
-    "user.accessperm": "Manage the access rights of your users.",
-    "user.notification": "Manage the notification of your users.",
-    "user.notifications": " notification ",
-    "user.access": "access"
+    "test": "test translation goes here"
 }

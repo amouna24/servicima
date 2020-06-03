@@ -4,6 +4,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfileService } from '../../../core/services/profile/profile.service';
+import { ViewParam } from '../../model/view.model';
+import { RefdataModel } from '../../model/refdata.model';
+import { ReftypeModel } from '../../model/reftype.model';
+import { CompanyModel } from '../../model/company.model';
+import { ApplicationModel } from '../../model/application.model';
+import { LanguageModel } from '../../model/language.model';
+import { MessageModel } from '../../model/message.model';
+import { TranslateModel } from '../../model/translate.model';
+import { ModuleModel } from '../../model/module.model';
+import { UtilsService } from '../../../core/services/utils/utils.service'
+import { UserInfo } from '../../model/userInfo.model';
+
 @Component({
   selector: 'wid-user-profile',
   templateUrl: './user-profile.component.html',
@@ -12,118 +24,38 @@ import { ProfileService } from '../../../core/services/profile/profile.service';
 export class UserProfileComponent implements OnInit {
   localUrl;
   file: File;
+  dataFromLocalStorage: any;
   photochanged = false;
-  User = {
-    user: [
-      {
-        status: 'A',
-        _id: '5eb138165d222ed604a98942',
-        UserKey: {
-          application_id: '5eac544a92809d7cd5dae21f',
-          email_adress: 'walid.tenniche@widigital-group.com'
-        },
-        company_email: 'walid.tenniche@widigital-group.com',
-        user_type: 'COMPANY',
-        first_name: 'TENNICHE',
-        last_name: 'Walid',
-        gender_id: '5eac549c1cb2a867dbd0abd1',
-        prof_phone: '0659254399',
-        photo: '/myPhoto',
-        creation_date: '5-5-2020 10:55:34',
-        created_by: 'walid.tenniche@widigital-group.com',
-        update_date: '5-5-2020 10:55:34',
-        updated_by: 'walid.tenniche@widigital-group.com',
-        __v: 0
-      }
-    ],
-    credentials: [
-      {
-        status: 'ACTIVE',
-        _id: '5eb135d42e684ea7b4116288',
-        creation_date: '5-5-2020 10:45:56',
-        created_by: 'walid.tenniche@widigital-group.com',
-        update_date: '5-5-2020 10:45:56',
-        updated_by: 'walid.tenniche@widigital-group.com',
-        last_connection: '7-5-2020 12:9:17'
-      }
-    ],
-    company: [
-      {
-        status: 'A',
-        _id: '5eafff1b0f8dc4b3500c1c4c',
-        CompanyKey: {
-          application_id: '5eac544a92809d7cd5dae21f',
-          email_adress: 'walid.tenniche@widigital-group.com'
-        },
-        company_name: 'WIDIGITAL SAS',
-        registry_country: 'FR',
-        reg_nbr: 'ALL',
-        legal_form: 'ALL',
-        activity_code: 'ALL',
-        vat_nbr: 'ALL',
-        adress: 'ALL',
-        city: 'ALL',
-        zip_code: 'ALL',
-        country_id: 'ALL',
-        phone_nbr: 'ALL',
-        currency_id: 'ALL',
-        employee_nbr: 0,
-        creation_date: '4-5-2020 12:40:11',
-        update_date: '4-5-2020 12:40:11',
-        __v: 0
-      }
-    ],
-    staff: [
-      {
-        status: 'A',
-        _id: '5eb1b4af2de6ea2aec24693d',
-        StaffKey: {
-          application_id: '5eac544a92809d7cd5dae21f',
-          email_adress: 'walid.tenniche@widigital-group.com',
-          staff_type_id: '5eac549d1cb2a867dbd0abfb'
-        },
-        phone_nbr: '(+33) 1 86 95 46 66',
-        cellphone_nbr: '(+33) 6 59 25 43 99',
-        language_id: '5eac544ad4cb666637fe1353',
-        title: '5eac549c1cb2a867dbd0abe1',
-        twitter_url: 'www.twitter.com',
-        youtube_url: 'www.youtube.fr',
-        __v: 0
-      }
-    ]
-
-  }
-  profiletype = [
-    { value: 'manager', viewValue: 'manager' },
-    { value: 'user', viewValue: 'user' },
-    { value: 'collaborator', viewValue: 'collaborator' },
-  ];
-  Gendre = [
-    { value: 'femme', viewValue: 'femme' },
-    { value: 'homme', viewValue: 'homme' },
-  ];
-  ville = [
-    { value: 'tunis', viewValue: 'tunis' },
-    { value: 'paris', viewValue: 'paris' },
-    { value: 'london', viewValue: 'london' },
-  ];
-  languages = [
-    { value: 'FR', viewValue: 'francais' },
-    { value: 'EN', viewValue: 'anglais' },
-  ];
+  languageCode: string;
+  genderList: ViewParam[] = [];
+  refDataList: RefdataModel[] = [];
+  refTypeList: ReftypeModel[] = [];
+  companyList: CompanyModel[] = [];
+  applicationList: ApplicationModel[] = [];
+  languageList: LanguageModel[] = [];
+  messagesList: MessageModel[] = [];
+  translatesList: TranslateModel[] = [];
+  moduleList: ModuleModel[] = [];
+  userInfo = new UserInfo();
   form: FormGroup;
-  constructor(private sanitizer: DomSanitizer, private profileService: ProfileService,
+  constructor(private utilsService: UtilsService, private sanitizer: DomSanitizer, 
+    private profileService: ProfileService,
     private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    /* this.profileService.getUser().subscribe(
-        res => {
-          this.localUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64,` +
-         res[0].photo.data);
-         this.User = res[0];
-      }
-      ) */
     this.initForm();
+    // this.utilsService.getRefData('','','','');
+    this.profileService.getUser().subscribe(
+      res => {
+        /*this.localUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64,` +
+       res[0].photo.data);
+       this.User = res[0];*/
+        this.userInfo = res;
+        this.setForm();
+
+      }
+    )
+
   }
 
   initForm(): void {
@@ -141,27 +73,33 @@ export class UserProfileComponent implements OnInit {
       twitterAccount: ['', [Validators.required]],
       youtubeAccount: ['', [Validators.required]],
       homeCompany: ['', [Validators.required]],
-
-
     });
+  }
+  setForm(): void {
     this.form.setValue({
-
-      emailAdress: this.User.user[0].UserKey.email_adress,
-      companyEmail: this.User.user[0].company_email,
-      userType: this.User.user[0].user_type,
-      firstname: this.User.user[0].first_name,
-      lastname: this.User.user[0].last_name,
-      genderId: this.User.user[0].gender_id,
-      profPhone: this.User.user[0].prof_phone,
-      businessPhone: this.User.staff[0].cellphone_nbr,
-      languages: this.User.staff[0].language_id,
-      profileType: this.User.staff[0].StaffKey.staff_type_id,
-      twitterAccount: this.User.staff[0].twitter_url,
-      youtubeAccount: this.User.staff[0].youtube_url,
-      homeCompany: this.User.company[0].company_name,
+      emailAdress: this.userInfo.user[0].UserKey.email_adress,
+      companyEmail: this.userInfo.user[0].company_email,
+      userType: this.userInfo.user[0].user_type,
+      firstname: this.userInfo.user[0].first_name,
+      lastname: this.userInfo.user[0].last_name,
+      genderId: this.userInfo.user[0].gender_id,
+      profPhone: this.userInfo.user[0].prof_phone,
+      businessPhone: this.userInfo.user[0].cellphone_nbr,
+      languages: this.userInfo.user[0].language_id,
+      profileType: this.userInfo.staff[0].StaffKey.staff_type_id,
+      twitterAccount: this.userInfo.user[0].twitter_url,
+      youtubeAccount: this.userInfo.user[0].youtube_url,
+      homeCompany: this.userInfo.company[0].company_name,
     })
   }
 
+/**
+ * @description : get the refdata from local storage
+ */
+  getRefdata(){
+
+  }
+  
   /**
    * @description: Error control
    */
@@ -181,6 +119,11 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+
+  /**
+   * @description : get the new photo ready to update
+   * @param file : file
+   */
   enregister(file): void {
     const maxSizeFile = 5 * 1024 * 1024;
 
@@ -199,6 +142,10 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+
+  /**
+   * @description : update the user info
+   */
   update(): void {
 
     /* this.User.user[0].UserKey.email_adress = this.form.value.emailAdress;
@@ -238,6 +185,8 @@ export class UserProfileComponent implements OnInit {
     )
 
   }
+
+
 }
 
 

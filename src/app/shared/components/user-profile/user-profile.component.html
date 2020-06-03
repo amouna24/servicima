@@ -1,4 +1,5 @@
 <div class="container">
+    <div class="button-container">
     <div fxLayout="row" fxLayout.xs="column" class="form-class-button"
         [ngStyle.xs]="{ 'width': '100%','height': '100%'}" fxLayoutAlign.xs="center center"
         fxLayoutAlign="space-between">
@@ -12,6 +13,7 @@
         <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button>
             {{ 'user.returnlist' | translation}}</button>
     </div>
+</div>
     <div style="margin-top: 3%;" fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
         <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
             <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
@@ -68,7 +70,7 @@
 
 
                         <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                            <div fxFlex='50'>
+                          <!--  <div fxFlex='50'>
                                 <mat-label class="label">{{ 'user.gender' | translation}}</mat-label>
                                 <div class="wid-form">
                                     <mat-form-field appearance="outline">
@@ -79,7 +81,7 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                            </div>
+                            </div>-->
                             <div fxFlex='50'>
                                 <mat-label class="label">{{ 'user.jobtitle' | translation}}</mat-label>
                                 <div class="wid-form">
@@ -139,7 +141,7 @@
 
 
                         <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                            <div fxFlex='50'>
+                          <!--  <div fxFlex='50'>
                                 <mat-label class="label">{{ 'user.languages' | translation}}</mat-label>
                                 <div class="wid-form">
                                     <mat-form-field appearance="outline">
@@ -150,8 +152,8 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                            </div>
-                            <div fxFlex='50'>
+                            </div>-->
+                          <!--  <div fxFlex='50'>
                                 <mat-label class="label">{{ 'user.user_type' | translation}}</mat-label>
                                 <div class="wid-form">
                                     <mat-form-field appearance="outline">
@@ -163,7 +165,7 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
 
