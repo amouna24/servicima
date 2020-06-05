@@ -9,8 +9,8 @@ import { UserInfo } from 'src/app/shared/model/userInfo.model';
 export class ProfileService {
 
   constructor(private httpClient: HttpClient) { }
-  userToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoid2FsaWQudGVubmljaGVAd2lkaWdpdGFsLWdyb3VwLmNvbS'+
-  'IsImlhdCI6MTU5MTA5Mjk2MywiZXhwIjoxNTkxMTc5MzYzfQ.hIZQgg3HQzisfEW21mBKPwipLYp66y-HTSPU4cLvMV4'
+  userToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoid2FsaWQudGVubmljaGVAd2lkaWdpdGFsLWdyb3VwLmNvbSIsImlhd'+
+  'CI6MTU5MTI4ODc1MSwiZXhwIjoxNTkxMzc1MTUxfQ.w_lt9jUMHpmfwqp4mlLNqX0oLcYNO6-QMRUU_avXs50'
 
   getUser() {
 
@@ -23,8 +23,10 @@ export class ProfileService {
   }
 
   updateUser(User) {
+    const header = new HttpHeaders().set('Authorization', `Bearer ${ this.userToken }`
+    );
     return this.httpClient
-      .put(environment.userApiUrl, User);
+      .put(environment.userApiUrl, User ,{headers:header});
   }
 
 

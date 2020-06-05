@@ -70,10 +70,10 @@
 /********************************************************/
 .wid-Value-input {
   @include font(
-    14px,
+    18px,
     contain,
     $RegularFamily,
-    12px,
+    18px,
     normal,
     normal,
     normal,
@@ -104,6 +104,7 @@
     $lightColorAuth,
     auto
   );
+  
 }
 
 /********************************************************/
@@ -111,8 +112,8 @@
 /********************************************************/
 .wid-background-button {
   height: 38px;
-  width: auto;
-  background-image: linear-gradient(to top, $accentColorAuth, #51bd05);
+  width: 100%;
+  background-image: linear-gradient(to top, #86B8D1,  #2F7CA3 );
   color: $lightColorAuth;
   object-fit: contain;
 }

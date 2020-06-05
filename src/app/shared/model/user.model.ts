@@ -1,4 +1,5 @@
 import { UserKeyModel } from './userKey.model';
+import { photoModel } from './photo.model';
 export class UserModel {
   UserKey: UserKeyModel
   status: string;
@@ -18,4 +19,7 @@ export class UserModel {
   created_by: string;
   update_date: string;
   updated_by: string;
+  application_id: string;
+  email_adress: string;
+  photo : photoModel;
 }

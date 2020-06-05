@@ -1,40 +1,52 @@
 .container {
-  width: 98%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin-left: 3%;
+}
+
+#input {
+  font-size: 18px;
+}
+
+.form-width{
+  width: 100%;
+}
+.form-class-button {
+  margin-top: 3%;
+  width: 50%;
+  
 }
 .mat-form-field {
-  font-size: 12px;
+  font-size: 18px;
   flex-grow: 1;
 }
-.button-container{
-  width: 120%;
-}
-.wid-form {
+
+.wid-form-input {
   display: flex;
   padding-top: 6px;
-  margin-left: 1%;
-  width: 95%;
+  width: 90%;
+}
+.wid-form-input-email {
+  display: flex;
+  padding-top: 6px;
+  width: 65% ;
 }
 
 .title {
-  margin-left: 1%;
-  margin-top: 2%;
   font-size: 20px;
   font-weight: bold;
 }
 .container-form {
-  height: 53%;
+  height: 50%;
+  margin-top: 2%;
 }
 
-.form-class-button {
-  width: 32%;
-  margin-left: 1%;
-}
+
 .form-class {
-  width: 100%;
-  margin-left: 1%;
+  width:650px;
 }
 .label {
-  margin-left: 2%;
   width: 100%;
   object-fit: contain;
   font-family: Rubik, serif;
@@ -45,7 +57,7 @@
   line-height: normal;
   letter-spacing: 1.6px;
   text-align: left;
-  color: #b0bac9;
+  color: #2E384D;
 }
 
 [type="file"] {

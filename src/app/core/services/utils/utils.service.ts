@@ -17,8 +17,8 @@ export class UtilsService {
   languageList: LanguageModel[];
   refTypeList: ReftypeModel[];
   refDataList: RefdataModel[];
-  resList: ViewParam[];
-  refData: {};
+  resList : ViewParam[] = [];
+  refData: {} = {};
   constructor(private localStorage: LocalStorageService,
     private translationServ: TranslationService) {
     this.getData();
