@@ -1,7 +1,7 @@
-<div class="container" fxLayout="column" fxLayoutAlign="start">
-    <div class="button-container">
-        <div fxLayout="row" fxLayout.xs="column" class="form-class-button"
-            [ngStyle.xs]="{ 'width': '100%','height': '100%'}" fxLayoutAlign.xs="center center"
+<div class="container" fxLayout="column" fxLayoutAlign="start"  [ngStyle.xs]="{ 'width': '100%','height': '100%'}">
+    <div class="button-container" [ngStyle.xs]="{ 'width': '90%'}">
+        <div fxLayout="row" fxLayout.xs="column"
+             fxLayoutAlign.xs="center center"
             fxLayoutAlign="space-between" fxLayoutGap="1%">
             <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}"
                 mat-button (click)='update()'>{{ 'user.save' | translation}} </button>
@@ -22,21 +22,19 @@
                 <div fxFlex='20'>
                     <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center"
                         fxLayoutAlign.xs="center center">
-                        <mat-label class="label"> {{ 'user.profilepicture' | translation}} </mat-label>
-
-
-                        <div *ngIf='localUrl' fxLayoutAlign="center center">
-                            <img src='assets/img/Avatar Homme.png' style="margin-top: 5%;margin-bottom: 5%;" width='40%'
-                                height="40%" [ngStyle.xs]="{ 'width.px' : 200 , 'height.px' : 100}">
-                        </div>
+                     
                         <div *ngIf='!localUrl' fxLayoutAlign="center center">
+                            <img src='assets/img/Avatar Homme.png' style="margin-top: 5%;margin-bottom: 5%;" width='40%'
+                                height="40%" [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
+                        </div>
+                        <div *ngIf='localUrl' fxLayoutAlign="center center">
                             <img [src]="localUrl" *ngIf="localUrl" style="margin-top: 5%;margin-bottom: 5%;" width='70%'
                                 height="50%" [ngStyle.xs]="{ 'width.px' : 200 , 'height.px' : 100}">
                         </div>
 
 
 
-                        <mat-label>{{ 'user.download' | translation}}</mat-label>
+                     
                         <div fxLayoutAlign="center center">
                             <!-- <input (change)="enregister($event)" type="file" name="file" id="file" class="inputfile" name="image_uploads" accept=".jpg, .jpeg, .png"/>
 <label for="file">Browse...</label>

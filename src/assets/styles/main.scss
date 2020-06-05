@@ -104,15 +104,17 @@
     $lightColorAuth,
     auto
   );
-  
+padding-left: 1px !important ;
+padding-right: 1px !important ;
 }
+
 
 /********************************************************/
 /*  background button  */
 /********************************************************/
 .wid-background-button {
   height: 38px;
-  width: 100%;
+  width: 90%;
   background-image: linear-gradient(to top, #86B8D1,  #2F7CA3 );
   color: $lightColorAuth;
   object-fit: contain;

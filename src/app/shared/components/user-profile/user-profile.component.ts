@@ -34,7 +34,7 @@ export class UserProfileComponent implements OnInit {
     // this.utilsService.getRefData('','','','');
     this.profileService.getUser().subscribe(
       res => {
-        this.localUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${res.user[0].photo.data}`);
+        this.localUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${res.user[0].photo.data.data.buffer}`);
      console.log(this.localUrl ,'sdqsdqsdqsdqsd');
      
         this.userInfo = res;
