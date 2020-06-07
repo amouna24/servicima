@@ -15,13 +15,12 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "wid",
       "kebab-case"
     ],
     "import-blacklist": [
@@ -86,7 +85,8 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "no-string-literal": false
   },
   "rulesDirectory": [
     "codelyzer"
