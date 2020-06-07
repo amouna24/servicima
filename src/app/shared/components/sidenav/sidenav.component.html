@@ -19,38 +19,62 @@
           background-color: rgb(245, 245, 245);"></mat-divider>
     <div class="flex-container">
       <div class="flex-item">
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/manager/dashboard"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item routerLinkActive="active-list-item"
+           routerLink="/manager/dashboard"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'dashboard', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">dashboard</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">dashboard</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/application" title="Application"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/application"
+           title="Application"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'outsoursing', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">settings_applications</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">OUTSOURSING</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/mailmodels" title="Mailing"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/mailmodels"
+           title="Mailing"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'bills', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">show_chart</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">BILLS</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/messages"
+           title="Messages"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'HR', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">recent_actors</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">HUMAN RESSOURCES</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/messages"
+           title="Messages"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'contracts', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">folder_shared</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">CONTRACTS</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/messages" title="Messages"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'administration', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">settings</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">ADMINISTRATION</span>
         </a>
-        <a mat-list-item routerLinkActive="active-list-item" routerLink="/messages" title="Messages"
-           class="menuColor wid-admin-font-Button">
+        <a mat-list-item
+           routerLinkActive="active-list-item"
+           routerLink="/messages" title="Messages"
+           class="menuColor wid-admin-font-Button"
+           *canBeDisplayed="{feature: 'timesheet', license: '123456'}">
           <mat-icon class="icon svcmaIcon" [@iconAnimation]="sidebarState">event_note</mat-icon>
           <span class="label SPAN" [@labelAnimation]="sidebarState">TIMESHEET</span>
         </a>
