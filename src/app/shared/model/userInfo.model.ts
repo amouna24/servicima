@@ -3,7 +3,7 @@ import { UserRolesModel } from './userRoles.model';
 import { CredentialsModel } from './Credentials.model';
 import { CompanyModel } from './company.model';
 import { StaffModel } from './staff.model';
-export class UserInfo {
+export interface UserInfo {
     user: UserModel[];
     userroles: UserRolesModel[];
     credentials : CredentialsModel[];

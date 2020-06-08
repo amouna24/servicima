@@ -1,6 +1,6 @@
 import { RefdatakeyModel } from './refdataKey.model';
 
-export class RefdataModel {
+export interface RefdataModel {
   /* ID */
   _id: string;
   RefDataKey: RefdatakeyModel;

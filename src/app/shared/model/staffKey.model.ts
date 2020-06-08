@@ -1,4 +1,4 @@
-export class StaffKeyModel {
+export interface StaffKeyModel {
     application_id: string;
     email_adress: string;
     staff_type_id: string;

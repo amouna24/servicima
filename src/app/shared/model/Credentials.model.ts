@@ -1,6 +1,6 @@
 import { CredentialsKey } from './CredentialsKey.model';
 
-export class CredentialsModel {
+export interface CredentialsModel {
   CredentialsKey:CredentialsKey;
   password :String;
   activation_code :String;

@@ -1,6 +1,6 @@
 import { ModuleKey } from './moduleKey.model';
 
-export class ModuleModel {
+export interface ModuleModel {
     _id :string;
     ModuleKey: ModuleKey;
   module_desc: string;

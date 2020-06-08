@@ -1,5 +1,5 @@
 import { CompanyId } from './companyId.model';
-export class CompanyModel {
+export interface CompanyModel {
   /* ID */
   _id: string;
   CompanyKey: CompanyId;

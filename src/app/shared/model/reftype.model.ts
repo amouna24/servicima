@@ -1,6 +1,6 @@
 import { RefTypeKeyModel } from './refTypeKey.model';
 
-export class ReftypeModel {
+export interface ReftypeModel {
   _id: string;
   RefTypeKey: RefTypeKeyModel;
   ref_type_desc: string;

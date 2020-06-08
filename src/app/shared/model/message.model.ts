@@ -1,5 +1,5 @@
 import { MessageKeyModel } from './messageKey.model';
-export class MessageModel {
+export interface MessageModel {
 
   MessageKey: MessageKeyModel;
   status: string ;

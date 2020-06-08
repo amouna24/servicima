@@ -1,4 +1,4 @@
-export class ViewParam {
+export interface ViewParam {
     value: string;
     viewValue: string;
   }

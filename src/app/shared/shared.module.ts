@@ -8,11 +8,13 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { RouterModule } from '@angular/router';
 import { TranslationPipe } from './pipes/translation/translation.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { UserComponent } from './components/settings/user/user.component';
+import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
+import { UsersListComponent } from './components/settings/usersList/users-list/users-list.component';
 
 @NgModule({
-  declarations: [SidenavComponent, HeaderComponent, SpinnerComponent, TranslationPipe, UserProfileComponent, ChangePasswordComponent],
+  declarations: [SidenavComponent, HeaderComponent, SpinnerComponent, TranslationPipe,
+     UserComponent, ChangePwdComponent, UsersListComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,8 +29,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     SidenavComponent,
     SpinnerComponent,
     TranslationPipe,
-    UserProfileComponent,
-    ChangePasswordComponent
+    UserComponent,
+    ChangePwdComponent,
+    UsersListComponent
   ]
 })
 export class SharedModule { }

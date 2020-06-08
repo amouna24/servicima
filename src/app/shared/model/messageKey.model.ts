@@ -1,4 +1,4 @@
-export class MessageKeyModel {
+export interface MessageKeyModel {
 
   company_id: string;
   application_id: string;

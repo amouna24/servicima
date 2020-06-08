@@ -1,5 +1,5 @@
 import { CompanyLicenceKeyModel } from './companyLicenceKey.model';
-export class companyLicenceModel {
+export interface companyLicenceModel {
     CompanyLicenceKey: CompanyLicenceKeyModel;
     status: string;
     licence_start_date: string;

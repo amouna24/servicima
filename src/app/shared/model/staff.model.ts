@@ -1,6 +1,6 @@
 import { StaffKeyModel } from './staffKey.model';
 
-export class StaffModel {
+export interface StaffModel {
     StaffKey: StaffKeyModel;
     status: string;
 }

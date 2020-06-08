@@ -1,4 +1,4 @@
-export class photoModel {
+export interface PhotoModel {
     data: any;
-    contentTpye: string;
+    contentType: string;
 }

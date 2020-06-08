@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { ProfileService } from '../../../core/services/profile/profile.service';
-import { CredentialsService } from '../../../core/services/credentials/credentials.service';
+import { ProfileService } from '../../../../core/services/profile/profile.service';
+import { CredentialsService } from '../../../../core/services/credentials/credentials.service';
 
 
 /** Error when the parent is invalid */
@@ -14,11 +14,11 @@ class CrossFieldErrorMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'wid-change-password',
-  templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+  selector: 'wid-changepwd',
+  templateUrl: './changepwd.component.html',
+  styleUrls: ['./changepwd.component.scss']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePwdComponent implements OnInit {
   form: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
@@ -27,7 +27,7 @@ export class ChangePasswordComponent implements OnInit {
   errorMatcher = new CrossFieldErrorMatcher();
 
   constructor(private formBuilder: FormBuilder, private credentialsService: CredentialsService,
-    public dialogRef: MatDialogRef<ChangePasswordComponent>) { }
+    public dialogRef: MatDialogRef<ChangePwdComponent>) { }
 
   formControl = new FormControl('', [
     Validators.required,

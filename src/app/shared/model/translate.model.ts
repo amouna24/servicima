@@ -1,6 +1,6 @@
 import { TranslateKeyModel } from './translateKey.model';
 
-export class TranslateModel {
+export interface TranslateModel {
 
   TranslateKey: TranslateKeyModel;
   status: string ;

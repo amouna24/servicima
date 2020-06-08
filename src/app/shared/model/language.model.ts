@@ -1,6 +1,6 @@
 import { LanguageKeyModel } from './languageKey.model';
 
-export class LanguageModel {
+export interface LanguageModel {
 
   LanguageKey: LanguageKeyModel;
   language_desc: string;

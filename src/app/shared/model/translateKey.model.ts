@@ -1,4 +1,4 @@
-export class TranslateKeyModel {
+export interface TranslateKeyModel {
 
   company_id: string;
   application_id: string;

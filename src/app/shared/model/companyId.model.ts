@@ -1,3 +1,3 @@
-export class CompanyId {
+export interface CompanyId {
   email_adress: string;
 }

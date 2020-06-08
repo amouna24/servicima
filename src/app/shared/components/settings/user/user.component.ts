@@ -1,50 +1,68 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { ChangePwdComponent } from '../changepwd/changepwd.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ProfileService } from '../../../core/services/profile/profile.service';
-import { LanguageModel } from '../../model/language.model';
-import { UtilsService } from '../../../core/services/utils/utils.service'
-import { UserInfo } from '../../model/userInfo.model';
-import { UserModel } from '../../model/user.model';
+import { ProfileService } from '../../../../core/services/profile/profile.service';
+import { LanguageModel } from '../../../model/language.model';
+import { UtilsService } from '../../../../core/services/utils/utils.service'
+import { UserInfo } from '../../../model/userInfo.model';
+import { UserModel } from '../../../model/user.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'wid-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+  selector: 'wid-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserComponent implements OnInit {
   localUrl;
   file: File;
   dataFromLocalStorage: any;
   photochanged = false;
   languageList: LanguageModel[] = [];
-  userInfo = new UserInfo();
-  user = new UserModel();
+  userInfo: UserInfo;
+  user: UserModel;
   form: FormGroup;
   refData: any = {};
-
-  constructor(private utilsService: UtilsService, private sanitizer: DomSanitizer,
+  loadData: boolean;
+  constructor(private utilsService: UtilsService, private sanitizer: DomSanitizer, private route: ActivatedRoute,
     private profileService: ProfileService,
     private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
+
     this.initForm();
-    // this.utilsService.getRefData('','','','');
-    this.profileService.getUser().subscribe(
-      res => {
-        this.localUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64, ${res.user[0].photo.data.data.buffer}`);
-     console.log(this.localUrl ,'sdqsdqsdqsdqsd');
-     
-        this.userInfo = res;
-        this.setForm();
-        this.getRefdata();
+
+    this.route.queryParams.subscribe(
+      params => {
+        this.loadData = params.onLoad;
+        console.log(this.loadData);
+
       }
     )
 
-  }
+    if (this.loadData) {
+      this.profileService.getUser().subscribe(
+        res => {
+          this.userInfo = res;
 
+
+          this.localUrl = this.sanitizer.bypassSecurityTrustResourceUrl
+            (`data:${this.userInfo.user[0].photo.contentType};base64,${this.userInfo.user[0].photo.data}`);
+          console.log(this.localUrl, 'sdqsdqsdqsdqsd');
+
+
+
+          this.setForm();
+          this.getRefdata();
+        }
+      )
+
+    }
+  }
+  
   initForm(): void {
     this.form = this.formBuilder.group({
       emailAdress: ['', [Validators.required, Validators.email]],
@@ -105,7 +123,7 @@ export class UserProfileComponent implements OnInit {
    */
 
   onChangePassword(): void {
-    const dialogRef = this.dialog.open(ChangePasswordComponent, {
+    const dialogRef = this.dialog.open(ChangePwdComponent, {
       data: {}, disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -166,7 +184,7 @@ export class UserProfileComponent implements OnInit {
     formData.append('updated_by', this.userInfo.user[0].UserKey.email_adress);
 
     console.log(formData);
-    
+
 
     this.profileService.updateUser(formData).subscribe(res => console.log(res));
 

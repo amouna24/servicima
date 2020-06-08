@@ -1,5 +1,5 @@
 import { UserRolesKeyModel } from './userRolesKey.model';
-export class UserRolesModel {
+export interface UserRolesModel {
     userRolesKey: UserRolesKeyModel;
     granted_by: string;
     granted_date: string;
