@@ -7,15 +7,11 @@ const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'manager/dashboard'
+        redirectTo: 'home/manager/dashboard'
     },
     {
-        path: 'manager',
-        loadChildren: () => import('./manager/manager.module').then(m => m.ManagerModule)
-    },
-    {
-        path: 'collaborater',
-        loadChildren: () => import('./collaborater/collaborater.module').then(m => m.CollaboraterModule)
+        path: 'home',
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
     },
     {
         path: 'auth',

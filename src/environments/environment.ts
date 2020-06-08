@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   env: 'local',
-  translateApiURL: 'http://localhost:8080/translate',
+  translateApiURL: 'http://localhost:8006/translate',
   languageApiURL: 'http://localhost:8090/language',
   credentialsApiURL: 'http://localhost:8010/credentials',
   companyApiURL: 'http://localhost:8012/company',
