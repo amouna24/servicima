@@ -1,0 +1,296 @@
+<div class="container" fxLayout="column" fxLayoutAlign="start"  [ngStyle.xs]="{ 'width': '100%','height': '100%'}">
+    <div class="button-container" [ngStyle.xs]="{ 'width': '90%'}">
+        <div fxLayout="row" fxLayout.xs="column"
+             fxLayoutAlign.xs="center center"
+            fxLayoutAlign="space-between" fxLayoutGap="1%">
+            <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}"
+                mat-button (click)='update()'>{{ 'user.save' | translation}} </button>
+            <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}"
+                mat-button (click)="onChangePassword()">
+                {{ 'user.changepwd' | translation}}</button>
+            <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}"
+                mat-button>
+                {{ 'user.disactivate' | translation}}</button>
+           <!--  <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}"
+                mat-button>
+                {{ 'user.returnlist' | translation}}</button>-->
+        </div>
+    </div>
+    <div class="container-form" fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
+        <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
+            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                <div fxFlex='20' [ngStyle.xs]="{'width': '90%'}">
+                    <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="center center">
+                     
+                        <div *ngIf='!localUrl' fxLayoutAlign="center center">
+                            <img src='assets/img/Avatar Homme.png' style="margin-top: 5%;margin-bottom: 5%;" width='40%'
+                                height="40%" [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
+                        </div>
+                        <div *ngIf='localUrl' fxLayoutAlign="center center">
+                            <img [src]="localUrl" *ngIf="localUrl" style="margin-top: 5%;margin-bottom: 5%;" width='70%'
+                                height="50%" [ngStyle.xs]="{ 'width.px' : 200 , 'height.px' : 100}">
+                        </div>
+
+
+
+                     
+                        <div fxLayoutAlign="center center">
+                            <!-- <input (change)="enregister($event)" type="file" name="file" id="file" class="inputfile" name="image_uploads" accept=".jpg, .jpeg, .png"/>
+<label for="file">Browse...</label>
+                            -->
+
+
+                            <input (change)="enregister($event)" type="file" id="file" name="file"
+                                accept=".jpg, .jpeg, .png" />
+                            <label for="file" class="btn-2">{{ 'user.select' | translation}}...</label>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+                <div fxFlex='80'>
+                    <div class="form-width">
+                        <div fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" matInput autocomplete="off" required
+                                                [placeholder]="'user.firstname' | translation" formControlName="firstname"
+                                                [ngStyle.xs]="{'font-size': '15px'}">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required
+                                                [placeholder]=" 'user.lastname' | translation"
+                                                formControlName="lastname" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <mat-select formControlName="genderId" class="wid-Value-input"
+                                                [placeholder]=" 'user.gender' | translation">
+                                                <mat-option *ngFor="let gender of refData.GENDER"
+                                                    [value]="gender.value">
+                                                    {{gender.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <mat-select class="wid-Value-input" formControlName="jobTitle"
+                                                [placeholder]=" 'user.job' | translation">
+                                                <mat-option *ngFor="let jobtitle of refData.PROF_TITLES"
+                                                    [value]="jobtitle.value">
+                                                    {{jobtitle.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div [ngStyle.xs]="{'height': 'auto'}">
+                                <!-- <div fxFlex='50'>
+                                <mat-label class="label"> {{ 'user.login' | translation}} </mat-label>
+                                <div class="wid-form-input">
+                                    <mat-form-field >
+                                        <input class="wid-Value-input" matInput autocomplete="off" required
+                                            formControlName="emailAdress" [ngStyle.xs]="{'font-size': '15px'}">
+                                    </mat-form-field>
+                                </div>
+                            </div>-->
+                                <div>
+                                    <div class="wid-form-input-email">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required
+                                                [placeholder]=" 'user.email' | translation"
+                                                formControlName="emailAdress" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                          <input class="wid-Value-input" autocomplete="off" matInput required
+                                                [placeholder]=" 'user.directline' | translation"
+                                                formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+                                                            <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required
+                                            [placeholder]=" 'user.profcellphone' | translation"    formControlName="cellphoneNbr" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <mat-select class="wid-Value-input" formControlName="language"  [placeholder]=" 'user.lang' | translation">
+                                                <mat-option *ngFor="let languages of languageList"
+                                                    [value]="languages._id">
+                                                    {{languages.language_desc}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required [placeholder]=" 'user.profiletype' | translation"
+                                                formControlName="userType" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required  [placeholder]=" 'user.homecompany' | translation"
+                                                formControlName="homeCompany" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput required  [placeholder]=" 'user.linkedinacc' | translation"
+                                                formControlName="linkedinAccount"
+                                                [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput  [placeholder]=" 'user.twitteracc' | translation"
+                                                formControlName="twitterAccount" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxFlex='50'>
+
+                                    <div class="wid-form-input">
+                                        <mat-form-field>
+                                            <input class="wid-Value-input" autocomplete="off" matInput [placeholder]=" 'user.youtubeacc' | translation"
+                                                formControlName="youtubeAccount" [ngStyle.xs]="{'font-size': '15px'}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+
+                                    <div class="wid-form-input">
+                                        <div class="title">{{ 'user.accessinfo' | translation}}</div>
+
+                                    </div>
+                                </div>
+                                <div fxFlex='50' fxLayoutAlign="center center">
+                                    <button style="padding: 5px 15px;
+                                text-align: center;
+                                margin-left: 2%;
+                                width: 50%;
+                                font-size: 20px;
+                                cursor: pointer;" type="submit"
+                                        [ngStyle.xs]="{'width': '70%'}">{{ 'user.access' | translation}}</button>
+                                </div>
+                            </div>
+
+                            <br>
+                            <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+                                <div fxFlex='50'>
+
+                                    <div class="wid-form-input">
+                                        <div class="title">{{ 'user.notificationinfo' | translation}}</div>
+                                    </div>
+                                </div>
+                                <div fxFlex='50' fxLayoutAlign="center center">
+                                    <button style="padding: 5px 15px;
+                                text-align: center;
+                                margin-left: 2%;
+                                width: 50%;
+                                font-size: 20px;
+                                " [ngStyle.xs]="{'width': '70%'}">{{ 'user.notification' | translation}}</button>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+                            <!--         
+                        <mat-label class="label"> {{ 'user.birthdate' | translation}}</mat-label>
+                        <div class="wid-form-input">
+                            <mat-form-field class="Rectangle" appearance="none">
+                                <input class="input-text" matInput [matDatepicker]="picker" autocomplete="off"
+                                    name="birthDate">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        -->
+
+
+
+                            <!--
+                        <mat-label class="label"> {{ 'user.address' | translation}}</mat-label>
+                        <div class="wid-form-input">
+                            <mat-form-field class="Rectangle-Area" appearance="none">
+                                <textarea rows="6" class="area-text" autocomplete="off" matInput required
+                                    [ngStyle.xs]="{'font-size': '15px'}"></textarea>
+                            </mat-form-field>
+                        </div>
+                        -->
+
+                        

@@ -1,0 +1,75 @@
+<div class="container" [ngStyle.xs]="{'width': '100%', height:'100%'}">
+    <div [ngStyle.xs]="{'width': 'auto', height:'auto'}">
+        <div mat-dialog-title>
+            <div class="row">
+                <div class="col">
+                    <h3 class="wid-dialog-title">Change password</h3>
+                </div>
+                <div class="col">
+                    <mat-icon (click)="onClose()" class="mat-18 wid-close">close</mat-icon>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+            <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
+                <!-- old Password -->
+                <mat-label class="label"> old password </mat-label>
+                <div class="wid-form">
+                    <mat-form-field appearance="outline">
+                        <input [type]="hideOldPassword ? 'password' : 'text'" autocomplete="off" matInput
+                            class="wid-Value-input" formControlName="oldPassword" name="oldPassword" type="password"
+                            required />
+                        <mat-icon class="icon-password" matSuffix (click)="hideOldPassword = !hideOldPassword">
+                            {{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        <mat-error class="wid-error-messages" *ngIf="form.controls.oldPassword.errors?.required">
+                            Required filed</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- new Password -->
+                <mat-label class="label"> Nouveau mot de passe </mat-label>
+                <div class="wid-form">
+                    <mat-form-field appearance="outline">
+                        <input [type]="hidePassword ? 'password' : 'text'" autocomplete="off" matInput
+                            class="wid-Value-input" formControlName="password" name="password" type="password"
+                            required />
+                        <mat-icon class="icon-password" matSuffix (click)="hidePassword = !hidePassword">
+                            {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        <mat-error *ngIf="form.controls.password.errors?.required">Required filed</mat-error>
+                        <mat-error *ngIf="form.controls.password.errors?.pattern">Password must contain between 8 to 30
+                            characters
+                            , must contain one upper-case letter<br>
+                            must contain one numeric character.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Confirm Password -->
+                <mat-label class="label"> Confirmez le mot de passe </mat-label>
+                <div class="wid-form">
+                    <mat-form-field appearance="outline" [ngStyle.xs]="{'width': '96%'}">
+                        <input [type]="hideConfirmPassword ? 'password' : 'text'" autocomplete="off" matInput
+                            class="wid-Value-input" formControlName="confirmPassword" name="confirmPassword"
+                            [errorStateMatcher]="errorMatcher" type="password" required />
+                        <mat-icon class="icon-password" matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
+                            {{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        <mat-error class="wid-error-messages" *ngIf="form.controls.confirmPassword.errors?.required">
+                            Required Field </mat-error>
+                        <mat-error class="wid-error-messages" *ngIf="form.hasError('passwordsDoNotMatch')"> Passwords do
+                            not match!</mat-error>
+                    </mat-form-field>
+                </div>
+
+
+
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" [ngStyle.xs]="{'height': 'auto'}">
+                    <button class="wid-background-button wid-Value-button form-button" type="submit"
+                        [ngStyle.xs]="{'width': '50%'}" (click)="changePassword(form)" mat-button
+                        [disabled]="!form.valid">Enregistrer
+                    </button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>

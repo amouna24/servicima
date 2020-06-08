@@ -1,0 +1,43 @@
+//line height
+$line-height: normal;
+//letter spacing
+$letter-normal: normal;
+//object fit
+$object-fit: contain;
+//font weight
+$font-weight: normal;
+$font-weight1: 300;
+$font-weight2: 500;
+// font style
+$font-style: normal;
+//font stretch
+$font-stretch: normal;
+//fontFamily
+$RomanAndItalic: Rubik;
+$RegularFamily: Montserrat;
+//color
+$primaryColorAuth: #b0bac9;
+$drakColorAuth: #2e384d;
+$lightColorAuth: #fff;
+$accentColorAuth: #8dde06;
+
+@mixin font($height, $fit, $family, $size, $weight, $stretch, $style, $line, $spacing, $align, $color, $width) {
+        height: $height;
+        object-fit: $fit;
+        font-family: $family, serif;
+        font-size: $size;
+        font-weight: $weight;
+        font-stretch: $stretch;
+        font-style: $style;
+        line-height: $line;
+        letter-spacing: $spacing;
+        text-align: $align;
+        color: $color;
+        width: $width;
+}
+
+@mixin label($width, $size, $line) {
+        width: $width;
+        font-size: $size;
+        line-height: $line;
+}

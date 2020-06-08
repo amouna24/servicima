@@ -11,7 +11,6 @@ export class TranslationPipe implements PipeTransform {
   constructor(private translationServ: TranslationService, private locals: LocalStorageService) {}
 
   transform(key: any): any {
-    console.log('transform');
     return this.translationServ.data[key] || key;
   }
 

@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   env: 'local',
-  translateApiURL: 'http://localhost:8080/translate',
-  languageApiURL: 'http://localhost:8090/language',
+  translateApiURL: 'http://localhost:8006/translate',
+  languageApiURL: 'http://localhost:8003/language',
   credentialsApiURL: 'http://localhost:8010/credentials',
   companyApiURL: 'http://localhost:8012/company',
   refDataApiUrl: 'http://localhost:8008/refdata',
@@ -14,6 +14,8 @@ export const environment = {
   applicationApiUrl: 'http://localhost:8007/application',
   loadAuthStarterDataApiUrl: 'http://localhost:8015/loadauthstarterdata',
   zipeCode: 'https://vicopo.selfbuild.fr/cherche',
+  getUserInfosApiUrl: 'http://localhost:8016/getprofileinfos',
+  userApiUrl: 'http://localhost:8013/user',
 };
 
 /*

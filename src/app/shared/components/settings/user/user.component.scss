@@ -1,0 +1,91 @@
+.container {
+  width: 75%;
+  height: 100%;
+  overflow: hidden;
+  margin-left: 3%;
+}
+
+.button-container {
+  margin-top: 3%;
+  width: 75%;
+}
+
+#input {
+  font-size: 18px;
+}
+
+.form-width {
+  width: 100%;
+}
+
+
+.mat-form-field {
+  font-size: 18px;
+  flex-grow: 1;
+}
+
+.wid-form-input {
+  display: flex;
+  padding-top: 6px;
+  width: 90%;
+}
+
+.wid-form-input-email {
+  display: flex;
+  padding-top: 6px;
+  width: 65%;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.container-form {
+  height: 50%;
+  margin-top: 2%;
+}
+
+.form-class {
+  width: 100%;
+}
+
+.label {
+  width: 100%;
+  object-fit: contain;
+  font-family: Rubik, serif;
+  font-size: 15px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.6px;
+  text-align: left;
+  color: #2e384d;
+}
+
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+[type="file"] + label {
+  border: none;
+  border-radius: 1px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: inherit;
+  outline: none;
+  padding: 0.5rem 30px;
+  vertical-align: middle;
+  &.btn-2 {
+    background-color: #8dde06;
+    border-radius: 50px;
+    overflow: hidden;
+  }
+}
+
+
+

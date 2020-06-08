@@ -1,0 +1,47 @@
+/********************************Container Style*************************************/
+.example-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .example-container form {
+    margin-bottom: 20px;
+  }
+  .example-container form > * {
+    margin: 5px 0;
+  }
+  .example-container .mat-radio-button {
+    margin: 0 12px;
+  }
+  .full-width-table {
+    width: 100%;
+  }
+  /************************* Add Button Style *****************************/
+  .mat-flat-button {
+    font-family: Montserrat,serif;
+  }
+  /************************* Columns Style **********************/
+  
+  .mat-column-firstname{
+    width: 12% !important;
+  }
+  .mat-column-lastname {
+    width: 12% !important;
+  }
+  .mat-column-email{
+    width: 20% !important;
+  }
+  .mat-column-type{
+    width: 10% !important;
+  }
+  .mat-column-title{
+    width: 10% !important;
+  }
+  .mat-column-created_by{
+    width: 16% !important;
+  }
+  .mat-column-status{
+    width: 10% !important;
+  }
+  .mat-column-action{
+    width: 10% !important;
+  }
