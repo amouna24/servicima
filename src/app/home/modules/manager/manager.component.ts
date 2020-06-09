@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { mainContentAnimation } from '../../../../shared/animations/animations';
+import { mainContentAnimation } from '../../../shared/animations/animations';
 import { environment } from 'src/environments/environment';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
@@ -13,8 +13,6 @@ import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
   ]
 })
 export class ManagerComponent implements OnInit, OnDestroy {
-
-  title = 'WIDIGITAL ' + environment.env;
 
   mobileQuery: MediaQueryList;
 

@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { MaterialModule } from './material/material.module';
 
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -14,6 +13,7 @@ import { ChangePwdComponent } from './components/settings/changepwd/changepwd.co
 import { UsersListComponent } from './components/settings/usersList/users-list/users-list.component';
 import { TranslationPipe } from './pipes/translation/translation.pipe';
 import {CanBeDisplayedDirective} from './directives/can-be-displayed.directive';
+import { MaterialModule } from './modules/material/material.module';
 
 
 @NgModule({

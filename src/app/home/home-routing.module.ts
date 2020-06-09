@@ -11,15 +11,15 @@ const routes: Routes = [
     children: [
       {
         path: 'manager',
-        loadChildren: () => import('./manager/manager.module').then(m => m.ManagerModule)
+        loadChildren: () => import('./modules/manager/manager.module').then(m => m.ManagerModule)
       },
       {
         path: 'collaborater',
-        loadChildren: () => import('./collaborater/collaborater.module').then(m => m.CollaboraterModule)
+        loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule)
       },
       {
         path: 'candidate',
-        loadChildren: () => import('./candidate/candidate.module').then(m => m.CandidateModule)
+        loadChildren: () => import('./modules/candidate/candidate.module').then(m => m.CandidateModule)
       },
     ]
   }
