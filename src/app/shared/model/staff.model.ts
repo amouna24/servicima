@@ -1,6 +1,6 @@
-import { StaffKeyModel } from './staffKey.model';
+import { IStaffKeyModel } from './staffKey.model';
 
-export interface StaffModel {
-    StaffKey: StaffKeyModel;
+export interface IStaffModel {
+    StaffKey: IStaffKeyModel;
     status: string;
 }

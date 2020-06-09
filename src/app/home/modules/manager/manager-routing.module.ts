@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
+import { UserComponent } from '../../../shared/components/settings/user/user.component';
+import { UsersListComponent } from '../../../shared/components/settings/usersList/users-list/users-list.component';
 import { ManagerComponent } from './manager.component';
-import { UserComponent } from 'src/app/shared/components/settings/user/user.component';
-import { UsersListComponent } from 'src/app/shared/components/settings/usersList/users-list/users-list.component';
-
-
 
 const routes: Routes = [
   {

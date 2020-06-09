@@ -1,13 +1,13 @@
 import {
-  trigger,
-  transition,
-  style,
   animate,
+  animateChild,
   AnimationTriggerMetadata,
-  state,
   group,
   query,
-  animateChild
+  state,
+  style,
+  transition,
+  trigger
 } from '@angular/animations';
 
 const defaultDuration = '200ms';
@@ -19,7 +19,7 @@ const defaultMaxPosition = '230px';
 const defaultMinPosition = '30px';
 
 export function mainContentAnimation(animationDuration: string = defaultDuration,
-  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
   return trigger('onSideNavChange', [
     state('close', style({ 'margin-left': minWidth })),
     state('open', style({ 'margin-left': maxWidth })),
@@ -29,7 +29,7 @@ export function mainContentAnimation(animationDuration: string = defaultDuration
 }
 
 export function sidebarAnimation(animationDuration: string = defaultDuration,
-  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
   return trigger('onSideNavChange', [
     state('close', style({ width: minWidth })),
     state('open', style({ width: maxWidth })),
@@ -47,7 +47,7 @@ export function sidebarAnimation(animationDuration: string = defaultDuration,
 }
 
 export function buttonAnimation(animationDuration: string = defaultDuration,
-  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
   return trigger('buttonAnimation', [
     state('close', style({ left: defaultMinPosition })),
     state('open', style({ left: defaultMaxPosition })),
@@ -61,7 +61,7 @@ export function buttonAnimation(animationDuration: string = defaultDuration,
 }
 
 export function iconAnimation(animationDuration: string = defaultDuration,
-  minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize, ): AnimationTriggerMetadata {
+  minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize): AnimationTriggerMetadata {
   return trigger('iconAnimation', [
     state('open', style({ fontSize: maxFontSize })),
     state('close', style({ fontSize: minFontSize })),
@@ -70,7 +70,7 @@ export function iconAnimation(animationDuration: string = defaultDuration,
   ]);
 }
 
-export function labelAnimation(animationDuration: string = defaultDuration, ): AnimationTriggerMetadata {
+export function labelAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
   return trigger('labelAnimation', [
     state('open', style({ display: 'inline', opacity: 1 })),
     state('close', style({ display: 'none', opacity: 0 })),
@@ -79,7 +79,7 @@ export function labelAnimation(animationDuration: string = defaultDuration, ): A
   ]);
 }
 
-export function nameAnimation(animationDuration: string = defaultDuration, ): AnimationTriggerMetadata {
+export function nameAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
   return trigger('nameAnimation', [
     state('close', style({ color: 'white' })),
     transition('close => open', animate(`${animationDuration} ease-in-out`)),

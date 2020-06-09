@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
+
 import {
-  sidebarAnimation,
+  buttonAnimation,
   iconAnimation,
   labelAnimation,
   nameAnimation,
-  buttonAnimation
+  sidebarAnimation
 } from '../../animations/animations';
-import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
 
 @Component({
   selector: 'wid-sidenav',
@@ -29,7 +30,7 @@ export class SidenavComponent implements OnInit {
   icontoShow = 'add';
   iconBool = true;
   pathName: string;
-  constructor( private sidenavService: SidenavService
+  constructor(private sidenavService: SidenavService
              ) { }
 
   ngOnInit() {

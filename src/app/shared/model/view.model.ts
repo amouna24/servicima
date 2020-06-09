@@ -1,5 +1,4 @@
-export interface ViewParam {
+export interface IViewParam {
     value: string;
     viewValue: string;
   }
-  

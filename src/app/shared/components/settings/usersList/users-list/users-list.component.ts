@@ -4,26 +4,26 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 /* rxjs */
+import { Router } from '@angular/router';
 import { combineLatest, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserModel } from 'src/app/shared/model/user.model';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { Router } from '@angular/router';
+import { IUserModel } from 'src/app/shared/model/user.model';
 @Component({
   selector: 'wid-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit {
-  usersList: UserModel[] = [];
-  filterArray: UserModel[] = [];
+  usersList: IUserModel[] = [];
+  filterArray: IUserModel[] = [];
 
   isLoading = false;
   constructor(private router: Router, private profileService: ProfileService) { }
 
   displayedColumns: string[] =
     ['firstname', 'lastname', 'email', 'type', 'title', 'created_by', 'status', 'actions'];
-  dataSource: MatTableDataSource<UserModel>;
+  dataSource: MatTableDataSource<IUserModel>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -33,25 +33,22 @@ export class UsersListComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.usersList);
   }
 
-
   load() {
     this.profileService.getAllUser().subscribe((res) => {
       console.log(res);
       this.usersList = res;
-      this.display(this.usersList)
+      this.display(this.usersList);
     }
 
-    )
+    );
 
   }
-
-
 
   /**
    * @description: Function to display data from modelList
    * @return: Data Source
    */
-  display(data: UserModel[]): void {
+  display(data: IUserModel[]): void {
     this.isLoading = true;
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
@@ -87,7 +84,6 @@ export class UsersListComponent implements OnInit {
     this.isLoading = false;
   }
 
-
   /**
    * @params filterValue
    * @description table filter
@@ -114,8 +110,6 @@ export class UsersListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
-
 
   /**
    * @description: Function to navigate to add user

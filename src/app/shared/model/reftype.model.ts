@@ -1,8 +1,8 @@
-import { RefTypeKeyModel } from './refTypeKey.model';
+import { IRefTypeKeyModel } from './refTypeKey.model';
 
-export interface ReftypeModel {
+export interface IReftypeModel {
   _id: string;
-  RefTypeKey: RefTypeKeyModel;
+  RefTypeKey: IRefTypeKeyModel;
   ref_type_desc: string;
   status: string;
 

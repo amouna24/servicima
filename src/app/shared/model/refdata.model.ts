@@ -1,9 +1,9 @@
-import { RefdatakeyModel } from './refdataKey.model';
+import { IRefdatakeyModel } from './refdataKey.model';
 
-export interface RefdataModel {
+export interface IRefdataModel {
   /* ID */
   _id: string;
-  RefDataKey: RefdatakeyModel;
+  RefDataKey: IRefdatakeyModel;
   ref_data_desc: string;
   status: string;
 }

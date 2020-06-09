@@ -1,8 +1,8 @@
-import { LanguageKeyModel } from './languageKey.model';
+import { ILanguageKeyModel } from './languageKey.model';
 
-export interface LanguageModel {
+export interface ILanguageModel {
 
-  LanguageKey: LanguageKeyModel;
+  LanguageKey: ILanguageKeyModel;
   language_desc: string;
   status: string;
   _id: string;

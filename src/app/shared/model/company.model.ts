@@ -1,8 +1,8 @@
-import { CompanyId } from './companyId.model';
-export interface CompanyModel {
+import { ICompanyId } from './companyId.model';
+export interface ICompanyModel {
   /* ID */
   _id: string;
-  CompanyKey: CompanyId;
+  CompanyKey: ICompanyId;
   address: string;
   legalForm: string;
   name: string;

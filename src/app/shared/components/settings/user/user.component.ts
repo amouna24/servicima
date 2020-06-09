@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangePwdComponent } from '../changepwd/changepwd.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { ProfileService } from '../../../../core/services/profile/profile.service';
-import { LanguageModel } from '../../../model/language.model';
-import { UtilsService } from '../../../../core/services/utils/utils.service'
-import { UserInfo } from '../../../model/userInfo.model';
-import { UserModel } from '../../../model/user.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { UtilsService } from '../../../../core/services/utils/utils.service';
+import { ILanguageModel } from '../../../model/language.model';
+import { IUserModel } from '../../../model/user.model';
+import { IUserInfo } from '../../../model/userInfo.model';
+import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
 @Component({
   selector: 'wid-user',
@@ -20,18 +21,17 @@ export class UserComponent implements OnInit {
   file: File;
   dataFromLocalStorage: any;
   photochanged = false;
-  languageList: LanguageModel[] = [];
-  userInfo: UserInfo;
-  user: UserModel;
+  languageList: ILanguageModel[] = [];
+  userInfo: IUserInfo;
+  user: IUserModel;
   form: FormGroup;
-  refData: any = {};
+  refData: any = { };
   loadData: boolean;
   constructor(private utilsService: UtilsService, private sanitizer: DomSanitizer, private route: ActivatedRoute,
     private profileService: ProfileService,
     private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-
 
     this.initForm();
 
@@ -41,28 +41,25 @@ export class UserComponent implements OnInit {
         console.log(this.loadData);
 
       }
-    )
+    );
 
     if (this.loadData) {
       this.profileService.getUser().subscribe(
         res => {
           this.userInfo = res;
 
-
           this.localUrl = this.sanitizer.bypassSecurityTrustResourceUrl
             (`data:${this.userInfo.user[0].photo.contentType};base64,${this.userInfo.user[0].photo.data}`);
           console.log(this.localUrl, 'sdqsdqsdqsdqsd');
 
-
-
           this.setForm();
           this.getRefdata();
         }
-      )
+      );
 
     }
   }
-  
+
   initForm(): void {
     this.form = this.formBuilder.group({
       emailAdress: ['', [Validators.required, Validators.email]],
@@ -98,14 +95,14 @@ export class UserComponent implements OnInit {
       linkedinAccount: this.userInfo.user[0].linkedin_url,
       homeCompany: this.userInfo.company[0].company_name,
 
-    })
+    });
   }
 
   /**
    * @description : get the refdata from local storage
    */
   getRefdata() {
-    const list = ['GENDER', 'PROF_TITLES']
+    const list = ['GENDER', 'PROF_TITLES'];
     this.refData = this.utilsService.getRefData(this.userInfo.company[0]._id, this.userInfo.user[0].UserKey.application_id,
       '5eac544ad4cb666637fe1354', list);
     this.languageList = this.utilsService.languageList;
@@ -124,12 +121,11 @@ export class UserComponent implements OnInit {
 
   onChangePassword(): void {
     const dialogRef = this.dialog.open(ChangePwdComponent, {
-      data: {}, disableClose: true,
+      data: { }, disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {
     });
   }
-
 
   /**
    * @description : get the new photo ready to update
@@ -139,24 +135,21 @@ export class UserComponent implements OnInit {
     const maxSizeFile = 2 * 1024 * 1024;
     if (file.target.files[0].size > maxSizeFile) {
       alert('File is too big!');
-    }
-    else {
+    } else {
       const reader = new FileReader();
       reader.onload = (event: any) => {
         this.localUrl = event.target.result;
         this.file = file.target.files[0];
 
-      }
+      };
       reader.readAsDataURL(file.target.files[0]);
     }
   }
-
 
   /**
    * @description : update the user info
    */
   update(): void {
-
 
     this.user.cellphone_nbr = this.form.value.businessPhone;
     this.user.language_id = this.form.value.languages;
@@ -185,12 +178,8 @@ export class UserComponent implements OnInit {
 
     console.log(formData);
 
-
     this.profileService.updateUser(formData).subscribe(res => console.log(res));
 
   }
 
-
 }
-
-

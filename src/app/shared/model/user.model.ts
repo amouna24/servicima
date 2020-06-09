@@ -1,7 +1,7 @@
-import { UserKeyModel } from './userKey.model';
-import { PhotoModel } from './photo.model';
-export interface UserModel {
-  UserKey: UserKeyModel
+import { IPhotoModel } from './photo.model';
+import { IUserKeyModel } from './userKey.model';
+export interface IUserModel {
+  UserKey: IUserKeyModel;
   status: string;
   company_email: string;
   user_type: string;
@@ -21,5 +21,5 @@ export interface UserModel {
   updated_by: string;
   application_id: string;
   email_adress: string;
-  photo : PhotoModel;
+  photo: IPhotoModel;
 }

@@ -1,4 +1,4 @@
-export interface RefdatakeyModel {
+export interface IRefdatakeyModel {
   company_id: string;
   application_id: string;
   ref_type_id: string;

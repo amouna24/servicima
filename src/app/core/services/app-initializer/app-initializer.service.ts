@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TranslationService } from '../translation/translation.service';
-import { LocalStorageService } from '../storage/local-storage.service';
-import { environment } from '../../../../environments/environment';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { environment } from '../../../../environments/environment';
+import { LocalStorageService } from '../storage/local-storage.service';
+import { TranslationService } from '../translation/translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,4 +32,3 @@ export class AppInitializerService {
     return promise;
   }
 }
-

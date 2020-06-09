@@ -1,3 +1,3 @@
-export interface ApplicationKey {
+export interface IApplicationKey {
   application_code: string;
 }
