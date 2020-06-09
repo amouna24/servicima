@@ -53,11 +53,11 @@ export class TranslationService {
 
   checkForLanguage(langCode: string): any {
     const languages = this.getLanguages();
-    const language = languages.find(language => language['LanguageKey']['language_code'] === langCode)
+    const language = languages.find(lang => lang['LanguageKey']['language_code'] === langCode)
     if (language) {
       return language;
     }
-    return languages.find(language => language['LanguageKey']['language_code'] === 'EN');
+    return languages.find(lang => lang['LanguageKey']['language_code'] === 'EN');
   }
 
   getUsedLanguage(): string {
