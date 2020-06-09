@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { mainContentAnimation } from '../../../shared/animations/animations';
-import { environment } from 'src/environments/environment';
 import { MediaMatcher } from '@angular/cdk/layout';
+
+import { mainContentAnimation } from '../../../shared/animations/animations';
 import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
 
 @Component({
@@ -23,11 +23,11 @@ export class ManagerComponent implements OnInit, OnDestroy {
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private sidebarService: SidenavService, ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this.mobileQueryListener);
+    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this.mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
   }
   toggle() {
     this.sidebarService.toggle();

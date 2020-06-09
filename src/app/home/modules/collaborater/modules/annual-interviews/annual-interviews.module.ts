@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AnnualInterviewsRoutingModule } from './annual-interviews-routing.module';
+import { AnnualInterviewsComponent } from './annual-interviews.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [AnnualInterviewsComponent],
   imports: [
     CommonModule,
     AnnualInterviewsRoutingModule

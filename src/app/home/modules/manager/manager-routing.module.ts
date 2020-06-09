@@ -38,7 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'placements',
-        loadChildren: () => import('./modules/placement/placement.module').then(m => m.PlacementModule)
+        loadChildren: () => import('../../../shared/modules/placement/placement.module').then(m => m.PlacementModule)
       },
       {
         path: 'recruitment',
