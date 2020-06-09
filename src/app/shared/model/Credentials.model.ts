@@ -2,14 +2,14 @@ import { CredentialsKey } from './CredentialsKey.model';
 
 export interface CredentialsModel {
   CredentialsKey:CredentialsKey;
-  password :String;
-  activation_code :String;
+  password :string;
+  activation_code :string;
   code_expiry_date : Date;
-  creation_date : String;
-  created_by :String;
-  update_date :String;
-  updated_by :String;
-  last_connection :String;
-  refresh_token : String;
-  status : String;
+  creation_date : string;
+  created_by :string;
+  update_date :string;
+  updated_by :string;
+  last_connection :string;
+  refresh_token : string;
+  status : string;
 }
