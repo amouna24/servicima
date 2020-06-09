@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ErrorComponent } from './pages/error/error.component';
 
@@ -10,12 +11,8 @@ const routes: Routes = [
         redirectTo: 'manager/dashboard'
     },
     {
-        path: 'manager',
-        loadChildren: () => import('./manager/manager.module').then(m => m.ManagerModule)
-    },
-    {
-        path: 'collaborater',
-        loadChildren: () => import('./collaborater/collaborater.module').then(m => m.CollaboraterModule)
+        path: '',
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
     },
     {
         path: 'auth',

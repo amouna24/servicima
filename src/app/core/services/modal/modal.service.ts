@@ -24,18 +24,18 @@ export class ModalService {
     return modal.modalComponent;
   }
 
-  displayModal(modalName: string, modalData?: object, width?: string, height?: string) {
+  displayModal(modalName: string, modalData?: object, modalWidth?: string, modalHeight?: string) {
     const modalComponent = this.getModalComponentRef(modalName);
     const initialState = modalData;
-    if (width === undefined || width === null) {
-      width = '50%';
+    if (modalWidth === undefined || modalWidth === null) {
+      modalWidth = '50%';
     }
-    if (height === undefined || height === null) {
-      height = '80%';
+    if (modalHeight === undefined || modalHeight === null) {
+      modalHeight = '80%';
     }
     const dialogRef = this.dialog.open(modalComponent, {
-      height: height,
-      width: width,
+      height: modalHeight,
+      width: modalWidth,
       data: initialState,
       disableClose: true
     });
@@ -44,10 +44,10 @@ export class ModalService {
   }
 
   // display global confirmation modal
-  displayConfirmationModal(data: Object): Subject<string> {
+  displayConfirmationModal(modalData: object): Subject<string> {
     const modalComponent = this.getModalComponentRef('confirmation');
     this.dialog.open(modalComponent, {
-      data: data
+      data: modalData
     });
     return this.confirmationModalResponse$;
   }

@@ -54,9 +54,9 @@ export class UtilsService {
             element.RefDataKey.ref_type_id ===
             this.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
             element.RefDataKey.application_id === this.applicationList
-              .find(application => application.ApplicationKey.application_code === 'ALL')._id &&
+              .find(app => app.ApplicationKey.application_code === 'ALL')._id &&
             element.RefDataKey.company_id === this.companyList
-              .find(company => company.CompanyKey.email_adress === 'ALL')._id &&
+              .find(comp => comp.CompanyKey.email_adress === 'ALL')._id &&
             element.RefDataKey.language_id === languageId);
         filterRefData.forEach(
           (element) => {

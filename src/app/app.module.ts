@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TranslationService } from './core/services/translation/translation.service';
 import { LocalStorageService } from './core/services/storage/local-storage.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -14,7 +14,7 @@ import { AppInitializerService } from './core/services/app-initializer/app-initi
 import { ErrorComponent } from './pages/error/error.component';
 
 export function setupApp(
-  translationServ: TranslationService, localStorageServ: LocalStorageService, appInitServ: AppInitializerService): Function {
+  translationServ: TranslationService, localStorageServ: LocalStorageService, appInitServ: AppInitializerService) {
     if (localStorageServ.getItem('data') !== null) {
       return () => translationServ.use(translationServ.getUsedLanguage());
     } else {

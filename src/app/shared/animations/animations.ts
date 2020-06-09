@@ -18,8 +18,8 @@ const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
 const defaultMinPosition = '30px';
 
-// tslint:disable-next-line:max-line-length
-export function mainContentAnimation(animationDuration: string = defaultDuration, minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+export function mainContentAnimation(animationDuration: string = defaultDuration,
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
   return trigger('onSideNavChange', [
     state('close', style({ 'margin-left': minWidth })),
     state('open', style({ 'margin-left': maxWidth })),
@@ -28,8 +28,8 @@ export function mainContentAnimation(animationDuration: string = defaultDuration
   ]);
 }
 
-// tslint:disable-next-line:max-line-length
-export function sidebarAnimation(animationDuration: string = defaultDuration, minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+export function sidebarAnimation(animationDuration: string = defaultDuration,
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
   return trigger('onSideNavChange', [
     state('close', style({ width: minWidth })),
     state('open', style({ width: maxWidth })),
@@ -46,7 +46,8 @@ export function sidebarAnimation(animationDuration: string = defaultDuration, mi
   ]);
 }
 
-export function buttonAnimation(animationDuration: string = defaultDuration, minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
+export function buttonAnimation(animationDuration: string = defaultDuration,
+  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth, ): AnimationTriggerMetadata {
   return trigger('buttonAnimation', [
     state('close', style({ left: defaultMinPosition })),
     state('open', style({ left: defaultMaxPosition })),
@@ -59,7 +60,8 @@ export function buttonAnimation(animationDuration: string = defaultDuration, min
   ]);
 }
 
-export function iconAnimation(animationDuration: string = defaultDuration, minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize, ): AnimationTriggerMetadata {
+export function iconAnimation(animationDuration: string = defaultDuration,
+  minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize, ): AnimationTriggerMetadata {
   return trigger('iconAnimation', [
     state('open', style({ fontSize: maxFontSize })),
     state('close', style({ fontSize: minFontSize })),
