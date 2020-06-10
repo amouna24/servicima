@@ -1,3 +1,3 @@
-export interface CompanyId {
+export interface ICompanyId {
   email_adress: string;
 }

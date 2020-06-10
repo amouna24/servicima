@@ -1,5 +1,5 @@
-export interface UserRolesKeyModel {
-    application_id: string; 
+export interface IUserRolesKeyModel {
+    application_id: string;
     email_adress: string;
-    role_code: string
+    role_code: string;
 }

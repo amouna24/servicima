@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SalarySlipsComponent } from './salary-slips.component';
-
 
 const routes: Routes = [
   {

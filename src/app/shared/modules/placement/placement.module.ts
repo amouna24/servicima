@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { PlacementRoutingModule } from './placement-routing.module';
 import { PlacementComponent } from './placement.component';
-
 
 @NgModule({
   declarations: [PlacementComponent],

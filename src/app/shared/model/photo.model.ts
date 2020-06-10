@@ -1,4 +1,4 @@
-export interface PhotoModel {
+export interface IPhotoModel {
     data: any;
     contentType: string;
 }

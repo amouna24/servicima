@@ -6,7 +6,7 @@ describe('HttpErrorReqHandlerService', () => {
   let service: HttpErrorReqHandlerService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ });
     service = TestBed.inject(HttpErrorReqHandlerService);
   });
 

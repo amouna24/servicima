@@ -1,8 +1,9 @@
-import { ApplicationKey } from './applicationKey.model';
-export interface ApplicationModel {
+import { IApplicationKey } from './applicationKey.model';
+
+export interface IApplicationModel {
   /* ID */
   _id: string;
-  ApplicationKey: ApplicationKey;
+  applicationKey: IApplicationKey;
   application_desc: string;
   status: string;
 

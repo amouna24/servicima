@@ -1,19 +1,19 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
+  Inject,
   Input,
   OnDestroy,
-  Inject,
   ViewEncapsulation
 } from '@angular/core';
 import {
-  Router,
-  NavigationStart,
-  NavigationEnd,
+  GuardsCheckStart,
   NavigationCancel,
+  NavigationEnd,
   NavigationError,
-  GuardsCheckStart
+  NavigationStart,
+  Router
 } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'wid-spinner',

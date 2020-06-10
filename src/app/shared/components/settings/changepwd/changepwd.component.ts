@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { ProfileService } from '../../../../core/services/profile/profile.service';
-import { CredentialsService } from '../../../../core/services/credentials/credentials.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
+import { CredentialsService } from '../../../../core/services/credentials/credentials.service';
+import { ProfileService } from '../../../../core/services/profile/profile.service';
 
 /** Error when the parent is invalid */
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
@@ -13,6 +13,7 @@ class CrossFieldErrorMatcher implements ErrorStateMatcher {
   }
 }
 
+// tslint:disable-next-line:max-classes-per-file
 @Component({
   selector: 'wid-changepwd',
   templateUrl: './changepwd.component.html',
@@ -37,7 +38,6 @@ export class ChangePwdComponent implements OnInit {
     this.initForm();
   }
 
-
   initForm(): void {
     this.form = this.formBuilder.group({
       oldPassword: ['', [Validators.required]],
@@ -59,7 +59,6 @@ export class ChangePwdComponent implements OnInit {
       });
   }
 
-
   /**
    * @description Check if the new password and the confirm password are matched
    */
@@ -75,8 +74,6 @@ export class ChangePwdComponent implements OnInit {
     this.dialogRef.close();
   }
 
-
-
   changePassword(form: FormGroup) {
     const newPassword = {
       application_id: '5eac544a92809d7cd5dae21f',
@@ -84,7 +81,7 @@ export class ChangePwdComponent implements OnInit {
       password: form.get('password'),
       oldPassword: form.get('oldPassword'),
       updated_by: 'walid.tenniche@widigital-group.com',
-    }
+    };
     this.credentialsService.changePassword(newPassword).subscribe(
       res => {
         console.log(res);
@@ -94,9 +91,8 @@ export class ChangePwdComponent implements OnInit {
         alert('error , try it later');
         this.dialogRef.close();
       }
-    )
+    );
 
   }
-
 
 }

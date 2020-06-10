@@ -22,6 +22,9 @@
     "e2e": "ng e2e",
     "e2e:ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "private": true,
   "dependencies": {
     "@angular/animations": "9.0.7",
@@ -42,7 +45,7 @@
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.900.7",
+    "@angular-devkit/build-angular": "^0.901.7",
     "@angular/cli": "9.0.7",
     "@angular/compiler-cli": "9.0.7",
     "@angular/language-service": "9.0.7",
@@ -52,15 +55,17 @@
     "codelyzer": "5.1.2",
     "jasmine-core": "3.4.0",
     "jasmine-spec-reporter": "4.2.1",
-    "karma": "4.1.0",
+    "karma": "5.0.9",
     "karma-chrome-launcher": "2.2.0",
     "karma-coverage-istanbul-reporter": "2.0.1",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.0",
-    "protractor": "5.4.0",
+    "pre-commit": "^1.2.2",
+    "protractor": "7.0.0",
     "ts-node": "7.0.0",
     "tslint": "5.15.0",
     "tslint-config-prettier": "1.18.0",
+    "tslint-origin-ordered-imports-rule": "1.2.2",
     "typescript": "3.7.5"
   }
 }

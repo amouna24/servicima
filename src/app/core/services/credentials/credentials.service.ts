@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,6 @@ import { environment } from '../../../../environments/environment';
 export class CredentialsService {
 
   constructor(private httpClient: HttpClient) { }
-
 
   changePassword(User) {
     return this.httpClient

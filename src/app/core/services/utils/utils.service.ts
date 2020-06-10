@@ -1,24 +1,25 @@
 import { Inject, Injectable } from '@angular/core';
-import { ApplicationModel } from '../../../shared/model/application.model';
-import { CompanyModel } from '../../../shared/model/company.model';
-import { LanguageModel } from '../../../shared/model/language.model';
+
+import { IApplicationModel } from '../../../shared/model/application.model';
+import { ICompanyModel } from '../../../shared/model/company.model';
+import { ILanguageModel } from '../../../shared/model/language.model';
+import { IRefdataModel } from '../../../shared/model/refdata.model';
+import { IReftypeModel } from '../../../shared/model/reftype.model';
+import { IViewParam } from '../../../shared/model/view.model';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { TranslationService } from '../translation/translation.service';
-import { RefdataModel } from '../../../shared/model/refdata.model';
-import { ReftypeModel } from '../../../shared/model/reftype.model';
-import { ViewParam } from '../../../shared/model/view.model';
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
   allDataFromStarterData: any;
-  applicationList: ApplicationModel[];
-  companyList: CompanyModel[];
-  languageList: LanguageModel[];
-  refTypeList: ReftypeModel[];
-  refDataList: RefdataModel[];
-  resList : ViewParam[] = [];
-  refData: {} = {};
+  applicationList: IApplicationModel[];
+  companyList: ICompanyModel[];
+  languageList: ILanguageModel[];
+  refTypeList: IReftypeModel[];
+  refDataList: IRefdataModel[];
+  resList: IViewParam[] = [];
+  refData: { } = { };
   constructor(private localStorage: LocalStorageService,
     private translationServ: TranslationService) {
     this.getData();
@@ -30,7 +31,7 @@ export class UtilsService {
   getRefData(company, application, languageId, Type): any {
     Type.forEach((type) => {
       this.resList = [];
-      let filterRefData =this.refDataList.filter(
+      let filterRefData = this.refDataList.filter(
         (element) => {
           if (
             element.RefDataKey.ref_type_id ===
@@ -54,7 +55,7 @@ export class UtilsService {
             element.RefDataKey.ref_type_id ===
             this.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
             element.RefDataKey.application_id === this.applicationList
-              .find(app => app.ApplicationKey.application_code === 'ALL')._id &&
+              .find(app => app.applicationKey.application_code === 'ALL')._id &&
             element.RefDataKey.company_id === this.companyList
               .find(comp => comp.CompanyKey.email_adress === 'ALL')._id &&
             element.RefDataKey.language_id === languageId);
@@ -67,11 +68,8 @@ export class UtilsService {
         this.refData[String(`${type}`)] = this.resList;
       }
     });
-    return this.refData
+    return this.refData;
   }
-
-
-
 
   /**
    * @description get data from local storage
@@ -85,8 +83,4 @@ export class UtilsService {
     this.languageList = this.allDataFromStarterData['languages'];
   }
 
-
-
 }
-
-

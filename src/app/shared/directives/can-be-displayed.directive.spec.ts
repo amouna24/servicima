@@ -2,7 +2,6 @@ import { Component, DebugElement, ElementRef, TemplateRef, ViewContainerRef } fr
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-
 import { CanBeDisplayedDirective } from './can-be-displayed.directive';
 
 @Component({
@@ -19,6 +18,7 @@ fdescribe('canBeDisplayed', () => {
   let fixture: ComponentFixture<TestComponent>;
   let divEls: DebugElement[];
 
+  // tslint:disable-next-line:max-classes-per-file
   class MockElementRef implements ElementRef {
     nativeElement = { };
   }

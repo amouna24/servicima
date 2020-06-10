@@ -1,4 +1,4 @@
-export interface LanguageKeyModel {
+export interface ILanguageKeyModel {
 
   language_code: string;
 }

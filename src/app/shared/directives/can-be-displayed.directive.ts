@@ -1,5 +1,5 @@
-import {Directive, ElementRef, Input, OnDestroy, TemplateRef, ViewContainerRef} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Directive, ElementRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[canBeDisplayed]'

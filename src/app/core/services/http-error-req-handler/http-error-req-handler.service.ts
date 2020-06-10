@@ -1,4 +1,4 @@
-import { Injectable, ErrorHandler } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,7 +6,7 @@ import { Injectable, ErrorHandler } from '@angular/core';
 export class HttpErrorReqHandlerService implements ErrorHandler {
 
   constructor() { }
-  
+
   handleError(error: any): void {
     throw new Error('Method not implemented.');
   }
