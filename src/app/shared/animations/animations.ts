@@ -34,13 +34,13 @@ export function sidebarAnimation(animationDuration: string = defaultDuration,
     state('close', style({ width: minWidth })),
     state('open', style({ width: maxWidth })),
     transition('close => open', group([
-      query('@iconAnimation', animateChild()),
-      query('@labelAnimation', animateChild()),
+      query('@iconAnimation', animateChild(), { optional: true }),
+      query('@labelAnimation', animateChild(), { optional: true }),
       animate(`${animationDuration} ease-in-out`)
     ])),
     transition('open => close', group([
-      query('@iconAnimation', animateChild()),
-      query('@labelAnimation', animateChild()),
+      query('@iconAnimation', animateChild(), { optional: true }),
+      query('@labelAnimation', animateChild(), { optional: true }),
       animate(`${animationDuration} ease-in-out`)
     ])),
   ]);

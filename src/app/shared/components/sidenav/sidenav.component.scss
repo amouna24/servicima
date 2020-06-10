@@ -1,25 +1,7 @@
-/* Toggle Button */
-.mat-icon-button {
-  background-image: linear-gradient(to top, #4fbd02, #5fc604, #6ece06, #7cd709, #8bdf0d);
-  background-size: cover;
-  border-radius: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 10px;
-}
-/* */
 .svcmaIcon {
   color: #ffffff;
 }
 
-.itemlist {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 1.14286;
-  color: rgb(222, 235, 255);
-  flex: 1 1 auto;
-  overflow: hidden;
-}
 
 .row {
   display: flex;
@@ -35,17 +17,12 @@
   margin-right: 0;
 }
 
-.sidebar-menu {
+.side-nav-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 81%;
   width: 99%;
-
-  .menu-list {
-    flex: 1;
-    justify-content: normal;
-  }
 
   .icon {
     padding: 0 10px 0 0;
@@ -58,15 +35,12 @@
   }
 
   .active-list-item {
-    span , .icon {
-      color: #ffd800 ;
+
+    span,
+    .icon {
+      color: #ffd800;
     }
   }
-}
-
-.menuColor {
-  margin: 1px;
-  border-bottom: 0.02px inset #d3d3d340;
 }
 
 .menuColor:hover {
@@ -74,27 +48,7 @@
 }
 
 .flex-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-content: stretch;
-  align-items: stretch;
-  height: 100%;
-  width: 99%;
   text-transform: uppercase;
-}
-
-.flex-item:nth-child(1) {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-}
-
-.flex-item:nth-child(2) {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
 }
 
 /* NEW */
@@ -113,6 +67,7 @@
   text-align: center;
   color: #ffffff;
 }
+
 .company_point {
   width: 4px;
   height: 4px;
@@ -135,7 +90,9 @@
   letter-spacing: normal;
   text-align: left;
   color: #ffffff;
+  font-weight: bold;
 }
+
 .span:hover {
   background-color: transparent;
   color: yellow;
