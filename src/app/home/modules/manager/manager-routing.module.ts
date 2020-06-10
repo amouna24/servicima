@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserComponent } from '../../../shared/components/settings/user/user.component';
-import { UsersListComponent } from '../../../shared/components/settings/usersList/users-list/users-list.component';
+import { UserComponent } from '@shared/components/settings/user/user.component';
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list/users-list.component';
+
 import { ManagerComponent } from './manager.component';
 
 const routes: Routes = [
@@ -36,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'placements',
-        loadChildren: () => import('../../../shared/modules/placement/placement.module').then(m => m.PlacementModule)
+        loadChildren: () => import('@shared/modules/placement/placement.module').then(m => m.PlacementModule)
       },
       {
         path: 'recruitment',

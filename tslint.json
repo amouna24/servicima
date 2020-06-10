@@ -9,6 +9,7 @@
   ],
   "rules": {
     "origin-ordered-imports": [ true, "one-blank-line" ],
+    "ordered-imports": false,
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,

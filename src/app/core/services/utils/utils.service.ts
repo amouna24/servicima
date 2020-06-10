@@ -1,13 +1,14 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { IApplicationModel } from '../../../shared/model/application.model';
-import { ICompanyModel } from '../../../shared/model/company.model';
-import { ILanguageModel } from '../../../shared/model/language.model';
-import { IRefdataModel } from '../../../shared/model/refdata.model';
-import { IReftypeModel } from '../../../shared/model/reftype.model';
-import { IViewParam } from '../../../shared/model/view.model';
+import { IApplicationModel } from '@shared/models/application.model';
+import { ICompanyModel } from '@shared/models/company.model';
+import { ILanguageModel } from '@shared/models/language.model';
+import { IRefdataModel } from '@shared/models/refdata.model';
+import { IReftypeModel } from '@shared/models/reftype.model';
+import { IViewParam } from '@shared/models/view.model';
+
 import { LocalStorageService } from '../storage/local-storage.service';
-import { TranslationService } from '../translation/translation.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,8 +21,7 @@ export class UtilsService {
   refDataList: IRefdataModel[];
   resList: IViewParam[] = [];
   refData: { } = { };
-  constructor(private localStorage: LocalStorageService,
-    private translationServ: TranslationService) {
+  constructor(private localStorage: LocalStorageService) {
     this.getData();
   }
 

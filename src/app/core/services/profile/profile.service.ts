@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IUserModel } from 'src/app/shared/model/user.model';
-import { IUserInfo } from 'src/app/shared/model/userInfo.model';
+import { IUserModel } from '@shared/models/user.model';
+import { IUserInfo } from '@shared/models/userInfo.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

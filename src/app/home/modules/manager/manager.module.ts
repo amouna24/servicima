@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
+
 import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerComponent } from './manager.component';
 

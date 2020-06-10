@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ProfileService } from '../../../../core/services/profile/profile.service';
-import { UtilsService } from '../../../../core/services/utils/utils.service';
-import { ILanguageModel } from '../../../model/language.model';
-import { IUserModel } from '../../../model/user.model';
-import { IUserInfo } from '../../../model/userInfo.model';
+import { ProfileService } from '@core/services/profile/profile.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { ILanguageModel } from '@shared/models/language.model';
+import { IUserModel } from '@shared/models/user.model';
+import { IUserInfo } from '@shared/models/userInfo.model';
+
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
 @Component({

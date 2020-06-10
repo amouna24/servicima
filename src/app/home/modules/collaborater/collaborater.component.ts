@@ -1,8 +1,8 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
-import { SidenavService } from '../../../core/services/sidenav/sidenav.service';
-import { mainContentAnimation } from '../../../shared/animations/animations';
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { mainContentAnimation } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-collaborater',

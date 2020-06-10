@@ -39,11 +39,11 @@ const routes: Routes = [
       },
       {
         path: 'placements',
-        loadChildren: () => import('../../../shared/modules/placement/placement.module').then(m => m.PlacementModule)
+        loadChildren: () => import('@shared/modules/placement/placement.module').then(m => m.PlacementModule)
       },
       {
         path: 'cv',
-        loadChildren: () => import('../../../shared/modules/cv/cv.module').then(m => m.CvModule)
+        loadChildren: () => import('@shared/modules/cv/cv.module').then(m => m.CvModule)
       },
     ]
   }
