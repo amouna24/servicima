@@ -12,7 +12,7 @@ export const managerMenu: IMenu[] = [
         state: 'recruitment',
         name: 'recruitment',
         type: 'link',
-        icon: 'dashboard',
+        icon: 'sync_alt',
         feature: 'SOURCING_ACCESS',
     },
     {

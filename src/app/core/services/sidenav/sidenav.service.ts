@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
-import { candidateMenu } from 'src/app/shared/static/candidate-menu.static';
-import { collaboraterMenu } from 'src/app/shared/static/collaborater-menu.static';
-import { managerMenu } from 'src/app/shared/static/manager-menu.static';
+import { candidateMenu } from '@shared/statics/candidate-menu.static';
+import { collaboraterMenu } from '@shared/statics/collaborater-menu.static';
+import { managerMenu } from '@shared/statics/manager-menu.static';
 
 @Injectable({
   providedIn: 'root'

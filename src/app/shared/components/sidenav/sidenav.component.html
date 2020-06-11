@@ -3,30 +3,54 @@
 </button>
 <div class="side-nav-container" [@onSideNavChange]="sidebarState">
   <mat-nav-list>
+    <!---------------------------------------- menu header ------------------------------------------------------------>
     <mat-list-item class="side-nav-header" [@nameAnimation]="sidebarState">
       <div class="col" style="margin-left: 5px">
         <div class="row">
           <img src="assets/img/ellipse-1.png" srcset="assets/img/ellipse-1@2x.png 2x,
-               assets/img/ellipse-1@3x.png 3x" class="company_point" alt="">
+               assets/img/ellipse-1@3x.png 3x" class="company-point">
         </div>
         <div class="row">
           <img src="assets/img/servicima.png" srcset="assets/img/servicima@2x.png 2x,
-               assets/servicima@3x.png 3x" class="company_name" alt="">
+               assets/servicima@3x.png 3x" class="company-name">
         </div>
       </div>
     </mat-list-item>
-    <div class="flex-container">
-      <div class="flex-item">
-        <ng-container *ngFor=" let menuItem of menu">
-          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['./', menuItem.state]"
-            class="menuColor wid-admin-font-Button"
-            *canBeDisplayed="{feature: menuItem.feature, license: menuItem.feature}">
-            <mat-icon class="icon svcmaIcon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
+    <!---------------------------------------- menu container ------------------------------------------------------------>
+    <div *ngIf="subMenu.length === 0; else subMenuContainer">
+      <ng-container *ngFor=" let menuItem of menu">
+        <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
+          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['./', menuItem.state]" class="list-item">
+            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
             </mat-icon>
-            <span class="label SPAN" [@labelAnimation]="sidebarState">{{menuItem.name}}</span>
+            <span [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
           </a>
         </ng-container>
-      </div>
+        <ng-template #subMenuLabel>
+          <mat-list-item class="list-item" (click)="toggleSubMenu(menuItem.children)">
+            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
+            </mat-icon>
+            <span [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
+          </mat-list-item>
+        </ng-template>
+      </ng-container>
     </div>
+    <!---------------------------------------- sub menu container ------------------------------------------------------------>
+    <ng-template #subMenuContainer>
+      <div class="sub-menu">
+        <mat-list-item class="list-item back-button" (click)="closeSubMenu()">
+          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">arrow_back
+          </mat-icon>
+          <span [@labelAnimation]="sidebarState">go back</span>
+        </mat-list-item>
+        <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['./', subMenuItem.state]" class="list-item"
+          *ngFor=" let subMenuItem of subMenu">
+          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
+            {{subMenuItem.icon}}
+          </mat-icon>
+          <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+        </a>
+      </div>
+    </ng-template>
   </mat-nav-list>
 </div>

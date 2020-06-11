@@ -1,12 +1,13 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 
 import {
   buttonAnimation,
   iconAnimation,
   labelAnimation,
   nameAnimation,
-  sidebarAnimation
+  sidebarAnimation,
 } from '../../animations/animations';
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
 
@@ -19,7 +20,7 @@ import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
     iconAnimation(),
     labelAnimation(),
     nameAnimation(),
-    buttonAnimation()
+    buttonAnimation(),
   ]
 })
 export class SidenavComponent implements OnInit, OnChanges {
@@ -31,6 +32,7 @@ export class SidenavComponent implements OnInit, OnChanges {
   iconBool = true;
   pathName: string;
   menu: IMenu[];
+  subMenu: IChildItem[] = [];
   @Input() moduleName: string;
 
   constructor(private sidenavService: SidenavService
@@ -52,6 +54,14 @@ export class SidenavComponent implements OnInit, OnChanges {
     this.sidenavService.toggle();
     this.iconBool = !this.iconBool;
     this.iconBool ? this.icontoShow = 'add' : this.icontoShow = 'more_vert';
+  }
+
+  toggleSubMenu(submenu: IChildItem[]) {
+    this.subMenu = submenu;
+  }
+
+  closeSubMenu() {
+    this.subMenu = [];
   }
 
 }
