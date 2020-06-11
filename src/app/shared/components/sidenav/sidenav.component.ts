@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
 
 import {
   buttonAnimation,

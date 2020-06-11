@@ -13,7 +13,7 @@ import { CanBeDisplayedDirective } from './can-be-displayed.directive';
 })
 class TestComponent { }
 
-fdescribe('canBeDisplayed', () => {
+describe('canBeDisplayed', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let divEls: DebugElement[];

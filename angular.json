@@ -161,7 +161,10 @@
             ],
             "scripts": [],
             "sourceMap": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "/**/*mock*.ts"
+            ]
           }
         },
         "lint": {

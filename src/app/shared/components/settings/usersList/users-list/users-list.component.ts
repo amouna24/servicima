@@ -7,8 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { combineLatest, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { IUserModel } from 'src/app/shared/model/user.model';
+import { ProfileService } from '@core/services/profile/profile.service';
+import { IUserModel } from '@shared/models/user.model';
 @Component({
   selector: 'wid-users-list',
   templateUrl: './users-list.component.html',
