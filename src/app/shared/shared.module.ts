@@ -4,6 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
 import { UserComponent } from './components/settings/user/user.component';
@@ -12,7 +14,6 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
-import { TranslationPipe } from './pipes/translation/translation.pipe';
 
 @NgModule({
   declarations: [
@@ -25,11 +26,10 @@ import { TranslationPipe } from './pipes/translation/translation.pipe';
     UserComponent,
     /* Directives */
     CanBeDisplayedDirective,
-    /* Pipes */
-    TranslationPipe
   ],
   imports: [
     CommonModule,
+    TranslateModule.forChild({ }),
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
@@ -41,10 +41,10 @@ import { TranslationPipe } from './pipes/translation/translation.pipe';
     HeaderComponent,
     SidenavComponent,
     SpinnerComponent,
-    TranslationPipe,
     UserComponent,
     ChangePwdComponent,
-    UsersListComponent
+    UsersListComponent,
+    TranslateModule
   ]
 })
 export class SharedModule { }

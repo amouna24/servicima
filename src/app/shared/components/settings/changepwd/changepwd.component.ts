@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Valida
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { CredentialsService } from '../../../../core/services/credentials/credentials.service';
-import { ProfileService } from '../../../../core/services/profile/profile.service';
+import { CredentialsService } from '@core/services/credentials/credentials.service';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 /** Error when the parent is invalid */
 class CrossFieldErrorMatcher implements ErrorStateMatcher {

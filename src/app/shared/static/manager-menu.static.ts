@@ -1,4 +1,4 @@
-import { IMenu } from '../model/side-nav-menu/side-nav-menu.model';
+import { IMenu } from '../models/side-nav-menu/side-nav-menu.model';
 
 export const managerMenu: IMenu[] = [
     {

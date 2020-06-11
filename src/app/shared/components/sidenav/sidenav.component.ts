@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { SidenavService } from 'src/app/core/services/sidenav/sidenav.service';
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
 
 import {
   buttonAnimation,
@@ -8,7 +8,7 @@ import {
   nameAnimation,
   sidebarAnimation
 } from '../../animations/animations';
-import { IMenu } from '../../model/side-nav-menu/side-nav-menu.model';
+import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
 
 @Component({
   selector: 'wid-sidenav',
@@ -38,7 +38,6 @@ export class SidenavComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.menu = this.sidenavService.getMenu(this.moduleName);
-    console.log(this.menu);
   }
 
   ngOnInit() {

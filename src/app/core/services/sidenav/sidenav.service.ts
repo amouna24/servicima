@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IMenu } from 'src/app/shared/model/side-nav-menu/side-nav-menu.model';
+import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
 import { candidateMenu } from 'src/app/shared/static/candidate-menu.static';
 import { collaboraterMenu } from 'src/app/shared/static/collaborater-menu.static';
 import { managerMenu } from 'src/app/shared/static/manager-menu.static';
