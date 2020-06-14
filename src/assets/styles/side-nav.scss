@@ -1,0 +1,87 @@
+wid-sidenav {
+
+  .side-nav-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .icon {
+      padding: 0 10px 0 0;
+      text-align: center;
+      vertical-align: middle;
+      color: $lightColor;
+    }
+
+    .active-list-item {
+
+      span,
+      .icon {
+        color: $thirdColor;
+      }
+    }
+  }
+
+  .side-nav-header {
+
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .col {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .col:last-child {
+      margin-right: 0;
+    }
+
+    .company-point {
+      width: 4px;
+      height: 4px;
+      margin-left: 125px;
+      -o-object-fit: contain;
+      object-fit: contain;
+      background-color: $thirdColor;
+    }
+
+    .company-name {
+      width: 113px;
+      height: 27px;
+      margin: auto;
+      object-fit: contain;
+    }
+  }
+
+  .list-item {
+    height: 60px !important;
+
+    span {
+      color: $lightColor;
+      font-family: $body-font;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+
+    }
+  }
+
+  .back-button {
+    margin-bottom: 10px;
+  }
+
+  .mat-icon-button {
+    background-image: $secondaryHorizontalGradient;
+    color: $lightColor;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 10px;
+  }
+
+}

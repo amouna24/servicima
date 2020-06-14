@@ -24,7 +24,7 @@ export class CanBeDisplayedDirective implements OnDestroy {
     // get the current user
     this.currentUser = {
       license: '123456',
-      features: ['dashboard', 'outsoursing', 'bills', 'HR', 'contracts', 'administration', 'timesheet']
+      features: ['CANDIDATE_FILE_ACCESS', 'outsoursing', 'bills', 'HR', 'contracts', 'administration', 'timesheet']
     };
   }
 

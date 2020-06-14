@@ -163,6 +163,6 @@
         "constructor": "never"
       }
     ],
-    "space-within-parens": 0
+    "space-within-parens": false
   }
 }
