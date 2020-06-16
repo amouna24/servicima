@@ -7,8 +7,8 @@ export const environment = {
   env: 'local',
   translateApiURL: 'http://192.168.1.22:8006/admin/translates/v1',
   languageApiURL: 'http://192.168.1.22:8003/admin/languages/v1',
-  credentialsApiURL: 'http://localhost:8010/auth/credentials/v1',
-  companyApiURL: 'http://localhost:8012/auth/companies/v1',
+  credentialsApiURL: 'http://192.168.1.22:8010/auth/credentials/v1',
+  companyApiURL: 'http://192.168.1.22:8012/auth/companies/v1',
   refDataApiUrl: 'http://192.168.1.22:8008/admin/refdatas/v1',
   refTypeApiUrl: 'http://192.168.1.22:8000/admin/reftypes/v1',
   applicationApiUrl: 'http://192.168.1.22:8007/admin/applications/v1',
@@ -19,8 +19,8 @@ export const environment = {
   userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1/addprofile',
   zipeCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',
-  userInfoApiUrl: 'http://localhost:8016/auth/v1',
-  userApiUrl: 'http://localhost:8013/auth/users/v1',
+  userInfoApiUrl: 'http://192.168.1.22:8016/auth/v1',
+  userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
   redirectionHomeUrl: 'home'
 };
 

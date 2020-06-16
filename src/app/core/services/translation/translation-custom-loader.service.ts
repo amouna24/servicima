@@ -19,6 +19,8 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class TranslationCustomLoaderService implements TranslateLoader {
 
+  localTranslationFile: any;
+
   constructor(
     private http: HttpClient,
     public translateService: TranslateService,
@@ -27,20 +29,51 @@ export class TranslationCustomLoaderService implements TranslateLoader {
 
   /**
    * this method has to be implement to override the ngx-translate original method
-   * @param langId: string
+   * @param language: string of languageId and keyCode
    */
-  getTranslation(langId: string): Observable<any> {
+  getTranslation(language: string): Observable<any> {
     return new Observable((observer: Observer<any>) => {
+      const langId = language.split('-')[0];
+      const langCode = language.split('-')[1];
       const langApiPath = `${environment.translateApiURL}?language_id=${langId}`;
       this.http.get(langApiPath).subscribe(
         (data: object[]) => {
-          observer.next(this.mapTranslationData(data));
-          observer.complete();
+          this.getLocalTranslation(langCode).subscribe((localTrad) => {
+            // Merge the http translation object with the local one
+            const formattedTrad = this.mapTranslationData(data);
+            const mergedData = Object.assign(localTrad, formattedTrad);
+            observer.next(mergedData);
+            observer.complete();
+          });
         },
         (err) => {
           console.log(err);
         },
       );
+    });
+  }
+
+  /**
+   * Get the local Translation file
+   */
+  getLocalTranslation(langCode: string): Observable<any> {
+    return new Observable((o: Observer<any>) => {
+      if (this.localTranslationFile) {
+        o.next(this.localTranslationFile);
+        o.complete();
+      } else {
+        this.http.get(`./assets/i18n/${langCode}.json`).subscribe(
+          (data) => {
+            this.localTranslationFile = data;
+            o.next(this.localTranslationFile);
+            o.complete();
+          },
+          () => {
+            o.next({ });
+            o.complete();
+          },
+        );
+      }
     });
   }
 
@@ -65,14 +98,13 @@ export class TranslationCustomLoaderService implements TranslateLoader {
   setTranslationLanguage() {
     const navLanguage = navigator.language.substr(0, 2).toUpperCase();
     const language = this.checkForLanguage(navLanguage);
-    this.translateService.use(language._id);
+    this.translateService.use(`${language._id}-${language.LanguageKey.language_code}`);
   }
 
   /**
    * Get the stored language from localStorage
    */
   getLanguages(): IAppLanguage[] {
-    const language = this.localStorageService.getItem('data').languages;
     return this.localStorageService.getItem('data').languages;
   }
 
