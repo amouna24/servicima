@@ -14,6 +14,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
+import { DataTableComponent } from './components/data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MaterialModule } from './modules/material/material.module';
     UsersListComponent,
     ChangePwdComponent,
     UserComponent,
+    DataTableComponent,
     /* Directives */
     CanBeDisplayedDirective,
   ],
@@ -44,6 +46,7 @@ import { MaterialModule } from './modules/material/material.module';
     UserComponent,
     ChangePwdComponent,
     UsersListComponent,
+    DataTableComponent,
     TranslateModule
   ]
 })

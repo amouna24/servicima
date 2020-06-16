@@ -1,0 +1,29 @@
+@import "./../../../../assets/styles/variables.scss";
+table,
+.mat-table {
+  width: 100%;
+  th {
+    background: rgba(0, 0, 0, 0.04);
+  }
+  .mat-row {
+    color: #202124;
+    background: rgba(255, 255, 255, 0.902);
+    cursor: pointer;
+    .icon {
+      color: $iconColor;
+    }
+    .actions-group {
+      display: none;
+    }
+  }
+  .mat-row:hover {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    border-color: rgba(223, 225, 229, 0);
+    background-color: rgba(0, 0, 0, 0.04);
+    .actions-group {
+      display: flex;
+      position: absolute;
+      right: 30px;
+    }
+  }
+}
