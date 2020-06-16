@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'wid-dashboard',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
