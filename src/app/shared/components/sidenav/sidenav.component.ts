@@ -11,6 +11,7 @@ import {
   sidebarAnimation,
 } from '../../animations/animations';
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
+import { ISubChild } from '@shared/models/side-nav-menu/sub-child.model';
 
 @Component({
   selector: 'wid-sidenav',
@@ -34,6 +35,8 @@ export class SidenavComponent implements OnInit, OnChanges {
   pathName: string;
   menu: IMenu[];
   subMenu: IChildItem[] = [];
+  parentMenu: string;
+
   @Input() moduleName: string;
 
   constructor(private sidenavService: SidenavService, private userService: UserService
@@ -61,8 +64,9 @@ export class SidenavComponent implements OnInit, OnChanges {
     this.iconBool ? this.icontoShow = 'add' : this.icontoShow = 'more_vert';
   }
 
-  toggleSubMenu(submenu: IChildItem[]) {
+  toggleSubMenu(submenu: IChildItem[], parentMenu: string) {
     this.subMenu = submenu;
+    this.parentMenu = parentMenu;
   }
 
   closeSubMenu() {

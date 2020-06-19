@@ -16,11 +16,10 @@ export const environment = {
   licenceApiUrl: 'http://192.168.1.22:8020/auth/companylicence/v1',
   moduleApiUrl: 'http://192.168.1.22:8005/admin/modules/v1',
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
+  userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1/addprofile',
+  contractApiUrl: 'http://localhost:8094/servicima/contracts/v1',
   applicationCode: 'SERVICIMA',
-  userInfoApiUrl: 'http://localhost:8016/auth/v1',
   userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
-  getUserInfosApiUrl: 'http://192.168.1.22:8016/auth/v1/getprofileinfos',
-  addProfileApiUrl:   'http://192.168.1.22:8016/auth/v1/addprofile',
   redirectionHomeUrl: '/'
 };
 

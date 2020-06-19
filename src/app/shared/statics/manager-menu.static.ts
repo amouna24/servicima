@@ -39,9 +39,64 @@ export const managerMenu: IMenu[] = [
     {
         state: 'contract-management',
         name: 'contract management',
-        type: 'link',
+        type: 'sub',
         icon: 'folder_shared',
         feature: 'CONTRACT_ACCESS',
+        children: [
+          {
+            state: '',
+            name: 'dashboard',
+            icon: 'assignment',
+            feature: 'CONTRACT_ACCESS',
+            type: 'link',
+          },
+          {
+            state: 'suppliers-contracts',
+            name: 'suppliers contracts',
+            icon: 'library_books',
+            feature: 'CONTRACT_ACCESS',
+            type: 'sub',
+            child: [
+              {
+                state: 'list',
+                name: 'supplier list',
+                icon: 'assignment',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              },
+              {
+                state: 'create',
+                name: 'supplier contracts',
+                icon: 'create',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              }
+            ]
+          },
+          {
+            state: 'clients-contracts',
+            name: 'clients contracts',
+            icon: 'assignment_ind',
+            feature: 'CONTRACT_ACCESS',
+            type: 'sub',
+            child: [
+              {
+                state: 'clients-list',
+                name: 'clients list',
+                icon: 'assignment',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              },
+              {
+                state: 'clients-contracts',
+                name: 'clients contracts',
+                icon: 'create',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              }
+            ]
+          }
+        ]
     },
     {
         state: 'billings',

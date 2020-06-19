@@ -20,7 +20,7 @@
           </a>
         </ng-container>
         <ng-template #subMenuLabel>
-          <mat-list-item class="list-item" (click)="toggleSubMenu(menuItem.children)">
+          <mat-list-item class="list-item" (click)="toggleSubMenu(menuItem.children, menuItem.state)">
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
             </mat-icon>
             <span [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
@@ -36,13 +36,35 @@
           </mat-icon>
           <span [@labelAnimation]="sidebarState">go back</span>
         </mat-list-item>
-        <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['./', subMenuItem.state]" class="list-item"
-          *ngFor=" let subMenuItem of subMenu">
-          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
-            {{subMenuItem.icon}}
-          </mat-icon>
-          <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
-        </a>
+        <ng-container *ngFor=" let subMenuItem of subMenu">
+                  <a *ngIf=" subMenuItem.type === 'link'" mat-list-item routerLinkActive="active-list-item" [routerLink]="subMenuItem.state === '' ? ['./' ,parentMenu] : ['./' ,parentMenu, subMenuItem.state]" [routerLinkActiveOptions]="{exact: true}" class="list-item">
+                    <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
+                      {{subMenuItem.icon}}
+                    </mat-icon>
+                    <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                  </a>
+                  <mat-accordion *ngIf=" subMenuItem.type === 'sub'">
+                    <mat-expansion-panel #widExp hideToggle>
+                      <mat-expansion-panel-header fxFlexAlign="auto" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="row" class="list-item" >
+                        <mat-panel-title  fxFlex="95">
+                          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
+                            {{subMenuItem.icon}}
+                          </mat-icon>
+                          <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                        </mat-panel-title>
+                        <mat-panel-description fxFlex="5">
+                          <mat-icon class="icon material-icons-outlined" *ngIf="!widExp.expanded">expand_more</mat-icon>
+                          <mat-icon class="icon material-icons-outlined" *ngIf="widExp.expanded">expand_less</mat-icon>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <a mat-list-item routerLinkActive="active-list-item" *ngFor="let subChildMenu of subMenuItem.child" [routerLink]="['./',parentMenu, subMenuItem.state, subChildMenu.state]" class="list-item">
+                        <mat-icon class="icon material-icons-outlined">{{subChildMenu.icon}}
+                        </mat-icon>
+                        <span [@labelAnimation]="sidebarState" class="wid-acc-title">{{subChildMenu.name }}</span>
+                      </a>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+        </ng-container>
       </div>
     </ng-template>
   </mat-nav-list>
