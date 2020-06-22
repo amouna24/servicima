@@ -5,17 +5,17 @@
 export const environment = {
   production: false,
   env: 'local',
-  translateApiURL: 'http://localhost:8006/translate',
-  languageApiURL: 'http://localhost:8003/language',
-  credentialsApiURL: 'http://localhost:8010/credentials',
-  companyApiURL: 'http://localhost:8012/company',
-  refDataApiUrl: 'http://localhost:8008/refdata',
-  refTypeApiUrl: 'http://localhost:8000/reftype',
-  applicationApiUrl: 'http://localhost:8007/application',
-  loadAuthStarterDataApiUrl: 'http://localhost:8015/loadauthstarterdata',
+  translateApiURL: 'http://localhost:8006/admin/translates/v1',
+  languageApiURL: 'http://localhost:8003/admin/languages/v1',
+  credentialsApiURL: 'http://localhost:8010/auth/credentials/v1',
+  companyApiURL: 'http://localhost:8012/auth/companies/v1',
+  refDataApiUrl: 'http://localhost:8008/admin/refdatas/v1',
+  refTypeApiUrl: 'http://localhost:8000/admin/reftypes/v1',
+  applicationApiUrl: 'http://localhost:8007/admin/applications/v1',
+  loadAuthStarterDataApiUrl: 'http://localhost:8015/admin/loadauthstarterdata/v1',
   zipeCode: 'https://vicopo.selfbuild.fr/cherche',
-  getUserInfosApiUrl: 'http://localhost:8016/getprofileinfos',
-  userApiUrl: 'http://localhost:8013/user',
+  userInfoApiUrl: 'http://localhost:8016/auth/v1',
+  userApiUrl: 'http://localhost:8013/auth/users/v1',
 };
 
 /*
