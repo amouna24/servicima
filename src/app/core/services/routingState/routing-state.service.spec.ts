@@ -6,7 +6,7 @@ describe('RoutingStateService', () => {
   let service: RoutingStateService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ });
     service = TestBed.inject(RoutingStateService);
   });
 

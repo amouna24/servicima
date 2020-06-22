@@ -32,6 +32,6 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
     this.routingState.loadRouting();
-   // this.modalService.registerModals(this.modals);
+    this.modalService.registerModals(this.modals);
   }
 }

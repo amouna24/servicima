@@ -20,8 +20,12 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
   private mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-     private sidebarService: SidenavService, private userService: UserService,) {
+  constructor(
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
+    private sidebarService: SidenavService,
+    private userService: UserService,
+    ) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);

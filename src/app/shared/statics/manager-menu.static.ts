@@ -58,16 +58,16 @@ export const managerMenu: IMenu[] = [
             type: 'sub',
             child: [
               {
-                state: 'list',
-                name: 'supplier list',
+                state: 'suppliers-list',
+                name: 'suppliers',
                 icon: 'assignment',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
               },
               {
-                state: 'create',
-                name: 'supplier contracts',
-                icon: 'create',
+                state: 'contracts-list',
+                name: 'contracts',
+                icon: 'assignment',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
               }
@@ -82,14 +82,14 @@ export const managerMenu: IMenu[] = [
             child: [
               {
                 state: 'clients-list',
-                name: 'clients list',
+                name: 'clients',
                 icon: 'assignment',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
               },
               {
                 state: 'clients-contracts',
-                name: 'clients contracts',
+                name: 'contracts',
                 icon: 'create',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',

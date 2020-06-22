@@ -11,7 +11,6 @@ import {
   sidebarAnimation,
 } from '../../animations/animations';
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
-import { ISubChild } from '@shared/models/side-nav-menu/sub-child.model';
 
 @Component({
   selector: 'wid-sidenav',

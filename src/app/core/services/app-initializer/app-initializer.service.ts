@@ -7,6 +7,13 @@ import { IApplicationModel } from '@shared/models/application.model';
 import { ICompanyModel } from '@shared/models/company.model';
 import { IRefdataModel } from '@shared/models/refdata.model';
 import { IReftypeModel } from '@shared/models/reftype.model';
+import { Country } from '@shared/models/countries.model';
+import { ICities } from '@shared/models/cities.model';
+import { ICurrency } from '@shared/models/currency.model';
+import { IViewParam } from '@shared/models/view.model';
+import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
+import { Activity } from '@shared/models/activity.model';
+import { forkJoin } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { TranslationCustomLoaderService } from '../translation/translation-custom-loader.service';
@@ -22,12 +29,18 @@ export class AppInitializerService {
   companyList: ICompanyModel[];
   refDataList: IRefdataModel[];
   refTypeList: IReftypeModel[];
+  activityCodeList: Activity[] = [];
+  countriesList: Country[] = [];
+  currenciesList: ICurrency[] = [];
+
   constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService,
     private translationCustomLoaderService: TranslationCustomLoaderService,
+    private assetsDataService: AssetsDataService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   async initializeApp() {
     await this.httpClient.get(environment.loadAuthStarterDataApiUrl).toPromise().then(
@@ -46,5 +59,15 @@ export class AppInitializerService {
         this.router.navigate(['/error']);
       },
     );
+    await forkJoin([
+      this.assetsDataService.getAllActivityCode(),
+      this.assetsDataService.getAllCountries(),
+      this.assetsDataService.getAllCurrencies()
+    ]).toPromise().then(
+      (data) => {
+        this.activityCodeList = data[0];
+        this.countriesList = data[1];
+        this.currenciesList = data[2];
+      });
   }
 }

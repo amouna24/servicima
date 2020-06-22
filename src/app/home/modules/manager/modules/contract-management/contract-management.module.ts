@@ -1,30 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MaterialModule } from '@shared/modules/material/material.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '@shared/shared.module';
 
 import { ContractManagementRoutingModule } from './contract-management-routing.module';
 import { ContractManagementComponent } from './contract-management.component';
-import { ContractListComponent } from './suppliers-contracts/contract-list/contract-list.component';
-import { AddContractComponent } from './suppliers-contracts/add-contract/add-contract.component';
-import { SuppliersContractsComponent } from './suppliers-contracts/suppliers-contracts.component';
-import { ClientsContractsComponent } from './clients-contracts/clients-contracts.component';
+import { AddContractorComponent } from './common-actions/add-contractor/add-contractor.component';
+import { ContractorsListComponent } from './common-actions/contractors-list/contractors-list.component';
 
 @NgModule({
   declarations: [
     ContractManagementComponent,
-    ContractListComponent,
-    AddContractComponent,
-    SuppliersContractsComponent,
-    ClientsContractsComponent,
+    AddContractorComponent,
+    ContractorsListComponent,
   ],
     imports: [
         CommonModule,
         ContractManagementRoutingModule,
-        MaterialModule,
-        FlexLayoutModule,
-        ReactiveFormsModule,
-    ]
+        SharedModule,
+    ],
+  exports: [
+    ContractorsListComponent,
+    AddContractorComponent,
+  ]
 })
 export class ContractManagementModule { }

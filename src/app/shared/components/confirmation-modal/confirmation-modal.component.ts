@@ -23,7 +23,7 @@ export class ConfirmationModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSubbmitAction(value: string): void {
+  onSubmitAction(value: string): void {
     this.modalService.emitConfirmationModalResponse(value);
     this.dialogRef.close();
   }

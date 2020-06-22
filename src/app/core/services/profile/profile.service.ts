@@ -58,7 +58,7 @@ export class ProfileService {
    * @param user: user
    */
   addNewProfile(user) {
-    return this.httpClient.post(environment.addProfileApiUrl, user);
+    return this.httpClient.post(environment.userApiUrl, user);
   }
 
   /**

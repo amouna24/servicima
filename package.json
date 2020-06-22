@@ -43,7 +43,7 @@
     "@syncfusion/ej2-angular-buttons": "18.1.52",
     "@syncfusion/ej2-angular-dropdowns": "18.1.55",
     "@syncfusion/ej2-angular-grids": "18.1.55",
-    "@widigital-group/auth-npm-front": "^0.1.8",
+    "@widigital-group/auth-npm-front": "^0.1.9",
     "angular-password-strength-meter": "2.0.0",
     "fingerprintjs2": "2.1.0",
     "ng-recaptcha": "5.0.0",

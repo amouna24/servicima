@@ -33,7 +33,7 @@ export class UtilsService {
       if (filterRefData.length > 0) {
         filterRefData.forEach(
           (element) => {
-            this.resList.push({ value: element._id, viewValue: element.ref_data_desc });
+            this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
           },
         );
         return this.refData[type] = this.resList;
@@ -58,4 +58,52 @@ export class UtilsService {
     });
     return this.refData;
   }
+
+  /*----------- IT WORKS FOR ANY APPLICATIONS AND COMPANY -------------*/
+
+  /**************************************************************************
+   * @description Get Application ID
+   * @param APPLICATION_CODE the application code
+   * @return the ID of APPLICATION_CODE
+   *************************************************************************/
+  getApplicationID(APPLICATION_CODE: string): string {
+    return this.appInitializerService.applicationList
+      .find(value => value.ApplicationKey.application_code === APPLICATION_CODE)._id;
+  }
+
+  /**************************************************************************
+   * @description Get Company ID
+   * @param COMPANY_EMAIL the email_address
+   * @param APPLICATION_CODE of Application
+   * @return ID of company
+   *************************************************************************/
+  getCompanyId(COMPANY_EMAIL: string, APPLICATION_CODE?: string): string {
+    return this.appInitializerService.companyList
+      .find(value =>
+        value.companyKey.email_address === COMPANY_EMAIL &&
+        value.companyKey.application_id === this.getApplicationID(APPLICATION_CODE)
+      )._id;
+  }
+  /**************************************************************************
+   * @description Get Application NAME
+   * @param APPLICATION_ID the application id
+   * @return the NAME of APPLICATION_ID
+   *************************************************************************/
+  getApplicationName(APPLICATION_ID: string): string {
+    return this.appInitializerService.applicationList
+      .find(value => value._id === APPLICATION_ID).application_desc;
+  }
+
+  /**************************************************************************
+   * @description Get Company NAME
+   * @param COMPANY_ID the companyID
+   * @return NAME of company
+   *************************************************************************/
+  getCompanyName(COMPANY_ID: string): string {
+    return this.appInitializerService.companyList
+      .find(value =>
+        value._id === COMPANY_ID
+      ).name;
+  }
+  /*-----------------------------------------------------------------------*/
 }

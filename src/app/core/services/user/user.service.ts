@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -9,9 +10,9 @@ import { LocalStorageService } from '../storage/local-storage.service';
   providedIn: 'root'
 })
 export class UserService {
-  userInfo;
+  userInfo: IUserInfo;
   userCredentials: string;
-  connectedUser$ = new BehaviorSubject(null);
+  connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   company$ = new Subject();
 
   constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
@@ -23,7 +24,7 @@ export class UserService {
     getUserInfo() {
      this.userCredentials = this.localStorageService.getItem('userCredentials');
      // tslint:disable-next-line:max-line-length
-       this.httpClient.get(`${environment.getUserInfosApiUrl}?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
+       this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
        .subscribe((data) => {
             this.userInfo = data;
             this.connectedUser$.next(data);
