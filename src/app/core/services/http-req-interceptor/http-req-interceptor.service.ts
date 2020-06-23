@@ -4,17 +4,21 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { LocalStorageService } from '../storage/local-storage.service';
+
 @Injectable()
 export class HttpReqInterceptorService implements HttpInterceptor {
   updatedRequest: any;
   // TODO : get the user token from the storage
-  userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaW1lbi5hbW1hckB3aWRpZ2l0YWwtZ3JvdXAuY29tIiwiaWF0I'
-    + 'joxNTkyNTU2MDExLCJleHAiOjE1OTI2NDI0MTF9.YqWEZVsDs9C9mMiGMsqRzVSrQX4lgCoUptVyIw0ilIQ';
-  constructor(private router: Router) { }
+  token: string;
+  constructor(private router: Router, private localStorageService: LocalStorageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (this.localStorageService.getItem('currentToken')) {
+      this.token =  this.localStorageService.getItem('currentToken').account_activation_token;
+    }
     this.updatedRequest = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${this.userToken}`)
+      headers: req.headers.set('Authorization', `Bearer ${this.token}`)
     });
     return next.handle(this.updatedRequest).pipe(
       tap(
