@@ -35,7 +35,7 @@ import { DataTableComponent } from './components/data-table/data-table.component
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   exports: [
     MaterialModule,
@@ -47,7 +47,7 @@ import { DataTableComponent } from './components/data-table/data-table.component
     ChangePwdComponent,
     UsersListComponent,
     DataTableComponent,
-    TranslateModule
+    TranslateModule,
   ]
 })
 export class SharedModule { }
