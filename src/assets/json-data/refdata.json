@@ -1,0 +1,141 @@
+[
+	{   "Language_CODE":"FR",
+		"REF_TYPE_CODE": "GENDER",
+		"REF_DATA_CODE": "M",
+		"REF_DATA_DESC": "Homme"
+	},
+	{   "Language_CODE":"FR",
+		"REF_TYPE_CODE": "GENDER",
+		"REF_DATA_CODE": "F",
+		"REF_DATA_DESC": "Femme"
+    },
+    { 	"Language_CODE":"EN",
+		"REF_TYPE_CODE": "GENDER",
+		"REF_DATA_CODE": "M",
+		"REF_DATA_DESC": "Male"
+	},
+	{   "Language_CODE":"EN",
+		"REF_TYPE_CODE": "GENDER",
+		"REF_DATA_CODE": "F",
+		"REF_DATA_DESC": "Female"
+	},
+	{  	"Language_CODE":"FR",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "EURL",
+		"REF_DATA_DESC": "EURL"
+	},
+	{  	"Language_CODE":"FR",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SARL",
+		"REF_DATA_DESC": "SARL"
+	},
+	{ 	"Language_CODE":"FR",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SAS",
+		"REF_DATA_DESC": "SAS"
+	},
+	{
+    	"Language_CODE":"FR",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SASU",
+		"REF_DATA_DESC": "SASU"
+	},
+	{
+   	    "Language_CODE":"FR",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "EIRL",
+		"REF_DATA_DESC": "EIRL"
+	},
+	{
+    	"Language_CODE":"FR",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SA",
+		"REF_DATA_DESC": "SA"
+	},
+ 	{ 	"Language_CODE":"EN",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+    	"REF_DATA_CODE": "EURL",
+    	"REF_DATA_DESC": "EURL"
+  	},
+  	{  	"Language_CODE":"EN",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+    	"REF_DATA_CODE": "SARL",
+    	"REF_DATA_DESC": "SARL"
+    },
+    { 	"Language_CODE":"EN",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SAS",
+		"REF_DATA_DESC": "SAS"
+    },
+    {	"Language_CODE":"EN",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+    	"REF_DATA_CODE": "SASU",
+    	"REF_DATA_DESC": "SASU"
+	},
+	{
+		"Language_CODE":"EN",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "EIRL",
+		"REF_DATA_DESC": "EIRL"
+	},
+	{
+		"Language_CODE":"EN",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SA",
+		"REF_DATA_DESC": "SA"
+	},
+	{   "Language_CODE":"FR",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "PRS",
+		"REF_DATA_DESC": "Président"
+    },
+	{
+        "Language_CODE":"FR",
+        "REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "MAN",
+		"REF_DATA_DESC": "Gérant"
+	},
+	{   "Language_CODE":"FR",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "DIR",
+		"REF_DATA_DESC": "Directeur"
+	},
+	{
+        "Language_CODE":"FR",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "ADM",
+		"REF_DATA_DESC": "Responsable Administratif"
+	},
+	{	"Language_CODE":"FR",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "BA",
+		"REF_DATA_DESC": "Business Developer"
+    },
+    {   "Language_CODE":"EN",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "PRS",
+		"REF_DATA_DESC": "President"
+	},
+	{
+        "Language_CODE":"EN",
+        "REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "MAN",
+		"REF_DATA_DESC": "Manager"
+	},
+	{   "Language_CODE":"EN",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "DIR",
+		"REF_DATA_DESC": "Director"
+	},
+	{
+        "Language_CODE":"EN",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "ADM",
+		"REF_DATA_DESC": "Administration Manager"
+	},
+	{	"Language_CODE":"EN",
+		"REF_TYPE_CODE": "PROF_TITLES",
+		"REF_DATA_CODE": "BA",
+		"REF_DATA_DESC": "Business Developer"
+	}
+]
