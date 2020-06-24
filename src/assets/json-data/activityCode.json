@@ -1,0 +1,2926 @@
+[
+  {
+    "NAF": "0111Z",
+    "ACTIVITE": "Culture de cereales (a l'exception du riz), de legumineuses et de graines oleagineuses"
+  },
+  {
+    "NAF": "0112Z",
+    "ACTIVITE": "Culture du riz"
+  },
+  {
+    "NAF": "0113Z",
+    "ACTIVITE": "Culture de legumes, de melons, de racines et de tubercules"
+  },
+  {
+    "NAF": "0114Z",
+    "ACTIVITE": "Culture de la canne a sucre"
+  },
+  {
+    "NAF": "0115Z",
+    "ACTIVITE": "Culture du tabac"
+  },
+  {
+    "NAF": "0116Z",
+    "ACTIVITE": "Culture de plantes a  fibres"
+  },
+  {
+    "NAF": "0119Z",
+    "ACTIVITE": "Autres cultures non permanentes"
+  },
+  {
+    "NAF": "0121Z",
+    "ACTIVITE": "Culture de la vigne"
+  },
+  {
+    "NAF": "0122Z",
+    "ACTIVITE": "Culture de fruits tropicaux et subtropicaux"
+  },
+  {
+    "NAF": "0123Z",
+    "ACTIVITE": "Culture d'agrumes"
+  },
+  {
+    "NAF": "0124Z",
+    "ACTIVITE": "Culture de fruits a  pepins et a  noyau"
+  },
+  {
+    "NAF": "0125Z",
+    "ACTIVITE": "Culture d'autres fruits d'arbres ou d'arbustes et de fruits a  coque"
+  },
+  {
+    "NAF": "0126Z",
+    "ACTIVITE": "Culture de fruits oleagineux"
+  },
+  {
+    "NAF": "0127Z",
+    "ACTIVITE": "Culture de plantes a  boissons"
+  },
+  {
+    "NAF": "0128Z",
+    "ACTIVITE": "Culture de plantes a  epices, aromatiques, medicinales et pharmaceutiques"
+  },
+  {
+    "NAF": "0129Z",
+    "ACTIVITE": "Autres cultures permanentes"
+  },
+  {
+    "NAF": "0130Z",
+    "ACTIVITE": "Reproduction de plantes"
+  },
+  {
+    "NAF": "0141Z",
+    "ACTIVITE": "Elevage de vaches laitieres"
+  },
+  {
+    "NAF": "0142Z",
+    "ACTIVITE": "Elevage d'autres bovins et de buffles"
+  },
+  {
+    "NAF": "0143Z",
+    "ACTIVITE": "Elevage de chevaux et d'autres equides"
+  },
+  {
+    "NAF": "0144Z",
+    "ACTIVITE": "Elevage de chameaux et d'autres camelides"
+  },
+  {
+    "NAF": "0145Z",
+    "ACTIVITE": "Elevage d'ovins et de caprins"
+  },
+  {
+    "NAF": "0146Z",
+    "ACTIVITE": "Elevage de porcins"
+  },
+  {
+    "NAF": "0147Z",
+    "ACTIVITE": "Elevage de volailles"
+  },
+  {
+    "NAF": "0149Z",
+    "ACTIVITE": "Elevage d'autres animaux"
+  },
+  {
+    "NAF": "0150Z",
+    "ACTIVITE": "Culture et Elevage associes"
+  },
+  {
+    "NAF": "0161Z",
+    "ACTIVITE": "Activites de soutien aux cultures"
+  },
+  {
+    "NAF": "0162Z",
+    "ACTIVITE": "Activites de soutien a  la production animale"
+  },
+  {
+    "NAF": "0163Z",
+    "ACTIVITE": "Traitement primaire des recoltes"
+  },
+  {
+    "NAF": "0164Z",
+    "ACTIVITE": "Traitement des semences"
+  },
+  {
+    "NAF": "0170Z",
+    "ACTIVITE": "Chasse, piegeage et services annexes"
+  },
+  {
+    "NAF": "0210Z",
+    "ACTIVITE": "Sylviculture et autres activites forestieres"
+  },
+  {
+    "NAF": "0220Z",
+    "ACTIVITE": "Exploitation forestiere"
+  },
+  {
+    "NAF": "0230Z",
+    "ACTIVITE": "Recolte de produits forestiers non ligneux poussant a  l'etat sauvage"
+  },
+  {
+    "NAF": "0240Z",
+    "ACTIVITE": "Services de soutien a  l'exploitation forestiere"
+  },
+  {
+    "NAF": "0311Z",
+    "ACTIVITE": "Peche en mer"
+  },
+  {
+    "NAF": "0312Z",
+    "ACTIVITE": "Peche en eau douce"
+  },
+  {
+    "NAF": "0321Z",
+    "ACTIVITE": "Aquaculture en mer"
+  },
+  {
+    "NAF": "0322Z",
+    "ACTIVITE": "Aquaculture en eau douce"
+  },
+  {
+    "NAF": "0510Z",
+    "ACTIVITE": "Extraction de houille"
+  },
+  {
+    "NAF": "0520Z",
+    "ACTIVITE": "Extraction de lignite"
+  },
+  {
+    "NAF": "0610Z",
+    "ACTIVITE": "Extraction de petrole brut"
+  },
+  {
+    "NAF": "0620Z",
+    "ACTIVITE": "Extraction de gaz naturel"
+  },
+  {
+    "NAF": "0710Z",
+    "ACTIVITE": "Extraction de minerais de fer"
+  },
+  {
+    "NAF": "0721Z",
+    "ACTIVITE": "Extraction de minerais d'uranium et de thorium"
+  },
+  {
+    "NAF": "0729Z",
+    "ACTIVITE": "Extraction d'autres minerais de metaux non ferreux"
+  },
+  {
+    "NAF": "0811Z",
+    "ACTIVITE": "Extraction de pierres ornementales et de construction, de calcaire industriel, de gypse, de craie et d'ardoise"
+  },
+  {
+    "NAF": "0812Z",
+    "ACTIVITE": "Exploitation de gravieres et sablieres, extraction d'argiles et de kaolin"
+  },
+  {
+    "NAF": "0891Z",
+    "ACTIVITE": "Extraction des mineraux chimiques et d'engrais mineraux"
+  },
+  {
+    "NAF": "0892Z",
+    "ACTIVITE": "Extraction de tourbe"
+  },
+  {
+    "NAF": "0893Z",
+    "ACTIVITE": "Production de sel"
+  },
+  {
+    "NAF": "0899Z",
+    "ACTIVITE": "Autres activites extractives n.c.a."
+  },
+  {
+    "NAF": "0910Z",
+    "ACTIVITE": "Activites de soutien a  l'extraction d'hydrocarbures"
+  },
+  {
+    "NAF": "0990Z",
+    "ACTIVITE": "Activites de soutien aux autres industries extractives"
+  },
+  {
+    "NAF": "1011Z",
+    "ACTIVITE": "Transformation et conservation de la viande de boucherie"
+  },
+  {
+    "NAF": "1012Z",
+    "ACTIVITE": "Transformation et conservation de la viande de volaille"
+  },
+  {
+    "NAF": "1013A",
+    "ACTIVITE": "Preparation industrielle de produits a  base de viande"
+  },
+  {
+    "NAF": "1013B",
+    "ACTIVITE": "Charcuterie"
+  },
+  {
+    "NAF": "1020Z",
+    "ACTIVITE": "Transformation et conservation de poisson, de crustaces et de mollusques"
+  },
+  {
+    "NAF": "1031Z",
+    "ACTIVITE": "Transformation et conservation de pommes de terre"
+  },
+  {
+    "NAF": "1032Z",
+    "ACTIVITE": "Preparation de jus de fruits et legumes"
+  },
+  {
+    "NAF": "1039A",
+    "ACTIVITE": "Autre transformation et conservation de legumes"
+  },
+  {
+    "NAF": "1039B",
+    "ACTIVITE": "Transformation et conservation de fruits"
+  },
+  {
+    "NAF": "1041B",
+    "ACTIVITE": "Fabrication d'huiles et graisses raffinees"
+  },
+  {
+    "NAF": "1042Z",
+    "ACTIVITE": "Fabrication de margarine et graisses comestibles similaires"
+  },
+  {
+    "NAF": "1051A",
+    "ACTIVITE": "Fabrication de lait liquide et de produits frais"
+  },
+  {
+    "NAF": "1051B",
+    "ACTIVITE": "Fabrication de beurre"
+  },
+  {
+    "NAF": "1051C",
+    "ACTIVITE": "Fabrication de fromage"
+  },
+  {
+    "NAF": "1051D",
+    "ACTIVITE": "Fabrication d'autres produits laitiers"
+  },
+  {
+    "NAF": "1052Z",
+    "ACTIVITE": "Fabrication de glaces et sorbets"
+  },
+  {
+    "NAF": "1061A",
+    "ACTIVITE": "Meunerie"
+  },
+  {
+    "NAF": "1061B",
+    "ACTIVITE": "Autres activites du travail des grains"
+  },
+  {
+    "NAF": "1062Z",
+    "ACTIVITE": "Fabrication de produits amylaces"
+  },
+  {
+    "NAF": "1071A",
+    "ACTIVITE": "Fabrication industrielle de pain et de patisserie fraiche"
+  },
+  {
+    "NAF": "1071B",
+    "ACTIVITE": "Cuisson de produits de boulangerie"
+  },
+  {
+    "NAF": "1071C",
+    "ACTIVITE": "Boulangerie et boulangerie-patisserie"
+  },
+  {
+    "NAF": "1071D",
+    "ACTIVITE": "Patisserie"
+  },
+  {
+    "NAF": "1072Z",
+    "ACTIVITE": "Fabrication de biscuits, biscottes et patisseries de conservation"
+  },
+  {
+    "NAF": "1073Z",
+    "ACTIVITE": "Fabrication de pates alimentaires"
+  },
+  {
+    "NAF": "1081Z",
+    "ACTIVITE": "Fabrication de sucre"
+  },
+  {
+    "NAF": "1082Z",
+    "ACTIVITE": "Fabrication de cacao, chocolat et de produits de confiserie"
+  },
+  {
+    "NAF": "1083Z",
+    "ACTIVITE": "Transformation du the et du cafe"
+  },
+  {
+    "NAF": "1084Z",
+    "ACTIVITE": "Fabrication de condiments et assaisonnements"
+  },
+  {
+    "NAF": "1085Z",
+    "ACTIVITE": "Fabrication de plats prepares"
+  },
+  {
+    "NAF": "1086Z",
+    "ACTIVITE": "Fabrication d'aliments homogeneises et dietetiques"
+  },
+  {
+    "NAF": "1089Z",
+    "ACTIVITE": "Fabrication d'autres produits alimentaires n.c.a."
+  },
+  {
+    "NAF": "1091Z",
+    "ACTIVITE": "Fabrication d'aliments pour animaux de ferme"
+  },
+  {
+    "NAF": "1092Z",
+    "ACTIVITE": "Fabrication d'aliments pour animaux de compagnie"
+  },
+  {
+    "NAF": "1101Z",
+    "ACTIVITE": "Production de boissons alcooliques distillees"
+  },
+  {
+    "NAF": "1102A",
+    "ACTIVITE": "Fabrication de vins effervescents"
+  },
+  {
+    "NAF": "1102B",
+    "ACTIVITE": "Vinification"
+  },
+  {
+    "NAF": "1103Z",
+    "ACTIVITE": "Fabrication de cidre et de vins de fruits"
+  },
+  {
+    "NAF": "1104Z",
+    "ACTIVITE": "Production d'autres boissons fermentees non distillees"
+  },
+  {
+    "NAF": "1105Z",
+    "ACTIVITE": "Fabrication de biere"
+  },
+  {
+    "NAF": "1106Z",
+    "ACTIVITE": "Fabrication de malt"
+  },
+  {
+    "NAF": "1107A",
+    "ACTIVITE": "Industrie des eaux de table"
+  },
+  {
+    "NAF": "1107B",
+    "ACTIVITE": "Production de boissons rafraichissantes"
+  },
+  {
+    "NAF": "1200Z",
+    "ACTIVITE": "Fabrication de produits a  base de tabac"
+  },
+  {
+    "NAF": "1310Z",
+    "ACTIVITE": "Preparation de fibres textiles et filature"
+  },
+  {
+    "NAF": "1320Z",
+    "ACTIVITE": "Tissage"
+  },
+  {
+    "NAF": "1330Z",
+    "ACTIVITE": "Ennoblissement textile"
+  },
+  {
+    "NAF": "1391Z",
+    "ACTIVITE": "Fabrication d'etoffes a  mailles"
+  },
+  {
+    "NAF": "1392Z",
+    "ACTIVITE": "Fabrication d'articles textiles, sauf habillement"
+  },
+  {
+    "NAF": "1393Z",
+    "ACTIVITE": "Fabrication de tapis et moquettes"
+  },
+  {
+    "NAF": "1394Z",
+    "ACTIVITE": "Fabrication de ficelles, cordes et filets"
+  },
+  {
+    "NAF": "1395Z",
+    "ACTIVITE": "Fabrication de non-tisses, sauf habillement"
+  },
+  {
+    "NAF": "1396Z",
+    "ACTIVITE": "Fabrication d'autres textiles techniques et industriels"
+  },
+  {
+    "NAF": "1399Z",
+    "ACTIVITE": "Fabrication d'autres textiles n.c.a."
+  },
+  {
+    "NAF": "1411Z",
+    "ACTIVITE": "Fabrication de vetements en cuir"
+  },
+  {
+    "NAF": "1412Z",
+    "ACTIVITE": "Fabrication de vetements de travail"
+  },
+  {
+    "NAF": "1413Z",
+    "ACTIVITE": "Fabrication de vetements de dessus"
+  },
+  {
+    "NAF": "1414Z",
+    "ACTIVITE": "Fabrication de vetements de dessous"
+  },
+  {
+    "NAF": "1419Z",
+    "ACTIVITE": "Fabrication d'autres vetements et accessoires"
+  },
+  {
+    "NAF": "1420Z",
+    "ACTIVITE": "Fabrication d'articles en fourrure"
+  },
+  {
+    "NAF": "1431Z",
+    "ACTIVITE": "Fabrication d'articles chaussants a  mailles"
+  },
+  {
+    "NAF": "1439Z",
+    "ACTIVITE": "Fabrication d'autres articles a  mailles"
+  },
+  {
+    "NAF": "1511Z",
+    "ACTIVITE": "Appret et tannage des cuirs"
+  },
+  {
+    "NAF": "1512Z",
+    "ACTIVITE": "Fabrication d'articles de voyage, de maroquinerie et de sellerie"
+  },
+  {
+    "NAF": "1520Z",
+    "ACTIVITE": "Fabrication de chaussures"
+  },
+  {
+    "NAF": "1610A",
+    "ACTIVITE": "Sciage et rabotage du bois, hors impregnation"
+  },
+  {
+    "NAF": "1610B",
+    "ACTIVITE": "Impregnation du bois"
+  },
+  {
+    "NAF": "1621Z",
+    "ACTIVITE": "Fabrication de placage et de panneaux de bois"
+  },
+  {
+    "NAF": "1622Z",
+    "ACTIVITE": "Fabrication de parquets assembles"
+  },
+  {
+    "NAF": "1623Z",
+    "ACTIVITE": "Fabrication de charpentes et d'autres menuiseries"
+  },
+  {
+    "NAF": "1624Z",
+    "ACTIVITE": "Fabrication d'emballages en bois"
+  },
+  {
+    "NAF": "1629Z",
+    "ACTIVITE": "Fabrication d'objets divers en bois"
+  },
+  {
+    "NAF": "1711Z",
+    "ACTIVITE": "Fabrication de pate a  papier"
+  },
+  {
+    "NAF": "1712Z",
+    "ACTIVITE": "Fabrication de papier et de carton"
+  },
+  {
+    "NAF": "1721A",
+    "ACTIVITE": "Fabrication de carton ondule"
+  },
+  {
+    "NAF": "1721B",
+    "ACTIVITE": "Fabrication de cartonnages"
+  },
+  {
+    "NAF": "1721C",
+    "ACTIVITE": "Fabrication d'emballages en papier"
+  },
+  {
+    "NAF": "1722Z",
+    "ACTIVITE": "Fabrication d'articles en papier a  usage sanitaire ou domestique"
+  },
+  {
+    "NAF": "1723Z",
+    "ACTIVITE": "Fabrication d'articles de papeterie"
+  },
+  {
+    "NAF": "1724Z",
+    "ACTIVITE": "Fabrication de papiers peints"
+  },
+  {
+    "NAF": "1729Z",
+    "ACTIVITE": "Fabrication d'autres articles en papier ou en carton"
+  },
+  {
+    "NAF": "1811Z",
+    "ACTIVITE": "Imprimerie de journaux"
+  },
+  {
+    "NAF": "1812Z",
+    "ACTIVITE": "Autre imprimerie (labeur)"
+  },
+  {
+    "NAF": "1813Z",
+    "ACTIVITE": "Activites de pre-presse"
+  },
+  {
+    "NAF": "1814Z",
+    "ACTIVITE": "Reliure et activites connexes"
+  },
+  {
+    "NAF": "1820Z",
+    "ACTIVITE": "Reproduction d'enregistrements"
+  },
+  {
+    "NAF": "1910Z",
+    "ACTIVITE": "Cokefaction"
+  },
+  {
+    "NAF": "1920Z",
+    "ACTIVITE": "Raffinage du petrole"
+  },
+  {
+    "NAF": "2011Z",
+    "ACTIVITE": "Fabrication de gaz industriels"
+  },
+  {
+    "NAF": "2012Z",
+    "ACTIVITE": "Fabrication de colorants et de pigments"
+  },
+  {
+    "NAF": "2013A",
+    "ACTIVITE": "Enrichissement et retraitement de matieres nucleaires"
+  },
+  {
+    "NAF": "2013B",
+    "ACTIVITE": "Fabrication d'autres produits chimiques inorganiques de base n.c.a."
+  },
+  {
+    "NAF": "2014Z",
+    "ACTIVITE": "Fabrication d'autres produits chimiques organiques de base"
+  },
+  {
+    "NAF": "2015Z",
+    "ACTIVITE": "Fabrication de produits azotes et d'engrais"
+  },
+  {
+    "NAF": "2016Z",
+    "ACTIVITE": "Fabrication de matieres plastiques de base"
+  },
+  {
+    "NAF": "2017Z",
+    "ACTIVITE": "Fabrication de caoutchouc synthetique"
+  },
+  {
+    "NAF": "2020Z",
+    "ACTIVITE": "Fabrication de pesticides et d'autres produits agrochimiques"
+  },
+  {
+    "NAF": "2030Z",
+    "ACTIVITE": "Fabrication de peintures, vernis, encres et mastics"
+  },
+  {
+    "NAF": "2041Z",
+    "ACTIVITE": "Fabrication de savons, detergents et produits d'entretien"
+  },
+  {
+    "NAF": "2042Z",
+    "ACTIVITE": "Fabrication de parfums et de produits pour la toilette"
+  },
+  {
+    "NAF": "2051Z",
+    "ACTIVITE": "Fabrication de produits explosifs"
+  },
+  {
+    "NAF": "2052Z",
+    "ACTIVITE": "Fabrication de colles"
+  },
+  {
+    "NAF": "2053Z",
+    "ACTIVITE": "Fabrication d'huiles essentielles"
+  },
+  {
+    "NAF": "2059Z",
+    "ACTIVITE": "Fabrication d'autres produits chimiques n.c.a."
+  },
+  {
+    "NAF": "2060Z",
+    "ACTIVITE": "Fabrication de fibres artificielles ou synthetiques"
+  },
+  {
+    "NAF": "2110Z",
+    "ACTIVITE": "Fabrication de produits pharmaceutiques de base"
+  },
+  {
+    "NAF": "2120Z",
+    "ACTIVITE": "Fabrication de preparations pharmaceutiques"
+  },
+  {
+    "NAF": "2211Z",
+    "ACTIVITE": "Fabrication et rechapage de pneumatiques"
+  },
+  {
+    "NAF": "2219Z",
+    "ACTIVITE": "Fabrication d'autres articles en caoutchouc"
+  },
+  {
+    "NAF": "2221Z",
+    "ACTIVITE": "Fabrication de plaques, feuilles, tubes et profiles en matieres plastiques"
+  },
+  {
+    "NAF": "2222Z",
+    "ACTIVITE": "Fabrication d'emballages en matieres plastiques"
+  },
+  {
+    "NAF": "2223Z",
+    "ACTIVITE": "Fabrication d'elements en matieres plastiques pour la construction"
+  },
+  {
+    "NAF": "2229A",
+    "ACTIVITE": "Fabrication de pieces techniques a  base de matieres plastiques"
+  },
+  {
+    "NAF": "2229B",
+    "ACTIVITE": "Fabrication de produits de consommation courante en matieres plastiques"
+  },
+  {
+    "NAF": "2311Z",
+    "ACTIVITE": "Fabrication de verre plat"
+  },
+  {
+    "NAF": "2312Z",
+    "ACTIVITE": "Faconnage et transformation du verre plat"
+  },
+  {
+    "NAF": "2313Z",
+    "ACTIVITE": "Fabrication de verre creux"
+  },
+  {
+    "NAF": "2314Z",
+    "ACTIVITE": "Fabrication de fibres de verre"
+  },
+  {
+    "NAF": "2319Z",
+    "ACTIVITE": "Fabrication et faconnage d'autres articles en verre, y compris verre technique"
+  },
+  {
+    "NAF": "2320Z",
+    "ACTIVITE": "Fabrication de produits refractaires"
+  },
+  {
+    "NAF": "2331Z",
+    "ACTIVITE": "Fabrication de carreaux en ceramique"
+  },
+  {
+    "NAF": "2332Z",
+    "ACTIVITE": "Fabrication de briques, tuiles et produits de construction, en terre cuite"
+  },
+  {
+    "NAF": "2341Z",
+    "ACTIVITE": "Fabrication d'articles ceramiques a  usage domestique ou ornemental"
+  },
+  {
+    "NAF": "2342Z",
+    "ACTIVITE": "Fabrication d'appareils sanitaires en ceramique"
+  },
+  {
+    "NAF": "2343Z",
+    "ACTIVITE": "Fabrication d'isolateurs et pieces isolantes en ceramique"
+  },
+  {
+    "NAF": "2344Z",
+    "ACTIVITE": "Fabrication d'autres produits ceramiques a  usage technique"
+  },
+  {
+    "NAF": "2349Z",
+    "ACTIVITE": "Fabrication d'autres produits ceramiques"
+  },
+  {
+    "NAF": "2351Z",
+    "ACTIVITE": "Fabrication de ciment"
+  },
+  {
+    "NAF": "2352Z",
+    "ACTIVITE": "Fabrication de chaux et platre"
+  },
+  {
+    "NAF": "2361Z",
+    "ACTIVITE": "Fabrication d'elements en beton pour la construction"
+  },
+  {
+    "NAF": "2362Z",
+    "ACTIVITE": "Fabrication d'elements en platre pour la construction"
+  },
+  {
+    "NAF": "2363Z",
+    "ACTIVITE": "Fabrication de beton pret a  l'emploi"
+  },
+  {
+    "NAF": "2364Z",
+    "ACTIVITE": "Fabrication de mortiers et betons secs"
+  },
+  {
+    "NAF": "2365Z",
+    "ACTIVITE": "Fabrication d'ouvrages en fibre-ciment"
+  },
+  {
+    "NAF": "2369Z",
+    "ACTIVITE": "Fabrication d'autres ouvrages en beton, en ciment ou en platre"
+  },
+  {
+    "NAF": "2370Z",
+    "ACTIVITE": "Taille, faconnage et finissage de pierres"
+  },
+  {
+    "NAF": "2391Z",
+    "ACTIVITE": "Fabrication de produits abrasifs"
+  },
+  {
+    "NAF": "2399Z",
+    "ACTIVITE": "Fabrication d'autres produits mineraux non metalliques n.c.a."
+  },
+  {
+    "NAF": "2410Z",
+    "ACTIVITE": "Siderurgie"
+  },
+  {
+    "NAF": "2420Z",
+    "ACTIVITE": "Fabrication de tubes, tuyaux, profiles creux et accessoires correspondants en acier"
+  },
+  {
+    "NAF": "2431Z",
+    "ACTIVITE": "Etirage a  froid de barres"
+  },
+  {
+    "NAF": "2432Z",
+    "ACTIVITE": "Laminage a  froid de feuillards"
+  },
+  {
+    "NAF": "2433Z",
+    "ACTIVITE": "Profilage a  froid par formage ou pliage"
+  },
+  {
+    "NAF": "2434Z",
+    "ACTIVITE": "Trefilage a  froid"
+  },
+  {
+    "NAF": "2441Z",
+    "ACTIVITE": "Production de metaux precieux"
+  },
+  {
+    "NAF": "2442Z",
+    "ACTIVITE": "Metallurgie de l'aluminium"
+  },
+  {
+    "NAF": "2443Z",
+    "ACTIVITE": "Metallurgie du plomb, du zinc ou de l'etain"
+  },
+  {
+    "NAF": "2444Z",
+    "ACTIVITE": "Metallurgie du cuivre"
+  },
+  {
+    "NAF": "2445Z",
+    "ACTIVITE": "Metallurgie des autres metaux non ferreux"
+  },
+  {
+    "NAF": "2446Z",
+    "ACTIVITE": "elaboration et transformation de matieres nucleaires"
+  },
+  {
+    "NAF": "2451Z",
+    "ACTIVITE": "Fonderie de fonte"
+  },
+  {
+    "NAF": "2452Z",
+    "ACTIVITE": "Fonderie d'acier"
+  },
+  {
+    "NAF": "2453Z",
+    "ACTIVITE": "Fonderie de metaux legers"
+  },
+  {
+    "NAF": "2454Z",
+    "ACTIVITE": "Fonderie d'autres metaux non ferreux"
+  },
+  {
+    "NAF": "2511Z",
+    "ACTIVITE": "Fabrication de structures metalliques et de parties de structures"
+  },
+  {
+    "NAF": "2512Z",
+    "ACTIVITE": "Fabrication de portes et fenetres en metal"
+  },
+  {
+    "NAF": "2521Z",
+    "ACTIVITE": "Fabrication de radiateurs et de chaudieres pour le chauffage central"
+  },
+  {
+    "NAF": "2529Z",
+    "ACTIVITE": "Fabrication d'autres reservoirs, citernes et conteneurs metalliques"
+  },
+  {
+    "NAF": "2530Z",
+    "ACTIVITE": "Fabrication de generateurs de vapeur, a  l'exception des chaudieres pour le chauffage central"
+  },
+  {
+    "NAF": "2540Z",
+    "ACTIVITE": "Fabrication d'armes et de munitions"
+  },
+  {
+    "NAF": "2550A",
+    "ACTIVITE": "Forge, estampage, matricage"
+  },
+  {
+    "NAF": "2550B",
+    "ACTIVITE": "Decoupage, emboutissage"
+  },
+  {
+    "NAF": "2561Z",
+    "ACTIVITE": "Traitement et revetement des metaux"
+  },
+  {
+    "NAF": "2562A",
+    "ACTIVITE": "Decolletage"
+  },
+  {
+    "NAF": "2562B",
+    "ACTIVITE": "Mecanique industrielle"
+  },
+  {
+    "NAF": "2571Z",
+    "ACTIVITE": "Fabrication de coutellerie"
+  },
+  {
+    "NAF": "2572Z",
+    "ACTIVITE": "Fabrication de serrures et de ferrures"
+  },
+  {
+    "NAF": "2573A",
+    "ACTIVITE": "Fabrication de moules et modeles"
+  },
+  {
+    "NAF": "2573B",
+    "ACTIVITE": "Fabrication d'autres outillages"
+  },
+  {
+    "NAF": "2591Z",
+    "ACTIVITE": "Fabrication de fa ts et emballages metalliques similaires"
+  },
+  {
+    "NAF": "2592Z",
+    "ACTIVITE": "Fabrication d'emballages metalliques legers"
+  },
+  {
+    "NAF": "2593Z",
+    "ACTIVITE": "Fabrication d'articles en fils metalliques, de chaines et de ressorts"
+  },
+  {
+    "NAF": "2594Z",
+    "ACTIVITE": "Fabrication de vis et de boulons"
+  },
+  {
+    "NAF": "2599A",
+    "ACTIVITE": "Fabrication d'articles metalliques menagers"
+  },
+  {
+    "NAF": "2599B",
+    "ACTIVITE": "Fabrication d'autres articles metalliques"
+  },
+  {
+    "NAF": "2611Z",
+    "ACTIVITE": "Fabrication de composants electroniques"
+  },
+  {
+    "NAF": "2612Z",
+    "ACTIVITE": "Fabrication de cartes electroniques assemblees"
+  },
+  {
+    "NAF": "2620Z",
+    "ACTIVITE": "Fabrication d'ordinateurs et d'equipements peripheriques"
+  },
+  {
+    "NAF": "2630Z",
+    "ACTIVITE": "Fabrication d'equipements de communication"
+  },
+  {
+    "NAF": "2640Z",
+    "ACTIVITE": "Fabrication de produits electroniques grand public"
+  },
+  {
+    "NAF": "2651A",
+    "ACTIVITE": "Fabrication d'equipements d'aide a  la navigation"
+  },
+  {
+    "NAF": "2651B",
+    "ACTIVITE": "Fabrication d'instrumentation scientifique et technique"
+  },
+  {
+    "NAF": "2652Z",
+    "ACTIVITE": "Horlogerie"
+  },
+  {
+    "NAF": "2660Z",
+    "ACTIVITE": "Fabrication d'equipements d'irradiation medicale, d'equipements electromedicaux et electrotherapeutiques"
+  },
+  {
+    "NAF": "2670Z",
+    "ACTIVITE": "Fabrication de materiels optique et photographique"
+  },
+  {
+    "NAF": "2680Z",
+    "ACTIVITE": "Fabrication de supports magnetiques et optiques"
+  },
+  {
+    "NAF": "2711Z",
+    "ACTIVITE": "Fabrication de moteurs, generatrices et transformateurs electriques"
+  },
+  {
+    "NAF": "2712Z",
+    "ACTIVITE": "Fabrication de materiel de distribution et de commande electrique"
+  },
+  {
+    "NAF": "2720Z",
+    "ACTIVITE": "Fabrication de piles et d'accumulateurs electriques"
+  },
+  {
+    "NAF": "2731Z",
+    "ACTIVITE": "Fabrication de cables de fibres optiques"
+  },
+  {
+    "NAF": "2732Z",
+    "ACTIVITE": "Fabrication d'autres fils et cables electroniques ou electriques"
+  },
+  {
+    "NAF": "2733Z",
+    "ACTIVITE": "Fabrication de materiel d'installation electrique"
+  },
+  {
+    "NAF": "2740Z",
+    "ACTIVITE": "Fabrication d'appareils d'eclairage electrique"
+  },
+  {
+    "NAF": "2751Z",
+    "ACTIVITE": "Fabrication d'appareils electromenagers"
+  },
+  {
+    "NAF": "2752Z",
+    "ACTIVITE": "Fabrication d'appareils menagers non electriques"
+  },
+  {
+    "NAF": "2790Z",
+    "ACTIVITE": "Fabrication d'autres materiels electriques"
+  },
+  {
+    "NAF": "2811Z",
+    "ACTIVITE": "Fabrication de moteurs et turbines, a  l'exception des moteurs d'avions et de vehicules"
+  },
+  {
+    "NAF": "2812Z",
+    "ACTIVITE": "Fabrication d'equipements hydrauliques et pneumatiques"
+  },
+  {
+    "NAF": "2813Z",
+    "ACTIVITE": "Fabrication d'autres pompes et compresseurs"
+  },
+  {
+    "NAF": "2814Z",
+    "ACTIVITE": "Fabrication d'autres articles de robinetterie"
+  },
+  {
+    "NAF": "2815Z",
+    "ACTIVITE": "Fabrication d'engrenages et d'organes mecaniques de transmission"
+  },
+  {
+    "NAF": "2821Z",
+    "ACTIVITE": "Fabrication de fours et bra leurs"
+  },
+  {
+    "NAF": "2822Z",
+    "ACTIVITE": "Fabrication de materiel de levage et de manutention"
+  },
+  {
+    "NAF": "2823Z",
+    "ACTIVITE": "Fabrication de machines et d'equipements de bureau (a  l'exception des ordinateurs et equipements"
+  },
+  {
+    "NAF": "2824Z",
+    "ACTIVITE": "Fabrication d'outillage portatif a  moteur incorpore"
+  },
+  {
+    "NAF": "2825Z",
+    "ACTIVITE": "Fabrication d'equipements aerauliques et frigorifiques industriels"
+  },
+  {
+    "NAF": "2829A",
+    "ACTIVITE": "Fabrication d'equipements d'emballage, de conditionnement et de pesage"
+  },
+  {
+    "NAF": "2829B",
+    "ACTIVITE": "Fabrication d'autres machines d'usage general"
+  },
+  {
+    "NAF": "2830Z",
+    "ACTIVITE": "Fabrication de machines agricoles et forestieres"
+  },
+  {
+    "NAF": "2841Z",
+    "ACTIVITE": "Fabrication de machines-outils pour le travail des metaux"
+  },
+  {
+    "NAF": "2849Z",
+    "ACTIVITE": "Fabrication d'autres machines-outils"
+  },
+  {
+    "NAF": "2891Z",
+    "ACTIVITE": "Fabrication de machines pour la metallurgie"
+  },
+  {
+    "NAF": "2892Z",
+    "ACTIVITE": "Fabrication de machines pour l'extraction ou la construction"
+  },
+  {
+    "NAF": "2893Z",
+    "ACTIVITE": "Fabrication de machines pour l'industrie agro-alimentaire"
+  },
+  {
+    "NAF": "2894Z",
+    "ACTIVITE": "Fabrication de machines pour les industries textiles"
+  },
+  {
+    "NAF": "2895Z",
+    "ACTIVITE": "Fabrication de machines pour les industries du papier et du carton"
+  },
+  {
+    "NAF": "2896Z",
+    "ACTIVITE": "Fabrication de machines pour le travail du caoutchouc ou des plastiques"
+  },
+  {
+    "NAF": "2899A",
+    "ACTIVITE": "Fabrication de machines d'imprimerie"
+  },
+  {
+    "NAF": "2899B",
+    "ACTIVITE": "Fabrication d'autres machines specialisees"
+  },
+  {
+    "NAF": "2910Z",
+    "ACTIVITE": "Construction de vehicules automobiles"
+  },
+  {
+    "NAF": "2920Z",
+    "ACTIVITE": "Fabrication de carrosseries et remorques"
+  },
+  {
+    "NAF": "2931Z",
+    "ACTIVITE": "Fabrication d'equipements electriques et electroniques automobiles"
+  },
+  {
+    "NAF": "2932Z",
+    "ACTIVITE": "Fabrication d'autres equipements automobiles"
+  },
+  {
+    "NAF": "3011Z",
+    "ACTIVITE": "Construction de navires et de structures flottantes"
+  },
+  {
+    "NAF": "3012Z",
+    "ACTIVITE": "Construction de bateaux de plaisance"
+  },
+  {
+    "NAF": "3020Z",
+    "ACTIVITE": "Construction de locomotives et d'autre materiel ferroviaire roulant"
+  },
+  {
+    "NAF": "3030Z",
+    "ACTIVITE": "Construction aeronautique et spatiale"
+  },
+  {
+    "NAF": "3040Z",
+    "ACTIVITE": "Construction de vehicules militaires de combat"
+  },
+  {
+    "NAF": "3091Z",
+    "ACTIVITE": "Fabrication de motocycles"
+  },
+  {
+    "NAF": "3092Z",
+    "ACTIVITE": "Fabrication de bicyclettes et de vehicules pour invalides"
+  },
+  {
+    "NAF": "3099Z",
+    "ACTIVITE": "Fabrication d'autres equipements de transport n.c.a."
+  },
+  {
+    "NAF": "3101Z",
+    "ACTIVITE": "Fabrication de meubles de bureau et de magasin"
+  },
+  {
+    "NAF": "3102Z",
+    "ACTIVITE": "Fabrication de meubles de cuisine"
+  },
+  {
+    "NAF": "3103Z",
+    "ACTIVITE": "Fabrication de matelas"
+  },
+  {
+    "NAF": "3109A",
+    "ACTIVITE": "Fabrication de sieges d'ameublement d'interieur"
+  },
+  {
+    "NAF": "3109B",
+    "ACTIVITE": "Fabrication d'autres meubles et industries connexes de l'ameublement"
+  },
+  {
+    "NAF": "3211Z",
+    "ACTIVITE": "Frappe de monnaie"
+  },
+  {
+    "NAF": "3212Z",
+    "ACTIVITE": "Fabrication d'articles de joaillerie et bijouterie"
+  },
+  {
+    "NAF": "3213Z",
+    "ACTIVITE": "Fabrication d'articles de bijouterie fantaisie et articles similaires"
+  },
+  {
+    "NAF": "3220Z",
+    "ACTIVITE": "Fabrication d'instruments de musique"
+  },
+  {
+    "NAF": "3230Z",
+    "ACTIVITE": "Fabrication d'articles de sport"
+  },
+  {
+    "NAF": "3240Z",
+    "ACTIVITE": "Fabrication de jeux et jouets"
+  },
+  {
+    "NAF": "3250A",
+    "ACTIVITE": "Fabrication de materiel medico-chirurgical et dentaire"
+  },
+  {
+    "NAF": "3250B",
+    "ACTIVITE": "Fabrication de lunettes"
+  },
+  {
+    "NAF": "3291Z",
+    "ACTIVITE": "Fabrication d'articles de brosserie"
+  },
+  {
+    "NAF": "3299Z",
+    "ACTIVITE": "Autres activites manufacturieres n.c.a."
+  },
+  {
+    "NAF": "3311Z",
+    "ACTIVITE": "Reparation d'ouvrages en metaux"
+  },
+  {
+    "NAF": "3312Z",
+    "ACTIVITE": "Reparation de machines et equipements mecaniques"
+  },
+  {
+    "NAF": "3313Z",
+    "ACTIVITE": "Reparation de materiels electroniques et optiques"
+  },
+  {
+    "NAF": "3314Z",
+    "ACTIVITE": "Reparation d'equipements electriques"
+  },
+  {
+    "NAF": "3315Z",
+    "ACTIVITE": "Reparation et maintenance navale"
+  },
+  {
+    "NAF": "3316Z",
+    "ACTIVITE": "Reparation et maintenance d'aeronefs et d'engins spatiaux"
+  },
+  {
+    "NAF": "3317Z",
+    "ACTIVITE": "Reparation et maintenance d'autres equipements de transport"
+  },
+  {
+    "NAF": "3319Z",
+    "ACTIVITE": "Reparation d'autres equipements"
+  },
+  {
+    "NAF": "3320A",
+    "ACTIVITE": "Installation de structures metalliques, chaudronnees et de tuyauterie"
+  },
+  {
+    "NAF": "3320B",
+    "ACTIVITE": "Installation de machines et equipements mecaniques"
+  },
+  {
+    "NAF": "3320C",
+    "ACTIVITE": "Conception d'ensemble et assemblage sur site industriel d'equipements de controle des processus industriels"
+  },
+  {
+    "NAF": "3320D",
+    "ACTIVITE": "Installation d'equipements electriques, de materiels electroniques et optiques ou d'autres materiels"
+  },
+  {
+    "NAF": "3511Z",
+    "ACTIVITE": "Production d'electricite"
+  },
+  {
+    "NAF": "3512Z",
+    "ACTIVITE": "Transport d'electricite"
+  },
+  {
+    "NAF": "3513Z",
+    "ACTIVITE": "Distribution d'electricite"
+  },
+  {
+    "NAF": "3514Z",
+    "ACTIVITE": "Commerce d'electricite"
+  },
+  {
+    "NAF": "3521Z",
+    "ACTIVITE": "Production de combustibles gazeux"
+  },
+  {
+    "NAF": "de gaz",
+    "ACTIVITE": "de vapeur"
+  },
+  {
+    "NAF": "3523Z",
+    "ACTIVITE": "Commerce de combustibles gazeux par conduites"
+  },
+  {
+    "NAF": "3530Z",
+    "ACTIVITE": "Production et distribution de vapeur et d'air conditionne"
+  },
+  {
+    "NAF": "3600Z",
+    "ACTIVITE": "Captage, traitement et distribution d'eau"
+  },
+  {
+    "NAF": "3700Z",
+    "ACTIVITE": "Collecte et traitement des eaux usees"
+  },
+  {
+    "NAF": "3811Z",
+    "ACTIVITE": "Collecte des dechets non dangereux"
+  },
+  {
+    "NAF": "3812Z",
+    "ACTIVITE": "Collecte des dechets dangereux"
+  },
+  {
+    "NAF": "3821Z",
+    "ACTIVITE": "Traitement et elimination des dechets non dangereux"
+  },
+  {
+    "NAF": "3822Z",
+    "ACTIVITE": "Traitement et elimination des dechets dangereux"
+  },
+  {
+    "NAF": "3831Z",
+    "ACTIVITE": "Demantelement d'epaves"
+  },
+  {
+    "NAF": "3832Z",
+    "ACTIVITE": "Recuperation de dechets tries"
+  },
+  {
+    "NAF": "39003Z9",
+    "ACTIVITE": "Depollution et autres services de gestion des dechets"
+  },
+  {
+    "NAF": "4110A",
+    "ACTIVITE": "Promotion immobiliere de logements"
+  },
+  {
+    "NAF": "4110B",
+    "ACTIVITE": "Promotion immobiliere de bureaux"
+  },
+  {
+    "NAF": "4110C",
+    "ACTIVITE": "Promotion immobiliere d'autres batiments"
+  },
+  {
+    "NAF": "4110D",
+    "ACTIVITE": "Supports juridiques de programmes"
+  },
+  {
+    "NAF": "4120A",
+    "ACTIVITE": "Construction de maisons individuelles"
+  },
+  {
+    "NAF": "4120B",
+    "ACTIVITE": "Construction d'autres batiments"
+  },
+  {
+    "NAF": "4211Z",
+    "ACTIVITE": "Construction de routes et autoroutes"
+  },
+  {
+    "NAF": "4212Z",
+    "ACTIVITE": "Construction de voies ferrees de surface et souterraines"
+  },
+  {
+    "NAF": "4213A",
+    "ACTIVITE": "Construction d'ouvrages d'art"
+  },
+  {
+    "NAF": "4213B",
+    "ACTIVITE": "Construction et entretien de tunnels"
+  },
+  {
+    "NAF": "4221Z",
+    "ACTIVITE": "Construction de reseaux pour fluides"
+  },
+  {
+    "NAF": "4222Z",
+    "ACTIVITE": "Construction de reseaux electriques et de telecommunications"
+  },
+  {
+    "NAF": "4291Z",
+    "ACTIVITE": "Construction d'ouvrages maritimes et fluviaux"
+  },
+  {
+    "NAF": "4299Z",
+    "ACTIVITE": "Construction d'autres ouvrages de genie civil n.c.a."
+  },
+  {
+    "NAF": "4311Z",
+    "ACTIVITE": "Travaux de demolition"
+  },
+  {
+    "NAF": "4312A",
+    "ACTIVITE": "Travaux de terrassement courants et travaux preparatoires"
+  },
+  {
+    "NAF": "4312B",
+    "ACTIVITE": "Travaux de terrassement specialises ou de grande masse"
+  },
+  {
+    "NAF": "4313Z",
+    "ACTIVITE": "Forages et sondages"
+  },
+  {
+    "NAF": "4321A",
+    "ACTIVITE": "Travaux d'installation electrique dans tous locaux"
+  },
+  {
+    "NAF": "4321B",
+    "ACTIVITE": "Travaux d'installation electrique sur la voie publique"
+  },
+  {
+    "NAF": "4322A",
+    "ACTIVITE": "Travaux d'installation d'eau et de gaz en tous locaux"
+  },
+  {
+    "NAF": "4322B",
+    "ACTIVITE": "Travaux d'installation d'equipements thermiques et de climatisation"
+  },
+  {
+    "NAF": "4329A",
+    "ACTIVITE": "Travaux d'isolation"
+  },
+  {
+    "NAF": "4329B",
+    "ACTIVITE": "Autres travaux d'installation n.c.a."
+  },
+  {
+    "NAF": "4331Z",
+    "ACTIVITE": "Travaux de platrerie"
+  },
+  {
+    "NAF": "4332A",
+    "ACTIVITE": "Travaux de menuiserie bois et pvc"
+  },
+  {
+    "NAF": "4332B",
+    "ACTIVITE": "Travaux de menuiserie metallique et serrurerie"
+  },
+  {
+    "NAF": "4332C",
+    "ACTIVITE": "Agencement de lieux de vente"
+  },
+  {
+    "NAF": "4333Z",
+    "ACTIVITE": "Travaux de revetement des sols et des murs"
+  },
+  {
+    "NAF": "4334Z",
+    "ACTIVITE": "Travaux de peinture et vitrerie"
+  },
+  {
+    "NAF": "4339Z",
+    "ACTIVITE": "Autres travaux de finition"
+  },
+  {
+    "NAF": "4391A",
+    "ACTIVITE": "Travaux de charpente"
+  },
+  {
+    "NAF": "4391B",
+    "ACTIVITE": "Travaux de couverture par elements"
+  },
+  {
+    "NAF": "4399A",
+    "ACTIVITE": "Travaux d'etancheification"
+  },
+  {
+    "NAF": "4399B",
+    "ACTIVITE": "Travaux de montage de structures metalliques"
+  },
+  {
+    "NAF": "4399C",
+    "ACTIVITE": "Travaux de maconnerie generale et gros œuvre de batiment"
+  },
+  {
+    "NAF": "4399D",
+    "ACTIVITE": "Autres travaux specialises de construction"
+  },
+  {
+    "NAF": "4399E",
+    "ACTIVITE": "Location avec operateur de materiel de construction"
+  },
+  {
+    "NAF": "4511Z",
+    "ACTIVITE": "Commerce de voitures et de vehicules automobiles legers"
+  },
+  {
+    "NAF": "4519Z",
+    "ACTIVITE": "Commerce d'autres vehicules automobiles"
+  },
+  {
+    "NAF": "4520A",
+    "ACTIVITE": "Entretien et reparation de vehicules automobiles legers"
+  },
+  {
+    "NAF": "4520B",
+    "ACTIVITE": "Entretien et reparation d'autres vehicules automobiles"
+  },
+  {
+    "NAF": "4531Z",
+    "ACTIVITE": "Commerce de gros d'equipements automobiles"
+  },
+  {
+    "NAF": "4532Z",
+    "ACTIVITE": "Commerce de detail d'equipements automobiles"
+  },
+  {
+    "NAF": "4540Z",
+    "ACTIVITE": "Commerce et reparation de motocycles"
+  },
+  {
+    "NAF": "4611Z",
+    "ACTIVITE": "Intermediaires du commerce en matieres premieres agricoles, animaux vivants, matieres premieres textiles et"
+  },
+  {
+    "NAF": "4612A",
+    "ACTIVITE": "Centrales d'achat de carburant"
+  },
+  {
+    "NAF": "4612B",
+    "ACTIVITE": "Autres intermediaires du commerce en combustibles, metaux, mineraux et produits chimiques"
+  },
+  {
+    "NAF": "4613Z",
+    "ACTIVITE": "Intermediaires du commerce en bois et materiaux de construction"
+  },
+  {
+    "NAF": "4614Z",
+    "ACTIVITE": "Intermediaires du commerce en machines, equipements industriels, navires et avions"
+  },
+  {
+    "NAF": "4615Z",
+    "ACTIVITE": "Intermediaires du commerce en meubles, articles de menage et quincaillerie"
+  },
+  {
+    "NAF": "4616Z",
+    "ACTIVITE": "Intermediaires du commerce en textiles, habillement, fourrures, chaussures et articles en cuir"
+  },
+  {
+    "NAF": "4617A",
+    "ACTIVITE": "Centrales d'achat alimentaires"
+  },
+  {
+    "NAF": "4617B",
+    "ACTIVITE": "Autres intermediaires du commerce en denrees, boissons et tabac"
+  },
+  {
+    "NAF": "4618Z",
+    "ACTIVITE": "Intermediaires specialises dans le commerce d'autres produits specifiques"
+  },
+  {
+    "NAF": "4619A",
+    "ACTIVITE": "Centrales d'achat non alimentaires"
+  },
+  {
+    "NAF": "4619B",
+    "ACTIVITE": "Autres intermediaires du commerce en produits divers"
+  },
+  {
+    "NAF": "4621Z",
+    "ACTIVITE": "Commerce de gros de cereales, de tabac non manufacture, de semences et d'aliments pour le betail"
+  },
+  {
+    "NAF": "4622Z",
+    "ACTIVITE": "Commerce de gros de fleurs et plantes"
+  },
+  {
+    "NAF": "4623Z",
+    "ACTIVITE": "Commerce de gros d'animaux vivants"
+  },
+  {
+    "NAF": "4624Z",
+    "ACTIVITE": "Commerce de gros de cuirs et peaux"
+  },
+  {
+    "NAF": "4631Z",
+    "ACTIVITE": "Commerce de gros de fruits et legumes"
+  },
+  {
+    "NAF": "4632A",
+    "ACTIVITE": "Commerce de gros de viandes de boucherie"
+  },
+  {
+    "NAF": "4632B",
+    "ACTIVITE": "Commerce de gros de produits a  base de viande"
+  },
+  {
+    "NAF": "4632C",
+    "ACTIVITE": "Commerce de gros de volailles et gibier"
+  },
+  {
+    "NAF": "4633Z",
+    "ACTIVITE": "Commerce de gros de produits laitiers, œufs, huiles et matieres grasses comestibles"
+  },
+  {
+    "NAF": "4634Z",
+    "ACTIVITE": "Commerce de gros de boissons"
+  },
+  {
+    "NAF": "4635Z",
+    "ACTIVITE": "Commerce de gros de produits a  base de tabac"
+  },
+  {
+    "NAF": "4636Z",
+    "ACTIVITE": "Commerce de gros de sucre, chocolat et confiserie"
+  },
+  {
+    "NAF": "4637Z",
+    "ACTIVITE": "Commerce de gros de cafe, the, cacao et epices"
+  },
+  {
+    "NAF": "4638A",
+    "ACTIVITE": "Commerce de gros de poissons, crustaces et mollusques"
+  },
+  {
+    "NAF": "4638B",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4639A",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4639B",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4641Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4642Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4643Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4644Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4645Z",
+    "ACTIVITE": "Commerce de gros de parfumerie et de produits de beaute"
+  },
+  {
+    "NAF": "4646Z",
+    "ACTIVITE": "Commerce de gros de produits pharmaceutiques"
+  },
+  {
+    "NAF": "4647Z",
+    "ACTIVITE": "Commerce de gros de meubles, de tapis et d'appareils d'eclairage"
+  },
+  {
+    "NAF": "4648Z",
+    "ACTIVITE": "Commerce de gros d'articles d'horlogerie et de bijouterie"
+  },
+  {
+    "NAF": "4649Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4651Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4652Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4661Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4662Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4663Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4664Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4665Z",
+    "ACTIVITE": "Commerce de gros de mobilier de bureau"
+  },
+  {
+    "NAF": "4666Z",
+    "ACTIVITE": "Commerce de gros d'autres machines et equipements de bureau"
+  },
+  {
+    "NAF": "4669A",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4669B",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4669C",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4671Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4672Z",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4673A",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4673B",
+    "ACTIVITE": "Commerce de gros"
+  },
+  {
+    "NAF": "4674A",
+    "ACTIVITE": "Commerce de gros de quincaillerie"
+  },
+  {
+    "NAF": "4674B",
+    "ACTIVITE": "Commerce de gros de fournitures pour la plomberie et le chauffage"
+  },
+  {
+    "NAF": "4675Z",
+    "ACTIVITE": "Commerce de gros de produits chimiques"
+  },
+  {
+    "NAF": "4676Z",
+    "ACTIVITE": "Commerce de gros d'autres produits intermediaires"
+  },
+  {
+    "NAF": "4677Z",
+    "ACTIVITE": "Commerce de gros de dechets et debris"
+  },
+  {
+    "NAF": "4690Z",
+    "ACTIVITE": "Commerce de gros non specialise"
+  },
+  {
+    "NAF": "4711A",
+    "ACTIVITE": "Commerce de detail de produits surgeles"
+  },
+  {
+    "NAF": "4711B",
+    "ACTIVITE": "Commerce d'alimentation generale"
+  },
+  {
+    "NAF": "4711C",
+    "ACTIVITE": "Superettes"
+  },
+  {
+    "NAF": "4711D",
+    "ACTIVITE": "Supermarches"
+  },
+  {
+    "NAF": "4711E",
+    "ACTIVITE": "Magasins multi-commerces"
+  },
+  {
+    "NAF": "4711F",
+    "ACTIVITE": "Hypermarches"
+  },
+  {
+    "NAF": "4719A",
+    "ACTIVITE": "Grands magasins"
+  },
+  {
+    "NAF": "4719B",
+    "ACTIVITE": "Autres commerces de detail en magasin non specialise"
+  },
+  {
+    "NAF": "4721Z",
+    "ACTIVITE": "Commerce de detail de fruits et legumes en magasin specialise"
+  },
+  {
+    "NAF": "4722Z",
+    "ACTIVITE": "Commerce de detail de viandes et de produits a  base de viande en magasin specialise"
+  },
+  {
+    "NAF": "4723Z",
+    "ACTIVITE": "Commerce de detail de poissons, crustaces et mollusques en magasin specialise"
+  },
+  {
+    "NAF": "4724Z",
+    "ACTIVITE": "Commerce de detail de pain, patisserie et confiserie en magasin specialise"
+  },
+  {
+    "NAF": "4725Z",
+    "ACTIVITE": "Commerce de detail de boissons en magasin specialise"
+  },
+  {
+    "NAF": "4726Z",
+    "ACTIVITE": "Commerce de detail de produits a  base de tabac en magasin specialise"
+  },
+  {
+    "NAF": "4729Z",
+    "ACTIVITE": "Autres commerces de detail alimentaires en magasin specialise"
+  },
+  {
+    "NAF": "4730Z",
+    "ACTIVITE": "Commerce de detail de carburants en magasin specialise"
+  },
+  {
+    "NAF": "4741Z",
+    "ACTIVITE": "Commerce de detail d'ordinateurs, d'unites peripheriques et de logiciels en magasin specialise"
+  },
+  {
+    "NAF": "4742Z",
+    "ACTIVITE": "Commerce de detail de materiels de telecommunication en magasin specialise"
+  },
+  {
+    "NAF": "4743Z",
+    "ACTIVITE": "Commerce de detail de materiels audio et video en magasin specialise"
+  },
+  {
+    "NAF": "4751Z",
+    "ACTIVITE": "Commerce de detail de textiles en magasin specialise"
+  },
+  {
+    "NAF": "4752A",
+    "ACTIVITE": "Commerce de detail de quincaillerie, peintures et verres en petites surfaces (moins de 400 m2)"
+  },
+  {
+    "NAF": "4752B",
+    "ACTIVITE": "Commerce de detail de quincaillerie, peintures et verres en grandes surfaces (400 m2 et plus)"
+  },
+  {
+    "NAF": "4753Z",
+    "ACTIVITE": "Commerce de detail de tapis, moquettes et revetements de murs et de sols en magasin specialise"
+  },
+  {
+    "NAF": "4754Z",
+    "ACTIVITE": "Commerce de detail d'appareils electromenagers en magasin specialise"
+  },
+  {
+    "NAF": "4759A",
+    "ACTIVITE": "Commerce de detail de meubles"
+  },
+  {
+    "NAF": "4759B",
+    "ACTIVITE": "Commerce de detail d'autres equipements du foyer"
+  },
+  {
+    "NAF": "4761Z",
+    "ACTIVITE": "Commerce de detail de livres en magasin specialise"
+  },
+  {
+    "NAF": "4762Z",
+    "ACTIVITE": "Commerce de detail de journaux et papeterie en magasin specialise"
+  },
+  {
+    "NAF": "4763Z",
+    "ACTIVITE": "Commerce de detail d'enregistrements musicaux et video en magasin specialise"
+  },
+  {
+    "NAF": "4764Z",
+    "ACTIVITE": "Commerce de detail d'articles de sport en magasin specialise"
+  },
+  {
+    "NAF": "4765Z",
+    "ACTIVITE": "Commerce de detail de jeux et jouets en magasin specialise"
+  },
+  {
+    "NAF": "4771Z",
+    "ACTIVITE": "Commerce de detail d'habillement en magasin specialise"
+  },
+  {
+    "NAF": "4772A",
+    "ACTIVITE": "Commerce de detail de la chaussure"
+  },
+  {
+    "NAF": "4772B",
+    "ACTIVITE": "Commerce de detail de maroquinerie et d'articles de voyage"
+  },
+  {
+    "NAF": "4773Z",
+    "ACTIVITE": "Commerce de detail de produits pharmaceutiques en magasin specialise"
+  },
+  {
+    "NAF": "4774Z",
+    "ACTIVITE": "Commerce de detail d'articles medicaux et orthopediques en magasin specialise"
+  },
+  {
+    "NAF": "4775Z",
+    "ACTIVITE": "Commerce de detail de parfumerie et de produits de beaute en magasin specialise"
+  },
+  {
+    "NAF": "4776Z",
+    "ACTIVITE": "Commerce de detail de fleurs, plantes, graines, engrais, animaux de compagnie et aliments pour ces animaux"
+  },
+  {
+    "NAF": "4777Z",
+    "ACTIVITE": "Commerce de detail d'articles d'horlogerie et de bijouterie en magasin specialise"
+  },
+  {
+    "NAF": "4778A",
+    "ACTIVITE": "Commerces de detail d'optique"
+  },
+  {
+    "NAF": "4778B",
+    "ACTIVITE": "Commerces de detail de charbons et combustibles"
+  },
+  {
+    "NAF": "4778C",
+    "ACTIVITE": "Autres commerces de detail specialises divers"
+  },
+  {
+    "NAF": "4779Z",
+    "ACTIVITE": "Commerce de detail de biens d'occasion en magasin"
+  },
+  {
+    "NAF": "4781Z",
+    "ACTIVITE": "Commerce de detail alimentaire sur eventaires et marches"
+  },
+  {
+    "NAF": "4782Z",
+    "ACTIVITE": "Commerce de detail de textiles, d'habillement et de chaussures sur eventaires et marches"
+  },
+  {
+    "NAF": "4789Z",
+    "ACTIVITE": "Autres commerces de detail sur eventaires et marches"
+  },
+  {
+    "NAF": "4791A",
+    "ACTIVITE": "Vente a  distance sur catalogue general"
+  },
+  {
+    "NAF": "4791B",
+    "ACTIVITE": "Vente a  distance sur catalogue specialise"
+  },
+  {
+    "NAF": "4799A",
+    "ACTIVITE": "Vente a  domicile"
+  },
+  {
+    "NAF": "4799B",
+    "ACTIVITE": "Vente par automates et autres commerces de detail hors magasin, eventaires ou marches n.c.a."
+  },
+  {
+    "NAF": "4910Z",
+    "ACTIVITE": "Transport ferroviaire interurbain de voyageurs"
+  },
+  {
+    "NAF": "4920Z",
+    "ACTIVITE": "Transports ferroviaires de fret"
+  },
+  {
+    "NAF": "4931Z",
+    "ACTIVITE": "Transports urbains et suburbains de voyageurs"
+  },
+  {
+    "NAF": "4932Z",
+    "ACTIVITE": "Transports de voyageurs par taxis"
+  },
+  {
+    "NAF": "4939A",
+    "ACTIVITE": "Transports routiers reguliers de voyageurs"
+  },
+  {
+    "NAF": "4939B",
+    "ACTIVITE": "Autres transports routiers de voyageurs"
+  },
+  {
+    "NAF": "4939C",
+    "ACTIVITE": "Telepheriques et remontees mecaniques"
+  },
+  {
+    "NAF": "4941A",
+    "ACTIVITE": "Transports routiers de fret interurbains"
+  },
+  {
+    "NAF": "4941B",
+    "ACTIVITE": "Transports routiers de fret de proximite"
+  },
+  {
+    "NAF": "4941C",
+    "ACTIVITE": "Location de camions avec chauffeur"
+  },
+  {
+    "NAF": "4942Z",
+    "ACTIVITE": "Services de demenagement"
+  },
+  {
+    "NAF": "4950Z",
+    "ACTIVITE": "Transports par conduites"
+  },
+  {
+    "NAF": "5010Z",
+    "ACTIVITE": "Transports maritimes et cotiers de passagers"
+  },
+  {
+    "NAF": "5020Z",
+    "ACTIVITE": "Transports maritimes et cotiers de fret"
+  },
+  {
+    "NAF": "5030Z",
+    "ACTIVITE": "Transports fluviaux de passagers"
+  },
+  {
+    "NAF": "5040Z",
+    "ACTIVITE": "Transports fluviaux de fret"
+  },
+  {
+    "NAF": "5110Z",
+    "ACTIVITE": "Transports aeriens de passagers"
+  },
+  {
+    "NAF": "5121Z",
+    "ACTIVITE": "Transports aeriens de fret"
+  },
+  {
+    "NAF": "5122Z",
+    "ACTIVITE": "Transports spatiaux"
+  },
+  {
+    "NAF": "5210A",
+    "ACTIVITE": "Entreposage et stockage frigorifique"
+  },
+  {
+    "NAF": "5210B",
+    "ACTIVITE": "Entreposage et stockage non frigorifique"
+  },
+  {
+    "NAF": "5221Z",
+    "ACTIVITE": "Services auxiliaires des transports terrestres"
+  },
+  {
+    "NAF": "5222Z",
+    "ACTIVITE": "Services auxiliaires des transports par eau"
+  },
+  {
+    "NAF": "5223Z",
+    "ACTIVITE": "Services auxiliaires des transports aeriens"
+  },
+  {
+    "NAF": "5224A",
+    "ACTIVITE": "Manutention portuaire"
+  },
+  {
+    "NAF": "5224B",
+    "ACTIVITE": "Manutention non portuaire"
+  },
+  {
+    "NAF": "5229A",
+    "ACTIVITE": "Messagerie, fret express"
+  },
+  {
+    "NAF": "5229B",
+    "ACTIVITE": "Affretement et organisation des transports"
+  },
+  {
+    "NAF": "5310Z",
+    "ACTIVITE": "Activites de poste dans le cadre d'une obligation de service universel"
+  },
+  {
+    "NAF": "5320Z",
+    "ACTIVITE": "Autres activites de poste et de courrier"
+  },
+  {
+    "NAF": "5510Z",
+    "ACTIVITE": "Hotels et hebergement similaire"
+  },
+  {
+    "NAF": "5520Z",
+    "ACTIVITE": "Hebergement touristique et autre hebergement de courte duree"
+  },
+  {
+    "NAF": "5530Z",
+    "ACTIVITE": "Terrains de camping et parcs pour caravanes ou vehicules de loisirs"
+  },
+  {
+    "NAF": "5590Z",
+    "ACTIVITE": "Autres hebergements"
+  },
+  {
+    "NAF": "5610A",
+    "ACTIVITE": "Restauration traditionnelle"
+  },
+  {
+    "NAF": "5610B",
+    "ACTIVITE": "Cafeterias et autres libres-services"
+  },
+  {
+    "NAF": "5610C",
+    "ACTIVITE": "Restauration de type rapide"
+  },
+  {
+    "NAF": "5621Z",
+    "ACTIVITE": "Services des traiteurs"
+  },
+  {
+    "NAF": "5629A",
+    "ACTIVITE": "Restauration collective sous contrat"
+  },
+  {
+    "NAF": "5629B",
+    "ACTIVITE": "Autres services de restauration n.c.a."
+  },
+  {
+    "NAF": "5630Z",
+    "ACTIVITE": "Debits de boissons"
+  },
+  {
+    "NAF": "5811Z",
+    "ACTIVITE": "Edition de livres"
+  },
+  {
+    "NAF": "5812Z",
+    "ACTIVITE": "Edition de repertoires et de fichiers d'adresses"
+  },
+  {
+    "NAF": "5813Z",
+    "ACTIVITE": "Edition de journaux"
+  },
+  {
+    "NAF": "5814Z",
+    "ACTIVITE": "Edition de revues et periodiques"
+  },
+  {
+    "NAF": "5819Z",
+    "ACTIVITE": "Autres activites d'edition"
+  },
+  {
+    "NAF": "5821Z",
+    "ACTIVITE": "Edition de jeux electroniques"
+  },
+  {
+    "NAF": "5829A",
+    "ACTIVITE": "Edition de logiciels systeme et de reseau"
+  },
+  {
+    "NAF": "5829B",
+    "ACTIVITE": "Edition de logiciels outils de developpement et de langages"
+  },
+  {
+    "NAF": "5829C",
+    "ACTIVITE": "Edition de logiciels applicatifs"
+  },
+  {
+    "NAF": "5911A",
+    "ACTIVITE": "Production de films et de programmes pour la television"
+  },
+  {
+    "NAF": "5911B",
+    "ACTIVITE": "Production de films institutionnels et publicitaires"
+  },
+  {
+    "NAF": "5911C",
+    "ACTIVITE": "Production de films pour le cinema"
+  },
+  {
+    "NAF": "5912Z",
+    "ACTIVITE": "Post-production de films cinematographiques, de video et de programmes de television"
+  },
+  {
+    "NAF": "5913A",
+    "ACTIVITE": "Distribution de films cinematographiques"
+  },
+  {
+    "NAF": "5913B",
+    "ACTIVITE": "Edition et distribution video"
+  },
+  {
+    "NAF": "5914Z",
+    "ACTIVITE": "Projection de films cinematographiques"
+  },
+  {
+    "NAF": "5920Z",
+    "ACTIVITE": "Enregistrement sonore et edition musicale"
+  },
+  {
+    "NAF": "6010Z",
+    "ACTIVITE": "Edition et diffusion de programmes radio"
+  },
+  {
+    "NAF": "6020A",
+    "ACTIVITE": "Edition de chaines generalistes"
+  },
+  {
+    "NAF": "6020B",
+    "ACTIVITE": "Edition de chaines thematiques"
+  },
+  {
+    "NAF": "6110Z",
+    "ACTIVITE": "Telecommunications filaires"
+  },
+  {
+    "NAF": "6120Z",
+    "ACTIVITE": "Telecommunications sans fil"
+  },
+  {
+    "NAF": "6130Z",
+    "ACTIVITE": "Telecommunications par satellite"
+  },
+  {
+    "NAF": "6190Z",
+    "ACTIVITE": "Autres activites de telecommunication"
+  },
+  {
+    "NAF": "6201Z",
+    "ACTIVITE": "Programmation informatique"
+  },
+  {
+    "NAF": "6202A",
+    "ACTIVITE": "Conseil en systemes et logiciels informatiques"
+  },
+  {
+    "NAF": "6202B",
+    "ACTIVITE": "Tierce maintenance de systemes et d'applications informatiques"
+  },
+  {
+    "NAF": "6203Z",
+    "ACTIVITE": "Gestion d'installations informatiques"
+  },
+  {
+    "NAF": "6209Z",
+    "ACTIVITE": "Autres activites informatiques"
+  },
+  {
+    "NAF": "6311Z",
+    "ACTIVITE": "Traitement de donnees, hebergement et activites connexes"
+  },
+  {
+    "NAF": "6312Z",
+    "ACTIVITE": "Portails internet"
+  },
+  {
+    "NAF": "6391Z",
+    "ACTIVITE": "Activites des agences de presse"
+  },
+  {
+    "NAF": "6399Z",
+    "ACTIVITE": "Autres services d'information n.c.a."
+  },
+  {
+    "NAF": "6411Z",
+    "ACTIVITE": "Activites de banque centrale"
+  },
+  {
+    "NAF": "6419Z",
+    "ACTIVITE": "Autres intermediations monetaires"
+  },
+  {
+    "NAF": "6420Z",
+    "ACTIVITE": "Activites des societes holding"
+  },
+  {
+    "NAF": "6430Z",
+    "ACTIVITE": "Fonds de placement et entites financieres similaires"
+  },
+  {
+    "NAF": "6491Z",
+    "ACTIVITE": "Credit-bail"
+  },
+  {
+    "NAF": "6492Z",
+    "ACTIVITE": "Autre distribution de credit"
+  },
+  {
+    "NAF": "6499Z",
+    "ACTIVITE": "Autres activites des services financiers, hors assurance et caisses de retraite, n.c.a."
+  },
+  {
+    "NAF": "6511Z",
+    "ACTIVITE": "Assurance vie"
+  },
+  {
+    "NAF": "6512Z",
+    "ACTIVITE": "Autres assurances"
+  },
+  {
+    "NAF": "6520Z",
+    "ACTIVITE": "Reassurance"
+  },
+  {
+    "NAF": "6530Z",
+    "ACTIVITE": "Caisses de retraite"
+  },
+  {
+    "NAF": "6611Z",
+    "ACTIVITE": "Administration de marches financiers"
+  },
+  {
+    "NAF": "6612Z",
+    "ACTIVITE": "Courtage de valeurs mobilieres et de marchandises"
+  },
+  {
+    "NAF": "6619A",
+    "ACTIVITE": "Supports juridiques de gestion de patrimoine mobilier"
+  },
+  {
+    "NAF": "6619B",
+    "ACTIVITE": "Autres activites auxiliaires de services financiers, hors assurance et caisses de retraite, n.c.a."
+  },
+  {
+    "NAF": "6621Z",
+    "ACTIVITE": "evaluation des risques et dommages"
+  },
+  {
+    "NAF": "6622Z",
+    "ACTIVITE": "Activites des agents et courtiers d'assurances"
+  },
+  {
+    "NAF": "6629Z",
+    "ACTIVITE": "Autres activites auxiliaires d'assurance et de caisses de retraite"
+  },
+  {
+    "NAF": "6630Z",
+    "ACTIVITE": "Gestion de fonds"
+  },
+  {
+    "NAF": "6810Z",
+    "ACTIVITE": "Activites des marchands de biens immobiliers"
+  },
+  {
+    "NAF": "6820A",
+    "ACTIVITE": "Location de logements"
+  },
+  {
+    "NAF": "6820B",
+    "ACTIVITE": "Location de terrains et d'autres biens immobiliers"
+  },
+  {
+    "NAF": "6831Z",
+    "ACTIVITE": "Agences immobilieres"
+  },
+  {
+    "NAF": "6832A",
+    "ACTIVITE": "Administration d'immeubles et autres biens immobiliers"
+  },
+  {
+    "NAF": "6832B",
+    "ACTIVITE": "Supports juridiques de gestion de patrimoine immobilier"
+  },
+  {
+    "NAF": "6910Z",
+    "ACTIVITE": "Activites juridiques"
+  },
+  {
+    "NAF": "6920Z",
+    "ACTIVITE": "Activites comptables"
+  },
+  {
+    "NAF": "7010Z",
+    "ACTIVITE": "Activites des sieges sociaux"
+  },
+  {
+    "NAF": "7021Z",
+    "ACTIVITE": "Conseil en relations publiques et communication"
+  },
+  {
+    "NAF": "7022Z",
+    "ACTIVITE": "Conseil pour les affaires et autres conseils de gestion"
+  },
+  {
+    "NAF": "7111Z",
+    "ACTIVITE": "Activites d'architecture"
+  },
+  {
+    "NAF": "7112A",
+    "ACTIVITE": "Activite des geometres"
+  },
+  {
+    "NAF": "7112B",
+    "ACTIVITE": "Ingenierie, etudes techniques"
+  },
+  {
+    "NAF": "7120A",
+    "ACTIVITE": "Controle technique automobile"
+  },
+  {
+    "NAF": "7120B",
+    "ACTIVITE": "Analyses, essais et inspections techniques"
+  },
+  {
+    "NAF": "7211Z",
+    "ACTIVITE": "Recherche-developpement en biotechnologie"
+  },
+  {
+    "NAF": "7219Z",
+    "ACTIVITE": "Recherche-developpement en autres sciences physiques et naturelles"
+  },
+  {
+    "NAF": "7220Z",
+    "ACTIVITE": "Recherche-developpement en sciences humaines et sociales"
+  },
+  {
+    "NAF": "7311Z",
+    "ACTIVITE": "Activites des agences de publicite"
+  },
+  {
+    "NAF": "7312Z",
+    "ACTIVITE": "Regie publicitaire de medias"
+  },
+  {
+    "NAF": "7320Z",
+    "ACTIVITE": "Etudes de marche"
+  },
+  {
+    "NAF": "7410Z",
+    "ACTIVITE": "Activites specialisees de design"
+  },
+  {
+    "NAF": "7420Z",
+    "ACTIVITE": "Activites photographiques"
+  },
+  {
+    "NAF": "7430Z",
+    "ACTIVITE": "Traduction et interpretation"
+  },
+  {
+    "NAF": "7490A",
+    "ACTIVITE": "Activite des economistes de la construction"
+  },
+  {
+    "NAF": "7490B",
+    "ACTIVITE": "Activites specialisees, scientifiques et techniques diverses"
+  },
+  {
+    "NAF": "7500Z",
+    "ACTIVITE": "Activites veterinaires"
+  },
+  {
+    "NAF": "7711A",
+    "ACTIVITE": "Location de courte duree de voitures et de vehicules automobiles legers"
+  },
+  {
+    "NAF": "7711B",
+    "ACTIVITE": "Location de longue duree de voitures et de vehicules automobiles legers"
+  },
+  {
+    "NAF": "7712Z",
+    "ACTIVITE": "Location et location-bail de camions"
+  },
+  {
+    "NAF": "7721Z",
+    "ACTIVITE": "Location et location-bail d'articles de loisirs et de sport"
+  },
+  {
+    "NAF": "7722Z",
+    "ACTIVITE": "Location de videocassettes et disques video"
+  },
+  {
+    "NAF": "7729Z",
+    "ACTIVITE": "Location et location-bail d'autres biens personnels et domestiques"
+  },
+  {
+    "NAF": "7731Z",
+    "ACTIVITE": "Location et location-bail de machines et equipements agricoles"
+  },
+  {
+    "NAF": "7732Z",
+    "ACTIVITE": "Location et location-bail de machines et equipements pour la construction"
+  },
+  {
+    "NAF": "7733Z",
+    "ACTIVITE": "Location et location-bail de machines de bureau et de materiel informatique"
+  },
+  {
+    "NAF": "7734Z",
+    "ACTIVITE": "Location et location-bail de materiels de transport par eau"
+  },
+  {
+    "NAF": "7735Z",
+    "ACTIVITE": "Location et location-bail de materiels de transport aerien"
+  },
+  {
+    "NAF": "7739Z",
+    "ACTIVITE": "Location et location-bail d'autres machines, equipements et biens materiels n.c.a."
+  },
+  {
+    "NAF": "7740Z",
+    "ACTIVITE": "Location-bail de propriete intellectuelle et de produits similaires, a  l'exception des œuvres soumises a "
+  },
+  {
+    "NAF": "7810Z",
+    "ACTIVITE": "Activites des agences de placement de main-d'œuvre"
+  },
+  {
+    "NAF": "7820Z",
+    "ACTIVITE": "Activites des agences de travail temporaire"
+  },
+  {
+    "NAF": "7830Z",
+    "ACTIVITE": "Autre mise a  disposition de ressources humaines"
+  },
+  {
+    "NAF": "7911Z",
+    "ACTIVITE": "Activites des agences de voyage"
+  },
+  {
+    "NAF": "7912Z",
+    "ACTIVITE": "Activites des voyagistes"
+  },
+  {
+    "NAF": "7990Z",
+    "ACTIVITE": "Autres services de reservation et activites connexes"
+  },
+  {
+    "NAF": "8010Z",
+    "ACTIVITE": "Activites de securite privee"
+  },
+  {
+    "NAF": "8020Z",
+    "ACTIVITE": "Activites liees aux systemes de securite"
+  },
+  {
+    "NAF": "8030Z",
+    "ACTIVITE": "Activites d'enquete"
+  },
+  {
+    "NAF": "8110Z",
+    "ACTIVITE": "Activites combinees de soutien lie aux batiments"
+  },
+  {
+    "NAF": "8121Z",
+    "ACTIVITE": "Nettoyage courant des batiments"
+  },
+  {
+    "NAF": "8122Z",
+    "ACTIVITE": "Autres activites de nettoyage des batiments et nettoyage industriel"
+  },
+  {
+    "NAF": "8129A",
+    "ACTIVITE": "Desinfection, desinsectisation, deratisation"
+  },
+  {
+    "NAF": "8129B",
+    "ACTIVITE": "Autres activites de nettoyage n.c.a."
+  },
+  {
+    "NAF": "8130Z",
+    "ACTIVITE": "Services d'amenagement paysager"
+  },
+  {
+    "NAF": "8211Z",
+    "ACTIVITE": "Services administratifs combines de bureau"
+  },
+  {
+    "NAF": "8219Z",
+    "ACTIVITE": "Photocopie, preparation de documents et autres activites specialisees de soutien de bureau"
+  },
+  {
+    "NAF": "8220Z",
+    "ACTIVITE": "Activites de centres d'appels"
+  },
+  {
+    "NAF": "8230Z",
+    "ACTIVITE": "Organisation de foires, salons professionnels et congres"
+  },
+  {
+    "NAF": "8291Z",
+    "ACTIVITE": "Activites des agences de recouvrement de factures et des societes d'information financiere sur la clientele"
+  },
+  {
+    "NAF": "8292Z",
+    "ACTIVITE": "Activites de conditionnement"
+  },
+  {
+    "NAF": "8299Z",
+    "ACTIVITE": "Autres activites de soutien aux entreprises n.c.a."
+  },
+  {
+    "NAF": "8411Z",
+    "ACTIVITE": "Administration publique generale"
+  },
+  {
+    "NAF": "8412Z",
+    "ACTIVITE": "Administration publique (tutelle) de la sante, de la formation, de la culture et des services sociaux, autre que"
+  },
+  {
+    "NAF": "8413Z",
+    "ACTIVITE": "Administration publique (tutelle) des activites economiques"
+  },
+  {
+    "NAF": "8421Z",
+    "ACTIVITE": "Affaires etrangeres"
+  },
+  {
+    "NAF": "8422Z",
+    "ACTIVITE": "Defense"
+  },
+  {
+    "NAF": "8423Z",
+    "ACTIVITE": "Justice"
+  },
+  {
+    "NAF": "8424Z",
+    "ACTIVITE": "Activites d'ordre public et de securite"
+  },
+  {
+    "NAF": "8425Z",
+    "ACTIVITE": "Services du feu et de secours"
+  },
+  {
+    "NAF": "8430A",
+    "ACTIVITE": "Activites generales de securite sociale"
+  },
+  {
+    "NAF": "8430B",
+    "ACTIVITE": "Gestion des retraites complementaires"
+  },
+  {
+    "NAF": "8430C",
+    "ACTIVITE": "Distribution sociale de revenus"
+  },
+  {
+    "NAF": "8510Z",
+    "ACTIVITE": "Enseignement pre-primaire"
+  },
+  {
+    "NAF": "8520Z",
+    "ACTIVITE": "Enseignement primaire"
+  },
+  {
+    "NAF": "8531Z",
+    "ACTIVITE": "Enseignement secondaire general"
+  },
+  {
+    "NAF": "8532Z",
+    "ACTIVITE": "Enseignement secondaire technique ou professionnel"
+  },
+  {
+    "NAF": "8541Z",
+    "ACTIVITE": "Enseignement post-secondaire non superieur"
+  },
+  {
+    "NAF": "8542Z",
+    "ACTIVITE": "Enseignement superieur"
+  },
+  {
+    "NAF": "8551Z",
+    "ACTIVITE": "Enseignement de disciplines sportives et d'activites de loisirs"
+  },
+  {
+    "NAF": "8552Z",
+    "ACTIVITE": "Enseignement culturel"
+  },
+  {
+    "NAF": "8553Z",
+    "ACTIVITE": "Enseignement de la conduite"
+  },
+  {
+    "NAF": "8559A",
+    "ACTIVITE": "Formation continue d'adultes"
+  },
+  {
+    "NAF": "8559B",
+    "ACTIVITE": "Autres enseignements"
+  },
+  {
+    "NAF": "8560Z",
+    "ACTIVITE": "Activites de soutien a  l'enseignement"
+  },
+  {
+    "NAF": "8610Z",
+    "ACTIVITE": "Activites hospitalieres"
+  },
+  {
+    "NAF": "8621Z",
+    "ACTIVITE": "Activite des medecins generalistes"
+  },
+  {
+    "NAF": "8622A",
+    "ACTIVITE": "Activites de radiodiagnostic et de radiotherapie"
+  },
+  {
+    "NAF": "8622B",
+    "ACTIVITE": "Activites chirurgicales"
+  },
+  {
+    "NAF": "8622C",
+    "ACTIVITE": "Autres activites des medecins specialistes"
+  },
+  {
+    "NAF": "8623Z",
+    "ACTIVITE": "Pratique dentaire"
+  },
+  {
+    "NAF": "8690A",
+    "ACTIVITE": "Ambulances"
+  },
+  {
+    "NAF": "8690B",
+    "ACTIVITE": "Laboratoires d'analyses medicales"
+  },
+  {
+    "NAF": "8690C",
+    "ACTIVITE": "Centres de collecte et banques d'organes"
+  },
+  {
+    "NAF": "8690D",
+    "ACTIVITE": "Activites des infirmiers et des sages-femmes"
+  },
+  {
+    "NAF": "8690E",
+    "ACTIVITE": "Activites des professionnels de la reeducation, de l'appareillage et des pedicures-podologues"
+  },
+  {
+    "NAF": "8690F",
+    "ACTIVITE": "Activites de sante humaine non classees ailleurs"
+  },
+  {
+    "NAF": "8710A",
+    "ACTIVITE": "Hebergement medicalise pour personnes agees"
+  },
+  {
+    "NAF": "8710B",
+    "ACTIVITE": "Hebergement medicalise pour enfants handicapes"
+  },
+  {
+    "NAF": "8710C",
+    "ACTIVITE": "Hebergement medicalise pour adultes handicapes et autre hebergement medicalise"
+  },
+  {
+    "NAF": "8720A",
+    "ACTIVITE": "Hebergement social pour handicapes mentaux et malades mentaux"
+  },
+  {
+    "NAF": "8720B",
+    "ACTIVITE": "Hebergement social pour toxicomanes"
+  },
+  {
+    "NAF": "8730A",
+    "ACTIVITE": "Hebergement social pour personnes agees"
+  },
+  {
+    "NAF": "8730B",
+    "ACTIVITE": "Hebergement social pour handicapes physiques"
+  },
+  {
+    "NAF": "8790A",
+    "ACTIVITE": "Hebergement social pour enfants en difficultes"
+  },
+  {
+    "NAF": "8790B",
+    "ACTIVITE": "Hebergement social pour adultes et familles en difficultes et autre hebergement social"
+  },
+  {
+    "NAF": "8810A",
+    "ACTIVITE": "Aide a  domicile"
+  },
+  {
+    "NAF": "8810B",
+    "ACTIVITE": "Accueil ou accompagnement sans hebergement d'adultes handicapes ou de personnes agees"
+  },
+  {
+    "NAF": "8810C",
+    "ACTIVITE": "Aide par le travail"
+  },
+  {
+    "NAF": "8891A",
+    "ACTIVITE": "Accueil de jeunes enfants"
+  },
+  {
+    "NAF": "8891B",
+    "ACTIVITE": "Accueil ou accompagnement sans hebergement d'enfants handicapes"
+  },
+  {
+    "NAF": "8899A",
+    "ACTIVITE": "Autre accueil ou accompagnement sans hebergement d'enfants et d'adolescents"
+  },
+  {
+    "NAF": "8899B",
+    "ACTIVITE": "Action sociale sans hebergement n.c.a."
+  },
+  {
+    "NAF": "9001Z",
+    "ACTIVITE": "Arts du spectacle vivant"
+  },
+  {
+    "NAF": "9002Z",
+    "ACTIVITE": "Activites de soutien au spectacle vivant"
+  },
+  {
+    "NAF": "9003A",
+    "ACTIVITE": "Creation artistique relevant des arts plastiques"
+  },
+  {
+    "NAF": "9003B",
+    "ACTIVITE": "Autre creation artistique"
+  },
+  {
+    "NAF": "9004Z",
+    "ACTIVITE": "Gestion de salles de spectacles"
+  },
+  {
+    "NAF": "9101Z",
+    "ACTIVITE": "Gestion des bibliotheques et des archives"
+  },
+  {
+    "NAF": "9102Z",
+    "ACTIVITE": "Gestion des musees"
+  },
+  {
+    "NAF": "9103Z",
+    "ACTIVITE": "Gestion des sites et monuments historiques et des attractions touristiques similaires"
+  },
+  {
+    "NAF": "9104Z",
+    "ACTIVITE": "Gestion des jardins botaniques et zoologiques et des reserves naturelles"
+  },
+  {
+    "NAF": "9200Z",
+    "ACTIVITE": "Organisation de jeux de hasard et d'argent"
+  },
+  {
+    "NAF": "9311Z",
+    "ACTIVITE": "Gestion d'installations sportives"
+  },
+  {
+    "NAF": "9312Z",
+    "ACTIVITE": "Activites de clubs de sports"
+  },
+  {
+    "NAF": "9313Z",
+    "ACTIVITE": "Activites des centres de culture physique"
+  },
+  {
+    "NAF": "9319Z",
+    "ACTIVITE": "Autres activites liees au sport"
+  },
+  {
+    "NAF": "9321Z",
+    "ACTIVITE": "Activites des parcs d'attractions et parcs a  themes"
+  },
+  {
+    "NAF": "9329Z",
+    "ACTIVITE": "Autres activites recreatives et de loisirs"
+  },
+  {
+    "NAF": "9411Z",
+    "ACTIVITE": "Activites des organisations patronales et consulaires"
+  },
+  {
+    "NAF": "9412Z",
+    "ACTIVITE": "Activites des organisations professionnelles"
+  },
+  {
+    "NAF": "9420Z",
+    "ACTIVITE": "Activites des syndicats de salaries"
+  },
+  {
+    "NAF": "9491Z",
+    "ACTIVITE": "Activites des organisations religieuses"
+  },
+  {
+    "NAF": "9492Z",
+    "ACTIVITE": "Activites des organisations politiques"
+  },
+  {
+    "NAF": "9499Z",
+    "ACTIVITE": "Autres organisations fonctionnant par adhesion volontaire"
+  },
+  {
+    "NAF": "9511Z",
+    "ACTIVITE": "Reparation d'ordinateurs et d'equipements peripheriques"
+  },
+  {
+    "NAF": "9512Z",
+    "ACTIVITE": "Reparation d'equipements de communication"
+  },
+  {
+    "NAF": "9521Z",
+    "ACTIVITE": "Reparation de produits electroniques grand public"
+  },
+  {
+    "NAF": "9522Z",
+    "ACTIVITE": "Reparation d'appareils electromenagers et d'equipements pour la maison et le jardin"
+  },
+  {
+    "NAF": "9523Z",
+    "ACTIVITE": "Reparation de chaussures et d'articles en cuir"
+  },
+  {
+    "NAF": "9524Z",
+    "ACTIVITE": "Reparation de meubles et d'equipements du foyer"
+  },
+  {
+    "NAF": "9525Z",
+    "ACTIVITE": "Reparation d'articles d'horlogerie et de bijouterie"
+  },
+  {
+    "NAF": "9529Z",
+    "ACTIVITE": "Reparation d'autres biens personnels et domestiques"
+  },
+  {
+    "NAF": "9601A",
+    "ACTIVITE": "Blanchisserie-teinturerie de gros"
+  },
+  {
+    "NAF": "9601B",
+    "ACTIVITE": "Blanchisserie-teinturerie de detail"
+  },
+  {
+    "NAF": "9602A",
+    "ACTIVITE": "Coiffure"
+  },
+  {
+    "NAF": "9602B",
+    "ACTIVITE": "Soins de beaute"
+  },
+  {
+    "NAF": "9603Z",
+    "ACTIVITE": "Services funeraires"
+  },
+  {
+    "NAF": "9604Z",
+    "ACTIVITE": "Entretien corporel"
+  },
+  {
+    "NAF": "9609Z",
+    "ACTIVITE": "Autres services personnels n.c.a."
+  },
+  {
+    "NAF": "9700Z",
+    "ACTIVITE": "Activites des menages en tant qu'employeurs de personnel domestique"
+  },
+  {
+    "NAF": "9810Z",
+    "ACTIVITE": "Activites indifferenciees des menages en tant que producteurs de biens pour usage propre"
+  },
+  {
+    "NAF": "9820Z",
+    "ACTIVITE": "Activites indifferenciees des menages en tant que producteurs de services pour usage propre"
+  },
+  {
+    "NAF": "9900Z",
+    "ACTIVITE": "Activites des organisations et organismes extraterritoriaux"
+  }
+]

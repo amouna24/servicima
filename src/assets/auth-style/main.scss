@@ -1,0 +1,361 @@
+
+/********************************************************/
+                    /* container */
+/********************************************************/
+.wid-container{
+  height: 402px;
+  background-color: $lightColorAuth;
+}
+
+/********************************************************/
+                  /* logo */
+/********************************************************/
+
+.wid-logo{
+  height: 35%;
+}
+
+/********************************************************/
+                  /* image */
+/********************************************************/
+
+.wid-image{
+  height: 60%;
+}
+
+.wid-image-login {
+height: 65%;
+}
+
+/********************************************************/
+                  /* title */
+/********************************************************/
+
+.wid-title{
+  height: 28%;
+}
+/********************************************************/
+                  /* form */
+/********************************************************/
+
+.wid-container-form{
+height: 49%;
+}
+
+.wid-container-form-login{
+height: 52%;
+}
+
+
+/********************************************************/
+                  /* footer */
+/********************************************************/
+
+.wid-footer{
+  height: 20%;
+  width: 90%;
+}
+
+.wid-footer-password{
+height: 20%;
+width: 30%;
+margin-left: 190px;
+}
+
+.container-button-stepper{
+  height: 100px;
+}
+
+/********************************************************/
+                  /* hide container */
+/********************************************************/
+
+.wid-container-hide-stepper{
+  height: 77%;
+}
+
+/********************************************************/
+                  /* error */
+/********************************************************/
+.container-error{
+  height: 9px;
+}
+
+
+
+
+
+
+
+/********************************************************/
+                    /*  background image  */
+/********************************************************/
+.wid-background-image{
+    background-image: url($layerPath ) ;
+    min-height: 100%;
+    background-size: 100% auto;
+  }
+
+.wid-image-password {
+  background-image: url($relaxPath);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-size: cover;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+
+
+/********************************************************/
+                    /* mat-form-field */
+/********************************************************/
+.mat-form-field{
+  font-size: 9px;
+  flex-grow:1;
+}
+
+/********************************************************/
+                  /* container mat form field */
+/********************************************************/
+.wid-form{
+  display:flex;
+  padding-top:6px;
+}
+/********************************************************/
+                  /* mat-input error outline color*/
+/********************************************************/
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+background-color: #fce4e4!important;
+color:red !important ;
+}
+
+/********************************************************/
+                  /* input outline color*/
+/********************************************************/
+.mat-form-field-appearance-outline  .mat-form-field-outline {
+background-color: #e0e7ff !important;
+}
+
+/********************************************************/
+                  /* container form*/
+/********************************************************/
+.wid-form-class{
+  width: 90%;
+}
+/********************************************************/
+                  /* input value */
+/********************************************************/
+.wid-Value-input {
+@include font(14px,contain,$RegularFamily,12px,normal,normal,normal,normal,normal,left, $accentColorAuth,57px);
+  cursor: pointer;
+}
+.wid-input-value{
+  @include font(14px,contain,$RegularFamily,12px,normal,normal,normal,normal,normal,left, $accentColorAuth,57px);
+}
+
+
+/********************************************************/
+                    /*  value button  */
+/********************************************************/
+.wid-Value-button {
+  @include font(auto,$object-fit,$RegularFamily,15px,$font-weight ,$font-stretch,$font-style,1.4,$letter-normal,center,$lightColorAuth,auto);
+  }
+
+/********************************************************/
+                  /*  background button  */
+/********************************************************/
+.wid-background-button {
+  height: 38px;
+  width: 100%;
+  background-image: linear-gradient(to top, #86B8D1,  #2F7CA3 );
+}
+
+.wid-Value-button[disabled]{
+  color: white !important;
+  opacity:0.5;
+}
+
+/********************************************************/
+                  /*  back button  */
+/********************************************************/
+.wid-back-button {
+  width: 100%;
+  height: 36px;
+  border: #e0e7ff;
+  background-color: $lightColorAuth;
+  text-align: right;
+  color:  $primaryColorAuth;
+}
+.wid-background-button-company{
+  width: 20%;
+
+}
+/********************************************************/
+                  /* select language  */
+/********************************************************/
+.lang-select {
+width:80px;
+max-width:110px;
+font-size: 15px;
+position: absolute;
+top: 0px;
+right: 0;
+}
+
+.wid-servicima {
+  @include font(16px,$object-fit,$RegularFamily,18.5px,$font-weight2 ,$font-stretch,$font-style,1.88,$letter-normal,left,$drakColorAuth,108px);
+}
+
+
+.wid-label-form{
+  @include font(9px,$object-fit,$RomanAndItalic,12px,$font-weight2 ,$font-stretch,$font-style,$line-height,1.2px,left,$primaryColorAuth,168px);
+}
+
+.wid-already-have-an-acco {
+  @include font(12px,$object-fit,$RegularFamily,13px,$font-weight1 ,$font-stretch,$font-style,3,$letter-normal,right,$primaryColorAuth,248px);
+  margin-right: 34px;
+}
+
+.wid-forget-password {
+  @include font(12px,$object-fit,$RegularFamily,12px,$font-weight ,$font-stretch,$font-style,$line-height,$letter-normal,left,$drakColorAuth,auto);
+  margin-right: 11px;
+  cursor: pointer;
+}
+
+.wid-get-started-for-free {
+  @include font(auto,$object-fit,$RegularFamily,19px,$font-weight ,$font-stretch,$font-style,1.07,$letter-normal,left,$drakColorAuth,333px);
+}
+
+.wid-free-forever-no-cre {
+  @include font(14px,$object-fit,$RegularFamily,11px,$font-weight1 ,$font-stretch,$font-style,1.47,$letter-normal,left,#8798ad,269px);
+  }
+
+.errorDuplicated{
+  @include label(auto,14px,0);
+  color: red;
+  margin: 19px 0;
+}
+
+.icon-password{
+  cursor: pointer;
+}
+
+
+/********************************************************/
+                  /* stepper  */
+/********************************************************/
+.wid-label-create-accompte-company {
+  width: 80%;
+  font-size: 26px;
+  text-align: center;
+}
+
+.wid-specific-input{
+width: 48%;
+}
+.wid-registration-label{
+  width: 183px;
+}
+
+/********************************************************/
+                  /* mat stepper  */
+/********************************************************/
+.mat-stepper-horizontal {
+  margin-top: 36px;
+}
+
+.mat-horizontal-content-container {
+  height: 530px ;
+  width: 1080px;
+}
+
+/********************************************************/
+                  /*phone */
+/********************************************************/
+.intl-tel-input input, .intl-tel-input input[type=text], .intl-tel-input input[type=tel] {
+  background: #e0e7ff !important;
+  }
+
+
+
+  .intl-tel-input input{
+    height: 36px;
+  }
+  .intl-tel-input{
+  margin-top: 1px;
+}
+
+.flag {
+  width: 16px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  margin-right: 3px;
+}
+.noaccount{
+  margin: -22px;
+}
+.team-image{
+ margin-right:30px;
+}
+.specific-button-stepper{
+  width: 100%;
+  height: 43px;
+}
+.error-phone{
+  font-size: 9px;
+  margin: 0 13px;
+}
+
+.required::after {
+  content: "*";
+  color: red;
+}
+
+.big-input{
+  width: 250px;
+}
+
+.medium-input{
+  width: 230px;
+}
+
+.small-input{
+ width: 112px;
+}
+
+.input-adress{
+  width: 371px;
+}
+.button-general{
+ margin-top: 47px;
+}
+
+mat-error{
+  font-size: 10px;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.spinner-auth:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #2F7CA3;
+  animation: spinner .8s linear infinite;
+}
+button {
+  outline-style: none !important;
+}

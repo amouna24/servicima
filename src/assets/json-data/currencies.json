@@ -1,0 +1,842 @@
+[
+  {
+    "CURRENCY_CODE": "AFN",
+    "CURRENCY_DESC": "Afghani"
+  },
+  {
+    "CURRENCY_CODE": "ZAR",
+    "CURRENCY_DESC": "Rand"
+  },
+  {
+    "CURRENCY_CODE": "ALL",
+    "CURRENCY_DESC": "Lek"
+  },
+  {
+    "CURRENCY_CODE": "DZD",
+    "CURRENCY_DESC": "Dinars algeriens"
+  },
+  {
+    "CURRENCY_CODE": "AOA",
+    "CURRENCY_DESC": "Kwanza"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "SAR",
+    "CURRENCY_DESC": "Riyal Saoudiens"
+  },
+  {
+    "CURRENCY_CODE": "ARS",
+    "CURRENCY_DESC": "Peso Argentin"
+  },
+  {
+    "CURRENCY_CODE": "AMD",
+    "CURRENCY_DESC": "Dram Armenien"
+  },
+  {
+    "CURRENCY_CODE": "AWG",
+    "CURRENCY_DESC": "Aruban Florin"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Australian Dollar"
+  },
+  {
+    "CURRENCY_CODE": "AZN",
+    "CURRENCY_DESC": "Azerbaijanian Manat"
+  },
+  {
+    "CURRENCY_CODE": "BSD",
+    "CURRENCY_DESC": "Dollar Bahameen"
+  },
+  {
+    "CURRENCY_CODE": "BHD",
+    "CURRENCY_DESC": "Dinar Bahraini"
+  },
+  {
+    "CURRENCY_CODE": "BDT",
+    "CURRENCY_DESC": "Taka"
+  },
+  {
+    "CURRENCY_CODE": "BBD",
+    "CURRENCY_DESC": "Dollars Barbados"
+  },
+  {
+    "CURRENCY_CODE": "BZD",
+    "CURRENCY_DESC": "Dollar de Belize"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "CFA Franc BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "BMD",
+    "CURRENCY_DESC": "Dollar Bermudien"
+  },
+  {
+    "CURRENCY_CODE": "BTN",
+    "CURRENCY_DESC": "Ngultrum"
+  },
+  {
+    "CURRENCY_CODE": "INR",
+    "CURRENCY_DESC": "Indian Rupee Indienne"
+  },
+  {
+    "CURRENCY_CODE": "BYR",
+    "CURRENCY_DESC": "Ruble Bielorusse"
+  },
+  {
+    "CURRENCY_CODE": "BOV",
+    "CURRENCY_DESC": "Mvdol"
+  },
+  {
+    "CURRENCY_CODE": "BOB",
+    "CURRENCY_DESC": "Boliviano"
+  },
+  {
+    "CURRENCY_CODE": "BAM",
+    "CURRENCY_DESC": "Mark Convertible"
+  },
+  {
+    "CURRENCY_CODE": "BWP",
+    "CURRENCY_DESC": "Pula"
+  },
+  {
+    "CURRENCY_CODE": "NOK",
+    "CURRENCY_DESC": "Couronne Norvegienne"
+  },
+  {
+    "CURRENCY_CODE": "BND",
+    "CURRENCY_DESC": "Brunei Dollar"
+  },
+  {
+    "CURRENCY_CODE": "BRL",
+    "CURRENCY_DESC": "Real Bresilien"
+  },
+  {
+    "CURRENCY_CODE": "BGN",
+    "CURRENCY_DESC": "Lev Bulgare"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "Franc CFA BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "BIF",
+    "CURRENCY_DESC": "Franc Burundi"
+  },
+  {
+    "CURRENCY_CODE": "CVE",
+    "CURRENCY_DESC": "Cabo Verde Escudo"
+  },
+  {
+    "CURRENCY_CODE": "KHR",
+    "CURRENCY_DESC": "Riel"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "Franc CFA BEAC"
+  },
+  {
+    "CURRENCY_CODE": "CAD",
+    "CURRENCY_DESC": "Dollar Canadien"
+  },
+  {
+    "CURRENCY_CODE": "KYD",
+    "CURRENCY_DESC": "Cayman Islands Dollar"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "CFA Franc BEAC"
+  },
+  {
+    "CURRENCY_CODE": "CLF",
+    "CURRENCY_DESC": "Unidad de Fomento"
+  },
+  {
+    "CURRENCY_CODE": "CLP",
+    "CURRENCY_DESC": "Peso Chilien"
+  },
+  {
+    "CURRENCY_CODE": "CNY",
+    "CURRENCY_DESC": "Yuan Renminbi"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  },
+  {
+    "CURRENCY_CODE": "COP",
+    "CURRENCY_DESC": "Peso Colombien"
+  },
+  {
+    "CURRENCY_CODE": "COU",
+    "CURRENCY_DESC": "Unidad de Valor Real"
+  },
+  {
+    "CURRENCY_CODE": "KMF",
+    "CURRENCY_DESC": "Franc Comorien"
+  },
+  {
+    "CURRENCY_CODE": "CDF",
+    "CURRENCY_DESC": "Le Franc Congolais"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "Franc CFA BEAC"
+  },
+  {
+    "CURRENCY_CODE": "NZD",
+    "CURRENCY_DESC": "Dollar Neo-Zelandais"
+  },
+  {
+    "CURRENCY_CODE": "KRW",
+    "CURRENCY_DESC": "Won"
+  },
+  {
+    "CURRENCY_CODE": "KPW",
+    "CURRENCY_DESC": "Won Nord-coreen"
+  },
+  {
+    "CURRENCY_CODE": "CRC",
+    "CURRENCY_DESC": "Costa Rican Colon"
+  },
+  {
+    "CURRENCY_CODE": "HRK",
+    "CURRENCY_DESC": "Kuna"
+  },
+  {
+    "CURRENCY_CODE": "CUC",
+    "CURRENCY_DESC": "Peso Convertible"
+  },
+  {
+    "CURRENCY_CODE": "CUP",
+    "CURRENCY_DESC": "Peso Cubain"
+  },
+  {
+    "CURRENCY_CODE": "ANG",
+    "CURRENCY_DESC": "Florin des Antilles neerlandaises"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "CFA Franc BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "DKK",
+    "CURRENCY_DESC": "Couronne Danoise"
+  },
+  {
+    "CURRENCY_CODE": "DJF",
+    "CURRENCY_DESC": "Franc Djiboutien"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "EGP",
+    "CURRENCY_DESC": "Pound egyptien"
+  },
+  {
+    "CURRENCY_CODE": "USD",
+    "CURRENCY_DESC": "Dollar US"
+  },
+  {
+    "CURRENCY_CODE": "ERN",
+    "CURRENCY_DESC": "Nakfa"
+  },
+  {
+    "CURRENCY_CODE": "ETB",
+    "CURRENCY_DESC": "Birr ethiopienne"
+  },
+  {
+    "CURRENCY_CODE": "FKP",
+    "CURRENCY_DESC": "Livre des ?les Malouines"
+  },
+  {
+    "CURRENCY_CODE": "FJD",
+    "CURRENCY_DESC": "Dollar des Fiji"
+  },
+  {
+    "CURRENCY_CODE": "XDR",
+    "CURRENCY_DESC": "SDR (Droit de tirage special)"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "Franc CFA BEAC"
+  },
+  {
+    "CURRENCY_CODE": "GMD",
+    "CURRENCY_DESC": "Dalasi"
+  },
+  {
+    "CURRENCY_CODE": "GEL",
+    "CURRENCY_DESC": "Lari"
+  },
+  {
+    "CURRENCY_CODE": "GHS",
+    "CURRENCY_DESC": "Cedi du Ghana"
+  },
+  {
+    "CURRENCY_CODE": "GIP",
+    "CURRENCY_DESC": "Pound de Gibraltar"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "DKK",
+    "CURRENCY_DESC": "Couronne Danoise"
+  },
+  {
+    "CURRENCY_CODE": "GTQ",
+    "CURRENCY_DESC": "Quetzal"
+  },
+  {
+    "CURRENCY_CODE": "GBP",
+    "CURRENCY_DESC": "Livre Sterlling"
+  },
+  {
+    "CURRENCY_CODE": "GNF",
+    "CURRENCY_DESC": "Franc Guineen"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "Franc CFA BEAC"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "CFA Franc BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "GYD",
+    "CURRENCY_DESC": "Dollar guyanien"
+  },
+  {
+    "CURRENCY_CODE": "HTG",
+    "CURRENCY_DESC": "Gourde"
+  },
+  {
+    "CURRENCY_CODE": "HNL",
+    "CURRENCY_DESC": "Lempira"
+  },
+  {
+    "CURRENCY_CODE": "HKD",
+    "CURRENCY_DESC": "Dollar de Hong Kong"
+  },
+  {
+    "CURRENCY_CODE": "HUF",
+    "CURRENCY_DESC": "Forint"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  },
+  {
+    "CURRENCY_CODE": "DKK",
+    "CURRENCY_DESC": "Couronne Danoise"
+  },
+  {
+    "CURRENCY_CODE": "INR",
+    "CURRENCY_DESC": "Rupee Indienne"
+  },
+  {
+    "CURRENCY_CODE": "IDR",
+    "CURRENCY_DESC": "Rupiah"
+  },
+  {
+    "CURRENCY_CODE": "IRR",
+    "CURRENCY_DESC": "Rial Iranien"
+  },
+  {
+    "CURRENCY_CODE": "IQD",
+    "CURRENCY_DESC": "Dinar Iraquien"
+  },
+  {
+    "CURRENCY_CODE": "ISK",
+    "CURRENCY_DESC": "Couronne Islandaise"
+  },
+  {
+    "CURRENCY_CODE": "ILS",
+    "CURRENCY_DESC": "Nouveau Sheqel Israelien"
+  },
+  {
+    "CURRENCY_CODE": "JMD",
+    "CURRENCY_DESC": "Dollars Jamaicain"
+  },
+  {
+    "CURRENCY_CODE": "JPY",
+    "CURRENCY_DESC": "Yen"
+  },
+  {
+    "CURRENCY_CODE": "JOD",
+    "CURRENCY_DESC": "Dinars Jordanien"
+  },
+  {
+    "CURRENCY_CODE": "KZT",
+    "CURRENCY_DESC": "Tenge"
+  },
+  {
+    "CURRENCY_CODE": "KES",
+    "CURRENCY_DESC": "Shilling Kenyan"
+  },
+  {
+    "CURRENCY_CODE": "KGS",
+    "CURRENCY_DESC": "Som"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  },
+  {
+    "CURRENCY_CODE": "KWD",
+    "CURRENCY_DESC": "Dinar Kowaitien"
+  },
+  {
+    "CURRENCY_CODE": "LAK",
+    "CURRENCY_DESC": "Kip"
+  },
+  {
+    "CURRENCY_CODE": "SVC",
+    "CURRENCY_DESC": "Le Colon Salvadorien"
+  },
+  {
+    "CURRENCY_CODE": "LSL",
+    "CURRENCY_DESC": "Loti"
+  },
+  {
+    "CURRENCY_CODE": "ZAR",
+    "CURRENCY_DESC": "Rand"
+  },
+  {
+    "CURRENCY_CODE": "LBP",
+    "CURRENCY_DESC": "Pound Libanais"
+  },
+  {
+    "CURRENCY_CODE": "LRD",
+    "CURRENCY_DESC": "Dollar du Liberia"
+  },
+  {
+    "CURRENCY_CODE": "LYD",
+    "CURRENCY_DESC": "Dinars Libien"
+  },
+  {
+    "CURRENCY_CODE": "CHF",
+    "CURRENCY_DESC": "Swiss Franc"
+  },
+  {
+    "CURRENCY_CODE": "MOP",
+    "CURRENCY_DESC": "Pataca"
+  },
+  {
+    "CURRENCY_CODE": "MKD",
+    "CURRENCY_DESC": "Denar"
+  },
+  {
+    "CURRENCY_CODE": "MGA",
+    "CURRENCY_DESC": "Malagasy Ariary"
+  },
+  {
+    "CURRENCY_CODE": "MWK",
+    "CURRENCY_DESC": "Kwacha"
+  },
+  {
+    "CURRENCY_CODE": "MYR",
+    "CURRENCY_DESC": "Ringgi Malaisien"
+  },
+  {
+    "CURRENCY_CODE": "MVR",
+    "CURRENCY_DESC": "Rufiyaa"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "CFA Franc BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "MUR",
+    "CURRENCY_DESC": "Mauritius Rupee"
+  },
+  {
+    "CURRENCY_CODE": "MRO",
+    "CURRENCY_DESC": "Ouguiya"
+  },
+  {
+    "CURRENCY_CODE": "MXN",
+    "CURRENCY_DESC": "Peso Mexicain"
+  },
+  {
+    "CURRENCY_CODE": "MXV",
+    "CURRENCY_DESC": "Mexican Unidad de Inversion (UDI)"
+  },
+  {
+    "CURRENCY_CODE": "MDL",
+    "CURRENCY_DESC": "Leu Moldavien"
+  },
+  {
+    "CURRENCY_CODE": "MNT",
+    "CURRENCY_DESC": "Tugrik"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "MAD",
+    "CURRENCY_DESC": "Dirham Marocain"
+  },
+  {
+    "CURRENCY_CODE": "MZN",
+    "CURRENCY_DESC": "Metical"
+  },
+  {
+    "CURRENCY_CODE": "MMK",
+    "CURRENCY_DESC": "Kyat"
+  },
+  {
+    "CURRENCY_CODE": "NAD",
+    "CURRENCY_DESC": "Dollar Namibien"
+  },
+  {
+    "CURRENCY_CODE": "ZAR",
+    "CURRENCY_DESC": "Rand"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  },
+  {
+    "CURRENCY_CODE": "NIO",
+    "CURRENCY_DESC": "Cordoba"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "Franc CFA BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "NGN",
+    "CURRENCY_DESC": "Naira"
+  },
+  {
+    "CURRENCY_CODE": "NZD",
+    "CURRENCY_DESC": "Dollar Neo-Zelandais"
+  },
+  {
+    "CURRENCY_CODE": "NOK",
+    "CURRENCY_DESC": "Couronne Norvegienne"
+  },
+  {
+    "CURRENCY_CODE": "XPF",
+    "CURRENCY_DESC": "Franc CFP"
+  },
+  {
+    "CURRENCY_CODE": "NZD",
+    "CURRENCY_DESC": "Neo-Zelandais"
+  },
+  {
+    "CURRENCY_CODE": "NPR",
+    "CURRENCY_DESC": "Rupee Nepalais"
+  },
+  {
+    "CURRENCY_CODE": "OMR",
+    "CURRENCY_DESC": "Rial Omani"
+  },
+  {
+    "CURRENCY_CODE": "UGX",
+    "CURRENCY_DESC": "Shilling Ougandaisg"
+  },
+  {
+    "CURRENCY_CODE": "UZS",
+    "CURRENCY_DESC": "Sum d'Oubekistan"
+  },
+  {
+    "CURRENCY_CODE": "PKR",
+    "CURRENCY_DESC": "Rupee du Pakistan"
+  },
+  {
+    "CURRENCY_CODE": "PAB",
+    "CURRENCY_DESC": "Balboa"
+  },
+  {
+    "CURRENCY_CODE": "PGK",
+    "CURRENCY_DESC": "Kina"
+  },
+  {
+    "CURRENCY_CODE": "PYG",
+    "CURRENCY_DESC": "Guarani"
+  },
+  {
+    "CURRENCY_CODE": "XUA",
+    "CURRENCY_DESC": "Unite de compte de la BAD"
+  },
+  {
+    "CURRENCY_CODE": "PEN",
+    "CURRENCY_DESC": "Nouveau Sol"
+  },
+  {
+    "CURRENCY_CODE": "PHP",
+    "CURRENCY_DESC": "Peso Phillipins"
+  },
+  {
+    "CURRENCY_CODE": "NZD",
+    "CURRENCY_DESC": "Dollar Neo-Zelandais"
+  },
+  {
+    "CURRENCY_CODE": "PLN",
+    "CURRENCY_DESC": "Zloty"
+  },
+  {
+    "CURRENCY_CODE": "XPF",
+    "CURRENCY_DESC": "Franc CFP"
+  },
+  {
+    "CURRENCY_CODE": "QAR",
+    "CURRENCY_DESC": "Rial Qatari"
+  },
+  {
+    "CURRENCY_CODE": "RON",
+    "CURRENCY_DESC": "Leu Roumain"
+  },
+  {
+    "CURRENCY_CODE": "RUB",
+    "CURRENCY_DESC": "Ruble Russe"
+  },
+  {
+    "CURRENCY_CODE": "RWF",
+    "CURRENCY_DESC": "Franc Rwandais"
+  },
+  {
+    "CURRENCY_CODE": "DOP",
+    "CURRENCY_DESC": "Peso Dominicain"
+  },
+  {
+    "CURRENCY_CODE": "CZK",
+    "CURRENCY_DESC": "Couronne Tcheque"
+  },
+  {
+    "CURRENCY_CODE": "MAD",
+    "CURRENCY_DESC": "Dirham Maroccain"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "XCD",
+    "CURRENCY_DESC": "Dollar des Caraibes orientales"
+  },
+  {
+    "CURRENCY_CODE": "SHP",
+    "CURRENCY_DESC": "Livre de Saint Helene"
+  },
+  {
+    "CURRENCY_CODE": "WST",
+    "CURRENCY_DESC": "Tala"
+  },
+  {
+    "CURRENCY_CODE": "STD",
+    "CURRENCY_DESC": "Dobra"
+  },
+  {
+    "CURRENCY_CODE": "RSD",
+    "CURRENCY_DESC": "Dinar Serbe"
+  },
+  {
+    "CURRENCY_CODE": "SCR",
+    "CURRENCY_DESC": "Rupee des Seychelles"
+  },
+  {
+    "CURRENCY_CODE": "SLL",
+    "CURRENCY_DESC": "Leone"
+  },
+  {
+    "CURRENCY_CODE": "SGD",
+    "CURRENCY_DESC": "Dollar Singaporien"
+  },
+  {
+    "CURRENCY_CODE": "ANG",
+    "CURRENCY_DESC": "Florin des Antilles neerlandaises"
+  },
+  {
+    "CURRENCY_CODE": "XSU",
+    "CURRENCY_DESC": "Sucre"
+  },
+  {
+    "CURRENCY_CODE": "SBD",
+    "CURRENCY_DESC": "Dollar des iles Solomon"
+  },
+  {
+    "CURRENCY_CODE": "SOS",
+    "CURRENCY_DESC": "Shilling Somalien"
+  },
+  {
+    "CURRENCY_CODE": "SDG",
+    "CURRENCY_DESC": "Livre Soudanais"
+  },
+  {
+    "CURRENCY_CODE": "SSP",
+    "CURRENCY_DESC": "Livre sud-soudanaise"
+  },
+  {
+    "CURRENCY_CODE": "LKR",
+    "CURRENCY_DESC": "Rupee Sri Lankais"
+  },
+  {
+    "CURRENCY_CODE": "CHE",
+    "CURRENCY_DESC": "WIR Euro"
+  },
+  {
+    "CURRENCY_CODE": "CHF",
+    "CURRENCY_DESC": "Franc Suisse"
+  },
+  {
+    "CURRENCY_CODE": "CHW",
+    "CURRENCY_DESC": "Franc WIR"
+  },
+  {
+    "CURRENCY_CODE": "SRD",
+    "CURRENCY_DESC": "Dollars du Surinam"
+  },
+  {
+    "CURRENCY_CODE": "SEK",
+    "CURRENCY_DESC": "Couronne Suedoise"
+  },
+  {
+    "CURRENCY_CODE": "NOK",
+    "CURRENCY_DESC": "Couronne Norvegienne"
+  },
+  {
+    "CURRENCY_CODE": "SZL",
+    "CURRENCY_DESC": "Lilangeni"
+  },
+  {
+    "CURRENCY_CODE": "SYP",
+    "CURRENCY_DESC": "Pound Syrien"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "Franc CFA BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "TJS",
+    "CURRENCY_DESC": "Somoni"
+  },
+  {
+    "CURRENCY_CODE": "TWD",
+    "CURRENCY_DESC": "Nouveau dollars Taiwanais"
+  },
+  {
+    "CURRENCY_CODE": "TZS",
+    "CURRENCY_DESC": "Shilling Tanzanien"
+  },
+  {
+    "CURRENCY_CODE": "XAF",
+    "CURRENCY_DESC": "CFA Franc BEAC"
+  },
+  {
+    "CURRENCY_CODE": "THB",
+    "CURRENCY_DESC": "Baht"
+  },
+  {
+    "CURRENCY_CODE": "XOF",
+    "CURRENCY_DESC": "Franc CFA BCEAO"
+  },
+  {
+    "CURRENCY_CODE": "NZD",
+    "CURRENCY_DESC": "Dollar neo-zelandais"
+  },
+  {
+    "CURRENCY_CODE": "TOP",
+    "CURRENCY_DESC": "Paanga"
+  },
+  {
+    "CURRENCY_CODE": "TTD",
+    "CURRENCY_DESC": "Dollars de Trinidad et Tobago"
+  },
+  {
+    "CURRENCY_CODE": "TND",
+    "CURRENCY_DESC": "Dinars Tunisiens"
+  },
+  {
+    "CURRENCY_CODE": "TMT",
+    "CURRENCY_DESC": "Turkmenistan Nouveau Manat"
+  },
+  {
+    "CURRENCY_CODE": "TRY",
+    "CURRENCY_DESC": "Livre Turque"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollars Australiens"
+  },
+  {
+    "CURRENCY_CODE": "UAH",
+    "CURRENCY_DESC": "Hryvnia"
+  },
+  {
+    "CURRENCY_CODE": "EUR",
+    "CURRENCY_DESC": "Euro"
+  },
+  {
+    "CURRENCY_CODE": "AED",
+    "CURRENCY_DESC": "Dirham UAE"
+  },
+  {
+    "CURRENCY_CODE": "UYI",
+    "CURRENCY_DESC": "Uruguay Peso en Unidades Indexadas (URUIURUI)"
+  },
+  {
+    "CURRENCY_CODE": "UYU",
+    "CURRENCY_DESC": "Peso Uruguayen"
+  },
+  {
+    "CURRENCY_CODE": "VUV",
+    "CURRENCY_DESC": "Vatu"
+  },
+  {
+    "CURRENCY_CODE": "VEF",
+    "CURRENCY_DESC": "Bolivar"
+  },
+  {
+    "CURRENCY_CODE": "VND",
+    "CURRENCY_DESC": "Dong"
+  },
+  {
+    "CURRENCY_CODE": "XPF",
+    "CURRENCY_DESC": "Franc CFP"
+  },
+  {
+    "CURRENCY_CODE": "YER",
+    "CURRENCY_DESC": "Rial du Yemenl"
+  },
+  {
+    "CURRENCY_CODE": "ZMW",
+    "CURRENCY_DESC": "Kwacha Zambien"
+  },
+  {
+    "CURRENCY_CODE": "ZWL",
+    "CURRENCY_DESC": "Dollars du Zimbabwe"
+  },
+  {
+    "CURRENCY_CODE": "USN",
+    "CURRENCY_DESC": "Dollars US (Prochain jours)"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  },
+  {
+    "CURRENCY_CODE": "AUD",
+    "CURRENCY_DESC": "Dollar Australien"
+  }
+]
