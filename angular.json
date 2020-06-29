@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-bootstrap": {
+    "servicima": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/angular-bootstrap",
+            "outputPath": "dist/servicima",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -124,24 +124,24 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-bootstrap:build"
+            "browserTarget": "servicima:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-bootstrap:build:production"
+              "browserTarget": "servicima:build:production"
             },
             "valid": {
-              "browserTarget": "angular-bootstrap:build:valid"
+              "browserTarget": "servicima:build:valid"
             },
             "dev": {
-              "browserTarget": "angular-bootstrap:build:dev"
+              "browserTarget": "servicima:build:dev"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-bootstrap:build"
+            "browserTarget": "servicima:build"
           }
         },
         "test": {
@@ -176,7 +176,8 @@
               "e2e/tsconfig.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "**/projects/**"
             ]
           }
         },
@@ -184,18 +185,53 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "angular-bootstrap:serve"
+            "devServerTarget": "servicima:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "angular-bootstrap:serve:prod"
+              "devServerTarget": "servicima:serve:prod"
             }
+          }
+        }
+      }
+    },
+    "AuthLib": {
+      "projectType": "library",
+      "root": "projects/auth-front-lib",
+      "sourceRoot": "projects/auth-front-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/auth-front-lib/tsconfig.lib.json",
+            "project": "projects/auth-front-lib/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/auth-front-lib/src/test.ts",
+            "tsConfig": "projects/auth-front-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/auth-front-lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/auth-front-lib/tsconfig.lib.json",
+              "projects/auth-front-lib/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "angular-bootstrap",
+  "defaultProject": "servicima",
   "cli": {
     "analytics": "103d4cf6-775d-461e-aefa-755ef3b5412e"
   },

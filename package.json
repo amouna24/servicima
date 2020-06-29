@@ -18,7 +18,7 @@
     "build:ci:dev": "ng build --prod --configuration=dev",
     "test": "ng lint && ng test",
     "test:ci": "ng lint && ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
-    "lint": "ng lint",
+    "lint": "ng lint servicima",
     "e2e": "ng e2e",
     "e2e:ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js"
   },
@@ -71,7 +71,7 @@
     "karma-coverage-istanbul-reporter": "2.0.1",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.0",
-    "pre-commit": "^1.2.2",
+    "pre-commit": "1.2.2",
     "protractor": "7.0.0",
     "ts-node": "7.0.0",
     "tslint": "5.15.0",
