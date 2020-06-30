@@ -1,20 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
+import { LocalStorageService } from '../storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  userInfo;
+  userCredentials: string;
+  connectedUser$ = new BehaviorSubject(null);
+  company$ = new Subject();
 
-  applicationId = `5eac544a92809d7cd5dae21f`; // Todo:  get the applicationId from the local storage
-  userEmail = `imen.ammar@widigital-group.com`; // Todo: get the userEmail from the local storage
-  $connectedUser = new BehaviorSubject(null); // connacted User Data
-
-  constructor(private httpClient: HttpClient) { }
-
-  getUserInfo(): Observable<any> {
-    return this.httpClient.get(`${environment.userApiUrl}/getprofileinfos?application_id=${this.applicationId}&email_address=${this.userEmail}`);
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
   }
-}
+
+   /**
+    * @description get user info
+    */
+    getUserInfo() {
+     this.userCredentials = this.localStorageService.getItem('userCredentials');
+     // tslint:disable-next-line:max-line-length
+       this.httpClient.get(`${environment.getUserInfosApiUrl}?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
+       .subscribe((data) => {
+            this.userInfo = data;
+            this.connectedUser$.next(data);
+            this.company$.next(data['company'][0]);
+       });
+      }
+  }

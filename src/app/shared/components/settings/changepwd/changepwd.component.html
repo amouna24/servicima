@@ -25,7 +25,6 @@
                             Required filed</mat-error>
                     </mat-form-field>
                 </div>
-
                 <!-- new Password -->
                 <mat-label class="label"> Nouveau mot de passe </mat-label>
                 <div class="wid-form">
@@ -42,7 +41,6 @@
                             must contain one numeric character.</mat-error>
                     </mat-form-field>
                 </div>
-
                 <!-- Confirm Password -->
                 <mat-label class="label"> Confirmez le mot de passe </mat-label>
                 <div class="wid-form">
@@ -58,17 +56,12 @@
                             not match!</mat-error>
                     </mat-form-field>
                 </div>
-
-
-
                 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" [ngStyle.xs]="{'height': 'auto'}">
                     <button class="wid-background-button wid-Value-button form-button" type="submit"
                         [ngStyle.xs]="{'width': '50%'}" (click)="changePassword(form)" mat-button
                         [disabled]="!form.valid">Enregistrer
                     </button>
                 </div>
-
-
             </form>
         </div>
     </div>

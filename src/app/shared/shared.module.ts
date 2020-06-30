@@ -9,11 +9,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
 import { UserComponent } from './components/settings/user/user.component';
-import { UsersListComponent } from './components/settings/usersList/users-list/users-list.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,8 @@ import { MaterialModule } from './modules/material/material.module';
     UserComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    ConfirmationModalComponent,
+
   ],
   imports: [
     CommonModule,

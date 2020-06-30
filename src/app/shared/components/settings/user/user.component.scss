@@ -13,7 +13,9 @@
 #input {
   font-size: 18px;
 }
-
+:host ::ng-deep .mat-form-field-label {
+  font-size: 0.7em;
+}
 .form-width {
   width: 100%;
 }
@@ -48,20 +50,6 @@
 
 .form-class {
   width: 100%;
-}
-
-.label {
-  width: 100%;
-  object-fit: contain;
-  font-family: Rubik, serif;
-  font-size: 15px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.6px;
-  text-align: left;
-  color: #2e384d;
 }
 
 [type="file"] {

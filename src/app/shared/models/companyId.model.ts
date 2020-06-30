@@ -1,3 +1,3 @@
 export interface ICompanyId {
-  email_adress: string;
+  email_address: string;
 }

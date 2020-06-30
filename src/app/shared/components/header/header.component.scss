@@ -1,62 +1,36 @@
-/* flex responsive */
-.row {
-  display: flex;
-  flex-direction: row;
+.header-label{
+ font-size: 14px;
 }
+mat-toolbar{
+  min-width:53px;
+  background-color: rgb(255,255,255);
+  border-bottom: 0.1px inset lightgray;
+}
+ .icon-button{
+    margin-top: -4px;
+   }
 
-.col {
-  flex: 1;
-  margin-right: 20px;
-}
-
-.col:last-child {
-  margin-right: 0;
-}
-/* container */
-.flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-content: stretch;
-  align-items: stretch;
-  height: 67%;
-  width: 100%;
-}
-
-.flex-item:nth-child(1) {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-}
-
-.flex-item:nth-child(2) {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-}
-
-/* extra-menu */
-.extra-menu {
-  background-size: cover;
-}
-
-/* Header Toolbar Icon */
-.toolbar-icon {
-  color: rgb(176, 177, 172);
-  font-size: 20px;
-}
+   @media only screen and (max-width: 887px) {
+     .header-label{
+       display: none;
+     }
+   }
 /* User Image */
 .user-avatar {
   width: 25px;
   height: 25px;
   border-radius: 50%;
   margin-top: 4px;
+  margin-right: 7px;
+}
+.wid-gift{
+  margin-top: 0;
 }
 /* Search Bar */
 .search {
   cursor: pointer;
   padding: 0 20px;
+  margin-top: -10px;
 }
 
 .search > div {
@@ -114,4 +88,7 @@
   height: 25px;
   width: 350px;
   padding: 5px 15px;
+}
+.flex-spacer {
+  flex: 1 1 auto;
 }

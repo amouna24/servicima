@@ -1,0 +1,8 @@
+<div class="container-dialog-content" >
+    <span >Are you sure to {{data.sentence}} ? </span>
+    <mat-icon (click)="onNoClick()">close</mat-icon>
+  </div>
+  <div class="container-dialog-actions">
+    <button mat-stroked-button color="primary" (click)="onSubbmitAction('true')" >Confirm</button>
+    <button mat-stroked-button color="warn" (click)="onSubbmitAction('false')" >Cancel</button>
+  </div>

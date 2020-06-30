@@ -2,13 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
+import { RoutingStateService } from '@core/services/routingState/routing-state.service';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ProfileService } from '@core/services/profile/profile.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ILanguageModel } from '@shared/models/language.model';
 import { IUserModel } from '@shared/models/user.model';
-import { IUserInfo } from '@shared/models/userInfo.model';
+import { ModalService } from '@core/services/modal/modal.service';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
@@ -23,90 +28,143 @@ export class UserComponent implements OnInit {
   dataFromLocalStorage: any;
   photochanged = false;
   languageList: ILanguageModel[] = [];
-  userInfo: IUserInfo;
+  userInfo;
+  companyId: string;
+  companyName: string;
+  userRole: string;
   user: IUserModel;
+  currentUrl: string;
   form: FormGroup;
   refData: any = { };
+  data;
   loadData: boolean;
-  constructor(private utilsService: UtilsService, private sanitizer: DomSanitizer, private route: ActivatedRoute,
-    private profileService: ProfileService,
-    private formBuilder: FormBuilder, public dialog: MatDialog) { }
+  language_id: string;
+  applicationId: string;
+  emailAddress: string;
+  showCompany: boolean;
 
+  constructor(private utilsService: UtilsService, private translateService: TranslateService,
+       private modalService: ModalService, private sanitizer: DomSanitizer,
+       private route: ActivatedRoute, private profileService: ProfileService,
+       private userService: UserService, private localStorageService: LocalStorageService,
+       private appInitializerService: AppInitializerService, private routingState: RoutingStateService,
+       private formBuilder: FormBuilder, public dialog: MatDialog) {
+       this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
+       this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
+     }
+
+   /**
+    * @description Loaded when component in init state
+    */
   ngOnInit(): void {
-
+    this.currentUrl = this.routingState.getCurrentUrl();
     this.initForm();
-
-    this.route.queryParams.subscribe(
-      params => {
-        this.loadData = params.onLoad;
-        console.log(this.loadData);
-
-      }
-    );
-
-    if (this.loadData) {
-      this.profileService.getUser().subscribe(
-        res => {
-          this.userInfo = res;
-
-          this.localUrl = this.sanitizer.bypassSecurityTrustResourceUrl
-            (`data:${this.userInfo.user[0].photo.contentType};base64,${this.userInfo.user[0].photo.data}`);
-          console.log(this.localUrl, 'sdqsdqsdqsdqsd');
-
-          this.setForm();
-          this.getRefdata();
-        }
-      );
-
-    }
+    this.userService.connectedUser$.subscribe((data) => {
+     if (!!data) {
+        this.data = data;
+        this.companyName = data['company'][0]['company_name'];
+        this.companyId = data['company'][0]['_id'];
+        this.language_id = data['user'][0]['language_id'];
+        this.userRole = data['userroles'][0]['userRolesKey']['role_code'];
+        this.checkComponentAction(data);
+     }
+   });
   }
 
+  /**
+   * @description : check if the user is in his home profile
+   * or the manager wants to add a new profile
+   * or he wants to update the profile of one user
+   */
+  checkComponentAction(connectedUser): void {
+
+    if (this.currentUrl === '/manager/add-user') {
+      this.showCompany = false;
+      this.getRefdata();
+    }
+    if (this.currentUrl === '/manager/profile') {
+      this.showCompany = true;
+      this.applicationId = connectedUser['user'][0]['userKey'].application_id;
+      this.userInfo =  connectedUser['user'][0];
+      this.language_id = this.userInfo['language_id'];
+      this.setForm();
+      this.form.controls['userType'].disable();
+      this.form.controls['homeCompany'].disable();
+      this.form.controls['userRole'].disable();
+      this.getRefdata();
+    } else {
+       this.route.queryParams.subscribe(params => {
+         const id = params.id || null;
+         if (id) {
+         this.showCompany = true;
+         this.profileService.getUserById(id).subscribe(user => {
+           this.userInfo = user[0];
+           this.language_id = this.userInfo['language_id'];
+           this.applicationId = this.userInfo['userKey'].application_id;
+           this.form.controls['userType'].disable();
+           this.form.controls['homeCompany'].disable();
+           this.setForm();
+         });
+     }
+   });
+   this.getRefdata();
+   }
+  }
+
+  /**
+   * @description : initialization of the form
+   */
   initForm(): void {
     this.form = this.formBuilder.group({
-      emailAdress: ['', [Validators.required, Validators.email]],
+      emailAddress: ['', [Validators.required, Validators.email]],
       companyEmail: ['', [Validators.required, Validators.email]],
       jobTitle: ['', [Validators.required]],
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
       genderId: ['', [Validators.required]],
       profPhone: ['', [Validators.required]],
       cellphoneNbr: ['', [Validators.required]],
       language: ['', [Validators.required]],
       userType: ['', [Validators.required]],
+      userRole: ['', [Validators.required]],
       twitterAccount: ['', [Validators.required]],
       youtubeAccount: ['', [Validators.required]],
       linkedinAccount: ['', [Validators.required]],
       homeCompany: ['', [Validators.required]],
     });
   }
-  setForm(): void {
-    this.form.setValue({
-      emailAdress: this.userInfo.user[0].UserKey.email_adress,
-      companyEmail: this.userInfo.user[0].company_email,
-      jobTitle: this.userInfo.user[0].title_id,
-      firstname: this.userInfo.user[0].first_name,
-      lastname: this.userInfo.user[0].last_name,
-      genderId: this.userInfo.user[0].gender_id,
-      profPhone: this.userInfo.user[0].prof_phone,
-      cellphoneNbr: this.userInfo.user[0].cellphone_nbr,
-      language: this.userInfo.user[0].language_id,
-      userType: this.userInfo.user[0].user_type,
-      twitterAccount: this.userInfo.user[0].twitter_url,
-      youtubeAccount: this.userInfo.user[0].youtube_url,
-      linkedinAccount: this.userInfo.user[0].linkedin_url,
-      homeCompany: this.userInfo.company[0].company_name,
 
+  /**
+   * @description : set the value of the form if it was an update user
+   */
+  setForm() {
+    this.form.setValue({
+      emailAddress: this.userInfo['userKey'].email_address,
+      companyEmail: this.userInfo['company_email'],
+      jobTitle: this.userInfo['title_id'],
+      firstName: this.userInfo['first_name'],
+      lastName: this.userInfo['last_name'],
+      genderId: this.userInfo['gender_id'],
+      profPhone: this.userInfo['prof_phone'],
+      cellphoneNbr: this.userInfo['cellphone_nbr'],
+      language: this.userInfo['language_id'],
+      userType: this.userInfo['user_type'],
+      userRole: this.userRole,
+      twitterAccount: this.userInfo['twitter_url'],
+      youtubeAccount: this.userInfo['youtube_url'],
+      linkedinAccount: this.userInfo['linkedin_url'],
+      homeCompany:  this.companyName,
     });
   }
 
   /**
    * @description : get the refdata from local storage
    */
-  getRefdata() {
-    const list = ['GENDER', 'PROF_TITLES'];
-    this.refData = this.utilsService.getRefData(this.userInfo.company[0]._id, this.userInfo.user[0].UserKey.application_id,
-      '5eac544ad4cb666637fe1354', list);
-    this.languageList = this.utilsService.languageList;
+  getRefdata(): void {
+    const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
+    this.refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+      this.language_id , list);
+    this.languageList = this.appInitializerService.languageList;
   }
 
   /**
@@ -149,38 +207,63 @@ export class UserComponent implements OnInit {
 
   /**
    * @description : update the user info
+   * or add a new user
    */
   update(): void {
-
-    this.user.cellphone_nbr = this.form.value.businessPhone;
-    this.user.language_id = this.form.value.languages;
-    this.user.linkedin_url = this.form.value.you;
-    this.user.twitter_url = this.form.value.twitterAccount;
-    this.user.youtube_url = this.form.value.youtubeAccount;
-
-    const formData: FormData = new FormData();
-    formData.append('file', this.file);
-
-    formData.append('application_id', this.userInfo.user[0].UserKey.application_id);
-    formData.append('email_adress', this.userInfo.user[0].UserKey.email_adress);
-    formData.append('company_email', this.userInfo.user[0].company_email);
-    formData.append('user_type', this.userInfo.user[0].user_type);
-    formData.append('first_name', this.form.value.firstname);
-    formData.append('last_name', this.form.value.lastname);
-    formData.append('gender_id', this.form.value.genderId);
-    formData.append('prof_phone', this.form.value.profPhone);
-    formData.append('cellphone_nbr', this.form.value.cellphoneNbr);
-    formData.append('language_id', this.form.value.language);
-    formData.append('title_id', this.form.value.jobTitle);
-    formData.append('linkedin_url', this.form.value.linkedinAccount);
-    formData.append('twitter_url', this.form.value.twitterAccount);
-    formData.append('youtube_url', this.form.value.youtubeAccount);
-    formData.append('updated_by', this.userInfo.user[0].UserKey.email_adress);
-
-    console.log(formData);
-
-    this.profileService.updateUser(formData).subscribe(res => console.log(res));
-
-  }
-
+  if (this.currentUrl === '/manager/add-user') {
+      const newUser = {
+        application_id: this.applicationId,
+        company_id: this.companyId,
+        email_address: this.form.value.emailAddress,
+        company_email: this.emailAddress,
+        user_type: this.form.value.userType,
+        staff_type_id: this.form.value.userType,
+        first_name: this.form.value.firstName,
+        last_name: this.form.value.lastName,
+        gender_id: this.form.value.genderId,
+        prof_phone: this.form.value.profPhone,
+        cellphone_nbr: this.form.value.cellphoneNbr,
+        language_id: this.form.value.language,
+        title_id: this.form.value.jobTitle,
+        created_by: this.emailAddress,
+        updated_by: this.emailAddress,
+        role_code: this.form.value.userRole,
+        granted_by: this.emailAddress,
+        linkedin_url: this.form.value.linkedinAccount,
+        twitter_url: this.form.value.twitterAccount,
+        youtube_url: this.form.value.youtubeAccount,
+      };
+          this.profileService.addNewProfile(newUser).subscribe(
+            (res) => console.log(res),
+            (err) => console.error(err),
+          );
+    } else {
+          const newUser = {
+            application_id: this.userInfo['userKey'].application_id,
+            email_address: this.form.value.emailAddress,
+            company_email: this.userInfo['company_email'],
+            user_type: this.userInfo['user_type'],
+            first_name: this.form.value.firstName,
+            last_name: this.form.value.lastName,
+            gender_id: this.form.value.genderId,
+            prof_phone: this.form.value.profPhone,
+            cellphone_nbr: this.form.value.cellphoneNbr,
+            language_id: this.form.value.language,
+            title_id: this.form.value.jobTitle,
+            updated_by: this.userInfo['company_email'],
+            linkedin_url: this.form.value.linkedinAccount,
+            twitter_url: this.form.value.twitterAccount,
+            youtube_url: this.form.value.youtubeAccount,
+          };
+          this.profileService.updateUser(newUser).subscribe(
+            res => {
+              if (newUser.email_address === this.emailAddress ) {
+                this.data['user'][0] = res;
+              this.userService.connectedUser$.next(this.data);
+            }
+            } ,
+            err => console.error(err),
+          );
+        }
+ }
 }

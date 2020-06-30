@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserComponent } from '@shared/components/settings/user/user.component';
-import { UsersListComponent } from '@shared/components/settings/usersList/users-list/users-list.component';
 
 import { ManagerComponent } from './manager.component';
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
 const routes: Routes = [
   {
@@ -52,7 +52,15 @@ const routes: Routes = [
         component: UserComponent
       },
       {
-        path: 'userslist',
+        path: 'add-user',
+        component: UserComponent,
+      },
+      {
+        path: 'update-user',
+        component: UserComponent,
+      },
+      {
+        path: 'users-list',
         component: UsersListComponent
       }
     ]

@@ -1,42 +1,79 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
+
 import { environment } from 'src/environments/environment';
+
+import { LocalStorageService } from '../storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
 
-  constructor(private httpClient: HttpClient) { }
-  userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoid2FsaWQudGVubmljaGVAd2lkaWdpdGFsLWdyb3VwLmNvbSIsImlh' +
-    'dCI6MTU5MTYwMTc3NiwiZXhwIjoxNTkxNjg4MTc2fQ.g5xFl0RUl5ouoCEyd7d7T4gd1D8X0tHzMG-XYvkRUwg';
+  constructor(private httpClient: HttpClient,  private localStorageService: LocalStorageService) { }
 
-  getUser() {
-
-    const header = new HttpHeaders().set('Authorization', `Bearer ${this.userToken}`
-    );
-
+ /**
+  * @description get user
+  * @param applicationId: appilcation id
+  * @param emailAddress: email adress
+  */
+  getUser(applicationId: string, emailAddress: string): Observable<IUserInfo> {
     return this.httpClient
-      .get<IUserInfo>(environment.userInfoApiUrl + '?application_id=5eac544a92809d7cd5dae21f' +
-        '&email_adress=walid.tenniche@widigital-group.com', { headers: header });
+      .get<IUserInfo>(`${environment.userApiUrl}?application_id=${applicationId}&email_address=${emailAddress}`);
   }
 
-  getAllUser() {
-
-    const header = new HttpHeaders().set('Authorization', `Bearer ${this.userToken}`
-    );
-
+  /**
+   * @description: http request get to get the user by his id
+   * @param id: string
+   */
+  getUserById(id: string) {
     return this.httpClient
-      .get<IUserModel[]>(environment.userApiUrl, { headers: header });
+      .get<IUserModel>(`${environment.userApiUrl}?_id=${id}`);
   }
 
-  updateUser(User) {
-    const header = new HttpHeaders().set('Authorization', `Bearer ${this.userToken}`
-    );
+  /**
+   * @description: http request get to get all users registered in the same company
+   * @param company_email: string
+   */
+  getAllUser(company_email: string): Observable<IUserModel[]> {
     return this.httpClient
-      .put(environment.userApiUrl, User, { headers: header });
+      .get<IUserModel[]>(`${environment.userApiUrl}?company_email=${company_email}`);
   }
 
+  /**
+   * @description: http resquest put to update the information of user
+   * @param user: user
+   */
+  updateUser(User): Observable<any> {
+    return this.httpClient
+      .put(environment.userApiUrl, User);
+  }
+
+  /**
+   * @description: http request post to add a new user
+   * @param user: user
+   */
+  addNewProfile(user) {
+    return this.httpClient.post(environment.addProfileApiUrl, user);
+  }
+
+  /**
+   * @description: http request delete if wanna disable the status of the user
+   *                http request put if wanna enable the status of the user
+   * @param id: id user
+   * @param status: status
+   * @param updated_by: email user
+   */
+  userChangeStatus(id: string, status: string, updated_by: string) {
+    if (status === 'ACTIVE') {
+      return this.httpClient.delete(`${environment.userApiUrl}/disable?_id=${id}&updated_by=${updated_by}`);
+    } else if (status === 'DISABLED') {
+      return this.httpClient.put(`${environment.userApiUrl}/enable?_id=${id}&updated_by=${updated_by}`, null);
+
+    }
+  }
 }

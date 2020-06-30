@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
+import { UserService } from '@core/services/user/user.service';
 
 import {
   buttonAnimation,
@@ -27,16 +28,20 @@ export class SidenavComponent implements OnInit, OnChanges {
 
   sidebarState: string;
   panelOpenState = false;
-  pName = '';
   icontoShow = 'add';
+  company: string;
   iconBool = true;
   pathName: string;
   menu: IMenu[];
   subMenu: IChildItem[] = [];
   @Input() moduleName: string;
 
-  constructor(private sidenavService: SidenavService
-  ) { }
+  constructor(private sidenavService: SidenavService, private userService: UserService
+  ) {
+    this.userService.company$.subscribe((data) => {
+     this.company = data['company_name'];
+    });
+  }
 
   ngOnChanges() {
     this.menu = this.sidenavService.getMenu(this.moduleName);
