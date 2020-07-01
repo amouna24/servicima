@@ -38,7 +38,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), AuthModule.forRoot(environment)],
+    imports: [
+      RouterModule.forRoot(routes),
+      AuthModule.forRoot(environment)
+    ],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }

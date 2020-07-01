@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { ModalService } from '@core/services/modal/modal.service';
 
@@ -10,18 +10,25 @@ import { ConfigurationModalComponent } from '../configuration-modal/configuratio
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent implements OnInit {
+export class DataTableComponent implements OnInit, OnChanges {
 
   @Input() data: any[] = [];
-  @Input() columns: any[] = [];
   @Input() tableCode: string;
 
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   selected = [];
+  columns = [];
   modalConfiguration: any;
+  displayedColumns = [];
+  canBeDisplayedColumns = [];
+  canBeFiltredColumns = [];
 
   constructor(private dataTableService: DataTableService, private modalService: ModalService) { }
+
+  ngOnChanges(changes): void {
+    console.log('change', changes);
+  }
 
   ngOnInit(): void {
     this.modalService.registerModals([
@@ -29,8 +36,10 @@ export class DataTableComponent implements OnInit {
     this.dataTableService.getDefaultTableConfig(this.tableCode).subscribe(
       res => {
         this.modalConfiguration = res;
-        const displayedColumns = this.dataTableService.getDefaultDisplayedColumn(this.modalConfiguration);
-        console.log(this.dataTableService.generateColumns(displayedColumns));
+        this.displayedColumns = this.dataTableService.getDefaultDisplayedColumns(this.modalConfiguration);
+        this.canBeDisplayedColumns = this.dataTableService.generateColumns(this.dataTableService.getCanBeDisplayedColumns(this.modalConfiguration));
+        this.canBeFiltredColumns = this.dataTableService.generateColumns(this.dataTableService.getCanBeFiltredColumns(this.modalConfiguration));
+        this.columns = this.dataTableService.generateColumns(this.displayedColumns);
       }
     );
   }
@@ -42,8 +51,13 @@ export class DataTableComponent implements OnInit {
   }
 
   displayConfigModal() {
-    //  this.columns.push({ name: 'weight' });
-    this.modalService.displayModal('dataTableConfiguration', this.modalConfiguration);
+
+    const data = { displayedColumns: this.columns, canBeDisplayedColumns: this.canBeDisplayedColumns };
+    this.modalService.displayModal('dataTableConfiguration', data, '400px').subscribe(
+      (res) => {
+        console.log(res);
+      }
+    );
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -53,10 +67,6 @@ export class DataTableComponent implements OnInit {
   }
 
   onCheckboxChangeFn($event) {
-    console.log($event);
-  }
-
-  detailToggle($event) {
     console.log($event);
   }
 

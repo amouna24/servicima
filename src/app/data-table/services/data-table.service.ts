@@ -18,15 +18,27 @@ export class DataTableService {
       `language_id=${this.languageId}&data_table_code=${tableCode}`);
   }
 
-  getDefaultDisplayedColumn(defaultConfigs: any[]): any[] {
+  getDefaultDisplayedColumns(defaultConfigs: any[]): any[] {
     return defaultConfigs.filter((config) => {
       return config.displayed === 'Y';
     });
   }
 
+  getCanBeDisplayedColumns(defaultConfigs: any[]): any[] {
+    return defaultConfigs.filter((config) => {
+      return config.can_be_displayed === 'Y';
+    });
+  }
+
+  getCanBeFiltredColumns(defaultConfigs: any[]): any[] {
+    return defaultConfigs.filter((config) => {
+      return config.can_be_filtred === 'Y';
+    });
+  }
+
   generateColumns(configs: any[]): any[] {
     return configs.map((config) => {
-      return { name: config.dataListKey.column_code };
+      return { prop: config.dataListKey.column_code, name: config.column_desc };
     });
   }
 }

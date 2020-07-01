@@ -41,6 +41,7 @@ import { MaterialModule } from './modules/material/material.module';
     MaterialModule,
     CommonModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
     HeaderComponent,
     SidenavComponent,
     SpinnerComponent,

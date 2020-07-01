@@ -1,26 +1,89 @@
+.table-container {
+    .actions-container {
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+        background: $lightGreyColor;
+        padding: 0 5px;
+        mat-icon {
+            font-size: 20px;
+        }
+    }
+}
 .ngx-datatable.material {
     box-shadow: none !important;
     border: 1px solid rgba(0, 0, 0, 0.12);
+    max-height: 500px;
     .datatable-header-cell {
-        background-color: #b5dbee !important;
+        background-color: #399fd0 !important;
         font-weight: 600 !important;
-        text-transform: capitalize;
-        color: $darkColor !important;
-        font-size: 13px !important;
+        text-transform: uppercase;
+        color: $lightColor !important;
+        font-size: 12px !important;
         .mat-checkbox .mat-checkbox-frame {
-            border-color: $darkColor;
+            border-color: $lightColor;
         }
+    }
+    .datatable-body-cell {
+        font-size: 12px !important;
     }
     .datatable-row-odd {
         background-color: $lightGreyColor;
+    }
+
+    ::-webkit-scrollbar {
+        background-color: $lightColor;
+        width: 14px;
+    }
+
+    ::-webkit-scrollbar-track:hover {
+        background-color: #f4f4f4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #babac0;
+        border-radius: 16px;
+        border: 5px solid #fff;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #a0a0a5;
+        border: 4px solid #f4f4f4;
     }
 }
 
 .ngx-datatable.material.multi-click-selection .datatable-body-row.active .datatable-row-group {
     background-color: $lightDanger !important;
-    color: #fff;
+    color: $lightColor;
 }
 
 .datatable-scroll {
     width: unset !important;
+}
+
+.datatable-row-left {
+    background-color: #f5f5f5 !important;
+    background-image: none !important;
+}
+
+.modal-header-container {
+    background-color: $lightPrimary;
+}
+
+mat-dialog-container {
+    padding: 0 !important;
+}
+
+.modal-header-container {
+    button {
+        span {
+            color: $lightColor;
+        }
+    }
+}
+
+.modal-body-container {
+    padding: 20px !important;
+    margin: 0 !important;
+    height: 100%;
 }
