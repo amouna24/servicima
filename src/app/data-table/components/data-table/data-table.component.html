@@ -1,0 +1,30 @@
+<div class="table-container">
+    <div fxLayout="row" fxLayoutAlign="end center" class="actions-container">
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon"
+            (click)="displayConfigModal()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </div>
+    <ngx-datatable class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
+        [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"
+        [scrollbarH]="true" (scroll)="detailToggle($event)" [selectionType]="'multiClick'"
+        [columnMode]="ColumnMode.force" [footerHeight]="50" [rowHeight]="50">
+
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" [frozenLeft]="true">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <mat-checkbox [indeterminate]="selected.length !== 0 && !isAllSelected()" [checked]="allRowsSelected"
+                    (change)="selectFn(!allRowsSelected)">
+                </mat-checkbox>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-row="row"
+                let-rowIndex="rowIndex" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <mat-checkbox [checked]="isSelected">
+                </mat-checkbox>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column *ngFor="let column of columns" [name]="column.name"></ngx-datatable-column>
+    </ngx-datatable>
+</div>

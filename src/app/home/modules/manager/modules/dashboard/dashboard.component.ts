@@ -20,9 +20,9 @@ export class DashboardComponent implements OnInit {
     { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
   ];
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns = [{ name: 'position' }, { name: 'name' }];
 
-  pageSize = [5, 15, 20];
+  pageSize = [10, 15, 20];
 
   constructor() {
   }

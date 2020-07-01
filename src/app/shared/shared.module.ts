@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -14,7 +15,6 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
-import { DataTableComponent } from './components/data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,6 @@ import { DataTableComponent } from './components/data-table/data-table.component
     UsersListComponent,
     ChangePwdComponent,
     UserComponent,
-    DataTableComponent,
     /* Directives */
     CanBeDisplayedDirective,
   ],
@@ -36,18 +35,20 @@ import { DataTableComponent } from './components/data-table/data-table.component
     RouterModule,
     MaterialModule,
     FlexLayoutModule,
+    NgxDatatableModule
   ],
   exports: [
     MaterialModule,
     CommonModule,
+    FlexLayoutModule,
     HeaderComponent,
     SidenavComponent,
     SpinnerComponent,
     UserComponent,
     ChangePwdComponent,
     UsersListComponent,
-    DataTableComponent,
     TranslateModule,
+    NgxDatatableModule
   ]
 })
 export class SharedModule { }

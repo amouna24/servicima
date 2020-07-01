@@ -1,5 +1,6 @@
 $body-font: Montserrat;
 $lightColor: #fff;
+$darkColor: #000;
 $primaryColor: #2660aa;
 $secondaryColor: #8dde06;
 $thirdColor: #ffd800;
@@ -7,7 +8,9 @@ $primaryVerticalGradient: linear-gradient(to top, #2660aa, #399fd0);
 $primaryHorizontalGradient: linear-gradient(to right, #2660aa, #399fd0);
 $secondaryHorizontalGradient: linear-gradient(to top, #4fbd02, #5fc604, #6ece06, #7cd709, #8bdf0d);
 $dangerColor: #e72952;
+$lightDanger: #f1b3c0;
 $iconColor: #2e384d;
+$lightGreyColor: rgba(0, 0, 0, 0.04);
 
 $primaryColorAuth: #2e384d;
 $drakColorAuth: #2e384d;

@@ -5,6 +5,11 @@
 @import "./assets/styles/main.scss";
 @import "./assets/styles/side-nav.scss";
 @import "./assets/auth-style/auth";
+@import "./assets/styles/data-table.scss";
+// data table styles
+@import "~@swimlane/ngx-datatable/index.css";
+@import "~@swimlane/ngx-datatable/themes/material.scss";
+@import "~@swimlane/ngx-datatable/assets/icons.css";
 html,
 body {
   height: 100%;

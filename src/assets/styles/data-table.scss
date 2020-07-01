@@ -1,0 +1,26 @@
+.ngx-datatable.material {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    .datatable-header-cell {
+        background-color: #b5dbee !important;
+        font-weight: 600 !important;
+        text-transform: capitalize;
+        color: $darkColor !important;
+        font-size: 13px !important;
+        .mat-checkbox .mat-checkbox-frame {
+            border-color: $darkColor;
+        }
+    }
+    .datatable-row-odd {
+        background-color: $lightGreyColor;
+    }
+}
+
+.ngx-datatable.material.multi-click-selection .datatable-body-row.active .datatable-row-group {
+    background-color: $lightDanger !important;
+    color: #fff;
+}
+
+.datatable-scroll {
+    width: unset !important;
+}

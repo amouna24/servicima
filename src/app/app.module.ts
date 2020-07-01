@@ -53,12 +53,12 @@ export function setupApp(
     SharedModule,
   ],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: setupApp,
-      deps: [TranslationCustomLoaderService, LocalStorageService, AppInitializerService],
-      multi: true
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: setupApp,
+    //   deps: [TranslationCustomLoaderService, LocalStorageService, AppInitializerService],
+    //   multi: true
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpReqInterceptorService,
