@@ -4,6 +4,8 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
@@ -23,11 +25,7 @@ export function setupApp(
   localStorageService: LocalStorageService,
   appInitService: AppInitializerService
 ) {
-  if (localStorageService.getItem('data') !== null) {
-    return () => translationCustomLoaderService.setTranslationLanguage();
-  } else {
-    return () => appInitService.initializeApp();
-  }
+  return () => appInitService.initializeApp();
 }
 
 @NgModule({

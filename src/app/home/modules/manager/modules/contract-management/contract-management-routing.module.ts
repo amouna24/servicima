@@ -6,9 +6,18 @@ import { ContractManagementComponent } from './contract-management.component';
 const routes: Routes = [
   {
     path: '',
-    component: ContractManagementComponent
-    ,
-  }
+    component: ContractManagementComponent,
+    children: [
+      {
+        path: 'suppliers-contracts',
+        loadChildren: () => import('./suppliers-contracts/suppliers-module.module').then(m => m.SuppliersModuleModule)
+      },
+      {
+        path: 'clients-contracts',
+        loadChildren: () => import('./clients-contracts/clients.module').then(m => m.ClientsModule)
+      },
+    ]
+  },
 ];
 
 @NgModule({

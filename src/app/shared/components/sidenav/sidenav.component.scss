@@ -1,1 +1,33 @@
+.company-label{
+    font-size: 18px;
+    font-family: Montserrat;
+    color: white;
+}
 
+::ng-deep .mat-expansion-panel{
+  background: transparent;
+  color: rgba(0,0,0,0); /* transparent */
+  box-shadow: none !important;
+}
+::ng-deep .mat-expansion-panel-header{
+  /* styles that were added to panel before */
+  background: transparent;
+  color: rgba(0,0,0,0); /* transparent */
+  box-shadow: none !important;
+  padding: 0 15px !important;
+}
+
+
+::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
+  /* change what you want */
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.26);
+  color: rgb(107, 190, 198);
+  box-shadow: none !important;
+}
+.wid-acc-title {
+  font-size: 9px !important;
+}
+.wid-acc-arrow {
+  flex: 1 1 auto;
+}

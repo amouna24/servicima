@@ -2,7 +2,7 @@ import { ICompanyId } from './companyId.model';
 export interface ICompanyModel {
   /* ID */
   _id: string;
-  CompanyKey: ICompanyId;
+  companyKey: ICompanyId;
   address: string;
   legalForm: string;
   name: string;

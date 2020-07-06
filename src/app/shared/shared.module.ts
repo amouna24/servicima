@@ -3,17 +3,17 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
 import { UserComponent } from './components/settings/user/user.component';
-import { UsersListComponent } from './components/settings/usersList/users-list/users-list.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +26,8 @@ import { MaterialModule } from './modules/material/material.module';
     UserComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    ConfirmationModalComponent,
+
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { MaterialModule } from './modules/material/material.module';
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ReactiveFormsModule
   ],
   exports: [
     MaterialModule,
@@ -44,7 +47,9 @@ import { MaterialModule } from './modules/material/material.module';
     UserComponent,
     ChangePwdComponent,
     UsersListComponent,
-    TranslateModule
+    TranslateModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
   ]
 })
 export class SharedModule { }

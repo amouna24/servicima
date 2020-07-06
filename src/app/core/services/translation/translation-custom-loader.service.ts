@@ -117,7 +117,7 @@ export class TranslationCustomLoaderService implements TranslateLoader {
    * Get the stored language from localStorage
    */
   getLanguages(): IAppLanguage[] {
-    return this.localStorageService.getItem('data').languages;
+    return this.localStorageService.getItem('languages');
   }
 
   /**

@@ -1,19 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { CredentialsService } from '@core/services/credentials/credentials.service';
-import { ProfileService } from '@core/services/profile/profile.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { CrossFieldErrorMatcher } from '@core/services/utils/validatorPassword';
 
-/** Error when the parent is invalid */
-class CrossFieldErrorMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return control.dirty && form.invalid;
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 @Component({
   selector: 'wid-changepwd',
   templateUrl: './changepwd.component.html',
@@ -26,18 +18,25 @@ export class ChangePwdComponent implements OnInit {
   hideOldPassword = true;
   matchedPassword: boolean;
   errorMatcher = new CrossFieldErrorMatcher();
+  userCredentials; string;
 
   constructor(private formBuilder: FormBuilder, private credentialsService: CredentialsService,
-    public dialogRef: MatDialogRef<ChangePwdComponent>) { }
+    private  localStorageService: LocalStorageService, public dialogRef: MatDialogRef<ChangePwdComponent>) { }
 
   formControl = new FormControl('', [
     Validators.required,
   ]);
 
+   /**
+    * @description Loaded when component in init state
+    */
   ngOnInit(): void {
     this.initForm();
   }
 
+  /**
+   * @description : initialization of the form
+   */
   initForm(): void {
     this.form = this.formBuilder.group({
       oldPassword: ['', [Validators.required]],
@@ -74,13 +73,14 @@ export class ChangePwdComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  changePassword(form: FormGroup) {
+  changePassword(form: FormGroup): void {
+    this.userCredentials = this.localStorageService.getItem('userCredentials');
     const newPassword = {
-      application_id: '5eac544a92809d7cd5dae21f',
-      email_adress: 'walid.tenniche@widigital-group.com',
+      application_id: this.userCredentials ['application_id'] ,
+      email_address: this.userCredentials['email_address'],
       password: form.get('password'),
       oldPassword: form.get('oldPassword'),
-      updated_by: 'walid.tenniche@widigital-group.com',
+      updated_by: this.userCredentials['email_address'],
     };
     this.credentialsService.changePassword(newPassword).subscribe(
       res => {

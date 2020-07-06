@@ -24,7 +24,7 @@
                fxLayoutAlign.xs="center center">
 
             <div *ngIf='!localUrl' fxLayoutAlign="center center">
-              <img src='assets/img/Avatar Homme.png' style="margin-top: 5%;margin-bottom: 5%;" width='40%'
+              <img src='assets/img/avatar.png' style="margin-top: 5%;margin-bottom: 5%;" width='40%'
                    height="40%" [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
             </div>
             <div *ngIf='localUrl' fxLayoutAlign="center center">
@@ -55,7 +55,7 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <input class="wid-Value-input" matInput autocomplete="off" required
-                             [placeholder]="'user.firstname' | translate" formControlName="firstname"
+                             [placeholder]="'user.firstname' | translate | uppercase" formControlName="firstName"
                              [ngStyle.xs]="{'font-size': '15px'}">
                     </mat-form-field>
                   </div>
@@ -64,8 +64,8 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.lastname' | translate"
-                             formControlName="lastname" [ngStyle.xs]="{'font-size': '15px'}"/>
+                             [placeholder]=" 'user.lastname' | translate | uppercase"
+                             formControlName="lastName" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -77,7 +77,7 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <mat-select formControlName="genderId" class="wid-Value-input"
-                                  [placeholder]=" 'user.gender' | translate">
+                                  [placeholder]=" 'user.gender' | translate | uppercase">
                         <mat-option *ngFor="let gender of refData.GENDER"
                                     [value]="gender.value">
                           {{gender.viewValue}}
@@ -90,7 +90,7 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <mat-select class="wid-Value-input" formControlName="jobTitle"
-                                  [placeholder]=" 'user.job' | translate">
+                                  [placeholder]=" 'user.job' | translate | uppercase">
                         <mat-option *ngFor="let jobtitle of refData.PROF_TITLES"
                                     [value]="jobtitle.value">
                           {{jobtitle.viewValue}}
@@ -118,8 +118,8 @@
                   <div class="wid-form-input-email">
                     <mat-form-field>
                       <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.email' | translate"
-                             formControlName="emailAdress" [ngStyle.xs]="{'font-size': '15px'}"/>
+                             [placeholder]=" 'user.email' | translate | uppercase"
+                             formControlName="emailAddress" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -130,8 +130,8 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.directline' | translate"
+                      <input class="wid-Value-input" autocomplete="off" matInput
+                             [placeholder]=" 'user.directline' | translate | uppercase"
                              formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
@@ -139,25 +139,23 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'use.profcellphone' | translate" formControlName="cellphoneNbr"
+                      <input class="wid-Value-input" autocomplete="off" matInput
+                             [placeholder]=" 'use.profcellphone' | translate | uppercase" formControlName="cellphoneNbr"
                              [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
-                    s
                   </div>
                 </div>
               </div>
-
 
               <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <mat-select class="wid-Value-input" formControlName="language"
-                                  [placeholder]=" 'user.lang' | translate">
-                        <mat-option *ngFor="let languages of languageList"
-                                    [value]="languages._id">
-                          {{languages.language_desc}}
+                      <mat-select class="wid-Value-input" formControlName="userRole"
+                                  [placeholder]=" 'user.role' | translate | uppercase">
+                        <mat-option *ngFor="let userRole of refData.ROLE"
+                                    [value]="userRole.value">
+                          {{userRole.viewValue}}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
@@ -166,9 +164,21 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.profiletype' | translate"
-                             formControlName="userType" [ngStyle.xs]="{'font-size': '15px'}"/>
+                      <mat-select class="wid-Value-input" formControlName="userType" required
+                        [placeholder]=" 'user.profiletype' | translate | uppercase">
+                        <div *ngFor="let userType of refData.PROFILE_TYPE" >
+                          <div  *ngIf="showCompany === false" >
+                        <mat-option  [value]="userType.value" *ngIf="userType.value!=='COMPANY'">
+                          {{userType.viewValue}}
+                        </mat-option>
+                      </div>
+                      <div  *ngIf="showCompany === true" >
+                        <mat-option  [value]="userType.value">
+                          {{userType.viewValue}}
+                        </mat-option>
+                      </div>
+                    </div>
+                      </mat-select>
                     </mat-form-field>
                   </div>
                 </div>
@@ -180,21 +190,26 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.homecompany' | translate"
+                             [placeholder]=" 'user.homecompany' | translate | uppercase"
                              formControlName="homeCompany" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
                 </div>
+
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <input class="wid-Value-input" autocomplete="off" matInput required
-                             [placeholder]=" 'user.linkedinacc' | translate"
-                             formControlName="linkedinAccount"
-                             [ngStyle.xs]="{'font-size': '15px'}"/>
+                      <mat-select class="wid-Value-input" formControlName="language"
+                                  [placeholder]=" 'user.lang' | translate | uppercase">
+                        <mat-option *ngFor="let languages of languageList"
+                                    [value]="languages._id">
+                          {{languages.language_desc}}
+                        </mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </div>
                 </div>
+
               </div>
 
 
@@ -203,7 +218,7 @@
                   <div class="wid-form-input">
                     <mat-form-field>
                       <input class="wid-Value-input" autocomplete="off" matInput
-                             [placeholder]=" 'user.twitteracc' | translate"
+                             [placeholder]=" 'user.twitteracc' | translate | uppercase"
                              formControlName="twitterAccount" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
@@ -212,24 +227,28 @@
 
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <input class="wid-Value-input" autocomplete="off" matInput
-                             [placeholder]=" 'user.youtubeacc' | translate"
+                      <input class="wid-Value-input" autocomplete="off" matInput class="placeholder"
+                             [placeholder]=" 'user.youtubeacc' | translate | uppercase"
                              formControlName="youtubeAccount" [ngStyle.xs]="{'font-size': '15px'}"/>
                     </mat-form-field>
                   </div>
                 </div>
               </div>
 
-              <!--
+
               <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                  <div fxFlex='50'>
-
-                      <div class="wid-form-input">
-                          <div class="title">{{ 'user.accessinfo' | translate}}</div>
-
-                      </div>
+                <div fxFlex='50'>
+                  <div class="wid-form-input">
+                    <mat-form-field>
+                      <input class="wid-Value-input" autocomplete="off" matInput required
+                             [placeholder]=" 'user.linkedinacc' | translate | uppercase"
+                             formControlName="linkedinAccount"
+                             [ngStyle.xs]="{'font-size': '15px'}"/>
+                    </mat-form-field>
                   </div>
-                  <div fxFlex='50' fxLayoutAlign="center center">
+                </div>
+                  </div>
+               <!--   <div fxFlex='50' fxLayoutAlign="center center">
                       <button style="padding: 5px 15px;
                   text-align: center;
                   margin-left: 2%;

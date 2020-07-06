@@ -17,7 +17,7 @@ export const managerMenu: IMenu[] = [
     },
     {
         state: 'human-ressources',
-        name: 'human ressources',
+        name: 'template.rh',
         type: 'link',
         icon: 'recent_actors',
         feature: 'RH_ACCESS',
@@ -39,9 +39,64 @@ export const managerMenu: IMenu[] = [
     {
         state: 'contract-management',
         name: 'contract management',
-        type: 'link',
+        type: 'sub',
         icon: 'folder_shared',
         feature: 'CONTRACT_ACCESS',
+        children: [
+          {
+            state: '',
+            name: 'dashboard',
+            icon: 'assignment',
+            feature: 'CONTRACT_ACCESS',
+            type: 'link',
+          },
+          {
+            state: 'suppliers-contracts',
+            name: 'suppliers contracts',
+            icon: 'library_books',
+            feature: 'CONTRACT_ACCESS',
+            type: 'sub',
+            child: [
+              {
+                state: 'suppliers-list',
+                name: 'suppliers',
+                icon: 'assignment',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              },
+              {
+                state: 'contracts-list',
+                name: 'contracts',
+                icon: 'assignment',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              }
+            ]
+          },
+          {
+            state: 'clients-contracts',
+            name: 'clients contracts',
+            icon: 'assignment_ind',
+            feature: 'CONTRACT_ACCESS',
+            type: 'sub',
+            child: [
+              {
+                state: 'clients-list',
+                name: 'clients',
+                icon: 'assignment',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              },
+              {
+                state: 'clients-contracts',
+                name: 'contracts',
+                icon: 'create',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+              }
+            ]
+          }
+        ]
     },
     {
         state: 'billings',
@@ -53,8 +108,73 @@ export const managerMenu: IMenu[] = [
     {
         state: 'settings',
         name: 'settings',
-        type: 'link',
+        type: 'sub',
         icon: 'settings',
         feature: 'CONFIG_ACCESS',
+        children: [
+            {
+              state: 'users-list',
+              name: 'User Management',
+              icon: 'assignment',
+              feature: 'SETTINGS_USERS_ACCESS',
+              type: 'link',
+            },
+            {
+                state: '',
+                name: 'Role management',
+                icon: 'assignment',
+                feature: 'SETTINGS_ROLES_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Departments',
+                icon: 'assignment',
+                feature: 'SETTINGS_DEP_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Calendars',
+                icon: 'assignment',
+                feature: 'SETTINGS_CALENDAR_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Licence',
+                icon: 'assignment',
+                feature: 'SETTINGS_LICENCE_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Payment info',
+                icon: 'assignment',
+                feature: 'SETTINGS_PAYMENT_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Invoices',
+                icon: 'assignment',
+                feature: 'SETTINGS_INVOICES_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Payment methods management',
+                icon: 'assignment',
+                feature: 'SETTINGS_PAYMENT_TERMS_ACCESS',
+                type: 'link',
+              },
+              {
+                state: '',
+                name: 'Tax management',
+                icon: 'assignment',
+                feature: 'SETTINGS_TAX_ACCESS',
+                type: 'link',
+              },
+        ]
     },
 ];
