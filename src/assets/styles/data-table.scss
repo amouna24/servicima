@@ -26,6 +26,7 @@
     }
     .datatable-body-cell {
         font-size: 12px !important;
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
     }
     .datatable-row-odd {
         background-color: $lightGreyColor;
@@ -85,5 +86,5 @@ mat-dialog-container {
 .modal-body-container {
     padding: 20px !important;
     margin: 0 !important;
-    height: 100%;
+    height: calc(100% - 172px) !important;
 }

@@ -27,7 +27,6 @@ export class DataTableComponent implements OnInit, OnChanges {
   constructor(private dataTableService: DataTableService, private modalService: ModalService) { }
 
   ngOnChanges(changes): void {
-    console.log('change', changes);
   }
 
   ngOnInit(): void {
@@ -47,15 +46,19 @@ export class DataTableComponent implements OnInit, OnChanges {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-    console.log('Select Event', this.selected);
   }
 
   displayConfigModal() {
-
-    const data = { displayedColumns: this.columns, canBeDisplayedColumns: this.canBeDisplayedColumns };
-    this.modalService.displayModal('dataTableConfiguration', data, '400px').subscribe(
+    const data = {
+      displayedColumns: this.dataTableService.generateColumns(this.displayedColumns),
+      canBeDisplayedColumns: this.canBeDisplayedColumns,
+      actualColumns: this.columns
+    };
+    this.modalService.displayModal('dataTableConfiguration', data, '40%').subscribe(
       (res) => {
-        console.log(res);
+        if (res.action) {
+          this.columns = [...res.actualColumns];
+        }
       }
     );
   }
@@ -67,7 +70,6 @@ export class DataTableComponent implements OnInit, OnChanges {
   }
 
   onCheckboxChangeFn($event) {
-    console.log($event);
   }
 
 }

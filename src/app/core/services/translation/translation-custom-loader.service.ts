@@ -20,6 +20,7 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class TranslationCustomLoaderService implements TranslateLoader {
 
   localTranslationFile: any;
+  localStorageLang: any;
 
   constructor(
     private http: HttpClient,
@@ -35,7 +36,7 @@ export class TranslationCustomLoaderService implements TranslateLoader {
     return new Observable((observer: Observer<any>) => {
       const langId = language.split('-')[0];
       const langCode = language.split('-')[1];
-      const langApiPath = `${environment.translateApiURL}?language_id=${langId}`;
+      const langApiPath = `${environment.translateApiUrl}?language_id=${langId}`;
       this.http.get(langApiPath).subscribe(
         (data: object[]) => {
           this.getLocalTranslation(langCode).subscribe((localTrad) => {
@@ -96,16 +97,27 @@ export class TranslationCustomLoaderService implements TranslateLoader {
    * Set the global App Lang
    */
   setTranslationLanguage() {
-    const navLanguage = navigator.language.substr(0, 2).toUpperCase();
-    const language = this.checkForLanguage(navLanguage);
-    this.translateService.use(`${language._id}-${language.LanguageKey.language_code}`);
+    this.localStorageLang = localStorage.getItem('language');
+    this.localStorageLang = JSON.parse(this.localStorageLang);
+    const langCode = !!this.localStorageLang ?
+      this.localStorageLang['langCode'] :
+      this.translateService.getBrowserLang().toUpperCase();
+    const language = this.checkForLanguage(langCode);
+    const langCombined = `${language._id}-${language.LanguageKey.language_code}`;
+    this.translateService.use(langCombined);
+    if (!this.localStorageLang) {
+      this.localStorageService.setItem('language', {
+        langCode: language.LanguageKey.language_code,
+        langId: language._id,
+      });
+    }
   }
 
   /**
    * Get the stored language from localStorage
    */
   getLanguages(): IAppLanguage[] {
-    return this.localStorageService.getItem('data').languages;
+    return this.localStorageService.getItem('languages');
   }
 
   /**

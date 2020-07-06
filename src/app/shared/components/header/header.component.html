@@ -1,66 +1,44 @@
-<mat-toolbar style="min-width:53px; background-color: rgb(255,255,255); border-bottom: 0.1px inset lightgray;">
-  <div class="flex-container">
-    <div class="flex-item row">
-      <div class="search">
-        <div id="search-container">
-          <input type="text" required>
-        </div>
-      </div>
+<mat-toolbar>
+  <div class="search">
+    <div id="search-container">
+      <input type="text" required>
     </div>
-    <div class="flex-item">
-      <div class="row">
-        <div class="col" style="width: 70px; border-right: 1px inset;">
-          <div style=" cursor: pointer;" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
-            <img src="assets/img/avatar.png" alt="" class="user-avatar">
-          </div>
-          <mat-menu #matUserMenu="matMenu" xPosition="before">
-            <button mat-menu-item>MyAccount</button>
-            <button mat-menu-item>Logout</button>
-          </mat-menu>
-        </div>
-        <div class="col">
-          <button mat-icon-button class="extra-menu" [matMenuTriggerFor]="menu"
-                  aria-label="Toggle menu">
-            <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
-              notifications_none
-            </mat-icon>
+  </div>
+  <span class="flex-spacer"></span>
+  <div fxLayout="row " fxLayoutGap="25px">
+    <ng-container *ngFor=" let headerMenu of headerMenu">
+      <ng-container *ngIf=" headerMenu.type === 'link';  else subMenuLabel">
+        <div fxLayout="row ">
+          <button mat-icon-button class="icon-button">
+            <mat-icon class="icon material-icons-outlined">{{headerMenu.icon}}  </mat-icon>
           </button>
-          <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item>Notification one</button>
-            <button mat-menu-item>Notification two</button>
-          </mat-menu>
+          <span class="header-label">{{headerMenu.name}}</span>
         </div>
-        <div class="col">
-          <button mat-icon-button class="extra-menu" [matMenuTriggerFor]="message"
-                  aria-label="Toggle menu">
-            <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
-              message
-            </mat-icon>
+      </ng-container>
+      <ng-template #subMenuLabel>
+        <div fxLayout="row ">
+          <button mat-icon-button class="icon-button" [matMenuTriggerFor]="matSettings"
+                  (click)="toggleSubMenu(headerMenu.children)">
+            <mat-icon class="icon material-icons-outlined">{{headerMenu.icon}}  </mat-icon>
+            <mat-menu #matSettings="matMenu" xPosition="before">
+              <ng-container *ngFor=" let children of headerMenu.children">
+                <button mat-menu-item [routerLink]="['./', children.state]">{{children.name}}</button>
+              </ng-container>
+            </mat-menu>
           </button>
-          <mat-menu #message="matMenu" xPosition="before">
-            <button mat-menu-item>Message One</button>
-            <button mat-menu-item>Message Two</button>
-          </mat-menu>
+          <div class="header-label">{{headerMenu.name}}</div>
         </div>
-        <div class="col" style="width: 70px; border-right: 1px inset;">
-          <button mat-icon-button class="extra-menu" [matMenuTriggerFor]="settings"
-                  aria-label="Toggle menu">
-            <mat-icon matBadge="15" matBadgeColor="warn" class="toolbar-icon" matBadgeSize="small">
-              settings
-            </mat-icon>
-          </button>
-          <mat-menu #settings="matMenu" xPosition="before">
-            <button mat-menu-item>Settings One</button>
-            <button mat-menu-item>Settings Two</button>
-          </mat-menu>
-        </div>
-        <div class="col">
-          <button mat-icon-button class="extra-menu">
-            <mat-icon class="toolbar-icon">exit_to_app
-            </mat-icon>
-          </button>
-        </div>
+      </ng-template>
+    </ng-container>
+    <div fxLayout="row ">
+      <div style=" cursor: pointer;" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
+        <img src="assets/img/avatar.png" alt="" class="user-avatar">
       </div>
+      <mat-menu #matUserMenu="matMenu" xPosition="before">
+        <button mat-menu-item [routerLink]="['/manager/profile']">MyAccount</button>
+        <button mat-menu-item (click)='logout()'>Logout</button>
+      </mat-menu>
+      <div class="header-label"> {{name}}</div>
     </div>
   </div>
 </mat-toolbar>

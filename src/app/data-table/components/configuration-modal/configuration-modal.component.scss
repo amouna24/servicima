@@ -1,3 +1,14 @@
+.close-button-container {
+    margin-left: auto;
+}
+
+.title-container {
+    span {
+        color: #fff;
+        text-transform: capitalize;
+    }
+}
+
 ::-webkit-scrollbar {
     background-color: #fff;
     width: 14px;
@@ -19,8 +30,13 @@
 }
 .config-container {
     padding: 5px;
+    height: 100%;
+
     .list-content {
-        height: 90%;
+        height: 75%;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
         form {
             display: flex;
             flex-direction: column;
@@ -29,6 +45,10 @@
             height: 100%;
         }
     }
+}
+
+.config-wrapper {
+    height: 100%;
 }
 .title {
     margin: 5px 0;
@@ -43,4 +63,9 @@
 }
 .switch-buttons {
     align-self: center;
+    display: flex;
+    flex-direction: column;
+    button {
+        align-self: center;
+    }
 }

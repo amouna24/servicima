@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { mainContentAnimation } from '@shared/animations/animations';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-manager',
@@ -15,15 +16,20 @@ import { mainContentAnimation } from '@shared/animations/animations';
 export class ManagerComponent implements OnInit, OnDestroy {
 
   mobileQuery: MediaQueryList;
-
   sidebarState: string;
 
   private mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private sidebarService: SidenavService) {
+  constructor(
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
+    private sidebarService: SidenavService,
+    private userService: UserService,
+  ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
+    // this.userService.getUserInfo();
   }
 
   ngOnDestroy(): void {

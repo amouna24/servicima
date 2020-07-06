@@ -5,24 +5,31 @@
 export const environment = {
   production: false,
   env: 'local',
-  translateApiURL: 'http://192.168.1.22:8006/admin/translates/v1',
-  languageApiURL: 'http://192.168.1.22:8003/admin/languages/v1',
-  credentialsApiURL: 'http://192.168.1.22:8010/auth/credentials/v1',
-  companyApiURL: 'http://192.168.1.22:8012/auth/companies/v1',
+  /************************** ADMINISTRATION *****************************/
+  translateApiUrl: 'http://192.168.1.22:8006/admin/translates/v1',
+  languageApiUrl: 'http://192.168.1.22:8003/admin/languages/v1',
   refDataApiUrl: 'http://192.168.1.22:8008/admin/refdatas/v1',
   refTypeApiUrl: 'http://192.168.1.22:8000/admin/reftypes/v1',
   applicationApiUrl: 'http://192.168.1.22:8007/admin/applications/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8015/admin/loadauthstarterdata/v1',
-  licenceApiUrl: 'http://192.168.1.22:8020/auth/companylicence/v1',
-  languageApiUrl: 'http://192.168.1.22:8003/admin/languages/v1',
   moduleApiUrl: 'http://192.168.1.22:8005/admin/modules/v1',
-  userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1',
-  zipeCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
-  applicationCode: 'SERVICIMA',
-  userInfoApiUrl: 'http://192.168.1.22:8016/auth/v1',
-  userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
   dataListsUrl: 'http://127.0.0.1:8036/admin/datalists/v1',
-  redirectionHomeUrl: '/'
+
+  /************************** SERVICIMA **********************************/
+  contractApiUrl: 'http://192.168.1.22:8030/servicima/contracts/v1',
+  contractorApiUrl: 'http://192.168.1.22:8028/servicima/contractors/v1',
+
+  /************************* AUTHENTICATION ******************************/
+  credentialsApiUrl: 'http://192.168.1.22:8010/auth/credentials/v1',
+  companyApiUrl: 'http://192.168.1.22:8012/auth/companies/v1',
+  licenceApiUrl: 'http://192.168.1.22:8020/auth/companylicence/v1',
+  userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1',
+  userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
+  redirectionHomeUrl: '/',
+
+  /*************************** OTHERS ************************************/
+  zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
+  applicationCode: 'SERVICIMA',
 };
 
 /*

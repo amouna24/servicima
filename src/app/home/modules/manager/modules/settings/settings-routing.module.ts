@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { SettingsComponent } from './settings.component';
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SettingsComponent,
+    component: UsersListComponent,
   }
 ];
 

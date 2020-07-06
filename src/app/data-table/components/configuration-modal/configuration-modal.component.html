@@ -1,37 +1,51 @@
-<mat-toolbar class="modal-header-container" fxLayoutAlign="end center">
-    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
-        <mat-icon class="icon material-icons-outlined">close</mat-icon>
-    </button>
+<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
+    <div class="title-container">
+        <span>personalize list columns</span>
+    </div>
+    <div class="close-button-container">
+        <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
+            <mat-icon class="icon material-icons-outlined">close</mat-icon>
+        </button>
+    </div>
 </mat-toolbar>
-<mat-dialog-content class="modal-body-container" fxLayout="row wrap">
-    <div fxFlex="40" class="config-container">
-        <div class="title"><span>Available</span></div>
-        <div class="list-content">
-            <form [formGroup]="canBeDisplayedColumnsForm">
-                <mat-checkbox *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
-                    (change)="checkCanBeDisplayedColumn($event)">
-                    <span>{{columns.name}}</span>
-                </mat-checkbox>
-            </form>
+<mat-dialog-content class="modal-body-container">
+
+    <div class="config-wrapper" fxLayout="row wrap">
+        <div fxFlex="40" class="config-container">
+            <div class="title"><span>Available</span></div>
+            <div class="list-content">
+                <form [formGroup]="canBeDisplayedColumnsForm">
+                    <mat-checkbox *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
+                        (change)="checkCanBeDisplayedColumn($event)">
+                        <span>{{columns.name}}</span>
+                    </mat-checkbox>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="switch-buttons" fxFlex="20">
-        <button mat-icon-button tabindex="-1" (click)="addToDisplayColumn()">
-            <mat-icon class="icon material-icons-outlined">arrow_forward</mat-icon>
-        </button>
-        <button mat-icon-button tabindex="-1" (click)="addToCanBeDisplayColumn()">
-            <mat-icon class="icon material-icons-outlined">arrow_back</mat-icon>
-        </button>
-    </div>
-    <div fxFlex="40" class="config-container">
-        <div class="title"><span>Displayed</span></div>
-        <div class="list-content">
-            <form [formGroup]="displayedColumnsForm">
-                <mat-checkbox *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
-                    (change)=checkDisplayedColumn($event)>
-                    <span>{{columns.name}}</span>
-                </mat-checkbox>
-            </form>
+        <div class="switch-buttons" fxFlex="20">
+            <button mat-icon-button tabindex="-1" (click)="addToDisplayColumn()"
+                [disabled]="canBeDisplayedColumnsForm.get('canBeDisplayedColumns').value.length <= 0">
+                <mat-icon class="icon material-icons-outlined">keyboard_arrow_right</mat-icon>
+            </button>
+            <button mat-icon-button tabindex="-1" (click)="addToCanBeDisplayColumn()"
+                [disabled]="displayedColumnsForm.get('displayedColumns').value.length <= 0">
+                <mat-icon class="icon material-icons-outlined">keyboard_arrow_left</mat-icon>
+            </button>
+        </div>
+        <div fxFlex="40" class="config-container">
+            <div class="title"><span>Displayed</span></div>
+            <div class="list-content">
+                <form [formGroup]="displayedColumnsForm">
+                    <mat-checkbox *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
+                        (change)=checkDisplayedColumn($event)>
+                        <span>{{columns.name}}</span>
+                    </mat-checkbox>
+                </form>
+            </div>
         </div>
     </div>
 </mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-flat-button (click)="applyChanges()">Apply Changes</button>
+    <button mat-flat-button (click)="resetColumns()">Reset Changes</button>
+</mat-dialog-actions>

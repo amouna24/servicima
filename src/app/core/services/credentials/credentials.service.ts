@@ -11,7 +11,7 @@ export class CredentialsService {
 
   changePassword(User) {
     return this.httpClient
-      .put(environment.credentialsApiURL + '/updatepassword' , User);
+      .put(environment.credentialsApiUrl + '/updatepassword' , User);
   }
 
 }

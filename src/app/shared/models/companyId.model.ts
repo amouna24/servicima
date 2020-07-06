@@ -1,3 +1,4 @@
 export interface ICompanyId {
-  email_adress: string;
+  application_id: string;
+  email_address: string;
 }
