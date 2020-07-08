@@ -1,8 +1,14 @@
 <div class="table-container">
     <div fxLayout="row" fxLayoutAlign="start center" class="actions-container">
-        <button mat-icon-button tabindex="-1" (click)="displayConfigModal()">
-            <mat-icon class="icon material-icons-outlined">settings</mat-icon>
-        </button>
+        <div id="setting-container">
+            <button mat-icon-button tabindex="-1" (click)="displayConfigModal()">
+                <mat-icon class="icon material-icons-outlined">settings</mat-icon>
+            </button>
+        </div>
+        <div id="table-filter-container">
+            <input id="search-bar" type="text" />
+        </div>
+
     </div>
     <ngx-datatable class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
         [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"

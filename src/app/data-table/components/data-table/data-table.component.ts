@@ -56,7 +56,7 @@ export class DataTableComponent implements OnInit, OnChanges {
     };
     this.modalService.displayModal('dataTableConfiguration', data, '40%').subscribe(
       (res) => {
-        if (res.action) {
+        if (res.action === 'change') {
           this.columns = [...res.actualColumns];
         }
       }
