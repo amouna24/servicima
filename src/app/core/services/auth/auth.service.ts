@@ -7,9 +7,6 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  userCredentials: string;
-  applicationId: string;
-  userEmail: string;
   constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
    }
 
@@ -17,10 +14,11 @@ export class AuthService {
   * @description Call api credentials to remove fingerprint
   */
   logout() {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
     const credentials = {
-    application_id:  this.localStorageService.getItem('userCredentials')['application_id'],
-    email_address: this.localStorageService.getItem('userCredentials')['email_address'],
-    finger_print: ''
+      application_id: userCredentials['application_id'],
+      email_address: userCredentials['email_address'],
+      finger_print: ''
     };
     return  this.httpClient.put(`${environment.credentialsApiUrl}/logout`,
      credentials);

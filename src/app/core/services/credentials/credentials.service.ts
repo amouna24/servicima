@@ -9,9 +9,9 @@ export class CredentialsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  changePassword(User) {
+  changePassword(user: object) {
     return this.httpClient
-      .put(environment.credentialsApiUrl + '/updatepassword' , User);
+      .put(`${environment.credentialsApiUrl}'/updatepassword` , user);
   }
 
 }

@@ -6,15 +6,19 @@ mat-toolbar{
   background-color: rgb(255,255,255);
   border-bottom: 0.1px inset lightgray;
 }
- .icon-button{
-    margin-top: -4px;
-   }
+.icon-button{
+  margin-top: 4px;
+}
 
-   @media only screen and (max-width: 887px) {
-     .header-label{
-       display: none;
-     }
-   }
+.cursor{
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 887px) {
+  .header-label{
+    display: none;
+  }
+}
 /* User Image */
 .user-avatar {
   width: 25px;

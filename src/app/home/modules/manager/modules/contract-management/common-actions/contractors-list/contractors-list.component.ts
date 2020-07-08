@@ -118,7 +118,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Navigate to ADD NEW CONTRACTOR Components
    *************************************************************************/
   addNewContractors() {
-    if ( this.type === 'SUPPLIER'){
+    if ( this.type === 'SUPPLIER') {
     this.router.navigate(
       ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: {  id: '' } });
     } else {

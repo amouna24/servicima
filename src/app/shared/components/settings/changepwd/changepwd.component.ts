@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { CredentialsService } from '@core/services/credentials/credentials.service';
@@ -16,16 +16,11 @@ export class ChangePwdComponent implements OnInit {
   hidePassword = true;
   hideConfirmPassword = true;
   hideOldPassword = true;
-  matchedPassword: boolean;
   errorMatcher = new CrossFieldErrorMatcher();
   userCredentials; string;
 
   constructor(private formBuilder: FormBuilder, private credentialsService: CredentialsService,
     private  localStorageService: LocalStorageService, public dialogRef: MatDialogRef<ChangePwdComponent>) { }
-
-  formControl = new FormControl('', [
-    Validators.required,
-  ]);
 
    /**
     * @description Loaded when component in init state
@@ -79,20 +74,19 @@ export class ChangePwdComponent implements OnInit {
       application_id: this.userCredentials ['application_id'] ,
       email_address: this.userCredentials['email_address'],
       password: form.get('password'),
-      oldPassword: form.get('oldPassword'),
+      old_password: form.get('oldPassword'),
       updated_by: this.userCredentials['email_address'],
     };
     this.credentialsService.changePassword(newPassword).subscribe(
-      res => {
-        console.log(res);
+      () => {
         this.dialogRef.close();
       },
       error => {
         alert('error , try it later');
+        console.error(error);
         this.dialogRef.close();
       }
     );
-
   }
 
 }
