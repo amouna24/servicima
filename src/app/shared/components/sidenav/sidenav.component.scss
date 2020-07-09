@@ -1,7 +1,15 @@
 .company-label{
-    font-size: 18px;
-    font-family: Montserrat;
-    color: white;
+  font-size: 18px;
+  font-family: Montserrat;
+  color: white;
+}
+.logo{
+  width: 100%;
+}
+.footer{
+  font-size: 12px;
+  color: white;
+  text-align: center;
 }
 
 ::ng-deep .mat-expansion-panel{
@@ -16,7 +24,6 @@
   box-shadow: none !important;
   padding: 0 15px !important;
 }
-
 
 ::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
   /* change what you want */

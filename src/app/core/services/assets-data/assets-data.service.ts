@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Country } from '@shared/models/countries.model';
-import { Activity } from '@shared/models/activity.model';
+import { ICountry } from '@shared/models/countries.model';
+import { IActivity } from '@shared/models/activity.model';
 import { ICurrency } from '@shared/models/currency.model';
 
 import { environment } from '../../../../environments/environment';
@@ -46,13 +46,13 @@ export class AssetsDataService {
    * @description Get all countries
    * @returns all countries
    *************************************************************************/
-  getAllCountries(): Observable<Country[]>  {
-    return this.httpClient.get<Country[]>(this.allCountries);
+  getAllCountries(): Observable<ICountry[]>  {
+    return this.httpClient.get<ICountry[]>(this.allCountries);
   }
 
   /**************************************************************************
-   * @description Get all currencies code
-   * @return all currencies code
+   * @description Get all currencies
+   * @return all currencies
    *************************************************************************/
   getAllCurrencies(): Observable<ICurrency[]> {
     return this.httpClient.get<ICurrency[]>(this.allCurrencies);
@@ -62,7 +62,7 @@ export class AssetsDataService {
    * @description Get all activity code
    * @return all  activity code
    *************************************************************************/
-  getAllActivityCode(): Observable<Activity[]> {
-    return this.httpClient.get<Activity[]>(this.activityCode);
+  getAllActivityCode(): Observable<IActivity[]> {
+    return this.httpClient.get<IActivity[]>(this.activityCode);
   }
 }

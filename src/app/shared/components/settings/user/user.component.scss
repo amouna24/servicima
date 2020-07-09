@@ -7,9 +7,15 @@
 
 .button-container {
   margin-top: 3%;
-  width: 75%;
+  width: 100%;
 }
-
+.avatar{
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+.wid-background-button{
+  width: 300px;
+}
 #input {
   font-size: 18px;
 }
@@ -19,7 +25,6 @@
 .form-width {
   width: 100%;
 }
-
 
 .mat-form-field {
   font-size: 18px;

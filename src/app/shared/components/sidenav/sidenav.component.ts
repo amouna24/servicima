@@ -40,8 +40,12 @@ export class SidenavComponent implements OnInit, OnChanges {
 
   constructor(private sidenavService: SidenavService, private userService: UserService
   ) {
-    this.userService.company$.subscribe((data) => {
-     this.company = data['company_name'];
+    this.userService.connectedUser$.subscribe((info) => {
+      if (!!info) {
+        this.company = info['company'][0]['company_name'];
+      }
+    }, (err) => {
+      console.error(err);
     });
   }
 
@@ -53,7 +57,8 @@ export class SidenavComponent implements OnInit, OnChanges {
     this.sidenavService.sidebarStateObservable$.
       subscribe((newState: string) => {
         this.sidebarState = newState;
-      });
+      }, (err) => {
+        console.error(err); });
     this.panelOpenState = true;
   }
 

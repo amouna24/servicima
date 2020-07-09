@@ -21,14 +21,6 @@ export class RoutingStateService {
       });
   }
 
-  public getHistory(): string[] {
-    return this.history;
-  }
-
-  public getPreviousUrl(): string {
-    return this.history[this.history.length - 2] || '/home';
-  }
-
   public getCurrentUrl(): string {
     return this.history[this.history.length - 1] || '/home';
 

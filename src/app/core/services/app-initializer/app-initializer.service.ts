@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { forkJoin } from 'rxjs';
+
 import { ILanguageModel } from '@shared/models/language.model';
 import { IApplicationModel } from '@shared/models/application.model';
 import { ICompanyModel } from '@shared/models/company.model';
 import { IRefdataModel } from '@shared/models/refdata.model';
 import { IReftypeModel } from '@shared/models/reftype.model';
-import { Country } from '@shared/models/countries.model';
-import { ICities } from '@shared/models/cities.model';
+import { ICountry } from '@shared/models/countries.model';
 import { ICurrency } from '@shared/models/currency.model';
-import { IViewParam } from '@shared/models/view.model';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
-import { Activity } from '@shared/models/activity.model';
-import { forkJoin } from 'rxjs';
+import { ILicenceModel } from '@shared/models/licence.model';
+import { IActivity } from '@shared/models/activity.model';
 
 import { environment } from '../../../../environments/environment';
 import { TranslationCustomLoaderService } from '../translation/translation-custom-loader.service';
@@ -29,9 +29,10 @@ export class AppInitializerService {
   companyList: ICompanyModel[];
   refDataList: IRefdataModel[];
   refTypeList: IReftypeModel[];
-  activityCodeList: Activity[] = [];
-  countriesList: Country[] = [];
+  activityCodeList: IActivity[] = [];
+  countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
+  licencesList: ILicenceModel[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -51,6 +52,7 @@ export class AppInitializerService {
         this.languageList = this.starterData['languages'];
         this.refDataList = this.starterData['refdataall'];
         this.refTypeList = this.starterData['reftypes'];
+        this.licencesList = this.starterData['licences'];
         this.localStorageService.setItem('languages', this.languageList);
         this.translationCustomLoaderService.setTranslationLanguage();
       },

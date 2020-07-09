@@ -5,6 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatSelectModule } from '@angular/material/select';
+
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -14,6 +17,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     UsersListComponent,
     ChangePwdComponent,
     UserComponent,
+    HomeCompanyComponent,
     /* Directives */
     CanBeDisplayedDirective,
     ConfirmationModalComponent,
@@ -36,7 +41,9 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     RouterModule,
     MaterialModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule,
+    NgxMatSelectSearchModule
   ],
   exports: [
     MaterialModule,
@@ -46,6 +53,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     SpinnerComponent,
     UserComponent,
     ChangePwdComponent,
+    HomeCompanyComponent,
     UsersListComponent,
     TranslateModule,
     FlexLayoutModule,
