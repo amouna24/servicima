@@ -15,12 +15,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 10px;
+            margin: 10px auto;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            padding: 5px;
+            background: #fff;
+            #select-column-key {
+                flex: 1;
+                font-size: 12px;
+            }
             #search-bar {
+                flex: 3;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
                 padding: 5px;
-                margin: 15px auto;
-                width: 100%;
-                border-radius: 30px;
-                border: 1px solid #ccc;
+                border: none;
+                border-left: 1px solid rgba(0, 0, 0, 0.12);
             }
             #search-bar:focus {
                 outline: none;
@@ -31,6 +42,13 @@
             flex: 1;
             display: flex;
             justify-content: flex-start;
+        }
+
+        #options-contaner {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
         }
     }
 }

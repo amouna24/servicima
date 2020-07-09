@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -38,7 +38,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     MaterialModule,
     FlexLayoutModule,
     NgxDatatableModule,
-    ReactiveFormsModule
+    FormsModule
   ],
   exports: [
     MaterialModule,
@@ -54,7 +54,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     TranslateModule,
     NgxDatatableModule,
     FlexLayoutModule,
-    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class SharedModule { }

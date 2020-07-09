@@ -6,9 +6,21 @@
             </button>
         </div>
         <div id="table-filter-container">
-            <input id="search-bar" type="text" />
+            <mat-select id="select-column-key" [(ngModel)]="searchSelection"
+                (selectionChange)="selectColumnToFilter($event)">
+                <mat-option [value]="column" *ngFor="let column of columns">{{column.name}}</mat-option>
+            </mat-select>
+            <input id="search-bar" type="text"
+                [placeholder]=" searchSelection.name ? 'Search By ' + searchSelection.name : 'Search'" />
         </div>
-
+        <div id="options-contaner">
+            <button mat-button [matMenuTriggerFor]="exportMenu">Export as</button>
+            <mat-menu #exportMenu>
+                <button mat-menu-item>Pdf</button>
+                <button mat-menu-item>Csv</button>
+                <button mat-menu-item>Xml</button>
+            </mat-menu>
+        </div>
     </div>
     <ngx-datatable class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
         [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"

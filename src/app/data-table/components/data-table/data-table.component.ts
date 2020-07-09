@@ -23,6 +23,9 @@ export class DataTableComponent implements OnInit, OnChanges {
   displayedColumns = [];
   canBeDisplayedColumns = [];
   canBeFiltredColumns = [];
+  searchSelection = {
+    name: ''
+  };
 
   constructor(private dataTableService: DataTableService, private modalService: ModalService) { }
 
@@ -46,6 +49,10 @@ export class DataTableComponent implements OnInit, OnChanges {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+  }
+
+  selectColumnToFilter(selection) {
+    console.log(selection);
   }
 
   displayConfigModal() {
