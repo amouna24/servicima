@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
+import { ColumnMode, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { ModalService } from '@core/services/modal/modal.service';
 
 import { DataTableService } from '../../services/data-table.service';
@@ -15,10 +15,13 @@ export class DataTableComponent implements OnInit, OnChanges {
   @Input() data: any[] = [];
   @Input() tableCode: string;
 
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   selected = [];
   columns = [];
+  temp = [];
   modalConfiguration: any;
   displayedColumns = [];
   canBeDisplayedColumns = [];
@@ -33,6 +36,7 @@ export class DataTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.temp = [...this.data];
     this.modalService.registerModals([
       { modalName: 'dataTableConfiguration', modalComponent: ConfigurationModalComponent }]);
     this.dataTableService.getDefaultTableConfig(this.tableCode).subscribe(
@@ -51,8 +55,17 @@ export class DataTableComponent implements OnInit, OnChanges {
     this.selected.push(...selected);
   }
 
-  selectColumnToFilter(selection) {
-    console.log(selection);
+  updateFilter(event, searchSelection) {
+    const val = event.target.value.toLowerCase();
+    // filter our data
+    const temp = this.temp.filter((row) => {
+      return row[searchSelection.prop].toLowerCase().indexOf(val) !== -1 || !val;
+    });
+    console.log(temp);
+    // update the rows
+    this.data = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
   }
 
   displayConfigModal() {

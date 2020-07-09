@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 
 export class DataTableService {
 
-  applicationId = '5eac544a92809d7cd5dae21f';
-  languageId = '5eac544ad4cb666637fe1353';
+  applicationId = '5eac544a92809d7cd5dae21f'; // to do : get the app Id from the user info
+  languageId = '5eac544ad4cb666637fe1353'; // to do : get the language Id from the user info
 
   constructor(private httpClient: HttpClient) {
   }

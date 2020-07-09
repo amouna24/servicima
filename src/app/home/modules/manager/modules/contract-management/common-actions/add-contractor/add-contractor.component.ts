@@ -4,7 +4,7 @@ import { AssetsDataService } from '@core/services/assets-data/assets-data.servic
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { Country } from '@shared/models/countries.model';
+import { ICountry } from '@shared/models/countries.model';
 import { ICurrency } from '@shared/models/currency.model';
 import { ICities } from '@shared/models/cities.model';
 import { UserService } from '@core/services/user/user.service';
@@ -38,7 +38,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Static Customers And Status Declaration
    *************************************************************************/
-  countriesList: Country[] = [];
+  countriesList: ICountry[] = [];
   citiesList: ICities[] = [];
   currenciesList: ICurrency[] = [];
   languagesList: ILanguageModel[] = [];
@@ -49,7 +49,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Filtered Data Declarations
    *************************************************************************/
-  filteredCountries: Observable<Country[]>;
+  filteredCountries: Observable<ICountry[]>;
   filteredCities: Observable<ICities[]>;
   filteredCurrencies: Observable<ICurrency[]>;
 
@@ -151,7 +151,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   this.utilsService.getRefData(
     this.utilsService.getCompanyId('ALL', 'ALL'),
     this.utilsService.getApplicationID('ALL'),
-    this.translateService.currentLang.slice(0, this.translateService.currentLang.length - 3),
     ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS']
     );
   this.statusList = this.utilsService.refData['CONTRACT_STATUS'];
@@ -202,7 +201,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description AutoComplete Displayed Value
    *************************************************************************/
-  displayCountryName(country: Country): string {
+  displayCountryName(country: ICountry): string {
     return country && country.COUNTRY_DESC ? country.COUNTRY_DESC : '';
   }
   displayCityName(city: ICities): string {
@@ -218,11 +217,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description AutoComplete Filtered data
    *************************************************************************/
-  private _filterCountry(name: string): Country[] {
+  private _filterCountry(name: string): ICountry[] {
     const filterValue = name.toLowerCase();
     return this.countriesList.filter(option => option.COUNTRY_DESC.toLowerCase().indexOf(filterValue) === 0);
   }
-  private _filterCountryByCode(code: string): Country[] {
+  private _filterCountryByCode(code: string): ICountry[] {
     const filterValue = code.toLowerCase();
     return this.countriesList.filter(option => option.COUNTRY_CODE.toLowerCase().indexOf(filterValue) === 0);
   }

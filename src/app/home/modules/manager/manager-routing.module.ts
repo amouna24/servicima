@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 import { UserComponent } from '@shared/components/settings/user/user.component';
+import { HomeCompanyComponent } from '@shared/components/settings/home-company/home-company.component';
 
 import { ManagerComponent } from './manager.component';
 
@@ -61,6 +62,14 @@ const routes: Routes = [
       {
         path: 'users-list',
         component: UsersListComponent
+      },
+      {
+        path: 'settings/users-list',
+        component: UsersListComponent
+      },
+      {
+        path: 'home-company',
+        component: HomeCompanyComponent
       }
     ]
   }

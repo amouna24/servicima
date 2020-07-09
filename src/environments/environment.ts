@@ -22,9 +22,10 @@ export const environment = {
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8010/auth/credentials/v1',
   companyApiUrl: 'http://192.168.1.22:8012/auth/companies/v1',
-  licenceApiUrl: 'http://192.168.1.22:8020/auth/companylicence/v1',
+  companyLicenceUrl: 'http://192.168.1.22:8020/auth/companylicences/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1',
   userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
+  userRoleApiUrl: 'http://localhost:8025/auth/userroles/v1',
   redirectionHomeUrl: '/',
 
   /*************************** OTHERS ************************************/

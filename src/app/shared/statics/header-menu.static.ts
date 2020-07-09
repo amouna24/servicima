@@ -23,7 +23,7 @@ export const headerMenu: IHeaderMenu[] = [
     feature: 'SOURCING_ACCESS',
   },
   {
-    state: '',
+    state: 'settings',
     name: 'Settings',
     type: 'sub',
     icon: 'settings',

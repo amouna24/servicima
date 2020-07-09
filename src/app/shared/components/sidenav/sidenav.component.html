@@ -68,20 +68,15 @@
       </div>
     </ng-template>
   </mat-nav-list>
+  <!---------------------------------------- footer ------------------------------------------------------------>
   <span class="flex-spacer"></span>
   <div *ngIf='iconBool'>
     <mat-list-item class="side-nav-header" [@nameAnimation]="sidebarState">
-      <div class="col" style="margin-left: 5px">
-        <div class="row">
-          <img src="assets/img/ellipse-1.png" srcset="assets/img/ellipse-1@2x.png 2x,
-             assets/img/ellipse-1@3x.png 3x" class="company-point">
-        </div>
-        <div class="row">
-          <img src="assets/img/servicima.png" srcset="assets/img/servicima@2x.png 2x,
-             assets/servicima@3x.png 3x" class="company-name">
-        </div>
-      </div>
+        <img src="assets/img/servicima.png"  class="company-name">
     </mat-list-item>
-    <div style="font-size: 12px; color: white; text-align: center;">2020 © Servicima All rights reserved.</div>
+    <div class="logo" fxLayoutAlign="center center">
+      <img src='assets/img/vector-smart-object.png'>
+    </div>
+    <div class="footer">2020 © Servicima All rights reserved.</div>
   </div>
 </div>

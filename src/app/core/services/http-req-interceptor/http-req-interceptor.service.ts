@@ -9,7 +9,6 @@ import { LocalStorageService } from '../storage/local-storage.service';
 @Injectable()
 export class HttpReqInterceptorService implements HttpInterceptor {
   updatedRequest: any;
-  // TODO : get the user token from the storage
   token: string;
   constructor(private router: Router, private localStorageService: LocalStorageService) { }
 

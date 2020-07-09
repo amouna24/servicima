@@ -6,11 +6,10 @@
             </button>
         </div>
         <div id="table-filter-container">
-            <mat-select id="select-column-key" [(ngModel)]="searchSelection"
-                (selectionChange)="selectColumnToFilter($event)">
+            <mat-select id="select-column-key" [(ngModel)]="searchSelection">
                 <mat-option [value]="column" *ngFor="let column of columns">{{column.name}}</mat-option>
             </mat-select>
-            <input id="search-bar" type="text"
+            <input id="search-bar" type="text" (keyup)="updateFilter($event, searchSelection)"
                 [placeholder]=" searchSelection.name ? 'Search By ' + searchSelection.name : 'Search'" />
         </div>
         <div id="options-contaner">
@@ -22,7 +21,7 @@
             </mat-menu>
         </div>
     </div>
-    <ngx-datatable class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
+    <ngx-datatable #table class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
         [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"
         [scrollbarH]="true" [selectionType]="'multiClick'" [columnMode]="ColumnMode.force" [footerHeight]="50"
         [rowHeight]="50">
