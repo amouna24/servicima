@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FileUploadModule } from 'ng2-file-upload';
 import { RouterModule } from '@angular/router';
-import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
-import { TranslateModule } from '@ngx-translate/core';
 import { MatSelectModule } from '@angular/material/select';
+
+import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
+
+import { TranslateModule } from '@ngx-translate/core';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -29,9 +32,9 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
+    ConfirmationModalComponent,
     /* Directives */
     CanBeDisplayedDirective,
-    ConfirmationModalComponent,
 
   ],
   imports: [
@@ -43,7 +46,9 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     FlexLayoutModule,
     ReactiveFormsModule,
     MatSelectModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    FormsModule,
+    FileUploadModule
   ],
   exports: [
     MaterialModule,

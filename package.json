@@ -47,6 +47,7 @@
     "angular-password-strength-meter": "2.0.0",
     "fingerprintjs2": "2.1.0",
     "ng-recaptcha": "5.0.0",
+    "ng2-file-upload": "^1.4.0",
     "ngx-mat-select-search": "^3.0.0",
     "ngx-spinner": "9.0.2",
     "node-sass": "4.13.1",
