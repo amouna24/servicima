@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -41,13 +42,15 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     RouterModule,
     MaterialModule,
     FlexLayoutModule,
-    ReactiveFormsModule,
-    MatSelectModule,
+    NgxDatatableModule,
+    FormsModule,
     NgxMatSelectSearchModule
   ],
   exports: [
     MaterialModule,
     CommonModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
     HeaderComponent,
     SidenavComponent,
     SpinnerComponent,
@@ -56,8 +59,9 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     HomeCompanyComponent,
     UsersListComponent,
     TranslateModule,
+    NgxDatatableModule,
     FlexLayoutModule,
-    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class SharedModule { }

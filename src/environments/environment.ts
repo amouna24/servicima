@@ -13,6 +13,7 @@ export const environment = {
   applicationApiUrl: 'http://192.168.1.22:8007/admin/applications/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8015/admin/loadauthstarterdata/v1',
   moduleApiUrl: 'http://192.168.1.22:8005/admin/modules/v1',
+  dataListsUrl: 'http://127.0.0.1:8036/admin/datalists/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8030/servicima/contracts/v1',

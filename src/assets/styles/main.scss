@@ -33,7 +33,7 @@
 /* mat-form-field */
 /********************************************************/
 .mat-form-field {
-  font-size: 9px;
+  font-size: 12px;
   flex-grow: 1;
 }
 
@@ -104,10 +104,9 @@
     $lightColorAuth,
     auto
   );
-padding-left: 1px !important ;
-padding-right: 1px !important ;
+  padding-left: 1px !important ;
+  padding-right: 1px !important ;
 }
-
 
 /********************************************************/
 /*  background button  */
@@ -115,7 +114,7 @@ padding-right: 1px !important ;
 .wid-background-button {
   height: 38px;
   width: 90%;
-  background-image: linear-gradient(to top, #86B8D1,  #2F7CA3 );
+  background-image: linear-gradient(to top, #86b8d1, #2f7ca3);
   color: $lightColorAuth;
   object-fit: contain;
 }

@@ -25,11 +25,11 @@ export class ManagerComponent implements OnInit, OnDestroy {
     media: MediaMatcher,
     private sidebarService: SidenavService,
     private userService: UserService,
-    ) {
-      this.mobileQuery = media.matchMedia('(max-width: 600px)');
+  ) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
-    this.userService.getUserInfo();
+    // this.userService.getUserInfo();
   }
 
   ngOnDestroy(): void {

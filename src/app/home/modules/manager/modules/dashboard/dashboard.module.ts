@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
+import { DataTableModule } from 'src/app/data-table/data-table.module';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -11,7 +12,8 @@ import { DashboardComponent } from './dashboard.component';
   imports: [
     CommonModule,
     SharedModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    DataTableModule
   ]
 })
 export class DashboardModule { }
