@@ -207,7 +207,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   async uploadFile(formData) {
-
     return this.uploadService.uploadImage(formData).pipe(indicate(this.loading$), map(response => response.file.filename)).toPromise();
   }
 
