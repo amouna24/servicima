@@ -9,7 +9,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UserService } from '@core/services/user/user.service';
 import { RoutingStateService } from '@core/services/routingState/routing-state.service';
 import { IUserRolesModel } from '@shared/models/userRoles.model';
-import { FileUploader } from 'ng2-file-upload';
 
 import { IViewParam } from '@shared/models/view.model';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -66,7 +65,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   files = [];
   url = 'https://evening-anchorage-3159.herokuapp.com/api/';
-  uploader: FileUploader;
 
   public genderCtrl: FormControl = new FormControl('', Validators.required);
   public titleCtrl: FormControl = new FormControl('', Validators.required);

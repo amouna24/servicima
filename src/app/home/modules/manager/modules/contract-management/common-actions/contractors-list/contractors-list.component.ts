@@ -32,17 +32,17 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
 
   dataSource: MatTableDataSource<IContractor>;
 
-  @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   /* Static Customers And Status Declaration */
   Customers = [
-    { email: 'olivier@europcar.fr', name: 'Olivier'},
-    { email: 'frank@canalplus.fr', name: 'Frank'}
+    { email: 'olivier@europcar.fr', name: 'Olivier' },
+    { email: 'frank@canalplus.fr', name: 'Frank' }
   ];
   Status = [
-    { value: 'Signed', viewValue: 'Signed'},
-    { value: 'Draft', viewValue: 'Draft'},
+    { value: 'Signed', viewValue: 'Signed' },
+    { value: 'Draft', viewValue: 'Draft' },
   ];
   /*******************************************/
 
@@ -60,7 +60,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   /**************************************************************************
    * @description load data emitted by child components
    *************************************************************************/
-  ngOnChanges(changes: { [propKey: string]: SimpleChange}) {
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     console.log(this.type);
   }
 
@@ -118,38 +118,38 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Navigate to ADD NEW CONTRACTOR Components
    *************************************************************************/
   addNewContractors() {
-    if ( this.type === 'SUPPLIER') {
-    this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: {  id: '' } });
+    if (this.type === 'SUPPLIER') {
+      this.router.navigate(
+        ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: { id: '' } });
     } else {
       this.router.navigate(
-        ['/manager/contract-management/clients-contracts/clients'], { queryParams: {  id: '' } });
+        ['/manager/contract-management/clients-contracts/clients'], { queryParams: { id: '' } });
     }
-    }
+  }
 
   /**************************************************************************
    * @description: Function to call  Dialog
    * @return: Updated Contractor Status
    *************************************************************************/
   onStatusChange(Contractor) {
-      this.modalsServices.displayConfirmationModal({ test: 'test'})
-        .subscribe(
+    this.modalsServices.displayConfirmationModal({ test: 'test' })
+      .subscribe(
         (res) => {
-         if (res === 'true') {
-           if (Contractor.status === 'A') {
-             this.contractorService.disableContractor(Contractor._id).subscribe(
-               (res1) => {
-                 console.log('resp:', res1);
-               }
-             );
-           } else if (Contractor.status === 'D') {
-             this.contractorService.enableContractor(Contractor._id).subscribe(
-               (res1) => {
-                 console.log('resp:', res1);
-               }
-             );
-           }
-         }
+          if (res === 'true') {
+            if (Contractor.status === 'A') {
+              this.contractorService.disableContractor(Contractor._id).subscribe(
+                (res1) => {
+                  console.log('resp:', res1);
+                }
+              );
+            } else if (Contractor.status === 'D') {
+              this.contractorService.enableContractor(Contractor._id).subscribe(
+                (res1) => {
+                  console.log('resp:', res1);
+                }
+              );
+            }
+          }
         }
       );
   }
@@ -161,7 +161,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   updateContractor(Contractor: IContractor): void {
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: {  id: btoa(Contractor._id) } });
+      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: { id: btoa(Contractor._id) } });
   }
 
   /**************************************************************************

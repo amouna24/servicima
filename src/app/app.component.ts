@@ -14,14 +14,14 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
   modals = [
-    { modalName: 'confirmation' , modalComponent : ConfirmationModalComponent },
+    { modalName: 'confirmation', modalComponent: ConfirmationModalComponent },
   ];
   title = 'WIDIGITAL ' + environment.env;
 
   constructor(
     private authService: AuthService,
     public translateService: TranslateService,
-    private  modalService: ModalService,
+    private modalService: ModalService,
     private routingState: RoutingStateService,
   ) {
     this.authService.languageSubject.subscribe(

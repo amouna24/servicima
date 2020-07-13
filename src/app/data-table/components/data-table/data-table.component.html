@@ -1,0 +1,47 @@
+<div class="table-container">
+    <div fxLayout="row" fxLayoutAlign="start center" class="actions-container">
+        <div id="setting-container">
+            <button mat-icon-button tabindex="-1" (click)="displayConfigModal()">
+                <mat-icon class="icon material-icons-outlined">settings</mat-icon>
+            </button>
+        </div>
+        <div id="table-filter-container">
+            <mat-select id="select-column-key" [(ngModel)]="searchSelection">
+                <mat-option [value]="column" *ngFor="let column of columns">{{column.name}}</mat-option>
+            </mat-select>
+            <input id="search-bar" type="text" (keyup)="updateFilter($event, searchSelection)"
+                [placeholder]=" searchSelection.name ? 'Search By ' + searchSelection.name : 'Search'" />
+        </div>
+        <div id="options-contaner">
+            <button mat-button [matMenuTriggerFor]="exportMenu">Export as</button>
+            <mat-menu #exportMenu>
+                <button mat-menu-item>Pdf</button>
+                <button mat-menu-item>Csv</button>
+                <button mat-menu-item>Xml</button>
+            </mat-menu>
+        </div>
+    </div>
+    <ngx-datatable #table class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
+        [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"
+        [scrollbarH]="true" [selectionType]="'multiClick'" [columnMode]="ColumnMode.force" [footerHeight]="50"
+        [rowHeight]="50">
+
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" [frozenLeft]="true">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <mat-checkbox [indeterminate]="selected.length !== 0 && !isAllSelected()" [checked]="allRowsSelected"
+                    (change)="selectFn(!allRowsSelected)">
+                </mat-checkbox>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-row="row"
+                let-rowIndex="rowIndex" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <mat-checkbox [checked]="isSelected">
+                </mat-checkbox>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column *ngFor="let column of columns" [prop]="column.prop" [name]="column.name">
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>
