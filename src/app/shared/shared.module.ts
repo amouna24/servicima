@@ -19,6 +19,7 @@ import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
+import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     /* Directives */
     CanBeDisplayedDirective,
     ConfirmationModalComponent,
+    SkeletonLoaderComponent,
 
   ],
   imports: [
@@ -62,6 +64,7 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     NgxDatatableModule,
     FlexLayoutModule,
     FormsModule,
+    SkeletonLoaderComponent
   ]
 })
 export class SharedModule { }

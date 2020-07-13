@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
 import { ColumnMode, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { ModalService } from '@core/services/modal/modal.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { DataTableService } from '../../services/data-table.service';
 import { ConfigurationModalComponent } from '../configuration-modal/configuration-modal.component';
@@ -19,6 +21,7 @@ export class DataTableComponent implements OnInit, OnChanges {
 
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
+  activeTheme = 'material';
   selected = [];
   columns = [];
   temp = [];
@@ -30,7 +33,10 @@ export class DataTableComponent implements OnInit, OnChanges {
     name: ''
   };
 
-  constructor(private dataTableService: DataTableService, private modalService: ModalService) { }
+  constructor(private dataTableService: DataTableService, private modalService: ModalService, private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer) {
+    this.registerMatIcons();
+  }
 
   ngOnChanges(changes): void {
   }
@@ -51,6 +57,7 @@ export class DataTableComponent implements OnInit, OnChanges {
   }
 
   onSelect({ selected }) {
+    console.log(selected);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
@@ -68,6 +75,18 @@ export class DataTableComponent implements OnInit, OnChanges {
     this.table.offset = 0;
   }
 
+  registerMatIcons() {
+    this.matIconRegistry.addSvgIcon(
+      'female',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/female.svg')
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      'male',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/male.svg')
+    );
+  }
+
   displayConfigModal() {
     const data = {
       displayedColumns: this.dataTableService.generateColumns(this.displayedColumns),
@@ -79,10 +98,14 @@ export class DataTableComponent implements OnInit, OnChanges {
         if (res.action === 'change') {
           this.columns = [...res.actualColumns];
         }
+        if (res.action === 'themeChange') {
+          this.activeTheme = res.activeTheme;
+        }
       }
     );
   }
   /** Whether the number of selected elements matches the total number of rows. */
+
   isAllSelected() {
     const numSelected = this.selected.length;
     const numRows = this.data.length;
@@ -90,6 +113,28 @@ export class DataTableComponent implements OnInit, OnChanges {
   }
 
   onCheckboxChangeFn($event) {
+    console.log($event);
+  }
+
+  generateSpanColor(value: string): string {
+    switch (value) {
+      case 'COMPANY':
+        return '#00b8d4';
+      case 'COLLABORATOR':
+        return '#1565c0';
+      case 'CANDIDATE':
+        return '#ff9100';
+      case 'STAFF':
+        return '#6d4c41';
+      case 'ACTIVE':
+        return '#2e7d32';
+      case 'INACTIVE':
+        return '#c62828';
+      case 'PENDING':
+        return '#c62828';
+      default:
+        return '#000';
+    }
   }
 
 }
