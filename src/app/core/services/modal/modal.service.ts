@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class ModalService {
     return modal.modalComponent;
   }
 
-  displayModal(modalName: string, modalData?: object, modalWidth?: string, modalHeight?: string) {
+  displayModal(modalName: string, modalData?: object, modalWidth?: string, modalHeight?: string): Observable<any> {
     const modalComponent = this.getModalComponentRef(modalName);
     const initialState = modalData;
     if (modalWidth === undefined || modalWidth === null) {
@@ -39,8 +39,7 @@ export class ModalService {
       data: initialState,
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    return dialogRef.afterClosed();
   }
 
   // display global confirmation modal
