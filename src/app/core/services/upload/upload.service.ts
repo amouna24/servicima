@@ -11,11 +11,6 @@ export class UploadService {
 
   constructor(private http: HttpClient) { }
 
-  downloadPDF(filename, filetype): any {
-    return this.http.get('http://127.0.0.1:8013/file/' + filename,
-    { responseType: 'blob' });
-  }
-
   uploadImage(file: any) {
     return this.http.post<{ }>(`${environment.userApiUrl}/api/upload`, file)
       .pipe(
@@ -25,18 +20,16 @@ export class UploadService {
         })
       );
   }
+
   getImage(idFile) {
     return this.http.get(`${environment.userApiUrl}/api/image/` + idFile, {
       responseType: 'blob',
     });
   }
+
   getImages() {
     return this.http.get(`${environment.userApiUrl}/api/`);
 
-  }
-
-  showFileNames() {
-    return this.http.get('http://127.0.0.1:8013/files');
   }
 
 }

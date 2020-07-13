@@ -28,6 +28,10 @@ export const environment = {
   userRoleApiUrl: 'http://localhost:8025/auth/userroles/v1',
   redirectionHomeUrl: '/',
 
+  /************************* UPLOAD FILE ******************************/
+  uploadFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/upload',
+  getFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/image/',
+  getFilesUrl: 'http://127.0.0.1:8013/auth/users/v1/api/',
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',

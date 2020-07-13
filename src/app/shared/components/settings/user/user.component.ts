@@ -103,8 +103,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
-    console.log('connectedUser', connectedUser);
-
     if (this.currentUrl === '/manager/add-user') {
       this.form.controls['homeCompany'].setValue(this.companyName);
       this.form.controls['homeCompany'].disable();
@@ -189,7 +187,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   /**
    * @description : set the Image to UpLoad and preview
-   * AND  UPLOAD TO SERVER
    */
   previewFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
@@ -204,6 +201,9 @@ export class UserComponent implements OnInit, OnDestroy {
     this.photo = formData;
   }
 
+  /**
+   * @description : Upload Image to Server  with async to promise
+   */
   async uploadFile(formData) {
     return this.uploadService.uploadImage(formData).pipe(indicate(this.loading$), map(response => response.file.filename)).toPromise();
   }
@@ -318,7 +318,6 @@ export class UserComponent implements OnInit, OnDestroy {
         youtube_url: this.form.value.youtubeAccount,
         photo: await this.uploadFile(this.photo)
       };
-      console.log('user', newUser);
 
       // object to update user role
       const user = {
