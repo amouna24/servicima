@@ -49,19 +49,31 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: UserComponent
+        component: UserComponent,
+        data: {
+          breadcrumb: 'profile'
+        },
       },
       {
         path: 'add-user',
         component: UserComponent,
+        data: {
+          breadcrumb: 'create'
+        },
       },
       {
         path: 'update-user',
         component: UserComponent,
+        data: {
+          breadcrumb: 'update'
+        },
       },
       {
         path: 'users-list',
-        component: UsersListComponent
+        component: UsersListComponent,
+        data: {
+          breadcrumb: 'users'
+        },
       },
       {
         path: 'settings/users-list',

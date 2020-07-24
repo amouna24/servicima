@@ -7,6 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: ActivityReportsComponent,
+    data: {
+      breadcrumb: 'activity-reports'
+    },
   }
 ];
 
