@@ -209,11 +209,19 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @description : Clear  preview  Image
+   */
+  clearPreview() {
+    this.photo = null;
+    this.avatar = null;
+  }
+
+  /**
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
    */
   getImage(id) {
-    this.uploadService.getImage(id).subscribe(
+    this.uploadService.getImage(id).subscridbe(
       data => {
         const unsafeImageUrl = URL.createObjectURL(data);
         this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
