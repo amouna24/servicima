@@ -1,12 +1,11 @@
 <div class="container" fxLayout="column" fxLayoutAlign="start" [ngStyle.xs]="{ 'width': '100%','height': '100%'}">
-  <div class="button-container" [ngStyle.xs]="{ 'width': '90%'}" fxLayoutAlign="center center" >
+  <div class="button-container" [ngStyle.xs]="{ 'width': '90%'}" fxLayoutAlign="center center">
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="center center"
-      fxLayoutAlign="space-between" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="center center" fxLayoutAlign="space-between"
+      fxLayoutGap="5px">
       <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button
         (click)='update()' [disabled]="!form.valid || genderCtrl.status =='INVALID'
-        || titleCtrl.status =='INVALID'|| roleCtrl.status =='INVALID'"
->{{ 'user.save' | translate}} </button>
+        || titleCtrl.status =='INVALID'|| roleCtrl.status =='INVALID'">{{ 'user.save' | translate}} </button>
       <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button
         (click)="onChangePassword()">
         {{ 'user.changepwd' | translate}}</button>
@@ -17,18 +16,23 @@
   <div class="container-form" fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
     <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
       <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
+        <!--Display and preview avatar-->
         <div fxFlex='20' [ngStyle.xs]="{'width': '90%'}">
           <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
-            <div  fxLayoutAlign="center center">
-              <img src='assets/img/avatar.png'  width='40%' height="40%"
-                [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
-            </div>
+            <!--Display Image Avatar of user  with progress border in upload-->
             <div fxLayoutAlign="center center">
-              <input type="file" id="file" name="file" accept=".jpg, .jpeg, .png" />
+              <img [src]="avatar ? avatar : 'assets/img/avatar.png'" width='80' height="80" class="avatar"
+                [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
+              <div class="progress" *ngIf="loading$ | async"></div>
+            </div>
+            <!--Input File accept only image with preview Image-->
+            <div fxLayoutAlign="center center">
+              <input #file type="file" id="file" name="file" (change)="previewFile($event)" accept="image/*" />
               <label for="file" class="btn-2">{{ 'user.select' | translate}}...</label>
             </div>
           </div>
         </div>
+
         <div fxFlex='100'>
           <div class="form-width">
             <div fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
@@ -60,31 +64,39 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <mat-select [placeholder]=" 'user.gender' | translate | uppercase"  [formControl]="genderCtrl" class="wid-Value-input"   #singleSelect>
+                      <mat-select [placeholder]=" 'user.gender' | translate | uppercase" [formControl]="genderCtrl"
+                        class="wid-Value-input" #singleSelect>
                         <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}" noEntriesFoundLabel="{{ 'general.nodata' | translate }}"  [formControl]="genderFilterCtrl"></ngx-mat-select-search>
+                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" [formControl]="genderFilterCtrl">
+                          </ngx-mat-select-search>
                         </mat-option>
-                        <mat-option *ngFor="let gender of filteredGender| async" [value]="gender.value" >
+                        <mat-option *ngFor="let gender of filteredGender| async" [value]="gender.value">
                           {{gender.viewValue}}
                         </mat-option>
                       </mat-select>
 
-                      <mat-error class="wid-error-messages" *ngIf="genderCtrl.errors?.required">  {{ 'manager.reqfield' | translate }} </mat-error>
+                      <mat-error class="wid-error-messages" *ngIf="genderCtrl.errors?.required">
+                        {{ 'manager.reqfield' | translate }} </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <mat-select    [placeholder]=" 'user.job' | translate | uppercase" [formControl]="titleCtrl" class="wid-Value-input"  #singleSelect>
+                      <mat-select [placeholder]=" 'user.job' | translate | uppercase" [formControl]="titleCtrl"
+                        class="wid-Value-input" #singleSelect>
                         <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}" noEntriesFoundLabel="{{ 'general.nodata' | translate }}"  [formControl]="titleFilterCtrl"></ngx-mat-select-search>
+                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" [formControl]="titleFilterCtrl">
+                          </ngx-mat-select-search>
                         </mat-option>
                         <mat-option *ngFor="let title of filteredTitle| async" [value]="title.value">
                           {{title.viewValue}}
                         </mat-option>
                       </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="titleCtrl.errors?.required">  {{ 'manager.reqfield' | translate }} </mat-error>
+                      <mat-error class="wid-error-messages" *ngIf="titleCtrl.errors?.required">
+                        {{ 'manager.reqfield' | translate }} </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -126,15 +138,19 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <mat-select  [placeholder]=" 'user.role' | translate | uppercase" [formControl]="roleCtrl" class="wid-Value-input"  #singleSelect>
+                      <mat-select [placeholder]=" 'user.role' | translate | uppercase" [formControl]="roleCtrl"
+                        class="wid-Value-input" #singleSelect>
                         <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}" noEntriesFoundLabel="{{ 'general.nodata' | translate }}"  [formControl]="roleFilterCtrl"></ngx-mat-select-search>
+                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" [formControl]="roleFilterCtrl">
+                          </ngx-mat-select-search>
                         </mat-option>
                         <mat-option *ngFor="let role of filteredRole| async" [value]="role.value">
                           {{role.viewValue}}
                         </mat-option>
                       </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="roleCtrl.errors?.required">  {{ 'manager.reqfield' | translate }} </mat-error>
+                      <mat-error class="wid-error-messages" *ngIf="roleCtrl.errors?.required">
+                        {{ 'manager.reqfield' | translate }} </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -175,15 +191,19 @@
                 <div fxFlex='50'>
                   <div class="wid-form-input">
                     <mat-form-field>
-                      <mat-select [placeholder]=" 'user.lang' | translate | uppercase"  [formControl]="languageCtrl" class="wid-Value-input"   #singleSelect>
+                      <mat-select [placeholder]=" 'user.lang' | translate | uppercase" [formControl]="languageCtrl"
+                        class="wid-Value-input" #singleSelect>
                         <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"  noEntriesFoundLabel="{{ 'general.nodata' | translate }}" [formControl]="languageFilterCtrl"></ngx-mat-select-search>
+                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" [formControl]="languageFilterCtrl">
+                          </ngx-mat-select-search>
                         </mat-option>
                         <mat-option *ngFor="let language of filteredLanguage| async" [value]="language.value">
                           {{language.viewValue}}
                         </mat-option>
                       </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="languageCtrl.errors?.required">  {{ 'manager.reqfield' | translate }} </mat-error>
+                      <mat-error class="wid-error-messages" *ngIf="languageCtrl.errors?.required">
+                        {{ 'manager.reqfield' | translate }} </mat-error>
                     </mat-form-field>
                   </div>
                 </div>

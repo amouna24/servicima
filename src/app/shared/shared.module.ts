@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatSelectModule } from '@angular/material/select';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -31,10 +33,11 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
+    ConfirmationModalComponent,
     BreadcrumbComponent,
+
     /* Directives */
     CanBeDisplayedDirective,
-    ConfirmationModalComponent,
 
   ],
   imports: [
@@ -44,6 +47,10 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     RouterModule,
     MaterialModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    NgxMatSelectSearchModule,
+    FormsModule,
     NgxDatatableModule,
     FormsModule,
     NgxMatSelectSearchModule
