@@ -25,7 +25,7 @@ export const environment = {
   companyLicenceUrl: 'http://192.168.1.22:8020/auth/companylicences/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1',
   userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
-  userRoleApiUrl: 'http://localhost:8025/auth/userroles/v1',
+  userRoleApiUrl: 'http://192.168.1.22:8025/auth/userroles/v1',
   redirectionHomeUrl: '/',
 
   /*************************** OTHERS ************************************/

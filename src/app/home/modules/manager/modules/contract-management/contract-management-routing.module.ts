@@ -7,6 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: ContractManagementComponent,
+    data: {
+      breadcrumb: 'contract-management'
+    },
     children: [
       {
         path: 'suppliers-contracts',
