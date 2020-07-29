@@ -21,6 +21,7 @@ import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,8 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     UserComponent,
     HomeCompanyComponent,
     ConfirmationModalComponent,
+    BreadcrumbComponent,
+
     /* Directives */
     CanBeDisplayedDirective,
 
@@ -68,6 +71,7 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     NgxDatatableModule,
     FlexLayoutModule,
     FormsModule,
+    BreadcrumbComponent,
   ]
 })
 export class SharedModule { }
