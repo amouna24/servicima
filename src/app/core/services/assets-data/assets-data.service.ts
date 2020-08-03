@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ICountry } from '@shared/models/countries.model';
 import { IActivity } from '@shared/models/activity.model';
 import { ICurrency } from '@shared/models/currency.model';
+import { ICities } from '@shared/models/cities.model';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 
 import { environment } from '../../../../environments/environment';
 
@@ -16,6 +18,8 @@ export class AssetsDataService {
   activityCode: string;
   allCurrencies: string;
   zipCode: string;
+
+  citiesList: ICities[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -36,7 +40,7 @@ export class AssetsDataService {
   /**************************************************************************
    * @description Get city
    * @param zipCode: zip code
-   * @return zip code
+   * @return city
    *************************************************************************/
   getCity(zipCode: string): Observable<any>  {
     return this.httpClient.get(`${this.zipCode}/${zipCode}`);

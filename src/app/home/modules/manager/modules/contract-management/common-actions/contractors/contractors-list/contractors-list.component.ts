@@ -5,10 +5,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { Subject, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { IUserInfo } from '@shared/models/userInfo.model';
+import { UserService } from '@core/services/user/user.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-contractors-list',
@@ -27,24 +28,21 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
+  private subscriptions: Subscription[] = [];
+
+  /**************************************************************************
+   * @description UserInfo
+   *************************************************************************/
+  userInfo: IUserInfo;
+
+  /**************************************************************************
+   * @description UserInfo
+   *************************************************************************/
   displayedColumns: string[] = ['contractor_code', 'contractor_name', 'email_address',
     'contact_email', 'creation_date', 'status', 'Actions'];
-
   dataSource: MatTableDataSource<IContractor>;
-
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-  /* Static Customers And Status Declaration */
-  Customers = [
-    { email: 'olivier@europcar.fr', name: 'Olivier' },
-    { email: 'frank@canalplus.fr', name: 'Frank' }
-  ];
-  Status = [
-    { value: 'Signed', viewValue: 'Signed' },
-    { value: 'Draft', viewValue: 'Draft' },
-  ];
-  /*******************************************/
+  @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true}) sort: MatSort;
 
   /*********** Contract Data Table ***********/
   contractorsList: IContractor[] = [];
@@ -52,6 +50,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private contractorService: ContractorsService,
+    private userService: UserService,
     private router: Router,
     private modalsServices: ModalService,
   ) {
@@ -60,7 +59,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   /**************************************************************************
    * @description load data emitted by child components
    *************************************************************************/
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  ngOnChanges(changes: { [propKey: string]: SimpleChange}) {
     console.log(this.type);
   }
 
@@ -68,7 +67,26 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    this.getContractors();
+    this.getInitialData();
+  }
+
+  /**************************************************************************
+   * @description Get all Initial Data from [ /app_initializer, Services ]
+   * From Assets: [ countries, currencies ]
+   * From Services [ RefData, UserInfo ]
+   * @return
+   * 1 Getting Assets Data with fork join from app_initializer
+   * 2 (after subs) Fetch refData [LEGAL_FORM, VAT, CONTRACT_STATUS] and
+   * initialize local tables
+   * 3 get current UserInfo
+   *************************************************************************/
+  getInitialData() {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+      if (!!data) {
+        this.userInfo = data;
+        this.getContractors();
+      }
+    }));
   }
 
   /**************************************************************************
@@ -100,7 +118,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * else return empty Table
    *************************************************************************/
   getContractors() {
-    this.contractorService.getContractors('').subscribe(
+    this.contractorService.getContractors(`?contractor_type=${this.type}&?email_address=${this.userInfo.user[0]['company_email']}`).subscribe(
       (response) => {
         this.contractorsList = response;
         this.display(this.contractorsList);
@@ -118,12 +136,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Navigate to ADD NEW CONTRACTOR Components
    *************************************************************************/
   addNewContractors() {
-    if (this.type === 'SUPPLIER') {
+    if ( this.type === 'SUPPLIER') {
       this.router.navigate(
-        ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: { id: '' } });
+        ['/manager/contract-management/suppliers-contracts/suppliers']);
     } else {
       this.router.navigate(
-        ['/manager/contract-management/clients-contracts/clients'], { queryParams: { id: '' } });
+        ['/manager/contract-management/clients-contracts/clients']);
     }
   }
 
@@ -132,20 +150,32 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Contractor Status
    *************************************************************************/
   onStatusChange(Contractor) {
-    this.modalsServices.displayConfirmationModal({ test: 'test' })
+    const confirmation = {
+      sentence: 'to change the status of this user',
+    };
+    this.modalsServices.displayConfirmationModal(confirmation)
       .subscribe(
         (res) => {
           if (res === 'true') {
+            console.log('resp:', res);
             if (Contractor.status === 'A') {
-              this.contractorService.disableContractor(Contractor._id).subscribe(
+              this.contractorService.disableContractor(Contractor._id)
+                .pipe(
+                  takeUntil(this.destroy$)
+                )
+                .subscribe(
                 (res1) => {
-                  console.log('resp:', res1);
+                  this.getContractors();
                 }
               );
             } else if (Contractor.status === 'D') {
-              this.contractorService.enableContractor(Contractor._id).subscribe(
+              this.contractorService.enableContractor(Contractor._id)
+                .pipe(
+                  takeUntil(this.destroy$)
+                )
+                .subscribe(
                 (res1) => {
-                  console.log('resp:', res1);
+                  this.getContractors();
                 }
               );
             }
@@ -161,7 +191,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   updateContractor(Contractor: IContractor): void {
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: { id: btoa(Contractor._id) } });
+      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: {  id: btoa(Contractor._id) } });
   }
 
   /**************************************************************************
@@ -171,5 +201,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 }

@@ -2,7 +2,7 @@
 
   <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
 
-    <div fxFlex="15" fxFlex.xs="10" fxLayoutGap="50px">
+    <div fxFlex="10" fxFlex.xs="10" fxLayoutGap="50px">
       <h2 fxFlexAlign="stretch" class="contract-title">{{ title }}</h2>
     </div>
     <mat-divider class="contract-divider"></mat-divider>
@@ -13,39 +13,7 @@
       </button>
     </div>
     <mat-divider class="contract-divider"></mat-divider>
-    <div fxFlex="30" fxFlex.xs="45" fxFlexAlign="stretch" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="column"
-         fxLayoutGap="2px" fxLayoutGap.xs="2px">
-      <mat-form-field fxFlex="25" fxFlex.xs="25" class="wid-Value-button">
-        <mat-label>All Customers</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let customer of Customers" [value]="customer.email">
-            {{customer.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field fxFlex="25" fxFlex.xs="25" class="wid-Value-button">
-        <mat-label>All Status</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let status of Status" [value]="status.value">
-            {{status.viewValue}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field fxFlex="25" fxFlex.xs="25" class="wid-Value-button">
-        <mat-label>From</mat-label>
-        <input matInput [matDatepicker]="fromPicker">
-        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-        <mat-datepicker #fromPicker color="primary"></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field fxFlex="25" fxFlex.xs="25" class="wid-Value-button">
-        <mat-label>To</mat-label>
-        <input matInput [matDatepicker]="toPicker">
-        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-        <mat-datepicker #toPicker color="primary"></mat-datepicker>
-      </mat-form-field>
-    </div>
-    <mat-divider class="contract-divider"></mat-divider>
-    <div fxFlex="55" fxFlex.xs="45">
+    <div fxFlex="60" fxFlex.xs="45">
       <mat-form-field class="wid-Value-button">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)">
@@ -88,7 +56,7 @@
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
             <td mat-cell *matCellDef="let row">
-              <button mat-icon-button *ngIf="row.status == 'ACTIVE'; else DIS">
+              <button mat-icon-button *ngIf="row.status == 'A'; else DIS">
                 <mat-icon class="mat-18">spellcheck</mat-icon>
               </button>
               <ng-template #DIS>
@@ -109,7 +77,7 @@
 
               <mat-menu #actions="matMenu">
                 <button mat-menu-item (click)="updateContractor(row)">Update</button>
-                <button mat-menu-item *ngIf="row.status == 'ACTIVE'; else DIS_MENU"
+                <button mat-menu-item *ngIf="row.status == 'A'; else DIS_MENU"
                         (click)="onStatusChange( {status: row.status, _id: row._id})">
                   Restore
                 </button>

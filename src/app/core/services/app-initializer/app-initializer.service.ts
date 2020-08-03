@@ -64,7 +64,7 @@ export class AppInitializerService {
     await forkJoin([
       this.assetsDataService.getAllActivityCode(),
       this.assetsDataService.getAllCountries(),
-      this.assetsDataService.getAllCurrencies()
+      this.assetsDataService.getAllCurrencies(),
     ]).toPromise().then(
       (data) => {
         this.activityCodeList = data[0];

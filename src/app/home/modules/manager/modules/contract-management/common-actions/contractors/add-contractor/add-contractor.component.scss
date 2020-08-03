@@ -57,3 +57,17 @@
 .wid-tabs-icon {
   margin-right: 8px;
 }
+
+/* ink bar style */
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  background-image: linear-gradient(to top, #4497be, #4199c2, #3f9bc7, #3c9dcb, #399fd0);
+  height: 1px;
+}
+/* label style */
+::ng-deep .mat-tab-label{
+  color: black;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
