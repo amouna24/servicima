@@ -29,7 +29,6 @@ export class UploadService {
 
   getImages() {
     return this.http.get(`${environment.userApiUrl}/api/`);
-
   }
 
 }

@@ -24,7 +24,7 @@ $accentColorAuth: #8dde06;
 @mixin font($height, $fit, $family, $size, $weight, $stretch, $style, $line, $spacing, $align, $color, $width) {
         height: $height;
         object-fit: $fit;
-        font-family: $family, serif;
+        font-family: $family, serif !important;
         font-size: $size;
         font-weight: $weight;
         font-stretch: $stretch;

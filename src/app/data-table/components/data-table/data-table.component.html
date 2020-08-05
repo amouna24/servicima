@@ -67,21 +67,23 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column [frozenRight]="true" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-            [resizeable]="false" [checkboxable]="false" [cellClass]="'row-actions'" [width]="100">
+            [resizeable]="false" [checkboxable]="false" [cellClass]="'row-actions'" [width]="100" >
             <ng-template ngx-datatable-header-template>
                 actions
             </ng-template>
-            <ng-template ngx-datatable-cell-template>
-                <div id="row-actions-container">
-                    <button mat-icon-button tabindex="-1">
-                        <mat-icon class="icon material-icons-outlined">archive</mat-icon>
-                    </button>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div id="row-actions-container">
+              <button mat-icon-button tabindex="-1">
+                <mat-icon  class="icon material-icons-outlined">
+                  archive
+                </mat-icon>
+              </button>
 
-                    <button mat-icon-button tabindex="-1">
-                        <mat-icon class="icon material-icons-outlined">edit</mat-icon>
-                    </button>
-                </div>
-            </ng-template>
+              <button mat-icon-button tabindex="-1">
+                <mat-icon class="icon material-icons-outlined" (click)="OnUpdate(row._id)">edit</mat-icon>
+              </button>
+            </div>
+          </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
 </div>

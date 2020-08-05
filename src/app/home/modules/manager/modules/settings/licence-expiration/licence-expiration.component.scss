@@ -1,0 +1,19 @@
+.confirm-dialog-container #close-icon:hover{
+  cursor: pointer;
+  color: black;
+}
+.close{
+  justify-content: flex-end;
+  cursor: pointer
+}
+.container-button{
+ text-align: center; 
+}
+.buy-button{
+ background-color: #d7c831;
+ color: white;
+}
+.icon-close{
+  display:flex;
+  justify-content: flex-end;
+ }

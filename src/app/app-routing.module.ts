@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthModule, AuthGuard } from '@widigital-group/auth-npm-front';
+
 import { environment } from 'src/environments/environment';
 
 import { ErrorComponent } from './pages/error/error.component';
@@ -11,8 +12,7 @@ const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'manager/dashboard',
-        canActivate: [AuthGuard]
+        redirectTo: 'manager/dashboard'
     },
     {
         path: '',

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, forkJoin, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -13,16 +14,16 @@ export class UserService {
   userInfo: IUserInfo;
   userCredentials: string;
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
-
-  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
+  constructor(private httpClient: HttpClient,
+              private localStorageService: LocalStorageService, ) {
   }
 
    /**
     * @description get user info
     */
-    async getUserInfo() {
+    getUserInfo(): void {
      this.userCredentials = this.localStorageService.getItem('userCredentials');
-     await this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
+      this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
        `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
        .subscribe((data) => {
             this.userInfo = data;
@@ -38,4 +39,5 @@ export class UserService {
   getUserInfoById(application: string, email: string): Observable<IUserInfo[]> {
    return  this.httpClient.get<IUserInfo[]>(`${environment.userGatewayApiUrl}/getprofileinfos?application_id=${application}&email_address=${email}`);
   }
-  }
+
+}

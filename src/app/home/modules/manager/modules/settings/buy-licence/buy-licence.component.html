@@ -1,0 +1,98 @@
+<div class="dialog-container">
+  <ng-template canBeDisplayed [canBeDisplayed]='param' >
+  <h1 class="title"> Acheter un forfait particuliers</h1>
+</ng-template>
+  <mat-vertical-stepper [linear]="isLinear" #stepper>
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Compte</ng-template>
+        <div fxLayout="row" fxLayoutGap="25px">
+          <div > {{name}}: {{emailAddress}}</div>
+          <button mat-button color='primary' class="button-logout"> Deconnexion</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Facturation</ng-template>
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group">
+          <mat-radio-button class="example-radio-button" *ngFor="let facturation of facturations" [value]="facturation">
+            {{facturation}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button color="primary" matStepperNext>Continue</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Paiement</ng-template>
+
+      <form [formGroup]="paymentForm">
+        <div>
+          <div>
+            <!-- Email address -->
+            <mat-list>
+              <mat-divider></mat-divider>
+              <mat-radio-group @slideView name="payment" formControlName="payment">
+                <mat-radio-button @slideView class="example-radio-button" [value]="3">
+                  <img src="assets/img/paypal.png" height="42px" alt="">
+                </mat-radio-button>
+                <mat-divider></mat-divider>
+                <mat-radio-button @slideView class="example-radio-button" [value]="1">
+                  <img src="assets/img/carte-credit.jpg" height="32px" class="img-card" alt="">
+                </mat-radio-button>
+                <mat-divider></mat-divider>
+                <mat-radio-button @slideView class="example-radio-button" [value]="2">
+                  <img src="assets/img/sepa.png" height="42px" alt="">
+                </mat-radio-button>
+              </mat-radio-group>
+            </mat-list>
+            <div @slideInOut *ngIf='paymentForm.value.payment === 2' style="width: 80%;margin: auto;">
+              <div fxLayout="row" fxLayoutGap="50px">
+                <mat-form-field appearance="outline">
+                  <input [placeholder]=" 'user.lastname' | translate | uppercase" autocomplete="off" matInput
+                    class="wid-input-value" formControlName="lastName" name="lastName" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <input [placeholder]=" 'user.firstname' | translate | uppercase" autocomplete="off" matInput
+                    class="wid-input-value" formControlName="firstName" name="firstName" required />
+                </mat-form-field>
+              </div>
+              <mat-form-field appearance="outline" class="container-input">
+                <input [placeholder]=" 'COUNTRY'" autocomplete="off" matInput class="wid-input-value"
+                  formControlName="country" name="country" required />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="container-input">
+                <input [placeholder]=" 'IBAN'" autocomplete="off" matInput class="wid-input-value"
+                  formControlName="iban" name="iban" required />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="container-input">
+                <input [placeholder]=" 'ADRESSE DE FACTURATION'" autocomplete="off" matInput class="wid-input-value"
+                  formControlName="address" name="address" required />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="container-input">
+                <input [placeholder]=" 'SUITE DE ADRESSE DE FACTURATION'" autocomplete="off" matInput
+                  class="wid-input-value" formControlName="suiteAddress" name="suiteAddress" required />
+              </mat-form-field>
+              <div fxLayout="row" fxLayoutGap="50px">
+                <mat-form-field appearance="outline">
+                  <input [placeholder]=" 'COMMUNE/VILLE'" autocomplete="off" matInput class="wid-input-value"
+                    formControlName="city" name="city" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <input [placeholder]=" 'CODE POSTAL'" autocomplete="off" matInput class="wid-input-value"
+                    formControlName="zipCode" name="zipCode" required />
+                </mat-form-field>
+              </div>
+              <div class="container-button">
+                <button mat-button class="button-next" [disabled]="!paymentForm.valid"> SUIVANT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

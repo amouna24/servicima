@@ -17,7 +17,7 @@ $RomanAndItalic : Rubik;
 $RegularFamily: Montserrat;
 //color
 $primaryColorAuth: #2E384D;
-$drakColorAuth: #2E384D;
+$darkColorAuth: #2E384D;
 $lightColorAuth: #fff;
 $accentColorAuth: #DE9318;
 //image
@@ -29,7 +29,7 @@ $relaxPath : "./assets/img/relax.png";
 
         height: $height;
         object-fit: $fit;
-        font-family: $family, serif;
+        font-family: $family, serif !important;
         font-size: $size !important;
         font-weight: $weight;
         font-stretch: $stretch;

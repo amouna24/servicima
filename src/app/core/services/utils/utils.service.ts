@@ -23,7 +23,7 @@ export class UtilsService {
   }
 
   /**
-   * @description get refdata with specific type
+   * @description get refData with specific type
    * @param company: company
    * application :application
    * languageId: language id
@@ -97,6 +97,7 @@ export class UtilsService {
         value.companyKey.application_id === this.getApplicationID(applicationCode)
       )._id;
   }
+
   /**************************************************************************
    * @description Get Application NAME
    * @param APPLICATION_ID the application id
@@ -149,6 +150,32 @@ export class UtilsService {
         this.filterData(list, filterCtrl, filtered);
       });
   }
+
+  /**
+   * @description calculate difference date between two date
+   */
+  differenceDay(date1: Date, date2: number): number {
+    const endDate: any = new Date(date1);
+    const startDate: any = new Date(date2);
+    let days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    if (days < 0) {
+      days = 0;
+      return days;
+    }
+    return days;
+  }
+
+  /**
+   * @description Add icon
+   * @param name; name
+   * @param path :path
+   */
+  addIcon(obj): void {
+    obj.forEach((data) => this.matIconRegistry.addSvgIcon(
+      data.name,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(data.path)
+    ));
+}
 
   /**
    * @description Add icon

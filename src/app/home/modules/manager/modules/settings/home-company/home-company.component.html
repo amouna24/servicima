@@ -13,8 +13,8 @@
             <div fxFlex='20' [ngStyle.xs]="{'width': '90%'}">
               <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
                 <div  fxLayoutAlign="center center">
-                  <img src='assets/img/default.jpg' class="avatar" width='40%' height="40%"
-                    [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
+                  <img src='../../../../../../../assets/img/avatar.png' class="avatar" width='40%' height="40%"
+                       [ngStyle.xs]="{ 'width.px' : 100 , 'height.px' : 120}">
                 </div>
                 <div fxLayoutAlign="center center">
                   <input  type="file" id="file" name="file" accept=".jpg, .jpeg, .png" />
@@ -32,7 +32,7 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <input class="wid-Value-input" matInput autocomplete="off" required
+                          <input class="wid-input-value"  matInput autocomplete="off" required
                             [placeholder]="'homecompany.email' | translate" formControlName="emailAddress"
                             [ngStyle.xs]="{'font-size': '15px'}">
                         </mat-form-field>
@@ -42,7 +42,7 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <input class="wid-Value-input" autocomplete="off" matInput required
+                          <input class="wid-input-value"  autocomplete="off" matInput required
                             [placeholder]=" 'homecompany.companyname' | translate" formControlName="companyName"
                             [ngStyle.xs]="{'font-size': '15px'}" />
                         </mat-form-field>
@@ -55,11 +55,11 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <mat-select [placeholder]=" 'homecompany.registrationcountry' | translate" [formControl]="registryCountryCtrl" class="wid-Value-input"  #singleSelect>
+                          <mat-select [placeholder]=" 'homecompany.registrationcountry' | translate" formControlName="registryCountryCtrl" class="wid-input-value"  #singleSelect>
                           <mat-option>
                             <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                    noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                   [formControl]="registryCountryFilterCtrl"></ngx-mat-select-search>
+                                                   formControlName="registryCountryFilterCtrl"></ngx-mat-select-search>
                           </mat-option>
                           <mat-option *ngFor="let registryCountry of filteredRegistryCountry| async"
                                       [value]="registryCountry.value">
@@ -67,7 +67,7 @@
                           </mat-option>
                         </mat-select>
                         <mat-error class="wid-error-messages"
-                        *ngIf="registryCountryCtrl.errors?.required">
+                        *ngIf="form.value.registryCountryCtrl.errors?.required">
                {{ 'general.required' | translate }} </mat-error>
 
 
@@ -78,7 +78,7 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <input class="wid-Value-input" matInput autocomplete="off"
+                          <input class="wid-input-value"  matInput autocomplete="off"
                             [placeholder]="'homecompany.registrationnumber' | translate"
                             formControlName="registrationNumber" [ngStyle.xs]="{'font-size': '15px'}">
                         </mat-form-field>
@@ -101,19 +101,19 @@
                     <!-- Activity code -->
                     <div fxFlex='50' class="activity-code">
                       <div >
-                        <div *ngIf="this.registryCountryCtrl.value !=='FRA'" class="wid-form-input">
+                        <div *ngIf="form.value.registryCountryCtrl !=='FRA'" class="wid-form-input">
                           <mat-form-field>
                             <input matInput class="wid-input-value"
-                              [placeholder]=" 'homecompany.activitycode' | translate" [formControl]="activityCodeCtrl">
+                              [placeholder]=" 'homecompany.activitycode' | translate" formControlName="activityCodeCtrl">
                           </mat-form-field>
                         </div>
-                        <div *ngIf="this.registryCountryCtrl.value  ==='FRA'" class="wid-form-input">
+                        <div *ngIf="form.value.registryCountryCtrl  ==='FRA'" class="wid-form-input">
                           <mat-form-field >
-                            <mat-select  [placeholder]=" 'homecompany.activitycode' | translate" [formControl]="activityCodeCtrl" class="wid-Value-input"   #singleSelect>
+                            <mat-select  [placeholder]=" 'homecompany.activitycode' | translate" formControlName="activityCodeCtrl" class="wid-input-value"  #singleSelect>
                               <mat-option>
                                 <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                        noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                       [formControl]="activityCodeFilterCtrl"></ngx-mat-select-search>
+                                                       formControlName="activityCodeFilterCtrl"></ngx-mat-select-search>
                               </mat-option>
                               <mat-option (blur)="setDescriptionActivity(activityCode.value)"
                                           *ngFor="let activityCode of filteredActivityCode| async"
@@ -134,11 +134,11 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <mat-select [placeholder]=" 'homecompany.currency' | translate" [formControl]="currencyCtrl" class="wid-Value-input"  #singleSelect>
+                          <mat-select [placeholder]=" 'homecompany.currency' | translate" formControlName="currencyCtrl" class="wid-input-value"   #singleSelect>
                             <mat-option>
                               <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                     [formControl]="currencyFilterCtrl"></ngx-mat-select-search>
+                                                     formControlName="currencyFilterCtrl"></ngx-mat-select-search>
                             </mat-option>
                             <mat-option *ngFor="let currency of filteredCurrency| async" [value]="currency.value">
                               {{currency.viewValue}}
@@ -152,11 +152,11 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <mat-select [formControl]="legalFormCtrl" [placeholder]=" 'homecompany.legalform' | translate" class="wid-Value-input"  #singleSelect>
+                          <mat-select formControlName="legalFormCtrl" [placeholder]=" 'homecompany.legalform' | translate" class="wid-input-value"   #singleSelect>
                             <mat-option>
                               <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                     [formControl]="legalFormFilterCtrl"></ngx-mat-select-search>
+                                                     formControlName="legalFormFilterCtrl"></ngx-mat-select-search>
                             </mat-option>
                             <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="legalForm.value">
                               {{legalForm.viewValue}}
@@ -173,7 +173,7 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <input class="wid-Value-input" autocomplete="off" matInput
+                          <input class="wid-input-value" autocomplete="off" matInput
                             [placeholder]=" 'homecompany.capital' | translate" formControlName="capital"
                             [ngStyle.xs]="{'font-size': '15px'}" />
                         </mat-form-field>
@@ -184,11 +184,11 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <mat-select [placeholder]=" 'homecompany.vat' | translate" [formControl]="vatCtrl" class="wid-Value-input"  #singleSelect>
+                          <mat-select [placeholder]=" 'homecompany.vat' | translate" formControlName="vatCtrl" class="wid-input-value"   #singleSelect>
                             <mat-option>
                               <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                     [formControl]="vatFilterCtrl"></ngx-mat-select-search>
+                                                     formControlName="vatFilterCtrl"></ngx-mat-select-search>
                             </mat-option>
                             <mat-option *ngFor="let vat of filteredVat| async" [value]="vat.value">
                               {{vat.viewValue}}
@@ -204,13 +204,12 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <textarea class="wid-Value-input" rows="9" formControlName="address"
+                          <textarea class="wid-input-value" rows="9" formControlName="address"
                             class="area-text" [placeholder]="'homecompany.adress' | translate" autocomplete="off" matInput
                             required [ngStyle.xs]="{'font-size': '15px'}">
                       </textarea>
                           <mat-error class="wid-error-messages" *ngIf="form.controls.address.errors?.required">
                             {{ 'general.required' | translate }} </mat-error>
-
                         </mat-form-field>
                       </div>
                     </div>
@@ -220,7 +219,7 @@
                       <div fxFlex='50'>
                         <div class="wid-form-input">
                           <mat-form-field>
-                            <input class="wid-Value-input" required autocomplete="off" matInput required
+                            <input class="wid-input-value"  required autocomplete="off" matInput required
                               [placeholder]=" 'homecompany.zipcode' | translate" formControlName="zipCode"
                               [ngStyle.xs]="{'font-size': '15px'}" (blur)="getCity(form.value.zipCode)" />
                             <mat-error class="wid-error-messages" *ngIf="form.controls.zipCode.errors?.required">
@@ -233,18 +232,18 @@
                       <div>
                         <div class="wid-form-input">
                           <mat-form-field>
-                            <mat-select [placeholder]=" 'homecompany.country' | translate" [formControl]="countryCtrl" class="wid-Value-input"  #singleSelect>
+                            <mat-select [placeholder]=" 'homecompany.country' | translate" formControlName="countryCtrl" class="wid-input-value"   #singleSelect>
                               <mat-option>
                                 <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                        noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                                       [formControl]="countryFilterCtrl"></ngx-mat-select-search>
+                                                       formControlName="countryFilterCtrl"></ngx-mat-select-search>
                               </mat-option>
                               <mat-option *ngFor="let country of filteredCountry| async" [value]="country.value">
                                 {{country.viewValue}}
                               </mat-option>
                             </mat-select>
                             <mat-error class="wid-error-messages"
-                            *ngIf="countryCtrl.errors?.required">  {{ 'general.required' | translate }}</mat-error>
+                            *ngIf="form.value.countryCtrl.errors?.required">  {{ 'general.required' | translate }}</mat-error>
 
                           </mat-form-field>
                         </div>
@@ -252,9 +251,9 @@
                       <!-- City -->
                       <div>
                         <div>
-                          <div class="wid-form" *ngIf="this.registryCountryCtrl.value !=='FRA'" class="wid-form-input">
+                          <div class="wid-form" *ngIf="form.value.registryCountryCtrl !=='FRA'" class="wid-form-input">
                             <mat-form-field>
-                              <input class="wid-Value-input" autocomplete="off" required matInput required
+                              <input class="wid-input-value" autocomplete="off" required matInput required
                                 [placeholder]=" 'homecompany.city' | translate" formControlName="city"
                                 [ngStyle.xs]="{'font-size': '15px'}" />
                               <mat-error class="wid-error-messages" *ngIf="form.controls.city.errors?.required">
@@ -263,7 +262,7 @@
                             </mat-form-field>
                           </div>
                         </div>
-                        <div class="wid-form" *ngIf="this.registryCountryCtrl.value ==='FRA'" class="wid-form-input">
+                        <div class="wid-form" *ngIf="form.value.registryCountryCtrl ==='FRA'" class="wid-form-input">
                           <mat-form-field>
                             <mat-select class="wid-input-value" formControlName="city" name="city" required [placeholder]=" 'homecompany.city' | translate" required>
                               <div *ngFor="let city of city.cities ">
@@ -284,7 +283,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value" autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.employeenum' | translate" formControlName="employeeNum"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>
@@ -294,7 +293,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value" autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.website' | translate" formControlName="webSite"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>
@@ -307,7 +306,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value" autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.contactemail' | translate" formControlName="contactEmail"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>
@@ -317,7 +316,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value"  autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.linkedin' | translate" formControlName="linkedinAccount"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>
@@ -330,7 +329,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value"  autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.twitter' | translate" formControlName="twitterAccount"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>
@@ -340,7 +339,7 @@
                           <div fxFlex='50'>
                             <div class="wid-form-input">
                               <mat-form-field>
-                                <input class="wid-Value-input" autocomplete="off" matInput
+                                <input class="wid-input-value"  autocomplete="off" matInput
                                   [placeholder]=" 'homecompany.youtube' | translate" formControlName="youtubeAccount"
                                   [ngStyle.xs]="{'font-size': '15px'}" />
                               </mat-form-field>

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ColumnMode, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import { DataTableService } from '../../services/data-table.service';
 import { ConfigurationModalComponent } from '../configuration-modal/configuration-modal.component';
@@ -16,7 +17,7 @@ export class DataTableComponent implements OnInit, OnChanges {
 
   @Input() data: any[] = [];
   @Input() tableCode: string;
-
+  @Output() valueChange = new EventEmitter();
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   ColumnMode = ColumnMode;
@@ -33,12 +34,16 @@ export class DataTableComponent implements OnInit, OnChanges {
     name: ''
   };
 
-  constructor(private dataTableService: DataTableService, private modalService: ModalService, private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer) {
+  constructor(private dataTableService: DataTableService,
+              private modalService: ModalService,
+              private matIconRegistry: MatIconRegistry,
+              private router: Router,
+              private domSanitizer: DomSanitizer, ) {
     this.registerMatIcons();
   }
 
   ngOnChanges(changes): void {
+  //  this.data = changes.data.currentValue;
   }
 
   ngOnInit(): void {
@@ -135,6 +140,9 @@ export class DataTableComponent implements OnInit, OnChanges {
       default:
         return '#000';
     }
+  }
+  OnUpdate(id) { // You can give any function name
+    this.valueChange.emit(id);
   }
 
 }

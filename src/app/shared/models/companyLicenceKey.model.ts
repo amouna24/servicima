@@ -1,4 +1,4 @@
-export interface CompanyLicenceKeyModel {
+export interface ICompanyLicenceKeyModel {
     application_id: string;
     email_adress: string;
     licence_code: string;

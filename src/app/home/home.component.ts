@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-home',
@@ -8,10 +7,9 @@ import { UserService } from '@core/services/user/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor() { }
 
   ngOnInit(): void {
-   this.userService.getUserInfo();
   }
 
 }

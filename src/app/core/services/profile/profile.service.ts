@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { IUserModel } from '@shared/models/user.model';
 
 import { environment } from 'src/environments/environment';
+import { IUserRolesModel } from '@shared/models/userRoles.model';
+import { IMessageCodeModel } from '@shared/models/messageCode.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class ProfileService {
    * @description: http request get to get the user by his id
    * @param id: string
    */
-  getUserById(id: string): Observable<any> {
+  getUserById(id: string): Observable<IUserModel> {
     return this.httpClient
       .get<IUserModel>(`${environment.userApiUrl}?_id=${id}`);
   }
@@ -35,24 +37,24 @@ export class ProfileService {
    * @description: http request put to update the information of user
    * @param user: user
    */
-  updateUser(user: object): Observable<any> {
+  updateUser(user: object): Observable<IUserModel> {
     return this.httpClient
-      .put(environment.userApiUrl, user);
+      .put<IUserModel>(environment.userApiUrl, user);
   }
 
   /**
    * @description: http request post to add a new user
    * @param user: user
    */
-  UpdateUserRole(user: object): Observable<any> {
-    return this.httpClient.put(`${environment.userRoleApiUrl}`, user);
+  UpdateUserRole(user: object): Observable<IUserRolesModel> {
+    return this.httpClient.put<IUserRolesModel>(`${environment.userRoleApiUrl}`, user);
   }
   /**
    * @description: http request post to add a new user
    * @param user: user
    */
-  addNewProfile(user: object): Observable<any> {
-    return this.httpClient.post(`${environment.userGatewayApiUrl}/addprofile`, user);
+  addNewProfile(user: object): Observable<IMessageCodeModel> {
+    return this.httpClient.post<IMessageCodeModel>(`${environment.userGatewayApiUrl}/addprofile`, user);
   }
 
   /**
@@ -62,11 +64,11 @@ export class ProfileService {
    * @param status: status
    * @param updated_by: email user
    */
-  userChangeStatus(id: string, status: string, updatedBy: string) {
+  userChangeStatus(id: string, status: string, updatedBy: string): Observable<IMessageCodeModel> {
     if (status === 'ACTIVE') {
-      return this.httpClient.delete(`${environment.userApiUrl}/disable?_id=${id}&updated_by=${updatedBy}`);
+      return this.httpClient.delete<IMessageCodeModel>(`${environment.userApiUrl}/disable?_id=${id}&updated_by=${updatedBy}`);
     } else if (status === 'DISABLED') {
-      return this.httpClient.put(`${environment.userApiUrl}/enable?_id=${id}&updated_by=${updatedBy}`, null);
+      return this.httpClient.put<IMessageCodeModel>(`${environment.userApiUrl}/enable?_id=${id}&updated_by=${updatedBy}`, null);
     }
   }
 
@@ -74,8 +76,8 @@ export class ProfileService {
    * @description update company credentials
    * @param company: company object to update
    */
-  updateCompany(company: object): Observable<any> {
+  updateCompany(company: object): Observable<IMessageCodeModel>  {
     return this.httpClient
-      .put(environment.companyApiUrl, company);
+      .put<IMessageCodeModel>(environment.companyApiUrl, company);
   }
 }
