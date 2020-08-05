@@ -4,6 +4,7 @@ import { AuthService } from '@widigital-group/auth-npm-front';
 import { RoutingStateService } from '@core/services/routingState/routing-state.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { TranslationCustomLoaderService } from '@core/services/translation/translation-custom-loader.service';
 
 import { environment } from '../environments/environment';
 
@@ -23,9 +24,11 @@ export class AppComponent implements OnInit {
     public translateService: TranslateService,
     private modalService: ModalService,
     private routingState: RoutingStateService,
+    private translationCustomLoaderService: TranslationCustomLoaderService,
   ) {
     this.authService.languageSubject.subscribe(
       (language) => {
+        this.translationCustomLoaderService.getLocalTranslation(`${language['langId']}-${language['langCode']}`);
         this.translateService.use(`${language['langId']}-${language['langCode']}`);
       }
     );

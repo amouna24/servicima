@@ -134,7 +134,7 @@
                     <div fxFlex='50'>
                       <div class="wid-form-input">
                         <mat-form-field>
-                          <mat-select [formControl]="currencyCtrl" class="wid-Value-input"  #singleSelect>
+                          <mat-select [placeholder]=" 'homecompany.currency' | translate" [formControl]="currencyCtrl" class="wid-Value-input"  #singleSelect>
                             <mat-option>
                               <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
                                                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}"

@@ -2,7 +2,7 @@
 /********************************************************/
                     /* container */
 /********************************************************/
-.wid-container{
+.wid-container {
   height: 402px;
   background-color: $lightColorAuth;
 }
@@ -11,7 +11,7 @@
                   /* logo */
 /********************************************************/
 
-.wid-logo{
+.wid-logo {
   height: 35%;
 }
 
@@ -19,7 +19,7 @@
                   /* image */
 /********************************************************/
 
-.wid-image{
+.wid-image {
   height: 60%;
 }
 
@@ -31,38 +31,41 @@ height: 65%;
                   /* title */
 /********************************************************/
 
-.wid-title{
+.wid-title {
   height: 28%;
 }
 /********************************************************/
                   /* form */
 /********************************************************/
 
-.wid-container-form{
+.wid-container-form {
 height: 49%;
 }
 
-.wid-container-form-login{
+.wid-container-form-login {
 height: 52%;
 }
 
+.wid-container-stepper {
+  height: 381px;
+}
 
 /********************************************************/
                   /* footer */
 /********************************************************/
 
-.wid-footer{
+.wid-footer {
   height: 20%;
   width: 90%;
 }
 
-.wid-footer-password{
-height: 20%;
-width: 30%;
-margin-left: 190px;
+.wid-footer-password {
+  height: 20%;
+  width: 30%;
+  margin-left: 190px;
 }
 
-.container-button-stepper{
+.container-button-stepper {
   height: 100px;
 }
 
@@ -70,7 +73,7 @@ margin-left: 190px;
                   /* hide container */
 /********************************************************/
 
-.wid-container-hide-stepper{
+.wid-container-hide-stepper {
   height: 77%;
 }
 
@@ -81,20 +84,14 @@ margin-left: 190px;
   height: 9px;
 }
 
-
-
-
-
-
-
 /********************************************************/
                     /*  background image  */
 /********************************************************/
-.wid-background-image{
-    background-image: url($layerPath ) ;
-    min-height: 100%;
-    background-size: 100% auto;
-  }
+.wid-background-image {
+  background-image: url($layerPath ) ;
+  min-height: 100%;
+  background-size: 100% auto;
+}
 
 .wid-image-password {
   background-image: url($relaxPath);
@@ -107,12 +104,10 @@ margin-left: 190px;
   min-height: 100%;
 }
 
-
-
 /********************************************************/
                     /* mat-form-field */
 /********************************************************/
-.mat-form-field{
+.mat-form-field {
   font-size: 9px;
   flex-grow:1;
 }
@@ -120,49 +115,38 @@ margin-left: 190px;
 /********************************************************/
                   /* container mat form field */
 /********************************************************/
-.wid-form{
+.wid-form {
   display:flex;
   padding-top:6px;
-}
-/********************************************************/
-                  /* mat-input error outline color*/
-/********************************************************/
-.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
-background-color: #fce4e4!important;
-color:red !important ;
 }
 
 /********************************************************/
                   /* input outline color*/
 /********************************************************/
 .mat-form-field-appearance-outline  .mat-form-field-outline {
-background-color: #e0e7ff !important;
+  background-color: white !important;
 }
 
 /********************************************************/
                   /* container form*/
 /********************************************************/
-.wid-form-class{
+.wid-form-class {
   width: 90%;
 }
 /********************************************************/
                   /* input value */
 /********************************************************/
-.wid-Value-input {
-@include font(14px,contain,$RegularFamily,12px,normal,normal,normal,normal,normal,left, $accentColorAuth,57px);
+.wid-input-value {
+@include font(18px,contain,$RegularFamily,13px,normal,normal,normal,normal,normal,left, #848282,57px);
   cursor: pointer;
 }
-.wid-input-value{
-  @include font(14px,contain,$RegularFamily,12px,normal,normal,normal,normal,normal,left, $accentColorAuth,57px);
-}
-
 
 /********************************************************/
                     /*  value button  */
 /********************************************************/
 .wid-Value-button {
   @include font(auto,$object-fit,$RegularFamily,15px,$font-weight ,$font-stretch,$font-style,1.4,$letter-normal,center,$lightColorAuth,auto);
-  }
+}
 
 /********************************************************/
                   /*  background button  */
@@ -170,10 +154,10 @@ background-color: #e0e7ff !important;
 .wid-background-button {
   height: 38px;
   width: 100%;
-  background-image: linear-gradient(to top, #86B8D1,  #2F7CA3 );
+  background:#76ff03 ;
 }
 
-.wid-Value-button[disabled]{
+.wid-Value-button[disabled] {
   color: white !important;
   opacity:0.5;
 }
@@ -189,10 +173,10 @@ background-color: #e0e7ff !important;
   text-align: right;
   color:  $primaryColorAuth;
 }
-.wid-background-button-company{
+.wid-background-button-company {
   width: 20%;
-
 }
+
 /********************************************************/
                   /* select language  */
 /********************************************************/
@@ -201,8 +185,8 @@ width:80px;
 max-width:110px;
 font-size: 15px;
 position: absolute;
-top: 0px;
-right: 0;
+top: 14px;
+right: 15px;
 }
 
 .wid-servicima {
@@ -210,8 +194,8 @@ right: 0;
 }
 
 
-.wid-label-form{
-  @include font(9px,$object-fit,$RomanAndItalic,12px,$font-weight2 ,$font-stretch,$font-style,$line-height,1.2px,left,$primaryColorAuth,168px);
+.wid-label-form {
+  @include font(9px,$object-fit,$RegularFamily,12px,$font-weight2 ,$font-stretch,$font-style,$line-height,1.2px,left,$primaryColorAuth,168px);
 }
 
 .wid-already-have-an-acco {
@@ -231,18 +215,21 @@ right: 0;
 
 .wid-free-forever-no-cre {
   @include font(14px,$object-fit,$RegularFamily,11px,$font-weight1 ,$font-stretch,$font-style,1.47,$letter-normal,left,#8798ad,269px);
-  }
-
-.errorDuplicated{
-  @include label(auto,14px,0);
-  color: red;
-  margin: 19px 0;
 }
 
-.icon-password{
+.errorDuplicated {
+  @include label(auto,14px,1);
+  color: red;
+  font-family:$RegularFamily;
+}
+
+.wid-error-messages {
+  font-family:$RegularFamily;
+}
+
+.icon-password {
   cursor: pointer;
 }
-
 
 /********************************************************/
                   /* stepper  */
@@ -253,10 +240,10 @@ right: 0;
   text-align: center;
 }
 
-.wid-specific-input{
-width: 48%;
+.wid-specific-input {
+  width: 48%;
 }
-.wid-registration-label{
+.wid-registration-label {
   width: 183px;
 }
 
@@ -268,25 +255,12 @@ width: 48%;
 }
 
 .mat-horizontal-content-container {
-  height: 530px ;
-  width: 1080px;
+  width: 990px;
 }
 
 /********************************************************/
-                  /*phone */
+                  /* Flag */
 /********************************************************/
-.intl-tel-input input, .intl-tel-input input[type=text], .intl-tel-input input[type=tel] {
-  background: #e0e7ff !important;
-  }
-
-
-
-  .intl-tel-input input{
-    height: 36px;
-  }
-  .intl-tel-input{
-  margin-top: 1px;
-}
 
 .flag {
   width: 16px;
@@ -294,19 +268,11 @@ width: 48%;
   box-sizing: border-box;
   margin-right: 3px;
 }
-.noaccount{
-  margin: -22px;
+.noaccount {
+  margin: -25px;
 }
-.team-image{
- margin-right:30px;
-}
-.specific-button-stepper{
-  width: 100%;
-  height: 43px;
-}
-.error-phone{
-  font-size: 9px;
-  margin: 0 13px;
+.team-image {
+  margin-right:30px;
 }
 
 .required::after {
@@ -330,13 +296,28 @@ width: 48%;
   width: 371px;
 }
 .button-general{
- margin-top: 47px;
+  margin-top: 30px;
+  width: 108%; padding: 0 !important;
 }
 
 mat-error{
   font-size: 10px;
 }
 
+button , span, div {
+  outline-style: none !important;
+}
+
+.mat-horizontal-stepper-header-container {
+  width: 51%;
+  text-align: center;
+  margin: auto;
+  height: 42px;
+}    
+
+ /********************************************************/
+                  /* Loading button */
+/********************************************************/
 @keyframes spinner {
   to {transform: rotate(360deg);}
 }
@@ -355,7 +336,4 @@ mat-error{
   border: 2px solid #ffffff;
   border-top-color: #2F7CA3;
   animation: spinner .8s linear infinite;
-}
-button {
-  outline-style: none !important;
 }
