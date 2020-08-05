@@ -59,10 +59,10 @@ export class TranslationCustomLoaderService implements TranslateLoader {
    */
   getLocalTranslation(langCode: string): Observable<any> {
     return new Observable((o: Observer<any>) => {
-      if (this.localTranslationFile) {
+     /* if (this.localTranslationFile) {
         o.next(this.localTranslationFile);
         o.complete();
-      } else {
+      } */
         this.http.get(`./assets/i18n/${langCode}.json`).subscribe(
           (data) => {
             this.localTranslationFile = data;
@@ -74,7 +74,6 @@ export class TranslationCustomLoaderService implements TranslateLoader {
             o.complete();
           },
         );
-      }
     });
   }
 
