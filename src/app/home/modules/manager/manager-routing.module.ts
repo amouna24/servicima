@@ -25,7 +25,10 @@ const routes: Routes = [
       },
       {
         path: 'contract-management',
-        loadChildren: () => import('./modules/contract-management/contract-management.module').then(m => m.ContractManagementModule)
+        loadChildren: () => import('./modules/contract-management/contract-management.module').then(m => m.ContractManagementModule),
+        data: {
+          breadcrumb: 'contract-management'
+        },
       },
       {
         path: 'expenses',

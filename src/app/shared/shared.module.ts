@@ -72,6 +72,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     FlexLayoutModule,
     FormsModule,
     BreadcrumbComponent,
+    NgxMatSelectSearchModule,
   ]
 })
 export class SharedModule { }

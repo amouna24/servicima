@@ -5,7 +5,7 @@ export interface IContractor {
   _id: string;
   contractorKey: IContractorKey;
   contractor_name: string;
-  activity_sector?: string;
+  language?: string;
   registry_code?: string;
   legal_form?: string;
   vat_nbr?: string;

@@ -13,7 +13,10 @@ const routes: Routes = [
     children: [
       {
         path: 'manager',
-        loadChildren: () => import('./modules/manager/manager.module').then(m => m.ManagerModule)
+        loadChildren: () => import('./modules/manager/manager.module').then(m => m.ManagerModule),
+        data: {
+          breadcrumb: 'manager'
+        },
       },
       {
         path: 'collaborater',

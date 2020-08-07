@@ -5,17 +5,14 @@
     <div fxFlex="10" fxFlex.xs="10">
       <h2 fxFlexAlign="stretch" class="contract-title">{{ title }}</h2>
     </div>
-    <mat-tab-group dynamicHeight color="primary"  fxFlex="90" fxFlex.xs="90">
+    <mat-tab-group dynamicHeight mat-stretch-tabs color="primary"  fxFlex="90" fxFlex.xs="90">
       <mat-tab fxLayout="column" fxLayout.xs="column" fxFlexFill>
         <ng-template mat-tab-label>
-          <mat-icon class="wid-tabs-icon">description</mat-icon>
           GENERAL
         </ng-template>
         <form [formGroup]="contractorForm" fxLayout="column" fxLayout.xs="column" fxFlexFill>
           <div fxFlex="50" fxFlex.xs="43" fxLayout="row" fxLayout.xs="column">
             <div fxFlex="50" fxFlex.xs="50" fxLayout="column" fxLayout.xs="column">
-              <!-- <span class="contract-sub-title">USER INFORMATION</span>
-              <mat-divider class="contract-divider"></mat-divider>-->
               <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
                    fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
                 <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
@@ -50,16 +47,20 @@
                    fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
                 <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
                   <mat-label>Country</mat-label>
-                  <input type="text" matInput formControlName="country_cd" [matAutocomplete]="country">
-                  <mat-autocomplete #country="matAutocomplete" [displayWith]="displayCountryName">
-                    <mat-option *ngFor="let option of filteredCountries | async" [value]="option">
-                      {{option.COUNTRY_DESC}}
+                  <mat-select formControlName="country_cd">
+                    <mat-option>
+                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                             noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                             formControlName="filteredCountriesControl"></ngx-mat-select-search>
                     </mat-option>
-                  </mat-autocomplete>
+                    <mat-option *ngFor="let option of filteredCountries | async" [value]="option.value" >
+                      {{option.viewValue}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
                   <mat-label>zip code</mat-label>
-                  <input matInput formControlName="zip_code" (keyup)="getCity($event.target.value)">
+                  <input matInput formControlName="zip_code" (keyup)="getCity($event.target.value,'', false)">
                   <mat-error class="wid-error-messages"
                              *ngIf="contractorForm.controls.zip_code.errors?.pattern">
                     Invalid zipCode</mat-error>
@@ -68,15 +69,23 @@
               </div>
               <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
                    fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>City</mat-label>
-                  <input type="text" matInput formControlName="city" [matAutocomplete]="city">
-                  <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
-                    <mat-option *ngFor="let option of filteredCities | async" [value]="option">
-                      {{option.city}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
+                <ng-container *ngIf="contractorForm.controls.country_cd.value != 'FRA'; else setSelect">
+                  <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                    <mat-label>City</mat-label>
+                    <input matInput  type="text" placeholder="city" formControlName="city">
+                  </mat-form-field>
+                </ng-container>
+                <ng-template #setSelect>
+                  <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                    <mat-label>City</mat-label>
+                    <mat-select formControlName="city">
+                      <mat-option *ngFor="let option of filteredCities" [value]="option.city" >
+                        {{option.city}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ng-template>
+
               </div>
             </div>
             <div fxFlex="50" fxFlex.xs="50" fxLayout="column" fxLayout.xs="column">
@@ -101,16 +110,24 @@
                    fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
                 <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
                   <mat-label>Currency</mat-label>
-                  <input type="text" matInput formControlName="currency_cd" [matAutocomplete]="currency_cd">
-                  <mat-autocomplete #currency_cd="matAutocomplete" [displayWith]="displayCurrencyName">
-                    <mat-option *ngFor="let option of filteredCurrencies | async" [value]="option">
-                      {{option.CURRENCY_DESC}}
+                  <mat-select formControlName="currency_cd">
+                    <mat-option>
+                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                             noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                             formControlName="filteredCurrencyControl"></ngx-mat-select-search>
                     </mat-option>
-                  </mat-autocomplete>
+                    <mat-option *ngFor="let option of filteredCurrencies | async" [value]="option.value" >
+                      {{option.viewValue}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Taxe</mat-label>
-                  <input matInput formControlName="taxe_cd">
+                  <mat-label>Tax</mat-label>
+                  <mat-select formControlName="taxe_cd">
+                    <mat-option *ngFor="let tax of companyTaxList" [value]="tax.companyTaxKey.tax_code">
+                      {{ tax.tax_desc }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -167,7 +184,6 @@
       </mat-tab>
       <mat-tab label="Contact">
         <ng-template mat-tab-label>
-          <mat-icon class="wid-tabs-icon">contact_mail</mat-icon>
           CONTACTS
         </ng-template>
         Content 2
