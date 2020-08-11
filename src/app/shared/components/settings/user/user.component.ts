@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { ReplaySubject, Subscription, Subject } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -16,6 +16,10 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UploadService } from '@core/services/upload/upload.service';
+import { map } from 'rxjs/internal/operators/map';
+import { indicate } from '@core/services/utils/progress';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
@@ -41,18 +45,32 @@ export class UserComponent implements OnInit, OnDestroy {
   genderList: IViewParam[];
   typeList: IViewParam[];
   roleList: IViewParam[];
-   /** subscription */
-   subscriptionModal: Subscription;
-   private subscriptions: Subscription[] = [];
+  avatar: any;
+  photo: FormData;
+  progress = 0;
 
-  constructor(private utilsService: UtilsService, private route: ActivatedRoute,
-    private profileService: ProfileService, private appInitializerService: AppInitializerService,
-    private userService: UserService, private localStorageService: LocalStorageService,
-    private modalService: ModalService, private routingState: RoutingStateService,
-    private formBuilder: FormBuilder, public dialog: MatDialog) {
+  /** subscription */
+  subscriptionModal: Subscription;
+  private subscriptions: Subscription[] = [];
+  loading$ = new Subject<boolean>();
+
+  constructor(private utilsService: UtilsService,
+    private uploadService: UploadService,
+    private route: ActivatedRoute,
+    private profileService: ProfileService,
+    private appInitializerService: AppInitializerService,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
+    private routingState: RoutingStateService,
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog,
+    private sanitizer: DomSanitizer, ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
   }
+  files = [];
+  url = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
   public genderCtrl: FormControl = new FormControl('', Validators.required);
   public titleCtrl: FormControl = new FormControl('', Validators.required);
@@ -109,7 +127,7 @@ export class UserComponent implements OnInit, OnDestroy {
         const id = params.id || null;
         if (id) {
           this.showCompany = true;
-          this.subscriptions.push( this.profileService.getUserById(id).subscribe(user => {
+          this.subscriptions.push(this.profileService.getUserById(id).subscribe(user => {
             this.user = user[0];
             this.subscriptions.push(this.userService.getUserInfoById(this.user['userKey']['application_id'], this.user['userKey']['email_address']).
               subscribe(((data) => {
@@ -125,6 +143,7 @@ export class UserComponent implements OnInit, OnDestroy {
         }
       }, (err) => console.error(err));
     }
+
     this.getRefdata();
   }
 
@@ -134,7 +153,7 @@ export class UserComponent implements OnInit, OnDestroy {
   initForm(): void {
     this.form = this.formBuilder.group({
       emailAddress: ['', [Validators.required, Validators.email]],
-      companyEmail: ['', ],
+      companyEmail: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       profPhone: [''],
@@ -168,6 +187,45 @@ export class UserComponent implements OnInit, OnDestroy {
       linkedinAccount: this.user['linkedin_url'],
       homeCompany: this.companyName,
     });
+    console.log(this.form.value);
+    this.getImage(this.user['photo']);
+  }
+
+  /**
+   * @description : set the Image to UpLoad and preview
+   */
+  previewFile(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    // File Preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.avatar = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+    formData.append('file', file);
+    this.photo = formData;
+  }
+
+  /**
+   * @description : Upload Image to Server  with async to promise
+   */
+  async uploadFile(formData) {
+    return this.uploadService.uploadImage(formData).pipe(indicate(this.loading$), map(response => response.file.filename)).toPromise();
+  }
+
+  /**
+   * @description : GET IMAGE FROM BACK AS BLOB
+   *  create Object from blob and convert to url
+   */
+  getImage(id) {
+    this.uploadService.getImage(id).subscribe(
+      data => {
+        const unsafeImageUrl = URL.createObjectURL(data);
+        this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+      }, error => {
+        console.log(error);
+      });
   }
 
   /**
@@ -176,7 +234,7 @@ export class UserComponent implements OnInit, OnDestroy {
   getRefdata(): void {
     const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
     const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
-       list);
+      list);
     this.titleList = refData['PROF_TITLES'];
     this.genderList = refData['GENDER'];
     this.typeList = refData['PROFILE_TYPE'];
@@ -207,7 +265,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description : update the user info
    * or add a new user
    */
-  update(): void {
+  async update(): Promise<void> {
     if (this.currentUrl === '/manager/add-user') {
       const newUser = {
         application_id: this.applicationId,
@@ -230,22 +288,24 @@ export class UserComponent implements OnInit, OnDestroy {
         linkedin_url: this.form.value.linkedinAccount,
         twitter_url: this.form.value.twitterAccount,
         youtube_url: this.form.value.youtubeAccount,
+        photo: await this.uploadFile(this.photo)
+
       };
       const confirmation = {
         sentence: 'to add user',
         name: newUser.first_name + newUser.last_name,
       };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
         if (value === 'true') {
           this.subscriptions.push(this.profileService.addNewProfile(newUser).subscribe(
-        (res) => console.log(res),
-        (err) => console.error(err),
-      ));
-    }
-    this.subscriptionModal.unsubscribe();
+            (res) => console.log(res),
+            (err) => console.error(err),
+          ));
+        }
+        this.subscriptionModal.unsubscribe();
       });
     } else {
-// user to update
+      // user to update
       const newUser = {
         application_id: this.user['userKey'].application_id,
         email_address: this.form.value.emailAddress,
@@ -262,9 +322,10 @@ export class UserComponent implements OnInit, OnDestroy {
         linkedin_url: this.form.value.linkedinAccount,
         twitter_url: this.form.value.twitterAccount,
         youtube_url: this.form.value.youtubeAccount,
+        photo: await this.uploadFile(this.photo)
       };
 
-// object to update user role
+      // object to update user role
       const user = {
         'application_id': newUser.application_id,
         'email_address': newUser.email_address,
@@ -277,32 +338,32 @@ export class UserComponent implements OnInit, OnDestroy {
         sentence: 'to update user',
         name: newUser.first_name + newUser.last_name,
       };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
         if (value === 'true') {
-          this.subscriptions.push( this.profileService.updateUser(newUser).subscribe(
-        res => {
-          this.infoUser['user'][0] = res;
-          if (newUser.email_address === this.emailAddress) {
-            if (this.currentUrl === '/manager/profile') {
-              this.userService.connectedUser$.next(this.infoUser);
-            } else {
-              this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe((data) => {
-                this.infoUser['userroles'][0] = data as IUserRolesModel;
-                this.userService.connectedUser$.next(this.infoUser);
-              },
-                (err) => console.error(err)));
-            }
-          } else {
-            this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe(() => {
-            }, (err) => console.error(err)));
-          }
-        },
-        err => console.error(err),
-      ));
+          this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
+            res => {
+              if (newUser.email_address === this.emailAddress) {
+                this.infoUser['user'][0] = res;
+                if (this.currentUrl === '/manager/profile') {
+                  this.userService.connectedUser$.next(this.infoUser);
+                } else {
+                  this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe((data) => {
+                    this.infoUser['userroles'][0] = data as IUserRolesModel;
+                    this.userService.connectedUser$.next(this.infoUser);
+                  },
+                    (err) => console.error(err)));
+                }
+              } else {
+                this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe(() => {
+                }, (err) => console.error(err)));
+              }
+            },
+            err => console.error(err),
+          ));
+        }
+        this.subscriptionModal.unsubscribe();
+      });
     }
-    this.subscriptionModal.unsubscribe();
-    });
-  }
   }
 
   /**

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientsListComponent implements OnInit {
 
-  type = 'CLIENT';
+  type = 'CUSTOMER';
   title = 'Client Management';
 
   constructor() { }

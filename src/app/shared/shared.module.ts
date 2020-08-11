@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatSelectModule } from '@angular/material/select';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -20,6 +22,7 @@ import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -31,10 +34,12 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
-    /* Directives */
-    CanBeDisplayedDirective,
+    ConfirmationModalComponent,
+    BreadcrumbComponent,
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
+    /* Directives */
+    CanBeDisplayedDirective
 
   ],
   imports: [
@@ -44,6 +49,10 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
     RouterModule,
     MaterialModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    NgxMatSelectSearchModule,
+    FormsModule,
     NgxDatatableModule,
     FormsModule,
     NgxMatSelectSearchModule
@@ -64,7 +73,9 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
     NgxDatatableModule,
     FlexLayoutModule,
     FormsModule,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    BreadcrumbComponent,
+    NgxMatSelectSearchModule,
   ]
 })
 export class SharedModule { }

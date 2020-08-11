@@ -76,9 +76,6 @@ export class ConfigurationModalComponent implements OnInit {
   }
 
   resetColumns() {
-    console.log(this.displayedColumns);
-    console.log(this.canBeDisplayedColumns);
-    console.log(this.data);
 
     this.displayedColumns = this.data.actualColumns;
     this.canBeDisplayedColumns = this.helperService.difference(this.data.canBeDisplayedColumns, this.displayedColumns, 'prop');

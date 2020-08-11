@@ -18,6 +18,8 @@ export const environment = {
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8030/servicima/contracts/v1',
   contractorApiUrl: 'http://192.168.1.22:8028/servicima/contractors/v1',
+  companyTaxApiUrl: 'http://192.168.1.22:8036/servicima/companytaxes/v1',
+  companyPaymentTermsApiUrl: 'http://192.168.1.22:8033/servicima/companypaymentterms/v1',
 
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8010/auth/credentials/v1',
@@ -25,8 +27,13 @@ export const environment = {
   companyLicenceUrl: 'http://192.168.1.22:8020/auth/companylicences/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8016/auth/v1',
   userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
-  userRoleApiUrl: 'http://localhost:8025/auth/userroles/v1',
+  userRoleApiUrl: 'http://192.168.1.22:8025/auth/userroles/v1',
   redirectionHomeUrl: '/',
+
+  /************************* UPLOAD FILE ******************************/
+  uploadFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/upload',
+  getFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/image/',
+  getFilesUrl: 'http://127.0.0.1:8013/auth/users/v1/api/',
 
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',

@@ -21,7 +21,7 @@ const routes: Routes = [
     },
    {
         path: 'auth',
-        loadChildren: () => import('./lazy-auth-module-wrapper/auth-lib-wrapper.module').then(m => m.AuthWrapperModule)
+        loadChildren: () => import('@widigital-group/auth-npm-front').then(m => m.AuthLibModule)
     },
     {
         path: 'notfound',
