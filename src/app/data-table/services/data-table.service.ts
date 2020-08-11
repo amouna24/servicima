@@ -38,7 +38,7 @@ export class DataTableService {
 
   generateColumns(configs: any[]): any[] {
     return configs.map((config) => {
-      return { prop: config.dataListKey.column_code, name: config.column_desc };
+      return { prop: config.dataListKey.column_code, name: config.column_desc, type: config.type || null };
     });
   }
 }

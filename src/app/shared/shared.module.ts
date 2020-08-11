@@ -21,6 +21,7 @@ import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
+import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
@@ -35,9 +36,10 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     HomeCompanyComponent,
     ConfirmationModalComponent,
     BreadcrumbComponent,
-
+    ConfirmationModalComponent,
+    SkeletonLoaderComponent,
     /* Directives */
-    CanBeDisplayedDirective,
+    CanBeDisplayedDirective
 
   ],
   imports: [
@@ -71,6 +73,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     NgxDatatableModule,
     FlexLayoutModule,
     FormsModule,
+    SkeletonLoaderComponent,
     BreadcrumbComponent,
     NgxMatSelectSearchModule,
   ]
