@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
@@ -55,7 +56,8 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatIconModule,
   ],
   exports: [
     MaterialModule,
@@ -76,6 +78,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     SkeletonLoaderComponent,
     BreadcrumbComponent,
     NgxMatSelectSearchModule,
+    MatIconModule,
   ]
 })
 export class SharedModule { }

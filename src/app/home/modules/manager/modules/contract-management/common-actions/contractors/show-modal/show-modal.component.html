@@ -1,0 +1,36 @@
+<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
+  <div class="title-container">
+    <span>Contact Info</span>
+  </div>
+  <div class="close-button-container">
+    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
+      <mat-icon class="icon material-icons-outlined">close</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<mat-dialog-content class="modal-body-container">
+
+  <div class="config-wrapper" fxLayout="row wrap" fxLayout.xs="row" fxFlexFill>
+    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+      <mat-list role="list">
+        <mat-list-item role="listitem">MAIN CONTACT</mat-list-item>
+        <mat-list-item role="listitem">FIRST NAME</mat-list-item>
+        <mat-list-item role="listitem">LAST NAME</mat-list-item>
+        <mat-list-item role="listitem">PHONE NUMBER</mat-list-item>
+        <mat-list-item role="listitem">CELL PHONE NUMBER</mat-list-item>
+      </mat-list>
+    </div>
+    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+      <mat-list role="list">
+        <mat-list-item role="listitem">{{ data.main_contact }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.first_name }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.last_name }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.phone_nbr }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.cell_phone_nbr }}</mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button [mat-dialog-close]="data">Cancel</button>
+</mat-dialog-actions>

@@ -1,195 +1,268 @@
 <div class="contract-container">
-
-  <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
-
-    <div fxFlex="10" fxFlex.xs="10">
-      <h2 fxFlexAlign="stretch" class="contract-title">{{ title }}</h2>
-    </div>
-    <mat-tab-group dynamicHeight mat-stretch-tabs color="primary"  fxFlex="90" fxFlex.xs="90">
-      <mat-tab fxLayout="column" fxLayout.xs="column" fxFlexFill>
-        <ng-template mat-tab-label>
-          GENERAL
-        </ng-template>
-        <form [formGroup]="contractorForm" fxLayout="column" fxLayout.xs="column" fxFlexFill>
-          <div fxFlex="50" fxFlex.xs="43" fxLayout="row" fxLayout.xs="column">
-            <div fxFlex="50" fxFlex.xs="50" fxLayout="column" fxLayout.xs="column">
-              <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Social Reason</mat-label>
-                  <input matInput formControlName="contractor_name">
-                </mat-form-field>
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Legal Form</mat-label>
-                  <mat-select formControlName="legal_form">
-                    <mat-option *ngFor="let lf of legalFormList" [value]="lf.value">
-                      {{ lf.viewValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Registry Code</mat-label>
-                  <input matInput formControlName="registry_code">
-                </mat-form-field>
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Language</mat-label>
-                  <mat-select formControlName="language">
-                    <mat-option *ngFor="let lan of languagesList" [value]="lan.LanguageKey.language_code">
-                      {{ lan.language_desc }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Country</mat-label>
-                  <mat-select formControlName="country_cd">
-                    <mat-option>
-                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                                             noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                             formControlName="filteredCountriesControl"></ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option *ngFor="let option of filteredCountries | async" [value]="option.value" >
-                      {{option.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>zip code</mat-label>
-                  <input matInput formControlName="zip_code" (keyup)="getCity($event.target.value,'', false)">
-                  <mat-error class="wid-error-messages"
-                             *ngIf="contractorForm.controls.zip_code.errors?.pattern">
-                    Invalid zipCode</mat-error>
-
-                </mat-form-field>
-              </div>
-              <div fxFlex="25" fxFlex.xs="33"  fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <ng-container *ngIf="contractorForm.controls.country_cd.value != 'FRA'; else setSelect">
-                  <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>City</mat-label>
-                    <input matInput  type="text" placeholder="city" formControlName="city">
-                  </mat-form-field>
-                </ng-container>
-                <ng-template #setSelect>
-                  <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>City</mat-label>
-                    <mat-select formControlName="city">
-                      <mat-option *ngFor="let option of filteredCities" [value]="option.city" >
-                        {{option.city}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ng-template>
-
-              </div>
-            </div>
-            <div fxFlex="50" fxFlex.xs="50" fxLayout="column" fxLayout.xs="column">
-              <span class="contract-sub-title">PAYMENT INFORMATION</span>
-              <mat-divider class="contract-divider"></mat-divider>
-              <div fxFlex="25" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Payment Code</mat-label>
-                  <input matInput formControlName="payment_cd">
-                </mat-form-field>
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>VAT number</mat-label>
-                  <mat-select formControlName="vat_nbr">
-                    <mat-option *ngFor="let vat of vatList" [value]="vat.value">
-                      {{ vat.viewValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div fxFlex="25" fxFlex.xs="33" fxFlexAlign="stretch" fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Currency</mat-label>
-                  <mat-select formControlName="currency_cd">
-                    <mat-option>
-                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                                             noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                                             formControlName="filteredCurrencyControl"></ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option *ngFor="let option of filteredCurrencies | async" [value]="option.value" >
-                      {{option.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
-                  <mat-label>Tax</mat-label>
-                  <mat-select formControlName="taxe_cd">
-                    <mat-option *ngFor="let tax of companyTaxList" [value]="tax.companyTaxKey.tax_code">
-                      {{ tax.tax_desc }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-          <div fxFlex="35" fxFlex.xs="42" fxLayout="column" fxLayout.xs="column" >
-            <span  fxFlex="10" fxFlex.xs="5" fxFlexAlign="stretch" class="contract-sub-title">CONTACT INFORMATION</span>
-            <mat-divider class="contract-divider"></mat-divider>
-            <div fxFlex="90" fxFlex.xs="50" fxLayout="column" fxLayout.xs="column">
-                <div fxFlex="30" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
-                     fxLayout.xs="column"
-                     fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                  <mat-form-field fxFlex="50" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="contact_email">
-                  </mat-form-field>
-                  <mat-form-field fxFlex="50" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>Web Site</mat-label>
-                    <input matInput formControlName="web_site">
-                  </mat-form-field>
-                </div>
-                <div fxFlex="30" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
-                     fxLayout.xs="column"
-                     fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                  <mat-form-field fxFlex="20" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>Phone Number 1</mat-label>
-                    <input matInput type="tel"  placeholder="+200 555-555-1234" formControlName="phone_nbr">
-                  </mat-form-field>
-                  <mat-form-field fxFlex="20" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>Phone Number 2</mat-label>
-                    <input matInput type="tel" placeholder="+200 555-555-1234" formControlName="phone2_nbr">
-                  </mat-form-field>
-                  <mat-form-field fxFlex="20" fxFlex.xs="100" class="wid-Value-button">
-                    <mat-label>Fax Number</mat-label>
-                    <input matInput formControlName="fax_nbr">
-                  </mat-form-field>
-                </div>
-                <div fxFlex="40" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
-                   fxLayout.xs="column"
-                   fxLayoutGap="10px" fxLayoutGap.xs="10px">
-                <mat-form-field fxFlex="100" fxFlex.xs="100" fxLayoutGap="10px" class="wid-Value-button">
-                  <mat-label>Address</mat-label>
-                  <textarea matInput formControlName="address" placeholder="Ex. DELTA, 48 Boulevard Jourdan, 75014 Paris, France. ..."></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-          <div fxFlex="15" fxFlex.xs="20" fxFlexAlign="auto" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="row"
-               fxFlexOffset="3" fxLayoutGap="20px">
-            <button (click)="addNewContractor()" [disabled]="!contractorForm.valid" fxFlex="10" fxFlex.xs="20" mat-button
-                    class="wid-Value-button wid-background-button contract-actions">Save
-            </button>
-          </div>
-        </form>
-      </mat-tab>
-      <mat-tab label="Contact">
-        <ng-template mat-tab-label>
-          CONTACTS
-        </ng-template>
-        Content 2
-      </mat-tab>
-    </mat-tab-group>
-
+  <div>
+    <h2 fxFlexAlign="stretch" class="contract-title">{{ title }}</h2>
   </div>
 
+  <div fxLayout="row" fxLayout.xs="row" fxFlexFill>
+    <mat-selection-list class="selectionList" fxLayout="column" fxLayoutAlign="space-between center" fxLayout.xs="row"
+                        fxFlex="25" fxFlex.xs="10" #shoes [multiple]="false">
+      <mat-list-option class="listOptions" [routerLinkActive]="" value="shoe">
+        <mat-icon mat-list-icon svgIcon="general"></mat-icon>
+        General
+      </mat-list-option>
+      <mat-list-option class="listOptions" value="shoe">
+        <mat-icon mat-list-icon svgIcon="contact"></mat-icon>
+        Contacts
+      </mat-list-option>
+      <mat-list-option class="listOptions" value="shoe">
+        <mat-icon mat-list-icon svgIcon="credit-card"></mat-icon>
+        Payments
+      </mat-list-option>
+    </mat-selection-list>
+
+
+    <form [formGroup]="contractorForm" fxLayout="column" fxLayout.xs="row" fxFlex="75" fxFlex.xs="90" fxFlexFill>
+      <div fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span fxFlex="9" fxFlex.xs="4" class="contract-sub-title">General</span>
+          <mat-divider fxFlex="1" fxFlex.xs="1" class="contract-divider"></mat-divider>
+          <div fxLayout="column" fxLayout.xs="column" fxFlex="90" fxFlex.xs="95">
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="first_name">
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="last_name">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender_cd">
+                  <mat-option *ngFor="let gl of gendersList" [value]="gl.value">
+                    {{ gl.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Title</mat-label>
+                <mat-select formControlName="title_cd">
+                  <mat-option *ngFor="let pt of profTitlesList" [value]="pt.value">
+                    {{ pt.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Social Reason</mat-label>
+                <input matInput formControlName="contractor_name">
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Legal Form</mat-label>
+                <mat-select formControlName="legal_form">
+                  <mat-option *ngFor="let lf of legalFormList" [value]="lf.value">
+                    {{ lf.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Registry Code</mat-label>
+                <input matInput formControlName="registry_code">
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Language</mat-label>
+                <mat-select formControlName="language">
+                  <mat-option *ngFor="let lan of languagesList" [value]="lan.LanguageKey.language_code">
+                    {{ lan.language_desc }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country_cd">
+                  <mat-option>
+                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                           noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                           formControlName="filteredCountriesControl"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let option of filteredCountries | async" [value]="option.value">
+                    {{option.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>zip code</mat-label>
+                <input matInput formControlName="zip_code" (keyup)="getCity($event.target.value,'', false)">
+                <mat-error class="wid-error-messages"
+                           *ngIf="contractorForm.controls.zip_code.errors?.pattern">
+                  Invalid zipCode
+                </mat-error>
+
+              </mat-form-field>
+            </div>
+            <div >
+              <ng-container *ngIf="contractorForm.controls.country_cd.value != 'FRA'; else setSelect">
+                <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                  <mat-label>City</mat-label>
+                  <input matInput type="text" placeholder="city" formControlName="city">
+                </mat-form-field>
+                <mat-slide-toggle class="canSign" fxFlex="40" fxFlex.xs="100" formControlName="can_sign_contract">Can Sign Contract</mat-slide-toggle>
+                </div>
+              </ng-container>
+              <ng-template #setSelect>
+                <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                     fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px" >
+                <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                  <mat-label>City</mat-label>
+                  <mat-select formControlName="city">
+                    <mat-option *ngFor="let option of filteredCities" [value]="option.city">
+                      {{option.city}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle class="canSign" fxFlex="40" fxFlex.xs="100">Can Sign Contract</mat-slide-toggle>
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div  fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span fxFlex="10" fxFlex.xs="5" fxFlexAlign="stretch" class="contract-sub-title">CONTACT INFORMATION</span>
+          <mat-divider class="contract-divider"></mat-divider>
+          <div fxFlex="100" fxFlex.xs="100" fxLayout="column" fxLayout.xs="column">
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="26" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Main Contact</mat-label>
+                <input matInput formControlName="main_contact">
+              </mat-form-field>
+              <mat-form-field fxFlex="26" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phone_nbr_c">
+              </mat-form-field>
+              <mat-form-field fxFlex="27" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Cell Phone Number</mat-label>
+                <input matInput formControlName="cell_phone_nbr">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="contact_email">
+              </mat-form-field>
+              <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Web Site</mat-label>
+                <input matInput formControlName="web_site">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="26" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Phone Number 1</mat-label>
+                <input matInput type="tel" placeholder="+200 555-555-1234" formControlName="phone_nbr">
+              </mat-form-field>
+              <mat-form-field fxFlex="26" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Phone Number 2</mat-label>
+                <input matInput type="tel" placeholder="+200 555-555-1234" formControlName="phone2_nbr">
+              </mat-form-field>
+              <mat-form-field fxFlex="27" fxFlex.xs="100" class="wid-Value-button">
+                <mat-label>Fax Number</mat-label>
+                <input matInput formControlName="fax_nbr">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field fxFlex="80" fxFlex.xs="100" fxLayoutGap="10px" class="wid-Value-button">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address"
+                          placeholder="Ex. DELTA, 48 Boulevard Jourdan, 75014 Paris, France. ..."></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div  fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span class="contract-sub-title">PAYMENT INFORMATION</span>
+          <mat-divider class="contract-divider"></mat-divider>
+          <div fxFlex="25" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
+               fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+            <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+              <mat-label>Payment Code</mat-label>
+              <input matInput formControlName="payment_cd">
+            </mat-form-field>
+            <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+              <mat-label>VAT number</mat-label>
+              <mat-select formControlName="vat_nbr">
+                <mat-option *ngFor="let vat of vatList" [value]="vat.value">
+                  {{ vat.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.xs="33" fxFlexAlign="stretch" fxFlexAlign.xs="auto" fxLayout="row"
+               fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+            <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+              <mat-label>Currency</mat-label>
+              <mat-select formControlName="currency_cd">
+                <mat-option>
+                  <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                         noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                         formControlName="filteredCurrencyControl"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let option of filteredCurrencies | async" [value]="option.value">
+                  {{option.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="40" fxFlex.xs="100" class="wid-Value-button">
+              <mat-label>Tax</mat-label>
+              <mat-select formControlName="taxe_cd">
+                <mat-option *ngFor="let tax of companyTaxList" [value]="tax.companyTaxKey.tax_code">
+                  {{ tax.tax_desc }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="10" fxFlex.xs="10" fxFlexAlign="auto" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="row"
+           fxFlexOffset="3" fxLayoutGap="20px">
+        <button (click)="addNewContractor()" [disabled]="!contractorForm.valid" fxFlex="10" fxFlex.xs="20" mat-button
+                class="wid-Value-button wid-background-button contract-actions">Save
+        </button>
+      </div>
+    </form>
+  </div>
+
+
 </div>
+<!--
+
+-->

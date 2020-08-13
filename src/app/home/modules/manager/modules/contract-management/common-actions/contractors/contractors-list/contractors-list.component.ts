@@ -7,9 +7,12 @@ import { ContractorsService } from '@core/services/contractors/contractors.servi
 import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { IContractorContact } from '@shared/models/contractorContact.model';
+import { takeUntil } from 'rxjs/operators';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { UserService } from '@core/services/user/user.service';
-import { takeUntil } from 'rxjs/operators';
+
+import { ShowModalComponent } from '../show-modal/show-modal.component';
 
 @Component({
   selector: 'wid-contractors-list',
@@ -34,12 +37,13 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description UserInfo
    *************************************************************************/
   userInfo: IUserInfo;
+  contractorContactInfo: IContractorContact;
 
   /**************************************************************************
    * @description UserInfo
    *************************************************************************/
   displayedColumns: string[] = ['contractor_code', 'contractor_name', 'email_address',
-    'contact_email', 'creation_date', 'status', 'Actions'];
+    'contact_email', 'creation_date', 'status', 'show', 'Actions'];
   dataSource: MatTableDataSource<IContractor>;
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
@@ -87,6 +91,8 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
         this.getContractors();
       }
     }));
+    this.modalsServices.registerModals([
+      { modalName: 'showContact', modalComponent: ShowModalComponent }]);
   }
 
   /**************************************************************************
@@ -118,7 +124,11 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * else return empty Table
    *************************************************************************/
   getContractors() {
-    this.contractorService.getContractors(`?contractor_type=${this.type}&?email_address=${this.userInfo.user[0]['company_email']}`).subscribe(
+    this.contractorService.getContractors(`?contractor_type=${this.type}&?email_address=${this.userInfo.user[0]['company_email']}`)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
       (response) => {
         this.contractorsList = response;
         this.display(this.contractorsList);
@@ -191,7 +201,47 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   updateContractor(Contractor: IContractor): void {
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'], { queryParams: {  id: btoa(Contractor._id) } });
+      ['/manager/contract-management/suppliers-contracts/suppliers'],
+      { queryParams: {
+          id: btoa(Contractor._id),
+          cc: btoa(Contractor.contractorKey.contractor_code),
+          ea: btoa(Contractor.contractorKey.email_address)
+      }
+      });
+  }
+
+  /**************************************************************************
+   * @description: Show Contact
+   * @param Contractor contractor Object
+   * @return: Contact of Contractor
+   *************************************************************************/
+  showContact(Contractor: IContractor): void {
+    const confirmation = {
+      sentence: 'to change the status of this user',
+    };
+      this.contractorService.getContractorsContact(
+        `?contractor_code=${Contractor.contractorKey.contractor_code}&email_address=${Contractor.contractorKey.email_address}`
+      )
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(
+        (res) => {
+          this.contractorContactInfo = res[0];
+          this.modalsServices.displayModal('showContact', this.contractorContactInfo, '40%')
+            .pipe(
+              takeUntil(this.destroy$)
+            )
+            .subscribe(
+            (resp) => {
+              console.log(resp);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   /**************************************************************************

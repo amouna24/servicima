@@ -6,12 +6,14 @@ import { ContractManagementRoutingModule } from './contract-management-routing.m
 import { ContractManagementComponent } from './contract-management.component';
 import { AddContractorComponent } from './common-actions/contractors/add-contractor/add-contractor.component';
 import { ContractorsListComponent } from './common-actions/contractors/contractors-list/contractors-list.component';
+import { ShowModalComponent } from './common-actions/contractors/show-modal/show-modal.component';
 
 @NgModule({
   declarations: [
     ContractManagementComponent,
     AddContractorComponent,
     ContractorsListComponent,
+    ShowModalComponent,
   ],
     imports: [
         CommonModule,
