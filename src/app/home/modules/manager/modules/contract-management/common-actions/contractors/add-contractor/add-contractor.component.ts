@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
+import { combineLatest, concat, forkJoin, of, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ICities } from '@shared/models/cities.model';
 import { UserService } from '@core/services/user/user.service';
@@ -16,6 +16,7 @@ import { ILanguageModel } from '@shared/models/language.model';
 import { IContractor } from '@shared/models/contractor.model';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
 import { ICompanyTaxModel } from '@shared/models/companyTax.model';
+import { IContractorContact } from '@shared/models/contractorContact.model';
 
 @Component({
   selector: 'wid-add-contractor',
@@ -46,6 +47,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   legalFormList: IViewParam[] = [];
   statusList: IViewParam[] = [];
   companyTaxList: ICompanyTaxModel[] = [];
+  gendersList: IViewParam[] = [];
+  profTitlesList: IViewParam[] = [];
 
   /**************************************************************************
    * @description Filtered Data Declarations
@@ -69,6 +72,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    *************************************************************************/
   userInfo: IUserInfo;
   contractorInfo: IContractor;
+  contractorContactInfo: IContractorContact;
   companyEmail: string;
 
   constructor(
@@ -83,21 +87,30 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private companyTaxService: CompanyTaxService,
   ) {
-    this.contractorForm = new FormGroup({
-    });
+    this.utilsService.addIcon(
+      [
+        { name: 'general', path: '../assets/icons/general.svg'},
+        { name: 'credit-card', path: '../assets/icons/credit-card.svg'},
+        { name: 'contact', path: '../assets/icons/contact.svg'},
+      ]
+    );
+    this.contractorForm = new FormGroup({ });
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    this.initContractForm(null);
+    this.initContractForm(null, null);
     this.getInitialData();
     this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$)
+      )
       .subscribe(params => {
         if (this.canUpdate(params.id)) {
           this.contractorId = params.id;
-          this.getContractorByID(params.id);
+          this.getContractorByID(params);
         }
       });
 
@@ -106,7 +119,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Init Contract Form
    *************************************************************************/
-  initContractForm(contractor: IContractor) {
+  initContractForm(contractor: IContractor, contractorContact: IContractorContact) {
     if (contractor) {
       this.getCity(contractor.zip_code, contractor.city, true);
     }
@@ -117,7 +130,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       legal_form: [contractor === null ? '' : contractor.legal_form],
       vat_nbr: [contractor === null ? '' : contractor.vat_nbr, [Validators.required]],
       address: [contractor === null ? '' : contractor.address],
-      city: [contractor === null ? '' :  contractor.city],
+      city: [contractor === null ? '' : contractor.city],
       zip_code: [contractor === null ? '' : contractor.zip_code, [Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]],
       country_cd: [contractor === null ? '' : contractor.country_cd],
       phone_nbr: [contractor === null ? '' : contractor.phone_nbr],
@@ -128,6 +141,15 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       currency_cd: [contractor === null ? '' : contractor.currency_cd],
       taxe_cd: [contractor === null ? '' : contractor.taxe_cd],
       payment_cd: [contractor === null ? '' : contractor.payment_cd],
+      /* Contractor Contact */
+      main_contact: [contractorContact === null ? '' : contractorContact.main_contact],
+      can_sign_contract: [contractorContact === null ? '' : contractorContact.can_sign_contract],
+      first_name: [contractorContact === null ? '' : contractorContact.first_name],
+      last_name: [contractorContact === null ? '' : contractorContact.last_name],
+      gender_cd: [contractorContact === null ? '' : contractorContact.gender_cd],
+      title_cd: [contractorContact === null ? '' : contractorContact.title_cd],
+      phone_nbr_c: [contractorContact === null ? '' : contractorContact.phone_nbr],
+      cell_phone_nbr: [contractorContact === null ? '' : contractorContact.cell_phone_nbr],
       /* Filter Form Control */
       filteredCountriesControl: [''],
       filteredCurrencyControl: [''],
@@ -160,11 +182,13 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.utilsService.getRefData(
       this.utilsService.getCompanyId('ALL', 'ALL'),
       this.utilsService.getApplicationID('ALL'),
-      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS']
+      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
     this.statusList = this.utilsService.refData['CONTRACT_STATUS'];
     this.vatList = this.utilsService.refData['VAT'];
     this.legalFormList = this.utilsService.refData['LEGAL_FORM'];
+    this.gendersList = this.utilsService.refData['GENDER'];
+    this.profTitlesList = this.utilsService.refData['PROF_TITLES'];
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         console.log(data.user[0]['company_email']);
@@ -187,8 +211,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         (companyTax) => {
           this.companyTaxList = companyTax;
         },
-      (error) => {
-        console.log(error);
+        (error) => {
+          console.log(error);
         }
       );
   }
@@ -215,7 +239,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           (e) => {
             console.log(e);
           }
-      );
+        );
     } else if (update) {
       this.filteredCities.push({ city, code: 0});
     }
@@ -226,10 +250,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    */
   mapData(): void {
     this.appInitializerService.countriesList.forEach((country) => {
-      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC});
     });
     this.appInitializerService.currenciesList.forEach((currency) => {
-      this.currenciesList.push({ value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC });
+      this.currenciesList.push({ value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC});
     });
   }
 
@@ -240,80 +264,117 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * get data from Forms
    *************************************************************************/
   addNewContractor() {
-    const newC = this.contractorForm.value;
-    newC.application_id  = this.userInfo.company[0].companyKey.application_id;
-    newC.email_address  = this.userInfo.company[0].companyKey.email_address;
-    newC.contractor_code  = `${Math.random().toString(36).substring(7).toUpperCase()}`;
-    newC.contractor_type = this.type;
-    newC.currency_cd = this.contractorForm.controls.currency_cd.value;
-    newC.country_cd = this.contractorForm.controls.country_cd.value;
-    newC.language = this.contractorForm.controls.language.value;
-    newC.creation_date = Date.now();
-    newC.update_date = Date.now();
+    const newContractor = this.contractorForm.value;
+    newContractor.application_id = this.userInfo.company[0].companyKey.application_id;
+    newContractor.email_address = this.userInfo.company[0].companyKey.email_address;
+    newContractor.contractor_code = `${Math.random().toString(36).substring(7).toUpperCase()}`;
+    newContractor.contractor_type = this.type;
+    newContractor.currency_cd = this.contractorForm.controls.currency_cd.value;
+    newContractor.country_cd = this.contractorForm.controls.country_cd.value;
+    newContractor.language = this.contractorForm.controls.language.value;
+    newContractor.creation_date = Date.now();
+    newContractor.update_date = Date.now();
+    /* Contractor Contact */
+    newContractor.can_sign_contract = this.contractorForm.controls.can_sign_contract.value;
+    newContractor.gender_cd = this.contractorForm.controls.gender_cd.value;
+    newContractor.title_cd = this.contractorForm.controls.title_cd.value;
+    newContractor.language_cd = this.contractorForm.controls.language.value;
+    newContractor.phone_nbr = this.contractorForm.controls.phone_nbr_c.value;
+    console.log('new', newContractor);
     if (this.canUpdate(this.contractorId)) {
       const updatedC = this.contractorForm.value;
-      updatedC.application_id  = this.contractorInfo.contractorKey.application_id;
-      updatedC.email_address  = this.contractorInfo.contractorKey.email_address;
-      updatedC.contractor_code  = this.contractorInfo.contractorKey.contractor_code;
+      updatedC.application_id = this.contractorInfo.contractorKey.application_id;
+      updatedC.email_address = this.contractorInfo.contractorKey.email_address;
+      updatedC.contractor_code = this.contractorInfo.contractorKey.contractor_code;
       updatedC.contractor_type = this.contractorInfo.contractorKey.contractor_type;
       updatedC.currency_cd = this.contractorForm.controls.currency_cd.value;
       updatedC.country_cd = this.contractorForm.controls.country_cd.value;
       updatedC.city = this.contractorForm.controls.city.value;
       updatedC.language = this.contractorForm.controls.language.value;
       updatedC.update_date = Date.now();
-      this.contractorService.updateContractor(updatedC).subscribe(
-        (res) => {
-          console.log('updated successfully', res);
-          if (this.type === 'CUSTOMER') {
-            this.router.navigate(
-              ['/manager/contract-management/clients-contracts/clients-list']);
-          } else if (this.type === 'SUPPLIER') {
-            this.router.navigate(
-              ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+      /* Contractor Contact */
+      updatedC.can_sign_contract = this.contractorForm.controls.can_sign_contract.value;
+      updatedC.gender_cd = this.contractorForm.controls.gender_cd.value;
+      updatedC.title_cd = this.contractorForm.controls.title_cd.value;
+      updatedC.language_cd = this.contractorForm.controls.language.value;
+      updatedC.phone_nbr = this.contractorForm.controls.phone_nbr_c.value;
+      console.log('updated', updatedC);
+      forkJoin(
+        [
+          this.contractorService.addContractor(newContractor),
+          this.contractorService.addContractorContact(newContractor),
+        ]
+      )
+        .pipe(
+        takeUntil(this.destroy$)
+      )
+        .subscribe(
+          (res) => {
+            console.log('updated successfully', res);
+            if (this.type === 'CUSTOMER') {
+              this.router.navigate(
+                ['/manager/contract-management/clients-contracts/clients-list']);
+            } else if (this.type === 'SUPPLIER') {
+              this.router.navigate(
+                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+            }
+          },
+          (error) => {
+            console.log(error);
           }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        );
     } else {
-      this.contractorService.addContractor(newC).subscribe(
-        (response) => {
-          console.log('added successfully', response);
-          if (this.type === 'CUSTOMER') {
-            this.router.navigate(
-              ['/manager/contract-management/clients-contracts/clients-list']);
-          } else if (this.type === 'SUPPLIER') {
-            this.router.navigate(
-              ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-          }
+      forkJoin(
+        [
+          this.contractorService.addContractor(newContractor),
+          this.contractorService.addContractorContact(newContractor),
+        ]
+      )
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(
+          (response) => {
+            console.log('added successfully', response);
+            if (this.type === 'CUSTOMER') {
+              this.router.navigate(
+                ['/manager/contract-management/clients-contracts/clients-list']);
+            } else if (this.type === 'SUPPLIER') {
+              this.router.navigate(
+                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+            }
           },
 
-        (error) => {
-          console.log(error);
-        }
-      );
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
 
   /**************************************************************************
    * @description Get Contractor to be updated
    *************************************************************************/
-  getContractorByID(_id: string) {
-    this.contractorService.getContractors(`?_id=${atob( _id)}`)
+  getContractorByID(params) {
+    forkJoin([
+      this.contractorService.getContractors(`?_id=${atob(params.id)}`),
+      this.contractorService.getContractorsContact(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}`)
+    ])
       .pipe(
         takeUntil(this.destroy$),
       )
       .subscribe(
         (res) => {
-          this.contractorInfo = res[0];
-          this.initContractForm(this.contractorInfo);
+          this.contractorInfo = res[0][0];
+          this.contractorContactInfo = res[1][0];
+          this.initContractForm(this.contractorInfo, this.contractorContactInfo);
         },
         (error) => {
           console.log(error);
         }
       );
   }
+
   /**************************************************************************
    * @description Check if URL contains the ID og
    *************************************************************************/
@@ -330,4 +391,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  onScroll(event) {
+    console.log(event);
+  }
 }

@@ -63,7 +63,7 @@ export class ContractListComponent implements OnInit {
    * @description Get Contracts List
    */
   getContracts() {
-    this.contractService.getContracts().subscribe(
+    this.contractService.getContracts('').subscribe(
       (response) => {
         this.contractList = response;
         this.dataSource = new MatTableDataSource(this.contractList);

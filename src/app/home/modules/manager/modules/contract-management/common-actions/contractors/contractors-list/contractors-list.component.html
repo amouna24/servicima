@@ -67,6 +67,16 @@
             </td>
           </ng-container>
 
+          <!-- Status Column -->
+          <ng-container matColumnDef="show">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Show</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button (click)="showContact(row)">
+                <mat-icon class="mat-18">more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
           <!-- Actions Column -->
           <ng-container matColumnDef="Actions">
             <th mat-header-cell *matHeaderCellDef> Actions</th>
