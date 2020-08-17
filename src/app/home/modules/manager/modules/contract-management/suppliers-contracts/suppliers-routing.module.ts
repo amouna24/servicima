@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AddContractComponent } from './contracts/add-contract/add-contract.component';
-import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { AddSupplierComponent } from './suppliers/add-supplier/add-supplier.component';
 import { SupplierListComponent } from './suppliers/supplier-list/supplier-list.component';
+import { AddSupplierContractComponent } from './contracts/add-supplier-contract/add-supplier-contract.component';
+import { SuppliersContractsListComponent } from './contracts/suppliers-contracts-list/suppliers-contracts-list.component';
 
 const routes: Routes = [
       {
-        path: 'create',
-        component: AddContractComponent, // a modifier
+        path: 'contracts',
+        component: AddSupplierContractComponent, // a modifier
         data: {
           breadcrumb: 'new contract'
         },
       },
       {
         path: 'contracts-list',
-        component: ContractListComponent, // a modifier
+        component: SuppliersContractsListComponent, // a modifier
         data: {
           breadcrumb: 'contracts'
         },

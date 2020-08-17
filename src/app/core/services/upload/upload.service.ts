@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import {id} from "@swimlane/ngx-datatable";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UploadService {
   constructor(private http: HttpClient) { }
 
   uploadImage(file: any) {
-    return this.http.post<{ }>(`${environment.userApiUrl}/api/upload`, file)
+    return this.http.post<{ }>(`${environment.uploadFileApiUrl}/`, file)
       .pipe(
         catchError(error => throwError(error)),
         map((response: any) => {
@@ -22,9 +23,17 @@ export class UploadService {
   }
 
   getImage(idFile) {
-    return this.http.get(`${environment.userApiUrl}/api/image/` + idFile, {
+    return this.http.get(`${environment.uploadFileApiUrl}/image/` + idFile, {
       responseType: 'blob',
     });
+  }
+
+  getFiles(idFile) {
+    return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
+  }
+
+  getFilesByName(idFile) {
+    return this.http.get(`${environment.uploadFileApiUrl}/` + idFile);
   }
 
   getImages() {

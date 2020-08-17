@@ -4,6 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
@@ -23,6 +25,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,8 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
     /* Directives */
-    CanBeDisplayedDirective
+    CanBeDisplayedDirective,
+    UploadSheetComponent
 
   ],
   imports: [
@@ -55,7 +59,9 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatIconModule,
+    MatBottomSheetModule
   ],
   exports: [
     MaterialModule,
@@ -76,6 +82,8 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     SkeletonLoaderComponent,
     BreadcrumbComponent,
     NgxMatSelectSearchModule,
+    MatIconModule,
+    MatBottomSheetModule
   ]
 })
 export class SharedModule { }

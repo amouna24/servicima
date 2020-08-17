@@ -52,7 +52,7 @@ export const managerMenu: IMenu[] = [
           },
           {
             state: 'suppliers-contracts',
-            name: 'suppliers contracts',
+            name: 'supplier',
             icon: 'library_books',
             feature: 'CONTRACT_ACCESS',
             type: 'sub',
@@ -75,14 +75,14 @@ export const managerMenu: IMenu[] = [
           },
           {
             state: 'clients-contracts',
-            name: 'clients contracts',
+            name: 'customer',
             icon: 'assignment_ind',
             feature: 'CONTRACT_ACCESS',
             type: 'sub',
             child: [
               {
                 state: 'clients-list',
-                name: 'clients',
+                name: 'customers',
                 icon: 'assignment',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',

@@ -1,0 +1,228 @@
+<div class="contract-container">
+  <div>
+    <h2 class="contract-title">{{ title }}</h2>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="row" fxFlexFill>
+    <mat-selection-list class="selectionList" fxLayout="column" fxLayoutAlign="space-between center" fxLayout.xs="row"
+                        fxFlex="25" fxFlex.xs="10" #shoes [multiple]="false">
+      <mat-list-option class="listOptions" [routerLinkActive]="" value="shoe">
+        <mat-icon mat-list-icon svgIcon="general"></mat-icon>
+        General
+      </mat-list-option>
+      <mat-list-option class="listOptions" value="shoe">
+        <mat-icon mat-list-icon svgIcon="contact"></mat-icon>
+        Extension
+      </mat-list-option>
+      <mat-list-option class="listOptions" value="shoe">
+        <mat-icon mat-list-icon svgIcon="credit-card"></mat-icon>
+        Notification
+      </mat-list-option>
+    </mat-selection-list>
+
+
+    <form [formGroup]="contractForm" fxLayout="column" fxLayout.xs="row" fxFlex="75" fxFlex.xs="90" fxFlexFill>
+      <div fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span fxFlex="9" fxFlex.xs="4" class="contract-sub-title">General</span>
+          <mat-divider fxFlex="1" fxFlex.xs="1" class="contract-divider"></mat-divider>
+          <div fxLayout="column" fxLayout.xs="column" fxFlex="90" fxFlex.xs="95">
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Contractor Code</mat-label>
+                <mat-select formControlName="contractor_code">
+                  <mat-option *ngFor="let col of contractorsList" [value]="col.contractorKey.contractor_code">
+                    {{col.contractor_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Collaborator</mat-label>
+                <mat-select formControlName="collaborator_email">
+                  <mat-option *ngFor="let col of collaboratorsList" [value]="col.value">
+                    {{col.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" formControlName="contract_start_date">
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker color="primary"></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="endDatePicker" formControlName="contract_end_date">
+                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker color="primary"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button" fxFlex="40" fxFlex.xs="100">
+                <mat-label>Contract Date</mat-label>
+                <input matInput [matDatepicker]="ContractDatePicker" formControlName="contract_date">
+                <mat-datepicker-toggle matSuffix [for]="ContractDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #ContractDatePicker color="primary"></mat-datepicker>
+              </mat-form-field>
+              <button mat-raised-button type="button" class="wid-Value-button upload-actions" fxFlex="20" fxFlex.xs="100" (click)="openUploadSheet()">Upload file</button>
+              <span *ngIf="selectedFile.name != ''" class="upload-actions" fxFlex="20" fxFlex.xs="100">{{ selectedFile.name }}</span>
+              <span *ngIf="selectedFile.name == ''" class="upload-actions" fxFlex="20" fxFlex.xs="100">{{ contractForm.controls.attachments.value}}</span>
+            </div>
+            <div fxFlex="100" fxFlex.xs="20" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Company Email</mat-label>
+                <mat-select formControlName="signer_company_email">
+                  <mat-option *ngFor="let signer of contractorsList" [value]="signer.contractorKey.email_address" >
+                    {{signer.contractor_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button" fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Company Date</mat-label>
+                <input matInput [matDatepicker]="signerCompanyPicker" formControlName="signature_company_date">
+                <mat-datepicker-toggle matSuffix [for]="signerCompanyPicker"></mat-datepicker-toggle>
+                <mat-datepicker #signerCompanyPicker color="primary"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Contractor Email</mat-label>
+                <mat-select formControlName="signer_contractor_email">
+                  <mat-option *ngFor="let signer of contractorsList" [value]="signer.contractorKey.email_address" >
+                    {{signer.contractor_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Contractor Date</mat-label>
+                <input matInput [matDatepicker]="signerContractorPicker" formControlName="signature_contractor_date">
+                <mat-datepicker-toggle matSuffix [for]="signerContractorPicker"></mat-datepicker-toggle>
+                <mat-datepicker #signerContractorPicker color="primary"></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div  fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span fxFlex="10" fxFlex.xs="5" class="contract-sub-title">CONTRACT EXTENSION</span>
+          <mat-divider class="contract-divider"></mat-divider>
+          <div fxFlex="100" fxFlex.xs="100" fxLayout="column" fxLayout.xs="column">
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="26" fxFlex.xs="100">
+                <mat-label>Rate</mat-label>
+                <input matInput formControlName="extension_rate" maxlength="5">
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button"  fxFlex="26" fxFlex.xs="100">
+                <mat-label>Currency CD</mat-label>
+                <mat-select formControlName="extension_currency_cd">
+                  <mat-option>
+                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                           noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                           formControlName="filterCurrencyControl"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let cur of filteredCurrencies | async" [value]="cur.value" >
+                    {{cur.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button" fxFlex="26" fxFlex.xs="100">
+                <mat-label>Contract Extension Status</mat-label>
+                <mat-select formControlName="extension_status">
+                  <mat-option *ngFor="let status of statusList" [value]="status.value" >
+                    {{status.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.xs="50" fxFlexAlign.xs="auto" fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px" fxLayoutGap.xs="10px">
+              <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Contractor Date</mat-label>
+                <input matInput [matDatepicker]="extensionStartPicker" formControlName="extension_start_date">
+                <mat-datepicker-toggle matSuffix [for]="extensionStartPicker"></mat-datepicker-toggle>
+                <mat-datepicker #extensionStartPicker color="primary"></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="wid-Value-button" fxFlex="40" fxFlex.xs="100">
+                <mat-label>Signer Contractor Date</mat-label>
+                <input matInput [matDatepicker]="extensionEndPicker" formControlName="extension_end_date">
+                <mat-datepicker-toggle matSuffix [for]="extensionEndPicker"></mat-datepicker-toggle>
+                <mat-datepicker #extensionEndPicker color="primary"></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div  fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="row">
+        <div fxLayout="column" fxLayout.xs="column" fxFlex="100" fxFlex.xs="100" fxFlexFill>
+          <span class="contract-sub-title">PAYMENT INFORMATION</span>
+          <mat-divider class="contract-divider"></mat-divider>
+          <div fxFlex="25" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
+               fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+            <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+              <mat-label>Rate</mat-label>
+              <input matInput formControlName="contract_rate" maxlength="5">
+            </mat-form-field>
+            <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+              <mat-label>Currency CD</mat-label>
+              <mat-select formControlName="currency_cd">
+                <mat-option>
+                  <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                         noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                         formControlName="filterCurrencyControl"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let cur of filteredCurrencies | async" [value]="cur.value" >
+                  {{cur.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.xs="33" fxFlexAlign.xs="auto" fxLayout="row"
+               fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="10px">
+            <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100">
+              <mat-label>Payment terms</mat-label>
+              <mat-select formControlName="payment_terms">
+                <mat-option *ngFor="let paymentTerms of paymentTermsList" [value]="paymentTerms.companyPaymentTermsKey.payment_terms_code" >
+                  {{paymentTerms.payment_terms_desc}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="wid-Value-button"  fxFlex="40" fxFlex.xs="100" >
+              <mat-label>Contract Status</mat-label>
+              <mat-select formControlName="contract_status">
+                <mat-option *ngFor="let status of statusList" [value]="status.value" >
+                  {{status.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="10" fxFlex.xs="10" fxFlexAlign="auto" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="row"
+           fxFlexOffset="3" fxLayoutGap="20px">
+        <button (click)="createNewContract()" [disabled]="!contractForm.valid" fxFlex="10" fxFlex.xs="20" mat-button
+                class="wid-Value-button wid-background-button contract-actions">Save
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+</div>
+<!--
+
+-->

@@ -17,4 +17,6 @@ export interface IContract {
   signature_contractor_date?: Date;
   contract_rate: number;
   currency_cd?: string;
+  payment_terms: string;
+  attachments?: string;
 }

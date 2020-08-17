@@ -204,6 +204,7 @@ export class UserComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(file);
     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
     formData.append('file', file);
+    formData.append('caption', file.name);
     this.photo = formData;
   }
 
@@ -211,7 +212,13 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description : Upload Image to Server  with async to promise
    */
   async uploadFile(formData) {
-    return this.uploadService.uploadImage(formData).pipe(indicate(this.loading$), map(response => response.file.filename)).toPromise();
+    return this.uploadService.uploadImage(formData)
+      .pipe(
+        indicate(this.loading$),
+        map(
+          response => response.file.filename
+        ))
+      .toPromise();
   }
 
   /**
