@@ -21,15 +21,15 @@ import { ModalService } from '@core/services/modal/modal.service';
 })
 export class HomeCompanyComponent implements OnInit, OnDestroy {
 
- constructor(private utilsService: UtilsService,
-              private profileService: ProfileService,
-              private formBuilder: FormBuilder,
-              private userService: UserService,
-              private localStorageService: LocalStorageService,
-              private assetsDataService: AssetsDataService,
-              private appInitializerService: AppInitializerService,
-              private modalService: ModalService,
-              ) {
+  constructor(private utilsService: UtilsService,
+    private profileService: ProfileService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private assetsDataService: AssetsDataService,
+    private appInitializerService: AppInitializerService,
+    private modalService: ModalService,
+  ) {
   }
 
   city: ICity;
@@ -41,11 +41,11 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   languageId: string;
   user: IUserModel;
   form: FormGroup;
-  countryList: IViewParam[]  = [];
+  countryList: IViewParam[] = [];
   legalFormList: IViewParam[] = [];
   vatList: IViewParam[] = [];
-  activityCodeList: IViewParam[]  = [];
-  currenciesList: IViewParam[]  = [];
+  activityCodeList: IViewParam[] = [];
+  currenciesList: IViewParam[] = [];
   /** subscription */
   subscription: Subscription;
 
@@ -95,10 +95,10 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    */
   getRefdata(): void {
     const list = ['VAT', 'LEGAL_FORM'];
-     const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
-       list);
-      this.legalFormList = refData['LEGAL_FORM'];
-      this.vatList = refData['VAT'];
+    const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+      list);
+    this.legalFormList = refData['LEGAL_FORM'];
+    this.vatList = refData['VAT'];
   }
 
   /**
@@ -106,8 +106,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      emailAddress: [{ value: '' , disabled: true }],
-      companyName: [{ value: '' , disabled: true }],
+      emailAddress: [{ value: '', disabled: true }],
+      companyName: [{ value: '', disabled: true }],
       address: ['', [Validators.required]],
       city: ['', [Validators.required]],
       zipCode: ['', [Validators.required]],
@@ -160,7 +160,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
     if (this.registryCountryCtrl.value === 'FRA' && this.form.value.zipCode) {
       this.assetsDataService.getCity(zipCode).subscribe((city) => {
         this.city['cities'] = city['cities'];
-      }, (err) => console.error(err)) ;
+      }, (err) => console.error(err));
     }
   }
 
@@ -168,22 +168,22 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @description get currencies and countries data from json
    */
   getJsonData(): void {
-      this.mapData();
-      this.getRefdata();
-      /* load the initial  list */
-      this.filteredLegalForm.next(this.legalFormList.slice());
-      this.filteredActivityCode.next(this.activityCodeList.slice());
-      this.filteredCountry.next(this.countryList.slice());
-      this.filteredRegistryCountry.next(this.countryList.slice());
-      this.filteredCurrency.next(this.currenciesList.slice());
-      this.filteredVat.next(this.vatList.slice());
-      /* listen for search field value changes */
-      this.utilsService.changeValueField(this.legalFormList, this.legalFormFilterCtrl, this.filteredLegalForm);
-      this.utilsService.changeValueField(this.countryList, this.countryFilterCtrl, this.filteredCountry);
-      this.utilsService.changeValueField(this.countryList, this.registryCountryFilterCtrl, this.filteredRegistryCountry);
-      this.utilsService.changeValueField(this.activityCodeList, this.activityCodeFilterCtrl, this.filteredActivityCode);
-      this.utilsService.changeValueField(this.currenciesList, this.currencyFilterCtrl, this.filteredCurrency);
-      this.utilsService.changeValueField(this.vatList, this.vatFilterCtrl, this.filteredVat);
+    this.mapData();
+    this.getRefdata();
+    /* load the initial  list */
+    this.filteredLegalForm.next(this.legalFormList.slice());
+    this.filteredActivityCode.next(this.activityCodeList.slice());
+    this.filteredCountry.next(this.countryList.slice());
+    this.filteredRegistryCountry.next(this.countryList.slice());
+    this.filteredCurrency.next(this.currenciesList.slice());
+    this.filteredVat.next(this.vatList.slice());
+    /* listen for search field value changes */
+    this.utilsService.changeValueField(this.legalFormList, this.legalFormFilterCtrl, this.filteredLegalForm);
+    this.utilsService.changeValueField(this.countryList, this.countryFilterCtrl, this.filteredCountry);
+    this.utilsService.changeValueField(this.countryList, this.registryCountryFilterCtrl, this.filteredRegistryCountry);
+    this.utilsService.changeValueField(this.activityCodeList, this.activityCodeFilterCtrl, this.filteredActivityCode);
+    this.utilsService.changeValueField(this.currenciesList, this.currencyFilterCtrl, this.filteredCurrency);
+    this.utilsService.changeValueField(this.vatList, this.vatFilterCtrl, this.filteredVat);
   }
 
   /**
@@ -199,7 +199,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       reg_nbr: this.form.value.registrationNumber,
       activity_desc: this.form.value.activityDescription,
       activity_code: this.activityCodeCtrl.value,
-      currency_id:  this.currencyCtrl.value,
+      currency_id: this.currencyCtrl.value,
       legal_form: this.legalFormCtrl.value,
       capital: this.form.value.capital,
       vat_nbr: this.vatCtrl.value,
@@ -222,14 +222,14 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       name: companyProfile.email_address + companyProfile.company_name,
     };
 
-  this.subscription = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
+    this.subscription = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
       if (value === 'true') {
-        this.subscriptions.push( this.profileService.updateCompany(companyProfile).subscribe(res => {
-    this.userInfo['company'][0] = res;
-   this.userService.connectedUser$.next(this.userInfo);
-   }, (err) => console.error(err)));
-  }
-  this.subscription.unsubscribe();
+        this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
+          this.userInfo['company'][0] = res;
+          this.userService.connectedUser$.next(this.userInfo);
+        }, (err) => console.error(err)));
+      }
+      this.subscription.unsubscribe();
     });
   }
 
@@ -249,16 +249,15 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @description: : mapping data
    */
   mapData(): void {
-    this.appInitializerService.countriesList.forEach((country) => {
-      this.countryList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+    this.countryList = this.appInitializerService.countriesList.map((country) => {
+      return { value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC };
     });
-    this.appInitializerService.activityCodeList.forEach((Code) => {
-      this.activityCodeList.push({ value: Code.NAF, viewValue: Code.NAF });
+    this.activityCodeList = this.appInitializerService.activityCodeList.map((Code) => {
+      return { value: Code.NAF, viewValue: Code.NAF };
     });
-    this.appInitializerService.currenciesList.forEach((currency) => {
-      this.currenciesList.push({ value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC });
+    this.currenciesList = this.appInitializerService.currenciesList.map((currency) => {
+      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC };
     });
-
   }
 
   /**

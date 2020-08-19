@@ -10,11 +10,17 @@ const routes: Routes = [
     children: [
       {
         path: 'suppliers-contracts',
-        loadChildren: () => import('./suppliers-contracts/suppliers-module.module').then(m => m.SuppliersModuleModule)
+        loadChildren: () => import('./suppliers-contracts/suppliers-module.module').then(m => m.SuppliersModuleModule),
+        data: {
+          breadcrumb: 'suppliers-contracts'
+        },
       },
       {
         path: 'clients-contracts',
-        loadChildren: () => import('./clients-contracts/clients.module').then(m => m.ClientsModule)
+        loadChildren: () => import('./clients-contracts/clients.module').then(m => m.ClientsModule),
+        data: {
+          breadcrumb: 'clients-contracts'
+        },
       },
     ]
   },

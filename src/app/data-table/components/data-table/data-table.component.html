@@ -1,5 +1,5 @@
 <div class="table-container">
-    <div fxLayout="row" fxLayoutAlign="start center" class="actions-container">
+    <div fxLayout="row" fxLayoutAlign="start center" [ngClass]="activeTheme" class="actions-container">
         <div id="setting-container">
             <button mat-icon-button tabindex="-1" (click)="displayConfigModal()">
                 <mat-icon class="icon material-icons-outlined">settings</mat-icon>
@@ -9,8 +9,11 @@
             <mat-select id="select-column-key" [(ngModel)]="searchSelection">
                 <mat-option [value]="column" *ngFor="let column of columns">{{column.name}}</mat-option>
             </mat-select>
-            <input id="search-bar" type="text" (keyup)="updateFilter($event, searchSelection)"
-                [placeholder]=" searchSelection.name ? 'Search By ' + searchSelection.name : 'Search'" />
+            <!-- <div id="search-bar-container" [ngSwitch]="searchSelection.type">
+                <input *ngSwitchCase="'text'" id="search-bar" type="text"
+                    (keyup)="updateFilter($event, searchSelection)"
+                    [placeholder]=" searchSelection.name ? 'Search By ' + searchSelection.name : 'Search'" />
+            </div> -->
         </div>
         <div id="options-contaner">
             <button mat-button [matMenuTriggerFor]="exportMenu">Export as</button>
@@ -21,10 +24,10 @@
             </mat-menu>
         </div>
     </div>
-    <ngx-datatable #table class="material fixed-header" [rows]="data" [columns]="columns" [headerHeight]="50"
-        [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected" [scrollbarV]="true"
-        [scrollbarH]="true" [selectionType]="'multiClick'" [columnMode]="ColumnMode.force" [footerHeight]="50"
-        [rowHeight]="50">
+    <ngx-datatable #table [ngClass]="activeTheme" class=" fixed-header" [rows]="data" [columns]="columns"
+        [headerHeight]="50" [selectionType]="SelectionType.checkbox" (select)="onSelect($event)" [selected]="selected"
+        [scrollbarV]="true" [scrollbarH]="true" [selectionType]="'checkbox'" [columnMode]="ColumnMode.force"
+        [footerHeight]="50" [rowHeight]="50">
 
         <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
             [resizeable]="false" [frozenLeft]="true">
@@ -36,12 +39,49 @@
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-row="row"
                 let-rowIndex="rowIndex" let-onCheckboxChangeFn="onCheckboxChangeFn">
-                <mat-checkbox [checked]="isSelected">
+                <mat-checkbox (change)="onCheckboxChangeFn($event)" [checked]="isSelected">
                 </mat-checkbox>
             </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column *ngFor="let column of columns" [prop]="column.prop" [name]="column.name">
+            <ng-template ngx-datatable-cell-template let-value="value">
+                <div [ngSwitch]="column.type">
+                    <div *ngSwitchCase="'date'">
+                        {{value | date:'long'}}
+                    </div>
+                    <div *ngSwitchCase="'selection'">
+                        <div class="gender-container" *ngIf="column.prop === 'gender_id';else defaultSpan">
+                            <mat-icon [ngClass]="(value === 'F')?'female':'male'"
+                                [svgIcon]="value === 'F' ? 'female' : 'male' "></mat-icon>
+                        </div>
+                        <ng-template #defaultSpan>
+                            <span class="selection-type"
+                                [ngStyle]="{background: generateSpanColor(value)}">{{value}}</span>
+                        </ng-template>
+                    </div>
+                    <div *ngSwitchDefault>{{value}}</div>
+                </div>
+                <!-- <wid-skeleton-loader height="25"></wid-skeleton-loader> -->
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [frozenRight]="true" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" [checkboxable]="false" [cellClass]="'row-actions'" [width]="100">
+            <ng-template ngx-datatable-header-template>
+                actions
+            </ng-template>
+            <ng-template ngx-datatable-cell-template>
+                <div id="row-actions-container">
+                    <button mat-icon-button tabindex="-1">
+                        <mat-icon class="icon material-icons-outlined">archive</mat-icon>
+                    </button>
+
+                    <button mat-icon-button tabindex="-1">
+                        <mat-icon class="icon material-icons-outlined">edit</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
 </div>

@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
 
@@ -21,6 +22,8 @@ import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
+import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +36,11 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     UserComponent,
     HomeCompanyComponent,
     ConfirmationModalComponent,
+    BreadcrumbComponent,
+    ConfirmationModalComponent,
+    SkeletonLoaderComponent,
     /* Directives */
-    CanBeDisplayedDirective,
+    CanBeDisplayedDirective
 
   ],
   imports: [
@@ -50,7 +56,8 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatIconModule,
   ],
   exports: [
     MaterialModule,
@@ -68,6 +75,10 @@ import { HomeCompanyComponent } from './components/settings/home-company/home-co
     NgxDatatableModule,
     FlexLayoutModule,
     FormsModule,
+    SkeletonLoaderComponent,
+    BreadcrumbComponent,
+    NgxMatSelectSearchModule,
+    MatIconModule,
   ]
 })
 export class SharedModule { }

@@ -14,6 +14,8 @@ export class ConfigurationModalComponent implements OnInit {
   canBeDisplayedColumnsForm: FormGroup;
   canBeDisplayedColumns: any[];
   displayedColumns: any[];
+  activeTheme = 'material';
+  themes = ['dark', 'material'];
 
   constructor(public dialogRef: MatDialogRef<ConfigurationModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private helperService: HelperService) { }
@@ -67,19 +69,22 @@ export class ConfigurationModalComponent implements OnInit {
     }
   }
 
-  applyChanges() {
+  applyColumnsChanges() {
     this.data.actualColumns = [...this.displayedColumns];
     this.data.action = 'change';
     this.dialogRef.close(this.data);
   }
 
   resetColumns() {
-    console.log(this.displayedColumns);
-    console.log(this.canBeDisplayedColumns);
-    console.log(this.data);
 
     this.displayedColumns = this.data.actualColumns;
     this.canBeDisplayedColumns = this.helperService.difference(this.data.canBeDisplayedColumns, this.displayedColumns, 'prop');
+  }
+
+  customizeTable() {
+    this.data.action = 'themeChange';
+    this.data.activeTheme = this.activeTheme;
+    this.dialogRef.close(this.data);
   }
 
 }

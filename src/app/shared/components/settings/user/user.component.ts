@@ -54,12 +54,18 @@ export class UserComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   loading$ = new Subject<boolean>();
 
-  constructor(private utilsService: UtilsService, private uploadService: UploadService, private route: ActivatedRoute,
-    private profileService: ProfileService, private appInitializerService: AppInitializerService,
-    private userService: UserService, private localStorageService: LocalStorageService,
-    private modalService: ModalService, private routingState: RoutingStateService,
-    private formBuilder: FormBuilder, public dialog: MatDialog,
-    private sanitizer: DomSanitizer) {
+  constructor(private utilsService: UtilsService,
+    private uploadService: UploadService,
+    private route: ActivatedRoute,
+    private profileService: ProfileService,
+    private appInitializerService: AppInitializerService,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
+    private routingState: RoutingStateService,
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog,
+    private sanitizer: DomSanitizer, ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
   }
@@ -344,8 +350,8 @@ export class UserComponent implements OnInit, OnDestroy {
         if (value === 'true') {
           this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
             res => {
-              this.infoUser['user'][0] = res;
               if (newUser.email_address === this.emailAddress) {
+                this.infoUser['user'][0] = res;
                 if (this.currentUrl === '/manager/profile') {
                   this.userService.connectedUser$.next(this.infoUser);
                 } else {

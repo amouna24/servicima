@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 
 import { ClientsRoutingModule } from './clients-routing.module';
-import { ClientsListComponent } from './clients-list/clients-list.component';
+import { ClientsListComponent } from './clients/clients-list/clients-list.component';
 import { ContractManagementModule } from '../contract-management.module';
-import { AddClientComponent } from './add-client/add-client.component';
+import { AddClientComponent } from './clients/add-client/add-client.component';
 import { ClientsContractsComponent } from './clients-contracts.component';
 
 @NgModule({

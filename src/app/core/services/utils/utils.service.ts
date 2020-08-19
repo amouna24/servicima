@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { IViewParam } from '@shared/models/view.model';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -11,7 +13,12 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
-  constructor(private appInitializerService: AppInitializerService, private localStorageService: LocalStorageService) {
+  constructor(
+    private appInitializerService: AppInitializerService,
+    private localStorageService: LocalStorageService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    ) {
 
   }
 
@@ -141,5 +148,22 @@ export class UtilsService {
       .subscribe(() => {
         this.filterData(list, filterCtrl, filtered);
       });
+  }
+
+  /**
+   * @description Add icon
+   * @param name; name
+   * @param path :path
+   */
+  addIcon(listOfIcons): void {
+    listOfIcons.forEach(
+      (icon) => {
+        this.matIconRegistry.addSvgIcon(
+          icon.name,
+          this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
+        );
+      }
+    );
+
   }
 }
