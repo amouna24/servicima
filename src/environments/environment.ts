@@ -13,7 +13,7 @@ export const environment = {
   applicationApiUrl: 'http://192.168.1.22:8007/admin/applications/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8015/admin/loadauthstarterdata/v1',
   moduleApiUrl: 'http://192.168.1.22:8005/admin/modules/v1',
-  dataListsUrl: 'http://127.0.0.1:8036/admin/datalists/v1',
+  dataListsUrl: 'http://192.168.1.22:8036/admin/datalists/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8030/servicima/contracts/v1',
@@ -31,11 +31,6 @@ export const environment = {
   userApiUrl: 'http://192.168.1.22:8013/auth/users/v1',
   userRoleApiUrl: 'http://192.168.1.22:8025/auth/userroles/v1',
   redirectionHomeUrl: '/',
-
-  /************************* UPLOAD FILE ******************************/
-  uploadFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/upload',
-  getFileUrl: 'http://127.0.0.1:8013/auth/users/v1/api/image/',
-  getFilesUrl: 'http://127.0.0.1:8013/auth/users/v1/api/',
 
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
