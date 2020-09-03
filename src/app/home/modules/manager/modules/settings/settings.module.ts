@@ -1,27 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
+import { DataTableModule } from '@dataTable/data-table.module';
 
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
-import { BuyLicenceComponent } from './buy-licence/buy-licence.component';
-import { CompleteUpgradeLicenceComponent } from './complete-upgrade-licence/complete-upgrade-licence.component';
-import { UpdateLicenceComponent } from './upgrade-licence/upgrade-licence.component';
-import { LicenceExpirationComponent } from './licence-expiration/licence-expiration.component';
-import { UserModalComponent } from './user-modal/user-modal.component';
+import { BuyLicenceComponent } from './licence/buy-licence/buy-licence.component';
+import { CompleteUpgradeLicenceComponent } from './licence/complete-upgrade-licence/complete-upgrade-licence.component';
+import { UpgradeLicenceComponent } from './licence/upgrade-licence/upgrade-licence.component';
+import { LicenceExpirationComponent } from './licence/licence-expiration/licence-expiration.component';
+import { LicenceManagementComponent } from './licence/licence-management/licence-management.component';
+import { PaymentMethodsManagementComponent } from './payment/payment-methods-management/payment-methods-management.component';
+import { PaymentInfoComponent } from './payment/payment-info/payment-info.component';
+import { RoleManagementComponent } from './role-management/role-management.component';
 
 @NgModule({
-  declarations: [SettingsComponent,
+  declarations: [
+    SettingsComponent,
     BuyLicenceComponent,
     CompleteUpgradeLicenceComponent,
-    UpdateLicenceComponent,
+    UpgradeLicenceComponent,
     LicenceExpirationComponent,
-    UserModalComponent,
+    LicenceManagementComponent,
+    PaymentMethodsManagementComponent,
+    PaymentInfoComponent,
+    RoleManagementComponent,
   ],
   imports: [
     CommonModule,
     SettingsRoutingModule,
     SharedModule,
+    DataTableModule,
   ],
 })
 export class SettingsModule {

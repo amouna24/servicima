@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 
 import { IUserModel } from '@shared/models/user.model';
 
-import { environment } from 'src/environments/environment';
 import { IUserRolesModel } from '@shared/models/userRoles.model';
 import { IMessageCodeModel } from '@shared/models/messageCode.model';
+
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -79,5 +80,14 @@ export class ProfileService {
   updateCompany(company: object): Observable<IMessageCodeModel>  {
     return this.httpClient
       .put<IMessageCodeModel>(environment.companyApiUrl, company);
+  }
+
+  /**
+   * @description change password
+   * @param user: object
+   */
+  changePassword(user: object): Observable<IMessageCodeModel> {
+    return this.httpClient
+      .put<IMessageCodeModel>(`${environment.credentialsApiUrl}/updatepassword` , user);
   }
 }

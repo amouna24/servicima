@@ -11,7 +11,6 @@ import { managerMenu } from '@shared/statics/manager-menu.static';
 export class SidenavService {
 
   private sidebarState = 'open';
-  private sidebarState1 = 'close';
   private sidebarStateChanged$ = new BehaviorSubject<string>(this.sidebarState);
   public sidebarStateObservable$ = this.sidebarStateChanged$.asObservable();
 
@@ -26,10 +25,6 @@ export class SidenavService {
   toggle() {
     this.sidebarState = this.sidebarState === 'open' ? 'close' : 'open';
     this.sidebarStateChanged$.next(this.sidebarState);
-  }
-  toggle1() {
-    this.sidebarState1 = this.sidebarState1 === 'open' ? 'close' : 'open';
-    this.sidebarStateChanged$.next(this.sidebarState1);
   }
 
   getState() {

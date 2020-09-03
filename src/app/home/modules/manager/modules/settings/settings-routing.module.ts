@@ -1,44 +1,53 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UsersListComponent } from './usersList/users-list.component';
-import { HomeCompanyComponent } from './home-company/home-company.component';
-import { CompleteUpgradeLicenceComponent } from './complete-upgrade-licence/complete-upgrade-licence.component';
-import { UpdateLicenceComponent } from './upgrade-licence/upgrade-licence.component';
-import { BuyLicenceComponent } from './buy-licence/buy-licence.component';
-
 const routes: Routes = [
   {
-    path: 'users-list',
-    component: UsersListComponent,
+    path: '',
+    loadChildren: () => import('./usersList/users-list.module').then(m => m.UserListModule),
     data: {
-      breadcrumb: 'users'
+      breadcrumb: 'settings'
     },
   },
+
   {
-    path: 'home-company',
-    component: HomeCompanyComponent,
+    path: 'licence',
+    loadChildren: () => import('./licence/licence.module').then(m => m.LicenceModule),
     data: {
-      breadcrumb: 'company'
+      breadcrumb: 'settings'
     },
   },
+
   {
-    path: 'complete-update',
-    component: CompleteUpgradeLicenceComponent,
+    path: '',
+    loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule),
     data: {
-      breadcrumb: 'complete update'
+      breadcrumb: 'settings'
     },
   },
+
   {
-    path: 'upgrade-licence',
-    component: UpdateLicenceComponent,
+    path: '',
+    loadChildren: () => import('./home-company/homeCompany.module').then(m => m.HomeCompanyModule),
     data: {
-      breadcrumb: 'upgrade licence'
+      breadcrumb: 'settings'
     },
   },
+
   {
-    path: 'buy-licence',
-    component: BuyLicenceComponent
+    path: '',
+    loadChildren: () => import('./tax/tax.module').then(m => m.TaxModule),
+    data: {
+      breadcrumb: 'settings'
+    },
+  },
+
+  {
+    path: '',
+    loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule),
+    data: {
+      breadcrumb: 'settings'
+    },
   },
 ];
 

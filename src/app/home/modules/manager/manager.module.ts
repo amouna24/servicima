@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
+import { DataTableModule } from '@dataTable/data-table.module';
 
 import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerComponent } from './manager.component';
@@ -9,7 +10,8 @@ import { ManagerComponent } from './manager.component';
   declarations: [ManagerComponent],
   imports: [
     ManagerRoutingModule,
-    SharedModule
+    SharedModule,
+    DataTableModule
   ]
 })
 export class ManagerModule { }

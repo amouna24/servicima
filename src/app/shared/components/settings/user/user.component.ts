@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Subscription, Subject } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
-import { RoutingStateService } from '@core/services/routingState/routing-state.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -19,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import { indicate } from '@core/services/utils/progress';
+import { AuthService } from '@core/services/auth/auth.service';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
@@ -35,7 +35,6 @@ export class UserComponent implements OnInit, OnDestroy {
   infoUser: IUserInfo;
   userRole: string;
   userRoleId: string;
-  currentUrl: string;
   form: FormGroup;
   applicationId: string;
   emailAddress: string;
@@ -61,13 +60,16 @@ export class UserComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private localStorageService: LocalStorageService,
               private modalService: ModalService,
-              private routingState: RoutingStateService,
               private formBuilder: FormBuilder,
               public dialog: MatDialog,
-              private sanitizer: DomSanitizer, ) {
+              private sanitizer: DomSanitizer,
+              private authService: AuthService,
+              private router: Router, ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
-  }
+  /*  this.modalService.registerModals([
+      { modalName: 'changePassword', modalComponent: ChangePwdComponent}]);*/
+}
 
   files = [];
   url = 'https://evening-anchorage-3159.herokuapp.com/api/';
@@ -82,7 +84,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-    this.currentUrl = this.routingState.getCurrentUrl();
     this.initForm();
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
@@ -100,7 +101,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
-
       this.showCompany = true;
       this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
@@ -203,7 +203,7 @@ export class UserComponent implements OnInit, OnDestroy {
    *  create Object from blob and convert to url
    */
   getImage(id) {
-    this.uploadService.getImage(id).subscridbe(
+    this.uploadService.getImage(id).subscribe(
       data => {
         const unsafeImageUrl = URL.createObjectURL(data);
         this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
@@ -238,10 +238,24 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
+  /*  const confirmation = {
+      sentence: 'change password',
+    };
+*/
     const dialogRef = this.dialog.open(ChangePwdComponent, {
       data: { }, disableClose: true,
     });
     dialogRef.afterClosed().subscribe(() => {
+
+      this.subscriptions.push(this.authService.logout().subscribe(() => {
+            localStorage.removeItem('userCredentials');
+            localStorage.removeItem('currentToken');
+            this.userService.connectedUser$.next(null);
+            this.router.navigate(['/auth/login']);
+          },
+          (err) => {
+            console.error(err);
+          }));
     });
   }
 
@@ -278,8 +292,6 @@ export class UserComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
           res => {
             if (res) {
-              /*if (newUser.email_address === this.emailAddress) {
-                ;*/
               this.infoUser['user'][0] = res;
               this.userService.connectedUser$.next(this.infoUser);
               this.subscriptionModal.unsubscribe();

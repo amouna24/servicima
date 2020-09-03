@@ -5,8 +5,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { IUserModel } from '@shared/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 
-import { UserModalComponent } from '../settings/user-modal/user-modal.component';
-
 @Component({
   selector: 'wid-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,6 +20,7 @@ export class DashboardComponent implements OnInit {
               private localStorageService: LocalStorageService,
               public dialog: MatDialog, ) {
     this.credentials = this.localStorageService.getItem('userCredentials');
+
     this.profileService.getAllUser( this.credentials['email_address']).subscribe((data) => {
       this.ELEMENT_DATA = data;
     this.loaded = Promise.resolve(true);
@@ -29,26 +28,5 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-  /**
-   * @description: navigate to the detail of the user
-   * @param id: string
-   */
-  goTodetailUser(id: string): void {
-
-    /*this.router.navigate(['/manager/update-user'],
-      {
-        queryParams: {
-          'id': id
-        }
-      });*/
-    const dialogRef = this.dialog.open(UserModalComponent, {
-      data: {
-      _id: id,
-    },
-  disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe(() => {
-    });
   }
 }

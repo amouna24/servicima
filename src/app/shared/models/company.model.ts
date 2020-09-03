@@ -1,4 +1,4 @@
-import { ICompanyId } from './companyId.model';
+import { ICompanyId } from './companyKey.model';
 export interface ICompanyModel {
   /* ID */
   _id: string;

@@ -1,8 +1,8 @@
 /* Angular core imports */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 /* RxJs imports */
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { FingerPrintService } from '@widigital-group/auth-npm-front';
 
@@ -15,10 +15,8 @@ import { LocalStorageService } from '../services/storage/local-storage.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate, OnDestroy {
-  private subscriptions: Subscription[] = [];
+export class AuthGuard implements CanActivate {
   data: any;
-  user: any;
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -27,12 +25,6 @@ export class AuthGuard implements CanActivate, OnDestroy {
               private localStorageService: LocalStorageService,
               private userService: UserService,
   ) {
-    this.userService.getUserInfo();
-    this.subscriptions.push( this.userService.connectedUser$.subscribe((data) => {
-      if (!!data && this.userService.userInfo) {
-        this.user = this.userService.userInfo;
-      }
-    }));
   }
 
   /**********************************************************************
@@ -60,16 +52,6 @@ export class AuthGuard implements CanActivate, OnDestroy {
               this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode } });
               resolve(false);
             } else { /* User Active => Allow access to requested ressource */
-            /*  this.userService.getUserInfo();
-              this.userService.connectedUser$.subscribe((data) => {
-                if (!!data && this.userService.userInfo) {
-                  console.log(';;;;;;');
-                   // this.router.navigate(['/home']);
-                resolve(true);
-                }
-              });*/
-              console.log(this.user);
-              return  resolve(true);
             }
           } else {
             /* Autologin cannot be done (fingerprint doesn't exist) => Redirect to login page */
@@ -78,8 +60,5 @@ export class AuthGuard implements CanActivate, OnDestroy {
           }
         });
     });
-  }
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 }

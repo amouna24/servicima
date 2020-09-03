@@ -86,3 +86,22 @@ export function nameAnimation(animationDuration: string = defaultDuration): Anim
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+export let slideView = trigger(
+  'slideView',
+  [
+    state('true', style({ transform: 'translateX(100%)', opacity: 0 })),
+    state('false', style({ transform: 'translateX(0)', opacity: 1 })),
+    transition('0 => 1', animate('500ms', style({ transform: 'translateX(0)', 'opacity': 1 }))),
+    transition('1 => 1', animate('500ms', style({ transform: 'translateX(100%)', 'opacity': 0 }))),
+  ]);
+export let slideInOut = trigger('slideInOut',
+  [
+    transition(':enter', [
+      style({ transform: 'translateY(100%)', opacity: 0 }),
+      animate('600ms ease-in', style({ transform: 'translateX(0%)', 'opacity': 1 }))
+    ]),
+    transition(':leave', [
+      style({ transform: 'translateY(0%)', opacity: 1 }),
+      animate('0ms ease-in', style({ transform: 'translateX(100%)', 'opacity': 0 }))
+    ])
+  ]);

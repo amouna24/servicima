@@ -22,6 +22,9 @@
       "@shared/*": [
         "src/app/shared/*"
       ],
+      "@dataTable/*": [
+        "src/app/data-table/*"
+      ],
       "@core/*": [
         "src/app/core/*"
       ]

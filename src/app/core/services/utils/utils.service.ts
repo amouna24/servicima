@@ -13,12 +13,13 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
+
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    ) {
+  ) {
 
   }
 
@@ -29,7 +30,7 @@ export class UtilsService {
    * languageId: language id
    * type: array code type example ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE']]
    */
-  getRefData(company: string, application: string, listType: string[]): any {
+  getRefData(company: string, application: string, listType: string[], map?: boolean): any {
     const languageId = this.localStorageService.getItem('language').langId;
     listType.forEach((type) => {
       this.resList = [];
@@ -45,12 +46,16 @@ export class UtilsService {
           }
         });
       if (filterRefData.length > 0) {
-        filterRefData.forEach(
-          (element) => {
-            this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-          },
-        );
-        return this.refData[type] = this.resList;
+        if (!map) {
+          filterRefData.forEach(
+            (element) => {
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+            },
+          );
+          return this.refData[type] = this.resList;
+        } else {
+          return this.refData[String(`${type}`)] = filterRefData;
+        }
       } else if (filterRefData.length === 0) {
         filterRefData = this.appInitializerService.refDataList.filter(
           element =>
@@ -61,12 +66,16 @@ export class UtilsService {
             element.RefDataKey.company_id === this.appInitializerService.companyList
               .find(comp => comp.companyKey.email_address === 'ALL')._id &&
             element.RefDataKey.language_id === languageId);
-        filterRefData.forEach(
-          (element) => {
-            this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-          },
-        );
-        this.refData[String(`${type}`)] = this.resList;
+        if (map) {
+          this.refData[String(`${type}`)] = filterRefData;
+        } else {
+          filterRefData.forEach(
+            (element) => {
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+            },
+          );
+          this.refData[String(`${type}`)] = this.resList;
+        }
       }
     });
     return this.refData;
@@ -164,18 +173,6 @@ export class UtilsService {
     }
     return days;
   }
-
-  /**
-   * @description Add icon
-   * @param name; name
-   * @param path :path
-   */
-  addIcon(obj): void {
-    obj.forEach((data) => this.matIconRegistry.addSvgIcon(
-      data.name,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(data.path)
-    ));
-}
 
   /**
    * @description Add icon

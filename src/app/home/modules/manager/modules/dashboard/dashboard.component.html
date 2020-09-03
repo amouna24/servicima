@@ -1,6 +1,6 @@
 <div class="page-container">
- <!-- <div *ngIf="loaded | async"> -->
-  <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'" (valueChange)='goTodetailUser($event)'>
+  <div *ngIf="loaded | async">
+  <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
   </wid-data-table>
-  <!-- </div>-->
+   </div>
  </div>

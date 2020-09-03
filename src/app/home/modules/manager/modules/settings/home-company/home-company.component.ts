@@ -59,6 +59,9 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /** subscription */
   private subscriptions: Subscription[] = [];
 
+  /**
+   * @description Loaded when component in init state
+   */
   ngOnInit(): void {
     this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.city = { cities: '', code: '' };

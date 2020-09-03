@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, combineLatest, forkJoin, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { ProfileService } from '@core/services/profile/profile.service';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -39,5 +38,4 @@ export class UserService {
   getUserInfoById(application: string, email: string): Observable<IUserInfo[]> {
    return  this.httpClient.get<IUserInfo[]>(`${environment.userGatewayApiUrl}/getprofileinfos?application_id=${application}&email_address=${email}`);
   }
-
 }

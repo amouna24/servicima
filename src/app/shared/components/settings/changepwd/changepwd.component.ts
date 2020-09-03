@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { CredentialsService } from '@core/services/credentials/credentials.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CrossFieldErrorMatcher } from '@core/services/utils/validatorPassword';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 @Component({
   selector: 'wid-changepwd',
@@ -20,7 +20,7 @@ export class ChangePwdComponent implements OnInit {
   userCredentials: string;
 
   constructor(private formBuilder: FormBuilder,
-              private credentialsService: CredentialsService,
+              private profileService: ProfileService,
               private  localStorageService: LocalStorageService,
               public dialogRef: MatDialogRef<ChangePwdComponent>) { }
 
@@ -82,7 +82,7 @@ export class ChangePwdComponent implements OnInit {
       old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    this.credentialsService.changePassword(newPassword).subscribe(
+    this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.dialogRef.close();
       },

@@ -20,7 +20,7 @@
           <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
             <!--Display Image Avatar of user  with progress border in upload-->
             <div fxLayoutAlign="center center" class="input-image">
-              <img [src]="photo ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
+              <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
                 [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
               <div class="progress" *ngIf="loading$ | async"></div>
               <label for="file" class="btn-action">

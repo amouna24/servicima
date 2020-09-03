@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 
-import { UsersListComponent } from '@shared/../home/modules/manager/modules/settings/usersList/users-list.component';
-
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -31,7 +29,6 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     SidenavComponent,
     HeaderComponent,
     SpinnerComponent,
-    UsersListComponent,
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
@@ -70,7 +67,6 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     UserComponent,
     ChangePwdComponent,
     HomeCompanyComponent,
-    UsersListComponent,
     TranslateModule,
     NgxDatatableModule,
     FlexLayoutModule,

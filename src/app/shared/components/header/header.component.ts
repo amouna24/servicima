@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { UserService } from '@core/services/user/user.service';
@@ -10,8 +10,9 @@ import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { ModalService } from '@core/services/modal/modal.service';
 
-import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence-expiration/licence-expiration.component';
+import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 
 @Component({
   selector: 'wid-header',
@@ -34,13 +35,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private utilService: UtilsService,
               public dialog: MatDialog,
+              private modalsServices: ModalService,
   ) {
-    this.utilService.addIcon([{ 'name': 'card_giftcard', 'path': 'assets/img/component.svg'},
-                                  { 'name': 'assistant', 'path': 'assets/img/component1.svg'},
-                                  { 'name': 'notifications_none', 'path': 'assets/img/component2.svg'},
-                                  { 'name': 'settings', 'path': 'assets/img/component3.svg'},
-                                  { 'name': 'buy', 'path': 'assets/img/bag.svg'},
-     ]
+    this.utilService.addIcon([{ 'name': 'buy', 'path': 'assets/icons/bag.svg'},
+      ]
     );
   }
 
@@ -48,20 +46,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
  ngOnInit(): void {
+    this.modalsServices.registerModals([
+      { modalName: 'expirationLicense', modalComponent: LicenceExpirationComponent}]);
     this.userService.connectedUser$.pipe(takeUntil(this.destroy$)).subscribe((userInfo) => {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
         if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
-          const dialogRef = this.dialog.open(LicenceExpirationComponent, {
-            data: { }, disableClose: true,
-          });
-          dialogRef.afterClosed().subscribe(() => {
-          });
+          this.modalsServices.displayModal('expirationLicense', null , '40%')
+            .pipe(
+              takeUntil(this.destroy$)
+            )
+            .subscribe(
+              (resp) => {
+              },
+              (error) => {
+                console.error(error);
+              });
         }
       }
-    }, (err) => {
-      console.error(err);
     });
   }
 
@@ -98,14 +101,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-    this.router.navigate(['/manager/settings/buy-licence']);
+    this.router.navigate(['/manager/settings/licence/buy-licence']);
   }
 
   /**
    * @description  : Open dialog upgrade licence
    */
   UpgradeLicence() {
-    this.router.navigate(['/manager/settings/upgrade-licence']);
+    this.router.navigate(['/manager/settings/licence/upgrade-licence']);
   }
 
   /**
