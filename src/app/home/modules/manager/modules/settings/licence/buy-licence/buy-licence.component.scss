@@ -1,0 +1,63 @@
+.mat-stepper-vertical {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+/********************************************************/
+/* input outline color*/
+/********************************************************/
+::ng-deep .mat-form-field-appearance-outline  .mat-form-field-outline {
+  background-color: white !important;
+}
+
+.container-button{
+  width: 100%;
+}
+.container-input{
+  width: 100%;
+}
+.dialog-container{
+  width: 100%;
+}
+.close{
+  display:flex;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+.icon-close{
+ display:flex;
+ justify-content: flex-end;
+}
+.button-logout{
+  line-height: 0;
+}
+.img-card{
+  margin-left: 4px;
+}
+.container-button{
+  width: 100%;
+  text-align: center;
+  margin-top: 14px;
+}
+.button-next{
+  background-color: #d7c831;
+}
+
+.title{
+  text-align: center;
+}
+.mat-stepper-vertical {
+  margin-top: 47px !important;
+}

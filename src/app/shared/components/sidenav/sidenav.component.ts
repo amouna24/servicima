@@ -38,7 +38,8 @@ export class SidenavComponent implements OnInit, OnChanges {
 
   @Input() moduleName: string;
 
-  constructor(private sidenavService: SidenavService, private userService: UserService
+  constructor(private sidenavService: SidenavService,
+              private userService: UserService
   ) {
     this.userService.connectedUser$.subscribe((info) => {
       if (!!info) {

@@ -150,7 +150,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @description: navigate to add user
    */
   addNewUser(): void {
-    this.router.navigate(['/manager/add-user']);
+    this.router.navigate(['/manager/settings/add-user']);
   }
 
   /**
@@ -158,7 +158,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param id: string
    */
   goTodetailUser(id: string): void {
-    this.router.navigate(['/manager/update-user'],
+    this.router.navigate(['/manager/settings/update-user'],
       {
         queryParams: {
           'id': id

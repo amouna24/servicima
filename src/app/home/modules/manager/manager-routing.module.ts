@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
-import { UserComponent } from '@shared/components/settings/user/user.component';
-import { HomeCompanyComponent } from '@shared/components/settings/home-company/home-company.component';
 
 import { ManagerComponent } from './manager.component';
 
@@ -51,41 +48,9 @@ const routes: Routes = [
         loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
       },
       {
-        path: 'profile',
-        component: UserComponent,
-        data: {
-          breadcrumb: 'profile'
-        },
+        path: '',
+        loadChildren: () => import('@core/../shared/components/settings/user/user.module').then(m => m.UserModule)
       },
-      {
-        path: 'add-user',
-        component: UserComponent,
-        data: {
-          breadcrumb: 'create'
-        },
-      },
-      {
-        path: 'update-user',
-        component: UserComponent,
-        data: {
-          breadcrumb: 'update'
-        },
-      },
-      {
-        path: 'users-list',
-        component: UsersListComponent,
-        data: {
-          breadcrumb: 'users'
-        },
-      },
-      {
-        path: 'settings/users-list',
-        component: UsersListComponent
-      },
-      {
-        path: 'home-company',
-        component: HomeCompanyComponent
-      }
     ]
   }
 ];

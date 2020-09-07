@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ViewChild, Output } from '@angular/core';
 import { ColumnMode, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -16,7 +16,6 @@ export class DataTableComponent implements OnInit, OnChanges {
 
   @Input() data: any[] = [];
   @Input() tableCode: string;
-
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   ColumnMode = ColumnMode;
@@ -33,8 +32,10 @@ export class DataTableComponent implements OnInit, OnChanges {
     name: ''
   };
 
-  constructor(private dataTableService: DataTableService, private modalService: ModalService, private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer) {
+  constructor(private dataTableService: DataTableService,
+              private modalService: ModalService,
+              private matIconRegistry: MatIconRegistry,
+              private domSanitizer: DomSanitizer, ) {
     this.registerMatIcons();
   }
 
@@ -136,5 +137,4 @@ export class DataTableComponent implements OnInit, OnChanges {
         return '#000';
     }
   }
-
 }

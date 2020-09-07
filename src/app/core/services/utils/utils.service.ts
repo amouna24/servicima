@@ -13,23 +13,24 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
+
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    ) {
+  ) {
 
   }
 
   /**
-   * @description get refdata with specific type
+   * @description get refData with specific type
    * @param company: company
    * application :application
    * languageId: language id
    * type: array code type example ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE']]
    */
-  getRefData(company: string, application: string, listType: string[]): any {
+  getRefData(company: string, application: string, listType: string[], map?: boolean): any {
     const languageId = this.localStorageService.getItem('language').langId;
     listType.forEach((type) => {
       this.resList = [];
@@ -45,12 +46,16 @@ export class UtilsService {
           }
         });
       if (filterRefData.length > 0) {
-        filterRefData.forEach(
-          (element) => {
-            this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-          },
-        );
-        return this.refData[type] = this.resList;
+        if (!map) {
+          filterRefData.forEach(
+            (element) => {
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+            },
+          );
+          return this.refData[type] = this.resList;
+        } else {
+          return this.refData[String(`${type}`)] = filterRefData;
+        }
       } else if (filterRefData.length === 0) {
         filterRefData = this.appInitializerService.refDataList.filter(
           element =>
@@ -61,12 +66,16 @@ export class UtilsService {
             element.RefDataKey.company_id === this.appInitializerService.companyList
               .find(comp => comp.companyKey.email_address === 'ALL')._id &&
             element.RefDataKey.language_id === languageId);
-        filterRefData.forEach(
-          (element) => {
-            this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-          },
-        );
-        this.refData[String(`${type}`)] = this.resList;
+        if (map) {
+          this.refData[String(`${type}`)] = filterRefData;
+        } else {
+          filterRefData.forEach(
+            (element) => {
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+            },
+          );
+          this.refData[String(`${type}`)] = this.resList;
+        }
       }
     });
     return this.refData;
@@ -97,6 +106,7 @@ export class UtilsService {
         value.companyKey.application_id === this.getApplicationID(applicationCode)
       )._id;
   }
+
   /**************************************************************************
    * @description Get Application NAME
    * @param APPLICATION_ID the application id
@@ -148,6 +158,20 @@ export class UtilsService {
       .subscribe(() => {
         this.filterData(list, filterCtrl, filtered);
       });
+  }
+
+  /**
+   * @description calculate difference date between two date
+   */
+  differenceDay(date1: Date, date2: number): number {
+    const endDate: any = new Date(date1);
+    const startDate: any = new Date(date2);
+    let days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    if (days < 0) {
+      days = 0;
+      return days;
+    }
+    return days;
   }
 
   /**

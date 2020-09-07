@@ -17,6 +17,8 @@ import { AppComponent } from './app.component';
 
 import { ErrorComponent } from './pages/error/error.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { TaxComponent } from './home/modules/manager/modules/settings/tax/tax.component';
+import { DataTableModule } from './data-table/data-table.module';
 
 export function setupApp(
   translationCustomLoaderService: TranslationCustomLoaderService,
@@ -31,6 +33,7 @@ export function setupApp(
     AppComponent,
     NotFoundComponent,
     ErrorComponent,
+    TaxComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +50,7 @@ export function setupApp(
     }),
     AppRoutingModule,
     SharedModule,
+    DataTableModule,
   ],
   providers: [
     {

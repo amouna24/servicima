@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ProfileService } from '@core/services/profile/profile.service';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -49,19 +49,6 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /** subscription */
   subscription: Subscription;
 
-  public legalFormCtrl: FormControl = new FormControl('');
-  public activityCodeCtrl: FormControl = new FormControl();
-  public countryCtrl: FormControl = new FormControl('', Validators.required);
-  public registryCountryCtrl: FormControl = new FormControl('', Validators.required);
-  public currencyCtrl: FormControl = new FormControl('', Validators.required);
-  public vatCtrl: FormControl = new FormControl('', Validators.required);
-  /** control for the MatSelect filter keyword */
-  public legalFormFilterCtrl: FormControl = new FormControl();
-  public countryFilterCtrl: FormControl = new FormControl();
-  public activityCodeFilterCtrl: FormControl = new FormControl();
-  public registryCountryFilterCtrl: FormControl = new FormControl();
-  public currencyFilterCtrl: FormControl = new FormControl();
-  public vatFilterCtrl: FormControl = new FormControl();
   /** list filtered by search keyword */
   public filteredLegalForm = new ReplaySubject(1);
   public filteredCountry = new ReplaySubject(1);
@@ -72,6 +59,9 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /** subscription */
   private subscriptions: Subscription[] = [];
 
+  /**
+   * @description Loaded when component in init state
+   */
   ngOnInit(): void {
     this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.city = { cities: '', code: '' };
@@ -91,7 +81,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description : get the refdata from local storage
+   * @description : get the refData from local storage
    */
   getRefdata(): void {
     const list = ['VAT', 'LEGAL_FORM'];
@@ -120,6 +110,18 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       linkedinAccount: [''],
       twitterAccount: [''],
       youtubeAccount: [''],
+      legalFormCtrl: [''],
+      activityCodeCtrl: [''],
+      currencyCtrl: [''],
+      vatCtrl: [''],
+      registryCountryCtrl: [''],
+      countryCtrl: [''],
+      legalFormFilterCtrl: [''],
+      countryFilterCtrl: [''],
+      activityCodeFilterCtrl: [''],
+      registryCountryFilterCtrl: [''],
+      currencyFilterCtrl: [''],
+      vatFilterCtrl: [''],
     });
   }
   /**
@@ -127,13 +129,13 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    */
   setForm(): void {
     this.city.cities = [{ city: this.company['city'] }];
-    this.countryCtrl.setValue(this.company['country_id']);
-    this.registryCountryCtrl.setValue(this.company['registry_country']);
-    this.legalFormCtrl.setValue(this.company['legal_form']);
-    this.activityCodeCtrl.setValue(this.company['activity_code']);
-    this.currencyCtrl.setValue(this.company['currency_id']);
-    this.vatCtrl.setValue(this.company['vat_nbr']);
     this.form.setValue({
+      countryCtrl: this.company['country_id'],
+      registryCountryCtrl: this.company['registry_country'],
+      legalFormCtrl: this.company['legal_form'],
+      activityCodeCtrl: this.company['activity_code'],
+      currencyCtrl: this.company['currency_id'],
+      vatCtrl: this.company['vat_nbr'],
       emailAddress: this.company.companyKey.email_address,
       companyName: this.company['company_name'],
       address: this.company['adress'],
@@ -148,6 +150,12 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       linkedinAccount: this.company['linkedin_url'],
       twitterAccount: this.company['twitter_url'],
       youtubeAccount: this.company['youtube_url'],
+      legalFormFilterCtrl: '',
+      countryFilterCtrl: '',
+      registryCountryFilterCtrl: '',
+      activityCodeFilterCtrl: '',
+      currencyFilterCtrl: '',
+      vatFilterCtrl: '',
     });
   }
 
@@ -157,7 +165,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @returns city
    */
   getCity(zipCode: string): void {
-    if (this.registryCountryCtrl.value === 'FRA' && this.form.value.zipCode) {
+    if (this.form.value.registryCountryCtrl === 'FRA' && this.form.value.zipCode) {
       this.assetsDataService.getCity(zipCode).subscribe((city) => {
         this.city['cities'] = city['cities'];
       }, (err) => console.error(err));
@@ -178,12 +186,12 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
     this.filteredCurrency.next(this.currenciesList.slice());
     this.filteredVat.next(this.vatList.slice());
     /* listen for search field value changes */
-    this.utilsService.changeValueField(this.legalFormList, this.legalFormFilterCtrl, this.filteredLegalForm);
-    this.utilsService.changeValueField(this.countryList, this.countryFilterCtrl, this.filteredCountry);
-    this.utilsService.changeValueField(this.countryList, this.registryCountryFilterCtrl, this.filteredRegistryCountry);
-    this.utilsService.changeValueField(this.activityCodeList, this.activityCodeFilterCtrl, this.filteredActivityCode);
-    this.utilsService.changeValueField(this.currenciesList, this.currencyFilterCtrl, this.filteredCurrency);
-    this.utilsService.changeValueField(this.vatList, this.vatFilterCtrl, this.filteredVat);
+    this.utilsService.changeValueField(this.legalFormList, this.form.controls.legalFormFilterCtrl, this.filteredLegalForm);
+    this.utilsService.changeValueField(this.countryList, this.form.controls.countryFilterCtrl, this.filteredCountry);
+    this.utilsService.changeValueField(this.countryList, this.form.controls.registryCountryFilterCtrl, this.filteredRegistryCountry);
+    this.utilsService.changeValueField(this.activityCodeList, this.form.controls.activityCodeFilterCtrl, this.filteredActivityCode);
+    this.utilsService.changeValueField(this.currenciesList, this.form.controls.currencyFilterCtrl, this.filteredCurrency);
+    this.utilsService.changeValueField(this.vatList, this.form.controls.vatFilterCtrl, this.filteredVat);
   }
 
   /**
@@ -195,17 +203,17 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       application_id: this.company.companyKey['application_id'],
       email_address: this.company.companyKey.email_address,
       company_name: this.company['company_name'],
-      registry_country: this.registryCountryCtrl.value,
+      registry_country: this.form.value.registryCountryCtrl,
       reg_nbr: this.form.value.registrationNumber,
       activity_desc: this.form.value.activityDescription,
-      activity_code: this.activityCodeCtrl.value,
-      currency_id: this.currencyCtrl.value,
-      legal_form: this.legalFormCtrl.value,
+      activity_code: this.form.value.activityCodeCtrl,
+      currency_id: this.form.value.currencyCtrl,
+      legal_form: this.form.value.legalFormCtrl,
       capital: this.form.value.capital,
-      vat_nbr: this.vatCtrl.value,
+      vat_nbr: this.form.value.vatCtrl,
       adress: this.form.value.address,
       zip_code: this.form.value.zipCode,
-      country_id: this.countryCtrl.value,
+      country_id: this.form.value.countryCtrl,
       city: this.form.value.city,
       employee_nbr: this.form.value.employeeNum,
       web_site: this.form.value.webSite,
@@ -238,7 +246,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @params Code activity
    */
   setDescriptionActivity(code: string): void {
-    if (this.registryCountryCtrl.value === 'FRA') {
+    if (this.form.value.registryCountryCtrl === 'FRA') {
       const desc = this.appInitializerService.activityCodeList
         .find(activity => activity.NAF === code).ACTIVITE;
       this.form.controls['activityDescription'].setValue(desc);

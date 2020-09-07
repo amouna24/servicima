@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 
-import { UsersListComponent } from '@shared/components/settings/usersList/users-list.component';
-
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -21,9 +19,9 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
-import { HomeCompanyComponent } from './components/settings/home-company/home-company.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +29,6 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     SidenavComponent,
     HeaderComponent,
     SpinnerComponent,
-    UsersListComponent,
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
@@ -40,7 +37,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
     /* Directives */
-    CanBeDisplayedDirective
+    CanBeDisplayedDirective,
 
   ],
   imports: [
@@ -70,7 +67,6 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     UserComponent,
     ChangePwdComponent,
     HomeCompanyComponent,
-    UsersListComponent,
     TranslateModule,
     NgxDatatableModule,
     FlexLayoutModule,

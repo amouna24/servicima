@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ICountry } from '@shared/models/countries.model';
 import { IActivity } from '@shared/models/activity.model';
 import { ICurrency } from '@shared/models/currency.model';
 import { ICities } from '@shared/models/cities.model';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 
 import { environment } from '../../../../environments/environment';
 

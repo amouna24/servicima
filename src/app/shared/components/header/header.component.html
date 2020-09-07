@@ -4,44 +4,56 @@
       <input type="text" required>
     </div>
   </div>
+  <div class="header-label" fxLayout="row" fxLayoutGap="25px">
+    <div class="trial"> {{licenceCode }} </div>
+    <div class="day-left" *ngIf="licenceType == 'TRIAL'"> {{endLicence}} jours restants</div>
+    <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()" mat-button
+           class="wid-button-buy" >
+      <mat-icon svgIcon="buy"> </mat-icon>
+      {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}
+    </button>
+  </div>
   <span class="flex-spacer"></span>
-  <div fxLayout="row " fxLayoutGap="25px">
+  <div fxLayout="row " fxLayoutGap="15px">
     <ng-container *ngFor=" let headerMenu of headerMenu">
       <ng-container *ngIf=" headerMenu.type === 'link';  else subMenuLabel">
         <div fxLayout="row" class="cursor" [routerLink]="['./', headerMenu.state]">
-          <mat-icon class="icon material-icons-outlined icon-button">{{headerMenu.icon}} </mat-icon>
-          <span class="header-label">{{headerMenu.name}}</span>
-        </div>
-      </ng-container>
+          <!--   <mat-icon class="icon material-icons-outlined icon-button" svgIcon={{headerMenu.icon}}> </mat-icon> -->
+           <!-- <span class="header-label">{{headerMenu.name}}</span> -->
+          <!--   <mat-divider [vertical]="true" style="margin-left:15px"></mat-divider> -->
+          </div>
+        </ng-container>
 
-      <ng-template #subMenuLabel>
-        <div fxLayout="row ">
-          <div class="cursor" [matMenuTriggerFor]="matSettings">
-            <div fxLayout="row ">
-              <mat-icon class="icon material-icons-outlined icon-button">{{headerMenu.icon}} </mat-icon>
-              <div class="header-label">{{headerMenu.name}}</div>
+        <ng-template #subMenuLabel>
+          <div fxLayout="row " fxLayoutGap="15px">
+            <div class="cursor" [matMenuTriggerFor]="matSettings">
+              <div fxLayout="row " fxLayoutGap="8px">
+                <!-- <mat-icon class="icon material-icons-outlined icon-button"  svgIcon={{headerMenu.icon}}></mat-icon>-->
+                 <!--   <div class="header-label">{{headerMenu.name}}</div> -->
+              <!--   <mat-divider [vertical]="true"></mat-divider>-->
+              </div>
+              <mat-menu #matSettings="matMenu" xPosition="before">
+                <ng-container *ngFor=" let children of headerMenu.children">
+                  <div mat-menu-item [routerLink]="['/manager/settings/',children.state]">{{children.name}}</div>
+                </ng-container>
+              </mat-menu>
             </div>
-            <mat-menu #matSettings="matMenu" xPosition="before">
-              <ng-container *ngFor=" let children of headerMenu.children">
-                <div mat-menu-item [routerLink]="['./', children.state]">{{children.name}}</div>
-              </ng-container>
-            </mat-menu>
+          </div>
+        </ng-template>
+      </ng-container>
+      <div fxLayout="row ">
+        <div class="cursor" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
+          <div fxLayout="row ">
+            <img src="assets/img/avatar.png" alt="" class="user-avatar">
+            <div class="header-label"> {{name}} </div>
           </div>
         </div>
-      </ng-template>
-    </ng-container>
-    <div fxLayout="row ">
-      <div class="cursor" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
-        <div fxLayout="row ">
-          <img src="assets/img/default.jpg" alt="" class="user-avatar">
-          <div class="header-label"> {{name}}</div>
-        </div>
+        <mat-menu #matUserMenu="matMenu" xPosition="before" >
+          <button mat-menu-item [routerLink]="['/manager/profile']">MyAccount</button>
+          <button mat-menu-item [routerLink]="['/manager/settings/home-company']">Home company</button>
+          <button mat-menu-item (click)='logout()'>Logout</button>
+        </mat-menu>
       </div>
-      <mat-menu #matUserMenu="matMenu" xPosition="before">
-        <button mat-menu-item [routerLink]="['/manager/profile']">MyAccount</button>
-        <button mat-menu-item [routerLink]="['/manager/home-company']">Home company</button>
-        <button mat-menu-item (click)='logout()'>Logout</button>
-      </mat-menu>
     </div>
-  </div>
-</mat-toolbar>
+  </mat-toolbar>
+

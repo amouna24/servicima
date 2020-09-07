@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { CredentialsService } from '@core/services/credentials/credentials.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CrossFieldErrorMatcher } from '@core/services/utils/validatorPassword';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 @Component({
   selector: 'wid-changepwd',
@@ -17,10 +17,12 @@ export class ChangePwdComponent implements OnInit {
   hideConfirmPassword = true;
   hideOldPassword = true;
   errorMatcher = new CrossFieldErrorMatcher();
-  userCredentials; string;
+  userCredentials: string;
 
-  constructor(private formBuilder: FormBuilder, private credentialsService: CredentialsService,
-    private  localStorageService: LocalStorageService, public dialogRef: MatDialogRef<ChangePwdComponent>) { }
+  constructor(private formBuilder: FormBuilder,
+              private profileService: ProfileService,
+              private  localStorageService: LocalStorageService,
+              public dialogRef: MatDialogRef<ChangePwdComponent>) { }
 
    /**
     * @description Loaded when component in init state
@@ -43,7 +45,6 @@ export class ChangePwdComponent implements OnInit {
         // check whether the entered password has upper-case letter
         // Has a minimum length of 8 characters and max length 30
         Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/),
-
       ]],
 
       confirmPassword: ['', [Validators.required]],
@@ -68,16 +69,20 @@ export class ChangePwdComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  /**
+   * @description Change password
+   * @param form: form
+   */
   changePassword(form: FormGroup): void {
     this.userCredentials = this.localStorageService.getItem('userCredentials');
     const newPassword = {
       application_id: this.userCredentials ['application_id'] ,
       email_address: this.userCredentials['email_address'],
-      password: form.get('password'),
-      old_password: form.get('oldPassword'),
+      password: form.get('password').value,
+      old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    this.credentialsService.changePassword(newPassword).subscribe(
+    this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.dialogRef.close();
       },
@@ -88,5 +93,4 @@ export class ChangePwdComponent implements OnInit {
       }
     );
   }
-
 }

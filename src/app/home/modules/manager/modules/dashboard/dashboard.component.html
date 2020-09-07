@@ -1,4 +1,6 @@
 <div class="page-container">
-  <wid-data-table [data]="ELEMENT_DATA" [tableCode]="'USERS-LIST'">
+  <div *ngIf="loaded | async">
+  <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
   </wid-data-table>
-</div>
+   </div>
+ </div>

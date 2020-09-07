@@ -4,8 +4,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 /* RxJs imports */
 import { Observable } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-
-import { FingerPrintService } from '../../../../projects/auth-front-lib/src/lib/core/services/auth/fingerprint.service';
+import { FingerPrintService } from '@widigital-group/auth-npm-front';
 
 /* Specific imports */
 import { LocalStorageService } from '../services/storage/local-storage.service';
@@ -17,9 +16,7 @@ import { LocalStorageService } from '../services/storage/local-storage.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-
   data: any;
-
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -46,7 +43,6 @@ export class AuthGuard implements CanActivate {
       /* Call the backend to check fingerprint is OK */
       this.fingerPrintService.userConnected()
         .then((result) => {
-
           /* Fingerprint is OK, new token and credentials status returned */
           if (result) {
             this.localStorageService.setItem('currentToken', { account_activation_token: this.fingerPrintService.token });
@@ -56,10 +52,6 @@ export class AuthGuard implements CanActivate {
               this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode } });
               resolve(false);
             } else { /* User Active => Allow access to requested ressource */
-              this.userService.getUserInfo();
-              if (this.userService.userInfo) {
-                resolve(true);
-              }
             }
           } else {
             /* Autologin cannot be done (fingerprint doesn't exist) => Redirect to login page */

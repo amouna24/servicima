@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Subscription, Subject } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
-import { RoutingStateService } from '@core/services/routingState/routing-state.service';
-import { IUserRolesModel } from '@shared/models/userRoles.model';
 
 import { IViewParam } from '@shared/models/view.model';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -20,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import { indicate } from '@core/services/utils/progress';
+import { AuthService } from '@core/services/auth/auth.service';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
@@ -36,7 +35,6 @@ export class UserComponent implements OnInit, OnDestroy {
   infoUser: IUserInfo;
   userRole: string;
   userRoleId: string;
-  currentUrl: string;
   form: FormGroup;
   applicationId: string;
   emailAddress: string;
@@ -55,32 +53,27 @@ export class UserComponent implements OnInit, OnDestroy {
   loading$ = new Subject<boolean>();
 
   constructor(private utilsService: UtilsService,
-    private uploadService: UploadService,
-    private route: ActivatedRoute,
-    private profileService: ProfileService,
-    private appInitializerService: AppInitializerService,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private modalService: ModalService,
-    private routingState: RoutingStateService,
-    private formBuilder: FormBuilder,
-    public dialog: MatDialog,
-    private sanitizer: DomSanitizer, ) {
+              private uploadService: UploadService,
+              private route: ActivatedRoute,
+              private profileService: ProfileService,
+              private appInitializerService: AppInitializerService,
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
+              private modalService: ModalService,
+              private formBuilder: FormBuilder,
+              public dialog: MatDialog,
+              private sanitizer: DomSanitizer,
+              private authService: AuthService,
+              private router: Router, ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
-  }
+  /*  this.modalService.registerModals([
+      { modalName: 'changePassword', modalComponent: ChangePwdComponent}]);*/
+}
+
   files = [];
   url = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
-  public genderCtrl: FormControl = new FormControl('', Validators.required);
-  public titleCtrl: FormControl = new FormControl('', Validators.required);
-  public languageCtrl: FormControl = new FormControl('', Validators.required);
-  public roleCtrl: FormControl = new FormControl('', Validators.required);
-  /** control for the MatSelect filter keyword */
-  public genderFilterCtrl: FormControl = new FormControl();
-  public titleFilterCtrl: FormControl = new FormControl();
-  public languageFilterCtrl: FormControl = new FormControl();
-  public roleFilterCtrl: FormControl = new FormControl();
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
   public filteredGender = new ReplaySubject(1);
@@ -91,7 +84,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-    this.currentUrl = this.routingState.getCurrentUrl();
     this.initForm();
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
@@ -109,11 +101,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
-    if (this.currentUrl === '/manager/add-user') {
-      this.form.controls['homeCompany'].setValue(this.companyName);
-      this.form.controls['homeCompany'].disable();
-      this.showCompany = false;
-    } else if (this.currentUrl === '/manager/profile') {
       this.showCompany = true;
       this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
@@ -121,29 +108,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.setForm();
       this.form.controls['userType'].disable();
       this.form.controls['homeCompany'].disable();
-      this.roleCtrl.disable();
-    } else {
-      this.route.queryParams.subscribe(params => {
-        const id = params.id || null;
-        if (id) {
-          this.showCompany = true;
-          this.subscriptions.push(this.profileService.getUserById(id).subscribe(user => {
-            this.user = user[0];
-            this.subscriptions.push(this.userService.getUserInfoById(this.user['userKey']['application_id'], this.user['userKey']['email_address']).
-              subscribe(((data) => {
-                this.userRole = data['userroles'][0]['userRolesKey']['role_code'];
-                this.userRoleId = data['userroles'][0]['_id'];
-                this.applicationId = this.user['userKey'].application_id;
-                this.form.controls['userType'].disable();
-                this.form.controls['homeCompany'].disable();
-                this.setForm();
-              }),
-                (err) => console.error(err)));
-          }, (err) => console.error(err)));
-        }
-      }, (err) => console.error(err));
-    }
-
+      this.form.controls['roleCtrl'].disable();
     this.getRefdata();
   }
 
@@ -163,6 +128,14 @@ export class UserComponent implements OnInit, OnDestroy {
       youtubeAccount: [''],
       linkedinAccount: [''],
       homeCompany: [''],
+      roleCtrl: [''],
+      genderCtrl: [''],
+      titleCtrl: [''],
+      languageCtrl: [''],
+      genderFilterCtrl: [''],
+      titleFilterCtrl: [''],
+      languageFilterCtrl: [''],
+      roleFilterCtrl: [''],
     });
   }
 
@@ -170,10 +143,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description : set the value of the form if it was an update user
    */
   setForm() {
-    this.roleCtrl.setValue(this.userRole);
-    this.languageCtrl.setValue(this.user['language_id']);
-    this.genderCtrl.setValue(this.user['gender_id']);
-    this.titleCtrl.setValue(this.user['title_id']);
     this.form.setValue({
       emailAddress: this.user['userKey'].email_address,
       companyEmail: this.user['company_email'],
@@ -186,8 +155,15 @@ export class UserComponent implements OnInit, OnDestroy {
       youtubeAccount: this.user['youtube_url'],
       linkedinAccount: this.user['linkedin_url'],
       homeCompany: this.companyName,
+      roleCtrl: this.userRole,
+      languageCtrl: this.user['language_id'],
+      genderCtrl: this.user['gender_id'],
+      titleCtrl: this.user['title_id'],
+      genderFilterCtrl: '',
+      titleFilterCtrl: '',
+      languageFilterCtrl: '',
+      roleFilterCtrl: '',
     });
-    console.log(this.form.value);
     this.getImage(this.user['photo']);
   }
 
@@ -227,7 +203,7 @@ export class UserComponent implements OnInit, OnDestroy {
    *  create Object from blob and convert to url
    */
   getImage(id) {
-    this.uploadService.getImage(id).subscridbe(
+    this.uploadService.getImage(id).subscribe(
       data => {
         const unsafeImageUrl = URL.createObjectURL(data);
         this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
@@ -252,20 +228,34 @@ export class UserComponent implements OnInit, OnDestroy {
     this.filteredTitle.next(this.titleList.slice());
     this.filteredLanguage.next(this.languages.slice());
     this.filteredRole.next(this.roleList.slice());
-    this.utilsService.changeValueField(this.titleList, this.titleFilterCtrl, this.filteredTitle);
-    this.utilsService.changeValueField(this.languages, this.languageFilterCtrl, this.filteredLanguage);
-    this.utilsService.changeValueField(this.genderList, this.genderFilterCtrl, this.filteredGender);
-    this.utilsService.changeValueField(this.roleList, this.roleFilterCtrl, this.filteredRole);
+    this.utilsService.changeValueField(this.titleList, this.form.controls.titleFilterCtrl, this.filteredTitle);
+    this.utilsService.changeValueField(this.languages, this.form.controls.languageFilterCtrl, this.filteredLanguage);
+    this.utilsService.changeValueField(this.genderList, this.form.controls.genderFilterCtrl, this.filteredGender);
+    this.utilsService.changeValueField(this.roleList, this.form.controls.roleFilterCtrl, this.filteredRole);
   }
 
   /**
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
+  /*  const confirmation = {
+      sentence: 'change password',
+    };
+*/
     const dialogRef = this.dialog.open(ChangePwdComponent, {
       data: { }, disableClose: true,
     });
     dialogRef.afterClosed().subscribe(() => {
+
+      this.subscriptions.push(this.authService.logout().subscribe(() => {
+            localStorage.removeItem('userCredentials');
+            localStorage.removeItem('currentToken');
+            this.userService.connectedUser$.next(null);
+            this.router.navigate(['/auth/login']);
+          },
+          (err) => {
+            console.error(err);
+          }));
     });
   }
 
@@ -274,104 +264,41 @@ export class UserComponent implements OnInit, OnDestroy {
    * or add a new user
    */
   async update(): Promise<void> {
-    if (this.currentUrl === '/manager/add-user') {
-      const newUser = {
-        application_id: this.applicationId,
-        company_id: this.companyId,
-        email_address: this.form.value.emailAddress,
-        company_email: this.emailAddress,
-        user_type: this.form.value.userType,
-        staff_type_id: this.form.value.userType,
-        first_name: this.form.value.firstName,
-        last_name: this.form.value.lastName,
-        gender_id: this.genderCtrl.value,
-        prof_phone: this.form.value.profPhone,
-        cellphone_nbr: this.form.value.cellphoneNbr,
-        language_id: this.languageCtrl.value,
-        title_id: this.titleCtrl.value,
-        created_by: this.emailAddress,
-        updated_by: this.emailAddress,
-        role_code: this.roleCtrl.value,
-        granted_by: this.emailAddress,
-        linkedin_url: this.form.value.linkedinAccount,
-        twitter_url: this.form.value.twitterAccount,
-        youtube_url: this.form.value.youtubeAccount,
-        photo: await this.uploadFile(this.photo)
+    const newUser = {
+      application_id: this.user['userKey'].application_id,
+      email_address: this.form.value.emailAddress,
+      company_email: this.user['company_email'],
+      user_type: this.user['user_type'],
+      first_name: this.form.value.firstName,
+      last_name: this.form.value.lastName,
+      gender_id: this.form.value.genderCtrl,
+      prof_phone: this.form.value.profPhone,
+      cellphone_nbr: this.form.value.cellphoneNbr,
+      language_id: this.form.value.languageCtrl,
+      title_id: this.form.value.titleCtrl,
+      updated_by: this.emailAddress,
+      linkedin_url: this.form.value.linkedinAccount,
+      twitter_url: this.form.value.twitterAccount,
+      youtube_url: this.form.value.youtubeAccount,
+       photo: await this.uploadFile(this.photo)
+    };
 
-      };
-      const confirmation = {
-        sentence: 'to add user',
-        name: newUser.first_name + newUser.last_name,
-      };
-      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
-        if (value === 'true') {
-          this.subscriptions.push(this.profileService.addNewProfile(newUser).subscribe(
-            (res) => console.log(res),
-            (err) => console.error(err),
-          ));
-        }
-        this.subscriptionModal.unsubscribe();
-      });
-    } else {
-      // user to update
-      const newUser = {
-        application_id: this.user['userKey'].application_id,
-        email_address: this.form.value.emailAddress,
-        company_email: this.user['company_email'],
-        user_type: this.user['user_type'],
-        first_name: this.form.value.firstName,
-        last_name: this.form.value.lastName,
-        gender_id: this.genderCtrl.value,
-        prof_phone: this.form.value.profPhone,
-        cellphone_nbr: this.form.value.cellphoneNbr,
-        language_id: this.languageCtrl.value,
-        title_id: this.titleCtrl.value,
-        updated_by: this.emailAddress,
-        linkedin_url: this.form.value.linkedinAccount,
-        twitter_url: this.form.value.twitterAccount,
-        youtube_url: this.form.value.youtubeAccount,
-        photo: await this.uploadFile(this.photo)
-      };
-
-      // object to update user role
-      const user = {
-        'application_id': newUser.application_id,
-        'email_address': newUser.email_address,
-        '_id': this.userRoleId,
-        'role_code': this.roleCtrl.value,
-        'granted_by': this.emailAddress,
-      };
-
-      const confirmation = {
-        sentence: 'to update user',
-        name: newUser.first_name + newUser.last_name,
-      };
-      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
-        if (value === 'true') {
-          this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
-            res => {
-              if (newUser.email_address === this.emailAddress) {
-                this.infoUser['user'][0] = res;
-                if (this.currentUrl === '/manager/profile') {
-                  this.userService.connectedUser$.next(this.infoUser);
-                } else {
-                  this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe((data) => {
-                    this.infoUser['userroles'][0] = data as IUserRolesModel;
-                    this.userService.connectedUser$.next(this.infoUser);
-                  },
-                    (err) => console.error(err)));
-                }
-              } else {
-                this.subscriptions.push(this.profileService.UpdateUserRole(user).subscribe(() => {
-                }, (err) => console.error(err)));
-              }
-            },
-            err => console.error(err),
-          ));
-        }
-        this.subscriptionModal.unsubscribe();
-      });
-    }
+    const confirmation = {
+      sentence: 'to update user',
+      name: newUser.first_name + newUser.last_name,
+    };
+    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
+      if (value === 'true') {
+        this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
+          res => {
+            if (res) {
+              this.infoUser['user'][0] = res;
+              this.userService.connectedUser$.next(this.infoUser);
+              this.subscriptionModal.unsubscribe();
+            }
+          }));
+      }
+    });
   }
 
   /**
@@ -379,8 +306,8 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   getLanguages(): void {
     this.languages = [];
-    this.appInitializerService.languageList.forEach((language) => {
-      this.languages.push({ value: language._id, viewValue: language.language_desc });
+    this.languages = this.appInitializerService.languageList.map((language) => {
+      return ({ value: language._id, viewValue: language.language_desc});
     });
   }
 
