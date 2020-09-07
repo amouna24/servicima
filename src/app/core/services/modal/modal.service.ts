@@ -16,7 +16,7 @@ export class ModalService {
   // registre modal component reference and name
   registerModals(modalsList: Array<{ modalName: string, modalComponent: any }>) {
     this.appModals = modalsList;
-    console.log(this.appModals)
+    console.log(this.appModals);
   }
 
   // get modal component reference using modal component name

@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Injectable({
   providedIn: 'root'
