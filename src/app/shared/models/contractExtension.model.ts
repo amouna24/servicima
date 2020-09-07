@@ -3,7 +3,7 @@ import { IContractExtensionKey } from '@shared/models/contractExtensionKey.model
 export interface IContractExtension {
   /* ID */
   _id: string;
-  contractorKey: IContractExtensionKey;
+  contractExtensionKey: IContractExtensionKey;
   extension_start_date?: string;
   extension_end_date?: string;
   extension_status?: string;

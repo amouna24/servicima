@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { id } from '@swimlane/ngx-datatable';
 
 @Injectable({
   providedIn: 'root'

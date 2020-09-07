@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { combineLatest, concat, forkJoin, of, ReplaySubject, Subject, Subscription } from 'rxjs';
@@ -61,7 +61,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Form Group
    *************************************************************************/
   contractorForm: FormGroup;
-
   /**************************************************************************
    * @description Declare the new ContractorId to be used on update
    *************************************************************************/
@@ -94,21 +93,20 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         { name: 'contact', path: '../assets/icons/contact.svg'},
       ]
     );
-    this.contractorForm = new FormGroup({ });
+    this.initContractForm(null, null);
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    this.initContractForm(null, null);
     this.getInitialData();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(params => {
-        if (this.canUpdate(params.id)) {
+        if (params.id) {
           this.contractorId = params.id;
           this.getContractorByID(params);
         }
@@ -120,42 +118,74 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Init Contract Form
    *************************************************************************/
   initContractForm(contractor: IContractor, contractorContact: IContractorContact) {
+    this.contractorForm = this.formBuilder.group({
+      contractor_name: ['', Validators.required],
+      language: ['' ],
+      registry_code: ['' ],
+      legal_form: ['' ],
+      vat_nbr: ['' , [Validators.required]],
+      address: ['' ],
+      city: ['' ],
+      zip_code: ['' , [Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]],
+      country_cd: ['' ],
+      phone_nbr: ['' ],
+      phone2_nbr: ['' ],
+      fax_nbr: ['' ],
+      contact_email: ['' , [Validators.required, Validators.email]],
+      web_site: ['' ],
+      currency_cd: ['' ],
+      taxe_cd: ['' ],
+      payment_cd: ['' ],
+      /* Contractor Contact */
+      main_contact: [ '' ],
+      can_sign_contract: [ '' ],
+      first_name: [ '' ],
+      last_name: [ '' ],
+      gender_cd: [ '' ],
+      title_cd: [ '' ],
+      phone_nbr_c: [ '' ],
+      cell_phone_nbr: [ '' ],
+      /* Filter Form Control */
+      filteredCountriesControl:  [''],
+      filteredCurrencyControl:  [''],
+    });
+  }
+  updateForms(contractor: IContractor, contractorContact: IContractorContact) {
     if (contractor) {
       this.getCity(contractor.zip_code, contractor.city, true);
     }
-    this.contractorForm = this.formBuilder.group({
-      contractor_name: [contractor === null ? '' : contractor.contractor_name, Validators.required],
-      language: [contractor === null ? '' : contractor.language],
-      registry_code: [contractor === null ? '' : contractor.registry_code],
-      legal_form: [contractor === null ? '' : contractor.legal_form],
-      vat_nbr: [contractor === null ? '' : contractor.vat_nbr, [Validators.required]],
-      address: [contractor === null ? '' : contractor.address],
-      city: [contractor === null ? '' : contractor.city],
-      zip_code: [contractor === null ? '' : contractor.zip_code, [Validators.pattern(/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/)]],
-      country_cd: [contractor === null ? '' : contractor.country_cd],
-      phone_nbr: [contractor === null ? '' : contractor.phone_nbr],
-      phone2_nbr: [contractor === null ? '' : contractor.phone2_nbr],
-      fax_nbr: [contractor === null ? '' : contractor.fax_nbr],
-      contact_email: [contractor === null ? '' : contractor.contact_email, [Validators.required, Validators.email]],
-      web_site: [contractor === null ? '' : contractor.web_site],
-      currency_cd: [contractor === null ? '' : contractor.currency_cd],
-      taxe_cd: [contractor === null ? '' : contractor.taxe_cd],
-      payment_cd: [contractor === null ? '' : contractor.payment_cd],
+    this.contractorForm.patchValue( {
+      contractor_name:  contractor.contractor_name,
+      language: contractor.language,
+      registry_code:  contractor.registry_code,
+      legal_form: contractor.legal_form,
+      vat_nbr:  contractor.vat_nbr,
+      address: contractor.address,
+      city: contractor.city,
+      zip_code: contractor.zip_code,
+      country_cd: contractor.country_cd,
+      phone_nbr : contractor.phone_nbr,
+      phone2_nbr : contractor.phone2_nbr,
+      fax_nbr : contractor.fax_nbr,
+      contact_email : contractor.contact_email,
+      web_site : contractor.web_site,
+      currency_cd : contractor.currency_cd,
+      taxe_cd : contractor.taxe_cd,
+      payment_cd : contractor.payment_cd,
       /* Contractor Contact */
-      main_contact: [contractorContact === null ? '' : contractorContact.main_contact],
-      can_sign_contract: [contractorContact === null ? '' : contractorContact.can_sign_contract],
-      first_name: [contractorContact === null ? '' : contractorContact.first_name],
-      last_name: [contractorContact === null ? '' : contractorContact.last_name],
-      gender_cd: [contractorContact === null ? '' : contractorContact.gender_cd],
-      title_cd: [contractorContact === null ? '' : contractorContact.title_cd],
-      phone_nbr_c: [contractorContact === null ? '' : contractorContact.phone_nbr],
-      cell_phone_nbr: [contractorContact === null ? '' : contractorContact.cell_phone_nbr],
+      main_contact: contractorContact.main_contact,
+      can_sign_contract: contractorContact.can_sign_contract,
+      first_name: contractorContact.first_name,
+      last_name: contractorContact.last_name,
+      gender_cd: contractorContact.gender_cd,
+      title_cd: contractorContact.title_cd,
+      phone_nbr_c: contractorContact.phone_nbr,
+      cell_phone_nbr: contractorContact.cell_phone_nbr,
       /* Filter Form Control */
-      filteredCountriesControl: [''],
-      filteredCurrencyControl: [''],
+      filteredCountriesControl:  '',
+      filteredCurrencyControl:  '',
     });
   }
-
   /**************************************************************************
    * @description Get all Initial Data from [ /app_initializer, Services ]
    * From Assets: [ countries, currencies ]
@@ -301,8 +331,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       console.log('updated', updatedC);
       forkJoin(
         [
-          this.contractorService.addContractor(newContractor),
-          this.contractorService.addContractorContact(newContractor),
+          this.contractorService.updateContractor(newContractor),
+          this.contractorService.updateContractorContact(newContractor),
         ]
       )
         .pipe(
@@ -367,7 +397,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         (res) => {
           this.contractorInfo = res[0][0];
           this.contractorContactInfo = res[1][0];
-          this.initContractForm(this.contractorInfo, this.contractorContactInfo);
+          this.updateForms(this.contractorInfo, this.contractorContactInfo);
+
         },
         (error) => {
           console.log(error);
@@ -389,9 +420,5 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
-  }
-
-  onScroll(event) {
-    console.log(event);
   }
 }

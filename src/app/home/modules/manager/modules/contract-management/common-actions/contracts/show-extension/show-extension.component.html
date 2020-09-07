@@ -1,0 +1,39 @@
+<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
+  <div class="title-container">
+    <span>Contact Info</span>
+  </div>
+  <div class="close-button-container">
+    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
+      <mat-icon class="icon material-icons-outlined">close</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<mat-dialog-content class="modal-body-container">
+
+  <div class="config-wrapper" fxLayout="row wrap" fxLayout.xs="row" fxFlexFill>
+    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+      <mat-list role="list">
+        <mat-list-item role="listitem">EXTENSION START DATE</mat-list-item>
+        <mat-list-item role="listitem">EXTENSION END DATE</mat-list-item>
+        <mat-list-item role="listitem">EXTENSION STATUS</mat-list-item>
+        <mat-list-item role="listitem">EXTENSION RATE</mat-list-item>
+        <mat-list-item role="listitem">EXTENSION CURRENCY CODE</mat-list-item>
+        <mat-list-item role="listitem">CONTRACT FILE</mat-list-item>
+      </mat-list>
+    </div>
+    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+      <mat-list role="list">
+        <mat-list-item role="listitem">{{ data.ext.extension_start_date | date }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.ext.extension_end_date | date }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.ext.extension_status }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.ext.extension_rate }}</mat-list-item>
+        <mat-list-item role="listitem">{{ data.ext.extension_currency_cd }}</mat-list-item>
+        <a href="http://127.0.0.1:8065/show/{{data.file}}" mat-list-item>Show Contract
+        </a>
+      </mat-list>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button [mat-dialog-close]="data">Cancel</button>
+</mat-dialog-actions>

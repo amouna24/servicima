@@ -29,7 +29,7 @@ export class ContractsService {
    * @description Add new Contract
    * @param Contract: Contract Model
    *************************************************************************/
-  addContact(Contract: IContract): Observable<any> {
+  addContract(Contract: IContract): Observable<any> {
     return this.httpClient.post<IContract>(`${environment.contractApiUrl}`, Contract);
   }
 
