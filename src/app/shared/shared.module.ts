@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -21,6 +22,7 @@ import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
 
 @NgModule({
@@ -38,6 +40,7 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     SkeletonLoaderComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    UploadSheetComponent
 
   ],
   imports: [
@@ -55,6 +58,7 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     FormsModule,
     NgxMatSelectSearchModule,
     MatIconModule,
+    MatBottomSheetModule
   ],
   exports: [
     MaterialModule,
@@ -75,6 +79,7 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     BreadcrumbComponent,
     NgxMatSelectSearchModule,
     MatIconModule,
+    MatBottomSheetModule
   ]
 })
 export class SharedModule { }

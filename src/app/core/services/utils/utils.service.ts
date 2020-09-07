@@ -154,10 +154,17 @@ export class UtilsService {
    * @description listen for search field value changes
    */
   changeValueField(list: any[], filterCtrl: any, filtered: any) {
+    console.log('here', filterCtrl.value);
     filterCtrl.valueChanges
-      .subscribe(() => {
+      .subscribe(
+        (res) => {
+        console.log('res', res);
         this.filterData(list, filterCtrl, filtered);
-      });
+      },
+        (e) => {
+          console.log('e', e);
+        }
+        );
   }
 
   /**
