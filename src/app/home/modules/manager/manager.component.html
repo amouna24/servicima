@@ -4,10 +4,17 @@
     <wid-sidenav [moduleName]="'manager'"></wid-sidenav>
   </mat-sidenav>
 
-  <mat-sidenav-content [@onSideNavChange]="sidebarState" style="background-color: #ffffff;">
-    <wid-header></wid-header>
-    <wid-breadcrumb></wid-breadcrumb>
-    <div class="grid-container">
+  <mat-sidenav-content [@onSideNavChange]="sidebarState" fxLayout="column" style="background-color: #f3f6f9;">
+
+    <div fxFlex="7">
+      <wid-header></wid-header>
+    </div>
+
+    <div fxFlex="4">
+      <wid-breadcrumb></wid-breadcrumb>
+    </div>
+
+    <div fxFlex="89">
       <router-outlet>
         <wid-spinner></wid-spinner>
       </router-outlet>

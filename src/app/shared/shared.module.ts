@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { StepperComponent } from '@shared/stepper/stepper.component';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -38,9 +39,10 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     BreadcrumbComponent,
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
+    StepperComponent,
     /* Directives */
     CanBeDisplayedDirective,
-    UploadSheetComponent
+    UploadSheetComponent,
 
   ],
   imports: [
@@ -79,7 +81,8 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     BreadcrumbComponent,
     NgxMatSelectSearchModule,
     MatIconModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    StepperComponent,
   ]
 })
 export class SharedModule { }
