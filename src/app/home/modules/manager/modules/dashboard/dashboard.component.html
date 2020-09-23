@@ -1,6 +1,174 @@
-<div class="page-container">
-  <div *ngIf="loaded | async">
-  <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
-  </wid-data-table>
-   </div>
- </div>
+<div class="page-container" fxLayout="column" >
+  <div *ngIf="loaded | async" fxFlex="35" fxFlex.xs="20">
+    <!------------------------- DATA TABLE ------------------------
+    <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
+    </wid-data-table>
+    ------------------------------------------------------------->
+  </div>
+
+  <!----------------------- CUSTOM STEPPER ---------------------->
+  <div fxFlex="65" fxFlex.xs="80">
+    <wid-stepper [stepperConfig]="stepperConfig"
+                 [linear]="stepperConfig.isLinear"
+                 (notify)="onNotify($event)"
+                 #stepper
+    >
+      <!--
+           YOU CAN CREATE STEP BY ADDING CONTENT
+                INSIDE THE FOLLOWING TAG
+            <cdk-step [stepControl]="yourFormControlOne">
+              <ng-template cdkStepLabel>
+                <span>stepLabelOne </span>
+              </ng-template>
+              YOUR CONTENT
+            </cdk-step>
+      -->
+      <cdk-step [stepControl]="frmDetails">
+        <ng-template cdkStepLabel>
+          <!-- Label Content Here -->
+          <span>General </span>
+        </ng-template>
+        <!--begin: Wizard Step 1-->
+        <form [formGroup]="frmDetails">
+          <div class="container">
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <label class="label">First Name</label>
+                  <p class="control is-expanded has-icons-right">
+                    <input formControlName="firstName" class="input" type="text" placeholder="First Name">
+                    <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+                  </p>
+                </div>
+                <div class="field">
+                  <label class="label">Last Name</label>
+                  <p class="control is-expanded has-icons-right">
+                    <input formControlName="lastName" class="input" type="text" placeholder="Last Name">
+                    <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+        <!--end: Wizard Step 1-->
+      </cdk-step>
+
+      <cdk-step [stepControl]="frmAddress">
+        <ng-template cdkStepLabel>
+          <!-- Label Content Here -->
+          <span>Address </span>
+        </ng-template>
+
+        <!--begin: Wizard Step 2-->
+        <form [formGroup]="frmAddress">
+          <div class="container">
+            <div class="field">
+              <label class="label">Address One</label>
+              <p class="control is-expanded has-icons-right">
+                <input formControlName="addressOne" class="input" type="text" placeholder="Address One">
+                <span class="icon is-small is-right">
+                      <i class="fas fa-check"></i>
+                    </span>
+              </p>
+            </div>
+            <div class="field">
+              <label class="label">Address Two</label>
+              <p class="control is-expanded has-icons-right">
+                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
+                <span class="icon is-small is-right">
+                      <i class="fas fa-check"></i>
+                    </span>
+              </p>
+            </div>
+            <div class="field">
+              <label class="label">Address Two</label>
+              <p class="control is-expanded has-icons-right">
+                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
+                <span class="icon is-small is-right">
+                      <i class="fas fa-check"></i>
+                    </span>
+              </p>
+            </div>
+          </div>
+        </form>
+        <!--end: Wizard Step 2-->
+      </cdk-step>
+
+      <cdk-step [stepControl]="frmDetails">
+        <ng-template cdkStepLabel>
+          <!-- Label Content Here -->
+          <span>General </span>
+        </ng-template>
+        <!--begin: Wizard Step 1-->
+        <form [formGroup]="frmDetails">
+          <div class="container">
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <label class="label">First Name</label>
+                  <p class="control is-expanded has-icons-right">
+                    <input formControlName="firstName" class="input" type="text" placeholder="First Name">
+                    <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+                  </p>
+                </div>
+                <div class="field">
+                  <label class="label">Last Name</label>
+                  <p class="control is-expanded has-icons-right">
+                    <input formControlName="lastName" class="input" type="text" placeholder="Last Name">
+                    <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+        <!--end: Wizard Step 1-->
+      </cdk-step>
+
+      <cdk-step [stepControl]="frmAddress">
+        <ng-template cdkStepLabel>
+          <!-- Label Content Here -->
+          <span>Address </span>
+        </ng-template>
+
+        <!--begin: Wizard Step 2-->
+        <form [formGroup]="frmAddress">
+          <div class="container">
+            <div class="field">
+              <label class="label">Address One</label>
+              <p class="control is-expanded has-icons-right">
+                <input formControlName="addressOne" class="input" type="text" placeholder="Address One">
+                <span class="icon is-small is-right">
+                      <i class="fas fa-check"></i>
+                    </span>
+              </p>
+            </div>
+            <div class="field">
+              <label class="label">Address Two</label>
+              <p class="control is-expanded has-icons-right">
+                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
+                <span class="icon is-small is-right">
+                      <i class="fas fa-check"></i>
+                    </span>
+              </p>
+            </div>
+          </div>
+        </form>
+        <!--end: Wizard Step 2-->
+      </cdk-step>
+
+    </wid-stepper>
+  </div>
+  <!------------------------------------------------------------->
+</div>
