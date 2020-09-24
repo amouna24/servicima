@@ -1,18 +1,17 @@
 <div class="page-container" fxLayout="column" >
-  <div *ngIf="loaded | async" fxFlex="35" fxFlex.xs="20">
-    <!------------------------- DATA TABLE ------------------------
+
+  <div *ngIf="loaded | async" fxFlex="33" fxFlex.xs="20">
+    <!------------------------- DATA TABLE ------------------------>
     <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
     </wid-data-table>
-    ------------------------------------------------------------->
+    <!------------------------------------------------------------->
   </div>
 
-  <!----------------------- CUSTOM STEPPER ---------------------->
-  <div fxFlex="65" fxFlex.xs="80">
+  <!----------------------- CUSTOM STEPPER [MULTI FORM] ---------------------->
+  <div fxFlex="33" fxFlex.xs="40">
     <wid-stepper [stepperConfig]="stepperConfig"
-                 [linear]="stepperConfig.isLinear"
                  (notify)="onNotify($event)"
-                 #stepper
-    >
+                 #multiFormStepper>
       <!--
            YOU CAN CREATE STEP BY ADDING CONTENT
                 INSIDE THE FOLLOWING TAG
@@ -170,5 +169,127 @@
 
     </wid-stepper>
   </div>
-  <!------------------------------------------------------------->
+  <!-------------------------------------------------------------------------->
+
+  <!---------------------- CUSTOM STEPPER [SINGLE FORM] ---------------------->
+  <div  fxFlex="34" fxFlex.xs="40">
+
+    <form [formGroup]="frmStepper">
+      <wid-stepper [stepperConfig]="stepperConfig"
+                   (notify)="onNotify($event)"
+                   formArrayName="steps"
+                   #singleFormStepper>
+        <!--
+             YOU CAN CREATE STEP BY ADDING CONTENT
+                  INSIDE THE FOLLOWING TAG
+              <cdk-step formGroupName="i" [stepControl]="formArray.get([i])">
+                <ng-template cdkStepLabel>
+                  <span>stepLabelOne </span>
+                </ng-template>
+                YOUR CONTENT
+              </cdk-step>
+        -->
+        <cdk-step formGroupName="0" [stepControl]="formArray.get([0])">
+          <ng-template cdkStepLabel>
+            <span>Personal Details</span>
+          </ng-template>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <label>First Name</label>
+                  <p >
+                    <input formControlName="firstName" class="input" type="text" placeholder="First Name">
+                  </p>
+                </div>
+                <div>
+                  <label>Last Name</label>
+                  <p>
+                    <input formControlName="lastName" type="text" placeholder="Last Name">
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label>Email Address</label>
+              <div>
+                <input formControlName="email" type="text" placeholder="Text input">
+              </div>
+            </div>
+          </div>
+        </cdk-step>
+
+        <cdk-step formGroupName="1" [stepControl]="formArray.get([1])">
+          <ng-template cdkStepLabel>
+            <span>Address</span>
+          </ng-template>
+          <div>
+            <div>
+              <label>Address One</label>
+              <p>
+                <input formControlName="addressOne" type="text" placeholder="Address One">
+              </p>
+            </div>
+            <div>
+              <label>Address Two</label>
+              <p>
+                <input formControlName="addressTwo" type="text" placeholder="Address Two">
+              </p>
+            </div>
+            <div>
+              <label>City</label>
+              <p>
+                <input formControlName="city" type="text" placeholder="City">
+              </p>
+            </div>
+
+            <div>
+              <label>County/State/Region</label>
+              <div>
+                <input formControlName="county" type="text" placeholder="County/State">
+              </div>
+            </div>
+            <div>
+              <label>Country</label>
+              <div>
+                <input formControlName="country" type="text" placeholder="Country">
+              </div>
+            </div>
+          </div>
+        </cdk-step>
+        <cdk-step formGroupName="2" [stepControl]="formArray.get([2])">
+          <ng-template cdkStepLabel>
+            <span>Payment Information</span>
+          </ng-template>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <label>Credit Card Number</label>
+                  <p>
+                    <input formControlName="creditCardNo" type="text" placeholder="Credit Card No.">
+                  </p>
+                </div>
+                <div>
+                  <label>Expiry</label>
+                  <p>
+                    <input formControlName="expiryDate" type="text" placeholder="10/2020">
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label>CVV Code</label>
+              <div>
+                <input formControlName="cvvCode" type="number" placeholder="CVV Code">
+              </div>
+            </div>
+          </div>
+        </cdk-step>
+      </wid-stepper>
+    </form>
+
+  </div>
+
+  <!-------------------------------------------------------------------------->
 </div>

@@ -1,16 +1,16 @@
-.wizard-step {
+.stepper-step {
   flex-grow: 1;
   margin: 0 1.5rem;
 }
 
-.wizard-label {
+.stepper-label {
   flex: 1;
   display: flex;
   flex-direction: column;
   color: #B5B5C3;
 }
 
-.wizard-title {
+.stepper-title {
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -18,19 +18,19 @@
   flex-wrap: wrap;
 }
 
-.wizard-title span {
+.stepper-title span {
   font-size: 2rem;
   margin-right: 0.5rem;
 }
 
-.wizard-bar {
+.stepper-bar {
   height: 4px;
   width: 100%;
   background-color: #EBEDF3;
   position: relative;
 }
 
-.wizard-bar:after {
+.stepper-bar:after {
   content: " ";
   position: absolute;
   top: 0;
@@ -44,11 +44,11 @@
   transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, -webkit-box-shadow 0.15s ease;
 }
 
-.wizard-step[data-wizard-state="current"] .wizard-label {
+.stepper-step[data-stepper-state="current"] .stepper-label {
   color: #6993FF;
 }
 
-.wizard-step[data-wizard-state="current"] .wizard-label .wizard-bar:after {
+.stepper-step[data-stepper-state="current"] .stepper-label .stepper-bar:after {
   width: 100%;
   background-color: #6993FF;
 }
