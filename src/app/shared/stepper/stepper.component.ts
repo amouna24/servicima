@@ -20,15 +20,13 @@ export class StepperComponent extends CdkStepper  implements OnInit {
   @Input() stepperConfig: {
               type: string,
               multiple: {
-                nextStep: boolean,
                 lastStep: string,
                 redirectTo: string,
-              }
-              single: { }
+              },
               style: { }
             };
   @Output() notify: EventEmitter<object> = new EventEmitter<object>();
-
+  frmValues: object = { };
   /************************************************
    * @description
    * - you can change function name
@@ -39,10 +37,12 @@ export class StepperComponent extends CdkStepper  implements OnInit {
    ***********************************************/
   onClick(index: number, step): void {
     if (step.stepControl.invalid ) {
-      console.log('Form Invalid');
+      console.log('invalid Form');
     } else {
       this.selectedIndex = index;
-      this.notify.emit({ selectedIndex: index, selectedFormGroup: step.stepControl });
+      this.notify.emit(
+        { selectedIndex: index, selectedFormGroup: step.stepControl }
+        );
     }
 
   }
