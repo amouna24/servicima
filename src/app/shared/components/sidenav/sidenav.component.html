@@ -13,7 +13,7 @@
     <div *ngIf="subMenu.length === 0; else subMenuContainer">
       <ng-container *ngFor=" let menuItem of menu">
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
-          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['./', menuItem.state]" class="list-item">
+          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]" class="list-item">
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
             </mat-icon>
             <span [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
@@ -37,7 +37,7 @@
           <span [@labelAnimation]="sidebarState">go back</span>
         </mat-list-item>
         <ng-container *ngFor=" let subMenuItem of subMenu">
-                  <a *ngIf=" subMenuItem.type === 'link'" mat-list-item routerLinkActive="active-list-item" [routerLink]="subMenuItem.state === '' ? ['./' ,parentMenu] : ['./' ,parentMenu, subMenuItem.state]" [routerLinkActiveOptions]="{exact: true}" class="list-item">
+                  <a *ngIf=" subMenuItem.type === 'link'" mat-list-item routerLinkActive="active-list-item" [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]" [routerLinkActiveOptions]="{exact: true}" class="list-item">
                     <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
                       {{subMenuItem.icon}}
                     </mat-icon>
@@ -57,7 +57,7 @@
                           <mat-icon class="icon material-icons-outlined" *ngIf="widExp.expanded">expand_less</mat-icon>
                         </mat-panel-description>
                       </mat-expansion-panel-header>
-                      <a mat-list-item routerLinkActive="active-list-item" *ngFor="let subChildMenu of subMenuItem.child" [routerLink]="['./',parentMenu, subMenuItem.state, subChildMenu.state]" class="list-item">
+                      <a mat-list-item routerLinkActive="active-list-item" *ngFor="let subChildMenu of subMenuItem.child" [routerLink]="['/', moduleName, parentMenu, subMenuItem.state, subChildMenu.state]" class="list-item">
                         <mat-icon class="icon material-icons-outlined">{{subChildMenu.icon}}
                         </mat-icon>
                         <span [@labelAnimation]="sidebarState" class="wid-acc-title">{{subChildMenu.name }}</span>

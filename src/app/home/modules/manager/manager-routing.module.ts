@@ -9,8 +9,8 @@ const routes: Routes = [
     component: ManagerComponent,
     children: [
       {
-        path: 'dashboard',
-        loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
+        path: '',
+        loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
       },
       {
         path: 'activity-reports',
@@ -18,7 +18,8 @@ const routes: Routes = [
       },
       {
         path: 'billings',
-        loadChildren: () => import('./modules/billings/billings.module').then(m => m.BillingsModule)
+        loadChildren: () => import('./modules/billings/billings.module').then(m => m.BillingsModule),
+
       },
       {
         path: 'contract-management',
@@ -48,9 +49,9 @@ const routes: Routes = [
         loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
       },
       {
-        path: '',
+        path: 'users',
         loadChildren: () => import('@core/../shared/components/settings/user/user.module').then(m => m.UserModule)
-      },
+      }
     ]
   }
 ];

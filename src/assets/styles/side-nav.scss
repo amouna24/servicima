@@ -1,3 +1,9 @@
+/*******************
+Imports
+*******************/
+
+@import "variables";
+
 wid-sidenav {
 
   .side-nav-container {
@@ -63,7 +69,7 @@ wid-sidenav {
 
     span {
       color: $lightColor;
-      font-family: $body-font;
+      font-family: $bodyFont;
       font-size: 10px;
       font-weight: bold;
       text-transform: uppercase;

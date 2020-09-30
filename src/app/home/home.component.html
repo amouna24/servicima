@@ -1,3 +1,20 @@
-<router-outlet>
-    <wid-spinner></wid-spinner>
-</router-outlet>
+<mat-sidenav-container style="height: 100%;">
+  <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
+               [fixedBottomGap]=0 autosize="false" fixedTopGap="56">
+    <wid-sidenav></wid-sidenav>
+  </mat-sidenav>
+
+  <mat-sidenav-content [@onSideNavChange]="sidebarState" fxLayout="column" style="background-color: #f3f6f9;">
+
+    <wid-header fxFlex="7"></wid-header>
+
+    <wid-breadcrumb fxFlex="4"></wid-breadcrumb>
+
+    <div fxFlex="89">
+      <router-outlet>
+        <wid-spinner></wid-spinner>
+      </router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
