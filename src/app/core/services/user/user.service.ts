@@ -11,8 +11,12 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class UserService {
   userInfo: IUserInfo;
+  isLoggedIn = false;
   userCredentials: string;
+  moduleName$ = new BehaviorSubject<string>(null);
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
+  isConnected$ = new BehaviorSubject<boolean>(false);
+
   constructor(private httpClient: HttpClient,
               private localStorageService: LocalStorageService, ) {
   }
@@ -25,8 +29,11 @@ export class UserService {
       this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
        `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
        .subscribe((data) => {
+         this.isLoggedIn = true;
+         this.isConnected$.next(true);
             this.userInfo = data;
             this.connectedUser$.next(data);
+            this.moduleName$.next(data.userroles[0].userRolesKey.role_code === 'ADMIN' ? 'manager' : 'candidate' );
        });
       }
 

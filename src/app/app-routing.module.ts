@@ -1,27 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthModule, AuthGuard } from '@widigital-group/auth-npm-front';
+/*import { AuthModule } from '@widigital-group/auth-npm-front';*/
+import { AuthGuard } from '@core/guard/auth.guard';
 
 import { environment } from 'src/environments/environment';
 
 import { ErrorComponent } from './pages/error/error.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
 
 const routes: Routes = [
+
     {
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'manager/dashboard'
-    },
-    {
-        path: '',
+        canActivate: [AuthGuard],
         loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-        canActivate: [AuthGuard]
     },
    {
         path: 'auth',
-        loadChildren: () => import('@widigital-group/auth-npm-front').then(m => m.AuthLibModule)
+        loadChildren: () => import('../../projects/auth-front-lib/src/public-api').then(m => m.AuthLibModule),
     },
     {
         path: 'notfound',
@@ -39,7 +37,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-      RouterModule.forRoot(routes),
+      RouterModule.forRoot(routes, { enableTracing: false}),
       AuthModule.forRoot(environment)
     ],
     exports: [RouterModule]

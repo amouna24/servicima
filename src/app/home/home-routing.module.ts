@@ -19,7 +19,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'collaborater',
+        path: 'collaborator',
         loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule)
       },
       {

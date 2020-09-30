@@ -1,4 +1,18 @@
-$body-font: Montserrat;
+// font family, also paste this import into styles.css file.
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,100;1,200;1,300;1,400;1,500&display=swap');
+
+$bodyFont:'Poppins', sans-serif;
+$headingFont:'Poppins', sans-serif;
+
+@import '~@angular/material/theming';
+
+
+
+
+
+
+/* TO BE DELETED */
 $lightColor: #fff;
 $darkColor: #000;
 $primaryColor: #2660aa;
@@ -17,3 +31,4 @@ $primaryColorAuth: #2e384d;
 $drakColorAuth: #2e384d;
 $lightColorAuth: #fff;
 $accentColorAuth: #de9318;
+/*********** */
