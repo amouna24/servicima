@@ -33,7 +33,6 @@ export function setupApp(
     AppComponent,
     NotFoundComponent,
     ErrorComponent,
-    TaxComponent,
   ],
   imports: [
     CommonModule,

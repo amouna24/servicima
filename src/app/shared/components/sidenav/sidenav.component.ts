@@ -1,7 +1,9 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { UserService } from '@core/services/user/user.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import {
   buttonAnimation,
@@ -24,7 +26,7 @@ import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
     buttonAnimation(),
   ]
 })
-export class SidenavComponent implements OnInit, OnChanges {
+export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
   sidebarState: string;
   panelOpenState = false;
@@ -35,19 +37,46 @@ export class SidenavComponent implements OnInit, OnChanges {
   menu: IMenu[];
   subMenu: IChildItem[] = [];
   parentMenu: string;
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
-  @Input() moduleName: string;
+  /**************************************************************************
+   * @description Module Name
+   *************************************************************************/
+  moduleName: string;
 
   constructor(private sidenavService: SidenavService,
               private userService: UserService
   ) {
-    this.userService.connectedUser$.subscribe((info) => {
-      if (!!info) {
-        this.company = info['company'][0]['company_name'];
-      }
-    }, (err) => {
-      console.error(err);
-    });
+    this.userService.moduleName$
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (moduleName) => {
+          if (!!moduleName) {
+            this.moduleName = moduleName;
+            this.menu = this.sidenavService.getMenu(moduleName);
+          }
+        },
+        (err) => {
+          console.error(err);
+        });
+      this.userService.connectedUser$
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(
+          (info) => {
+              if (!!info) {
+                this.company = info['company'][0]['company_name'];
+              }
+         },
+          (err) => {
+                console.error(err);
+        });
   }
 
   ngOnChanges() {
@@ -76,6 +105,15 @@ export class SidenavComponent implements OnInit, OnChanges {
 
   closeSubMenu() {
     this.subMenu = [];
+  }
+
+  /**************************************************************************
+   * @description Destroy All subscriptions declared with takeUntil operator
+   *************************************************************************/
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 
 }

@@ -3,7 +3,7 @@
         <!--begin: Stepper-->
         <div class="stepper stepper-3" fxFlex fxLayout="column" data-stepper-state="step-first" data-stepper-clickable="false">
           <!--begin: Stepper Nav-->
-          <div fxFlex="20" fxFlex.xs="40" fxLayout="column" fxLayoutAlign="center stretch" class="stepper-nav">
+          <div fxFlex="30" fxFlex.xs="40" fxLayout="column" fxLayoutAlign="center stretch" class="stepper-nav">
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="start stretch">
               <!--begin::Stepper Step i Nav-->
               <ng-container *ngFor="let step of steps; let i = index;" >
@@ -40,7 +40,7 @@
           </div>
           <!--end: Stepper Nav-->
           <!--begin: Stepper Body-->
-          <div fxFlex="65"  fxFlex.xs="50" >
+          <div fxFlex="60"  fxFlex.xs="50" >
             <div class="">
               <!--begin: Stepper Form-->
                 <div
@@ -56,7 +56,7 @@
           </div>
           <!--end: Stepper Body-->
           <!--begin: Stepper Actions-->
-          <div fxFlex="15"  fxFlex.xs="10">
+          <div fxFlex="10"  fxFlex.xs="10">
             <div fxFlex="50" fxLayoutAlign="center center">
               <button
                 *ngIf="selectedIndex !== 0"

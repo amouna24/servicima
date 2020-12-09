@@ -1,13 +1,20 @@
 /* Angular core imports */
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate, CanActivateChild,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 /* RxJs imports */
-import { Observable } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
+/*
 import { FingerPrintService } from '@widigital-group/auth-npm-front';
+*/
 
 /* Specific imports */
 import { LocalStorageService } from '../services/storage/local-storage.service';
+import { FingerPrintService } from '../../../../projects/auth-front-lib/src/lib/core/services/auth/fingerprint.service';
 
 /**********************************************************************
  * AuthGard : Used to allow or not access to the requested roots
@@ -16,7 +23,12 @@ import { LocalStorageService } from '../services/storage/local-storage.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  data: any;
+
+  /**********************************************************************
+   * @description IsLoggedIn to check if user's connected
+   * resolveValue: the result returned for each steps (true/false)
+   *********************************************************************/
+  resolveValue: boolean;
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -34,31 +46,30 @@ export class AuthGuard implements CanActivate {
    * -- if the user is not connected, try autologin using fingerprint
    * -- if the fingerprint signin failed, redirect to the login page
    *********************************************************************/
-  canActivate(
+  async canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return new Promise((resolve) => {
-
+    state: RouterStateSnapshot): Promise<boolean> {
       /* Call the backend to check fingerprint is OK */
       this.fingerPrintService.userConnected()
-        .then((result) => {
+        .then(async (result) => {
           /* Fingerprint is OK, new token and credentials status returned */
           if (result) {
-            this.localStorageService.setItem('currentToken', { account_activation_token: this.fingerPrintService.token });
+            this.localStorageService.setItem('currentToken', { account_activation_token: this.fingerPrintService.token});
 
             /* credentials status PENDING, user should complete registration*/
             if (this.fingerPrintService.credentialsStatus === 'PENDING') {
-              this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode } });
-              resolve(false);
+              this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode}});
+              this.resolveValue = false;
             } else { /* User Active => Allow access to requested ressource */
+              this.resolveValue = await this.userService.getUserInfo();
             }
           } else {
             /* Autologin cannot be done (fingerprint doesn't exist) => Redirect to login page */
             this.router.navigate(['/auth/login']);
-            resolve(false);
+            this.resolveValue = true;
           }
-        });
     });
+      return this.resolveValue;
   }
+
 }

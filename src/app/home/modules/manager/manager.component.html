@@ -1,23 +1,4 @@
-<mat-sidenav-container style="height: 100%;">
-  <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
-    [fixedBottomGap]=0 autosize="false" fixedTopGap="56">
-    <wid-sidenav [moduleName]="'manager'"></wid-sidenav>
-  </mat-sidenav>
+<router-outlet>
+  <wid-spinner></wid-spinner>
+</router-outlet>
 
-  <mat-sidenav-content [@onSideNavChange]="sidebarState" fxLayout="column" style="background-color: #f3f6f9;">
-
-    <div fxFlex="7">
-      <wid-header></wid-header>
-    </div>
-
-    <div fxFlex="4">
-      <wid-breadcrumb></wid-breadcrumb>
-    </div>
-
-    <div fxFlex="89">
-      <router-outlet>
-        <wid-spinner></wid-spinner>
-      </router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
