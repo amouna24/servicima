@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from '@widigital-group/auth-npm-front';
 import { ModalService } from '@core/services/modal/modal.service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 import { TranslationCustomLoaderService } from '@core/services/translation/translation-custom-loader.service';
+
+import { AuthService } from 'projects/auth-front-lib/src/public-api';
 
 import { environment } from '../environments/environment';
 

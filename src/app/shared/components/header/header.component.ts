@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-        if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
+      /*  if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
           this.modalsServices.displayModal('expirationLicense', null , '40%')
             .pipe(
               takeUntil(this.destroy$)
@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               (error) => {
                 console.error(error);
               });
-        }
+        }*/
       }
     });
   }

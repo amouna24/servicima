@@ -1,0 +1,40 @@
+/*******************
+    Button Auth
+*******************/
+
+.auth-content .btn-large{
+    background-color: $pale-grey;
+    color: $cerulean-blue;
+    margin-top: $m-t-30 !important;
+  }
+  .auth-content .btn-medium{
+  background-color: $topaz;
+  color: $pale-grey;
+  }
+
+/*******************
+    Headings Auth
+*******************/
+
+  .auth-content h1 {
+    line-height: 10px;
+  }
+  .auth-content h5{
+    line-height: 10px;
+  }
+
+/*******************
+   Height
+*******************/
+.full-height{
+    min-height: $height-100;
+  }
+
+/*******************
+   Column right Auth
+*******************/
+  .col-right{
+   background-color: $primaryColor;
+   border-top-left-radius: $border-radius-15;
+   border-bottom-left-radius: $border-radius-15;
+  }

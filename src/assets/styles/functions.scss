@@ -1,0 +1,11 @@
+  
+  @mixin button($height,$width,$border-radius,$background-color,$color,$font-size,$line-height,$text-align) {
+    height: $height !important;
+    width: $width !important;
+    border-radius: $border-radius !important;
+    background-color: $background-color ;
+    color: $color;
+    font-size: $font-size !important;
+    line-height: $line-height !important;
+    text-align: $text-align !important;
+}
