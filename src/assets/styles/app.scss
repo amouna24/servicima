@@ -1,5 +1,5 @@
-/******************* 
-   Global Styles 
+/*******************
+   Global Styles
 *******************/
 * {
     outline: none;
@@ -10,15 +10,15 @@ body {
     font-family: $bodyFont;
     margin: 0;
     overflow-x: hidden;
-    color: $bodytext;
-    font-weight: 300;
-    background: $inverse;
+    // color: $bodytext;
+    // font-weight: 300;
+    background: $pale-grey;
 }
 
 html {
     position: relative;
     min-height: 100%;
-    background: $white;
+    // background: $white;
 }
 a:hover, a:focus, a{
     text-decoration: none;
@@ -54,7 +54,7 @@ code {
 }
 
 .shadow-none{
-    box-shadow: none!important; 
+    box-shadow: none!important;
 }
 .ml-auto{
     margin-left: auto;
@@ -78,7 +78,7 @@ h3,
 h4,
 h5,
 h6 {
-    
+
     font-family: $headingFont;
 }
 
@@ -124,7 +124,7 @@ html, body{
 .display-6{
     font-size:36px;
 }
-}    
+}
 .box{
     border-radius: $radius;
     padding: 10px;
@@ -237,7 +237,7 @@ html body {
     padding-bottom: 40px;
 }
 }
-    
+
 /*******************
       Margin
 *******************/
@@ -379,11 +379,40 @@ html body {
 }
 .font-12 {
     font-size: 12px;
-}    
+}
 .font-18 {
     font-size: 18px;
 }
 .font-20 {
     font-size: 20px;
     }
+.font-9 {
+  font-size: 9px;
 }
+}
+
+/*******************
+       colors
+*******************/
+.pale-grey {
+  color: $pale-grey;
+}
+.golden-yellow {
+  color: #f1c40f;
+}
+.cool-grey {
+  color: $cool-grey;
+}
+
+
+/*******************
+       logo
+*******************/
+.b-r-logo {
+  height: 60px;
+  width: $width-sm;
+}
+.t-l-logo {
+  width: 54px;
+}
+

@@ -7,30 +7,11 @@ $headingFont:'Poppins', sans-serif;
 
 @import '~@angular/material/theming';
 
-
-
-
-
-
 /* TO BE DELETED */
-$lightColor: #fff;
-$darkColor: #000;
-$primaryColor: #2660aa;
-$secondaryColor: #8dde06;
-$thirdColor: #ffd800;
-$primaryVerticalGradient: linear-gradient(to top, #2660aa, #399fd0);
 $primaryHorizontalGradient: linear-gradient(to right, #2660aa, #399fd0);
 $secondaryHorizontalGradient: linear-gradient(to top, #4fbd02, #5fc604, #6ece06, #7cd709, #8bdf0d);
-$dangerColor: #e72952;
 $lightPrimary: #399fd0;
-$lightDanger: #f7dae0;
-$iconColor: #2e384d;
 $lightGreyColor: rgba(0, 0, 0, 0.04);
-
-$primaryColorAuth: #2e384d;
-$drakColorAuth: #2e384d;
-$lightColorAuth: #fff;
-$accentColorAuth: #de9318;
 
 /*Theme Colors*/
 $topbar: #2196f3;
@@ -39,7 +20,7 @@ $sidebar-white: #e5edef;
 $sidebar-alt:#f2f6f8;
 $bodycolor: #eef5f9;
 $headingtext: #455a64;
-$bodytext: #67757c; 
+$bodytext: #67757c;
 $sidebar-text: #8f999e;
 $sidebar-icons: #99abb4 ;
 
@@ -49,6 +30,7 @@ $themecolor-alt: #26c6da;
 $themecolor-dark: #028ee1;
 
 /*bootstrap Color*/
+$dangerColor: #fc4b6c;
 $danger: #fc4b6c;
 $success: #26c6da;
 $warning: #ffb22b;
@@ -57,7 +39,7 @@ $info: #1e88e5;
 $inverse: #2f3d4a;
 $muted: #99abb4;
 $dark: #263238;
-$light: #f2f4f8;
+$lightColor: #f2f4f8;
 $extra-light: #ebf3f5;
 $secondary: #727b84;
 
@@ -68,7 +50,7 @@ $light-warning: #fff8ec;
 $light-primary: #f1effd;
 $light-info: #e3f3fd;
 $light-inverse: #f6f6f6;
-$light-megna: #e0f2f4; 
+$light-megna: #e0f2f4;
 $danger-dark: #e6294b;
 $success-dark: #1eacbe;
 $warning-dark: #e9ab2e;
@@ -95,3 +77,35 @@ $card-brd:#d7dfe3;
 $dark-text: #848a96;
 $radius: 4px;
 $form-brd: #d9d9d9;
+
+/* Color Servicima  */
+$primaryColor: #0067e0;
+$secondaryColor: #1bc5bd;
+$thirdColor: #f1c40f;
+$cerulean-blue: #0067e0;
+$pale-grey: #f3f6f9;
+$topaz: #1bc5bd;
+$cool-grey: #afb1b8;
+$black: #232323;
+$golden-yellow: #f1c40f;
+$water-blue: #0d66d0;
+$error-red: #d24d57;
+$warning-yellow: #fad859;
+$info-blue: #89caef;
+$help-blue: #67809f;
+$bright-blue: #0478ff;
+$ocean-blue: #0459bc;
+$steel: #7b7e8a;
+
+/* Width */
+$width-sm: 109px;
+$width-md: 158px;
+$width-lg: 228px;
+$width-xlg: 300px;
+
+/* Margin */
+$m-0-auto: 0 auto;
+
+/* Font Size */
+$font-10: 10px;
+$font-12: 12px;

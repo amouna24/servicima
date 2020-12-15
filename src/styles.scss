@@ -2,6 +2,8 @@
 @import "./assets/styles/variables.scss";
 @import "./assets/styles/side-nav.scss";
 @import "./assets/styles/data-table.scss";
+@import "./assets/styles/app";
+@import "assets/styles/auth-style";
 // data table styles
 @import "~@swimlane/ngx-datatable/index.css";
 @import "~@swimlane/ngx-datatable/themes/material.scss";

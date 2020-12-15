@@ -1,0 +1,61 @@
+
+.auth-content {
+
+  .mat-form-field {
+    width: $width-lg;
+    color: $pale-grey;
+    font-size: $font-12;
+  }
+
+  .mat-input-element::placeholder {
+    color: $pale-grey;
+  }
+
+  .mat-error {
+    color: $error-red;
+  }
+
+  .mat-icon {
+    color: $error-red;
+  }
+
+  .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+    color: $error-red;
+    opacity: 0.8;
+  }
+  .invalid-msg {
+    width: $width-lg;
+    height: 34px;
+    background-color: $error-red;
+    .error-msg {
+      height: 100%;
+      color: $pale-grey;
+      margin: $m-0-auto;
+      font-size: $font-10;
+      text-align: center;
+      display: block;
+      .mat-icon {
+        color: $pale-grey;
+      }
+    }
+  }
+
+}
+
+.lang-select {
+  color: $cool-grey !important;
+  width: $width-sm !important;
+  font-size: $font-12 !important;
+  position: absolute !important;
+  top: 14px;
+  left: 15px;
+}
+
+.panelColor {
+  margin-top: -20px !important;
+  background-color: $pale-grey !important;
+}
+
+
+
+
