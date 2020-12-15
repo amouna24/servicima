@@ -1,0 +1,33 @@
+@import "functions.scss";
+  /* small button */
+  .btn-small{
+    @include button(25px,$width-sm,$border-radius-10,$cerulean-blue,$white,$font-size-11,0,center)
+  }
+
+  /* Meduim */
+
+  .btn-medium {
+    @include button(42px,$width-md,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
+  }
+  /* Large */
+
+  .btn-large{
+    @include button(42px,$width-lg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center);
+  }
+
+  /* X Large */
+
+  .btn-xlarge {
+    @include button(42px,$width-xlg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
+  }
+
+  .btn-small:hover,
+  .btn-large:hover,
+  .btn-medium:hover,
+  .btn-xlarge:hover{
+    background-color: $bright-blue;
+  }
+
+  .isClicked{
+    background-color: $ocean-blue;
+  }

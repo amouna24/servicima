@@ -23,7 +23,6 @@ $headingtext: #455a64;
 $bodytext: #67757c;
 $sidebar-text: #8f999e;
 $sidebar-icons: #99abb4 ;
-
 $light-text: #a6b7bf;
 $themecolor: #1e88e5;
 $themecolor-alt: #26c6da;
@@ -68,15 +67,6 @@ $purple: #7460ee;
 $blue: #02bec9;
 $megna: #00897b;
 
-/*Extra Variable*/
-$rgt: right;
-$lft: left;
-$border: rgba(120, 130, 140, 0.13);
-$table-border:#f3f1f1;
-$card-brd:#d7dfe3;
-$dark-text: #848a96;
-$radius: 4px;
-$form-brd: #d9d9d9;
 
 /* Color Servicima  */
 $primaryColor: #0067e0;
@@ -84,6 +74,7 @@ $secondaryColor: #1bc5bd;
 $thirdColor: #f1c40f;
 $cerulean-blue: #0067e0;
 $pale-grey: #f3f6f9;
+$brownish-grey:#676767;
 $topaz: #1bc5bd;
 $cool-grey: #afb1b8;
 $black: #232323;
@@ -97,15 +88,42 @@ $bright-blue: #0478ff;
 $ocean-blue: #0459bc;
 $steel: #7b7e8a;
 
-/* Width */
+
+/* Margin */
+$m-0-auto: 0 auto;
+$m-t-30: 30px;
+
+/* Font Size */
+$font-size-10: 10px;
+$font-size-12: 12px;
+$font-size-11: 11px;
+$font-size-14: 14px;
+$font-size-17: 17px;
+/*Extra Variable*/
+$rgt: right;
+$lft: left;
+$border: rgba(120, 130, 140, 0.13);
+$table-border:#f3f1f1;
+$card-brd:#d7dfe3;
+$dark-text: #848a96;
+$radius: 4px;
+$form-brd: #d9d9d9;
+
+
+/* Border radius */
+$border-radius-5: 5px;
+$border-radius-10: 10px;
+$border-radius-15: 15px;
+$border-radius-20: 20px;
+
+/* width */
 $width-sm: 109px;
 $width-md: 158px;
 $width-lg: 228px;
 $width-xlg: 300px;
 
-/* Margin */
-$m-0-auto: 0 auto;
+/* height */
+$height-100: 100%;
 
-/* Font Size */
-$font-10: 10px;
-$font-12: 12px;
+/* weight */
+$font-weight-300: 300;

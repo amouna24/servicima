@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'users',
     loadChildren: () => import('./usersList/users-list.module').then(m => m.UserListModule),
     data: {
       breadcrumb: 'settings'
@@ -11,23 +11,30 @@ const routes: Routes = [
   },
 
   {
-    path: 'licence',
+    path: 'licences',
     loadChildren: () => import('./licence/licence.module').then(m => m.LicenceModule),
     data: {
       breadcrumb: 'settings'
     },
   },
-
   {
-    path: '',
-    loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule),
+    path: 'payment-methods',
+    loadChildren: () => import('./payment/payment-methods-management/payment-methods.module').then(m => m.PaymentMethodsModule),
     data: {
       breadcrumb: 'settings'
     },
   },
 
   {
-    path: '',
+    path: 'payment-info',
+    loadChildren: () => import('./payment/payment-info/payment-info.module').then(m => m.PaymentInfoModule),
+    data: {
+      breadcrumb: 'settings'
+    },
+  },
+
+  {
+    path: 'home-company',
     loadChildren: () => import('./home-company/homeCompany.module').then(m => m.HomeCompanyModule),
     data: {
       breadcrumb: 'settings'
@@ -35,7 +42,7 @@ const routes: Routes = [
   },
 
   {
-    path: '',
+    path: 'tax',
     loadChildren: () => import('./tax/tax.module').then(m => m.TaxModule),
     data: {
       breadcrumb: 'settings'
@@ -43,7 +50,7 @@ const routes: Routes = [
   },
 
   {
-    path: '',
+    path: 'role',
     loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule),
     data: {
       breadcrumb: 'settings'

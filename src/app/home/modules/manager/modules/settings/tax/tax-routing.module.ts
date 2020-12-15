@@ -5,7 +5,7 @@ import { TaxComponent } from './tax.component';
 
 const routes: Routes = [
   {
-    path: 'tax',
+    path: '',
     component: TaxComponent,
     data: {
       breadcrumb: 'tax'

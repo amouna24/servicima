@@ -6,7 +6,7 @@ import { UsersListComponent } from './users-list.component';
 
 const routes: Routes = [
   {
-    path: 'users-list',
+    path: '',
     component: UsersListComponent,
     data: {
       breadcrumb: 'users'

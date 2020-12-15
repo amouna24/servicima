@@ -113,7 +113,7 @@ export const managerMenu: IMenu[] = [
         feature: 'CONFIG_ACCESS',
         children: [
             {
-              state: 'users-list',
+              state: 'users',
               name: 'User Management',
               icon: 'assignment',
               feature: 'SETTINGS_USERS_ACCESS',
@@ -141,7 +141,7 @@ export const managerMenu: IMenu[] = [
                 type: 'link',
               },
               {
-                state: 'licence',
+                state: 'licences',
                 name: 'Licence',
                 icon: 'assignment',
                 feature: 'SETTINGS_LICENCE_ACCESS',
