@@ -20,6 +20,9 @@ html {
     min-height: 100%;
     // background: $white;
 }
+a{
+    cursor: pointer;
+}
 a:hover, a:focus, a{
     text-decoration: none;
 }
@@ -176,6 +179,9 @@ html body {
 
 .p-l-20 {
     padding-left: 20px;
+}
+.p-l-65{
+    padding-left: 65px;
 }
 
 .p-r-0 {
@@ -369,29 +375,38 @@ html body {
 .font-medium {
     font-weight: 500;
 }
-.font-16 {
+.font-size-16 {
     font-size: 16px;
 }
-.font-14 {
+.font-size-14 {
     font-size: 14px;
 }
-.font-10 {
+.font-size-10 {
     font-size: 10px;
 }
-.font-12 {
+.font-size-12 {
     font-size: 12px;
 }
-.font-18 {
+.font-size-18 {
     font-size: 18px;
 }
-.font-20 {
+.font-size-20 {
     font-size: 20px;
     }
-.font-9 {
+.font-size-9 {
   font-size: 9px;
 }
 }
 
+/*******************
+       Line height
+*******************/
+.line-height-3{
+    line-height: 3;
+}
+.line-height-20{
+   line-height: 20px !important;
+}
 /*******************
        colors
 *******************/
@@ -404,7 +419,12 @@ html body {
 .cool-grey {
   color: $cool-grey;
 }
-
+.black {
+    color: $black;
+  }
+.brownish-grey{
+    color: $brownish-grey;
+}
 
 /*******************
        logo

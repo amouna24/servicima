@@ -36,6 +36,7 @@ Auth Style
     width: $width-lg;
     height: 34px;
     background-color: $error-red;
+    border-radius: $border-radius-5;
     .error-msg {
       height: 100%;
       color: $pale-grey;
@@ -107,4 +108,15 @@ Auth Style
    background-color: $primaryColor;
    border-top-left-radius: $border-radius-15;
    border-bottom-left-radius: $border-radius-15;
+  }
+  /*******************
+   Column right Auth
+*******************/
+  .servicima {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.53;
+    text-align: left;
+    color: $black;
+    font-family: Poppins;
   }
