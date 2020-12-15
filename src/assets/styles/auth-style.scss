@@ -6,7 +6,7 @@ Auth Style
   .mat-form-field {
     width: $width-lg;
     color: $pale-grey;
-    font-size: $font-12;
+    font-size: $font-size-12;
   }
 
   .mat-input-element::placeholder {
@@ -41,7 +41,7 @@ Auth Style
       height: 100%;
       color: $pale-grey;
       margin: $m-0-auto;
-      font-size: $font-10;
+      font-size: $font-size-10;
       text-align: center;
       display: block;
       .mat-icon {
@@ -68,12 +68,11 @@ Auth Style
     Headings Auth
 *******************/
 
-  .auth-welcome h1 {
-    line-height: 10px;
-  }
-  .auth-welcome h5{
-    line-height: 10px;
-  }
+.auth-welcome{
+    h1,h5 {
+      line-height: 10px;
+    }
+}
 }
 
 
@@ -83,7 +82,7 @@ Auth Style
 .lang-select {
   color: $cool-grey !important;
   width: $width-sm !important;
-  font-size: $font-12 !important;
+  font-size: $font-size-12 !important;
   position: absolute !important;
   top: 14px;
   left: 15px;
@@ -109,14 +108,12 @@ Auth Style
    border-top-left-radius: $border-radius-15;
    border-bottom-left-radius: $border-radius-15;
   }
-  /*******************
-   Column right Auth
+
+/*******************
+   Servicima
 *******************/
   .servicima {
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 1.53;
-    text-align: left;
+    font-size: $font-size-17;
+    font-weight: $font-weight-300;
     color: $black;
-    font-family: Poppins;
   }
