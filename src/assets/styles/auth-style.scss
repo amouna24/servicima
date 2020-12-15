@@ -1,4 +1,6 @@
-
+/*******************
+Auth Style
+*******************/
 .auth-content {
 
   .mat-form-field {
@@ -19,10 +21,17 @@
     color: $error-red;
   }
 
+  /*******************
+  Input Outline Color on error
+*******************/
   .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
     color: $error-red;
     opacity: 0.8;
   }
+
+  /*******************
+  Invalid Message SnackBar
+*******************/
   .invalid-msg {
     width: $width-lg;
     height: 34px;
@@ -40,8 +49,36 @@
     }
   }
 
+  /*******************
+    Button Auth
+*******************/
+
+  .btn-large{
+    background-color: $pale-grey;
+    color: $cerulean-blue;
+    margin-top: $m-t-30 !important;
+  }
+  .btn-medium{
+    background-color: $topaz;
+    color: $pale-grey;
+  }
+
+  /*******************
+    Headings Auth
+*******************/
+
+  .auth-welcome h1 {
+    line-height: 10px;
+  }
+  .auth-welcome h5{
+    line-height: 10px;
+  }
 }
 
+
+/*******************
+   Language Select
+*******************/
 .lang-select {
   color: $cool-grey !important;
   width: $width-sm !important;
@@ -56,6 +93,18 @@
   background-color: $pale-grey !important;
 }
 
+/*******************
+   Height
+*******************/
+.full-height{
+    min-height: $height-100;
+  }
 
-
-
+/*******************
+   Column right Auth
+*******************/
+  .col-right{
+   background-color: $primaryColor;
+   border-top-left-radius: $border-radius-15;
+   border-bottom-left-radius: $border-radius-15;
+  }
