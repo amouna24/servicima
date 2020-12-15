@@ -1,10 +1,12 @@
-
+/*******************
+Auth Style
+*******************/
 .auth-content {
 
   .mat-form-field {
     width: $width-lg;
     color: $pale-grey;
-    font-size: $font-12;
+    font-size: $font-size-12;
   }
 
   .mat-input-element::placeholder {
@@ -19,19 +21,27 @@
     color: $error-red;
   }
 
+  /*******************
+  Input Outline Color on error
+*******************/
   .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
     color: $error-red;
     opacity: 0.8;
   }
+
+  /*******************
+  Invalid Message SnackBar
+*******************/
   .invalid-msg {
     width: $width-lg;
     height: 34px;
     background-color: $error-red;
+    border-radius: $border-radius-5;
     .error-msg {
       height: 100%;
       color: $pale-grey;
       margin: $m-0-auto;
-      font-size: $font-10;
+      font-size: $font-size-10;
       text-align: center;
       display: block;
       .mat-icon {
@@ -40,12 +50,39 @@
     }
   }
 
+  /*******************
+    Button Auth
+*******************/
+
+  .btn-large{
+    background-color: $pale-grey;
+    color: $cerulean-blue;
+    margin-top: $m-t-30 !important;
+  }
+  .btn-medium{
+    background-color: $topaz;
+    color: $pale-grey;
+  }
+
+  /*******************
+    Headings Auth
+*******************/
+
+.auth-welcome{
+    h1,h5 {
+      line-height: 10px;
+    }
+}
 }
 
+
+/*******************
+   Language Select
+*******************/
 .lang-select {
   color: $cool-grey !important;
   width: $width-sm !important;
-  font-size: $font-12 !important;
+  font-size: $font-size-12 !important;
   position: absolute !important;
   top: 14px;
   left: 15px;
@@ -56,6 +93,27 @@
   background-color: $pale-grey !important;
 }
 
+/*******************
+   Height
+*******************/
+.full-height{
+    min-height: $height-100;
+  }
 
+/*******************
+   Column right Auth
+*******************/
+  .col-right{
+   background-color: $primaryColor;
+   border-top-left-radius: $border-radius-15;
+   border-bottom-left-radius: $border-radius-15;
+  }
 
-
+/*******************
+   Servicima
+*******************/
+  .servicima {
+    font-size: $font-size-17;
+    font-weight: $font-weight-300;
+    color: $black;
+  }
