@@ -43,7 +43,7 @@ a.link{
   height: auto;
 }
 .img-rounded{
-    border-radius: $radius;
+    border-radius: $img-rounded;
 }
 html body .mdi:before, html body .mdi-set{
     line-height: initial;
@@ -120,6 +120,7 @@ h6 {
     font-size: 14px;
     font-weight: normal;
 }
+
 
 html, body{
 .display-5{
@@ -365,12 +366,17 @@ html body {
 .font-bold {
     font-weight: 700;
 }
-
+.font-semi-bold{
+  font-weight: 600;
+}
 .font-normal {
     font-weight: normal;
 }
 .font-light {
     font-weight: 300;
+}
+.font-extra-light {
+  font-weight: 200;
 }
 .font-medium {
     font-weight: 500;
@@ -425,7 +431,25 @@ html body {
 .brownish-grey{
     color: $brownish-grey;
 }
+.water-blue{
+  color: $water-blue;
+}
 
+/*******************
+ background colors
+*******************/
+.bg-cerulean-blue {
+  background-color: $cerulean-blue;
+}
+.bg-white{
+  background-color: $white;
+}
+.bg-golden-yellow{
+  background-color: $golden-yellow !important;
+}
+.bg-white-two{
+  background-color: $white-two !important;
+}
 /*******************
        logo
 *******************/

@@ -59,7 +59,7 @@ export class AuthGuard implements CanActivate {
             /* credentials status PENDING, user should complete registration*/
             if (this.fingerPrintService.credentialsStatus === 'PENDING') {
               this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode}});
-              this.resolveValue = false;
+              this.resolveValue = true;
             } else { /* User Active => Allow access to requested ressource */
               this.resolveValue = await this.userService.getUserInfo();
             }
