@@ -364,28 +364,31 @@ html body {
 *******************/
 html body {
 .font-bold {
-    font-weight: 700;
+    font-weight: $font-weight-700;
 }
 .font-semi-bold{
-  font-weight: 600;
+  font-weight: $font-weight-600;
 }
 .font-normal {
     font-weight: normal;
 }
 .font-light {
-    font-weight: 300;
+    font-weight: $font-weight-300;
 }
 .font-extra-light {
-  font-weight: 200;
+  font-weight: $font-weight-200;
 }
 .font-medium {
-    font-weight: 500;
+    font-weight: $font-weight-500;
 }
 .font-size-16 {
     font-size: 16px;
 }
 .font-size-14 {
     font-size: 14px;
+}
+.font-size-9 {
+    font-size: 9px;
 }
 .font-size-10 {
     font-size: 10px;
@@ -398,10 +401,11 @@ html body {
 }
 .font-size-20 {
     font-size: 20px;
-    }
-.font-size-9 {
-  font-size: 9px;
 }
+.font-size-25 {
+  font-size: 25px;
+}
+
 }
 
 /*******************
@@ -434,6 +438,9 @@ html body {
 .water-blue{
   color: $water-blue;
 }
+.steel{
+  color: $steel;
+}
 
 /*******************
  background colors
@@ -449,6 +456,9 @@ html body {
 }
 .bg-white-two{
   background-color: $white-two !important;
+}
+.bg-topaz{
+  background-color: $topaz;
 }
 /*******************
        logo

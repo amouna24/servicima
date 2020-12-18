@@ -1,29 +1,24 @@
+@import "../../../../assets/styles/variables";
 .breadcrumb {
   background: none;
-  font-size: 0.8em;
-  margin: 0;
-  a,
-  span {
-    color: #3264a8;
+  padding: 0 !important;
+  margin: 5vh 1vh 5vh 1.6vw;
+
+  span{
     cursor: pointer;
   }
   a:hover,
   span:hover {
-    color: dimgrey;
+    color: $cerulean-blue;
     text-decoration: none;
   }
   li {
     list-style: none;
     float: left;
-    margin: 5px;
-  }
-  li:last-child {
-    margin-right: 20px;
   }
   li::after {
     content: "/";
-    color: #3264a8;
-    margin-left: 5px;
+    color: $steel;
   }
   li:last-child::after {
     content: "";

@@ -36,11 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private utilService: UtilsService,
               public dialog: MatDialog,
               private modalsServices: ModalService,
-  ) {
-    this.utilService.addIcon([{ 'name': 'buy', 'path': 'assets/icons/bag.svg'},
-      ]
-    );
-  }
+  ) { }
 
   /**
    * @description Loaded when component in init state

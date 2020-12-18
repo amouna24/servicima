@@ -8,13 +8,11 @@ import {
 } from '@angular/router';
 /* RxJs imports */
 import { UserService } from '@core/services/user/user.service';
-/*
 import { FingerPrintService } from '@widigital-group/auth-npm-front';
-*/
 
 /* Specific imports */
 import { LocalStorageService } from '../services/storage/local-storage.service';
-import { FingerPrintService } from '../../../../projects/auth-front-lib/src/lib/core/services/auth/fingerprint.service';
+// import { FingerPrintService } from '../../../../projects/auth-front-lib/src/lib/core/services/auth/fingerprint.service';
 
 /**********************************************************************
  * AuthGard : Used to allow or not access to the requested roots

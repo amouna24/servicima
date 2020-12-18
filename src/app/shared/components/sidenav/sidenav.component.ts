@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { UserService } from '@core/services/user/user.service';
@@ -30,8 +30,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
   sidebarState: string;
   panelOpenState = false;
-  icontoShow = 'add';
+  icontoShow = 'keyboard_arrow_left';
   company: string;
+  abbrCompany: string;
   iconBool = true;
   pathName: string;
   menu: IMenu[];
@@ -72,6 +73,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
           (info) => {
               if (!!info) {
                 this.company = info['company'][0]['company_name'];
+                this.abbrCompany = this.company.match(/\b(\w)/g).join('');
               }
          },
           (err) => {
@@ -95,7 +97,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   toggleSideNav() {
     this.sidenavService.toggle();
     this.iconBool = !this.iconBool;
-    this.iconBool ? this.icontoShow = 'add' : this.icontoShow = 'more_vert';
+    this.iconBool ? this.icontoShow = 'keyboard_arrow_left' : this.icontoShow = 'keyboard_arrow_right';
+
   }
 
   toggleSubMenu(submenu: IChildItem[], parentMenu: string) {

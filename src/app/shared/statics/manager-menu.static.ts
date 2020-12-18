@@ -105,7 +105,7 @@ export const managerMenu: IMenu[] = [
         icon: 'show_chart',
         feature: 'EXPENSES_ACCESS',
     },
-    {
+   /* {
         state: 'settings',
         name: 'settings',
         type: 'sub',
@@ -176,5 +176,5 @@ export const managerMenu: IMenu[] = [
                 type: 'link',
               },
         ]
-    },
+    },*/
 ];

@@ -1,8 +1,10 @@
 @import "../../../../assets/styles/variables";
 mat-toolbar {
-  width: 72.5vw;
-  height: 6vh;
-  margin: 1vh auto;
+  width: auto;
+  height: 46px;
+  margin-top: 1vh;
+  margin-right: 7.7vw;
+  margin-left: 1.6vw;
   border-radius: $border-radius-20;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.05);
   padding-right: 0 !important;
