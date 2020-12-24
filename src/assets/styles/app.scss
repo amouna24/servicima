@@ -428,6 +428,12 @@ html body {
 .brownish-grey{
     color: $brownish-grey;
 }
+.cerulean-blue{
+  color: $cerulean-blue !important;
+}
+.pale-grey{
+  color: $pale-grey !important;
+}
 
 /*******************
  Background colors
@@ -438,6 +444,13 @@ html body {
 .bg-golden-yellow {
   background-color: #f1c40f;
 }
+.bg-pale-grey{
+  background-color: $pale-grey !important;
+}
+.bg-topaz{
+  background-color: $topaz !important;
+}
+
 /*******************
        logo
 *******************/

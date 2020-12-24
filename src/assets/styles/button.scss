@@ -1,5 +1,4 @@
-@import "./functions.scss";
-
+@import "functions.scss";
   /* small button */
   .btn-small{
     @include button(25px,$width-sm,$border-radius-10,$cerulean-blue,$white,$font-size-11,0,center)
