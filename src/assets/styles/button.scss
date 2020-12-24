@@ -1,4 +1,5 @@
-@import "./assets/styles/functions.scss";
+@import "./functions.scss";
+
   /* small button */
   .btn-small{
     @include button(25px,$width-sm,$border-radius-10,$cerulean-blue,$white,$font-size-11,0,center)
@@ -19,13 +20,6 @@
 
   .btn-xlarge {
     @include button(42px,$width-xlg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
-  }
-
-  .btn-small:hover,
-  .btn-large:hover,
-  .btn-medium:hover,
-  .btn-xlarge:hover{
-    background-color: $bright-blue;
   }
 
   .isClicked{

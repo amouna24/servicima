@@ -430,6 +430,15 @@ html body {
 }
 
 /*******************
+ Background colors
+*******************/
+.bg-primaryColor {
+  background-color: $primaryColor;
+}
+.bg-golden-yellow {
+  background-color: #f1c40f;
+}
+/*******************
        logo
 *******************/
 .b-r-logo {
@@ -438,5 +447,12 @@ html body {
 }
 .t-l-logo {
   width: 54px;
+}
+
+/*******************
+ full-width-height
+*******************/
+.full-width {
+  width: 100%;
 }
 
