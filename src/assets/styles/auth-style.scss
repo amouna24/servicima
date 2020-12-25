@@ -1,35 +1,21 @@
+@import "./functions.scss";
+
 /*******************
 Auth Style
 *******************/
+.complete-register {
+  @include get-page(cr);
+}
+
 .auth-content {
-
-  .mat-form-field {
-    width: $width-lg;
-    color: $pale-grey;
-    font-size: $font-size-12;
+  @include get-page(login);
+  .auth-welcome {
+    h1,h5 {
+      line-height: 10px;
+    }
   }
 
-  .mat-input-element::placeholder {
-    color: $pale-grey;
-  }
-
-  .mat-error {
-    color: $error-red;
-  }
-
-  .mat-icon {
-    color: $error-red;
-  }
-
-  /*******************
-  Input Outline Color on error
-*******************/
-  .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
-    color: $error-red;
-    opacity: 0.8;
-  }
-
-  /*******************
+/*******************
   Invalid Message SnackBar
 *******************/
   .invalid-msg {
@@ -49,32 +35,20 @@ Auth Style
       }
     }
   }
-
-  /*******************
-    Button Auth
-*******************/
-
-  .btn-large{
-    background-color: $pale-grey;
-    color: $cerulean-blue;
-    margin-top: $m-t-30 !important;
-  }
-  .btn-medium{
-    background-color: $topaz;
-    color: $pale-grey;
-  }
-
-  /*******************
-    Headings Auth
-*******************/
-
-.auth-welcome{
-    h1,h5 {
-      line-height: 10px;
-    }
-}
 }
 
+
+/*******************
+Input Outline Color on error
+*******************/
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+  color: $error-red;
+  opacity: 0.8;
+}
+
+.mat-error {
+  color: $error-red;
+}
 
 /*******************
    Language Select
@@ -88,9 +62,15 @@ Auth Style
   left: 15px;
 }
 
+.mat-select-search-inner {
+  background-color: $pale-grey;
+  top: -9px !important;
+}
+
 .panelColor {
   margin-top: -20px !important;
   background-color: $pale-grey !important;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 /*******************
@@ -104,16 +84,12 @@ Auth Style
    Column right Auth
 *******************/
   .col-right{
-   background-color: $primaryColor;
    border-top-left-radius: $border-radius-15;
    border-bottom-left-radius: $border-radius-15;
   }
-
-/*******************
-   Servicima
-*******************/
-  .servicima {
-    font-size: $font-size-17;
-    font-weight: $font-weight-300;
-    color: $black;
+  .col-left{
+    border-top-right-radius: $border-radius-15;
+    border-bottom-right-radius: $border-radius-15;
   }
+
+

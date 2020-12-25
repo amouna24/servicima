@@ -6,7 +6,7 @@ import { RoleManagementComponent } from './role-management.component';
 const routes: Routes = [
 
   {
-    path: 'role',
+    path: '',
     component: RoleManagementComponent,
     data: {
       breadcrumb: 'role'

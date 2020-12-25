@@ -49,7 +49,7 @@ const routes: Routes = [
         loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
       },
       {
-        path: 'users',
+        path: 'user',
         loadChildren: () => import('@core/../shared/components/settings/user/user.module').then(m => m.UserModule)
       }
     ]

@@ -1,4 +1,4 @@
-  
+
   @mixin button($height,$width,$border-radius,$background-color,$color,$font-size,$line-height,$text-align) {
     height: $height !important;
     width: $width !important;
@@ -9,3 +9,40 @@
     line-height: $line-height !important;
     text-align: $text-align !important;
 }
+
+  @mixin get-page($page) {
+    @if $page == login {
+      @include set-style($width-lg, $pale-grey, $black,$font-size-12, $font-size-17, $font-weight-300);
+    }
+    @else if($page == cr) {
+      @include set-style($width-xlg, $cool-grey, $white, $font-size-12, $font-size-17, $font-weight-300);
+    }
+  }
+
+  @mixin set-style($lg-xlg, $pale-cool, $white-black, $font-size-1, $font-size-2, $font-weight) {
+
+    .mat-input-element::placeholder {
+      color: $pale-cool;
+    }
+
+    .mat-form-field {
+      width: $lg-xlg;
+      color: $pale-cool;
+      font-size: $font-size-1;
+    }
+
+
+    /*******************
+       Servicima
+    *******************/
+    .servicima {
+      color: $white-black;
+      font-size: $font-size-2;
+      font-weight: $font-weight;
+    }
+
+
+  }
+
+
+
