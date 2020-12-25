@@ -1,59 +1,16 @@
-<mat-toolbar>
-  <div class="search">
-    <div id="search-container">
-      <input type="text" required>
-    </div>
+<mat-toolbar class="bg-white" fxLayout="row" fxLayoutAlign="start center">
+  <h6 class="font-semi-bold m-r-15">{{licenceCode }}</h6>
+  <p class="font-size-14 font-extra-light water-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
+  <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+          mat-button class="btn-small buy-btn bg-golden-yellow">
+    <mat-icon class="mat-icon-btn" svgIcon="buy"></mat-icon>
+    {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}
+  </button>
+  <mat-form-field class="search-bar ml-auto relative" appearance="fill" fxLayoutAlign="center center">
+    <input matInput type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
+    <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
+  </mat-form-field>
+  <div fxLayoutAlign="center center" class="user-avatar bg-cerulean-blue">
+    <img src="assets/img/avatar.png" class="img-rounded" alt="{{name}}">
   </div>
-  <div class="header-label" fxLayout="row" fxLayoutGap="25px">
-    <div class="trial"> {{licenceCode }} </div>
-    <div class="day-left" *ngIf="licenceType == 'TRIAL'"> {{endLicence}} jours restants</div>
-    <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()" mat-button
-           class="wid-button-buy" >
-      <mat-icon svgIcon="buy"> </mat-icon>
-      {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}
-    </button>
-  </div>
-  <span class="flex-spacer"></span>
-  <div fxLayout="row " fxLayoutGap="15px">
-    <ng-container *ngFor=" let headerMenu of headerMenu">
-      <ng-container *ngIf=" headerMenu.type === 'link';  else subMenuLabel">
-        <div fxLayout="row" class="cursor" [routerLink]="['./', headerMenu.state]">
-          <!--   <mat-icon class="icon material-icons-outlined icon-button" svgIcon={{headerMenu.icon}}> </mat-icon> -->
-           <!-- <span class="header-label">{{headerMenu.name}}</span> -->
-          <!--   <mat-divider [vertical]="true" style="margin-left:15px"></mat-divider> -->
-          </div>
-        </ng-container>
-
-        <ng-template #subMenuLabel>
-          <div fxLayout="row " fxLayoutGap="15px">
-            <div class="cursor" [matMenuTriggerFor]="matSettings">
-              <div fxLayout="row " fxLayoutGap="8px">
-                <!-- <mat-icon class="icon material-icons-outlined icon-button"  svgIcon={{headerMenu.icon}}></mat-icon>-->
-                 <!--   <div class="header-label">{{headerMenu.name}}</div> -->
-              <!--   <mat-divider [vertical]="true"></mat-divider>-->
-              </div>
-              <mat-menu #matSettings="matMenu" xPosition="before">
-                <ng-container *ngFor=" let children of headerMenu.children">
-                  <div mat-menu-item [routerLink]="['/manager/settings/',children.state]">{{children.name}}</div>
-                </ng-container>
-              </mat-menu>
-            </div>
-          </div>
-        </ng-template>
-      </ng-container>
-      <div fxLayout="row ">
-        <div class="cursor" [matMenuTriggerFor]="matUserMenu" aria-label="Toggle matUserMenu">
-          <div fxLayout="row ">
-            <img src="assets/img/avatar.png" alt="" class="user-avatar">
-            <div class="header-label"> {{name}} </div>
-          </div>
-        </div>
-        <mat-menu #matUserMenu="matMenu" xPosition="before" >
-          <button mat-menu-item [routerLink]="['/manager/user/profile']">MyAccount</button>
-          <button mat-menu-item [routerLink]="['/manager/settings/home-company']">Home company</button>
-          <button mat-menu-item (click)='logout()'>Logout</button>
-        </mat-menu>
-      </div>
-    </div>
-  </mat-toolbar>
-
+</mat-toolbar>

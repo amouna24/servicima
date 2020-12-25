@@ -43,7 +43,7 @@ a.link{
   height: auto;
 }
 .img-rounded{
-    border-radius: $radius;
+    border-radius: $img-rounded;
 }
 html body .mdi:before, html body .mdi-set{
     line-height: initial;
@@ -365,36 +365,50 @@ html body {
 .font-bold {
     font-weight: 700;
 }
-
+.font-semi-bold{
+  font-weight: 600;
+}
 .font-normal {
     font-weight: normal;
 }
 .font-light {
     font-weight: 300;
 }
+.font-extra-light {
+  font-weight: 200;
+}
 .font-medium {
     font-weight: 500;
 }
-.font-size-16 {
-    font-size: 16px;
-}
-.font-size-14 {
-    font-size: 14px;
-}
+/*******************
+    font size
+*******************/
+.font-size-9 {
+    font-size: 9px;
+  }
 .font-size-10 {
     font-size: 10px;
 }
 .font-size-12 {
     font-size: 12px;
 }
+.font-size-14 {
+    font-size: 14px;
+}
+.font-size-16 {
+    font-size: 16px;
+}
 .font-size-18 {
     font-size: 18px;
 }
+.font-size-19 {
+    font-size: 19px;
+  }
 .font-size-20 {
     font-size: 20px;
-    }
-.font-size-9 {
-  font-size: 9px;
+  }
+.font-size-38{
+    font-size: 38px;
 }
 }
 
@@ -431,9 +445,7 @@ html body {
 .cerulean-blue{
   color: $cerulean-blue !important;
 }
-.pale-grey{
-  color: $pale-grey !important;
-}
+
 
 /*******************
  Background colors
@@ -441,16 +453,24 @@ html body {
 .bg-primaryColor {
   background-color: $primaryColor;
 }
-.bg-golden-yellow {
-  background-color: #f1c40f;
-}
 .bg-pale-grey{
   background-color: $pale-grey !important;
 }
 .bg-topaz{
   background-color: $topaz !important;
 }
-
+.bg-cerulean-blue {
+  background-color: $cerulean-blue;
+}
+.bg-white{
+  background-color: $white;
+}
+.bg-golden-yellow{
+  background-color: $golden-yellow !important;
+}
+.bg-white-two{
+  background-color: $white-two !important;
+}
 /*******************
        logo
 *******************/

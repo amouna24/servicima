@@ -1,134 +1,51 @@
-.header-label{
- font-size: 14px;
-}
-mat-toolbar{
-  min-width:53px;
-  background-color: rgb(255,255,255);
-  border-bottom: 0.1px inset lightgray;
-}
-.icon-button{
-  margin-top: 4px;
-}
+@import "../../../../assets/styles/variables";
+mat-toolbar {
+  width: 72.5vw;
+  height: 6vh;
+  margin: 1vh auto;
+  border-radius: $border-radius-20;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.05);
+  padding-right: 0 !important;
+  padding-left: 18px !important;
 
-.cursor{
-  cursor: pointer;
-}
+  .buy-btn {
+    width: auto !important;
+    margin-left: 27px;
+  }
 
-@media only screen and (max-width: 887px) {
-  .header-label{
-    display: none;
+  .search-bar {
+    height: $height-100 !important;
+
+    span {
+      z-index: 1;
+      top: -18.4px;
+      left: 11px;
+    }
+
+    input {
+      padding: 3px 35px !important;
+      height: 25px !important;
+      width: $width-lg;
+      border-radius: $border-radius-15;
+    }
+
+  }
+
+  .user-avatar {
+    width: 6.1%;
+    height: $height-100;
+    border-radius: 0 $border-radius-20 $border-radius-20 $border-radius-20;
+    margin-right: 0;
+    margin-left: 50px;
+    cursor: pointer;
+
+    img {
+      width: 35px;
+      height: 35px;
+    }
   }
 }
-/* User Image */
-.user-avatar {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  margin-top: 4px;
-  margin-right: 7px;
-}
-.wid-gift{
-  margin-top: 0;
-}
-/* Search Bar */
-.search {
-  cursor: pointer;
-  padding: 0 20px;
-  margin-top: -10px;
-}
 
-.search > div {
-  display: inline-block;
-  position: relative;
-}
 
-.search > div:after {
-  content: "";
-  background: #b0b1ac;
-  width: 2px;
-  height: 7px;
-  position: absolute;
-  top: 21px;
-  right: 0px;
-  transform: rotate(140deg);
-}
-.search > div:focus-within::after {
-  top: 30px;
-}
 
-.search > div::after > input:valid {
-  top: 30px;
-}
-
-.search > div > input {
-  color: #b0b1ac;
-  cursor: pointer;
-  background: transparent;
-  width: 3px;
-  height: 3px;
-  padding: 3px;
-  border: solid 2px #b0b1ac;
-  outline: none;
-  border-radius: 32px;
-  transition: width 0.5s, height 0.2s;
-}
-
-.search > div > input::placeholder {
-  color: #efefef;
-  opacity: 1;
-}
-
-.search > div > input::-ms-placeholder {
-  color: #efefef;
-}
-
-.search > div > input::-ms-input-placeholder {
-  color: #efefef;
-}
-
-.search > div > input:focus,
-.search > div > input:valid {
-  cursor: auto;
-  height: 25px;
-  width: 350px;
-  padding: 5px 15px;
-}
-.flex-spacer {
-  flex: 1 1 auto;
-}
-
-.wid-button-buy{
-  height: 35px;
-  border-radius: 10px;
-  background-color: #f1c40f;
-  height: 35px;
-  font-family: Poppins;
-  font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #ffffff;
-}
-.day-left{
-  font-family: Poppins;
-  font-size: 20px;
-  font-weight: 200;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #0d66d0;
-}
-.trial{
-  font-family: Poppins;
-  font-size: 25px;
-  font-weight: 600;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #1e1e1e;
-}
 
