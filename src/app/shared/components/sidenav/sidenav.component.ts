@@ -2,10 +2,13 @@ import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { UserService } from '@core/services/user/user.service';
+import { MatExpansionPanel } from '@angular/material/expansion';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import {
+  accordionAnimation,
   buttonAnimation,
   iconAnimation,
   labelAnimation,
@@ -24,6 +27,7 @@ import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
     labelAnimation(),
     nameAnimation(),
     buttonAnimation(),
+    accordionAnimation(),
   ]
 })
 export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
@@ -38,6 +42,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   menu: IMenu[];
   subMenu: IChildItem[] = [];
   parentMenu: string;
+
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -47,7 +52,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
    * @description Module Name
    *************************************************************************/
   moduleName: string;
-
   constructor(private sidenavService: SidenavService,
               private userService: UserService
   ) {
@@ -98,12 +102,18 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.sidenavService.toggle();
     this.iconBool = !this.iconBool;
     this.iconBool ? this.icontoShow = 'keyboard_arrow_left' : this.icontoShow = 'keyboard_arrow_right';
-
   }
 
   toggleSubMenu(submenu: IChildItem[], parentMenu: string) {
     this.subMenu = submenu;
     this.parentMenu = parentMenu;
+  }
+
+  toggleAccordion(widExp: MatExpansionPanel) {
+    if (this.sidebarState === 'close') {
+      this.toggleSideNav();
+      widExp.open();
+    }
   }
 
   closeSubMenu() {
