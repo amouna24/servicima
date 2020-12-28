@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@core/services/auth/auth.service';
 import { UserService } from '@core/services/user/user.service';
 import { headerMenu } from '@shared/statics/header-menu.static';
 import { IHeaderMenu } from '@shared/models/header-menu/header-menu.model';
@@ -13,6 +12,7 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
+import { AuthService } from '../../../../../projects/auth-front-lib/src/public-api';
 
 @Component({
   selector: 'wid-header',

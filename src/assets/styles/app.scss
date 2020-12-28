@@ -121,7 +121,6 @@ h6 {
     font-weight: normal;
 }
 
-
 html, body{
 .display-5{
     font-size:3rem;
@@ -381,32 +380,41 @@ html body {
 .font-medium {
     font-weight: $font-weight-500;
 }
-.font-size-16 {
-    font-size: 16px;
-}
-.font-size-14 {
-    font-size: 14px;
-}
+/*******************
+    font size
+*******************/
 .font-size-9 {
     font-size: 9px;
-}
+  }
 .font-size-10 {
-    font-size: 10px;
+   font-size: 10px;
 }
 .font-size-12 {
     font-size: 12px;
 }
+.font-size-14 {
+    font-size: 14px;
+}
+.font-size-16 {
+    font-size: 16px;
+}
 .font-size-18 {
     font-size: 18px;
 }
+.font-size-19 {
+    font-size: 19px;
+  }
 .font-size-20 {
     font-size: 20px;
-}
+    }
 .font-size-25 {
-  font-size: 25px;
+    font-size: 25px;
+}
+.font-size-38{
+  font-size: 38px;
+}
 }
 
-}
 
 /*******************
        Line height
@@ -432,11 +440,14 @@ html body {
 .black {
     color: $black;
   }
+.white {
+  color: $white;
+}
 .brownish-grey{
     color: $brownish-grey;
 }
-.water-blue{
-  color: $water-blue;
+.cerulean-blue{
+  color: $cerulean-blue !important;
 }
 .steel{
   color: $steel;
@@ -445,6 +456,15 @@ html body {
 /*******************
  background colors
 *******************/
+.bg-primaryColor {
+  background-color: $primaryColor;
+}
+.bg-pale-grey{
+  background-color: $pale-grey !important;
+}
+.bg-topaz{
+  background-color: $topaz !important;
+}
 .bg-cerulean-blue {
   background-color: $cerulean-blue;
 }
@@ -457,9 +477,7 @@ html body {
 .bg-white-two{
   background-color: $white-two !important;
 }
-.bg-topaz{
-  background-color: $topaz;
-}
+
 /*******************
        logo
 *******************/
@@ -469,5 +487,12 @@ html body {
 }
 .t-l-logo {
   width: 54px;
+}
+
+/*******************
+ full-width-height
+*******************/
+.full-width {
+  width: 100%;
 }
 
