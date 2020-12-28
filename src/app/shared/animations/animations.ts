@@ -11,12 +11,12 @@ import {
 } from '@angular/animations';
 
 const defaultDuration = '200ms';
-const defaultMinWidth = '50px';
-const defaultMaxWidth = '250px';
+const defaultMinWidth = '71px';
+const defaultMaxWidth = '248px';
 const defaultMinFontSize = '20px';
 const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
-const defaultMinPosition = '30px';
+const defaultMinPosition = '51px';
 
 export function mainContentAnimation(animationDuration: string = defaultDuration,
   minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
@@ -46,8 +46,8 @@ export function sidebarAnimation(animationDuration: string = defaultDuration,
   ]);
 }
 
-export function buttonAnimation(animationDuration: string = defaultDuration,
-  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
+export function buttonAnimation(animationDuration: string = defaultDuration)
+  : AnimationTriggerMetadata {
   return trigger('buttonAnimation', [
     state('close', style({ left: defaultMinPosition })),
     state('open', style({ left: defaultMaxPosition })),
@@ -64,7 +64,7 @@ export function iconAnimation(animationDuration: string = defaultDuration,
   minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize): AnimationTriggerMetadata {
   return trigger('iconAnimation', [
     state('open', style({ fontSize: maxFontSize })),
-    state('close', style({ fontSize: minFontSize })),
+    state('close', style({ fontSize: minFontSize, margin: 'auto'})),
     transition('close => open', animate(`${animationDuration} ease-in-out`)),
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);
@@ -81,7 +81,7 @@ export function labelAnimation(animationDuration: string = defaultDuration): Ani
 
 export function nameAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
   return trigger('nameAnimation', [
-    state('close', style({ color: 'white' })),
+    state('close', style({ fontSize: '16px', 'margin-bottom': '20px'})),
     transition('close => open', animate(`${animationDuration} ease-in-out`)),
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);

@@ -363,22 +363,22 @@ html body {
 *******************/
 html body {
 .font-bold {
-    font-weight: 700;
+    font-weight: $font-weight-700;
 }
 .font-semi-bold{
-  font-weight: 600;
+  font-weight: $font-weight-600;
 }
 .font-normal {
     font-weight: normal;
 }
 .font-light {
-    font-weight: 300;
+    font-weight: $font-weight-300;
 }
 .font-extra-light {
-  font-weight: 200;
+  font-weight: $font-weight-200;
 }
 .font-medium {
-    font-weight: 500;
+    font-weight: $font-weight-500;
 }
 /*******************
     font size
@@ -387,7 +387,7 @@ html body {
     font-size: 9px;
   }
 .font-size-10 {
-    font-size: 10px;
+   font-size: 10px;
 }
 .font-size-12 {
     font-size: 12px;
@@ -406,11 +406,15 @@ html body {
   }
 .font-size-20 {
     font-size: 20px;
-  }
+    }
+.font-size-25 {
+    font-size: 25px;
+}
 .font-size-38{
-    font-size: 38px;
+  font-size: 38px;
 }
 }
+
 
 /*******************
        Line height
@@ -445,10 +449,12 @@ html body {
 .cerulean-blue{
   color: $cerulean-blue !important;
 }
-
+.steel{
+  color: $steel;
+}
 
 /*******************
- Background colors
+ background colors
 *******************/
 .bg-primaryColor {
   background-color: $primaryColor;
@@ -471,6 +477,7 @@ html body {
 .bg-white-two{
   background-color: $white-two !important;
 }
+
 /*******************
        logo
 *******************/

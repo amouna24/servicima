@@ -7,87 +7,96 @@ Imports
 wid-sidenav {
 
   .side-nav-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    height: $height-100;
+    width: $width-100;
+    overflow-x: hidden;
 
     .icon {
-      padding: 0 10px 0 0;
       text-align: center;
       vertical-align: middle;
-      color: $lightColor;
+      color: $pale-grey;
     }
 
     .active-list-item {
+      background-color: $pale-grey;
 
       span,
       .icon {
-        color: $thirdColor;
+        color: $cerulean-blue;
+
+        &:hover {
+          color: $cerulean-blue !important;
+        }
+      }
+
+      &:hover {
+        background-color: $pale-grey !important;
       }
     }
   }
 
-  .side-nav-header {
-
-    flex: 1 1 auto;
-    overflow: hidden;
-
-    .row {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .col {
-      flex: 1;
-      margin-right: 20px;
-    }
-
-    .col:last-child {
-      margin-right: 0;
-    }
-
-    .company-point {
-      width: 4px;
-      height: 4px;
-      margin-left: 125px;
-      -o-object-fit: contain;
-      object-fit: contain;
-      background-color: $thirdColor;
-    }
-
-    .company-name {
-      width: 248px;
-      height: 58px;
-      margin: auto;
-      object-fit: contain;
-    }
+  .company-label {
+    margin: auto;
+    text-align: center;
   }
 
   .list-item {
-    height: 60px !important;
+    height: 50px !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin-bottom: 10px;
+    border-radius: $border-radius-10;
+
+    &:hover {
+      background-color: rgba(243, 246, 249, 0.1);
+    }
+
+    &:nth-last-child(1) {
+      margin-bottom: 0 !important;
+    }
 
     span {
-      color: $lightColor;
-      font-family: $bodyFont;
-      font-size: 10px;
-      font-weight: bold;
-      text-transform: uppercase;
+      color: $pale-grey;
+      text-transform: capitalize;
+      margin-left: 10px;
+    }
+
+    mat-panel-title{
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      margin: 0 auto;
+      position: relative;
+      height: inherit;
+      box-sizing: border-box;
+      flex-direction: row;
 
     }
   }
-
-  .back-button {
-    margin-bottom: 10px;
+  .sub-menu-child-item{
+    color: $pale-grey !important;
+    &:hover{
+      font-weight: $font-weight-500;
+    }
+  }
+  .active-sub-menu-child-item{
+    font-weight: $font-weight-600 !important;
+    color: $golden-yellow !important;
   }
 
   .mat-icon-button {
-    background-image: $secondaryHorizontalGradient;
     color: $lightColor;
-    border-radius: 50%;
+    border-radius: $border-radius-10;
+    width: 43px;
+    height: 43px;
     position: fixed;
     z-index: 1;
-    top: 10px;
+    bottom: 64px;
+  }
+
+  .servicima-logo {
+    margin-bottom: 12px;
+    margin-top: auto;
   }
 
 }
