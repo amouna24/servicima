@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@core/services/auth/auth.service';
 import { UserService } from '@core/services/user/user.service';
 import { headerMenu } from '@shared/statics/header-menu.static';
 import { IHeaderMenu } from '@shared/models/header-menu/header-menu.model';
@@ -13,6 +12,7 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
+import { AuthService } from '../../../../../projects/auth-front-lib/src/public-api';
 
 @Component({
   selector: 'wid-header',
@@ -36,11 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private utilService: UtilsService,
               public dialog: MatDialog,
               private modalsServices: ModalService,
-  ) {
-    this.utilService.addIcon([{ 'name': 'buy', 'path': 'assets/icons/bag.svg'},
-      ]
-    );
-  }
+  ) { }
 
   /**
    * @description Loaded when component in init state
@@ -52,7 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-        if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
+      /*  if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
           this.modalsServices.displayModal('expirationLicense', null , '40%')
             .pipe(
               takeUntil(this.destroy$)
@@ -63,7 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               (error) => {
                 console.error(error);
               });
-        }
+        }*/
       }
     });
   }

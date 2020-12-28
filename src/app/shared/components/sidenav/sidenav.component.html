@@ -1,82 +1,97 @@
-<button mat-icon-button (click)="toggleSideNav()" [@buttonAnimation]="sidebarState">
+<button mat-icon-button class="bg-topaz" (click)="toggleSideNav()" [@buttonAnimation]="sidebarState">
   <mat-icon>{{icontoShow}}</mat-icon>
 </button>
-<div class="side-nav-container" [@onSideNavChange]="sidebarState">
+<div class="side-nav-container" [@onSideNavChange]="sidebarState" fxLayout="column" fxLayoutAlign="start center">
   <mat-nav-list>
     <!---------------------------------------- menu header ------------------------------------------------------------>
-    <mat-list-item class="side-nav-header" [@nameAnimation]="sidebarState">
-      <div class="col" style="margin-left: 5px">
-        <div class="company-label"> {{company}}</div>
-      </div>
+    <mat-list-item class="side-nav-header" >
+      <p [@nameAnimation]="sidebarState" class="company-label pale-grey font-size-25">
+        <ng-container *ngIf="sidebarState === 'open';else abbrTemplate">
+          {{company}}
+        </ng-container>
+        <ng-template #abbrTemplate>
+          {{abbrCompany}}
+        </ng-template>
+      </p>
     </mat-list-item>
     <!---------------------------------------- menu container ------------------------------------------------------------>
     <div *ngIf="subMenu.length === 0; else subMenuContainer">
       <ng-container *ngFor=" let menuItem of menu">
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
-          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]" class="list-item">
+          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]"
+             class="list-item" [@iconAnimation]="sidebarState">
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
             </mat-icon>
-            <span [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
+            <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
           </a>
         </ng-container>
         <ng-template #subMenuLabel>
-          <mat-list-item class="list-item" (click)="toggleSubMenu(menuItem.children, menuItem.state)">
-            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
+          <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
+                         [@iconAnimation]="sidebarState">
+            <mat-icon class="icon material-icons-outlined">{{menuItem.icon}}
             </mat-icon>
-            <span [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
+            <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
           </mat-list-item>
         </ng-template>
       </ng-container>
     </div>
     <!---------------------------------------- sub menu container ------------------------------------------------------------>
     <ng-template #subMenuContainer>
-      <div class="sub-menu">
-        <mat-list-item class="list-item back-button" (click)="closeSubMenu()">
-          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">arrow_back
+      <div class="mat-list-item-content">
+        <mat-list-item class="list-item" [@iconAnimation]="sidebarState" (click)="closeSubMenu()">
+          <mat-icon class="icon material-icons-outlined" >arrow_back
           </mat-icon>
-          <span [@labelAnimation]="sidebarState">go back</span>
+          <span class="font-light font-size-14" [@labelAnimation]="sidebarState">go back</span>
         </mat-list-item>
         <ng-container *ngFor=" let subMenuItem of subMenu">
-                  <a *ngIf=" subMenuItem.type === 'link'" mat-list-item routerLinkActive="active-list-item" [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]" [routerLinkActiveOptions]="{exact: true}" class="list-item">
-                    <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
+          <ng-container *ngIf=" subMenuItem.type === 'link'; else accordion">
+            <a mat-list-item routerLinkActive="active-list-item"
+               [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
+               [routerLinkActiveOptions]="{exact: true}" class="list-item" [@iconAnimation]="sidebarState">
+              <mat-icon class="icon material-icons-outlined" >
+                {{subMenuItem.icon}}
+              </mat-icon>
+              <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+            </a>
+          </ng-container>
+          <ng-template #accordion>
+            <mat-accordion>
+              <mat-expansion-panel (opened)="sidebarState==='close' ? toggleSideNav() : ''" hideToggle>
+                <mat-expansion-panel-header class="list-item"  [@iconAnimation]="sidebarState">
+                  <mat-panel-title>
+                    <mat-icon class="icon material-icons-outlined" >
                       {{subMenuItem.icon}}
                     </mat-icon>
-                    <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
-                  </a>
-                  <mat-accordion *ngIf=" subMenuItem.type === 'sub'">
-                    <mat-expansion-panel #widExp hideToggle>
-                      <mat-expansion-panel-header fxFlexAlign="auto" fxFlexAlign.xs="auto" fxLayout="row" fxLayout.xs="row" class="list-item" >
-                        <mat-panel-title  fxFlex="95">
-                          <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">
-                            {{subMenuItem.icon}}
-                          </mat-icon>
-                          <span [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
-                        </mat-panel-title>
-                        <mat-panel-description fxFlex="5">
-                          <mat-icon class="icon material-icons-outlined" *ngIf="!widExp.expanded">expand_more</mat-icon>
-                          <mat-icon class="icon material-icons-outlined" *ngIf="widExp.expanded">expand_less</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <a mat-list-item routerLinkActive="active-list-item" *ngFor="let subChildMenu of subMenuItem.child" [routerLink]="['/', moduleName, parentMenu, subMenuItem.state, subChildMenu.state]" class="list-item">
-                        <mat-icon class="icon material-icons-outlined">{{subChildMenu.icon}}
-                        </mat-icon>
-                        <span [@labelAnimation]="sidebarState" class="wid-acc-title">{{subChildMenu.name }}</span>
-                      </a>
-                    </mat-expansion-panel>
-                  </mat-accordion>
+                    <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <a mat-list-item routerLinkActive="active-sub-menu-child-item" *ngFor="let subChildMenu of subMenuItem.child"
+                   [routerLink]="['/', moduleName, parentMenu, subMenuItem.state, subChildMenu.state]"
+                   class="font-light font-size-14 sub-menu-child-item " [@labelAnimation]="sidebarState">
+                    {{subChildMenu.name }}
+                </a>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </ng-template>
         </ng-container>
       </div>
     </ng-template>
   </mat-nav-list>
   <!---------------------------------------- footer ------------------------------------------------------------>
   <span class="flex-spacer"></span>
-  <div *ngIf='iconBool'>
-    <mat-list-item class="side-nav-header" [@nameAnimation]="sidebarState">
-        <img src="assets/img/servicima.png"  class="company-name">
-    </mat-list-item>
-    <div class="logo" fxLayoutAlign="center center">
-      <img src='assets/img/logoServicima.png'>
-    </div>
-    <div class="footer">2020 © Servicima All rights reserved.</div>
-  </div>
+  <span class="servicima-logo" fxLayout="row">
+      <ng-container *ngIf="iconBool; else miniLogo" [@labelAnimation]="sidebarState">
+        <div fxLayoutAlign="center center" fxLayoutGap="10px">
+          <img src="assets/img/logoServicima.png" alt="servicima" fxFlex="14.5">
+         <img src="assets/img/servicima.png" alt="servicima" fxFlex="51">
+        </div>
+      </ng-container>
+      <ng-template #miniLogo>
+         <img src="assets/img/logoServicima.png" alt="servicima" fxFlexAlign="center center" fxFlex="80">
+      </ng-template>
+
+    </span>
+
+  <p [@labelAnimation]="sidebarState" class="pale-grey font-light font-size-9" style="text-align: center">2020 ©
+    Servicima All rights reserved.</p>
 </div>

@@ -2,11 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AuthGuard } from '@core/guard/auth.guard';
-
-/*
 import { AuthModule } from '@widigital-group/auth-npm-front';
-*/
-import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
+// import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
 
 import { ErrorComponent } from './pages/error/error.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -21,7 +18,7 @@ const routes: Routes = [
    {
         path: 'auth',
         canActivate: [AuthGuard],
-        loadChildren: () => import('../../projects/auth-front-lib/src/public-api').then(m => m.AuthLibModule),
+        loadChildren: () => import('@widigital-group/auth-npm-front').then(m => m.AuthLibModule),
     },
     {
         path: 'notfound',

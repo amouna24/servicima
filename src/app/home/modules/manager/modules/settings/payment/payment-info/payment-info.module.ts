@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { DataTableModule } from '@dataTable/data-table.module';
 
-import { PaymentRoutingModule } from './payment-routing.module';
+import { PaymentInfoRoutingModule } from './payment-info-routing.module';
 
 @NgModule({
   declarations: [
@@ -11,9 +11,9 @@ import { PaymentRoutingModule } from './payment-routing.module';
   imports: [
     CommonModule,
     SharedModule,
-    PaymentRoutingModule,
+    PaymentInfoRoutingModule,
     DataTableModule,
   ],
 })
-export class PaymentModule {
+export class PaymentInfoModule {
 }

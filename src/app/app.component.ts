@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from '@widigital-group/auth-npm-front';
 import { ModalService } from '@core/services/modal/modal.service';
+import { AuthService } from '@widigital-group/auth-npm-front';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 import { TranslationCustomLoaderService } from '@core/services/translation/translation-custom-loader.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { environment } from '../environments/environment';
-
 @Component({
   selector: 'wid-root',
   templateUrl: './app.component.html',
@@ -17,12 +17,18 @@ export class AppComponent implements OnInit {
     { modalName: 'confirmation', modalComponent: ConfirmationModalComponent },
   ];
   title = 'WIDIGITAL ' + environment.env;
-
+  iconsList = [
+    { name: 'buy', path: 'assets/icons/bag.svg'},
+    { name: 'wi-dashboared', path: 'assets/icons/Dashbored.svg'},
+    { name: 'wi_contracts_management', path: 'assets/icons/contracts_management.svg'},
+    { name: 'wi_customer', path: 'assets/icons/Customer.svg'},
+  ];
   constructor(
     private authService: AuthService,
     public translateService: TranslateService,
     private modalService: ModalService,
     private translationCustomLoaderService: TranslationCustomLoaderService,
+    private utilService: UtilsService
   ) {
     this.authService.languageSubject.subscribe(
       (language) => {
@@ -30,6 +36,7 @@ export class AppComponent implements OnInit {
         this.translateService.use(`${language['langId']}-${language['langCode']}`);
       }
     );
+    this.utilService.addIcon(this.iconsList);
   }
 
   /**

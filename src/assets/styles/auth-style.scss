@@ -1,0 +1,95 @@
+@import "./functions.scss";
+
+/*******************
+Auth Style
+*******************/
+.complete-register {
+  @include get-page(cr);
+}
+
+.auth-content {
+  @include get-page(login);
+  .auth-welcome {
+    h1,h5 {
+      line-height: 10px;
+    }
+  }
+
+/*******************
+  Invalid Message SnackBar
+*******************/
+  .invalid-msg {
+    width: $width-lg;
+    height: 34px;
+    background-color: $error-red;
+    border-radius: $border-radius-5;
+    .error-msg {
+      height: 100%;
+      color: $pale-grey;
+      margin: $m-0-auto;
+      font-size: $font-size-10;
+      text-align: center;
+      display: block;
+      .mat-icon {
+        color: $pale-grey;
+      }
+    }
+  }
+}
+
+
+/*******************
+Input Outline Color on error
+*******************/
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+  color: $error-red;
+  opacity: 0.8;
+}
+
+.mat-error {
+  color: $error-red;
+}
+
+/*******************
+   Language Select
+*******************/
+.lang-select {
+  color: $cool-grey !important;
+  width: $width-sm !important;
+  font-size: $font-size-12 !important;
+  position: absolute !important;
+  top: 14px;
+  left: 15px;
+}
+
+.mat-select-search-inner {
+  background-color: $pale-grey;
+  top: -9px !important;
+}
+
+.panelColor {
+  margin-top: -20px !important;
+  background-color: $pale-grey !important;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+/*******************
+   Height
+*******************/
+.full-height{
+    min-height: $height-100;
+  }
+
+/*******************
+   Column right Auth
+*******************/
+  .col-right{
+   border-top-left-radius: $border-radius-15;
+   border-bottom-left-radius: $border-radius-15;
+  }
+  .col-left{
+    border-top-right-radius: $border-radius-15;
+    border-bottom-right-radius: $border-radius-15;
+  }
+
+
