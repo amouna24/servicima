@@ -42,3 +42,80 @@ $custom-typography: mat-typography-config(
   $font-family: 'Poppins'
 );
 @include mat-core($custom-typography);
+
+
+@import '~@angular/material/theming';
+
+/*Material Theme Colors*/
+
+$primary: mat-palette($mat-blue, 600);
+$accent: mat-palette($mat-indigo, 500);
+$warn: mat-palette($mat-pink, 500);
+$theme: mat-light-theme($primary, $accent, $warn);
+$background: map-get($theme, background);
+$foreground: map-get($theme, foreground);
+
+.bg-theme{
+  background-color: $cerulean-blue !important;
+}
+// Default Theme
+@include angular-material-theme($theme);
+
+@include mat-core($custom-typography);
+
+// Green Theme
+
+.green {
+  @import '../src/assets/styles/themes/green';
+  @include angular-material-theme($green-app-theme);
+}
+// Black Theme
+
+.black {
+  @import 'assets/styles/themes/black-yellow';
+  @include angular-material-theme($black-app-theme);
+}
+.black1{
+  @import 'assets/styles/themes/black-green';
+  @include angular-material-theme($black-app-theme);
+}
+.blueBerry{
+  @import '../src/assets/styles/themes/blueberry';
+  @include angular-material-theme($black-app-theme);
+}
+.cobalt{
+  @import '../src/assets/styles/themes/cobalt';
+  @include angular-material-theme($black-app-theme);
+}
+.darkishBlue{
+  @import '../src/assets/styles/themes/darkish-blue';
+  @include angular-material-theme($black-app-theme);
+}
+.everGreen{
+  @import '../src/assets/styles/themes/evergreen';
+  @include angular-material-theme($black-app-theme);
+}
+.greenBlue{
+  @import '../src/assets/styles/themes/green-blue';
+  @include angular-material-theme($black-app-theme);
+}
+.lighterPurple{
+  @import '../src/assets/styles/themes/lighter-purple';
+  @include angular-material-theme($black-app-theme);
+}
+.mango{
+  @import '../src/assets/styles/themes/mango';
+  @include angular-material-theme($black-app-theme);
+}
+.whiteGreen{
+  @import '../src/assets/styles/themes/white-green';
+  @include angular-material-theme($black-app-theme);
+}
+.whiteOrange{
+  @import '../src/assets/styles/themes/white-orange';
+  @include angular-material-theme($black-app-theme);
+}
+.whiteRed{
+  @import '../src/assets/styles/themes/white-red';
+  @include angular-material-theme($black-app-theme);
+}

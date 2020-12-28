@@ -1,0 +1,30 @@
+// Define palettes
+$black-app-primary: mat-palette((500: $light-greenish-blue,contrast: ()));
+$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
+$black-app-warn: mat-palette($mat-pink);
+// Create the theme object (a Sass map containing all of the palettes).
+$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$themeColor: #9854ff;
+$themeColorSidenav: $pale-grey;
+
+.bg-theme{
+  background-color: $themeColor !important;
+}
+
+/*******************
+   Sidenav
+*******************/
+wid-sidenav {
+  .icon, span, .company-label{
+    color: $themeColorSidenav;
+  }
+  .side-nav-container .active-list-item span, .side-nav-container .active-list-item .icon {
+    color: $light-greenish-blue !important;
+  }
+  .sub-menu-child-item {
+    color: $themeColorSidenav !important;;
+  }
+  .active-sub-menu-child-item {
+    color: $golden-yellow !important;
+  }
+}

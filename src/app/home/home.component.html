@@ -1,3 +1,7 @@
+<div [ngClass]="{'green': green,'black': black,'black1': black1,'blueBerry':blueBerry,
+                 'cobalt':cobalt,'darkishBlue': darkishBlue,'everGreen': everGreen,
+                 'greenBlue':greenBlue,'lighterPurple':lighterPurple,'mango': mango,
+                 'whiteGreen':whiteGreen, 'whiteOrange':whiteOrange, 'whiteRed':whiteRed}">
 <mat-sidenav-container>
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
                [fixedBottomGap]=0 autosize="false" >
@@ -10,6 +14,65 @@
 
     <wid-breadcrumb fxFlex="4"></wid-breadcrumb>
 
+    <mat-nav-list>
+      <h3 mat-subheader class="text-uppercase font-weight-bold">Colors</h3>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="green" (change)="danger = blue = black = black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed  = false" class="text-megna">Teal
+          Green</mat-checkbox>
+      </mat-list-item>
+
+    <mat-list-item>
+      <mat-checkbox color="warn" [(ngModel)]="black" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">BlackYellow</mat-checkbox>
+    </mat-list-item>
+
+
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="black1" (change)="green = danger = blue =  black = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">BlackGreen</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="blueBerry" (change)="green = danger = blue =  black1 = black = cobalt = darkishBlue = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">blueBerry</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="cobalt" (change)="green = danger = blue =  black1 = blueBerry = black = darkishBlue = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">cobalt</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="darkishBlue" (change)="green = danger = blue =  black1 = blueBerry = cobalt = black = everGreen = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">darkishBlue</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="everGreen" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = black = greenBlue = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">everGreen</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="greenBlue" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = black = lighterPurple = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">greenBlue</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="lighterPurple" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = black = mango = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">lighterPurple</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="mango" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = black = lighterPurple = whiteGreen = whiteOrange  = whiteRed =
+ false" class="text-danger">mango</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="whiteGreen" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = black = mango = lighterPurple = whiteOrange  = whiteRed =
+ false" class="text-danger">whiteGreen</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox color="warn" [(ngModel)]="whiteOrange" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = black = mango = whiteGreen = lighterPurple  = whiteRed =
+ false" class="text-danger">whiteOrange</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+      <mat-checkbox color="warn" [(ngModel)]="whiteRed" (change)="green = danger = blue =  black1 = blueBerry = cobalt = darkishBlue = everGreen = greenBlue = black = mango = whiteGreen = lighterPurple  = whiteOrange =
+ false" class="text-danger">whiteRed</mat-checkbox>
+      </mat-list-item>
+
+    </mat-nav-list>
     <div fxFlex="89">
       <router-outlet>
         <wid-spinner></wid-spinner>
@@ -18,3 +81,4 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+</div>

@@ -15,7 +15,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   mobileQuery: MediaQueryList;
   sidebarState: string;
-
+  green: boolean;
+  black: boolean;
+  black1: boolean;
+  blueBerry: boolean;
+  cobalt: boolean;
+  darkishBlue: boolean;
+  everGreen: boolean;
+  greenBlue: boolean;
+  lighterPurple: boolean;
+  mango: boolean;
+  whiteGreen: boolean;
+  whiteOrange: boolean;
+  whiteRed: boolean;
   private mobileQueryListener: () => void;
 
   constructor(

@@ -19,8 +19,9 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import { indicate } from '@core/services/utils/progress';
 
-import { AuthService } from '../../../../../../projects/auth-front-lib/src/public-api';
+
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
+import { AuthService } from '@widigital-group/auth-npm-front';
 
 @Component({
   selector: 'wid-user',

@@ -495,4 +495,13 @@ html body {
 .full-width {
   width: 100%;
 }
+.mat-raised-button{
+  box-shadow: none !important;
+}
+.mat-expansion-panel{
+  box-shadow: none !important;
+}
+.mat-expansion-panel {
+  background: inherit !important;
+}
 
