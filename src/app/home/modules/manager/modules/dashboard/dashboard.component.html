@@ -1,6 +1,10 @@
 
 <button mat-button class="btn-small small-text ">Small</button>
-<wid-alert [type]="'danger'" [message]="'hello world'"></wid-alert>
+<wid-alert [type]="'error'" [message]="'error message'"></wid-alert>
+<wid-alert [type]="'success'" [message]="'success message'"></wid-alert>
+<wid-alert [type]="'warning'" [message]="'warning message'"></wid-alert>
+<wid-alert [type]="'info'" [message]="'info message'"></wid-alert>
+<wid-alert [type]="'help'" [message]="'help message'"></wid-alert>
 <div class="page-container" fxLayout="column" >
 
   <div *ngIf="loaded | async" fxFlex="33" fxFlex.xs="20">
