@@ -86,6 +86,14 @@ export function nameAnimation(animationDuration: string = defaultDuration): Anim
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+
+export function accordionAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
+  return trigger('accordionAnimation', [
+    state('close', style({ height: '50px' , margin: '0'})),
+    transition('close => open', animate(`${animationDuration} ease-in-out`)),
+    transition('open => close', animate(`${animationDuration} ease-in-out`)),
+  ]);
+}
 export let slideView = trigger(
   'slideView',
   [
