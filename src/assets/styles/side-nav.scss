@@ -32,9 +32,14 @@ wid-sidenav {
       &:hover {
         background-color: $pale-grey !important;
       }
-
+      mat-expansion-panel-header {
+        background-color: $pale-grey;
+        span,
+        .icon {
+          color: $cerulean-blue;
+        }
     }
-
+    }
   }
 
   .company-label {
@@ -48,6 +53,7 @@ wid-sidenav {
     width: auto !important;
     padding: 0 !important;
     margin-bottom: 10px;
+    color: $pale-grey;
     border-radius: $border-radius-10;
 
     &:hover {
@@ -75,7 +81,6 @@ wid-sidenav {
       flex-direction: row;
 
     }
-
   }
   .sub-menu-child-item{
     color: $pale-grey !important;
@@ -102,4 +107,6 @@ wid-sidenav {
     margin-bottom: 12px;
     margin-top: auto;
   }
+
+
 }

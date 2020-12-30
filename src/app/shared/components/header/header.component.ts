@@ -98,14 +98,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-    this.router.navigate(['/manager/settings/licence/buy-licence']);
+    this.router.navigate(['/manager/settings/licences/buy-licence']);
   }
 
   /**
    * @description  : Open dialog upgrade licence
    */
   UpgradeLicence() {
-    this.router.navigate(['/manager/settings/licence/upgrade-licence']);
+    this.router.navigate(['/manager/settings/licences/upgrade-licence']);
   }
 
   /**
