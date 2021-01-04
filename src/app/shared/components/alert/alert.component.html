@@ -1,0 +1,11 @@
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1px"
+     class="alert-container" [@closeAlertAnimation]="param.state">
+  <div class="icon-container border-radius-left-5" [ngClass]="param.style" fxFlex="13" fxLayoutAlign="center center">
+    <mat-icon class="white" [svgIcon]="param.icon" fxFlex="49.6"></mat-icon>
+  </div>
+  <div fxFlex class="message-container border-radius-right-5" fxLayoutAlign="space-between center" [ngClass]="displayClasses()">
+   <p class="white font-size-12 font-light m-l-10 ">{{param.message}} </p>
+    <mat-icon class="white font-size-12 text-center" (click)="param.state='close'">close</mat-icon>
+  </div>
+
+</div>

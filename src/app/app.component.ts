@@ -22,6 +22,11 @@ export class AppComponent implements OnInit {
     { name: 'wi-dashboared', path: 'assets/icons/Dashbored.svg'},
     { name: 'wi_contracts_management', path: 'assets/icons/contracts_management.svg'},
     { name: 'wi_customer', path: 'assets/icons/Customer.svg'},
+    { name: 'wi_alert_error', path: 'assets/icons/error.svg'},
+    { name: 'wi_alert_success', path: 'assets/icons/success.svg'},
+    { name: 'wi_alert_info', path: 'assets/icons/info.svg'},
+    { name: 'wi_alert_help', path: 'assets/icons/help.svg'},
+    { name: 'wi_alert_warning', path: 'assets/icons/warning.svg'},
   ];
   constructor(
     private authService: AuthService,
