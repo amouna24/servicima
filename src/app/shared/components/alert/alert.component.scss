@@ -1,0 +1,14 @@
+.alert-container{
+  width: 250px;
+  height: 35px;
+
+  .message-container{
+    mat-icon{
+      opacity: 0.3;
+      cursor: pointer;
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+}

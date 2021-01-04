@@ -87,6 +87,14 @@ export function nameAnimation(animationDuration: string = defaultDuration): Anim
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+
+export function accordionAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
+  return trigger('accordionAnimation', [
+    state('close', style({ height: '50px' , margin: '0'})),
+    transition('close => open', animate(`${animationDuration} ease-in-out`)),
+    transition('open => close', animate(`${animationDuration} ease-in-out`)),
+  ]);
+}
 export let slideView = trigger(
   'slideView',
   [
@@ -106,3 +114,9 @@ export let slideInOut = trigger('slideInOut',
       animate('0ms ease-in', style({ transform: 'translateX(100%)', 'opacity': 0 }))
     ])
   ]);
+export function closeAlertAnimation(animationDuration: string = '500ms'): AnimationTriggerMetadata {
+  return trigger('closeAlertAnimation', [
+    state('close', style({ display: 'none', opacity: 0 })),
+    transition('* => close', animate(`${animationDuration} ease-in-out`)),
+  ]);
+}

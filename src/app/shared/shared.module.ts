@@ -25,6 +25,7 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
+import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { RightSidenaveComponent } from './components/right-sidenave/right-sidena
     /* Directives */
     CanBeDisplayedDirective,
     UploadSheetComponent,
+    AlertComponent,
 
   ],
   imports: [
@@ -85,6 +87,7 @@ import { RightSidenaveComponent } from './components/right-sidenave/right-sidena
     MatIconModule,
     MatBottomSheetModule,
     StepperComponent,
+    AlertComponent,
     RightSidenaveComponent,
   ]
 })
