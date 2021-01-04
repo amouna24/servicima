@@ -1,113 +1,109 @@
-  <!--begin::Container-->
-  <div fxLayout="column" [ngStyle]="stepperConfig.style" style="height: 100%">
-        <!--begin: Stepper-->
-        <div class="stepper stepper-3" fxFlex fxLayout="column" data-stepper-state="step-first" data-stepper-clickable="false">
-          <!--begin: Stepper Nav-->
-          <div fxFlex="30" fxFlex.xs="40" fxLayout="column" fxLayoutAlign="center stretch" class="stepper-nav">
-            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="start stretch">
-              <!--begin::Stepper Step i Nav-->
-              <ng-container *ngFor="let step of steps; let i = index;" >
-                <ng-container *ngIf="selectedIndex === i; else notCurrent">
-                     <div
-                       class="stepper-step"
-                       data-stepper-state="current"
-                       data-stepper-type="step">
-                        <!-- (click)="onClick(i, step.stepControl)" -->
-                        <div class="stepper-label">
-                          <h3 class="stepper-title">
-                            <span [ngTemplateOutlet]="step.stepLabel.template">{{i + 1}}.</span> {{ step.label }}
-                          </h3>
-                          <div class="stepper-bar"></div>
-                        </div>
-                     </div>
-                </ng-container>
-                <ng-template #notCurrent>
-                  <!-- (click)="onClick(i, step.stepControl)" -->
-                  <div class="stepper-step"
-                       data-stepper-state="pending"
-                       data-stepper-type="step">
-                    <div class="stepper-label">
-                      <h3 class="stepper-title">
-                        <span [ngTemplateOutlet]="step.stepLabel.template">{{i + 1}}.</span> {{ step.label }}
-                      </h3>
-                      <div class="stepper-bar"></div>
-                    </div>
-                  </div>
-                </ng-template>
-              </ng-container>
-              <!--end::Stepper Step 1 Nav-->
-            </div>
-          </div>
-          <!--end: Stepper Nav-->
-          <!--begin: Stepper Body-->
-          <div fxFlex="60"  fxFlex.xs="50" >
-            <div class="">
-              <!--begin: Stepper Form-->
-                <div
-                  fxFlex="80" fxFlexOffset="10"
-                  data-stepper-type="step-content"
-                  data-stepper-state="current"
-                >
-                  <!-- Content from the CdkStep is projected here -->
-                  <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+<!--begin::Container-->
+<div fxLayout="column" [ngStyle]="stepperConfig.style" style="height: 100%">
+  <!--begin: Wizard-->
+  <div class="wizard wizard-3" fxFlex fxLayout="column" data-wizard-state="step-first" data-wizard-clickable="false">
+    <!--begin: Wizard Nav-->
+    <div fxFlex="10" fxFlex.xs="40" fxLayout="column" fxLayoutAlign="center stretch" class="wizard-nav">
+      <div fxFlex="100" fxLayoutAlign.xs="start stretch" fxLayoutAlign="space-around center">
+        <div fxFlex="80" fxLayout="row" >
+          <!--begin::Wizard Step i Nav-->
+          <ng-container *ngFor="let step of steps; let i = index;" >
+            <ng-container *ngIf="selectedIndex === i; else notCurrent">
+              <div
+                class="wizard-step"
+                data-wizard-state="current"
+                data-wizard-type="step">
+                <!-- (click)="onClick(i, step.stepControl)" -->
+                <div class="wizard-label">
+                  <h3 class="wizard-title">
+                    <span [ngTemplateOutlet]="step.stepLabel.template">{{i + 1}}.</span> {{ step.label }}
+                  </h3>
+                  <div class="wizard-bar"></div>
                 </div>
-              <!--end: Stepper Form-->
-            </div>
-          </div>
-          <!--end: Stepper Body-->
-          <!--begin: Stepper Actions-->
-          <div fxFlex="10"  fxFlex.xs="10">
-            <div fxFlex="50" fxLayoutAlign="center center">
-              <button
-                *ngIf="selectedIndex !== 0"
-                cdkStepperPrevious
-                mat-flat-button
-                color="primary"
-                class="auth-button"
-              >
-                Previous
-              </button>
-            </div>
-            <div fxFlex="50" fxLayoutAlign="center center">
-              <button
-                *ngIf="selectedIndex === steps.length -1 &&
-                stepperConfig.multiple.lastStep ==='done'"
-                mat-flat-button
-                color="primary"
-                class="auth-button"
-                [routerLink]="stepperConfig.multiple.redirectTo"
-              >
-                Done
-              </button>
-              <ng-container *ngFor="let step of steps; let i = index">
-              <button
-                 *ngIf="selectedIndex === steps.length -1 &&
-                 selectedIndex === i && stepperConfig.multiple.lastStep ==='submit'"
-                 [disabled]="step.stepControl.invalid"
-                 (click)="onClick(i, step)"
-                 mat-flat-button
-                 color="primary"
-                 class="auth-button"
-              >
-                Submit
-              </button>
-                <button
-                  *ngIf="selectedIndex !== steps.length -1 &&
-                  selectedIndex === i"
-                  [disabled]="step.stepControl.invalid"
-                  mat-flat-button
-                  color="primary"
-                  (click)="onClick(i, step)"
-                  class="auth-button"
-                >
-                  Next
-                </button>
-              </ng-container>
-              <!-- [disabled]="selected.stepControl.invalid -->
-            </div>
-          </div>
-          <!--end: Stepper Actions-->
+              </div>
+            </ng-container>
+            <ng-template #notCurrent>
+              <!-- (click)="onClick(i, step.stepControl)" -->
+              <div class="wizard-step"
+                   data-wizard-state="pending"
+                   data-wizard-type="step">
+                <div class="wizard-label">
+                  <h3 class="wizard-title">
+                    <span [ngTemplateOutlet]="step.stepLabel.template">{{i + 1}}.</span> {{ step.label }}
+                  </h3>
+                  <div class="wizard-bar"></div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+          <!--end::Wizard Step 1 Nav-->
         </div>
-        <!--end: Stepper-->
+      </div>
+    </div>
+    <!--end: Wizard Nav-->
+    <!--begin: Wizard Body-->
+    <div fxFlex="75"  fxFlex.xs="50"  fxLayout="column" fxLayoutAlign="center stretch">
+      <div class="">
+        <!--begin: Wizard Form-->
+        <div
+          fxFlex="100" fxLayoutAlign="space-around center"
+          data-wizard-type="step-content"
+          data-wizard-state="current"
+        >
+          <!-- Content from the CdkStep is projected here -->
+          <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+        </div>
+        <!--end: Wizard Form-->
+      </div>
+    </div>
+    <!--end: Wizard Body-->
+    <!--begin: Wizard Actions-->
+    <div fxFlex="15"  fxFlex.xs="10">
+      <div fxFlex="50" fxLayoutAlign="center center">
+        <button
+          *ngIf="selectedIndex !== 0 && selectedIndex !== steps.length -1 && stepperConfig.multiple.lastStep ==='done'"
+          cdkStepperPrevious
+          mat-flat-button
+          color="primary"
+          class="btn-large bg-cerulean-blue">
+          Previous
+        </button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="center center">
+        <button
+          *ngIf="selectedIndex === steps.length -1 && stepperConfig.multiple.lastStep ==='done'"
+          mat-flat-button
+          color="primary"
+          class="btn-large bg-cerulean-blue"
+          [routerLink]="stepperConfig.multiple.redirectTo"
+        >
+          Done
+        </button>
+        <button
+          *ngIf="selectedIndex === steps.length -1 && stepperConfig.multiple.lastStep ==='submit'"
+          mat-flat-button
+          color="primary"
+          class="btn-large bg-cerulean-blue"
+        >
+          Submit
+        </button>
+        <ng-container *ngFor="let step of steps; let i = index">
+          <button
+            *ngIf="selectedIndex !== steps.length -1 && selectedIndex === i"
+            [disabled]="step.stepControl.invalid"
+            mat-flat-button
+            color="primary"
+            (click)="onClick(i, step)"
+            class="btn-large bg-cerulean-blue"
+          >
+            Next
+          </button>
+        </ng-container>
+        <!-- [disabled]="selected.stepControl.invalid || stepperConfig.nextStep === false" -->
+      </div>
+    </div>
+    <!--end: Wizard Actions-->
   </div>
-  <!--end::Container-->
+  <!--end: Wizard-->
+</div>
+<!--end::Container-->

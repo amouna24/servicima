@@ -26,6 +26,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AlertComponent } from './components/alert/alert.component';
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
     StepperComponent,
+    RightSidenaveComponent,
     /* Directives */
     CanBeDisplayedDirective,
     UploadSheetComponent,
@@ -86,6 +88,7 @@ import { AlertComponent } from './components/alert/alert.component';
     MatBottomSheetModule,
     StepperComponent,
     AlertComponent,
+    RightSidenaveComponent,
   ]
 })
 export class SharedModule { }

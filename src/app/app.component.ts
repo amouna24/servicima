@@ -27,6 +27,11 @@ export class AppComponent implements OnInit {
     { name: 'wi_alert_info', path: 'assets/icons/info.svg'},
     { name: 'wi_alert_help', path: 'assets/icons/help.svg'},
     { name: 'wi_alert_warning', path: 'assets/icons/warning.svg'},
+    /* Right-Nav Icons */
+    { name: 'wi_company', path: 'assets/icons/building-solid.svg', viewBox: '0 -10 20 45'},
+    { name: 'wi_user', path: 'assets/icons/user-solid.svg', viewBox: '0 -10 20 45'},
+    { name: 'wi_settings', path: 'assets/icons/cogs-solid.svg', viewBox: '0 -15 20 45'},
+    { name: 'wi_logout', path: 'assets/icons/sign-out-alt-solid.svg', viewBox: '0 -15 20 45'},
   ];
   constructor(
     private authService: AuthService,
