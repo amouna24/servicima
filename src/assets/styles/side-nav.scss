@@ -110,3 +110,51 @@ wid-sidenav {
 
 
 }
+
+.right-side-nav-container {
+    background: $white !important;
+    min-width: 350px;
+  .close-btn {
+    width: 23px;
+    height: 23px;
+    border-radius: $border-radius-5;
+  }
+  .icon {
+    width: 46px;
+    height: 46px;
+    text-align: center;
+    line-height: 43px;
+    vertical-align: middle;
+    background-color: $duck-egg-blue;
+    color: $water-blue;
+    border-radius: $border-radius-15;
+  }
+  .alert-item {
+    border-radius: $border-radius-15;
+    background-color: $duck-egg-blue;
+  }
+  .list-item {
+    height: 50px !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin-bottom: 10px;
+    border-radius: $border-radius-10;
+
+    &:hover {
+      background-color: rgba(243, 246, 249, 0.1);
+    }
+
+    &:nth-last-child(1) {
+      margin-bottom: 0 !important;
+    }
+
+    span {
+      color: $steel;
+      text-transform: capitalize;
+      margin-left: 10px;
+    }
+  }
+}
+.mat-drawer-backdrop.mat-drawer-shown {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}

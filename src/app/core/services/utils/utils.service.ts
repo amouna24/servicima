@@ -183,15 +183,15 @@ export class UtilsService {
 
   /**
    * @description Add icon
-   * @param name; name
-   * @param path :path
+   * @param listOfIcons;
    */
   addIcon(listOfIcons): void {
     listOfIcons.forEach(
       (icon) => {
         this.matIconRegistry.addSvgIcon(
           icon.name,
-          this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
+          this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path),
+          { viewBox: icon.viewBox }
         );
       }
     );

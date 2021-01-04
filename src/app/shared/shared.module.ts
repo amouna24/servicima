@@ -25,6 +25,8 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 
 @NgModule({
   declarations: [
@@ -40,9 +42,11 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
     StepperComponent,
+    RightSidenaveComponent,
     /* Directives */
     CanBeDisplayedDirective,
     UploadSheetComponent,
+    AlertComponent,
 
   ],
   imports: [
@@ -83,6 +87,8 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
     MatIconModule,
     MatBottomSheetModule,
     StepperComponent,
+    AlertComponent,
+    RightSidenaveComponent,
   ]
 })
 export class SharedModule { }

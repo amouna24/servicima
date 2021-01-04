@@ -14,12 +14,17 @@ export class SidenavService {
   private sidebarStateChanged$ = new BehaviorSubject<string>(this.sidebarState);
   public sidebarStateObservable$ = this.sidebarStateChanged$.asObservable();
 
+  private rightSidebarState = 'close';
+  private rightSidebarStateChanged$ = new BehaviorSubject<string>(this.rightSidebarState);
+  public  rightSidebarStateObservable$ = this.rightSidebarStateChanged$.asObservable();
+
   managerMenu: IMenu[] = managerMenu;
   collaboraterMenu: IMenu[] = collaboraterMenu;
   candidateMenu: IMenu[] = candidateMenu;
 
   constructor() {
     this.sidebarStateChanged$.next('open');
+    this.rightSidebarStateChanged$.next('close');
   }
 
   toggle() {
@@ -27,8 +32,17 @@ export class SidenavService {
     this.sidebarStateChanged$.next(this.sidebarState);
   }
 
+  toggleRightSideNav() {
+    this.rightSidebarState = this.rightSidebarState === 'open' ? 'close' : 'open';
+    this.rightSidebarStateChanged$.next(this.rightSidebarState);
+  }
+
   getState() {
     return this.sidebarState;
+  }
+
+  getRightSidenavState() {
+    return this.rightSidebarState === 'open';
   }
 
   getMenu(moduleName: string): IMenu[] {

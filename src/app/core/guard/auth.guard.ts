@@ -27,9 +27,9 @@ export class AuthGuard implements CanActivate {
    * resolveValue: the result returned for each steps (true/false)
    *********************************************************************/
   resolveValue: boolean;
-  userCredentials;
-  emailAddress = '';
-  applicationId = '';
+  userCredentials: string;
+  emailAddress: string;
+  applicationId: string;
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -56,18 +56,18 @@ export class AuthGuard implements CanActivate {
           /* Fingerprint is OK, new token and credentials status returned */
           if (result) {
             this.localStorageService.setItem('currentToken', { account_activation_token: this.fingerPrintService.token});
-           if(this.userCredentials = this.localStorageService.getItem('userCredentials')){
-            this.emailAddress = this.userCredentials['email_address']
-            this.applicationId = this.userCredentials['application_id']
-          }
+            this.userCredentials = this.localStorageService.getItem('userCredentials');
+            if (this.userCredentials) {
+              this.emailAddress = this.userCredentials['email_address'];
+              this.applicationId = this.userCredentials['application_id'];
+            }
             /* credentials status PENDING, user should complete registration*/
-            if (this.fingerPrintService.credentialsStatus === 'PENDING' && this.emailAddress && this.applicationId  ) {
+            if (this.fingerPrintService.credentialsStatus === 'PENDING' && this.emailAddress && this.applicationId) {
               this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode}});
               this.resolveValue = true;
-            } else if(this.emailAddress && this.applicationId){ /* User Active => Allow access to requested ressource */
+             } else if (this.emailAddress && this.applicationId) { /* User Active => Allow access to requested ressource */
               this.resolveValue = await this.userService.getUserInfo();
-            }
-            else {
+            } else {
               this.router.navigate(['/auth/login']);
               this.resolveValue = true;
             }
