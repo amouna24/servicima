@@ -4,10 +4,10 @@
   <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
           mat-button class="btn-small buy-btn bg-golden-yellow">
     <mat-icon class="mat-icon-btn" svgIcon="buy"></mat-icon>
-    {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}
+  <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
   </button>
   <mat-form-field class="search-bar ml-auto relative" appearance="fill" fxLayoutAlign="center center">
-    <input matInput type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
+    <input matInput  type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
     <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
   </mat-form-field>
   <div fxLayoutAlign="center center" class="user-avatar bg-cerulean-blue" (click)="toggleSideNav()">

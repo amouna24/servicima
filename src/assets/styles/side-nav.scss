@@ -18,7 +18,7 @@ wid-sidenav {
     }
 
     .active-list-item {
-      background-color: $pale-grey !important;
+        background-color: $pale-grey-three !important;
 
       span,
       .icon {
@@ -45,6 +45,7 @@ wid-sidenav {
   .company-label {
     margin: auto;
     text-align: center;
+    color: $pale-grey;
   }
 
   .list-item {
@@ -106,6 +107,7 @@ wid-sidenav {
     margin-bottom: 12px;
     margin-top: auto;
   }
+
 
 }
 

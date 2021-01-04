@@ -466,7 +466,7 @@ html body {
        colors
 *******************/
 .pale-grey {
-  color: $pale-grey;
+  color: $pale-grey !important;
 }
 .golden-yellow {
   color: #f1c40f;
@@ -550,5 +550,14 @@ html body {
 }
 .full-screen-height {
   height: 100vh !important;
+}
+.mat-raised-button{
+  box-shadow: none !important;
+}
+.mat-expansion-panel{
+  box-shadow: none !important;
+}
+.mat-expansion-panel {
+  background: inherit !important;
 }
 

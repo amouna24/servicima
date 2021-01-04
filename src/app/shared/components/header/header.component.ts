@@ -13,6 +13,8 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
+import { AuthService } from '@widigital-group/auth-npm-front';
+
 
 @Component({
   selector: 'wid-header',
@@ -82,14 +84,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-    this.router.navigate(['/manager/settings/licence/buy-licence']);
+    this.router.navigate(['/manager/settings/licences/buy-licence']);
   }
 
   /**
    * @description  : Open dialog upgrade licence
    */
   UpgradeLicence() {
-    this.router.navigate(['/manager/settings/licence/upgrade-licence']);
+    this.router.navigate(['/manager/settings/licences/upgrade-licence']);
   }
 
   /**

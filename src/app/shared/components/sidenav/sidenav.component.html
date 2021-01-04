@@ -1,11 +1,11 @@
-<button mat-icon-button class="bg-topaz" (click)="toggleSideNav()" [@buttonAnimation]="sidebarState">
-  <mat-icon>{{icontoShow}}</mat-icon>
+<button mat-icon-button mat-raised-button color="primary"  (click)="toggleSideNav()" [@buttonAnimation]="sidebarState">
+  <mat-icon class="white">{{icontoShow}}</mat-icon>
 </button>
-<div class="side-nav-container" [@onSideNavChange]="sidebarState" fxLayout="column" fxLayoutAlign="start center">
+<div class="side-nav-container bg-theme" [@onSideNavChange]="sidebarState" fxLayout="column" fxLayoutAlign="start center">
   <mat-nav-list>
     <!---------------------------------------- menu header ------------------------------------------------------------>
     <mat-list-item class="side-nav-header" >
-      <p [@nameAnimation]="sidebarState" class="company-label pale-grey font-size-25">
+      <p [@nameAnimation]="sidebarState" class="company-label font-size-25">
         <ng-container *ngIf="sidebarState === 'open';else abbrTemplate">
           {{company}}
         </ng-container>
@@ -18,7 +18,7 @@
     <div *ngIf="subMenu.length === 0; else subMenuContainer">
       <ng-container *ngFor=" let menuItem of menu">
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
-          <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]"
+          <a  mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]"
              class="list-item" [@iconAnimation]="sidebarState">
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
             </mat-icon>

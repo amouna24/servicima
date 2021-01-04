@@ -91,5 +91,6 @@ Input Outline Color on error
     border-top-right-radius: $border-radius-15;
     border-bottom-right-radius: $border-radius-15;
   }
-
-
+.mat-form-field-appearance-fill .mat-form-field-flex{
+  background-color: inherit !important;
+}
