@@ -10,9 +10,10 @@ import {
   trigger
 } from '@angular/animations';
 
-const defaultDuration = '200ms';
+const defaultDuration = '300ms';
 const defaultMinWidth = '71px';
 const defaultMaxWidth = '248px';
+const rightSideNavWidth = '350px';
 const defaultMinFontSize = '20px';
 const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
@@ -20,11 +21,11 @@ const defaultMinPosition = '51px';
 
 export function mainContentAnimation(animationDuration: string = defaultDuration,
   minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
-  return trigger('onSideNavChange', [
+  return trigger('mainContent', [
     state('close', style({ 'margin-left': minWidth })),
     state('open', style({ 'margin-left': maxWidth })),
-    transition('close => open', animate(`${animationDuration} ease-in`)),
-    transition('open => close', animate(`${animationDuration} ease-out`)),
+   /* transition('close => open', animate(`${animationDuration} ease-in`)),
+    transition('open => close', animate(`${animationDuration} ease-out`)),*/
   ]);
 }
 

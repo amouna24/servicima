@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 import { AuthService } from '../../../../../projects/auth-front-lib/src/public-api';
@@ -30,12 +31,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /** subscription */
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private authService: AuthService,
+  constructor(
               private router: Router,
               private userService: UserService,
               private utilService: UtilsService,
               public dialog: MatDialog,
               private modalsServices: ModalService,
+              private sidenavService: SidenavService,
   ) { }
 
   /**
@@ -78,22 +80,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description logout: remove fingerprint and local storage
-   * navigate from login
-   */
-  logout(): void {
-    this.authService.logout().subscribe(() => {
-        localStorage.removeItem('userCredentials');
-        localStorage.removeItem('currentToken');
-        this.userService.connectedUser$.next(null);
-        this.router.navigate(['/auth/login']);
-      },
-      (err) => {
-        console.error(err);
-      });
-  }
-
-  /**
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
@@ -107,6 +93,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/manager/settings/licence/upgrade-licence']);
   }
 
+  /**
+   * @description  : Open right sidenav
+   */
+  toggleSideNav() {
+    this.sidenavService.toggleRightSideNav();
+  }
   /**
    * @description destroy subscriptions
    */

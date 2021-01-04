@@ -1,10 +1,16 @@
 <mat-sidenav-container>
+
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
-               [fixedBottomGap]=0 autosize="false" >
+               [fixedBottomGap]=0 >
     <wid-sidenav></wid-sidenav>
   </mat-sidenav>
 
-  <mat-sidenav-content [@onSideNavChange]="sidebarState" fxLayout="column" style="background-color: #f3f6f9;">
+  <mat-sidenav class="right-side-nav-container" position="end" mode="over" [opened]="rightSidebarState" [fixedInViewport]="true" [fixedTopGap]=0
+               [fixedBottomGap]=0>
+    <wid-right-sidenave></wid-right-sidenave>
+  </mat-sidenav>
+
+  <mat-sidenav-content [@mainContent]="sidebarState"  fxLayout="column" style="background-color: #f3f6f9;">
 
     <wid-header></wid-header>
 

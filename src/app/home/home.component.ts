@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MediaMatcher } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { mainContentAnimation } from '@shared/animations/animations';
 
@@ -13,29 +12,25 @@ import { mainContentAnimation } from '@shared/animations/animations';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  mobileQuery: MediaQueryList;
   sidebarState: string;
-
-  private mobileQueryListener: () => void;
-
+  rightSidebarState: boolean;
   constructor(
-    changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher,
     private sidebarService: SidenavService,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this.mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
+
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
   }
 
   ngOnInit() {
     this.sidebarService.sidebarStateObservable$
       .subscribe((newState: string) => {
         this.sidebarState = newState;
+      });
+    this.sidebarService.rightSidebarStateObservable$
+      .subscribe((newState: string) => {
+        this.rightSidebarState = newState === 'open';
       });
   }
 
