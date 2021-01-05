@@ -13,8 +13,6 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
-import { AuthService } from '@widigital-group/auth-npm-front';
-
 
 @Component({
   selector: 'wid-header',
