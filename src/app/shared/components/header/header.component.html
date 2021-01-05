@@ -2,7 +2,7 @@
   <h6 class="font-semi-bold m-r-15">{{licenceCode }}</h6>
   <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
   <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
-          mat-button class="btn-small buy-btn bg-golden-yellow">
+          mat-raised-button color="primary" class="btn-small buy-btn">
     <mat-icon class="mat-icon-btn" svgIcon="buy"></mat-icon>
   <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
   </button>
@@ -10,7 +10,7 @@
     <input matInput  type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
     <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
   </mat-form-field>
-  <div fxLayoutAlign="center center" class="user-avatar bg-cerulean-blue" (click)="toggleSideNav()">
+  <div fxLayoutAlign="center center" class="user-avatar bg-theme" (click)="toggleSideNav()">
     <img src="assets/img/avatar.png" class="img-rounded" alt="{{name}}">
   </div>
 </mat-toolbar>

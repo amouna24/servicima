@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   sidebarState: string;
   rightSidebarState: boolean;
   listColor: ITheme[];
-  private mobileQueryListener: () => void;
 
   constructor(
     private sidebarService: SidenavService,
@@ -29,8 +28,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.listColor = [{ 'color': 'green', 'status': false },
-      { 'color': 'black', 'status': false },
-      { 'color': 'black1', 'status': false },
+      { 'color': 'blackYellow', 'status': false },
+      { 'color': 'blacGreen', 'status': false },
       { 'color': 'blueBerry', 'status': false },
       { 'color': 'cobalt', 'status': false },
       { 'color': 'blue', 'status': false },
@@ -58,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   displayClass(): object {
     return {
-      'green': this.listColor[0].status, 'black': this.listColor[1].status, 'black1': this.listColor[2].status,
+      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blacGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
