@@ -1,0 +1,21 @@
+
+snack-bar-container{
+  background-color: $topaz !important;
+  simple-snack-bar{
+    span{
+      font-size: $font-size-12;
+      font-weight: $font-weight-300;
+      color: $white;
+    }
+    .mat-simple-snackbar-action button {
+      background-color: #37cbc5;
+
+      span {
+        font-size: $font-size-14;
+        font-weight: $font-weight-500;
+        color: $white;
+
+      }
+    }
+  }
+}
