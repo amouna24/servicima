@@ -1,5 +1,5 @@
 
-<button mat-button class="btn-small small-text ">Small</button>
+<button mat-button (click)="utilService.openSnackBar('hello world','done' )" class="btn-small small-text bg-topaz white">Snack</button>
 <wid-alert [type]="'error'" [message]="'error message'"></wid-alert>
 <wid-alert [type]="'success'" [message]="'success message'"></wid-alert>
 <wid-alert [type]="'warning'" [message]="'warning message'"></wid-alert>

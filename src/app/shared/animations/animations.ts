@@ -71,6 +71,15 @@ export function iconAnimation(animationDuration: string = defaultDuration,
   ]);
 }
 
+export function listAnimation(animationDuration: string = defaultDuration,
+                              minFontSize: string = defaultMinFontSize, maxFontSize: string = defaultMaxFontSize): AnimationTriggerMetadata {
+  return trigger('listAnimation', [
+    state('open', style({ width: '91.3%' })),
+    transition('close => open', animate(`${animationDuration} ease-in-out`)),
+    transition('open => close', animate(`${animationDuration} ease-in-out`)),
+  ]);
+}
+
 export function labelAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
   return trigger('labelAnimation', [
     state('open', style({ display: 'inline', opacity: 1 })),

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateLicenceComponent } from './upgrade-licence.component';
+import { UpgradeLicenceComponent } from './upgrade-licence.component';
 
 describe('UpdateLicenceComponent', () => {
-  let component: UpdateLicenceComponent;
-  let fixture: ComponentFixture<UpdateLicenceComponent>;
+  let component: UpgradeLicenceComponent;
+  let fixture: ComponentFixture<UpgradeLicenceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UpdateLicenceComponent ]
+      declarations: [ UpgradeLicenceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UpdateLicenceComponent);
+    fixture = TestBed.createComponent(UpgradeLicenceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
