@@ -72,11 +72,11 @@ $foreground: map-get($theme, foreground);
 }
 // Black Theme
 
-.black {
+.blackYellow {
   @import 'assets/styles/themes/black-yellow';
   @include angular-material-theme($black-app-theme);
 }
-.black1{
+.blacGreen{
   @import 'assets/styles/themes/black-green';
   @include angular-material-theme($black-app-theme);
 }
