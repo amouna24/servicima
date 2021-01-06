@@ -1,7 +1,7 @@
 import { IPhotoModel } from './photo.model';
 import { IUserKeyModel } from './userKey.model';
 export interface IUserModel {
-  UserKey: IUserKeyModel;
+  userKey: IUserKeyModel;
   status: string;
   company_email: string;
   user_type: string;
@@ -20,6 +20,6 @@ export interface IUserModel {
   update_date: string;
   updated_by: string;
   application_id: string;
-  email_adress: string;
+  email_address: string;
   photo: IPhotoModel;
 }

@@ -11,6 +11,9 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { UploadService } from '@core/services/upload/upload.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { IUserModel } from '@shared/models/user.model';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 
@@ -29,7 +32,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   emailAddress: string;
   /** subscription */
   destroy$: Subject<boolean> = new Subject<boolean>();
-
+  avatar: any;
+  user: IUserModel;
   constructor(
               private router: Router,
               private userService: UserService,
@@ -37,6 +41,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private modalsServices: ModalService,
               private sidenavService: SidenavService,
+              private uploadService: UploadService,
+              private sanitizer: DomSanitizer,
   ) { }
 
   /**
@@ -70,12 +76,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @param userInfo user info
    */
   getData(userInfo: IUserInfo) {
+    this.user = userInfo['user'][0];
     this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
     this.name = `${userInfo['user'][0]['first_name']}  ${userInfo['user'][0]['last_name']}`;
     this.companyLicenceList = userInfo['companylicence'][0];
     this.licenceType = this.companyLicenceList['companyLicenceKey']['licence_type'];
     this.licenceCode = this.companyLicenceList['companyLicenceKey']['licence_code'];
     this.endLicence = this.utilService.differenceDay(this.companyLicenceList['licence_end_date'], Date.now());
+    this.getImage(userInfo['user'][0]['photo']);
+  }
+
+  /**
+   * @description : GET IMAGE FROM BACK AS BLOB
+   *  create Object from blob and convert to url
+   */
+  getImage(id) {
+    this.uploadService.getImage(id).subscribe(
+      data => {
+        const unsafeImageUrl = URL.createObjectURL(data);
+        this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+      }, error => {
+        console.log(error);
+      });
   }
 
   /**

@@ -9,6 +9,7 @@ import { indicate } from '@core/services/utils/progress';
 import { IUserModel } from '@shared/models/user.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '@widigital-group/auth-npm-front';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 @Component({
   selector: 'wid-right-sidenave',
@@ -20,7 +21,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   sidebarState: string;
   user: IUserModel;
   avatar: any;
-  photo: FormData;
+  selectedFile = { file: null, name: '' };
   loading$ = new Subject<boolean>();
 
   /**************************************************************************
@@ -35,6 +36,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private uploadService: UploadService,
     private sanitizer: DomSanitizer,
+    private profileService: ProfileService
   ) {
 
   }
@@ -49,6 +51,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.user = data['user'][0];
+        this.selectedFile.file = this.user.photo ? this.getImage(this.user.photo) : null;
       }
     });
   }
@@ -71,28 +74,40 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
     formData.append('file', file);
     formData.append('caption', file.name);
-    this.photo = formData;
+    this.selectedFile.file = formData;
+    this.selectedFile.name = file.name;
   }
 
   /**
    * @description : Upload Image to Server  with async to promise
    */
-  async uploadFile(formData) {
-    return this.uploadService.uploadImage(formData)
+  async uploadFile() {
+    const filename = await this.uploadService.uploadImage(this.selectedFile.file)
       .pipe(
         indicate(this.loading$),
         map(
           response => response.file.filename
         ))
       .toPromise();
+    this.user.email_address = this.user.userKey.email_address;
+    this.user.application_id = this.user.userKey.application_id;
+    this.user.photo = filename;
+    this.profileService.updateUser(this.user).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   /**
    * @description : Clear  preview  Image
    */
   clearPreview() {
-    this.photo = null;
-    this.avatar = null;
+    this.selectedFile = null;
+    this.avatar = this.getImage(this.user.photo);
   }
 
   /**

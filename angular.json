@@ -28,8 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/assets/styles/spinner.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },

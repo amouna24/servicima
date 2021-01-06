@@ -11,6 +11,6 @@
     <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
   </mat-form-field>
   <div fxLayoutAlign="center center" class="user-avatar bg-theme" (click)="toggleSideNav()">
-    <img src="assets/img/avatar.png" class="img-rounded" alt="{{name}}">
+    <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" class="img-rounded" alt="{{name}}">
   </div>
 </mat-toolbar>
