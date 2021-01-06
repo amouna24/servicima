@@ -11,7 +11,8 @@ import {
   accordionAnimation,
   buttonAnimation,
   iconAnimation,
-  labelAnimation, listAnimation,
+  labelAnimation,
+  listAnimation,
   nameAnimation,
   sidebarAnimation,
 } from '../../animations/animations';
