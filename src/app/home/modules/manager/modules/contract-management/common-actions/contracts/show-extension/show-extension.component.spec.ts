@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShowExtentionComponent } from './show-extension.component';
+import { ShowExtensionComponent } from './show-extension.component';
 
 describe('ShowExtentionComponent', () => {
-  let component: ShowExtentionComponent;
-  let fixture: ComponentFixture<ShowExtentionComponent>;
+  let component: ShowExtensionComponent;
+  let fixture: ComponentFixture<ShowExtensionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShowExtentionComponent ]
+      declarations: [ ShowExtensionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShowExtentionComponent);
+    fixture = TestBed.createComponent(ShowExtensionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
