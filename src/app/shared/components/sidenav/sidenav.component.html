@@ -2,9 +2,9 @@
   <mat-icon class="white">{{icontoShow}}</mat-icon>
 </button>
 <div class="side-nav-container bg-theme" [@onSideNavChange]="sidebarState" fxLayout="column" fxLayoutAlign="start center">
-  <mat-nav-list>
+  <mat-nav-list [@listAnimation]="sidebarState">
     <!---------------------------------------- menu header ------------------------------------------------------------>
-    <mat-list-item class="side-nav-header" >
+    <mat-list-item>
       <p [@nameAnimation]="sidebarState" class="company-label font-size-25">
         <ng-container *ngIf="sidebarState === 'open';else abbrTemplate">
           {{company}}
@@ -37,7 +37,7 @@
     </div>
     <!---------------------------------------- sub menu container ------------------------------------------------------------>
     <ng-template #subMenuContainer>
-      <div class="mat-list-item-content">
+      <div>
         <mat-list-item class="list-item" [@iconAnimation]="sidebarState" (click)="closeSubMenu()">
           <mat-icon class="icon material-icons-outlined" >arrow_back
           </mat-icon>
