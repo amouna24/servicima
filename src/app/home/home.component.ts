@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { mainContentAnimation } from '@shared/animations/animations';
 import { ITheme } from '@shared/models/theme.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-home',
@@ -16,9 +18,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   sidebarState: string;
   rightSidebarState: boolean;
   listColor: ITheme[];
-
   constructor(
     private sidebarService: SidenavService,
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
   ) {
 
   }
@@ -29,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.listColor = [{ 'color': 'green', 'status': false },
       { 'color': 'blackYellow', 'status': false },
-      { 'color': 'blacGreen', 'status': false },
+      { 'color': 'blackGreen', 'status': false },
       { 'color': 'blueBerry', 'status': false },
       { 'color': 'cobalt', 'status': false },
       { 'color': 'blue', 'status': false },
@@ -40,7 +43,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       { 'color': 'whiteGreen', 'status': false },
       { 'color': 'whiteOrange', 'status': false },
       { 'color': 'whiteRed', 'status': false }];
-
+    if (this.localStorageService.getItem('theme')) {
+      this.listColor.map(element => {
+        if (element.color === this.localStorageService.getItem('theme')) {
+          element.status = true;
+        }
+      });
+      }
     this.sidebarService.sidebarStateObservable$
       .subscribe((newState: string) => {
         this.sidebarState = newState;
@@ -57,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   displayClass(): object {
     return {
-      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blacGreen': this.listColor[2].status,
+      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
@@ -70,10 +79,33 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param color: color
    */
   getTheme(color: string): void {
+    this.displayImage(color);
     this.listColor.map(element => {
       if (element.color !== color) {
         element.status = false;
+      } else {
+        this.localStorageService.setItem('theme', element.color);
       }
     });
+  }
+
+  /**
+   * @description Display image
+   * @param color: color
+   */
+  displayImage(color: string): void {
+    switch (color) {
+      case 'whiteGreen':
+        this.userService.emitColor('assets/img/logo-title.svg');
+        break;
+      case 'whiteOrange':
+        this.userService.emitColor('assets/img/logo-title.svg');
+        break;
+      case 'whiteRed':
+        this.userService.emitColor('assets/img/logo-title.svg');
+        break;
+      default:
+        this.userService.emitColor('assets/img/servicima.png');
+    }
   }
 }

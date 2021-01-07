@@ -6,6 +6,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import {
   accordionAnimation,
@@ -15,6 +16,7 @@ import {
   nameAnimation,
   sidebarAnimation,
 } from '../../animations/animations';
+
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
 
 @Component({
@@ -42,6 +44,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   menu: IMenu[];
   subMenu: IChildItem[] = [];
   parentMenu: string;
+  year: number;
+  image: string;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -53,7 +57,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   moduleName: string;
   constructor(private sidenavService: SidenavService,
-              private userService: UserService
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
   ) {
     this.userService.moduleName$
       .pipe(
@@ -90,12 +95,22 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    const color = this.localStorageService.getItem('theme');
+    if (color === 'whiteGreen' || color === 'whiteOrange' || color === 'whiteRed') {
+      this.image = 'assets/img/logo-title.svg';
+    } else {
+      this.image = 'assets/img/servicima.png';
+    }
     this.sidenavService.sidebarStateObservable$.
       subscribe((newState: string) => {
         this.sidebarState = newState;
       }, (err) => {
         console.error(err); });
     this.panelOpenState = true;
+    this.userService.colorSubject$.subscribe((color) => {
+      this.image = color;
+    });
+    this.year = new Date().getFullYear();
   }
 
   toggleSideNav() {

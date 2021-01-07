@@ -83,8 +83,8 @@
   <span class="servicima-logo" fxLayout="row">
       <ng-container *ngIf="iconBool; else miniLogo" [@labelAnimation]="sidebarState">
         <div fxLayoutAlign="center center" fxLayoutGap="10px">
-          <img src="assets/img/logoServicima.png" alt="servicima" fxFlex="14.5">
-         <img src="assets/img/servicima.png" alt="servicima" fxFlex="51">
+           <img src="assets/img/logoServicima.png" alt="servicima" fxFlex="14.5">
+           <img src={{this.image}} alt="servicima" fxFlex="51">
         </div>
       </ng-container>
       <ng-template #miniLogo>
@@ -93,6 +93,6 @@
 
     </span>
 
-  <p [@labelAnimation]="sidebarState" class="pale-grey font-light font-size-9 text-center">2020 ©
+  <p [@labelAnimation]="sidebarState" class="font-light font-size-9 text-center servicima-color">{{this.year}} ©
     Servicima All rights reserved.</p>
 </div>

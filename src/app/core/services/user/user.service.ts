@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class UserService {
   moduleName$ = new BehaviorSubject<string>(null);
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   redirected = false;
+  colorSubject$ = new Subject<string>();
 
   constructor(private httpClient: HttpClient,
               private router: Router,
@@ -60,5 +61,13 @@ export class UserService {
       default:
         return false;
     }
+  }
+
+  /**************************************************************************
+   * @description Emit color
+   * @param color
+   *************************************************************************/
+  emitColor(color: string): void {
+    this.colorSubject$.next(color);
   }
 }

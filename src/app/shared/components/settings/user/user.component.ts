@@ -257,6 +257,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.authService.logout().subscribe(() => {
             localStorage.removeItem('userCredentials');
             localStorage.removeItem('currentToken');
+          localStorage.removeItem('theme');
             this.userService.connectedUser$.next(null);
             this.router.navigate(['/auth/login']);
           },

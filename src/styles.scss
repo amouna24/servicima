@@ -49,7 +49,7 @@ $custom-typography: mat-typography-config(
 
 /*Material Theme Colors*/
 
-$primary: mat-palette($mat-blue, 600);
+$primary: mat-palette((500: $topaz,contrast: ()));
 $accent: mat-palette($mat-indigo, 500);
 $warn: mat-palette($mat-pink, 500);
 $theme: mat-light-theme($primary, $accent, $warn);
@@ -76,7 +76,7 @@ $foreground: map-get($theme, foreground);
   @import 'assets/styles/themes/black-yellow';
   @include angular-material-theme($black-app-theme);
 }
-.blacGreen{
+.blackGreen{
   @import 'assets/styles/themes/black-green';
   @include angular-material-theme($black-app-theme);
 }
