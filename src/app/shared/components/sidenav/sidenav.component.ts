@@ -13,6 +13,7 @@ import {
   buttonAnimation,
   iconAnimation,
   labelAnimation,
+  listAnimation,
   nameAnimation,
   sidebarAnimation,
 } from '../../animations/animations';
@@ -30,6 +31,7 @@ import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
     nameAnimation(),
     buttonAnimation(),
     accordionAnimation(),
+    listAnimation(),
   ]
 })
 export class SidenavComponent implements OnInit, OnChanges, OnDestroy {

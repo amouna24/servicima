@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IViewParam } from '@shared/models/view.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -19,6 +20,7 @@ export class UtilsService {
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private matSnackBar: MatSnackBar
   ) {
 
   }
@@ -196,5 +198,19 @@ export class UtilsService {
       }
     );
 
+  }
+
+  /**
+   * @description Open SnackBar
+   * @param message;
+   *  @param action;
+   * *
+   */
+  openSnackBar(message: string, action?: string , duration?: number) {
+    this.matSnackBar.open(message, action , {
+      duration,
+      horizontalPosition: 'end',
+      verticalPosition: 'bottom',
+    });
   }
 }
