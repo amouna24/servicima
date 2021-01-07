@@ -18,7 +18,7 @@
     <wid-breadcrumb fxFlex="4"></wid-breadcrumb>
 
     <mat-list-item *ngFor="let list of listColor">
-      <mat-checkbox color="warn" [(ngModel)]=list.status (change)="getTheme(list.color)" class="text-danger" >
+      <mat-checkbox color="warn" [(ngModel)]=list.status (change)="getTheme(list.color)" >
         {{list.color}}</mat-checkbox>
     </mat-list-item>
 

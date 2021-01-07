@@ -15,7 +15,7 @@ $themeColorSidenav: #2b2b2b;
    Sidenav
 *******************/
 wid-sidenav {
-  .icon, span, .company-label{
+  .icon, span, .company-label, .servicima-color{
     color: $themeColorSidenav;
   }
   .side-nav-container .active-list-item span, .side-nav-container .active-list-item .icon {

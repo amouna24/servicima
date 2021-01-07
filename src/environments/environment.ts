@@ -35,7 +35,7 @@ export const environment = {
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/
-  uploadFileApiUrl: 'http://127.0.0.1:8065',
+  uploadFileApiUrl: 'http://192.168.1.22:8065',
 
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
