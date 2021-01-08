@@ -497,7 +497,7 @@ html body {
  background colors
 *******************/
 .bg-primaryColor {
-  background-color: $primaryColor;
+  background-color: $primaryColor !important;
 }
 .bg-pale-grey{
   background-color: $pale-grey !important;
@@ -506,10 +506,10 @@ html body {
   background-color: $topaz !important;
 }
 .bg-cerulean-blue {
-  background-color: $cerulean-blue;
+  background-color: $cerulean-blue !important;
 }
 .bg-white{
-  background-color: $white;
+  background-color: $white !important;
 }
 .bg-golden-yellow{
   background-color: $golden-yellow !important;
@@ -518,19 +518,19 @@ html body {
   background-color: $white-two !important;
 }
 .duck-egg-blue {
-  background-color: $duck-egg-blue;
+  background-color: $duck-egg-blue !important;
 }
 .bg-error-red{
-  background-color: $error-red;
+  background-color: $error-red !important;
 }
 .bg-warning-yellow{
-  background-color: $warning-yellow;
+  background-color: $warning-yellow !important;
 }
 .bg-info-blue{
-  background-color: $info-blue;
+  background-color: $info-blue !important;
 }
 .bg-help-blue{
-  background-color: $help-blue;
+  background-color: $help-blue !important;
 }
 /*******************
        logo
@@ -564,4 +564,23 @@ html body {
 
 .icon-password{
   cursor: pointer;
+}
+
+/*******************
+    WID-Scrollbar
+*******************/
+.wrapper {
+  resize: both !important;
+  height: 400px !important;
+  padding: 20px;
+}
+.sidenav-wrapper {
+  resize: both !important;
+  height: 400px !important;
+}
+.scrollbar {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
 }

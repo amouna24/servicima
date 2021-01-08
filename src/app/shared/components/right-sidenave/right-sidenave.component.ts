@@ -51,9 +51,13 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.user = data['user'][0];
-        this.selectedFile.file = this.user.photo ? this.getImage(this.user.photo) : null;
       }
     });
+    this.userService.avatar$.subscribe(
+      avatar => {
+        this.avatar = avatar;
+      }
+    );
   }
 
   toggleSideNav() {
@@ -94,12 +98,13 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.user.photo = filename;
     this.profileService.updateUser(this.user).subscribe(
       (res) => {
-        console.log(res);
       },
       (error) => {
         console.log(error);
       }
     );
+    this.userService.getImage(filename);
+    this.selectedFile.file = null;
   }
 
   /**
@@ -107,21 +112,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    */
   clearPreview() {
     this.selectedFile = null;
-    this.avatar = this.getImage(this.user.photo);
-  }
-
-  /**
-   * @description : GET IMAGE FROM BACK AS BLOB
-   *  create Object from blob and convert to url
-   */
-  getImage(id) {
-    this.uploadService.getImage(id).subscribe(
-      data => {
-        const unsafeImageUrl = URL.createObjectURL(data);
-        this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-      }, error => {
-        console.log(error);
-      });
+    this.avatar = this.userService.avatar$.getValue();
   }
 
   /**

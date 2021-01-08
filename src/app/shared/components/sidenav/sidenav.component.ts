@@ -41,7 +41,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   panelOpenState = false;
   icontoShow = 'keyboard_arrow_left';
   company: string;
-  abbrCompany: string;
   iconBool = true;
   pathName: string;
   menu: IMenu[];
@@ -86,7 +85,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
           (info) => {
               if (!!info) {
                 this.company = info['company'][0]['company_name'];
-                this.abbrCompany = this.company.match(/\b(\w)/g).join('');
               }
          },
           (err) => {
@@ -139,6 +137,14 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
   closeSubMenu() {
     this.subMenu = [];
+  }
+
+  companyName(): string {
+    let comp = this.company;
+    if ((this.sidebarState === 'open' && comp.length > 12) || this.sidebarState === 'close') {
+      comp = this.company.match(/\b(\w)/g).join('');
+    }
+    return comp;
   }
 
   /**************************************************************************

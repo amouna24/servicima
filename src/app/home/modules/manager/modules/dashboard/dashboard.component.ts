@@ -6,7 +6,6 @@ import { IUserModel } from '@shared/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkStepper } from '@angular/cdk/stepper';
-import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-dashboard',
@@ -54,7 +53,6 @@ export class DashboardComponent implements OnInit {
               private profileService: ProfileService,
               private localStorageService: LocalStorageService,
               public dialog: MatDialog,
-              public utilService: UtilsService,
               /* STEPPER TEST */
               private _formBuilder: FormBuilder
               /* ************ */

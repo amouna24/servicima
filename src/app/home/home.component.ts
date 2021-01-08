@@ -4,6 +4,9 @@ import { mainContentAnimation } from '@shared/animations/animations';
 import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { SpinnerService } from '@core/services/spinner/spinner.service';
+import { Subject } from 'rxjs';
+
 import { UtilsService } from '@core/services/utils/utils.service';
 @Component({
   selector: 'wid-home',
@@ -19,19 +22,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   rightSidebarState: boolean;
   listColor: ITheme[];
   email: string;
+  isLoading$ = new Subject<boolean>();
   constructor(
     private sidebarService: SidenavService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilService: UtilsService,
   ) {
-
   }
 
   ngOnDestroy(): void {
   }
 
   ngOnInit() {
+    this.userService.isLoadingAction$.subscribe(
+      (res) => {
+          this.isLoading$.next(res);
+      },
+      error => this.isLoading$.next(true)
+    );
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred[ 'email_address'];
     this.listColor = [{ 'color': 'green', 'status': false },

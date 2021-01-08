@@ -22,12 +22,6 @@ export class UploadService {
       );
   }
 
-  getImage(idFile) {
-    return this.http.get(`${environment.uploadFileApiUrl}/image/` + idFile, {
-      responseType: 'blob',
-    });
-  }
-
   getFiles(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
   }

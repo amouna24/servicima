@@ -7,13 +7,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {
-  GuardsCheckStart,
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
   Router
 } from '@angular/router';
+import { SpinnerService } from '@core/services/spinner/spinner.service';
 
 @Component({
   selector: 'wid-spinner',
@@ -32,22 +28,12 @@ export class SpinnerComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private spinnerService: SpinnerService,
   ) {
-    this.router.events.subscribe(
-      event => {
-        if (event instanceof NavigationStart || event instanceof GuardsCheckStart) {
-          this.isSpinnerVisible = true;
-        } else if (
-          event instanceof NavigationEnd ||
-          event instanceof NavigationCancel ||
-          event instanceof NavigationError
-        ) {
-          this.isSpinnerVisible = false;
-        }
-      },
-      () => {
-        this.isSpinnerVisible = false;
+    this.spinnerService.isLoadingAction$.subscribe(
+      (res) => {
+        this.isSpinnerVisible = res;
       }
     );
   }

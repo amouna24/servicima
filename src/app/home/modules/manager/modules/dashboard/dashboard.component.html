@@ -1,191 +1,18 @@
 
-<button mat-button (click)="utilService.openSnackBar('hello world','done' )" class="btn-small small-text bg-topaz white">Snack</button>
-<wid-alert [type]="'error'" [message]="'error message'"></wid-alert>
-<wid-alert [type]="'success'" [message]="'success message'"></wid-alert>
-<wid-alert [type]="'warning'" [message]="'warning message'"></wid-alert>
-<wid-alert [type]="'info'" [message]="'info message'"></wid-alert>
-<wid-alert [type]="'help'" [message]="'help message'"></wid-alert>
+
 <div class="page-container" fxLayout="column" >
 
-  <div *ngIf="loaded | async" fxFlex="33" fxFlex.xs="20">
-    <!------------------------- DATA TABLE ------------------------>
-    <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'USERS-LIST'">
-    </wid-data-table>
-    <!------------------------------------------------------------->
-  </div>
 
-  <!----------------------- CUSTOM STEPPER [MULTI FORM] ---------------------->
-  <div fxFlex="33" fxFlex.xs="40">
-    <wid-stepper [stepperConfig]="stepperConfig"
-                 (notify)="onNotify($event)"
-                 #multiFormStepper>
-      <!--
-           YOU CAN CREATE STEP BY ADDING CONTENT
-                INSIDE THE FOLLOWING TAG
-            <cdk-step [stepControl]="yourFormControlOne">
-              <ng-template cdkStepLabel>
-                <span>stepLabelOne </span>
-              </ng-template>
-              YOUR CONTENT
-            </cdk-step>
-      -->
-      <cdk-step [stepControl]="frmDetails">
-        <ng-template cdkStepLabel>
-          <!-- Label Content Here -->
-          General
-        </ng-template>
-        <!--begin: Wizard Step 1-->
-        <form [formGroup]="frmDetails">
-          <div class="container">
-            <div class="field is-horizontal">
-              <div class="field-body">
-                <div class="field">
-                  <label class="label">First Name</label>
-                  <p class="control is-expanded has-icons-right">
-                    <input formControlName="firstName" class="input" type="text" placeholder="First Name">
-                    <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
-                </span>
-                  </p>
-                </div>
-                <div class="field">
-                  <label class="label">Last Name</label>
-                  <p class="control is-expanded has-icons-right">
-                    <input formControlName="lastName" class="input" type="text" placeholder="Last Name">
-                    <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
-                </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </form>
-        <!--end: Wizard Step 1-->
-      </cdk-step>
-
-      <cdk-step [stepControl]="frmAddress">
-        <ng-template cdkStepLabel>
-          <!-- Label Content Here -->
-          Address
-        </ng-template>
-
-        <!--begin: Wizard Step 2-->
-        <form [formGroup]="frmAddress">
-          <div class="container">
-            <div class="field">
-              <label class="label">Address One</label>
-              <p class="control is-expanded has-icons-right">
-                <input formControlName="addressOne" class="input" type="text" placeholder="Address One">
-                <span class="icon is-small is-right">
-                      <i class="fas fa-check"></i>
-                    </span>
-              </p>
-            </div>
-            <div class="field">
-              <label class="label">Address Two</label>
-              <p class="control is-expanded has-icons-right">
-                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
-                <span class="icon is-small is-right">
-                      <i class="fas fa-check"></i>
-                    </span>
-              </p>
-            </div>
-            <div class="field">
-              <label class="label">Address Two</label>
-              <p class="control is-expanded has-icons-right">
-                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
-                <span class="icon is-small is-right">
-                      <i class="fas fa-check"></i>
-                    </span>
-              </p>
-            </div>
-          </div>
-        </form>
-        <!--end: Wizard Step 2-->
-      </cdk-step>
-
-      <cdk-step [stepControl]="frmDetails">
-        <ng-template cdkStepLabel>
-          <!-- Label Content Here -->
-          General
-        </ng-template>
-        <!--begin: Wizard Step 1-->
-        <form [formGroup]="frmDetails">
-          <div class="container">
-            <div class="field is-horizontal">
-              <div class="field-body">
-                <div class="field">
-                  <label class="label">First Name</label>
-                  <p class="control is-expanded has-icons-right">
-                    <input formControlName="firstName" class="input" type="text" placeholder="First Name">
-                    <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
-                </span>
-                  </p>
-                </div>
-                <div class="field">
-                  <label class="label">Last Name</label>
-                  <p class="control is-expanded has-icons-right">
-                    <input formControlName="lastName" class="input" type="text" placeholder="Last Name">
-                    <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
-                </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </form>
-        <!--end: Wizard Step 1-->
-      </cdk-step>
-
-      <cdk-step [stepControl]="frmAddress">
-        <ng-template cdkStepLabel>
-          <!-- Label Content Here -->
-          Address
-        </ng-template>
-
-        <!--begin: Wizard Step 2-->
-        <form [formGroup]="frmAddress">
-          <div class="container">
-            <div class="field">
-              <label class="label">Address One</label>
-              <p class="control is-expanded has-icons-right">
-                <input formControlName="addressOne" class="input" type="text" placeholder="Address One">
-                <span class="icon is-small is-right">
-                      <i class="fas fa-check"></i>
-                    </span>
-              </p>
-            </div>
-            <div class="field">
-              <label class="label">Address Two</label>
-              <p class="control is-expanded has-icons-right">
-                <input formControlName="addressTwo" class="input" type="text" placeholder="Address Two">
-                <span class="icon is-small is-right">
-                      <i class="fas fa-check"></i>
-                    </span>
-              </p>
-            </div>
-          </div>
-        </form>
-        <!--end: Wizard Step 2-->
-      </cdk-step>
-
-    </wid-stepper>
-  </div>
-  <!-------------------------------------------------------------------------->
 
   <!---------------------- CUSTOM STEPPER [SINGLE FORM] ---------------------->
+  <!--
   <div  fxFlex="34" fxFlex.xs="40">
 
     <form [formGroup]="frmStepper">
       <wid-stepper [stepperConfig]="stepperConfig"
                    (notify)="onNotify($event)"
                    formArrayName="steps"
-                   #singleFormStepper>
+                   #singleFormStepper> -->
         <!--
              YOU CAN CREATE STEP BY ADDING CONTENT
                   INSIDE THE FOLLOWING TAG
@@ -196,7 +23,7 @@
                 YOUR CONTENT
               </cdk-step>
         -->
-        <cdk-step formGroupName="0" [stepControl]="formArray.get([0])">
+     <!--   <cdk-step formGroupName="0" [stepControl]="formArray.get([0])">
           <ng-template cdkStepLabel>
             Personal Details
           </ng-template>
@@ -297,7 +124,7 @@
     </form>
 
   </div>
-
+-->
   <!-------------------------------------------------------------------------->
 </div>
 
