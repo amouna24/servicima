@@ -109,8 +109,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       }, (err) => {
         console.error(err); });
     this.panelOpenState = true;
-    this.userService.colorSubject$.subscribe((color) => {
-      this.image = color;
+    this.userService.colorSubject$.subscribe((c) => {
+      this.image = c;
     });
     this.year = new Date().getFullYear();
   }
