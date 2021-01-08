@@ -6,12 +6,7 @@
     <!---------------------------------------- menu header ------------------------------------------------------------>
     <mat-list-item>
       <p [@nameAnimation]="sidebarState" class="company-label font-size-25">
-        <ng-container *ngIf="sidebarState === 'open';else abbrTemplate">
-          {{company}}
-        </ng-container>
-        <ng-template #abbrTemplate>
-          {{abbrCompany}}
-        </ng-template>
+        {{companyName()}}
       </p>
     </mat-list-item>
     <!---------------------------------------- menu container ------------------------------------------------------------>
