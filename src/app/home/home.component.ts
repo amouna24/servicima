@@ -4,6 +4,8 @@ import { mainContentAnimation } from '@shared/animations/animations';
 import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { SpinnerService } from '@core/services/spinner/spinner.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'wid-home',
@@ -18,18 +20,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   sidebarState: string;
   rightSidebarState: boolean;
   listColor: ITheme[];
+  isLoading$ = new Subject<boolean>();
   constructor(
     private sidebarService: SidenavService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
   ) {
-
   }
 
   ngOnDestroy(): void {
   }
 
   ngOnInit() {
+    this.userService.isLoadingAction$.subscribe(
+      (res) => {
+          this.isLoading$.next(res);
+      },
+      error => this.isLoading$.next(true)
+    );
     this.listColor = [{ 'color': 'green', 'status': false },
       { 'color': 'blackYellow', 'status': false },
       { 'color': 'blackGreen', 'status': false },

@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
 import { headerMenu } from '@shared/statics/header-menu.static';
 import { IHeaderMenu } from '@shared/models/header-menu/header-menu.model';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -14,6 +14,7 @@ import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IUserModel } from '@shared/models/user.model';
+import { SpinnerService } from '@core/services/spinner/spinner.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 
@@ -41,8 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private modalsServices: ModalService,
               private sidenavService: SidenavService,
-              private uploadService: UploadService,
-              private sanitizer: DomSanitizer,
+              private spinnerService: SpinnerService,
   ) { }
 
   /**
@@ -51,7 +51,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
  ngOnInit(): void {
     this.modalsServices.registerModals([
       { modalName: 'expirationLicense', modalComponent: LicenceExpirationComponent}]);
-    this.userService.connectedUser$.pipe(takeUntil(this.destroy$)).subscribe((userInfo) => {
+    this.userService.avatar$.subscribe(
+      avatar => {
+        if (!!avatar) {
+          this.avatar = avatar;
+          this.spinnerService.isLoadingSubject.next(false);
+        } else {
+          this.spinnerService.isLoadingSubject.next(true);
+        }
+      }
+    );
+    this.userService.connectedUser$
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(
+        (userInfo) => {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
@@ -83,21 +98,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.licenceType = this.companyLicenceList['companyLicenceKey']['licence_type'];
     this.licenceCode = this.companyLicenceList['companyLicenceKey']['licence_code'];
     this.endLicence = this.utilService.differenceDay(this.companyLicenceList['licence_end_date'], Date.now());
-    this.getImage(userInfo['user'][0]['photo']);
-  }
-
-  /**
-   * @description : GET IMAGE FROM BACK AS BLOB
-   *  create Object from blob and convert to url
-   */
-  getImage(id) {
-    this.uploadService.getImage(id).subscribe(
-      data => {
-        const unsafeImageUrl = URL.createObjectURL(data);
-        this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-      }, error => {
-        console.log(error);
-      });
   }
 
   /**

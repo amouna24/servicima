@@ -12,6 +12,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
+import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -64,7 +65,8 @@ import { RightSidenaveComponent } from './components/right-sidenave/right-sidena
     FormsModule,
     NgxMatSelectSearchModule,
     MatIconModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    ScrollbarModule
   ],
   exports: [
     MaterialModule,
@@ -89,6 +91,7 @@ import { RightSidenaveComponent } from './components/right-sidenave/right-sidena
     StepperComponent,
     AlertComponent,
     RightSidenaveComponent,
+    ScrollbarModule
   ]
 })
 export class SharedModule { }

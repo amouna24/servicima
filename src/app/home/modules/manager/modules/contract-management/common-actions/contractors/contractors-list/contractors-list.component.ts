@@ -64,7 +64,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description load data emitted by child components
    *************************************************************************/
   ngOnChanges(changes: { [propKey: string]: SimpleChange}) {
-    console.log(this.type);
   }
 
   /**************************************************************************
@@ -167,7 +166,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           if (res === 'true') {
-            console.log('resp:', res);
             if (Contractor.status === 'A') {
               this.contractorService.disableContractor(Contractor._id)
                 .pipe(

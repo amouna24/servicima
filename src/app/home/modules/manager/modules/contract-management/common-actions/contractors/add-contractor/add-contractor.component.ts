@@ -221,7 +221,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.profTitlesList = this.utilsService.refData['PROF_TITLES'];
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
-        console.log(data.user[0]['company_email']);
         this.userInfo = data;
         this.companyEmail = data.user[0]['company_email'];
         this.getCompanyTax();
@@ -263,7 +262,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (arr) => {
-            console.log(arr);
             this.filteredCities = arr['cities'];
           },
           (e) => {
@@ -310,7 +308,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     newContractor.title_cd = this.contractorForm.controls.title_cd.value;
     newContractor.language_cd = this.contractorForm.controls.language.value;
     newContractor.phone_nbr = this.contractorForm.controls.phone_nbr_c.value;
-    console.log('new', newContractor);
     if (this.canUpdate(this.contractorId)) {
       const updatedC = this.contractorForm.value;
       updatedC.application_id = this.contractorInfo.contractorKey.application_id;
@@ -328,7 +325,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       updatedC.title_cd = this.contractorForm.controls.title_cd.value;
       updatedC.language_cd = this.contractorForm.controls.language.value;
       updatedC.phone_nbr = this.contractorForm.controls.phone_nbr_c.value;
-      console.log('updated', updatedC);
       forkJoin(
         [
           this.contractorService.updateContractor(newContractor),
@@ -340,7 +336,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       )
         .subscribe(
           (res) => {
-            console.log('updated successfully', res);
             if (this.type === 'CUSTOMER') {
               this.router.navigate(
                 ['/manager/contract-management/clients-contracts/clients-list']);
@@ -365,7 +360,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (response) => {
-            console.log('added successfully', response);
             if (this.type === 'CUSTOMER') {
               this.router.navigate(
                 ['/manager/contract-management/clients-contracts/clients-list']);

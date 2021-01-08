@@ -164,7 +164,7 @@ export class UserComponent implements OnInit, OnDestroy {
       languageFilterCtrl: '',
       roleFilterCtrl: '',
     });
-    this.getImage(this.user['photo']);
+    // this.getImage(this.user['photo']);
   }
 
   /**
@@ -205,10 +205,10 @@ export class UserComponent implements OnInit, OnDestroy {
     this.avatar = null;
   }
 
-  /**
+/*  /!**
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
-   */
+   *!/
   getImage(id) {
     this.uploadService.getImage(id).subscribe(
       data => {
@@ -217,7 +217,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
-  }
+  }*/
 
   /**
    * @description : get the refData from appInitializer service and mapping data
