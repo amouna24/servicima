@@ -7,15 +7,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
-
-  constructor(
+   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
@@ -212,5 +210,15 @@ export class UtilsService {
       horizontalPosition: 'end',
       verticalPosition: 'bottom',
     });
+  }
+
+  /**
+   * @description hash code
+   * @param text;
+   * @return hash text;
+   */
+  hashCode(text: string): string {
+    // tslint:disable-next-line:no-bitwise
+    return text.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0) + '';
   }
 }

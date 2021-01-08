@@ -133,7 +133,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         this.sidenavService.toggleRightSideNav();
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
-        localStorage.removeItem('theme');
         this.userService.connectedUser$.next(null);
         this.router.navigate(['/auth/login']);
       },
