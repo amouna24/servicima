@@ -7,6 +7,7 @@ import { UserService } from '@core/services/user/user.service';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
 import { Subject } from 'rxjs';
 
+import { UtilsService } from '@core/services/utils/utils.service';
 @Component({
   selector: 'wid-home',
   templateUrl: './home.component.html',
@@ -20,11 +21,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   sidebarState: string;
   rightSidebarState: boolean;
   listColor: ITheme[];
+  email: string;
   isLoading$ = new Subject<boolean>();
   constructor(
     private sidebarService: SidenavService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
+    private utilService: UtilsService,
   ) {
   }
 
@@ -38,6 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
       error => this.isLoading$.next(true)
     );
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.email = cred[ 'email_address'];
     this.listColor = [{ 'color': 'green', 'status': false },
       { 'color': 'blackYellow', 'status': false },
       { 'color': 'blackGreen', 'status': false },
@@ -51,9 +56,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       { 'color': 'whiteGreen', 'status': false },
       { 'color': 'whiteOrange', 'status': false },
       { 'color': 'whiteRed', 'status': false }];
-    if (this.localStorageService.getItem('theme')) {
+    if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
       this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem('theme')) {
+        if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
           element.status = true;
         }
       });
@@ -87,33 +92,35 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param color: color
    */
   getTheme(color: string): void {
-    this.displayImage(color);
     this.listColor.map(element => {
       if (element.color !== color) {
         element.status = false;
+      } else if (element.status && element.color === color) {
+        this.localStorageService.setItem(this.utilService.hashCode(this.email), element.color);
       } else {
-        this.localStorageService.setItem('theme', element.color);
+        localStorage.removeItem(this.utilService.hashCode(this.email));
       }
     });
+    this.displayImage();
   }
 
   /**
    * @description Display image
    * @param color: color
    */
-  displayImage(color: string): void {
-    switch (color) {
+  displayImage(): void {
+    switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
       case 'whiteGreen':
-        this.userService.emitColor('assets/img/logo-title.svg');
+        this.userService.emitColor('assets/img/logo-title-dark.png');
         break;
       case 'whiteOrange':
-        this.userService.emitColor('assets/img/logo-title.svg');
+        this.userService.emitColor('assets/img/logo-title-dark.png');
         break;
       case 'whiteRed':
-        this.userService.emitColor('assets/img/logo-title.svg');
+        this.userService.emitColor('assets/img/logo-title-dark.png');
         break;
       default:
-        this.userService.emitColor('assets/img/servicima.png');
+        this.userService.emitColor('assets/img/logo-title.png');
     }
   }
 }

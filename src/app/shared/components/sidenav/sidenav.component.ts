@@ -19,6 +19,7 @@ import {
 } from '../../animations/animations';
 
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-sidenav',
@@ -47,7 +48,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   parentMenu: string;
   year: number;
   image: string;
-
+  email: string;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -60,6 +61,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private sidenavService: SidenavService,
               private userService: UserService,
               private localStorageService: LocalStorageService,
+              private utilService: UtilsService,
   ) {
     this.userService.moduleName$
       .pipe(
@@ -95,11 +97,13 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    const color = this.localStorageService.getItem('theme');
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.email = cred[ 'email_address'];
+    const color = this.localStorageService.getItem(this.utilService.hashCode(this.email));
     if (color === 'whiteGreen' || color === 'whiteOrange' || color === 'whiteRed') {
-      this.image = 'assets/img/logo-title.svg';
+      this.image = 'assets/img/logo-title-dark.png';
     } else {
-      this.image = 'assets/img/servicima.png';
+      this.image = 'assets/img/logo-title.png';
     }
     this.sidenavService.sidebarStateObservable$.
       subscribe((newState: string) => {
@@ -107,8 +111,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       }, (err) => {
         console.error(err); });
     this.panelOpenState = true;
-    this.userService.colorSubject$.subscribe((c) => {
-      this.image = c;
+    this.userService.colorSubject$.subscribe((col) => {
+      this.image = col;
     });
     this.year = new Date().getFullYear();
   }

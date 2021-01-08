@@ -4,7 +4,7 @@ $black-app-accent: mat-palette($mat-blue, A200, A100, A400);
 $black-app-warn: mat-palette($mat-pink);
 // Create the theme object (a Sass map containing all of the palettes).
 $black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
-$themeColor: #1a1f7f;
+$themeColor: $cobalt;
 $themeColorSidenav: $pale-grey;
 
 .bg-theme{
