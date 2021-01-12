@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.732" height="18.616" viewBox="0 0 20.732 18.616">
+  <g id="Component_146_" data-name="Component 146 " transform="translate(0.75 0.75)">
+    <g id="Iconly_Two-tone_Message" data-name="Iconly/Two-tone/Message">
+      <g id="Message" transform="translate(0 0)">
+        <path id="Rectangle_511" d="M4.888,0h9.428A4.957,4.957,0,0,1,17.9,1.59a5.017,5.017,0,0,1,1.326,3.7v6.528a5.017,5.017,0,0,1-1.326,3.7,4.957,4.957,0,0,1-3.58,1.59H4.888C1.968,17.116,0,14.741,0,11.822V5.294C0,2.375,1.968,0,4.888,0Z" transform="translate(0 0)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+    <g id="Iconly_Two-tone_Profile" data-name="Iconly/Two-tone/Profile" transform="translate(11.5 8.75)">
+      <g id="Profile">
+        <ellipse id="Ellipse_736" cx="1.476" cy="1.543" rx="1.476" ry="1.543" stroke-width="0.4" transform="translate(0.865)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        <path id="Path_33945" d="M0,.974A.742.742,0,0,1,.068.661,1.239,1.239,0,0,1,.939.137,4.976,4.976,0,0,1,1.663.031a7.407,7.407,0,0,1,1.355,0,5.033,5.033,0,0,1,.724.106,1.193,1.193,0,0,1,.871.523.763.763,0,0,1,0,.63,1.181,1.181,0,0,1-.871.52,4.66,4.66,0,0,1-.724.109,7.634,7.634,0,0,1-1.1.018,1.2,1.2,0,0,1-.252-.018,4.573,4.573,0,0,1-.721-.109,1.186,1.186,0,0,1-.874-.52A.764.764,0,0,1,0,.974Z" transform="translate(0 4.259)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.4" opacity="0.4"/>
+      </g>
+    </g>
+    <g id="Iconly_Two-tone_Profile-2" data-name="Iconly/Two-tone/Profile" transform="translate(0 2)">
+      <g id="Profile-2" data-name="Profile" transform="translate(2.167 1.083)">
+        <circle id="Ellipse_736-2" data-name="Ellipse_736" cx="2.588" cy="2.588" r="2.588" transform="translate(1.517 0)" opacity="0.4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.7" />
+        <path id="Path_33945-2" data-name="Path_33945" d="M0,1.634a1.2,1.2,0,0,1,.119-.526A2.19,2.19,0,0,1,1.646.231,9.093,9.093,0,0,1,2.915.052a13.57,13.57,0,0,1,2.375,0A9.2,9.2,0,0,1,6.56.231a2.107,2.107,0,0,1,1.527.878,1.23,1.23,0,0,1,0,1.056,2.086,2.086,0,0,1-1.527.873A8.513,8.513,0,0,1,5.29,3.22a13.987,13.987,0,0,1-1.934.03,2.2,2.2,0,0,1-.441-.03,8.354,8.354,0,0,1-1.264-.183A2.1,2.1,0,0,1,.119,2.164,1.235,1.235,0,0,1,0,1.634Z" transform="translate(0 7.142)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.7"/>
+      </g>
+    </g>
+  </g>
+</svg>

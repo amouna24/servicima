@@ -1,5 +1,5 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $faded-blue,contrast: ()));
+$black-app-primary: mat-palette((500: $faded-blue, contrast: ()));
 $black-app-accent: mat-palette($mat-blue, A200, A100, A400);
 $black-app-warn: mat-palette($mat-pink);
 // Create the theme object (a Sass map containing all of the palettes).
@@ -7,7 +7,7 @@ $black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-
 $themeColor: $evergreen;
 $themeColorSidenav: $pale-grey;
 
-.bg-theme{
+.bg-theme {
   background-color: $themeColor !important;
 }
 
@@ -15,16 +15,28 @@ $themeColorSidenav: $pale-grey;
    Sidenav
 *******************/
 wid-sidenav {
-  .icon, span, .company-label, .servicima-color{
+  .icon {
+    stroke: $themeColorSidenav;
+  }
+
+  span, .company-label, .servicima-color {
     color: $themeColorSidenav;
   }
-  .side-nav-container .active-list-item span, .side-nav-container .active-list-item .icon {
+
+  .side-nav-container .active-list-item span {
     color: $faded-blue !important;
   }
+
+  .side-nav-container .active-list-item .icon {
+    color: $faded-blue !important;
+    stroke: $faded-blue !important;
+  }
+
   .sub-menu-child-item {
     color: $themeColorSidenav !important;
   }
-   .active-sub-menu-child-item {
+
+  .active-sub-menu-child-item {
     color: $golden-yellow !important;
   }
 }

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.732" height="18.616" viewBox="0 0 20.732 18.616">
+  <g id="recruitment" transform="translate(0.75 0.75)">
+    <g id="Message">
+      <path id="Rectangle_511" d="M4.888,0h9.428A4.957,4.957,0,0,1,17.9,1.59a5.017,5.017,0,0,1,1.326,3.7v6.528a5.017,5.017,0,0,1-1.326,3.7,4.957,4.957,0,0,1-3.58,1.59H4.888C1.968,17.116,0,14.741,0,11.822V5.294C0,2.375,1.968,0,4.888,0Z" transform="translate(0 0)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+    <g id="Group_1" data-name="Group 1" transform="translate(-381 -1970)">
+      <line id="Line_2" data-name="Line 2" x2="6.818" transform="translate(388.166 1980.79)" stroke-linecap="round" stroke-width="1.3" opacity="0.4"/>
+      <path id="Combined_Shape" data-name="Combined Shape" d="M0,0V0ZM0,0H0Z" transform="translate(386 1980.808) rotate(-45)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+    <g id="Group_2" data-name="Group 2" transform="translate(5 4.182)">
+      <line id="Line_2-2" data-name="Line 2" x1="6.818" transform="translate(0 1.608)" stroke-linecap="round" stroke-width="1.3" opacity="0.4"/>
+      <path id="Combined_Shape-2" data-name="Combined Shape" d="M0,2.3v0Zm0,0H0Z" transform="translate(7.358 3.253) rotate(-135)"  stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

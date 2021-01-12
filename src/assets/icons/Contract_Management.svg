@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.696" height="20.669" viewBox="0 0 20.696 20.669">
+  <g id="Component_145_1" data-name="Component 145 – 1" transform="translate(0.75 0.75)">
+    <g id="Iconly_Two-tone_Folder" data-name="Iconly/Two-tone/Folder">
+      <g id="Folder" transform="translate(-0.776 -0.776)">
+        <path id="Path_33957" d="M19.169,13.482c0,3.578-2.109,5.687-5.687,5.687H5.7c-3.587,0-5.7-2.109-5.7-5.687v-7.8C0,2.109,1.314,0,4.893,0h2A2.282,2.282,0,0,1,8.717.913L9.63,2.127a2.291,2.291,0,0,0,1.826.913h2.83c3.587,0,4.911,1.826,4.911,5.477Z" transform="translate(0.776 0.776)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+    <g id="Iconly_Two-tone_Profile" data-name="Iconly/Two-tone/Profile" transform="translate(8.224 7.724)">
+      <g id="Profile" transform="translate(1.667 0.833)">
+        <circle id="Ellipse_736" cx="1.991" cy="1.991" r="1.991" opacity="0.4" transform="translate(1.167)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.7" />
+        <path id="Path_33945" d="M0,1.257a.923.923,0,0,1,.092-.4A1.684,1.684,0,0,1,1.266.177,7,7,0,0,1,2.243.04a10.439,10.439,0,0,1,1.827,0,7.075,7.075,0,0,1,.976.137A1.62,1.62,0,0,1,6.22.852a.946.946,0,0,1,0,.812,1.6,1.6,0,0,1-1.175.671,6.548,6.548,0,0,1-.976.141A10.759,10.759,0,0,1,2.582,2.5a1.694,1.694,0,0,1-.339-.023,6.426,6.426,0,0,1-.973-.141A1.612,1.612,0,0,1,.092,1.665.95.95,0,0,1,0,1.257Z" transform="translate(0 5.494)" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.7"/>
+      </g>
+    </g>
+  </g>
+</svg>
