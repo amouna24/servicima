@@ -17,6 +17,7 @@ $themeColorSidenav: $pale-grey;
 .wid-sidenav {
   .icon {
     stroke: $themeColorSidenav;
+    color: $themeColorSidenav;
   }
 
   span, .company-label, .servicima-color {
