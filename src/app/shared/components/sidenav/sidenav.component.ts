@@ -3,6 +3,7 @@ import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { UserService } from '@core/services/user/user.service';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,7 +20,6 @@ import {
 } from '../../animations/animations';
 
 import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
-import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-sidenav',
