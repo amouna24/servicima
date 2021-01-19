@@ -17,6 +17,7 @@ import { IUserModel } from '@shared/models/user.model';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
 
 import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'wid-header',
@@ -50,7 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
  ngOnInit(): void {
     this.modalsServices.registerModals([
-      { modalName: 'expirationLicense', modalComponent: LicenceExpirationComponent}]);
+      { modalName: 'expirationLicense', modalComponent: ConfirmationModalComponent}]);
     this.userService.avatar$.subscribe(
       avatar => {
         if (!!avatar) {
@@ -70,7 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-      /*  if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
+     /*   if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
           this.modalsServices.displayModal('expirationLicense', null , '40%')
             .pipe(
               takeUntil(this.destroy$)
@@ -104,7 +105,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-    this.router.navigate(['/manager/settings/licences/buy-licence']);
+   // this.router.navigate(['/manager/settings/licences/buy-licence']);
+   this.modalsServices.displayModal('expirationLicense', null, '70%');
+
   }
 
   /**

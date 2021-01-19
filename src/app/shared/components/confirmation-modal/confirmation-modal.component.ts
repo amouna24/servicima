@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'wid-confirmation-modal',
@@ -10,21 +11,41 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ConfirmationModalComponent implements OnInit {
 
   constructor(  private modalService: ModalService,
+                private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<ConfirmationModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
-
+  formLogin: FormGroup;
+  modelConfig = {
+    title: 'hello les amis',
+    button: {
+      buttonLeft: {
+        visible: true,
+        name: 'confirm',
+        color: '#232323',
+        background: '#f3f6f9'
+      },
+      buttonRight: {
+        visible: true,
+        name: 'cancel',
+        color: '#f3f6f9',
+        background: '#0067e0'
+      },
+    },
+    style: {
+    }
+  };
   ngOnInit(): void {
-  }
-  /**
-   * @description CLose Dialog OnNoClick on Cancel Button
-   */
-  onNoClick(): void {
-    this.modalService.emitConfirmationModalResponse('false');
-    this.dialogRef.close();
+    this.formLogin = this.formBuilder.group({
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+    });
+
   }
 
-  onSubmitAction(value: string): void {
-    this.modalService.emitConfirmationModalResponse(value);
-    this.dialogRef.close();
+  onNotify(res: boolean): void {
+   if (!res) {
+   this.dialogRef.close();
+ }
+    console.log(this.formLogin.value.email);
   }
 }

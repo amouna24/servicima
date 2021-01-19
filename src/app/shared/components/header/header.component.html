@@ -1,7 +1,7 @@
-<mat-toolbar class="wid-header bg-white" fxLayout="row" fxLayoutAlign="start center">
+<mat-toolbar class="wid-header bg-white" fxLayout="row" fxLayoutAlign="start center" >
   <h6 class="font-semi-bold m-r-15">{{licenceCode }}</h6>
   <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
-  <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+  <button  (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
           mat-raised-button color="primary" class="btn-small buy-btn">
     <mat-icon class="mat-icon-btn" svgIcon="buy"></mat-icon>
   <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -10,25 +10,53 @@ import { IUserModel } from '@shared/models/user.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { ProfileService } from '@core/services/profile/profile.service';
-
+import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
+import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
+import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
+import {
+  accordionAnimation,
+  buttonAnimation,
+  iconAnimation,
+  labelAnimation, listAnimation,
+  nameAnimation,
+  sidebarAnimation
+} from '@shared/animations/animations';
+import { ITheme } from '@shared/models/theme.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { listColor } from '@shared/statics/list-color.static';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'wid-right-sidenave',
   templateUrl: './right-sidenave.component.html',
   styleUrls: ['./right-sidenave.component.scss'],
+  animations: [
+    sidebarAnimation(),
+    iconAnimation(),
+    labelAnimation(),
+    nameAnimation(),
+    buttonAnimation(),
+    accordionAnimation(),
+    listAnimation(),
+  ]
 })
-export class RightSidenaveComponent implements OnInit, OnDestroy {
+export class RightSidenaveComponent implements OnInit, OnDestroy, OnChanges {
 
   sidebarState: string;
   user: IUserModel;
   avatar: any;
   selectedFile = { file: null, name: '' };
   loading$ = new Subject<boolean>();
-
+  moduleName: string;
+  menu = [];
+  subMenu: IChildItem[] = [];
+  parentMenu: string;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
-
+  listColor: ITheme[];
+  email: string;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -36,12 +64,45 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private uploadService: UploadService,
     private sanitizer: DomSanitizer,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private localStorageService: LocalStorageService,
+    private utilService: UtilsService,
   ) {
-
+    this.menu = sidenavRightMenu;
+  }
+  ngOnChanges() {
+    this.menu = sidenavRightMenu;
   }
 
+  toggleSubMenu(submenu: IChildItem[], parentMenu: string) {
+    this.subMenu = submenu;
+    this.parentMenu = parentMenu;
+  }
+  closeSubMenu() {
+    this.subMenu = [];
+  }
   ngOnInit(): void {
+    this.userService.moduleName$
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (moduleName) => {
+          this.moduleName = moduleName;
+        },
+        (err) => {
+          console.error(err);
+        });
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.email = cred[ 'email_address'];
+    this.listColor = listColor;
+    if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
+      this.listColor.map(element => {
+        if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
+          element.status = true;
+        }
+      });
+    }
     this.sidenavService.rightSidebarStateObservable$.
     subscribe((newState: string) => {
       this.sidebarState = newState;
@@ -139,5 +200,55 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
+  }
+  /**
+   * @description Display theme
+   * @return theme
+   */
+  displayClass(): any {
+    this.userService.emitCass({ 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
+      'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
+      'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
+      'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
+      'whiteRed': this.listColor[12].status
+    });
+  }
+
+  /**
+   * @description Get theme
+   * @param color: color
+   */
+  getTheme(color: string): void {
+    this.listColor.map(element => {
+      if (element.color !== color) {
+        element.status = false;
+      } else if (element.status && element.color === color) {
+        this.localStorageService.setItem(this.utilService.hashCode(this.email), element.color);
+      } else {
+        localStorage.removeItem(this.utilService.hashCode(this.email));
+      }
+    });
+    this.displayClass();
+    this.displayImage();
+  }
+
+  /**
+   * @description Display image
+   * @param color: color
+   */
+  displayImage(): void {
+    switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
+      case 'whiteGreen':
+        this.userService.emitColor('assets/img/logo-title-dark.png');
+        break;
+      case 'whiteOrange':
+        this.userService.emitColor('assets/img/logo-title-dark.png');
+        break;
+      case 'whiteRed':
+        this.userService.emitColor('assets/img/logo-title-dark.png');
+        break;
+      default:
+        this.userService.emitColor('assets/img/logo-title.png');
+    }
   }
 }
