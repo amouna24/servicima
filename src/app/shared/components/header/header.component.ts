@@ -1,22 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
-import { headerMenu } from '@shared/statics/header-menu.static';
-import { IHeaderMenu } from '@shared/models/header-menu/header-menu.model';
-import { takeUntil, tap } from 'rxjs/operators';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
-import { UploadService } from '@core/services/upload/upload.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { IUserModel } from '@shared/models/user.model';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
 
-import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -26,7 +21,6 @@ import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-m
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   name: string;
-  headerMenu: IHeaderMenu[] = headerMenu;
   companyLicenceList: ICompanyLicenceModel[];
   licenceType: string;
   licenceCode: string;
@@ -106,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   expirationLicence(): void {
    // this.router.navigate(['/manager/settings/licences/buy-licence']);
-   this.modalsServices.displayModal('expirationLicense', null, '70%');
+   this.modalsServices.displayModal('expirationLicense', null, '50%', '40%');
 
   }
 

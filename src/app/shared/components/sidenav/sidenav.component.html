@@ -15,7 +15,7 @@
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
           <a  mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]"
              class="list-item" [@iconAnimation]="sidebarState">
-            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState">{{menuItem.icon}}
+            <mat-icon  [svgIcon]="menuItem.icon" class="icon" [@iconAnimation]="sidebarState">
             </mat-icon>
             <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
           </a>
@@ -23,7 +23,7 @@
         <ng-template #subMenuLabel>
           <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
                          [@iconAnimation]="sidebarState">
-            <mat-icon class="icon material-icons-outlined">{{menuItem.icon}}
+            <mat-icon class="icon material-icons-outlined" [svgIcon]="menuItem.icon">
             </mat-icon>
             <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
           </mat-list-item>

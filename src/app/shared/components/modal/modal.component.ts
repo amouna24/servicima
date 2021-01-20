@@ -2,10 +2,10 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'wid-model-modal',
-  templateUrl: './model-modal.component.html',
-  styleUrls: ['./model-modal.component.scss']
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.scss']
 })
-export class ModelModalComponent implements OnInit {
+export class ModalComponent implements OnInit {
   @Input() modelConfig: {
     title: string,
     button: {
@@ -29,10 +29,7 @@ export class ModelModalComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  closeModal() {
-    console.log('hello world');
 
-  }
   confirm() {
     this.emitter.emit(true);
   }

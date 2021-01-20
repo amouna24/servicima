@@ -40,9 +40,6 @@
     </div>
 
 
-
-<!-- test -->
-
     <div *ngIf="subMenu.length === 0; else subMenuContainer" fxLayout="column" >
       <ng-container *ngFor=" let menuItem of menu" >
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel" >
@@ -114,7 +111,7 @@
           <ng-container *ngFor=" let subMenuItem of subMenu" >
             <ng-container *ngIf=" parentMenu == 'themes'" >
               <div fxLayout="column"  class="m-l-15" fxLayoutGap="15px" >
-              <span class="font-light font-size-19"  [@labelAnimation]="sidebarState">{{parentMenu }}</span>
+              <span class="font-light font-size-19"  [@labelAnimation]="sidebarState">{{parentMenu | titlecase}}:</span>
               <mat-list-item *ngFor="let list of listColor" >
                 <div [style.backgroundColor]="list.status ? '#f3f6f9': 'white' ">
                   <mat-checkbox color="warn" [(ngModel)]=list.status (change)="getTheme(list.color)">

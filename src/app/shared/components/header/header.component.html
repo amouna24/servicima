@@ -3,7 +3,7 @@
   <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
   <button  (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
           mat-raised-button color="primary" class="btn-small buy-btn">
-    <mat-icon class="mat-icon-btn" svgIcon="buy"></mat-icon>
+    <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
   <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
   </button>
   <mat-form-field class="search-bar ml-auto relative" appearance="fill" fxLayoutAlign="center center">

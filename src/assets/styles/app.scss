@@ -549,6 +549,12 @@ html body {
 .full-width {
   width: 100%;
 }
+/*******************
+ full-height
+*******************/
+.full-height {
+  height: $height-100 !important;
+}
 .full-screen-height {
   height: 100vh !important;
 }

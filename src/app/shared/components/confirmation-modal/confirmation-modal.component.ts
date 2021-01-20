@@ -16,7 +16,7 @@ export class ConfirmationModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
   formLogin: FormGroup;
   modelConfig = {
-    title: 'hello les amis',
+    title: 'Customer profile',
     button: {
       buttonLeft: {
         visible: true,

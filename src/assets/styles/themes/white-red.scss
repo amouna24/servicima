@@ -7,7 +7,7 @@ $black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-
 $themeColor: $pale-grey-two;
 $themeColorSidenav: $black-three;
 
-.bg-theme{
+.bg-theme {
   background-color: $themeColor !important;
 }
 
@@ -15,16 +15,29 @@ $themeColorSidenav: $black-three;
    Sidenav
 *******************/
 wid-sidenav {
-  .icon, span, .company-label, .servicima-color{
+  .icon {
+    stroke: $themeColorSidenav;
     color: $themeColorSidenav;
   }
-  .side-nav-container .active-list-item span, .side-nav-container .active-list-item .icon {
+
+  span, .company-label, .servicima-color {
+    color: $themeColorSidenav;
+  }
+
+  .side-nav-container .active-list-item span {
     color: $cherry-red !important;
   }
+
+  .side-nav-container .active-list-item .icon {
+    color: $cherry-red !important;
+    stroke: $cherry-red !important;
+  }
+
   .sub-menu-child-item {
     color: $themeColorSidenav !important;;
   }
+
   .active-sub-menu-child-item {
-      color: $golden-yellow !important;
-    }
+    color: $golden-yellow !important;
+  }
 }

@@ -90,7 +90,7 @@ export const sidenavRightMenu = [
     state: 'themes',
     name: 'Themes',
     type: 'sub',
-    icon: 'wi_settings',
+    icon: 'wi_theme',
     feature: 'themes',
     children: [
       {
@@ -110,76 +110,4 @@ export const sidenavRightMenu = [
     feature: 'logout',
 
   },
-  /* {
-       state: 'settings',
-       name: 'settings',
-       type: 'sub',
-       icon: 'settings',
-       feature: 'CONFIG_ACCESS',
-       children: [
-           {
-             state: 'users',
-             name: 'User Management',
-             icon: 'assignment',
-             feature: 'SETTINGS_USERS_ACCESS',
-             type: 'link',
-           },
-           {
-               state: 'role',
-               name: 'Role management',
-               icon: 'assignment',
-               feature: 'SETTINGS_ROLES_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'departments',
-               name: 'Departments',
-               icon: 'assignment',
-               feature: 'SETTINGS_DEP_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'calendars',
-               name: 'Calendars',
-               icon: 'assignment',
-               feature: 'SETTINGS_CALENDAR_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'licences',
-               name: 'Licence',
-               icon: 'assignment',
-               feature: 'SETTINGS_LICENCE_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'payment-info',
-               name: 'Payment info',
-               icon: 'assignment',
-               feature: 'SETTINGS_PAYMENT_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'invoices',
-               name: 'Invoices',
-               icon: 'assignment',
-               feature: 'SETTINGS_INVOICES_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'payment-methods',
-               name: 'Payment methods management',
-               icon: 'assignment',
-               feature: 'SETTINGS_PAYMENT_TERMS_ACCESS',
-               type: 'link',
-             },
-             {
-               state: 'tax',
-               name: 'Tax management',
-               icon: 'assignment',
-               feature: 'SETTINGS_TAX_ACCESS',
-               type: 'link',
-             },
-       ]
-   },*/
 ];

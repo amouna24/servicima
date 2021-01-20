@@ -1,6 +1,54 @@
-<div style="height:100%;min-width: 100%;">
-<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" fxFlex="100" fxFlex.xs="50"  fxLayout="row">
-  <div modal-body fxFlex="100" fxFlex.xs="50" fxLayout="column" style="padding: 0 8px;" >
+
+<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" class="full-height ">
+  <div modal-body fxFlex="100" fxFlex.xs="50" fxLayout="column"  fxFlexOffset="9" >
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime laudantium voluptates nesciunt natus aperiam necessitatibus aliquid temporibus! Veniam, vel maxime! Qui omnis eum temporibus unde adipisci cumque laudantium quia ex.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime laudantium voluptates nesciunt natus aperiam necessitatibus aliquid temporibus! Veniam, vel maxime! Qui omnis eum temporibus unde adipisci cumque laudantium quia ex.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime laudantium voluptates nesciunt natus aperiam necessitatibus aliquid temporibus! Veniam, vel maxime! Qui omnis eum temporibus unde adipisci cumque laudantium quia ex.
+      <mat-form-field appearance="legacy">
+        <mat-label>Legacy form field</mat-label>
+        <input matInput placeholder="Placeholder">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>Standard form field</mat-label>
+        <input matInput placeholder="Placeholder">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Fill form field</mat-label>
+        <input matInput placeholder="Placeholder">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label>Outline form field</mat-label>
+        <input matInput placeholder="Placeholder">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </p>
+    <form [formGroup]="formLogin">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="email" [placeholder]=" 'login.email' | translate">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline">
+          <input type="password" matInput placeholder="Password" formControlName="password"
+                 [placeholder]=" 'login.password' | translate" />
+        </mat-form-field>
+      </div>
+    </form>
     <p>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime laudantium voluptates nesciunt natus aperiam necessitatibus aliquid temporibus! Veniam, vel maxime! Qui omnis eum temporibus unde adipisci cumque laudantium quia ex.
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime laudantium voluptates nesciunt natus aperiam necessitatibus aliquid temporibus! Veniam, vel maxime! Qui omnis eum temporibus unde adipisci cumque laudantium quia ex.
@@ -53,4 +101,3 @@
   </div>
 
 </wid-model-modal>
-</div>

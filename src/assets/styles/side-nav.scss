@@ -13,6 +13,8 @@ wid-sidenav {
       text-align: center;
       vertical-align: middle;
       color: $pale-grey;
+      stroke: $pale-grey-three;
+      fill: none;
     }
 
     .active-list-item {
@@ -21,7 +23,7 @@ wid-sidenav {
       span,
       .icon {
         color: $cerulean-blue;
-
+        stroke: $cerulean-blue;
         &:hover {
           color: $cerulean-blue !important;
         }
