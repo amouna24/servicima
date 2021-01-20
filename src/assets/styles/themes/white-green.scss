@@ -33,6 +33,12 @@ wid-sidenav {
     color: $themeColorSidenav !important;;
   }
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $bdazzled-blue !important;
+  }
+}
+
+.wid-header {
+  .buy-btn {
+    background-color: $bdazzled-blue !important;
   }
 }

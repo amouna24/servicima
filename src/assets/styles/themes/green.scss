@@ -4,7 +4,7 @@ $green-app-accent: mat-palette($mat-indigo, A200, A100, A400);
 $green-app-warn: mat-palette($mat-pink);
 // Create the theme object (a Sass map containing all of the palettes).
 $green-app-theme: mat-light-theme($green-app-primary, $green-app-accent, $green-app-warn);
-$themeColor: $green-blue;
+$themeColor: $russian-green;
 $themeColorSidenav: $pale-grey;
 
 .bg-theme {
@@ -25,12 +25,12 @@ wid-sidenav {
   }
 
   .side-nav-container .active-list-item span {
-    color: $black-two !important;
+    color: $old-burgundy !important;
   }
 
   .side-nav-container .active-list-item .icon {
-    stroke: $black-two !important;
-    color: $black-two !important;
+    stroke: $old-burgundy !important;
+    color: $old-burgundy !important;
   }
 
   .sub-menu-child-item {
@@ -38,6 +38,6 @@ wid-sidenav {
   }
 
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $maize-crayola !important;
   }
 }

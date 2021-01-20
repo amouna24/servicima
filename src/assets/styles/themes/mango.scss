@@ -38,6 +38,13 @@ wid-sidenav {
   }
 
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $headingtext !important;
+  }
+}
+
+.wid-header{
+  .buy-btn{
+    background-color: $headingtext !important;
+    color: $black !important;
   }
 }
