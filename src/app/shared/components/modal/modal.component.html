@@ -9,13 +9,14 @@
       </div>
   </div>
 
-  <div class="modal-content-container" fxFlex="60" >
+  <div class="modal-content-container" fxFlex="55" >
     <wid-scrollbar class="scrollbar">
-      <ng-content select="[modal-body]"></ng-content>
+      <ng-content  select="[modal-body]">
+      </ng-content>
     </wid-scrollbar>
   </div>
 
-  <div class="modal-footer" fxFlex="20" fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="20px">
+  <div class="modal-footer" fxFlex="25" fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="30px">
       <button mat-button class="btn-medium" (click)="confirm()"
         [style.background-color]="modelConfig.button.buttonLeft.background"
         [style.color]="modelConfig.button.buttonLeft.color" *ngIf="modelConfig.button.buttonLeft.visible"

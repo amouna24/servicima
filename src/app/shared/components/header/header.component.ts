@@ -12,8 +12,6 @@ import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { IUserModel } from '@shared/models/user.model';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
 
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
-
 @Component({
   selector: 'wid-header',
   templateUrl: './header.component.html',
@@ -44,8 +42,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
  ngOnInit(): void {
-    this.modalsServices.registerModals([
-      { modalName: 'expirationLicense', modalComponent: ConfirmationModalComponent}]);
     this.userService.avatar$.subscribe(
       avatar => {
         if (!!avatar) {
@@ -99,9 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-   // this.router.navigate(['/manager/settings/licences/buy-licence']);
-   this.modalsServices.displayModal('expirationLicense', null, '50%', '40%');
-
+   this.router.navigate(['/manager/settings/licences/buy-licence']);
   }
 
   /**

@@ -40,7 +40,7 @@ import { takeUntil } from 'rxjs/operators';
     listAnimation(),
   ]
 })
-export class RightSidenaveComponent implements OnInit, OnDestroy, OnChanges {
+export class RightSidenaveComponent implements OnInit, OnDestroy {
 
   sidebarState: string;
   user: IUserModel;
@@ -68,9 +68,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy, OnChanges {
     private localStorageService: LocalStorageService,
     private utilService: UtilsService,
   ) {
-    this.menu = sidenavRightMenu;
-  }
-  ngOnChanges() {
     this.menu = sidenavRightMenu;
   }
 
@@ -193,20 +190,12 @@ export class RightSidenaveComponent implements OnInit, OnDestroy, OnChanges {
       });
   }
 
-  /**************************************************************************
-   * @description Destroy All subscriptions declared with takeUntil operator
-   *************************************************************************/
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    // Unsubscribe from the subject
-    this.destroy$.unsubscribe();
-  }
   /**
    * @description Display theme
    * @return theme
    */
   displayClass(): any {
-    this.userService.emitCass({ 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
+    this.userService.emitClass({ 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
@@ -251,4 +240,14 @@ export class RightSidenaveComponent implements OnInit, OnDestroy, OnChanges {
         this.userService.emitColor('assets/img/logo-title.png');
     }
   }
+
+  /**************************************************************************
+   * @description Destroy All subscriptions declared with takeUntil operator
+   *************************************************************************/
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
+  }
+
 }

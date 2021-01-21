@@ -19,6 +19,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import { indicate } from '@core/services/utils/progress';
 import { AuthService } from '@widigital-group/auth-npm-front';
+import { DeactivateAccountComponent } from '@shared/components/deactivate-account/deactivate-account.component';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
@@ -93,6 +94,8 @@ export class UserComponent implements OnInit, OnDestroy {
         this.checkComponentAction(data);
       }
     }));
+    this.modalService.registerModals([
+      { modalName: 'DeactivateAccountComponent', modalComponent: DeactivateAccountComponent}]);
   }
 
   /**
@@ -317,6 +320,13 @@ export class UserComponent implements OnInit, OnDestroy {
     this.languages = this.appInitializerService.languageList.map((language) => {
       return ({ value: language._id, viewValue: language.language_desc});
     });
+  }
+
+  /**
+   * @description: Deactivate account
+   */
+  deactivateAccount(): void {
+    this.modalService.displayModal('DeactivateAccountComponent', null, '50%', '40%');
   }
 
   /**

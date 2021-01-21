@@ -1,9 +1,9 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $cherry-red, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$white-red-primary: mat-palette((500: $pale-grey-two, contrast: ()));
+$white-red-accent: mat-palette((500: $cherry-red, contrast: ()));
+$white-red-warn: mat-palette((500: $independence, contrast: ()));
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($white-red-primary, $white-red-accent, $white-red-warn);
 $themeColor: $pale-grey-two;
 $themeColorSidenav: $black-three;
 
@@ -38,6 +38,6 @@ wid-sidenav {
   }
 
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $independence !important;
   }
 }

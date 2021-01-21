@@ -8,7 +8,7 @@
       <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button
         (click)="onChangePassword()">
         {{ 'user.changepwd' | translate}}</button>
-      <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button>
+      <button class="wid-background-button wid-Value-button" (click)="deactivateAccount()" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button>
         {{ 'user.disactivate' | translate}}</button>
     </div>
   </div>
