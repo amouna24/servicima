@@ -1,9 +1,9 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $black-two, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$green-blue-primary: mat-palette((500: $green-blue, contrast: ()));
+$green-blue-accent: mat-palette((500: $black-two, contrast: ()));
+$green-blue-warn: mat-palette((500: $golden-yellow, contrast: ()));
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($green-blue-primary, $green-blue-accent, $green-blue-warn);
 $themeColor: $green-blue;
 $themeColorSidenav: $pale-grey;
 

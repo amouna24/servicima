@@ -1,9 +1,9 @@
 // Define palettes
-$black-app-primary: mat-palette((500: #3C6E71, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$cobalt-primary: mat-palette((500: $cobalt, contrast: ()));
+$cobalt-accent: mat-palette((500: $ming, contrast: ()));
+$cobalt-warn: mat-palette((500: $mango , contrast: ()));
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($cobalt-primary, $cobalt-accent, $cobalt-warn);
 $themeColor: $cobalt;
 $themeColorSidenav: $pale-grey;
 
@@ -42,8 +42,4 @@ wid-sidenav {
   }
 }
 
-.wid-header {
-  .buy-btn {
-    background-color: $mango !important;
-  }
-}
+

@@ -1,22 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
-import { headerMenu } from '@shared/statics/header-menu.static';
-import { IHeaderMenu } from '@shared/models/header-menu/header-menu.model';
-import { takeUntil, tap } from 'rxjs/operators';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
-import { UploadService } from '@core/services/upload/upload.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { IUserModel } from '@shared/models/user.model';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
-
-import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
 
 @Component({
   selector: 'wid-header',
@@ -25,7 +19,6 @@ import { LicenceExpirationComponent } from '../../../home/modules/manager/module
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   name: string;
-  headerMenu: IHeaderMenu[] = headerMenu;
   companyLicenceList: ICompanyLicenceModel[];
   licenceType: string;
   licenceCode: string;
@@ -49,8 +42,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
  ngOnInit(): void {
-    this.modalsServices.registerModals([
-      { modalName: 'expirationLicense', modalComponent: LicenceExpirationComponent}]);
     this.userService.avatar$.subscribe(
       avatar => {
         if (!!avatar) {
@@ -70,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-      /*  if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
+     /*   if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
           this.modalsServices.displayModal('expirationLicense', null , '40%')
             .pipe(
               takeUntil(this.destroy$)
@@ -104,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open dialog expiration licence
    */
   expirationLicence(): void {
-    this.router.navigate(['/manager/settings/licences/buy-licence']);
+   this.router.navigate(['/manager/settings/licences/buy-licence']);
   }
 
   /**

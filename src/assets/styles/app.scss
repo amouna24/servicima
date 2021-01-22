@@ -549,6 +549,12 @@ html body {
 .full-width {
   width: 100%;
 }
+/*******************
+ full-height
+*******************/
+.full-height {
+  height: $height-100 !important;
+}
 .full-screen-height {
   height: 100vh !important;
 }
@@ -583,4 +589,16 @@ html body {
   max-height: 100% !important;
   border-radius: 4px !important;
   box-sizing: border-box !important;
+}
+/*******************
+   cursor pointer
+*******************/
+.cursor-pointer{
+  cursor: pointer;
+}
+/*******************
+   Dialog Container Modal
+*******************/
+.mat-dialog-container {
+  border-radius: 20px !important;
 }

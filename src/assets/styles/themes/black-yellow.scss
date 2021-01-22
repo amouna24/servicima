@@ -1,9 +1,9 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $golden-yellow, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$black-yellow-primary: mat-palette((500: $black-three, contrast: ()));
+$black-yellow-accent: mat-palette((500: $golden-yellow, contrast: ()));
+$black-yellow-warn: mat-palette((500: $golden-yellow, contrast: ()));
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($black-yellow-primary, $black-yellow-accent, $black-yellow-warn);
 $themeColor: $black-three;
 $themeColorSidenav: $pale-grey;
 
@@ -14,7 +14,7 @@ $themeColorSidenav: $pale-grey;
 /*******************
    Sidenav
 *******************/
-.wid-sidenav {
+wid-sidenav {
   .icon {
     stroke: $themeColorSidenav;
     color: $themeColorSidenav;
@@ -34,7 +34,7 @@ $themeColorSidenav: $pale-grey;
   }
 
   .sub-menu-child-item {
-    color: $themeColorSidenav !important;;
+    color: $themeColorSidenav !important;
   }
 
   .active-sub-menu-child-item {

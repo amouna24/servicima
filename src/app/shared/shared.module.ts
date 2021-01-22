@@ -28,6 +28,7 @@ import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.com
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { RightSidenaveComponent } from './components/right-sidenave/right-sidena
     CanBeDisplayedDirective,
     UploadSheetComponent,
     AlertComponent,
+    ModalComponent,
 
   ],
   imports: [

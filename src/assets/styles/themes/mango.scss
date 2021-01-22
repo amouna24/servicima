@@ -1,9 +1,10 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $light-navy, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$mango-primary: mat-palette((500: $mango, contrast: ()));
+$mango-accent: mat-palette((500: $light-navy, contrast: ()));
+$mango-warn: mat-palette((500: $headingtext, contrast: ()));
+
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($mango-primary, $mango-accent, $mango-warn);
 $themeColor: $mango;
 $themeColorSidenav: $pale-grey;
 
@@ -39,12 +40,5 @@ wid-sidenav {
 
   .active-sub-menu-child-item {
     color: $headingtext !important;
-  }
-}
-
-.wid-header{
-  .buy-btn{
-    background-color: $headingtext !important;
-    color: $black !important;
   }
 }

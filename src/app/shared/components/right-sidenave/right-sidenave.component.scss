@@ -128,3 +128,8 @@
     overflow: hidden;
   }
 }
+
+
+::ng-deep .mat-checkbox-inner-container {
+  display: none !important;
+}
