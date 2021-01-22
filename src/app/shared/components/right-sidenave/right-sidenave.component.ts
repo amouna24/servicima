@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,7 +11,6 @@ import { Subject } from 'rxjs';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
-import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
 import {
   accordionAnimation,
@@ -30,6 +29,7 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'wid-right-sidenave',
   templateUrl: './right-sidenave.component.html',
   styleUrls: ['./right-sidenave.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     sidebarAnimation(),
     iconAnimation(),

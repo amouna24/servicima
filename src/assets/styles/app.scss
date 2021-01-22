@@ -433,6 +433,9 @@ html body {
 .font-size-16 {
     font-size: 16px;
 }
+.font-size-17 {
+  font-size: 17px;
+}
 .font-size-18 {
     font-size: 18px;
 }
@@ -467,7 +470,7 @@ html body {
   color: $pale-grey !important;
 }
 .golden-yellow {
-  color: #f1c40f;
+  color: $golden-yellow;
 }
 .cool-grey {
   color: $cool-grey;
@@ -477,6 +480,9 @@ html body {
   }
 .white {
   color: $white;
+}
+.steel{
+  color: $steel;
 }
 .brownish-grey{
     color: $brownish-grey;
@@ -601,4 +607,14 @@ html body {
 *******************/
 .mat-dialog-container {
   border-radius: 20px !important;
+}
+/*******************
+   Close
+*******************/
+.bg-close {
+  width: 15px;
+  height: 19px;
+  border-radius: 5px;
+  background-color: #f2f3f8;
+  padding: 1px 3px;
 }

@@ -113,7 +113,7 @@ export class UserService {
    * @description Emit class color
    * @param object class color
    *************************************************************************/
-  emitCass(classColor: object): void {
+  emitClass(classColor: object): void {
     this.classSubject$.next(classColor);
   }
 }
