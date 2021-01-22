@@ -95,9 +95,9 @@ export const sidenavRightMenu = [
     children: [
       {
         state: 'themes',
-        name: 'User Management',
-        icon: 'assignment',
-        feature: 'SETTINGS_USERS_ACCESS',
+        name: 'themes',
+        icon: '',
+        feature: 'SETTINGS_THEMES',
         type: 'link',
       },
      ]
