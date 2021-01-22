@@ -8,6 +8,8 @@ import { SpinnerService } from '@core/services/spinner/spinner.service';
 import { Subject } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils/utils.service';
+import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
+import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
 @Component({
   selector: 'wid-home',
   templateUrl: './home.component.html',
@@ -23,6 +25,75 @@ export class HomeComponent implements OnInit, OnDestroy {
   listColor: ITheme[];
   email: string;
   isLoading$ = new Subject<boolean>();
+  /**************************************************************************
+   * @description Menu Items List
+   *************************************************************************/
+  menuItems: IDynamicMenu[] = [
+    {
+      title: 'General information',
+      titleKey: 'GENERAL_INFORMATION',
+      child: [
+        {
+          title: 'Address',
+          titleKey: 'ADDRESS',
+        },
+        {
+          title: 'General Contact',
+          titleKey: 'GENERAL_CONTACT',
+        },
+        {
+          title: 'Organisation',
+          titleKey: 'ORGANISATION',
+        },
+        ]
+    },
+    {
+      title: 'Contact',
+      titleKey: 'CONTACT',
+      child: []
+    },
+  ];
+  dynamicForm: IDynamicForm[] = [
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+        {
+        label: 'LastName',
+        placeholder: 'LastName',
+        type: 'input',
+      }
+      ],
+    },
+    {
+      titleRef: 'ADDRESS',
+      fields: [
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'ORGANISATION',
+      fields: [
+        {
+          label: 'Gender',
+          placeholder: 'Gender',
+          type: 'select',
+          selectFieldList: [
+            { value: 'Male', viewValue: 'Male'},
+            { value: 'Female', viewValue: 'Female'},
+          ]
+        }
+      ],
+    }
+  ];
   constructor(
     private sidebarService: SidenavService,
     private localStorageService: LocalStorageService,
