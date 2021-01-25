@@ -108,7 +108,7 @@ h4 {
 }
 
 h5 {
-    line-height: 1.53;
+    line-height: 0.53;
     font-size: 19px;
     font-weight: 300;
 }
@@ -172,7 +172,7 @@ html body {
 }
 
 .p-l-10 {
-    padding-left: 900px;
+    padding-left: 10px;
 }
 
 .p-l-20 {
@@ -479,7 +479,7 @@ html body {
     color: $black;
   }
 .white {
-  color: $white;
+  color: $white !important;
 }
 .steel{
   color: $steel;
@@ -537,6 +537,9 @@ html body {
 }
 .bg-help-blue{
   background-color: $help-blue !important;
+}
+.bg-ocean-blue{
+ background-color: $ocean-blue !important;
 }
 /*******************
        logo
