@@ -3,7 +3,12 @@
 
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
                [fixedBottomGap]=0 >
-    <wid-sidenav></wid-sidenav>
+    <ng-container *ngIf="displaySidenavSetting();else sidenav">
+      <wid-sidenav-settings fxFlex ></wid-sidenav-settings>
+    </ng-container>
+    <ng-template #sidenav>
+      <wid-sidenav fxFill ></wid-sidenav>
+    </ng-template>
   </mat-sidenav>
 
   <mat-sidenav class="right-side-nav-container" position="end" mode="over" [opened]="rightSidebarState" [fixedInViewport]="true" [fixedTopGap]=0
@@ -11,7 +16,7 @@
     <wid-right-sidenave></wid-right-sidenave>
   </mat-sidenav>
 
-  <mat-sidenav-content [@mainContent]="sidebarState" class="full-screen-height" fxFlex="100" fxLayout="column" style="background-color: #f3f6f9; overflow: hidden">
+  <mat-sidenav-content [@mainContent]="sidebarState" class="full-screen-height" fxFlex fxLayout="column">
 
     <wid-header fxFlex="5"></wid-header>
 

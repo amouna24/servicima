@@ -172,7 +172,11 @@ html body {
 }
 
 .p-l-10 {
-    padding-left: 900px;
+    padding-left: 10px;
+}
+
+.p-l-15 {
+    padding-left: 15px;
 }
 
 .p-l-20 {
@@ -537,6 +541,12 @@ html body {
 }
 .bg-help-blue{
   background-color: $help-blue !important;
+}
+.bg-dark-grey-blue{
+  background-color: $dark-grey-blue;
+}
+.bg-denim{
+  background-color: $denim;
 }
 /*******************
        logo

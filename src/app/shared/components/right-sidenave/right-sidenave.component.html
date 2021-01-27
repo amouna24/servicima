@@ -51,7 +51,7 @@
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
             <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
-               class="list-item" [@iconAnimation]="sidebarState"  >
+               class="list-item" (click)="toggleSideNav()" [@iconAnimation]="sidebarState"  >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
