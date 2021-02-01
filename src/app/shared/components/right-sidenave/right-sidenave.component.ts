@@ -120,6 +120,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
 
   toggleSideNav() {
     this.sidenavService.toggleRightSideNav();
+    this.subMenu = [];
   }
 
   /**

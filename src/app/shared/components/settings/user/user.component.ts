@@ -45,6 +45,9 @@ export class UserComponent implements OnInit, OnDestroy {
   typeList: IViewParam[];
   roleList: IViewParam[];
   avatar: any;
+  gender: string;
+  lang: string;
+  title: string;
   photo: FormData;
   progress = 0;
 
@@ -86,7 +89,13 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.initForm();
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+    this.userService.avatar$.subscribe(
+      avatar => {
+        this.avatar = avatar;
+      }
+    );
+
+  this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.infoUser = data;
         this.companyName = data['company'][0]['company_name'];
@@ -113,6 +122,9 @@ export class UserComponent implements OnInit, OnDestroy {
       this.form.controls['homeCompany'].disable();
       this.form.controls['roleCtrl'].disable();
     this.getRefdata();
+    this.gender = this.utilsService.getViewValue(this.user['gender_id'], this.genderList);
+    this.lang = this.utilsService.getViewValue(this.user['language_id'], this.languages);
+    this.title = this.utilsService.getViewValue(this.user['title_id'], this.titleList);
   }
 
   /**
