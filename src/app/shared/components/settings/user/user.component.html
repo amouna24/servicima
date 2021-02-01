@@ -1,253 +1,160 @@
-<div class="container" fxLayout="column" fxLayoutAlign="start" [ngStyle.xs]="{ 'width': '100%','height': '100%'}">
-  <div class="button-container" [ngStyle.xs]="{ 'width': '90%'}" fxLayoutAlign="center center">
+<div fxLayout="row" fxFlexOffset="20px" class="p-t-20" fxFlex="100" style=" min-height: 100%">
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="center center" fxLayoutAlign="space-between"
-      fxLayoutGap="5px">
-      <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button
-        (click)='update()' [disabled]="!form.valid">{{ 'user.save' | translate}} </button>
-      <button class="wid-background-button wid-Value-button" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button
-        (click)="onChangePassword()">
-        {{ 'user.changepwd' | translate}}</button>
-      <button class="wid-background-button wid-Value-button" (click)="deactivateAccount()" type="submit" [ngStyle.xs]="{'width': '70%'}" mat-button>
-        {{ 'user.disactivate' | translate}}</button>
+  <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
+    class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
+      <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
+        [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="5px" fxFlex="20">
+      <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
+      <span class="cool-grey font-size-10">{{user.company_email}}</span>
+      <span class="cool-grey font-size-10">{{gender}}</span>
+    </div>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="20px">
+      <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px">
+        <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
+            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+          </div>
+        </button>
+
+      </div>
+      <div fxLayout="row" fxLayoutAlign="flex-end">
+        <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
+            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+          </div>
+        </button>
+
+      </div>
+      <div fxLayout="row" fxLayoutAlign="flex-end">
+        <button mat-button mat-raised-button class="btn-medium bg-error-red white">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
+            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+          </div>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="container-form" fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
-    <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
-      <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-        <!--Display and preview avatar-->
-        <div fxFlex='20' [ngStyle.xs]="{'width': '90%'}">
-          <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
-            <!--Display Image Avatar of user  with progress border in upload-->
-            <div fxLayoutAlign="center center" class="input-image">
-              <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
-                [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
-              <div class="progress" *ngIf="loading$ | async"></div>
-              <label for="file" class="btn-action">
-                <span class="material-icons">
-                  edit
-                </span>
-                <!--Input File accept only image with preview Image-->
-                <input style="display: hidden;" #file type="file" id="file" name="file" (change)="previewFile($event)"
-                  accept="image/*" />
-                <input type="hidden" name="profile_avatar_remove" />
-              </label>
-              <div class="btn-cancel" *ngIf="photo" >
-                <span class="material-icons" (click)="clearPreview()">
-                  close
-                </span>
-              </div>
+  <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px"
+       class="bg-white border-radius-20" fxFlexOffset="50px">
+
+    <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
+      <div fxLayout="column" fxFlex="85" class="m-l-20">
+
+        <div fxLayout="row" fxLayoutGap="20px">
+          <h5 class="steel">Personnel information :</h5>
+        </div>
+        <div fxLayout="row">
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.firstname'| translate}}: </span>
+              <span class="steel"> {{user.first_name}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.lang'| translate}}: </span>
+              <span class="steel"> {{lang}}</span>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.lastname'| translate}}: </span>
+              <span class="steel"> {{user.last_name}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.gender'| translate}}: </span>
+              <span class="steel"> {{gender}}</span>
             </div>
           </div>
         </div>
 
-        <div fxFlex='100'>
-          <div class="form-width">
-            <div fxLayout="column" fxLayout.xs="column" [ngStyle.xs]="{'width': '100%', height:'100%'}">
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value" matInput autocomplete="off" required
-                        [placeholder]="'user.firstname' | translate | uppercase" formControlName="firstName"
-                        [ngStyle.xs]="{'font-size': '15px'}">
-                      <mat-error class="wid-error-messages" *ngIf="form.controls.firstName.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput required
-                        [placeholder]=" 'user.lastname' | translate | uppercase" formControlName="lastName"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                      <mat-error class="wid-error-messages" *ngIf="form.controls.lastName.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <mat-select [placeholder]=" 'user.gender' | translate | uppercase" formControlName="genderCtrl"  class="wid-input-value"  #singleSelect>
-                        <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="genderFilterCtrl">
-                          </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option *ngFor="let gender of filteredGender| async" [value]="gender.value">
-                          {{gender.viewValue}}
-                        </mat-option>
-                      </mat-select>
+        <div fxLayout="row">
+          <h5 class="steel">Professional information :</h5>
+        </div>
+        <div fxLayout="row">
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span > {{'user.job'| translate}}: </span>
+              <span class="steel"> {{title}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.profiletype'| translate}}: </span>
+              <span class="steel"> {{user.user_type | titlecase}}</span>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.role' | translate}}: </span>
+              <span class="steel"> {{userRole | titlecase}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.homecompany'| translate}}: </span>
+              <span class="steel"> {{user.company_email}}</span>
+            </div>
+          </div>
+        </div>
 
-                      <mat-error class="wid-error-messages" *ngIf="form.value.genderCtrl.errors?.required">
-                        {{ 'manager.reqfield' | translate }} </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <mat-select [placeholder]=" 'user.job' | translate | uppercase" formControlName="titleCtrl" class="wid-input-value"  #singleSelect>
-                        <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="titleFilterCtrl">
-                          </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option *ngFor="let title of filteredTitle| async" [value]="title.value">
-                          {{title.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="form.value.titleCtrl.errors?.required">
-                        {{ 'manager.reqfield' | translate }} </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div [ngStyle.xs]="{'height': 'auto'}">
-                <div>
-                  <div class="wid-form-input-email">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput required
-                        [placeholder]=" 'user.email' | translate | uppercase" formControlName="emailAddress"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                      <mat-error class="wid-error-messages" *ngIf="form.controls.emailAddress.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput
-                        [placeholder]=" 'user.directline' | translate | uppercase" formControlName="profPhone"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput
-                        [placeholder]=" 'use.profcellphone' | translate | uppercase" formControlName="cellphoneNbr"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <mat-select [placeholder]=" 'user.role' | translate | uppercase" formControlName="roleCtrl" class="wid-input-value"  #singleSelect>
-                        <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="roleFilterCtrl">
-                          </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option *ngFor="let role of filteredRole| async" [value]="role.value">
-                          {{role.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="form.controls.roleCtrl.errors?.required">
-                        {{ 'manager.reqfield' | translate }} </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <mat-select class="wid-input-value" formControlName="userType" required
-                        [placeholder]=" 'user.profiletype' | translate | uppercase">
-                        <div *ngFor="let userType of typeList">
-                          <div *ngIf="showCompany === false">
-                            <mat-option [value]="userType.value" *ngIf="userType.value!=='COMPANY'">
-                              {{userType.viewValue}}
-                            </mat-option>
-                          </div>
-                          <div *ngIf="showCompany === true">
-                            <mat-option [value]="userType.value">
-                              {{userType.viewValue}}
-                            </mat-option>
-                          </div>
-                        </div>
-                      </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="form.controls.userType.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput required
-                        [placeholder]=" 'user.homecompany' | translate | uppercase" formControlName="homeCompany"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <mat-select [placeholder]=" 'user.lang' | translate | uppercase" formControlName="languageCtrl"
-                         class="wid-input-value"  #singleSelect>
-                        <mat-option>
-                          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="languageFilterCtrl">
-                          </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option *ngFor="let language of filteredLanguage| async" [value]="language.value">
-                          {{language.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="form.value.languageCtrl.errors?.required">
-                        {{ 'manager.reqfield' | translate }} </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value" autocomplete="off" matInput
-                        [placeholder]=" 'user.twitteracc' | translate | uppercase" formControlName="twitterAccount"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value"  autocomplete="off" matInput
-                        [placeholder]=" 'user.youtubeacc' | translate | uppercase" formControlName="youtubeAccount"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div fxLayout="row " fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-                <div fxFlex='50'>
-                  <div class="wid-form-input">
-                    <mat-form-field>
-                      <input class="wid-input-value" autocomplete="off" matInput
-                        [placeholder]=" 'user.linkedinacc' | translate | uppercase" formControlName="linkedinAccount"
-                        [ngStyle.xs]="{'font-size': '15px'}" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
+
+        <div fxLayout="row">
+          <h5 class="steel">Contact :</h5>
+        </div>
+
+        <div fxLayout="row">
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span> {{'user.directline'| translate}}: </span>
+              <span class="steel"> {{user.cellphone_nbr}} </span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+              <span > {{'user.email'| translate}}: </span>
+              <span class="steel"> {{user.email_address}}</span>
+            </div>
+          </div>
+
+
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px"  class="font-size-12">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span > {{'use.profcellphone'| translate}}: </span>
+              <span class="steel"> {{user.cellphone_nbr}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row">
+          <h5 class="steel">Social network :</h5>
+        </div>
+        <div fxLayout="row">
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
+              <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span class="font-size-12"> {{'youtubeacc'| translate}}: </span>
+              <span class="font-size-12 steel"> {{user.email_address}}</span>
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
+              <span  class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
             </div>
           </div>
         </div>
       </div>
-    </form>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center flex-end">
+        <div fxLayout="column" fxLayoutAlign="center flex-end" class="m-r-10" >
+          <button mat-button color="accent" [routerLink]="['/edit']" mat-raised-button class="btn-small" class="white">
+            edit
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -108,7 +108,7 @@ h4 {
 }
 
 h5 {
-    line-height: 1.53;
+    line-height: 0.53;
     font-size: 19px;
     font-weight: 300;
 }
@@ -172,7 +172,7 @@ html body {
 }
 
 .p-l-10 {
-    padding-left: 900px;
+    padding-left: 10px;
 }
 
 .p-l-20 {
@@ -479,7 +479,7 @@ html body {
     color: $black;
   }
 .white {
-  color: $white;
+  color: $white !important;
 }
 .steel{
   color: $steel;
@@ -492,6 +492,9 @@ html body {
 }
 .steel{
   color: $steel;
+}
+.topaz{
+  color: $topaz !important;
 }
 .black-three {
   color: $black-three;
@@ -537,6 +540,9 @@ html body {
 }
 .bg-help-blue{
   background-color: $help-blue !important;
+}
+.bg-ocean-blue{
+ background-color: $ocean-blue !important;
 }
 /*******************
        logo
@@ -617,4 +623,8 @@ html body {
   border-radius: 5px;
   background-color: #f2f3f8;
   padding: 1px 3px;
+}
+
+.decoration{
+  text-decoration: underline;
 }

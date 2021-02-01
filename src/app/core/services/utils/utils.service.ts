@@ -219,4 +219,17 @@ export class UtilsService {
     // tslint:disable-next-line:no-bitwise
     return text.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0) + '';
   }
+
+/**************************************************************************
+ * @description get view value
+ * @param id: string
+ * @param list: array
+ * @return view value
+ *************************************************************************/
+getViewValue(id: string, list): string {
+  return list
+    .find(value =>
+      value.value === id
+    ).viewValue;
+}
 }

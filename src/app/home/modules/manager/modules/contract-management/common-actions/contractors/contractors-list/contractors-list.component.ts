@@ -90,8 +90,8 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
         this.getContractors();
       }
     }));
-    this.modalsServices.registerModals([
-      { modalName: 'showContact', modalComponent: ShowModalComponent }]);
+    this.modalsServices.registerModals(
+      { modalName: 'showContact', modalComponent: ShowModalComponent });
   }
 
   /**************************************************************************

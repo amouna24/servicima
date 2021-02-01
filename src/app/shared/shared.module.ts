@@ -30,6 +30,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { DeactivateAccountComponent } from './components/deactivate-account/deactivate-account.component';
+import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { DeactivateAccountComponent } from './components/deactivate-account/deac
     AlertComponent,
     ModalComponent,
     DeactivateAccountComponent,
+    EditUserComponent,
 
   ],
   imports: [

@@ -6,7 +6,7 @@ import { Subject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ModalService {
-  appModals: Array<{ modalName: string, modalComponent: any }>;
+  appModals: Array<{ modalName: string, modalComponent: any }> = [];
   confirmationModalResponse$ = new Subject<string>();
   constructor(public dialog: MatDialog) { }
 
@@ -14,8 +14,8 @@ export class ModalService {
   }
 
   // registre modal component reference and name
-  registerModals(modalsList: Array<{ modalName: string, modalComponent: any }>) {
-    this.appModals = modalsList;
+  registerModals(modalsList: { modalName: string, modalComponent: any }) {
+    this.appModals.push(modalsList) ;
     console.log(this.appModals);
   }
 

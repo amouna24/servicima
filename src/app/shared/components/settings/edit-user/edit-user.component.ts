@@ -24,11 +24,11 @@ import { DeactivateAccountComponent } from '@shared/components/deactivate-accoun
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 
 @Component({
-  selector: 'wid-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  selector: 'wid-edit-user',
+  templateUrl: './edit-user.component.html',
+  styleUrls: ['./edit-user.component.scss']
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class EditUserComponent implements OnInit, OnDestroy {
   languages: IViewParam[] = [];
   user: IUserModel;
   companyId: string;
@@ -45,9 +45,6 @@ export class UserComponent implements OnInit, OnDestroy {
   typeList: IViewParam[];
   roleList: IViewParam[];
   avatar: any;
-  gender: string;
-  lang: string;
-  title: string;
   photo: FormData;
   progress = 0;
 
@@ -71,9 +68,11 @@ export class UserComponent implements OnInit, OnDestroy {
               private router: Router, ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
-  /*  this.modalService.registerModals([
-      { modalName: 'changePassword', modalComponent: ChangePwdComponent}]);*/
-}
+      this.modalService.registerModals(
+        { modalName: 'changePassword', modalComponent: ChangePwdComponent});
+    this.modalService.registerModals(
+      { modalName: 'DeactivateAccountComponent', modalComponent: DeactivateAccountComponent});
+  }
 
   files = [];
   url = 'https://evening-anchorage-3159.herokuapp.com/api/';
@@ -92,10 +91,8 @@ export class UserComponent implements OnInit, OnDestroy {
     this.userService.avatar$.subscribe(
       avatar => {
         this.avatar = avatar;
-      }
-    );
-
-  this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+      });
+    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.infoUser = data;
         this.companyName = data['company'][0]['company_name'];
@@ -103,8 +100,6 @@ export class UserComponent implements OnInit, OnDestroy {
         this.checkComponentAction(data);
       }
     }));
-    this.modalService.registerModals(
-      { modalName: 'DeactivateAccountComponent', modalComponent: DeactivateAccountComponent});
   }
 
   /**
@@ -113,18 +108,16 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
-      this.showCompany = true;
-      this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
-      this.applicationId = connectedUser['user'][0]['userKey'].application_id;
-      this.user = connectedUser['user'][0];
-      this.setForm();
-      this.form.controls['userType'].disable();
-      this.form.controls['homeCompany'].disable();
-      this.form.controls['roleCtrl'].disable();
+    this.showCompany = true;
+    this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
+    this.applicationId = connectedUser['user'][0]['userKey'].application_id;
+    this.user = connectedUser['user'][0];
+    this.setForm();
+    this.form.controls['userType'].disable();
+    this.form.controls['homeCompany'].disable();
+    this.form.controls['roleCtrl'].disable();
+
     this.getRefdata();
-    this.gender = this.utilsService.getViewValue(this.user['gender_id'], this.genderList);
-    this.lang = this.utilsService.getViewValue(this.user['language_id'], this.languages);
-    this.title = this.utilsService.getViewValue(this.user['title_id'], this.titleList);
   }
 
   /**
@@ -140,6 +133,7 @@ export class UserComponent implements OnInit, OnDestroy {
       cellphoneNbr: [''],
       userType: ['', [Validators.required]],
       twitterAccount: [''],
+      genderProfil: [''],
       youtubeAccount: [''],
       linkedinAccount: [''],
       homeCompany: [''],
@@ -170,6 +164,7 @@ export class UserComponent implements OnInit, OnDestroy {
       youtubeAccount: this.user['youtube_url'],
       linkedinAccount: this.user['linkedin_url'],
       homeCompany: this.companyName,
+      genderProfil: this.user['gender_id'],
       roleCtrl: this.userRole,
       languageCtrl: this.user['language_id'],
       genderCtrl: this.user['gender_id'],
@@ -179,7 +174,7 @@ export class UserComponent implements OnInit, OnDestroy {
       languageFilterCtrl: '',
       roleFilterCtrl: '',
     });
-    // this.getImage(this.user['photo']);
+ //   this.getImage(this.user['photo']);
   }
 
   /**
@@ -220,20 +215,20 @@ export class UserComponent implements OnInit, OnDestroy {
     this.avatar = null;
   }
 
-/*  /!**
+  /**
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
-   *!/
-  getImage(id) {
-    this.uploadService.getImage(id).subscribe(
+   */
+ /* getImage(id) {
+   this.uploadService.getImage(id).subscribe(
       data => {
         const unsafeImageUrl = URL.createObjectURL(data);
         this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
       }, error => {
         console.log(error);
       });
-  }*/
-
+  }
+*/
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
@@ -260,26 +255,11 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
-  /*  const confirmation = {
-      sentence: 'change password',
-    };
-*/
-    const dialogRef = this.dialog.open(ChangePwdComponent, {
-      data: { }, disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe(() => {
-
-      this.subscriptions.push(this.authService.logout().subscribe(() => {
-            localStorage.removeItem('userCredentials');
-            localStorage.removeItem('currentToken');
-          localStorage.removeItem('theme');
-            this.userService.connectedUser$.next(null);
-            this.router.navigate(['/auth/login']);
-          },
-          (err) => {
-            console.error(err);
-          }));
-    });
+    /*  const confirmation = {
+        sentence: 'change password',
+      };
+  */
+    this.modalService.displayModal('changePassword', null, '50%', '80%');
   }
 
   /**
@@ -303,7 +283,7 @@ export class UserComponent implements OnInit, OnDestroy {
       linkedin_url: this.form.value.linkedinAccount,
       twitter_url: this.form.value.twitterAccount,
       youtube_url: this.form.value.youtubeAccount,
-       photo: await this.uploadFile(this.photo)
+      photo: this.user['photo']
     };
 
     const confirmation = {
@@ -325,6 +305,13 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @description: Deactivate account
+   */
+  deactivateAccount(): void {
+    this.modalService.displayModal('DeactivateAccountComponent', null, '50%', '40%');
+  }
+
+  /**
    * @description: get languages
    */
   getLanguages(): void {
@@ -332,13 +319,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.languages = this.appInitializerService.languageList.map((language) => {
       return ({ value: language._id, viewValue: language.language_desc});
     });
-  }
-
-  /**
-   * @description: Deactivate account
-   */
-  deactivateAccount(): void {
-    this.modalService.displayModal('DeactivateAccountComponent', null, '50%', '40%');
   }
 
   /**

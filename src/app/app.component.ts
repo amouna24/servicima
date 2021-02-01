@@ -13,9 +13,7 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  modals = [
-    { modalName: 'confirmation', modalComponent: ConfirmationModalComponent },
-  ];
+  modals = { modalName: 'confirmation', modalComponent: ConfirmationModalComponent };
   title = 'WIDIGITAL ' + environment.env;
   iconsList = [
     { name: 'wi-bag', path: 'assets/icons/bag.svg'},
