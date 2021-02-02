@@ -6,7 +6,7 @@ import { DOCUMENT } from '@angular/common';
 import { ScrollbarComponent } from './scrollbar.component';
 
 @Directive({
-  selector: '[widScrollbar]'
+  selector: '[draggable]'
 })
 export class DraggableDirective {
   @Input()

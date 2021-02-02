@@ -1,0 +1,406 @@
+<div class="dynamic-component-container border-radius-20">
+  <div fxLayout="row" fxFlex="100">
+
+    <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC MENU SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+    <div fxLayout="row" fxFlex="30">
+      <div fxLayout="column" fxFlex="100">
+        <div class="bg-pale-grey border-radius-20" fxFlexAlign="center" [ngStyle]="{ 'width': '80%' }"
+             fxFlexOffset="10">
+          <mat-list *ngFor="let mi of menuItems">
+            <ng-container *ngIf="mi.child.length > 0; else ChildMI">
+              <mat-list-item [ngStyle]="{cursor: 'pointer'}"
+                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             (click)="scroll(mi.titleKey)"> {{ mi.title }} </mat-list-item>
+              <mat-list-item [ngStyle]="{cursor: 'pointer'}"
+                             [ngClass]="childMI.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-14 m-l-20' : 'steel-two font-size-14 m-l-20'"
+                             *ngFor="let childMI of mi.child"
+                             (click)="scroll(childMI.titleKey)"> {{ childMI.title }} </mat-list-item>
+            </ng-container>
+            <ng-template #ChildMI>
+              <mat-list-item [ngStyle]="{cursor: 'pointer'}"
+                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             (click)="scroll('#' + mi.titleKey)"> {{ mi.title }} </mat-list-item>
+            </ng-template>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+    <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+
+
+    <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   MAT DIVIDER SECTION   /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+    <div fxLayout="row" fxFlex="1">
+      <mat-divider fxFlexAlign="center" [vertical]="true" [ngStyle]="{ 'height': '90%' }"></mat-divider>
+    </div>
+    <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+
+
+    <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC FORM SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
+    <div fxLayout="column" fxFlex="69">
+      <wid-scrollbar class="dynamic-component-content">
+        <div fxLayout="column" fxFlex="100">
+          <ng-container *ngFor="let mi of menuItems">
+            <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  FIRST ITEM AND ITS CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
+            <ng-container *ngIf="mi.child.length > 0; else childSection">
+              <section id="{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)">
+
+                <!------------------------ TITLE  ------------------------->
+                <div fxLayout="row">
+                  <h1 class="steel font-size-18">{{ mi.title }}</h1>
+                </div>
+                <!--------------------------------------------------------->
+
+                <div *ngFor="let ff of dynamicForm;"
+                     fxLayout="row">
+                  <!------------------ ONE ITEM CENTER LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_CENTER'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <ng-container *ngFor="let sf of ff.fields">
+                        <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ sf.placeholder }}">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <mat-select disableOptionCentering panelClass="panelColor"
+                                        placeholder="{{ sf.placeholder }}">
+                              <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                {{v.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF ONE ITEM CENTER LAYOUT ------------------->
+
+                  <!---------------------- ONE ITEM LEFT LAYOUT ------------------------>
+                  <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_LEFT'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="start center">
+                      <ng-container *ngFor="let sf of ff.fields">
+                        <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ sf.placeholder }}">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <mat-select disableOptionCentering panelClass="panelColor"
+                                        placeholder="{{ sf.placeholder }}">
+                              <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                {{v.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF ONE ITEM LEFT LAYOUT ------------------->
+
+                  <!------------------- ONE ITEM STRETCH LAYOUT ---------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_STRETCH'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <ng-container *ngFor="let sf of ff.fields">
+                        <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="87">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ sf.placeholder }}">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="87">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <mat-select disableOptionCentering panelClass="panelColor"
+                                        placeholder="{{ sf.placeholder }}">
+                              <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                {{v.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF ONE ITEM STRETCH LAYOUT ------------------->
+
+                  <!------------------ TWO ITEMS LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <ng-container *ngFor="let sf of ff.fields">
+                        <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ sf.placeholder }}">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <mat-select disableOptionCentering panelClass="panelColor"
+                                        placeholder="{{ sf.placeholder }}">
+                              <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                {{v.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF TWO ITEMS LAYOUT ------------------->
+
+                  <!------------------ TWO ITEMS WITH TEXTAREA LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS_WITH_TEXTAREA'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <div fxLayout="column" fxFlex="40">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="{{ sf.placeholder }}">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor"
+                                          placeholder="{{ sf.placeholder }}">
+                                <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+                      </div>
+                      <div fxLayout="column" fxFlex="40" fxLayoutAlign="center stretch" [style]="{height: '100%'}">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'textarea'" fxLayout="column" fxFlex="100">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <textarea matInput placeholder="{{ sf.placeholder }}" rows="7"></textarea>
+                          </mat-form-field>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF TWO ITEMS WITH TEXTAREA LAYOUT ------------------->
+
+                  <!------------------ TWO ITEMS WITH IMAGE AT RIGHT LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS_WITH_IMAGE_AT_RIGHT'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <div fxLayout="column" fxFlex="40">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="{{ sf.placeholder }}">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor"
+                                          placeholder="{{ sf.placeholder }}">
+                                <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+                      </div>
+                      <div fxLayout="column" fxFlex="40" fxLayoutAlign="center stretch" [style]="{height: '100%'}">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center" class="profile-image">
+                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar" [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF TWO ITEMS WITH IMAGE AT RIGHT LAYOUT ------------------->
+
+
+                  <!------------------ TWO ITEMS WITH IMAGE AT RIGHT LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS_WITH_IMAGE_AT_LEFT'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <div fxLayout="column" fxFlex="40" fxLayoutAlign="center stretch" [style]="{height: '100%'}">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center" class="profile-image">
+                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar" [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                          </div>
+                        </ng-container>
+                      </div>
+                      <div fxLayout="column" fxFlex="40">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="{{ sf.placeholder }}">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor"
+                                          placeholder="{{ sf.placeholder }}">
+                                <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                    </div>
+                  </ng-container>
+                  <!------------------ END OF TWO ITEMS WITH IMAGE AT RIGHT LAYOUT ------------------->
+                </div>
+              </section>
+              <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   FIRST ITEM'S CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+              <ng-container *ngFor="let chMI of mi.child">
+                <section id="{{chMI.titleKey}}" fxLayout="column" fxFlex="100"
+                         (mouseenter)="setSelectedItem(chMI.titleKey)">
+
+                  <!------------------------ TITLE  ------------------------->
+                  <div fxLayout="row">
+                    <h1 class="steel font-size-18">{{ chMI.title }}</h1>
+                  </div>
+                  <!--------------------------------------------------------->
+
+                  <div *ngFor="let ff of dynamicForm; let index = index; let isEven = even; let isOdd = odd;"
+                       fxLayout="row">
+                    <!------------------ TWO ITEMS LAYOUT ------------------->
+                    <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS'">
+                      <div *ngIf="ff.titleRef === chMI.titleKey" fxLayout="row" fxFlex="100"
+                           fxLayoutAlign="space-evenly center">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="{{ sf.placeholder }}">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor"
+                                          placeholder="{{ sf.placeholder }}">
+                                <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                  </div>
+                </section>
+              </ng-container>
+            </ng-container>
+            <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   ITEM WITHOUT CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+            <ng-template #childSection>
+              <section id="#{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)">
+
+                <!------------------------ TITLE  ------------------------->
+                <div fxLayout="row">
+                  <h1 class="steel font-size-18">{{ mi.title }}</h1>
+                </div>
+                <!--------------------------------------------------------->
+
+                <div *ngFor="let ff of dynamicForm;"
+                     fxLayout="row">
+                  <!------------------ TWO ITEMS LAYOUT ------------------->
+                  <ng-container *ngIf="ff.fieldsLayout === 'TWO_ITEMS'">
+                    <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                         fxLayoutAlign="space-evenly center">
+                      <ng-container *ngFor="let sf of ff.fields">
+                        <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ sf.placeholder }}">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
+                          <mat-label class="black font-size-12">
+                            {{ sf.label }} :
+                          </mat-label>
+                          <mat-form-field appearance="outline">
+                            <mat-select disableOptionCentering panelClass="panelColor"
+                                        placeholder="{{ sf.placeholder }}">
+                              <mat-option *ngFor="let v of sf.selectFieldList" [value]="v.value">
+                                {{v.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </div>
+              </section>
+            </ng-template>
+          </ng-container>
+        </div>
+      </wid-scrollbar>
+    </div>
+  </div>
+  <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
+
+</div>

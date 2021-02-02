@@ -1,0 +1,22 @@
+<img [src]="haveImage ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
+     [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+<div class="progress" *ngIf="loading$ | async"></div>
+<label for="file" class="btn-action">
+                <span class="material-icons">
+                  edit
+                </span>
+  <!--Input File accept only image with preview Image-->
+  <input style="display: none;" #file type="file" id="file" name="file" (change)="previewFile($event)"
+         accept="image/*" />
+  <input type="hidden" name="profile_avatar_remove" />
+</label>
+<div class="btn-cancel" *ngIf="selectedFile.file" >
+                  <span class="material-icons" (click)="clearPreview()">
+                    close
+                  </span>
+</div>
+<div class="btn-validate" *ngIf="selectedFile.file" >
+                  <span class="material-icons" (click)="uploadFile()">
+                    published_with_changes
+                  </span>
+</div>

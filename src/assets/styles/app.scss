@@ -1,3 +1,5 @@
+@import "./functions.scss";
+
 /*******************
    Global Styles
 *******************/
@@ -286,7 +288,7 @@ html body {
 }
 
 .m-l-5 {
-    margin-left: 5px;
+    margin-left: 5px !important;
 }
 
 .m-l-10 {
@@ -425,19 +427,19 @@ html body {
     font-size: 12px;
 }
 .font-size-14 {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 .font-size-15 {
   font-size: 15px;
 }
 .font-size-16 {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 .font-size-17 {
   font-size: 17px;
 }
 .font-size-18 {
-    font-size: 18px;
+    font-size: 18px !important;
 }
 .font-size-19 {
     font-size: 19px;
@@ -498,6 +500,9 @@ html body {
 }
 .red{
   color: $error-red;
+}
+.steel-two {
+  color: $steel-two;
 }
 /*******************
  background colors
@@ -589,6 +594,16 @@ html body {
   height: 400px !important;
   padding: 20px;
 }
+.dynamic-component-container {
+  @include get-page(servicima);
+  background-color: $white;
+  margin: 20px;
+  height: 85vh !important;
+}
+
+.dynamic-component-content {
+  resize: both !important;
+}
 .sidenav-wrapper {
   resize: both !important;
   height: 400px !important;
@@ -621,3 +636,4 @@ html body {
   background-color: #f2f3f8;
   padding: 1px 3px;
 }
+

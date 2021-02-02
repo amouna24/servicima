@@ -45,8 +45,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   sidebarState: string;
   user: IUserModel;
   avatar: any;
-  selectedFile = { file: null, name: '' };
-  loading$ = new Subject<boolean>();
+  haveImage: any;
   moduleName: string;
   menu = [];
   subMenu: IChildItem[] = [];
@@ -62,7 +61,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private router: Router,
     private sidenavService: SidenavService,
     private userService: UserService,
-    private uploadService: UploadService,
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
     private localStorageService: LocalStorageService,
@@ -109,6 +107,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.user = data['user'][0];
+        this.haveImage = data['user'][0]['photo'];
       }
     });
     this.userService.avatar$.subscribe(
@@ -121,57 +120,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   toggleSideNav() {
     this.sidenavService.toggleRightSideNav();
     this.subMenu = [];
-  }
-
-  /**
-   * @description : set the Image to UpLoad and preview
-   */
-  previewFile(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    // File Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.avatar = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption', file.name);
-    this.selectedFile.file = formData;
-    this.selectedFile.name = file.name;
-  }
-
-  /**
-   * @description : Upload Image to Server  with async to promise
-   */
-  async uploadFile() {
-    const filename = await this.uploadService.uploadImage(this.selectedFile.file)
-      .pipe(
-        indicate(this.loading$),
-        map(
-          response => response.file.filename
-        ))
-      .toPromise();
-    this.user.email_address = this.user.userKey.email_address;
-    this.user.application_id = this.user.userKey.application_id;
-    this.user.photo = filename;
-    this.profileService.updateUser(this.user).subscribe(
-      (res) => {
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this.userService.getImage(filename);
-    this.selectedFile.file = null;
-  }
-
-  /**
-   * @description : Clear  preview  Image
-   */
-  clearPreview() {
-    this.selectedFile = null;
-    this.avatar = this.userService.avatar$.getValue();
   }
 
   /**

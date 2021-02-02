@@ -17,12 +17,13 @@
 
     <wid-breadcrumb fxFlex="5"></wid-breadcrumb>
 
-    <div fxFlex="90" class="wrapper">
-      <wid-scrollbar class="scrollbar">
+    <div fxFlex="90">
         <router-outlet>
           <wid-spinner></wid-spinner>
+<!--          <wid-dynamic-component [menuItems]="menuItems" [dynamicForm]="dynamicForm">
+
+          </wid-dynamic-component>-->
         </router-outlet>
-      </wid-scrollbar>
     </div>
 
   </mat-sidenav-content>

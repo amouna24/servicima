@@ -28,8 +28,10 @@ import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.com
 import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
+import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { DeactivateAccountComponent } from './components/deactivate-account/deactivate-account.component';
+import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 
 @NgModule({
   declarations: [
@@ -50,8 +52,10 @@ import { DeactivateAccountComponent } from './components/deactivate-account/deac
     CanBeDisplayedDirective,
     UploadSheetComponent,
     AlertComponent,
+    DynamicComponent,
     ModalComponent,
     DeactivateAccountComponent,
+    ProfileImageComponent,
 
   ],
   imports: [
@@ -95,7 +99,8 @@ import { DeactivateAccountComponent } from './components/deactivate-account/deac
     StepperComponent,
     AlertComponent,
     RightSidenaveComponent,
-    ScrollbarModule
+    ScrollbarModule,
+    DynamicComponent
   ]
 })
 export class SharedModule { }

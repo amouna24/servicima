@@ -182,44 +182,6 @@ export class UserComponent implements OnInit, OnDestroy {
     // this.getImage(this.user['photo']);
   }
 
-  /**
-   * @description : set the Image to UpLoad and preview
-   */
-  previewFile(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    // File Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.avatar = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption', file.name);
-    this.photo = formData;
-  }
-
-  /**
-   * @description : Upload Image to Server  with async to promise
-   */
-  async uploadFile(formData) {
-    return this.uploadService.uploadImage(formData)
-      .pipe(
-        indicate(this.loading$),
-        map(
-          response => response.file.filename
-        ))
-      .toPromise();
-  }
-
-  /**
-   * @description : Clear  preview  Image
-   */
-  clearPreview() {
-    this.photo = null;
-    this.avatar = null;
-  }
-
 /*  /!**
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
@@ -303,7 +265,6 @@ export class UserComponent implements OnInit, OnDestroy {
       linkedin_url: this.form.value.linkedinAccount,
       twitter_url: this.form.value.twitterAccount,
       youtube_url: this.form.value.youtubeAccount,
-       photo: await this.uploadFile(this.photo)
     };
 
     const confirmation = {
