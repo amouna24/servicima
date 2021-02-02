@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
 import { takeUntil } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { SpinnerService } from '@core/services/spinner/spinner.service';
   selector: 'wid-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-
+  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   name: string;

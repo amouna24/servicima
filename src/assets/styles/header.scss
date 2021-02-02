@@ -1,45 +1,35 @@
 .wid-header {
-  width: auto !important;
   height: 46px !important;
-  margin-top: 1vh !important;
-  margin-right: 7.7vw !important;
-  margin-left: 1.6vw !important;
   border-radius: $border-radius-20 !important;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.05) !important;
-  padding-right: 0 !important;
-  padding-left: 18px !important;
-
+  padding:  0 0 0 16px !important;
   .buy-btn {
     width: auto !important;
-    margin-left: 27px;
-   // background-color: $golden-yellow !important;
   }
 
+  /*******************
+    search
+  *******************/
   .search-bar {
-    height: $height-100 !important;
-
     span {
       z-index: 1;
       top: -18.4px;
       left: 11px;
     }
-
     input {
       padding: 3px 35px !important;
       height: 25px !important;
-      width: $width-lg;
       border-radius: $border-radius-15;
     }
-
   }
 
+  /*******************
+    Avatar
+  *******************/
   .user-avatar {
-    width: 6.1%;
-    height: $height-100;
+    width: 16%;
     border-radius: 0 $border-radius-20 $border-radius-20 $border-radius-20;
-    margin-right: 0;
-    margin-left: 50px;
-    cursor: pointer;
+    height: 46px;
 
     img {
       width: 35px;
@@ -48,6 +38,13 @@
   }
 }
 
-
-
+/*******************
+  mat-form-field
+*******************/
+.mat-form-field-underline {
+  display: none;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: 0 !important;
+}
 
