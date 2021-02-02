@@ -1,4 +1,4 @@
-<div [ngClass]="displayClass()" *ngIf="isLoading$ | async">
+<div [ngClass]="classColor" *ngIf="isLoading$ | async" >
 <mat-sidenav-container>
 
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
@@ -24,10 +24,6 @@
 
           </wid-dynamic-component>
         </router-outlet>
-        <mat-list-item *ngFor="let list of listColor">
-          <mat-checkbox color="warn" [(ngModel)]=list.status (change)="getTheme(list.color)" >
-            {{list.color}}</mat-checkbox>
-        </mat-list-item>
     </div>
 
   </mat-sidenav-content>

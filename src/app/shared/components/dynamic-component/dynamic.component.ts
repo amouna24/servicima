@@ -22,11 +22,13 @@ export class DynamicComponent implements OnInit {
   selectedItem = new Subject<string>();
   valueOfSelectedItem = '';
 
+  randomSubParent: any;
+
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.dynamicForm);
-    console.log(this.menuItems);
+    this.randomSubParent = document.getElementsByClassName('dynamic-component-content')[0];
+    this.valueOfSelectedItem = this.menuItems[0].titleKey;
   }
 
   setSelectedItem(titleKey) {
@@ -36,5 +38,27 @@ export class DynamicComponent implements OnInit {
         this.valueOfSelectedItem = res;
       }
     );
+  }
+
+  scroll(child) {
+    this.setSelectedItem(child.replace('#', ''));
+    const childID = document.getElementById(child);
+    // Where is the parent on page
+    const parentRect = this.randomSubParent.getBoundingClientRect();
+    // What can you see?
+    const parentViewableArea = {
+      height: this.randomSubParent.clientHeight,
+      width: this.randomSubParent.clientWidth
+    };
+    // Where is the child
+    const childRect =  childID.getBoundingClientRect();
+    // Is the child viewable?
+    const isViewable = (childRect.top >= parentRect.top) && (childRect.top <= parentRect.top + parentViewableArea.height);
+
+    // if you can't see the child try to scroll parent
+    if (!isViewable) {
+      // scroll by offset relative to parent
+      this.randomSubParent.scrollTop = (childRect.top + this.randomSubParent.scrollTop) - parentRect.top;
+    }
   }
 }

@@ -1,9 +1,9 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $sun-yellow, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$cobalt-primary: mat-palette((500: $cobalt, contrast: ()));
+$cobalt-accent: mat-palette((500: $ming, contrast: ()));
+$cobalt-warn: mat-palette((500: $mango , contrast: ()));
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($cobalt-primary, $cobalt-accent, $cobalt-warn);
 $themeColor: $cobalt;
 $themeColorSidenav: $pale-grey;
 
@@ -17,6 +17,7 @@ $themeColorSidenav: $pale-grey;
 wid-sidenav {
   .icon {
     stroke: $themeColorSidenav;
+    color: $themeColorSidenav;
   }
 
   span, .company-label, .servicima-color {
@@ -24,12 +25,12 @@ wid-sidenav {
   }
 
   .side-nav-container .active-list-item span {
-    color: $sun-yellow !important;
+    color: $ming !important;
   }
 
   .side-nav-container .active-list-item .icon {
-    stroke: $sun-yellow !important;
-    color: $sun-yellow !important;
+    stroke: $ming !important;
+    color: $ming !important;
   }
 
   .sub-menu-child-item {
@@ -37,6 +38,8 @@ wid-sidenav {
   }
 
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $mango !important;
   }
 }
+
+

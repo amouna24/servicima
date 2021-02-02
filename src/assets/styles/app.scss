@@ -1,3 +1,5 @@
+@import "./functions.scss";
+
 /*******************
    Global Styles
 *******************/
@@ -433,6 +435,9 @@ html body {
 .font-size-16 {
     font-size: 16px !important;
 }
+.font-size-17 {
+  font-size: 17px;
+}
 .font-size-18 {
     font-size: 18px !important;
 }
@@ -467,7 +472,7 @@ html body {
   color: $pale-grey !important;
 }
 .golden-yellow {
-  color: #f1c40f;
+  color: $golden-yellow;
 }
 .cool-grey {
   color: $cool-grey;
@@ -477,6 +482,9 @@ html body {
   }
 .white {
   color: $white;
+}
+.steel{
+  color: $steel;
 }
 .brownish-grey{
     color: $brownish-grey;
@@ -552,6 +560,12 @@ html body {
 .full-width {
   width: 100%;
 }
+/*******************
+ full-height
+*******************/
+.full-height {
+  height: $height-100 !important;
+}
 .full-screen-height {
   height: 100vh !important;
 }
@@ -578,6 +592,7 @@ html body {
   padding: 20px;
 }
 .dynamic-component-container {
+  @include get-page(servicima);
   background-color: $white;
   margin: 20px;
   height: 85vh !important;
@@ -596,3 +611,26 @@ html body {
   border-radius: 4px !important;
   box-sizing: border-box !important;
 }
+/*******************
+   cursor pointer
+*******************/
+.cursor-pointer{
+  cursor: pointer;
+}
+/*******************
+   Dialog Container Modal
+*******************/
+.mat-dialog-container {
+  border-radius: 20px !important;
+}
+/*******************
+   Close
+*******************/
+.bg-close {
+  width: 15px;
+  height: 19px;
+  border-radius: 5px;
+  background-color: #f2f3f8;
+  padding: 1px 3px;
+}
+

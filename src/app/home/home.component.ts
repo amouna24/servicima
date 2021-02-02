@@ -4,12 +4,12 @@ import { mainContentAnimation } from '@shared/animations/animations';
 import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
-import { SpinnerService } from '@core/services/spinner/spinner.service';
 import { Subject } from 'rxjs';
-
+import { listColor } from '@shared/statics/list-color.static';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
-import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
+import { FieldsAlignment, IDynamicForm } from '@shared/models/dynamic-component/form.model';
+
 @Component({
   selector: 'wid-home',
   templateUrl: './home.component.html',
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   rightSidebarState: boolean;
   listColor: ITheme[];
   email: string;
+  classColor: object;
   isLoading$ = new Subject<boolean>();
   /**************************************************************************
    * @description Menu Items List
@@ -56,6 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   dynamicForm: IDynamicForm[] = [
     {
       titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items_with_textarea,
       fields: [
         {
           label: 'FirstName',
@@ -63,15 +65,139 @@ export class HomeComponent implements OnInit, OnDestroy {
           type: 'input',
         },
         {
-        label: 'LastName',
-        placeholder: 'LastName',
-        type: 'input',
-      }
+          label: 'LastName',
+          placeholder: 'LastName',
+          type: 'input',
+        },
+        {
+          label: 'Textarea',
+          placeholder: 'Textarea',
+          type: 'textarea',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+        {
+          label: 'LastName',
+          placeholder: 'LastName',
+          type: 'input',
+        },
+        {
+          type: 'image',
+          imageInputs: {
+            avatar: '',
+            haveImage: '',
+            modelObject: [],
+          }
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items_with_image_at_left,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+        {
+          label: 'LastName',
+          placeholder: 'LastName',
+          type: 'input',
+        },
+        {
+          type: 'image',
+          imageInputs: {
+            avatar: '',
+            haveImage: '',
+            modelObject: [],
+          }
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.one_item_at_center,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.one_item_stretch,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: 'input',
+        },
+        {
+          label: 'LastName',
+          placeholder: 'LastName',
+          type: 'input',
+        },
       ],
     },
     {
       titleRef: 'ADDRESS',
+      fieldsLayout: FieldsAlignment.tow_items,
       fields: [
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
         {
           label: 'TEST',
           placeholder: 'TEST',
@@ -81,6 +207,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
     {
       titleRef: 'ORGANISATION',
+      fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
           label: 'Gender',
@@ -90,7 +217,32 @@ export class HomeComponent implements OnInit, OnDestroy {
             { value: 'Male', viewValue: 'Male'},
             { value: 'Female', viewValue: 'Female'},
           ]
-        }
+        },
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Gender',
+          placeholder: 'Gender',
+          type: 'select',
+          selectFieldList: [
+            { value: 'Male', viewValue: 'Male'},
+            { value: 'Female', viewValue: 'Female'},
+          ]
+        },
+        {
+          label: 'TEST',
+          placeholder: 'TEST',
+          type: 'input',
+        },
       ],
     }
   ];
@@ -106,34 +258,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.isLoadingAction$.subscribe(
-      (res) => {
-          this.isLoading$.next(res);
-      },
-      error => this.isLoading$.next(true)
-    );
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred[ 'email_address'];
-    this.listColor = [{ 'color': 'green', 'status': false },
-      { 'color': 'blackYellow', 'status': false },
-      { 'color': 'blackGreen', 'status': false },
-      { 'color': 'blueBerry', 'status': false },
-      { 'color': 'cobalt', 'status': false },
-      { 'color': 'blue', 'status': false },
-      { 'color': 'evenGreen', 'status': false },
-      { 'color': 'greenBlue', 'status': false },
-      { 'color': 'lighterPurple', 'status': false },
-      { 'color': 'mango', 'status': false },
-      { 'color': 'whiteGreen', 'status': false },
-      { 'color': 'whiteOrange', 'status': false },
-      { 'color': 'whiteRed', 'status': false }];
+    this.listColor = listColor;
     if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
       this.listColor.map(element => {
         if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
           element.status = true;
         }
       });
-      }
+    //  this.displayClass();
+    }
+
+    this.displayClass();
+    this.userService.isLoadingAction$.subscribe(
+      (res) => {
+          this.isLoading$.next(res);
+      },
+      error => this.isLoading$.next(true)
+    );
     this.sidebarService.sidebarStateObservable$
       .subscribe((newState: string) => {
         this.sidebarState = newState;
@@ -148,50 +291,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @description Display theme
    * @return theme
    */
-  displayClass(): object {
-    return {
-      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
+  displayClass(): void {
+    this.classColor =  { 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
       'whiteRed': this.listColor[12].status
     };
-  }
-
-  /**
-   * @description Get theme
-   * @param color: color
-   */
-  getTheme(color: string): void {
-    this.listColor.map(element => {
-      if (element.color !== color) {
-        element.status = false;
-      } else if (element.status && element.color === color) {
-        this.localStorageService.setItem(this.utilService.hashCode(this.email), element.color);
-      } else {
-        localStorage.removeItem(this.utilService.hashCode(this.email));
-      }
-    });
-    this.displayImage();
-  }
-
-  /**
-   * @description Display image
-   * @param color: color
-   */
-  displayImage(): void {
-    switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-      case 'whiteGreen':
-        this.userService.emitColor('assets/img/logo-title-dark.png');
-        break;
-      case 'whiteOrange':
-        this.userService.emitColor('assets/img/logo-title-dark.png');
-        break;
-      case 'whiteRed':
-        this.userService.emitColor('assets/img/logo-title-dark.png');
-        break;
-      default:
-        this.userService.emitColor('assets/img/logo-title.png');
-    }
+    this.userService.classSubject$.subscribe((col) => {
+        this.classColor = col;
+      });
   }
 }

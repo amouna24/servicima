@@ -2,7 +2,9 @@
   <h6 class="font-semi-bold m-r-15">{{licenceCode }}</h6>
   <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
   <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
-          mat-raised-button color="primary" class="btn-small buy-btn">
+          mat-raised-button color="warn"   class="btn-small buy-btn" >
+  <!-- <button  (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+          mat-raised-button color="primary" class="btn-small buy-btn"> -->
     <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
   <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
   </button>

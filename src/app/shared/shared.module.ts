@@ -29,6 +29,9 @@ import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/h
 import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { DeactivateAccountComponent } from './components/deactivate-account/deactivate-account.component';
+import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,9 @@ import { DynamicComponent } from './components/dynamic-component/dynamic.compone
     UploadSheetComponent,
     AlertComponent,
     DynamicComponent,
+    ModalComponent,
+    DeactivateAccountComponent,
+    ProfileImageComponent,
 
   ],
   imports: [

@@ -1,9 +1,10 @@
 // Define palettes
-$black-app-primary: mat-palette((500: $lighter-green, contrast: ()));
-$black-app-accent: mat-palette($mat-blue, A200, A100, A400);
-$black-app-warn: mat-palette($mat-pink);
+$white-green-primary: mat-palette((500: $pale-grey-two, contrast: ()));
+$white-green-accent: mat-palette((500: $lighter-green, contrast: ()));
+$white-green-warn: mat-palette((500: $bdazzled-blue, contrast: ()));
+
 // Create the theme object (a Sass map containing all of the palettes).
-$black-app-theme: mat-light-theme($black-app-primary, $black-app-accent, $black-app-warn);
+$app-theme: mat-light-theme($white-green-primary, $white-green-accent, $white-green-warn);
 $themeColor: $pale-grey-two;
 $themeColorSidenav: $black-three;
 
@@ -17,6 +18,7 @@ $themeColorSidenav: $black-three;
 wid-sidenav {
   .icon{
     stroke: $themeColorSidenav ;
+    color: $themeColorSidenav
   }
   span, .company-label, .servicima-color{
     color: $themeColorSidenav;
@@ -32,6 +34,6 @@ wid-sidenav {
     color: $themeColorSidenav !important;;
   }
   .active-sub-menu-child-item {
-    color: $golden-yellow !important;
+    color: $bdazzled-blue !important;
   }
 }

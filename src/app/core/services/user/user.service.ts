@@ -20,6 +20,7 @@ export class UserService {
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   redirected = false;
   colorSubject$ = new Subject<string>();
+  classSubject$ = new Subject<object>();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
@@ -107,5 +108,12 @@ export class UserService {
    *************************************************************************/
   emitColor(color: string): void {
     this.colorSubject$.next(color);
+  }
+  /**************************************************************************
+   * @description Emit class color
+   * @param object class color
+   *************************************************************************/
+  emitClass(classColor: object): void {
+    this.classSubject$.next(classColor);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -10,8 +10,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ConfirmationModalComponent implements OnInit {
 
   constructor(  private modalService: ModalService,
-    public dialogRef: MatDialogRef<ConfirmationModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+                public dialogRef: MatDialogRef<ConfirmationModalComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
   }

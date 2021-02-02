@@ -1,0 +1,98 @@
+
+@import '~@angular/material/theming';
+
+/* Default theme */
+
+$primary-default-theme: mat-palette((500: $topaz,contrast: ()));
+$accent-default-theme: mat-palette((500: $topaz,contrast: ()));
+$warn-default-theme: mat-palette((500: $golden-yellow,contrast: ()));
+$theme: mat-light-theme($primary-default-theme, $accent-default-theme, $warn-default-theme);
+$background: map-get($theme, background);
+$foreground: map-get($theme, foreground);
+
+.bg-theme{
+  background-color: $cerulean-blue !important;
+}
+
+@include angular-material-theme($theme);
+
+
+
+// Green Theme
+.green {
+  @import 'green';
+  @include angular-material-theme($app-theme);
+}
+
+// Black yellow Theme
+.blackYellow {
+  @import 'black-yellow';
+  @include angular-material-theme($app-theme);
+}
+
+// Black green Theme
+.blackGreen{
+  @import 'black-green';
+  @include angular-material-theme($app-theme);
+}
+
+// Blue berry Theme
+.blueBerry{
+  @import 'blueberry';
+  @include angular-material-theme($app-theme);
+}
+
+// Cobalt Theme
+.cobalt{
+  @import 'cobalt';
+  @include angular-material-theme($app-theme);
+}
+
+// Darkish blue Theme
+.darkishBlue{
+  @import 'darkish-blue';
+  @include angular-material-theme($app-theme);
+}
+
+// Evergreen Theme
+.everGreen{
+  @import 'evergreen';
+  @include angular-material-theme($app-theme);
+}
+
+// Green blue Theme
+.greenBlue{
+  @import 'green-blue';
+  @include angular-material-theme($app-theme);
+}
+
+// Lighter purple Theme
+.lighterPurple{
+  @import 'lighter-purple';
+  @include angular-material-theme($app-theme);
+}
+
+// Mango Theme
+.mango{
+  @import 'mango';
+  @include angular-material-theme($app-theme);
+}
+
+// White green Theme
+.whiteGreen{
+  @import 'white-green';
+  @include angular-material-theme($app-theme);
+}
+
+// White orange Theme
+.whiteOrange{
+  @import 'white-orange';
+  @include angular-material-theme($app-theme);
+}
+
+// White red Theme
+.whiteRed{
+  @import 'white-red';
+  @include angular-material-theme($app-theme);
+}
+
