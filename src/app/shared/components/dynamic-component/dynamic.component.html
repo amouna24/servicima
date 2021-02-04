@@ -37,12 +37,12 @@
 
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC FORM SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
     <div fxLayout="column" fxFlex="69">
-      <wid-scrollbar class="dynamic-component-content">
-        <div fxLayout="column" fxFlex="100">
+      <wid-scrollbar class="dynamic-component-content" >
+        <form [formGroup]="formData" fxLayout="column" fxFlex="100">
           <ng-container *ngFor="let mi of menuItems">
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  FIRST ITEM AND ITS CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
             <ng-container *ngIf="mi.child.length > 0; else childSection">
-              <section id="{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)">
+              <section id="{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)" formGroupName="{{ mi.titleKey }}">
 
                 <!------------------------ TITLE  ------------------------->
                 <div fxLayout="row">
@@ -62,7 +62,7 @@
                             {{ sf.label }} :
                           </mat-label>
                           <mat-form-field appearance="outline">
-                            <input matInput placeholder="{{ sf.placeholder }}">
+                            <input matInput placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
                           </mat-form-field>
                         </div>
                         <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
@@ -155,7 +155,7 @@
                             {{ sf.label }} :
                           </mat-label>
                           <mat-form-field appearance="outline">
-                            <input matInput placeholder="{{ sf.placeholder }}">
+                            <input matInput placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
                           </mat-form-field>
                         </div>
                         <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
@@ -309,7 +309,7 @@
               <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   FIRST ITEM'S CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
               <ng-container *ngFor="let chMI of mi.child">
                 <section id="{{chMI.titleKey}}" fxLayout="column" fxFlex="100"
-                         (mouseenter)="setSelectedItem(chMI.titleKey)">
+                         (mouseenter)="setSelectedItem(chMI.titleKey)" formGroupName="{{ mi.titleKey }}">
 
                   <!------------------------ TITLE  ------------------------->
                   <div fxLayout="row">
@@ -354,7 +354,7 @@
             </ng-container>
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   ITEM WITHOUT CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
             <ng-template #childSection>
-              <section id="#{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)">
+              <section id="#{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)" formGroupName="{{ mi.titleKey }}">
 
                 <!------------------------ TITLE  ------------------------->
                 <div fxLayout="row">
@@ -397,7 +397,12 @@
               </section>
             </ng-template>
           </ng-container>
-        </div>
+          <div fxLayoutAlign="end center" fxLayout="row" fxFlex="100">
+            <button (click)="submitAction()" color="primary" [style]="{marginRight: '4%'}" mat-raised-button
+                    class="white btn-medium">Save
+            </button>
+          </div>
+        </form>
       </wid-scrollbar>
     </div>
   </div>

@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { Subject } from 'rxjs';
 import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
+import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 
 @Component({
   selector: 'wid-dynamic-component',
@@ -15,6 +16,11 @@ export class DynamicComponent implements OnInit {
    *************************************************************************/
   @Input() menuItems: IDynamicMenu[];
   @Input() dynamicForm: IDynamicForm[];
+  @Input() formData: FormGroup;
+  /**************************************************************************
+   * @description Form Group
+   *************************************************************************/
+  @Output() dynamicFormGroup = new EventEmitter<FormGroup>();
 
   /**************************************************************************
    * @description Menu Items List
@@ -24,7 +30,8 @@ export class DynamicComponent implements OnInit {
 
   randomSubParent: any;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
     this.randomSubParent = document.getElementsByClassName('dynamic-component-content')[0];
@@ -60,5 +67,9 @@ export class DynamicComponent implements OnInit {
       // scroll by offset relative to parent
       this.randomSubParent.scrollTop = (childRect.top + this.randomSubParent.scrollTop) - parentRect.top;
     }
+  }
+
+  submitAction() {
+    this.dynamicFormGroup.emit(this.formData);
   }
 }

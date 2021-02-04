@@ -12,6 +12,7 @@ export interface IFieldsObject {
   label?: string;
   placeholder?: string;
   type: string;
+  formControlName?: string;
   selectFieldList ?: any;
   imageInputs?: {
     avatar: any;

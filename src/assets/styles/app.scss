@@ -268,7 +268,7 @@ html body {
   border-radius: $border-radius-10;
 }
 .border-radius-15{
-  border-radius: $border-radius-15;
+  border-radius: $border-radius-15 !important;
 }
 .border-radius-20{
   border-radius: $border-radius-20;
@@ -603,6 +603,7 @@ html body {
 
 .dynamic-component-content {
   resize: both !important;
+  scroll-behavior: smooth !important;
 }
 .sidenav-wrapper {
   resize: both !important;
