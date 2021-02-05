@@ -24,11 +24,12 @@ export class ModalComponent implements OnInit {
     },
     style: any
   };
+
   @Output() emitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   confirm() {
     this.emitter.emit(true);

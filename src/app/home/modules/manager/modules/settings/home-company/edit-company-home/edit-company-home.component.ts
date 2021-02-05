@@ -1,34 +1,36 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReplaySubject, Subscription } from 'rxjs';
+
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ProfileService } from '@core/services/profile/profile.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ICompanyModel } from '@shared/models/company.model';
-import { IUserModel } from '@shared/models/user.model';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
-import { IUserInfo } from '@shared/models/userInfo.model';
-import { ICity } from '@shared/models/city.model';
+import { ModalService } from '@core/services/modal/modal.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+
+import { ICompanyModel } from '@shared/models/company.model';
+import { IUserModel } from '@shared/models/user.model';
 import { IViewParam } from '@shared/models/view.model';
-import { ModalService } from '@core/services/modal/modal.service';
+import { IUserInfo } from '@shared/models/userInfo.model';
+import { ICity } from '@shared/models/city.model';
 
 @Component({
-  selector: 'wid-home-company',
-  templateUrl: './home-company.component.html',
-  styleUrls: ['./home-company.component.scss']
+  selector: 'wid-edit-company-home',
+  templateUrl: './edit-company-home.component.html',
+  styleUrls: ['./edit-company-home.component.scss']
 })
-export class HomeCompanyComponent implements OnInit, OnDestroy {
+export class EditCompanyHomeComponent implements OnInit, OnDestroy {
 
   constructor(private utilsService: UtilsService,
-    private profileService: ProfileService,
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private assetsDataService: AssetsDataService,
-    private appInitializerService: AppInitializerService,
-    private modalService: ModalService,
+              private profileService: ProfileService,
+              private formBuilder: FormBuilder,
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
+              private assetsDataService: AssetsDataService,
+              private appInitializerService: AppInitializerService,
+              private modalService: ModalService,
   ) {
   }
 
@@ -71,6 +73,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         this.userInfo = info;
         this.languageId = this.userInfo['user'][0]['language_id'];
         this.company = info['company'][0];
+        this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
         this.getRefdata();
@@ -114,8 +117,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       activityCodeCtrl: [''],
       currencyCtrl: [''],
       vatCtrl: [''],
-      registryCountryCtrl: [''],
-      countryCtrl: [''],
+      registryCountryCtrl: ['', [Validators.required]],
+      countryCtrl: ['', [Validators.required]],
       legalFormFilterCtrl: [''],
       countryFilterCtrl: [''],
       activityCodeFilterCtrl: [''],
@@ -192,6 +195,9 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
     this.utilsService.changeValueField(this.activityCodeList, this.form.controls.activityCodeFilterCtrl, this.filteredActivityCode);
     this.utilsService.changeValueField(this.currenciesList, this.form.controls.currencyFilterCtrl, this.filteredCurrency);
     this.utilsService.changeValueField(this.vatList, this.form.controls.vatFilterCtrl, this.filteredVat);
+    this.utilsService.changeValueField(this.countryList, this.form.controls['countryFilterCtrl'], this.filteredCountry);
+    this.utilsService.changeValueField(this.countryList, this.form.controls['registryCountryFilterCtrl'], this.filteredRegistryCountry);
+
   }
 
   /**
@@ -226,12 +232,10 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       phone_nbr: this.company['phone_nbr'],
     };
     const confirmation = {
-      sentence: 'to update this company',
-      name: companyProfile.email_address + companyProfile.company_name,
+      title: 'edit',
     };
-
-    this.subscription = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
-      if (value === 'true') {
+    this.subscription = this.modalService.displayConfirmationModal(confirmation, '50%', '40%').subscribe((value) => {
+      if (value === true) {
         this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
           this.userInfo['company'][0] = res;
           this.userService.connectedUser$.next(this.userInfo);
@@ -239,6 +243,30 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       }
       this.subscription.unsubscribe();
     });
+  }
+
+  /**
+   * @description: clear form
+   */
+  reset(): void {
+    this.form.get('registryCountryCtrl').setValue(null);
+    this.form.get('registrationNumber').setValue(null);
+    this.form.get('activityDescription').setValue(null);
+    this.form.get('activityCodeCtrl').setValue(null);
+    this.form.get('currencyCtrl').setValue(null);
+    this.form.get('legalFormCtrl').setValue(null);
+    this.form.get('capital').setValue(null);
+    this.form.get('vatCtrl').setValue(null);
+    this.form.get('address').setValue(null);
+    this.form.get('zipCode').setValue(null);
+    this.form.get('countryCtrl').setValue(null);
+    this.form.get('city').setValue(null);
+    this.form.get('employeeNum').setValue(null);
+    this.form.get('webSite').setValue(null);
+    this.form.get('contactEmail').setValue(null);
+    this.form.get('linkedinAccount').setValue(null);
+    this.form.get('twitterAccount').setValue(null);
+    this.form.get('youtubeAccount').setValue(null);
   }
 
   /**
@@ -257,8 +285,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @description: : mapping data
    */
   mapData(): void {
-    this.countryList = this.appInitializerService.countriesList.map((country) => {
-      return { value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC };
+    this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.languageId)).map((country) => {
+      this.countryList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
     });
     this.activityCodeList = this.appInitializerService.activityCodeList.map((Code) => {
       return { value: Code.NAF, viewValue: Code.NAF };

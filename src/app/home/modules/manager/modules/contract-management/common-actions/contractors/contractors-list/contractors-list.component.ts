@@ -165,7 +165,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     this.modalsServices.displayConfirmationModal(confirmation)
       .subscribe(
         (res) => {
-          if (res === 'true') {
+          if (res === true) {
             if (Contractor.status === 'A') {
               this.contractorService.disableContractor(Contractor._id)
                 .pipe(

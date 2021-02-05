@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, pipe, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
-import { SpinnerService } from '@core/services/spinner/spinner.service';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -21,6 +20,7 @@ export class UserService {
   redirected = false;
   colorSubject$ = new Subject<string>();
   classSubject$ = new Subject<object>();
+  haveImage$ = new Subject<string>();
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
@@ -109,11 +109,20 @@ export class UserService {
   emitColor(color: string): void {
     this.colorSubject$.next(color);
   }
+
   /**************************************************************************
    * @description Emit class color
    * @param object class color
    *************************************************************************/
   emitClass(classColor: object): void {
     this.classSubject$.next(classColor);
+  }
+
+  /**************************************************************************
+   * @description Emit message if image exist
+   * @param message: string
+   *************************************************************************/
+  haveImage(message): void {
+    this.haveImage$.next(message);
   }
 }

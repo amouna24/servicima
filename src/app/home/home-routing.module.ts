@@ -27,10 +27,6 @@ const routes: Routes = [
         path: 'candidate',
         loadChildren: () => import('./modules/candidate/candidate.module').then(m => m.CandidateModule)
       },
-      {
-        path: 'edit',
-       component: EditUserComponent
-      },
     ]
   }
 ];

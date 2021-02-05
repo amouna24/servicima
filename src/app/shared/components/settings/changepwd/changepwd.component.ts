@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CrossFieldErrorMatcher } from '@core/services/utils/validatorPassword';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { AuthService } from '@widigital-group/auth-npm-front';
-import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-changepwd',
@@ -42,13 +42,14 @@ export class ChangePwdComponent implements OnInit {
     style: {
     }
   };
+
   constructor(private formBuilder: FormBuilder,
               private profileService: ProfileService,
-              private  localStorageService: LocalStorageService,
+              private localStorageService: LocalStorageService,
               private authService: AuthService,
-              private  userService: UserService,
+              private userService: UserService,
               private router: Router,
-              public dialogRef: MatDialogRef<ChangePwdComponent>) { }
+              public  dialogRef: MatDialogRef<ChangePwdComponent>) { }
 
    /**
     * @description Loaded when component in init state
@@ -56,6 +57,7 @@ export class ChangePwdComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
   }
+
   onNotify(res: boolean): void {
     if (!res) {
       this.dialogRef.close();
@@ -63,6 +65,7 @@ export class ChangePwdComponent implements OnInit {
       this.changePassword(this.form);
     }
   }
+
   /**
    * @description : initialization of the form
    */
@@ -76,7 +79,7 @@ export class ChangePwdComponent implements OnInit {
         // check whether the entered password has a lower-case letter
         // check whether the entered password has upper-case letter
         // Has a minimum length of 8 characters and max length 30
-        Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/),
+        // Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z].{8,}')
       ]],
 
       confirmPassword: ['', [Validators.required]],
@@ -114,7 +117,7 @@ export class ChangePwdComponent implements OnInit {
       old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    console.log(newPassword);
+    console.log(newPassword, 'new password');
     this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.subscriptions.push(this.authService.logout().subscribe(() => {

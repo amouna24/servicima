@@ -1,28 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject, Subscription, Subject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { ProfileService } from '@core/services/profile/profile.service';
+import { ModalService } from '@core/services/modal/modal.service';
 
 import { IViewParam } from '@shared/models/view.model';
-import { ProfileService } from '@core/services/profile/profile.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { ModalService } from '@core/services/modal/modal.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { UploadService } from '@core/services/upload/upload.service';
-import { map } from 'rxjs/internal/operators/map';
-import { indicate } from '@core/services/utils/progress';
-import { AuthService } from '@widigital-group/auth-npm-front';
-import { DeactivateAccountComponent } from '@shared/components/deactivate-account/deactivate-account.component';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
-
 @Component({
   selector: 'wid-edit-user',
   templateUrl: './edit-user.component.html',
@@ -45,37 +36,26 @@ export class EditUserComponent implements OnInit, OnDestroy {
   typeList: IViewParam[];
   roleList: IViewParam[];
   avatar: any;
+  haveImage: any;
   photo: FormData;
-  progress = 0;
 
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
-  loading$ = new Subject<boolean>();
 
   constructor(private utilsService: UtilsService,
-              private uploadService: UploadService,
-              private route: ActivatedRoute,
               private profileService: ProfileService,
               private appInitializerService: AppInitializerService,
               private userService: UserService,
               private localStorageService: LocalStorageService,
               private modalService: ModalService,
               private formBuilder: FormBuilder,
-              public dialog: MatDialog,
-              private sanitizer: DomSanitizer,
-              private authService: AuthService,
-              private router: Router, ) {
+              ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
       this.modalService.registerModals(
         { modalName: 'changePassword', modalComponent: ChangePwdComponent});
-    this.modalService.registerModals(
-      { modalName: 'DeactivateAccountComponent', modalComponent: DeactivateAccountComponent});
   }
-
-  files = [];
-  url = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
@@ -88,18 +68,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.initForm();
+    this.userService.connectedUser$.subscribe((data) => {
+      if (!!data) {
+        this.infoUser = data;
+        this.user = data['user'][0];
+        this.companyName = data['company'][0]['company_name'];
+        this.companyId = data['company'][0]['_id'];
+        this.haveImage = data['user'][0]['photo'];
+        this.checkComponentAction(data);
+      }
+    });
     this.userService.avatar$.subscribe(
       avatar => {
         this.avatar = avatar;
-      });
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.infoUser = data;
-        this.companyName = data['company'][0]['company_name'];
-        this.companyId = data['company'][0]['_id'];
-        this.checkComponentAction(data);
       }
-    }));
+    );
   }
 
   /**
@@ -111,12 +94,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.showCompany = true;
     this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
     this.applicationId = connectedUser['user'][0]['userKey'].application_id;
-    this.user = connectedUser['user'][0];
     this.setForm();
     this.form.controls['userType'].disable();
     this.form.controls['homeCompany'].disable();
     this.form.controls['roleCtrl'].disable();
-
     this.getRefdata();
   }
 
@@ -125,7 +106,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      emailAddress: ['', [Validators.required, Validators.email]],
+      emailAddress: [{ value: '', disabled: true }],
       companyEmail: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -133,15 +114,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
       cellphoneNbr: [''],
       userType: ['', [Validators.required]],
       twitterAccount: [''],
-      genderProfil: [''],
+      genderProfil: ['', [Validators.required]],
       youtubeAccount: [''],
       linkedinAccount: [''],
       homeCompany: [''],
       roleCtrl: [''],
-      genderCtrl: [''],
       titleCtrl: [''],
       languageCtrl: [''],
-      genderFilterCtrl: [''],
       titleFilterCtrl: [''],
       languageFilterCtrl: [''],
       roleFilterCtrl: [''],
@@ -167,68 +146,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
       genderProfil: this.user['gender_id'],
       roleCtrl: this.userRole,
       languageCtrl: this.user['language_id'],
-      genderCtrl: this.user['gender_id'],
       titleCtrl: this.user['title_id'],
-      genderFilterCtrl: '',
       titleFilterCtrl: '',
       languageFilterCtrl: '',
       roleFilterCtrl: '',
     });
- //   this.getImage(this.user['photo']);
   }
 
-  /**
-   * @description : set the Image to UpLoad and preview
-   */
-  previewFile(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    // File Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.avatar = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption', file.name);
-    this.photo = formData;
-  }
-
-  /**
-   * @description : Upload Image to Server  with async to promise
-   */
-  async uploadFile(formData) {
-    return this.uploadService.uploadImage(formData)
-      .pipe(
-        indicate(this.loading$),
-        map(
-          response => response.file.filename
-        ))
-      .toPromise();
-  }
-
-  /**
-   * @description : Clear  preview  Image
-   */
-  clearPreview() {
-    this.photo = null;
-    this.avatar = null;
-  }
-
-  /**
-   * @description : GET IMAGE FROM BACK AS BLOB
-   *  create Object from blob and convert to url
-   */
- /* getImage(id) {
-   this.uploadService.getImage(id).subscribe(
-      data => {
-        const unsafeImageUrl = URL.createObjectURL(data);
-        this.avatar = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-      }, error => {
-        console.log(error);
-      });
-  }
-*/
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
@@ -241,13 +165,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.typeList = refData['PROFILE_TYPE'];
     this.roleList = refData['ROLE'];
     this.getLanguages();
-    this.filteredGender.next(this.genderList.slice());
     this.filteredTitle.next(this.titleList.slice());
     this.filteredLanguage.next(this.languages.slice());
     this.filteredRole.next(this.roleList.slice());
     this.utilsService.changeValueField(this.titleList, this.form.controls.titleFilterCtrl, this.filteredTitle);
     this.utilsService.changeValueField(this.languages, this.form.controls.languageFilterCtrl, this.filteredLanguage);
-    this.utilsService.changeValueField(this.genderList, this.form.controls.genderFilterCtrl, this.filteredGender);
     this.utilsService.changeValueField(this.roleList, this.form.controls.roleFilterCtrl, this.filteredRole);
   }
 
@@ -255,10 +177,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
-    /*  const confirmation = {
-        sentence: 'change password',
-      };
-  */
     this.modalService.displayModal('changePassword', null, '50%', '80%');
   }
 
@@ -269,12 +187,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
   async update(): Promise<void> {
     const newUser = {
       application_id: this.user['userKey'].application_id,
-      email_address: this.form.value.emailAddress,
+      email_address: this.user['userKey'].email_address,
       company_email: this.user['company_email'],
       user_type: this.user['user_type'],
       first_name: this.form.value.firstName,
       last_name: this.form.value.lastName,
-      gender_id: this.form.value.genderCtrl,
+      gender_id: this.form.value.genderProfil,
       prof_phone: this.form.value.profPhone,
       cellphone_nbr: this.form.value.cellphoneNbr,
       language_id: this.form.value.languageCtrl,
@@ -287,20 +205,19 @@ export class EditUserComponent implements OnInit, OnDestroy {
     };
 
     const confirmation = {
-      sentence: 'to update user',
-      name: newUser.first_name + newUser.last_name,
+      title: 'edit',
     };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
-      if (value === 'true') {
+    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '45%', '45%').subscribe((value) => {
+      if (value) {
         this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
           res => {
             if (res) {
               this.infoUser['user'][0] = res;
               this.userService.connectedUser$.next(this.infoUser);
-              this.subscriptionModal.unsubscribe();
             }
           }));
       }
+      this.subscriptionModal.unsubscribe();
     });
   }
 
@@ -308,7 +225,17 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description: Deactivate account
    */
   deactivateAccount(): void {
-    this.modalService.displayModal('DeactivateAccountComponent', null, '50%', '40%');
+    const desactivate = {
+      title: 'desactivate',
+    };
+    this.subscriptionModal =  this.modalService.displayConfirmationModal(desactivate, '45%', '45%').subscribe((value) => {
+      if (value ) {
+        console.log('compte desactivé');
+        this.subscriptionModal.unsubscribe();
+      }
+      this.subscriptionModal.unsubscribe();
+    });
+
   }
 
   /**
@@ -319,6 +246,23 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.languages = this.appInitializerService.languageList.map((language) => {
       return ({ value: language._id, viewValue: language.language_desc});
     });
+  }
+
+  /**
+   * @description: clear form
+   */
+  reset(): void {
+    this.form.get('firstName').setValue(null);
+    this.form.get('emailAddress').setValue(null);
+    this.form.get('lastName').setValue(null);
+    this.form.get('genderProfil').setValue(null);
+    this.form.get('profPhone').setValue(null);
+    this.form.get('cellphoneNbr').setValue(null);
+    this.form.get('languageCtrl').setValue(null);
+    this.form.get('titleCtrl').setValue(null);
+    this.form.get('linkedinAccount').setValue(null);
+    this.form.get('twitterAccount').setValue(null);
+    this.form.get('youtubeAccount').setValue(null);
   }
 
   /**

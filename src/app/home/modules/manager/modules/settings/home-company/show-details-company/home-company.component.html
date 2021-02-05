@@ -1,0 +1,176 @@
+<div class="container-show">
+  <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
+    <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
+      class="bg-white border-radius-20">
+      <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
+        <img src="assets/img/profile-pic.png" width="80" height="80" class="avatar"
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+      </div>
+      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
+        <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
+        <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
+      </div>
+      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px">
+          <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
+          </button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="flex-end">
+          <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
+          </button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="flex-end">
+          <button mat-button mat-raised-button class="btn-medium bg-error-red white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
+      fxFlexOffset="50px">
+      <div fxLayout="column" fxFlex="90" fxLayoutGap="20px">
+        <wid-scrollbar class="scrollbar">
+          <div fxLayout="column" fxFlex="100" class="m-l-20">
+            <div fxLayout="column" fxFlex="100">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <h5 class="steel">{{'company.generalinformation' | translate}} </h5>
+              </div>
+              <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'homecompany.companyname' | translate}}: </span>
+                    <span class="steel"> {{this.company['company_name']}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'user.lang'| translate}}: </span>
+                    <span class="steel"> {{lang}}</span>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'homecompany.vat' | translate}}: </span>
+                    <span class="steel"> {{vat}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'homecompany.registrationnumber' | translate}}: </span>
+                    <span class="steel"> {{this.company['reg_nbr']}}</span>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <h5 class="steel">{{'company.organisation' | translate}}:</h5>
+              </div>
+              <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.activitycode' | translate}}: </span>
+                    <span class="steel"> {{this.company['activity_code']}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'homecompany.activitydescription' | translate}}: </span>
+                    <span class="steel"> {{this.company['activity_desc']}}</span>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> {{'homecompany.currency' | translate}}: </span>
+                    <span class="steel"> {{ this.currency}}</span>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <h5 class="steel"> {{'company.contact' | translate}}:</h5>
+              </div>
+              <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.website' | translate}}: </span>
+                    <span class="steel"> {{this.company['web_site']}} </span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                    <span> Phone 1: </span>
+                    <span class="steel"></span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> Fax: </span>
+                    <span class="steel"> </span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.city' | translate}}: </span>
+                    <span class="steel"> {{this.company['city']}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.adress' | translate}}: </span>
+                    <span class="steel"> {{this.company['adress']}}</span>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.contactemail' | translate}}: </span>
+                    <span class="steel"> {{this.company['contact_email']}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> Phone 2: </span>
+                    <span class="steel"></span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.country' | translate}}: </span>
+                    <span class="steel"> {{country}}</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span> {{'homecompany.zipcode' | translate}}: </span>
+                    <span class="steel"> {{this.company['zip_code']}}</span>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <h5 class="steel">{{'company.socialnetwork' | translate}}:</h5>
+              </div>
+              <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
+                    <span class="font-size-12 steel"> {{this.company['linkedin_url']}} </span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
+                    <span class="font-size-12 steel"> {{this.company['youtube_url']}}</span>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
+                    <span class="font-size-12 steel"> {{this.company['twitter_url']}} </span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                    <span class="font-size-12 topaz"> + </span>
+                    <span class="font-size-12 steel"> {{'company.addlink' | translate}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </wid-scrollbar>
+      </div>
+      <div fxLayout="column" fxFlex="10" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10 m-b-10" fxLayoutGap="15px">
+          <button mat-button color="accent" [routerLink]="['/manager/settings/home-company/edit-company']"
+            mat-raised-button class="btn-small white">
+            {{'company.edit' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

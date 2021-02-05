@@ -177,7 +177,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     };
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
-      if (value === 'true') {
+      if (value === true) {
         this.subscriptions.push( this.profileService.userChangeStatus(id, status, this.credentials['email_address']).subscribe(
           () => {
             this.load();

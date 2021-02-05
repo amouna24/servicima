@@ -2,10 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UploadService } from '@core/services/upload/upload.service';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/internal/operators/map';
-import { indicate } from '@core/services/utils/progress';
 import { IUserModel } from '@shared/models/user.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '@widigital-group/auth-npm-front';
@@ -45,8 +42,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   sidebarState: string;
   user: IUserModel;
   avatar: any;
-  selectedFile = { file: null, name: '' };
-  loading$ = new Subject<boolean>();
+  haveImage: any;
   moduleName: string;
   menu = [];
   subMenu: IChildItem[] = [];
@@ -62,7 +58,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private router: Router,
     private sidenavService: SidenavService,
     private userService: UserService,
-    private uploadService: UploadService,
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
     private localStorageService: LocalStorageService,
@@ -79,6 +74,29 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.subMenu = [];
   }
   ngOnInit(): void {
+   this.getModuleName();
+   this.getSelectedTheme();
+   this.getStateSidenav();
+    this.userService.connectedUser$.subscribe((data) => {
+      if (!!data) {
+        this.user = data['user'][0];
+        this.haveImage = data['user'][0]['photo'];
+        if (!this.haveImage) {
+          this.userService.haveImage$.subscribe((res) => {
+              this.haveImage = res;
+            }
+          );
+        }
+      }
+    });
+    this.userService.avatar$.subscribe(
+      avatar => {
+        this.avatar = avatar;
+      }
+    );
+  }
+
+  getModuleName() {
     this.userService.moduleName$
       .pipe(
         takeUntil(this.destroy$)
@@ -90,6 +108,24 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         (err) => {
           console.error(err);
         });
+  }
+
+  /**
+   * @description get state sidenav
+   */
+  getStateSidenav() {
+    this.sidenavService.rightSidebarStateObservable$.
+    subscribe((newState: string) => {
+      this.sidebarState = newState;
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  /**
+   * @description get selected theme
+   */
+  getSelectedTheme(): void {
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred[ 'email_address'];
     this.listColor = listColor;
@@ -100,78 +136,14 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.sidenavService.rightSidebarStateObservable$.
-    subscribe((newState: string) => {
-      this.sidebarState = newState;
-    }, (err) => {
-      console.error(err);
-    });
-    this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.user = data['user'][0];
-      }
-    });
-    this.userService.avatar$.subscribe(
-      avatar => {
-        this.avatar = avatar;
-      }
-    );
   }
 
-  toggleSideNav() {
+  /**
+   * @description toggle sidenav
+   */
+  toggleSideNav(): void {
     this.sidenavService.toggleRightSideNav();
     this.subMenu = [];
-  }
-
-  /**
-   * @description : set the Image to UpLoad and preview
-   */
-  previewFile(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    // File Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.avatar = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption', file.name);
-    this.selectedFile.file = formData;
-    this.selectedFile.name = file.name;
-  }
-
-  /**
-   * @description : Upload Image to Server  with async to promise
-   */
-  async uploadFile() {
-    const filename = await this.uploadService.uploadImage(this.selectedFile.file)
-      .pipe(
-        indicate(this.loading$),
-        map(
-          response => response.file.filename
-        ))
-      .toPromise();
-    this.user.email_address = this.user.userKey.email_address;
-    this.user.application_id = this.user.userKey.application_id;
-    this.user.photo = filename;
-    this.profileService.updateUser(this.user).subscribe(
-      (res) => {
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this.userService.getImage(filename);
-    this.selectedFile.file = null;
-  }
-
-  /**
-   * @description : Clear  preview  Image
-   */
-  clearPreview() {
-    this.selectedFile = null;
-    this.avatar = this.userService.avatar$.getValue();
   }
 
   /**
@@ -224,7 +196,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
 
   /**
    * @description Display image
-   * @param color: color
    */
   displayImage(): void {
     switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {

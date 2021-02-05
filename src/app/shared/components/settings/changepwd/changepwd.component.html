@@ -27,10 +27,7 @@
             <mat-icon class="icon-password" matSuffix (click)="hidePassword = !hidePassword">
               {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="form.controls.password.errors?.required">Required filed</mat-error>
-            <mat-error *ngIf="form.controls.password.errors?.pattern">Password must contain between 8 to 30
-              characters
-              , must contain one upper-case letter<br>
-              must contain one numeric character.</mat-error>
+            <mat-error *ngIf="form.controls.password.errors?.pattern">{{ 'updatepwd.invalidpwq' | translate }}.</mat-error>
           </mat-form-field>
         </div>
         <!-- Confirm Password -->
