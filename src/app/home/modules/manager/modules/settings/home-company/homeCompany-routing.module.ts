@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeCompanyComponent } from './home-company.component';
+import { HomeCompanyComponent } from './show-details-company/home-company.component';
+import { EditCompanyHomeComponent } from './edit-company-home/edit-company-home.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,13 @@ const routes: Routes = [
     component: HomeCompanyComponent,
     data: {
       breadcrumb: 'company'
+    },
+  },
+  {
+    path: 'edit-company',
+    component: EditCompanyHomeComponent,
+    data: {
+      breadcrumb: 'edit-company'
     },
   },
 ];

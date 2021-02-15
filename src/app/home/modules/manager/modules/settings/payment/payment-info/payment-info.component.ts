@@ -17,7 +17,6 @@ export class PaymentInfoComponent implements OnInit {
   ngOnInit(): void {
     this.companyPaymentTermsService.getPaymentTerms().subscribe((data) => {
       this.ELEMENT_DATA = data;
-      console.log(this.ELEMENT_DATA);
       // to review
      this.ELEMENT_DATA.forEach((payment) => {
        payment['payment_terms_code'] = payment['paymentTermsKey'].payment_terms_code;

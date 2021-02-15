@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '@core/services/user/user.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
-import { MatDialog } from '@angular/material/dialog';
+
 import { UtilsService } from '@core/services/utils/utils.service';
-import { IUserInfo } from '@shared/models/userInfo.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
-import { IUserModel } from '@shared/models/user.model';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
+import { UserService } from '@core/services/user/user.service';
+
+import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
+import { IUserModel } from '@shared/models/user.model';
+import { IUserInfo } from '@shared/models/userInfo.model';
 
 @Component({
   selector: 'wid-header',
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   licenceType: string;
   licenceCode: string;
   endLicence: number;
+  haveImage: any;
   emailAddress: string;
   /** subscription */
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -33,7 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private router: Router,
               private userService: UserService,
               private utilService: UtilsService,
-              public dialog: MatDialog,
               private modalsServices: ModalService,
               private sidenavService: SidenavService,
               private spinnerService: SpinnerService,
@@ -87,6 +88,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
     this.name = `${userInfo['user'][0]['first_name']}  ${userInfo['user'][0]['last_name']}`;
     this.companyLicenceList = userInfo['companylicence'][0];
+    this.haveImage = userInfo['user'][0]['photo'];
+    if (!this.haveImage) {
+      this.userService.haveImage$.subscribe((res) => {
+        this.haveImage = res;
+      });
+    }
     this.licenceType = this.companyLicenceList['companyLicenceKey']['licence_type'];
     this.licenceCode = this.companyLicenceList['companyLicenceKey']['licence_code'];
     this.endLicence = this.utilService.differenceDay(this.companyLicenceList['licence_end_date'], Date.now());

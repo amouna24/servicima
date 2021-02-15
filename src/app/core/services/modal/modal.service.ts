@@ -6,17 +6,16 @@ import { Subject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ModalService {
-  appModals: Array<{ modalName: string, modalComponent: any }>;
-  confirmationModalResponse$ = new Subject<string>();
+  appModals: Array<{ modalName: string, modalComponent: any }> = [];
+  confirmationModalResponse$ = new Subject<boolean>();
   constructor(public dialog: MatDialog) { }
 
   openModal(): void {
   }
 
-  // registre modal component reference and name
-  registerModals(modalsList: Array<{ modalName: string, modalComponent: any }>) {
-    this.appModals = modalsList;
-    console.log(this.appModals);
+  // register modal component reference and name
+  registerModals(modalsList: { modalName: string, modalComponent: any }) {
+    this.appModals.push(modalsList) ;
   }
 
   // get modal component reference using modal component name
@@ -44,15 +43,17 @@ export class ModalService {
   }
 
   // display global confirmation modal
-  displayConfirmationModal(modalData: object): Subject<string> {
+  displayConfirmationModal(modalData: object, modalWidth?: string, modalHeight?: string): Subject<boolean> {
     const modalComponent = this.getModalComponentRef('confirmation');
     this.dialog.open(modalComponent, {
-      data: modalData
+      data: modalData,
+      height: modalHeight,
+      width: modalWidth,
     });
     return this.confirmationModalResponse$;
   }
 
-  emitConfirmationModalResponse(confirmationResponse: string) {
+  emitConfirmationModalResponse(confirmationResponse: boolean) {
     this.confirmationModalResponse$.next(confirmationResponse);
   }
 }

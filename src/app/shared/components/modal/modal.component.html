@@ -2,21 +2,21 @@
 
   <div class="modal-dialog" fxLayout="column" fxFlex="100">
 
-  <div class="modal-header" fxFlex="20" >
+  <div class="modal-header" fxFlex="15" >
       <div fxFlex="100" fxFlex.xs="50" fxLayout="row" fxLayout.xs="column" fxLayoutAlign=" center" fxLayoutGap="10px" fxFlexOffset="9">
             <div class="font-size-25"   fxFlex="90" [style.color]="modelConfig.style.colorTitle">{{modelConfig.title}}</div>
         <img src="assets/icons/close.svg" class="bg-close" [mat-dialog-close]="false">
       </div>
   </div>
 
-  <div class="modal-content-container" fxFlex="55" >
+  <div class="modal-content-container" fxFlex="60" >
     <wid-scrollbar class="scrollbar">
       <ng-content  select="[modal-body]">
       </ng-content>
     </wid-scrollbar>
   </div>
 
-  <div class="modal-footer" fxFlex="25" fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="30px">
+  <div class="modal-footer" fxFlex="40" fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="30px">
       <button mat-button class="btn-medium" (click)="confirm()"
         [style.background-color]="modelConfig.button.buttonLeft.background"
         [style.color]="modelConfig.button.buttonLeft.color" *ngIf="modelConfig.button.buttonLeft.visible"

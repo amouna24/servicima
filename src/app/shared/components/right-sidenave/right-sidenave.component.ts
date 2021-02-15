@@ -2,10 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UploadService } from '@core/services/upload/upload.service';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/internal/operators/map';
-import { indicate } from '@core/services/utils/progress';
 import { IUserModel } from '@shared/models/user.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '@widigital-group/auth-npm-front';
@@ -77,6 +74,29 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.subMenu = [];
   }
   ngOnInit(): void {
+   this.getModuleName();
+   this.getSelectedTheme();
+   this.getStateSidenav();
+    this.userService.connectedUser$.subscribe((data) => {
+      if (!!data) {
+        this.user = data['user'][0];
+        this.haveImage = data['user'][0]['photo'];
+        if (!this.haveImage) {
+          this.userService.haveImage$.subscribe((res) => {
+              this.haveImage = res;
+            }
+          );
+        }
+      }
+    });
+    this.userService.avatar$.subscribe(
+      avatar => {
+        this.avatar = avatar;
+      }
+    );
+  }
+
+  getModuleName() {
     this.userService.moduleName$
       .pipe(
         takeUntil(this.destroy$)
@@ -88,6 +108,24 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         (err) => {
           console.error(err);
         });
+  }
+
+  /**
+   * @description get state sidenav
+   */
+  getStateSidenav() {
+    this.sidenavService.rightSidebarStateObservable$.
+    subscribe((newState: string) => {
+      this.sidebarState = newState;
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  /**
+   * @description get selected theme
+   */
+  getSelectedTheme(): void {
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred[ 'email_address'];
     this.listColor = listColor;
@@ -98,26 +136,12 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.sidenavService.rightSidebarStateObservable$.
-    subscribe((newState: string) => {
-      this.sidebarState = newState;
-    }, (err) => {
-      console.error(err);
-    });
-    this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.user = data['user'][0];
-        this.haveImage = data['user'][0]['photo'];
-      }
-    });
-    this.userService.avatar$.subscribe(
-      avatar => {
-        this.avatar = avatar;
-      }
-    );
   }
 
-  toggleSideNav() {
+  /**
+   * @description toggle sidenav
+   */
+  toggleSideNav(): void {
     this.sidenavService.toggleRightSideNav();
     this.subMenu = [];
   }
@@ -172,7 +196,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
 
   /**
    * @description Display image
-   * @param color: color
    */
   displayImage(): void {
     switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {

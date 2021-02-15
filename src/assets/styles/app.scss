@@ -152,7 +152,6 @@ html, body{
 /*******************
 Paddings
 *******************/
-html body {
 .p-0 {
     padding: 0;
 }
@@ -243,7 +242,6 @@ html body {
 .p-b-40 {
     padding-bottom: 40px;
 }
-}
 
 /*******************
       align
@@ -282,7 +280,6 @@ html body {
 /*******************
       Margin
 *******************/
-html body {
 .m-0 {
     margin: 0;
 }
@@ -352,7 +349,7 @@ html body {
 }
 
 .m-t-20 {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
 .m-t-30 {
@@ -390,12 +387,10 @@ html body {
 .m-b-40 {
     margin-bottom: 40px;
 }
-}
 
 /*******************
     font weight
 *******************/
-html body {
 .font-bold {
     font-weight: $font-weight-700;
 }
@@ -419,7 +414,7 @@ html body {
 *******************/
 .font-size-9 {
     font-size: 9px;
-  }
+}
 .font-size-10 {
    font-size: 10px;
 }
@@ -443,24 +438,29 @@ html body {
 }
 .font-size-19 {
     font-size: 19px;
-  }
+}
 .font-size-20 {
     font-size: 20px;
-    }
+}
 .font-size-25 {
     font-size: 25px;
 }
 .font-size-38{
   font-size: 38px;
 }
-}
 
 
 /*******************
        Line height
 *******************/
+.line-height-2{
+  line-height: 2;
+}
 .line-height-3{
     line-height: 3;
+}
+.line-height-4{
+  line-height: 4;
 }
 .line-height-20{
    line-height: 20px !important;
@@ -479,7 +479,7 @@ html body {
 }
 .black {
     color: $black;
-  }
+}
 .white {
   color: $white !important;
 }
@@ -494,6 +494,9 @@ html body {
 }
 .steel{
   color: $steel;
+}
+.topaz{
+  color: $topaz !important;
 }
 .black-three {
   color: $black-three;
@@ -563,6 +566,7 @@ html body {
 .full-width {
   width: 100%;
 }
+
 /*******************
  full-height
 *******************/
@@ -571,6 +575,9 @@ html body {
 }
 .full-screen-height {
   height: 100vh !important;
+}
+.min-full-screen-height {
+  min-height: 100vh !important;
 }
 .mat-raised-button{
   box-shadow: none !important;
@@ -637,3 +644,25 @@ html body {
   padding: 1px 3px;
 }
 
+.decoration{
+  text-decoration: underline;
+}
+
+.required:after {
+  content:" *";
+  color: red;
+}
+
+/*******************
+   user
+*******************/
+.container-show{
+  height: 95% !important;
+}
+.container-edit{
+  height: 95% !important;
+  width: 95%;
+}
+.container-btn{
+  width: 43px;
+}

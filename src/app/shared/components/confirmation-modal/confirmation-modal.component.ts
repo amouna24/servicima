@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -9,22 +9,70 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ConfirmationModalComponent implements OnInit {
 
-  constructor(  private modalService: ModalService,
-                public dialogRef: MatDialogRef<ConfirmationModalComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private modalService: ModalService, ) {
+  }
 
+  modelConfig: any;
   ngOnInit(): void {
-  }
-  /**
-   * @description CLose Dialog OnNoClick on Cancel Button
-   */
-  onNoClick(): void {
-    this.modalService.emitConfirmationModalResponse('false');
-    this.dialogRef.close();
+    this.displayStyle();
   }
 
-  onSubmitAction(value: string): void {
-    this.modalService.emitConfirmationModalResponse(value);
-    this.dialogRef.close();
+  onNotify(res: boolean): void {
+      this.dialogRef.close();
+      this.modalService.emitConfirmationModalResponse(res);
+  }
+
+  displayStyle() {
+    switch (this.data.title) {
+      case 'desactivate': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'Desactivate',
+              color: ' #f3f6f9',
+              background: '#d24d57'
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9'
+            },
+          },
+          style: {
+          }
+        };
+
+        break;
+      }
+      case 'edit': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'Confirm',
+              color: ' #f3f6f9',
+              background: '#0459bc'
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9'
+            },
+          },
+          style: { }
+        };
+        break;
+      }
+      default: {
+        return '';
+      }
+    }
   }
 }

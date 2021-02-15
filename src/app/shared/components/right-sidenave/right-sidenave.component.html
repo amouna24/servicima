@@ -10,7 +10,7 @@
         </div>
       </div>
       <div fxFlex="30"  fxLayout="column"  fxLayoutAlign="center start" class="profile-image">
-        <wid-profile-image [haveImage]="haveImage" [avatar]="avatar" [modelObject]="user"></wid-profile-image>
+        <wid-profile-image [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user"></wid-profile-image>
       </div>
       <div fxFlex="55" fxLayout="column" fxLayoutAlign="center start">
           <span class="brownish-grey font-size-14">{{user.first_name}} {{ user.last_name}}</span>
@@ -30,7 +30,7 @@
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
             <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
-               class="list-item" [@iconAnimation]="sidebarState"  >
+               class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>

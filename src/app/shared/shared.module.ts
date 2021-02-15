@@ -25,13 +25,15 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { UploadSheetComponent } from './components/upload-sheet/upload-sheet.component';
-import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/home-company.component';
+import { HomeCompanyComponent } from '../home/modules/manager/modules/settings/home-company/show-details-company/home-company.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { DeactivateAccountComponent } from './components/deactivate-account/deactivate-account.component';
+import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
+import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
+import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settings/home-company/edit-company-home/edit-company-home.component';
 
 @NgModule({
   declarations: [
@@ -54,8 +56,10 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     AlertComponent,
     DynamicComponent,
     ModalComponent,
-    DeactivateAccountComponent,
     ProfileImageComponent,
+    EditUserComponent,
+    ModalSocialWebsiteComponent,
+    EditCompanyHomeComponent,
 
   ],
   imports: [
@@ -100,7 +104,8 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     AlertComponent,
     RightSidenaveComponent,
     ScrollbarModule,
-    DynamicComponent
+    DynamicComponent,
+    EditCompanyHomeComponent
   ]
 })
 export class SharedModule { }

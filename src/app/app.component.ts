@@ -13,9 +13,7 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  modals = [
-    { modalName: 'confirmation', modalComponent: ConfirmationModalComponent },
-  ];
+  modals = { modalName: 'confirmation', modalComponent: ConfirmationModalComponent };
   title = 'WIDIGITAL ' + environment.env;
   iconsList = [
     { name: 'wi-bag', path: 'assets/icons/bag.svg'},
@@ -49,6 +47,11 @@ export class AppComponent implements OnInit {
     { name: 'wi_youtube', path: 'assets/icons/youtube-square-brands.svg'},
     { name: 'wi_twitter', path: 'assets/icons/twitter-square-brands.svg'},
     { name: 'wi_linkedin', path: 'assets/icons/linkedin-brands.svg'},
+    /* Gender Icons */
+    { name: 'wi_male', path: 'assets/icons/male.svg'},
+    { name: 'wi_female', path: 'assets/icons/female.svg'},
+    /* email Icons */
+    { name: 'wi_email', path: 'assets/icons/email.svg'},
   ];
   constructor(
     private authService: AuthService,
