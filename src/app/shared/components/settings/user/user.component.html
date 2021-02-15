@@ -1,157 +1,176 @@
-<div fxLayout="row" fxFlexOffset="20px" class="p-t-20" fxFlex="100" fxLayoutGap="20px" style=" height: 80vh">
+<div class="container-show">
+  <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
 
-  <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
-    class="bg-white border-radius-20">
-    <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image marg-top">
-      <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
-        [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
-    </div>
-
-    <div fxLayout="column" fxLayoutGap="5px" fxFlex="20">
-      <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
-      <span class="cool-grey font-size-10">{{user.company_email}}</span>
-      <span class="cool-grey font-size-10">{{gender}}</span>
-    </div>
-    <div fxLayout="column" fxFlex="50" fxLayoutGap="20px" class="mar-bottom">
-      <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px">
-        <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
-          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
-          </div>
-        </button>
-
+    <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
+      class="bg-white border-radius-20">
+      <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
+        <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
       </div>
-      <div fxLayout="row" fxLayoutAlign="flex-end">
-        <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
-          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
-          </div>
-        </button>
 
-      </div>
-      <div fxLayout="row" fxLayoutAlign="flex-end">
-        <button mat-button mat-raised-button class="btn-medium bg-error-red white">
-          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-            <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
-          </div>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px"
-       class="bg-white border-radius-20" fxFlexOffset="50px">
-    <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
-      <div fxLayout="column" fxFlex="90" class="m-l-20">
-
-        <div fxLayout="row" fxLayoutGap="20px">
-          <h5 class="steel">Personnel information :</h5>
+      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
+        <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
+        <div fxLayout="row" fxFlex="80">
+          <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
+          </mat-icon>
+          <span class="cool-grey font-size-10">{{user.company_email}}</span>
         </div>
-        <div fxLayout="row">
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.firstname'| translate}}: </span>
-              <span class="steel"> {{user.first_name}}</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.lang'| translate}}: </span>
-              <span class="steel"> {{lang}}</span>
-            </div>
-          </div>
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.lastname'| translate}}: </span>
-              <span class="steel"> {{user.last_name}}</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.gender'| translate}}: </span>
-              <span class="steel"> {{gender}}</span>
-            </div>
-          </div>
-        </div>
-
-        <div fxLayout="row">
-          <h5 class="steel">Professional information :</h5>
-        </div>
-        <div fxLayout="row">
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span > {{'user.job'| translate}}: </span>
-              <span class="steel"> {{title}}</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.profiletype'| translate}}: </span>
-              <span class="steel"> {{user.user_type | titlecase}}</span>
-            </div>
-          </div>
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.role' | translate}}: </span>
-              <span class="steel"> {{userRole | titlecase}}</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.homecompany'| translate}}: </span>
-              <span class="steel"> {{user.company_email}}</span>
-            </div>
-          </div>
-        </div>
-
-
-        <div fxLayout="row">
-          <h5 class="steel">Contact :</h5>
-        </div>
-
-        <div fxLayout="row">
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span> {{'user.directline'| translate}}: </span>
-              <span class="steel"> {{user.cellphone_nbr}} </span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-              <span > {{'user.email'| translate}}: </span>
-              <span class="steel"> {{user.email_address}}</span>
-            </div>
-          </div>
-
-
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px"  class="font-size-12">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span > {{'use.profcellphone'| translate}}: </span>
-              <span class="steel"> {{user.cellphone_nbr}}</span>
-            </div>
-          </div>
-        </div>
-
-        <div fxLayout="row">
-          <h5 class="steel">Social network :</h5>
-        </div>
-        <div fxLayout="row">
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-              <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span class="font-size-12"> {{'youtubeacc'| translate}}: </span>
-              <span class="font-size-12 steel"> {{user.email_address}}</span>
-            </div>
-          </div>
-
-          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-              <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-              <span  class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
-            </div>
+        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="55">
+          <div fxLayout="row" fxFlex="80">
+            <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon={{icon}}>
+            </mat-icon>
+            <span class="cool-grey font-size-10">{{gender}}</span>
           </div>
         </div>
       </div>
-      <div fxLayout="column" fxFlex="10" fxLayoutAlign="center flex-end">
-        <div fxLayout="column" fxLayoutAlign="flex-end flex-end">
-          <button mat-button color="accent" mat-raised-button class="btn-small" class="white">
-            edit
+      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px">
+          <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
           </button>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="flex-end">
+          <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
+          </button>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="flex-end">
+          <button mat-button mat-raised-button class="btn-medium bg-error-red white">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
+              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
+      fxFlexOffset="50px">
+
+      <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
+        <div fxLayout="column" fxFlex="100" class="m-l-20">
+          <div fxLayout="column" fxFlex="90">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
+            </div>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.firstname'| translate}}: </span>
+                  <span class="steel"> {{user.first_name}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.lang'| translate}}: </span>
+                  <span class="steel"> {{lang}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.lastname'| translate}}: </span>
+                  <span class="steel"> {{user.last_name}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.gender'| translate}}: </span>
+                  <span class="steel"> {{gender}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div fxLayout="row">
+              <h5 class="steel">{{'user.professionalinformation'| translate}}:</h5>
+            </div>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span> {{'user.job'| translate}}: </span>
+                  <span class="steel"> {{title}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.profiletype'| translate}}: </span>
+                  <span class="steel"> {{user.user_type | titlecase}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.role' | translate}}: </span>
+                  <span class="steel"> {{userRole | titlecase}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.homecompany'| translate}}: </span>
+                  <span class="steel"> {{user.company_email}}</span>
+                </div>
+              </div>
+            </div>
+
+
+            <div fxLayout="row">
+              <h5 class="steel"> {{'user.contact'| translate}}:</h5>
+            </div>
+
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span> {{'user.directline'| translate}}: </span>
+                  <span class="steel"> {{user.cellphone_nbr}} </span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
+                  <span> {{'user.email'| translate}}: </span>
+                  <span class="steel"> {{user.email_address}}</span>
+                </div>
+              </div>
+
+
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span> {{'use.profcellphone'| translate}}: </span>
+                  <span class="steel"> {{user.cellphone_nbr}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div fxLayout="row">
+              <h5 class="steel"> {{'ser.socialnetwork'| translate}}:</h5>
+            </div>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
+                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
+                  <span class="font-size-12 steel"> {{user.email_address}}</span>
+                </div>
+              </div>
+
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
+                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                  <span class="font-size-12 topaz"> + </span>
+                  <span class="font-size-12 steel"> Add link </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
+            <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
+              <button mat-button color="accent" [routerLink]="['/manager/user/edit-profile']" mat-raised-button
+                class="btn-small white">
+                {{'user.edit'| translate}}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

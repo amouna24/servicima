@@ -220,16 +220,38 @@ export class UtilsService {
     return text.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0) + '';
   }
 
-/**************************************************************************
- * @description get view value
- * @param id: string
- * @param list: array
- * @return view value
- *************************************************************************/
-getViewValue(id: string, list): string {
-  return list
-    .find(value =>
-      value.value === id
-    ).viewValue;
-}
+  /**************************************************************************
+   * @description get view value
+   * @param id: string
+   * @param list: array
+   * @return view value
+   *************************************************************************/
+  getViewValue(id: string, list): string {
+    if (id) {
+    return list
+      .find(value =>
+        value.value === id
+      ).viewValue;
+  }
+  }
+
+  /**
+   * @description get country
+   * @params lang: language code
+   */
+  getCountry(lang: string) {
+    return this.appInitializerService.countriesList.filter(
+      element => element['LANGUAGE_CODE'] === lang);
+  }
+
+  /**
+   * @description get code language
+   * @param id: language_id
+   * @returns code language
+   */
+  getCodeLanguage(id: string): string {
+    return this.appInitializerService.languageList
+      .find(language => language._id === id).LanguageKey.language_code;
+  }
+
 }

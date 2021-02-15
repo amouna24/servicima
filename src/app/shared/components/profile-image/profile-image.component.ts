@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { indicate } from '@core/services/utils/progress';
+
 import { map } from 'rxjs/internal/operators/map';
+import { Subject } from 'rxjs';
+
+import { indicate } from '@core/services/utils/progress';
+import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { Subject } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ProfileService } from '@core/services/profile/profile.service';
 
 @Component({
   selector: 'wid-profile-image',
@@ -17,13 +18,12 @@ export class ProfileImageComponent implements OnInit {
   @Input() avatar: any;
   @Input() haveImage: any;
   @Input() modelObject: any;
+  page = Math.random();
   selectedFile = { file: null, name: '' };
   loading$ = new Subject<boolean>();
-
   constructor(
     private uploadService: UploadService,
     private userService: UserService,
-    private sanitizer: DomSanitizer,
     private profileService: ProfileService,
   ) { }
 
@@ -38,14 +38,15 @@ export class ProfileImageComponent implements OnInit {
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-      this.avatar = reader.result as string;
+     this.avatar = reader.result as string;
+     this.haveImage = 'have image';
     };
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption', file.name);
-    this.selectedFile.file = formData;
-    this.selectedFile.name = file.name;
+   reader.readAsDataURL(file);
+      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+     formData.append('file', file);
+     formData.append('caption', file.name);
+     this.selectedFile.file = formData;
+     this.selectedFile.name = file.name;
   }
 
   /**
@@ -63,10 +64,11 @@ export class ProfileImageComponent implements OnInit {
     this.modelObject.application_id = this.modelObject.userKey.application_id;
     this.modelObject.photo = filename;
     this.profileService.updateUser(this.modelObject).subscribe(
-      (res) => {
+      () => {
+        this.userService.haveImage('have image');
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
     this.userService.getImage(filename);
@@ -80,5 +82,4 @@ export class ProfileImageComponent implements OnInit {
     this.selectedFile = null;
     this.avatar = this.userService.avatar$.getValue();
   }
-
 }
