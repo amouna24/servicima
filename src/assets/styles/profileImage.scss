@@ -1,0 +1,134 @@
+/***********************/
+/******IMAGE INPUT******/
+/***********************/
+.profile-image {
+  border-radius: 50%;
+  position: relative;
+  img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  }
+  .btn-action {
+    background: white;
+    right: 5%;
+    top: 5%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+    }
+  }
+  .btn-cancel {
+    right: 5%;
+    bottom: 1%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+
+    }
+  }
+  .btn-validate {
+    right: 86%;
+    bottom: 0%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+
+    }
+  }
+}
+
+.progress {
+  position: absolute;
+  -webkit-filter: grayscale(0%);
+  border-radius: 50%;
+  animation-name: spinning-circle;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  width: 85px;
+  height: 85px;
+  outline-color: #ea3556;
+  // background-color: #399953;
+  background-repeat: no-repeat;
+  background-size: 50% 50%, 50% 50%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-image: linear-gradient(#377af5, #f0f3f8);
+}
+
+@-webkit-keyframes spinning-circle {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+[type="file"] + label {
+  border: none;
+  border-radius: 1px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: inherit;
+  outline: none;
+  padding: 0.5rem 30px;
+  vertical-align: middle;
+  &.btn-2 {
+    background-color: #8dde06;
+    border-radius: 50px;
+    overflow: hidden;
+  }
+}
+
+.mat-checkbox-inner-container {
+  display: none !important;
+}

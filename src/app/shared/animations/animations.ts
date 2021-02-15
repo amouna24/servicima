@@ -13,19 +13,21 @@ import {
 const defaultDuration = '300ms';
 const defaultMinWidth = '71px';
 const defaultMaxWidth = '248px';
-const rightSideNavWidth = '350px';
+const defaultSettingMaxWidth = '344px';
 const defaultMinFontSize = '20px';
 const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
 const defaultMinPosition = '51px';
 
 export function mainContentAnimation(animationDuration: string = defaultDuration,
-  minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth): AnimationTriggerMetadata {
+minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth,
+maxWidthSetting: string = defaultSettingMaxWidth): AnimationTriggerMetadata {
   return trigger('mainContent', [
     state('close', style({ 'margin-left': minWidth })),
     state('open', style({ 'margin-left': maxWidth })),
-   /* transition('close => open', animate(`${animationDuration} ease-in`)),
-    transition('open => close', animate(`${animationDuration} ease-out`)),*/
+    state('setting', style({ 'margin-left': maxWidthSetting })),
+   transition('close => open', animate(`${animationDuration} ease-in`)),
+    transition('open => close', animate(`${animationDuration} ease-out`)),
   ]);
 }
 

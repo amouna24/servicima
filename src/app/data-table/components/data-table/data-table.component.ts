@@ -44,8 +44,8 @@ export class DataTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.temp = [...this.data];
-    this.modalService.registerModals([
-      { modalName: 'dataTableConfiguration', modalComponent: ConfigurationModalComponent }]);
+    this.modalService.registerModals(
+      { modalName: 'dataTableConfiguration', modalComponent: ConfigurationModalComponent });
     this.dataTableService.getDefaultTableConfig(this.tableCode).subscribe(
       res => {
         this.modalConfiguration = res;

@@ -1,10 +1,8 @@
-<div class="confirm-dialog-container" fxFlexFill fxLayout="column" fxLayout.xs="column" fxLayoutGap="10px">
-  <div fxFlex="50" fxFlex.xs="50" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
-    <span fxFlex="90" >Are you sure to {{data.Title }} this model ?</span>
-    <mat-icon fxFlex="10"  id="close-icon" [mat-dialog-close]="false">close</mat-icon>
+<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" class="full-height ">
+
+  <div modal-body fxFlex="100" fxFlex.xs="50" fxLayout="column"  fxFlexOffset="9">
+    <h5 class=" steel">{{data.title | titlecase}} Account :</h5>
+    <div class="font-size-19 line-height-3" >Are you sure you want to {{data.title}} your account !</div>
   </div>
-  <div fxFlex="50" fxFlex.xs="50" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
-    <button mat-flat-button mat-stroked-button fxFlex="50" (click)="onSubmitAction('true')" [mat-dialog-close]="true">Confirm</button>
-    <button mat-flat-button mat-stroked-button fxFlex="50" (click)="onSubmitAction('false')" [mat-dialog-close]="false">Cancel</button>
-  </div>
-</div>
+
+</wid-model-modal>

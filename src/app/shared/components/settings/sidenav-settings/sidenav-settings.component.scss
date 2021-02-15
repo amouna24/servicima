@@ -1,17 +1,14 @@
 .setting-side-nav-container {
   overflow: hidden;
-  animation-duration: 1s;
-  animation-name: slideIn;
+  width: 344px;
   .setting-side-nav-menu {
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16);
-
     mat-nav-list {
       .item {
         .icon {
           stroke: white;
           fill: none;
         }
-
         &:hover {
           background-color: rgba(243, 246, 249, 0.1);
         }
@@ -24,12 +21,7 @@
       .submenu-item {
         &:hover {
           background-color: rgba(243, 246, 249, 0.3);
-
-          p {
-            color: #67809f !important;
-          }
         }
-
       }
     }
   }
@@ -40,15 +32,17 @@
   p {
     color: #67809f !important;
   }
-}
+  &:hover{
+    background-color: #f3f6f9 !important;
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    width: 0;
+    p {
+      color: #67809f !important;
+    }
   }
-  to {
-    opacity: 1;
-    width: 344px;
+}
+.active-menu-item{
+  background-color: #f3f6f9;
+  .icon {
+    stroke: #67809f !important;
   }
 }

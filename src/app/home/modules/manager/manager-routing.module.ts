@@ -50,7 +50,7 @@ const routes: Routes = [
       },
       {
         path: 'user',
-        loadChildren: () => import('@core/../shared/components/settings/user/user.module').then(m => m.UserModule)
+        loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
       }
     ]
   }

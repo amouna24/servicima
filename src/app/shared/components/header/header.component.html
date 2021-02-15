@@ -1,18 +1,22 @@
-<mat-toolbar class="wid-header bg-white" fxLayout="row" fxLayoutAlign="start center">
-  <h6 class="font-semi-bold m-r-15">{{licenceCode }}</h6>
-  <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
-  <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
-          mat-raised-button color="warn"   class="btn-small buy-btn" >
-  <!-- <button  (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
-          mat-raised-button color="primary" class="btn-small buy-btn"> -->
-    <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
-  <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
-  </button>
-  <mat-form-field class="search-bar ml-auto relative" appearance="fill" fxLayoutAlign="center center">
-    <input matInput  type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
-    <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
-  </mat-form-field>
-  <div fxLayoutAlign="center center" class="user-avatar bg-theme" (click)="toggleSideNav()">
-    <img [src]="avatar ? avatar : 'assets/img/default.jpg'" class="img-rounded">
+<mat-toolbar fxFlexOffset="3" class="wid-header bg-white" fxLayout="row"
+             fxLayoutAlign="center center" fxFlex="94">
+  <div fxLayout="row" fxFlex="60" fxLayoutAlign="start center" fxLayoutGap="20px">
+    <p class="font-semi-bold" >{{licenceCode }}</p>
+    <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
+    <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+            mat-raised-button color="warn"   class="btn-small buy-btn" >
+      <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
+      <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
+    </button>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="flex-end center" fxFlex="40"  fxLayoutGap="50px" >
+    <mat-form-field class="search-bar  relative" appearance="fill" fxLayoutAlign="center center" >
+      <input matInput  type="search" placeholder="Search ..." class="bg-white-two font-size-14 font-extra-light">
+      <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
+    </mat-form-field>
+    <div  class="user-avatar bg-theme cursor-pointer" fxLayoutAlign="center center" (click)="toggleSideNav()" >
+     <img [src]="haveImage ? avatar : 'assets/img/default.jpg'"  class="img-rounded">
+    </div>
   </div>
 </mat-toolbar>

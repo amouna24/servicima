@@ -74,8 +74,8 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.getContracts();
-    this.modalsServices.registerModals([
-      { modalName: 'showExtension', modalComponent: ShowExtensionComponent }]);
+    this.modalsServices.registerModals(
+      { modalName: 'showExtension', modalComponent: ShowExtensionComponent });
   }
 
   /**

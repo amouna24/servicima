@@ -4,7 +4,7 @@
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
                [fixedBottomGap]=0 >
     <ng-container *ngIf="displaySidenavSetting();else sidenav">
-      <wid-sidenav-settings fxFlex ></wid-sidenav-settings>
+      <wid-sidenav-settings fxFill ></wid-sidenav-settings>
     </ng-container>
     <ng-template #sidenav>
       <wid-sidenav fxFill ></wid-sidenav>
@@ -16,18 +16,19 @@
     <wid-right-sidenave></wid-right-sidenave>
   </mat-sidenav>
 
-  <mat-sidenav-content [@mainContent]="sidebarState" class="full-screen-height" fxFlex fxLayout="column">
+  <mat-sidenav-content [@mainContent]="displaySidenavSetting() ? 'setting' : sidebarState" class="full-screen-height" fxLayout="column">
 
-    <wid-header fxFlex="5"></wid-header>
+    <wid-header fxFlex="5" fxFlexOffset="7px"></wid-header>
 
-    <wid-breadcrumb fxFlex="5"></wid-breadcrumb>
+    <wid-breadcrumb fxFlex="13"></wid-breadcrumb>
 
-    <div fxFlex="90" class="wrapper">
-      <wid-scrollbar class="scrollbar">
+    <div fxFlex="82">
         <router-outlet>
           <wid-spinner></wid-spinner>
+<!--          <wid-dynamic-component [menuItems]="menuItems" [dynamicForm]="dynamicForm">
+
+          </wid-dynamic-component>-->
         </router-outlet>
-      </wid-scrollbar>
     </div>
 
   </mat-sidenav-content>
