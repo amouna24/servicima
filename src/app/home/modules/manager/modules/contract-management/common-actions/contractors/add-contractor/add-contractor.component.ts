@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
-import { combineLatest, concat, forkJoin, of, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ICities } from '@shared/models/cities.model';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +16,8 @@ import { IContractor } from '@shared/models/contractor.model';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
 import { ICompanyTaxModel } from '@shared/models/companyTax.model';
 import { IContractorContact } from '@shared/models/contractorContact.model';
+import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
+import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 
 @Component({
   selector: 'wid-add-contractor',
@@ -53,14 +54,28 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Filtered Data Declarations
    *************************************************************************/
-  filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
-  filteredCities: ICities[] = [];
+  filteredCities: IViewParam[] = [];
+
+  /**************************************************************************
+   * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
+   *************************************************************************/
+  filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  citiesList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  genderList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  legalList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  VATList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  profileTitleList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  activityCodeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  statList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description Form Group
    *************************************************************************/
   contractorForm: FormGroup;
+
   /**************************************************************************
    * @description Declare the new ContractorId to be used on update
    *************************************************************************/
@@ -74,6 +89,308 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   contractorContactInfo: IContractorContact;
   companyEmail: string;
 
+  /**************************************************************************
+   * @description Menu Items List
+   *************************************************************************/
+  contractorItems: IDynamicMenu[] = [
+    {
+      title: 'General information',
+      titleKey: 'GENERAL_INFORMATION',
+      child: [
+        {
+          title: 'Personal information',
+          titleKey: 'PERSONAL_INFORMATION',
+        },
+        {
+          title: 'Address',
+          titleKey: 'ADDRESS',
+        },
+        {
+          title: 'General Contact',
+          titleKey: 'GENERAL_CONTACT',
+        },
+        {
+          title: 'Organisation',
+          titleKey: 'ORGANISATION',
+        },
+      ]
+    },
+    {
+      title: 'Contact',
+      titleKey: 'CONTACT',
+      child: []
+    },
+  ];
+  dynamicForm: IDynamicForm[] = [
+    {
+      titleRef: 'PERSONAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
+      fields: [
+        {
+          label: 'Social Reason',
+          placeholder: 'Social Reason',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'socialReason',
+        },
+        {
+          label: 'Registry number',
+          placeholder: 'Registry number',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'registryNumber',
+        },
+        {
+          type: FieldsType.IMAGE,
+          imageInputs: {
+            avatar: '',
+            haveImage: '',
+            modelObject: [],
+          }
+        },
+      ],
+    },
+    {
+      titleRef: 'PERSONAL_INFORMATION',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'Language',
+          placeholder: 'Language',
+          type: FieldsType.SELECT,
+          selectFieldList: this.langList,
+          formControlName: 'language'
+        },
+      ],
+    },
+    {
+      titleRef: 'ADDRESS',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Address',
+          placeholder: 'Address',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'address',
+        },
+        {
+          label: 'Country',
+          placeholder: 'Country',
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCountries,
+          formControlName: 'registryCountryCtrl',
+          searchControlName: 'registryCountryFilterCtrl'
+        },
+      ],
+    },
+    {
+      titleRef: 'ADDRESS',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'ZIP',
+          placeholder: 'ZIP',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'zipCode',
+        },
+        {
+          label: 'City',
+          placeholder: 'City',
+          type: FieldsType.SELECT,
+          selectFieldList: this.citiesList,
+          formControlName: 'city',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Web Site',
+          placeholder: 'Web Site',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'webSite',
+        },
+        {
+          label: 'Email',
+          placeholder: 'Email',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'email',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Phone 1',
+          placeholder: 'Phone 1',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'phoneOne',
+        },
+        {
+          label: 'Email',
+          placeholder: 'Phone 2',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'phoneTwo',
+        },
+      ],
+    },
+    {
+      titleRef: 'GENERAL_CONTACT',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'Fax',
+          placeholder: 'Fax',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'fax',
+        },
+      ],
+    },
+    {
+      titleRef: 'ORGANISATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Activity Sector',
+          placeholder: 'Activity Sector',
+          type: FieldsType.SELECT,
+          selectFieldList: this.activityCodeList,
+          formControlName: 'activitySector',
+        },
+        {
+          label: 'Payment Mode',
+          placeholder: 'Payment Mode',
+          type: FieldsType.SELECT,
+          selectFieldList: this.legalList,
+          formControlName: 'paymentMode',
+        },
+      ],
+    },
+    {
+      titleRef: 'ORGANISATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Currency',
+          placeholder: 'Currency',
+          type: FieldsType.SELECT,
+          selectFieldList: this.currencyList,
+          formControlName: 'currency',
+        },
+        {
+          label: 'TVA Number',
+          placeholder: 'TVA Number',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'tvaNumber',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'First name',
+          placeholder: 'First name',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'contactFirstname',
+        },
+        {
+          label: 'Last name',
+          placeholder: 'Last name',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'contactLastname',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Main Contact',
+          placeholder: 'Main Contact',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'mainContact',
+        },
+        {
+          label: 'Email',
+          placeholder: 'Email',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'contactEmail',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Gender',
+          placeholder: 'Gender',
+          type: FieldsType.SELECT,
+          selectFieldList: this.genderList,
+          formControlName: 'contactGender',
+        },
+        {
+          label: 'Title',
+          placeholder: 'Title',
+          type: FieldsType.SELECT,
+          selectFieldList: this.profileTitleList,
+          formControlName: 'contactTitle',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Phone',
+          placeholder: 'Phone',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'contactPhone',
+        },
+        {
+          label: 'Cellphone',
+          placeholder: 'Cellphone',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'contactCellphone',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTACT',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'Language',
+          placeholder: 'Language',
+          type: FieldsType.SELECT,
+          selectFieldList: this.langList,
+          formControlName: 'contactLanguage'
+        },
+      ],
+    },
+  ];
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -93,6 +410,44 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         { name: 'contact', path: '../assets/icons/contact.svg'},
       ]
     );
+    this.contractorForm = this.formBuilder.group({
+      PERSONAL_INFORMATION: this.formBuilder.group({
+        socialReason: ['', Validators.required],
+        registryNumber: [],
+        language: ['']
+      }),
+      ADDRESS: this.formBuilder.group({
+        address: [''],
+        registryCountryCtrl: [''],
+        registryCountryFilterCtrl: [''],
+        zipCode: [''],
+        city: [''],
+      }),
+      GENERAL_CONTACT: this.formBuilder.group({
+        webSite: [''],
+        email: ['', [Validators.required, Validators.email]],
+        phoneOne: [''],
+        phoneTwo: [''],
+        fax: [''],
+      }),
+      ORGANISATION: this.formBuilder.group({
+        activitySector: [''],
+        paymentMode: [''],
+        currency: [''],
+        tvaNumber: [''],
+      }),
+      CONTACT: this.formBuilder.group({
+        contactFirstname: [''],
+        contactLastname: [''],
+        mainContact: [''],
+        contactEmail: ['', [Validators.required, Validators.email]],
+        contactGender: [''],
+        contactTitle: [''],
+        contactPhone: [''],
+        contactCellphone: [''],
+        contactLanguage: [''],
+      }),
+    });
     this.initContractForm(null, null);
   }
 
@@ -118,7 +473,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Init Contract Form
    *************************************************************************/
   initContractForm(contractor: IContractor, contractorContact: IContractorContact) {
-    this.contractorForm = this.formBuilder.group({
+
+/*    this.contractorForm = this.formBuilder.group({
       contractor_name: ['', Validators.required],
       language: ['' ],
       registry_code: ['' ],
@@ -136,7 +492,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       currency_cd: ['' ],
       taxe_cd: ['' ],
       payment_cd: ['' ],
-      /* Contractor Contact */
+      /!* Contractor Contact *!/
       main_contact: [ '' ],
       can_sign_contract: [ '' ],
       first_name: [ '' ],
@@ -145,10 +501,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       title_cd: [ '' ],
       phone_nbr_c: [ '' ],
       cell_phone_nbr: [ '' ],
-      /* Filter Form Control */
+
+      /!* Filter Form Control *!/
       filteredCountriesControl:  [''],
       filteredCurrencyControl:  [''],
-    });
+    });*/
   }
   updateForms(contractor: IContractor, contractorContact: IContractorContact) {
     if (contractor) {
@@ -200,11 +557,19 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.mapData();
     /************ get countries List and next the value to the subject ************/
     this.filteredCountries.next(this.countriesList.slice());
-    this.utilsService.changeValueField(this.countriesList, this.contractorForm.controls.filteredCountriesControl, this.filteredCountries);
-
-    /************ get currencies List and next the value to the subject ************/
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.contractorForm.controls.ADDRESS['controls'].registryCountryFilterCtrl,
+      this.filteredCountries
+    );
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+       return  { value: obj.LanguageKey.language_code, viewValue: obj.language_desc };
+      }
+    ));
+/*    /!************ get currencies List and next the value to the subject ************!/
     this.filteredCurrencies.next(this.currenciesList.slice());
-    this.utilsService.changeValueField(this.currenciesList, this.contractorForm.controls.filteredCurrencyControl, this.filteredCurrencies);
+    this.utilsService.changeValueField(this.currenciesList, this.contractorForm.controls.filteredCurrencyControl, this.filteredCurrencies);*/
 
     /***************************** get languages List ******************************/
     this.languagesList = this.appInitializerService.languageList;
@@ -219,6 +584,12 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.legalFormList = this.utilsService.refData['LEGAL_FORM'];
     this.gendersList = this.utilsService.refData['GENDER'];
     this.profTitlesList = this.utilsService.refData['PROF_TITLES'];
+    // new
+    this.statList.next(this.utilsService.refData['CONTRACT_STATUS']);
+    this.VATList.next(this.utilsService.refData['VAT']);
+    this.legalList.next(this.utilsService.refData['LEGAL_FORM']);
+    this.genderList.next(this.utilsService.refData['GENDER']);
+    this.profileTitleList.next(this.utilsService.refData['PROF_TITLES']);
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.userInfo = data;
@@ -248,14 +619,20 @@ export class AddContractorComponent implements OnInit, OnDestroy {
 
   /* ----------------------------------------------------------------------*/
 
+  keyUpEvent(value) {
+    console.log('value', value);
+    this.getCity(value, '', false);
+  }
+
   /**************************************************************************
    * @description getCity with Zip Code
    * @param zipCode: number
    * @return city ? city : null
    *************************************************************************/
   getCity(zipCode: string, city: string, update: boolean): void {
-    if (this.contractorForm.controls.country_cd.value === 'FRA' && this.contractorForm.controls.zip_code.value) {
+    if (/*this.contractorForm.controls.country_cd.value === 'FRA' && this.contractorForm.controls.zip_code.value*/zipCode) {
       this.filteredCities = [];
+      this.citiesList.next([]);
       this.assetsDataService.getCity(zipCode)
         .pipe(
           takeUntil(this.destroy$)
@@ -263,13 +640,19 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         .subscribe(
           (arr) => {
             this.filteredCities = arr['cities'];
+            this.citiesList.next(arr['cities'].map(
+              (obj) => {
+                return { value: obj.code, viewValue: obj.city };
+              }
+            ));
+            console.log('cc', this.citiesList.getValue());
           },
           (e) => {
             console.log(e);
           }
         );
     } else if (update) {
-      this.filteredCities.push({ city, code: 0});
+      this.filteredCities.push({ viewValue: city, value: '0'});
     }
   }
 
@@ -283,6 +666,12 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.appInitializerService.currenciesList.forEach((currency) => {
       this.currenciesList.push({ value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC});
     });
+    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
+      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
+    }));
+    this.activityCodeList.next(this.appInitializerService.activityCodeList.map((activityCode) => {
+     return { value: activityCode.NAF, viewValue: activityCode.NAF };
+    }));
   }
 
   /**************************************************************************
@@ -407,6 +796,13 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     return _id && _id !== '';
   }
 
+  submit(data: FormGroup) {
+    console.log('data', data);
+  }
+
+  fetchData(value) {
+    this.getCity(value, '', false);
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
