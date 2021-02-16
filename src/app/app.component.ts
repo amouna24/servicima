@@ -29,6 +29,10 @@ export class AppComponent implements OnInit {
     { name: 'wi-activity-reports', path: 'assets/icons/Activity_Reports.svg'},
     { name: 'wi-contract-management', path: 'assets/icons/Contract_Management.svg'},
     { name: 'wi-billings', path: 'assets/icons/Billing.svg'},
+    /* Settings side nav*/
+    { name: 'wi-user', path: 'assets/icons/user.svg'},
+    { name: 'wi-credit-card', path: 'assets/icons/credit-card-payement.svg'},
+    { name: 'wi-three-dots', path: 'assets/icons/three-dots-ellipsis.svg'},
     /* Alert Icons */
     { name: 'wi_alert_error', path: 'assets/icons/error.svg'},
     { name: 'wi_alert_success', path: 'assets/icons/success.svg'},

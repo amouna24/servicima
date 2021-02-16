@@ -10,6 +10,8 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, IDynamicForm } from '@shared/models/dynamic-component/form.model';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'wid-home',
   templateUrl: './home.component.html',
@@ -251,6 +253,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilService: UtilsService,
+    private router: Router
   ) {
   }
 
@@ -259,7 +262,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred[ 'email_address'];
+    this.email = cred['email_address'];
     this.listColor = listColor;
     if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
       this.listColor.map(element => {
@@ -273,7 +276,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.displayClass();
     this.userService.isLoadingAction$.subscribe(
       (res) => {
-          this.isLoading$.next(res);
+        this.isLoading$.next(res);
       },
       error => this.isLoading$.next(true)
     );
@@ -292,14 +295,23 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): void {
-    this.classColor =  { 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
+    this.classColor = {
+      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
       'whiteRed': this.listColor[12].status
     };
     this.userService.classSubject$.subscribe((col) => {
-        this.classColor = col;
-      });
+      this.classColor = col;
+    });
+  }
+
+  /**
+   * @description display sidanev setting
+   * @return boolean
+   */
+  displaySidenavSetting(): boolean {
+    return this.router.url.startsWith('/manager/settings');
   }
 }

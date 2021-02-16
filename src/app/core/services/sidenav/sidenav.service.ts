@@ -4,6 +4,7 @@ import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
 import { candidateMenu } from '@shared/statics/candidate-menu.static';
 import { collaboraterMenu } from '@shared/statics/collaborater-menu.static';
 import { managerMenu } from '@shared/statics/manager-menu.static';
+import { ManagerSettingMenu } from '@shared/statics/manager-setting-menu';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class SidenavService {
   public  rightSidebarStateObservable$ = this.rightSidebarStateChanged$.asObservable();
 
   managerMenu: IMenu[] = managerMenu;
+  managerSettingMenu: IMenu[] = ManagerSettingMenu;
   collaboraterMenu: IMenu[] = collaboraterMenu;
   candidateMenu: IMenu[] = candidateMenu;
 
@@ -49,6 +51,8 @@ export class SidenavService {
     switch (moduleName) {
       case 'manager':
         return this.managerMenu;
+      case 'managerSetting':
+        return this.managerSettingMenu;
       case 'collaborater':
         return this.collaboraterMenu;
       case 'candidate':

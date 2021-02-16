@@ -176,6 +176,10 @@ Paddings
     padding-left: 10px;
 }
 
+.p-l-15 {
+    padding-left: 15px;
+}
+
 .p-l-20 {
     padding-left: 20px;
 }
@@ -280,6 +284,7 @@ Paddings
 /*******************
       Margin
 *******************/
+html body {
 .m-0 {
     margin: 0;
 }
@@ -448,6 +453,7 @@ Paddings
 .font-size-38{
   font-size: 38px;
 }
+}
 
 
 /*******************
@@ -546,8 +552,11 @@ Paddings
 .bg-help-blue{
   background-color: $help-blue !important;
 }
-.bg-ocean-blue{
- background-color: $ocean-blue !important;
+.bg-dark-grey-blue{
+  background-color: $dark-grey-blue;
+}
+.bg-denim{
+  background-color: $denim;
 }
 /*******************
        logo
@@ -566,7 +575,6 @@ Paddings
 .full-width {
   width: 100%;
 }
-
 /*******************
  full-height
 *******************/

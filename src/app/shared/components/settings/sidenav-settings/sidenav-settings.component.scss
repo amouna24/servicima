@@ -1,0 +1,48 @@
+.setting-side-nav-container {
+  overflow: hidden;
+  width: 344px;
+  .setting-side-nav-menu {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16);
+    mat-nav-list {
+      .item {
+        .icon {
+          stroke: white;
+          fill: none;
+        }
+        &:hover {
+          background-color: rgba(243, 246, 249, 0.1);
+        }
+      }
+    }
+  }
+
+  .setting-side-nav-contant {
+    mat-nav-list {
+      .submenu-item {
+        &:hover {
+          background-color: rgba(243, 246, 249, 0.3);
+        }
+      }
+    }
+  }
+}
+.active-submenu-item {
+  background-color: #f3f6f9;
+
+  p {
+    color: #67809f !important;
+  }
+  &:hover{
+    background-color: #f3f6f9 !important;
+
+    p {
+      color: #67809f !important;
+    }
+  }
+}
+.active-menu-item{
+  background-color: #f3f6f9;
+  .icon {
+    stroke: #67809f !important;
+  }
+}
