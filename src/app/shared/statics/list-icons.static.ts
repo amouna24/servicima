@@ -146,4 +146,9 @@ export const iconsList: IIcon[] = [
     name: 'wi_email',
     path: 'assets/icons/email.svg'
   },
+  /* arrow Icons */
+  {
+    name: 'wi_arrow-left',
+    path: 'assets/icons/arrow-left.svg'
+  },
 ];
