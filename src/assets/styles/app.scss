@@ -270,7 +270,7 @@ Paddings
   border-radius: $border-radius-10;
 }
 .border-radius-15{
-  border-radius: $border-radius-15;
+  border-radius: $border-radius-15 !important;
 }
 .border-radius-20{
   border-radius: $border-radius-20;
@@ -508,7 +508,7 @@ html body {
   color: $black-three;
 }
 .red{
-  color: $error-red;
+  color: $error-red !important;
 }
 .steel-two {
   color: $steel-two;
@@ -613,11 +613,12 @@ html body {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
-  height: 85vh !important;
+  height: 82vh !important;
 }
 
 .dynamic-component-content {
   resize: both !important;
+  scroll-behavior: smooth !important;
 }
 .sidenav-wrapper {
   resize: both !important;

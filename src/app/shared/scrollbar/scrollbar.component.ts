@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, Inject, OnInit } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  OnInit
+} from '@angular/core';
 
 @Component({
   selector: 'wid-scrollbar',

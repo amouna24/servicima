@@ -1,3 +1,7 @@
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { IViewParam } from '@shared/models/view.model';
+import { userType } from '@shared/models/userProfileType.model';
+
 export enum FieldsAlignment {
   tow_items_with_image_at_left = 'TWO_ITEMS_WITH_IMAGE_AT_LEFT',
   tow_items_with_image_at_right = 'TWO_ITEMS_WITH_IMAGE_AT_RIGHT',
@@ -8,15 +12,36 @@ export enum FieldsAlignment {
   one_item_stretch = 'ONE_ITEM_STRETCH',
 }
 
+export enum InputType {
+  EMAIL = 'email',
+  NUMBER = 'number',
+  TEXT = 'text',
+  PASSWORD = 'password',
+}
+
+export enum FieldsType {
+  IMAGE = 'image',
+  INPUT = 'input',
+  SELECT = 'select',
+  SELECT_WITH_SEARCH = 'selectWithSearch',
+  SLIDE_TOGGLE = 'slideToggle'
+}
+
 export interface IFieldsObject {
   label?: string;
   placeholder?: string;
-  type: string;
-  selectFieldList ?: any;
+  type: FieldsType;
+  inputType?: InputType;
+  formControlName?: string;
+  selectFieldList ?: BehaviorSubject<IViewParam[]>;
+  searchControlName?: string;
+  filteredList ?: ReplaySubject<IViewParam[]>;
   imageInputs?: {
-    avatar: any;
-    haveImage: any;
+    avatar: BehaviorSubject<any>;
+    haveImage: BehaviorSubject<any>;
     modelObject: any;
+    singleUpload: boolean;
+    userType: userType;
   };
 }
 

@@ -3,7 +3,7 @@ import { IContractorContactKey } from '@shared/models/contractorContactKey.model
 export interface IContractorContact {
   /* ID */
   _id: string;
-  contractorKey: IContractorContactKey;
+  contractorContactKey: IContractorContactKey;
   main_contact: string;
   can_sign_contract?: string;
   first_name?: string;
@@ -13,4 +13,5 @@ export interface IContractorContact {
   phone_nbr?: string;
   cell_phone_nbr?: string;
   language_cd?: string;
+
 }

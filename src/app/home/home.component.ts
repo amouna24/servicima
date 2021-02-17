@@ -8,7 +8,8 @@ import { Subject } from 'rxjs';
 import { listColor } from '@shared/statics/list-color.static';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
-import { FieldsAlignment, IDynamicForm } from '@shared/models/dynamic-component/form.model';
+import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -28,6 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   email: string;
   classColor: object;
   isLoading$ = new Subject<boolean>();
+  d_c_Form: FormGroup;
+
   /**************************************************************************
    * @description Menu Items List
    *************************************************************************/
@@ -40,14 +43,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           title: 'Address',
           titleKey: 'ADDRESS',
         },
-        {
-          title: 'General Contact',
-          titleKey: 'GENERAL_CONTACT',
-        },
-        {
-          title: 'Organisation',
-          titleKey: 'ORGANISATION',
-        },
         ]
     },
     {
@@ -57,27 +52,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
   ];
   dynamicForm: IDynamicForm[] = [
-    {
-      titleRef: 'GENERAL_INFORMATION',
-      fieldsLayout: FieldsAlignment.tow_items_with_textarea,
+   {
+      titleRef: 'ADDRESS',
+      fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
           label: 'FirstName',
           placeholder: 'FirstName',
-          type: 'input',
+          type: FieldsType.INPUT,
+          formControlName: 'firstname',
         },
         {
           label: 'LastName',
           placeholder: 'LastName',
-          type: 'input',
-        },
-        {
-          label: 'Textarea',
-          placeholder: 'Textarea',
-          type: 'textarea',
+          type: FieldsType.INPUT,
+          formControlName: 'lastname',
         },
       ],
     },
+    /*
     {
       titleRef: 'GENERAL_INFORMATION',
       fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
@@ -158,24 +151,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           type: 'input',
         },
       ],
-    },
-    {
-      titleRef: 'GENERAL_INFORMATION',
-      fieldsLayout: FieldsAlignment.tow_items,
-      fields: [
-        {
-          label: 'FirstName',
-          placeholder: 'FirstName',
-          type: 'input',
-        },
-        {
-          label: 'LastName',
-          placeholder: 'LastName',
-          type: 'input',
-        },
-      ],
-    },
-    {
+    },*/
+
+/*    {
       titleRef: 'ADDRESS',
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
@@ -183,67 +161,32 @@ export class HomeComponent implements OnInit, OnDestroy {
           label: 'TEST',
           placeholder: 'TEST',
           type: 'input',
+          inputType: InputType.TEXT,
         },
         {
           label: 'TEST',
           placeholder: 'TEST',
           type: 'input',
+          inputType: InputType.TEXT,
         },
       ],
-    },
-    {
-      titleRef: 'GENERAL_CONTACT',
-      fieldsLayout: FieldsAlignment.tow_items,
-      fields: [
-        {
-          label: 'TEST',
-          placeholder: 'TEST',
-          type: 'input',
-        },
-        {
-          label: 'TEST',
-          placeholder: 'TEST',
-          type: 'input',
-        },
-      ],
-    },
-    {
-      titleRef: 'ORGANISATION',
-      fieldsLayout: FieldsAlignment.tow_items,
-      fields: [
-        {
-          label: 'Gender',
-          placeholder: 'Gender',
-          type: 'select',
-          selectFieldList: [
-            { value: 'Male', viewValue: 'Male'},
-            { value: 'Female', viewValue: 'Female'},
-          ]
-        },
-        {
-          label: 'TEST',
-          placeholder: 'TEST',
-          type: 'input',
-        },
-      ],
-    },
+    },*/
+
     {
       titleRef: 'CONTACT',
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Gender',
-          placeholder: 'Gender',
-          type: 'select',
-          selectFieldList: [
-            { value: 'Male', viewValue: 'Male'},
-            { value: 'Female', viewValue: 'Female'},
-          ]
+          label: 'FirstName',
+          placeholder: 'FirstName',
+          type: FieldsType.INPUT,
+          formControlName: 'firstnamee',
         },
         {
-          label: 'TEST',
-          placeholder: 'TEST',
-          type: 'input',
+          label: 'LastName',
+          placeholder: 'LastName',
+          type: FieldsType.INPUT,
+          formControlName: 'lastnamee',
         },
       ],
     }
@@ -253,8 +196,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilService: UtilsService,
+    private formBuilder: FormBuilder,
     private router: Router
   ) {
+    this.d_c_Form = this.formBuilder.group({
+        ADDRESS: this.formBuilder.group({
+        firstname: [],
+        lastname: [],
+      }),
+      CONTACT: this.formBuilder.group({
+        firstnamee: [],
+        lastnamee: [],
+    }),
+  },
+    );
+
   }
 
   ngOnDestroy(): void {
@@ -305,6 +261,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.userService.classSubject$.subscribe((col) => {
       this.classColor = col;
     });
+  }
+
+  submit(data: FormGroup) {
+    console.log('data', data.controls);
   }
 
   /**
