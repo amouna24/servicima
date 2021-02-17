@@ -31,6 +31,7 @@ export class CanBeDisplayedDirective implements OnDestroy {
       this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
           if (!!data) {
             this.licenceFeature = data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
+            console.log(this.licenceFeature, 'licence feature');
             this.licenseUser = data['companylicence'][0]['companyLicenceKey']['licence_code'];
             this.currentUser = {
               license: this.licenseUser,

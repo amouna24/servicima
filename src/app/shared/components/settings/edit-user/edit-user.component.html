@@ -48,7 +48,7 @@
           </div>
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="80">
-              <label class="font-size-12">{{'user.directline' | translate | uppercase}} </label>
+              <label class="font-size-12">{{'use.profcellphone' | translate | uppercase}} </label>
               <mat-form-field appearance="outline">
                 <input autocomplete="off" matInput [placeholder]=" 'user.directline' | translate | uppercase"
                   formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -79,7 +79,7 @@
             <div fxLayout="column" fxFlex="80">
               <label class="font-size-12">{{'user.homecompany' | translate | uppercase}} </label>
               <mat-form-field appearance="outline">
-                <input autocomplete="off" matInput required [placeholder]=" 'user.homecompany' | translate | uppercase"
+                <input autocomplete="off" matInput [placeholder]=" 'user.homecompany' | translate | uppercase"
                   formControlName="homeCompany" [ngStyle.xs]="{'font-size': '15px'}" />
               </mat-form-field>
             </div>
@@ -152,7 +152,7 @@
                 <label class="font-size-12">{{'user.directline' | translate | uppercase}} </label>
                 <mat-form-field appearance="outline">
                   <input autocomplete="off" matInput [placeholder]=" 'user.directline' | translate | uppercase"
-                    formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}" />
+                    formControlName="cellphoneNbr" [ngStyle.xs]="{'font-size': '15px'}" />
                 </mat-form-field>
               </div>
             </div>
@@ -200,20 +200,22 @@
               </div>
             </div>
           </div>
-          <div fxLayout="column" fxFlex="10">
-            <div fxLayout="row" fxFlex="80">
-              <div fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="center center">
-                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="font-size-14"> {{ 'user.reset' | translate}}</span>
-                  </div>
-                </button>
-                <button mat-button mat-raised-button [disabled]="!form.valid" class="btn-medium bg-ocean-blue white"
-                  (click)="update()">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="font-size-14">{{ 'user.save' | translate}}</span>
-                  </div>
-                </button>
+          <div fxLayout="column" fxFlex="15" fxLayoutAlign="flex-end">
+            <div fxLayout="row" fxFlex="80" fxLayoutAlign="stretch center">
+              <div fxLayout="column" fxFlex="80" fxLayoutAlign=" center">
+                <div fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="flex-end center">
+                  <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                      <span class="font-size-14"> {{ 'user.reset' | translate}}</span>
+                    </div>
+                  </button>
+                  <button mat-button mat-raised-button [disabled]="!form.valid" class="btn-medium bg-ocean-blue white"
+                    (click)="update()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                      <span class="font-size-14">{{ 'user.save' | translate}}</span>
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

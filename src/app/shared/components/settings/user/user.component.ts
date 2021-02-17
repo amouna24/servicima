@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -26,26 +28,28 @@ export class UserComponent implements OnInit, OnDestroy {
   applicationId: string;
   emailAddress: string;
   languages: IViewParam[] = [];
-
+  path: string;
   avatar: any;
   gender: string;
   lang: string;
   title: string;
   icon: string;
-
+  id: string;
   /** subscription */
   private subscriptions: Subscription[] = [];
 
   constructor(private utilsService: UtilsService,
-              private appInitializerService: AppInitializerService,
-              private userService: UserService,
-              private localStorageService: LocalStorageService,
-              private modalService: ModalService,
+    private appInitializerService: AppInitializerService,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private profileService: ProfileService
   ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
     this.modalService.registerModals(
-      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
+      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
   }
 
   /**
@@ -58,7 +62,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     );
 
-  this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
@@ -73,9 +77,27 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
+    this.route.queryParams.subscribe(params => {
+      this.id = params.id || null;
+    });
+    if (this.id) {
+      this.profileService.getUserById(this.id).subscribe(user => {
+        this.user = user[0];
+        this.emailAddress = this.user['userKey']['email_address'];
+        this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
+          (data) => {
+            const list = ['ROLE'];
+            const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+              list);
+            this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], refData['ROLE']);
+          });
+      });
+    } else {
       this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
+      this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
+    }
     this.getRefdata();
     this.getIcon();
   }
@@ -97,8 +119,24 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   getLanguages(): void {
     this.languages = this.appInitializerService.languageList.map((language) => {
-      return ({ value: language._id, viewValue: language.language_desc});
+      return ({ value: language._id, viewValue: language.language_desc });
     });
+  }
+
+  /**
+   * @description: Update
+   */
+  update(): void {
+    if (this.id) {
+      this.router.navigate(['/manager/user/edit-profile'],
+        {
+          queryParams: {
+            'id': this.id
+          }
+        });
+    } else {
+      this.router.navigate(['/manager/user/edit-profile']);
+    }
   }
 
   /**

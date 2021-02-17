@@ -125,4 +125,12 @@ export class UserService {
   haveImage(message): void {
     this.haveImage$.next(message);
   }
+
+  /**************************************************************************
+   * @description get user role
+   * @param message: string
+   *************************************************************************/
+  getUserRole(applicatinId: string, email: string) {
+   return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicatinId}&email_address=${email}`);
+  }
 }

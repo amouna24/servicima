@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -14,6 +15,7 @@ import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
+
 @Component({
   selector: 'wid-edit-user',
   templateUrl: './edit-user.component.html',
@@ -38,23 +40,29 @@ export class EditUserComponent implements OnInit, OnDestroy {
   avatar: any;
   haveImage: any;
   photo: FormData;
-
+  userInfo: IUserModel;
+  idRole: string;
+  emailAddressStorage: string;
+  id: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
 
   constructor(private utilsService: UtilsService,
-              private profileService: ProfileService,
-              private appInitializerService: AppInitializerService,
-              private userService: UserService,
-              private localStorageService: LocalStorageService,
-              private modalService: ModalService,
-              private formBuilder: FormBuilder,
-              ) {
+    private profileService: ProfileService,
+    private appInitializerService: AppInitializerService,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
-      this.modalService.registerModals(
-        { modalName: 'changePassword', modalComponent: ChangePwdComponent});
+    this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
+    this.modalService.registerModals(
+      { modalName: 'changePassword', modalComponent: ChangePwdComponent });
   }
 
   /** list filtered by search keyword */
@@ -91,22 +99,44 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
   checkComponentAction(connectedUser: IUserInfo): void {
-    this.showCompany = true;
-    this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
-    this.applicationId = connectedUser['user'][0]['userKey'].application_id;
-    this.setForm();
-    this.form.controls['userType'].disable();
-    this.form.controls['homeCompany'].disable();
-    this.form.controls['roleCtrl'].disable();
+    this.route.queryParams.subscribe(params => {
+      this.id = params.id || null;
+    });
+    if (this.router.url === '/manager/settings/users/add-user') {
+      this.showCompany = false;
+    } else if (this.id) {
+      this.showCompany = true;
+      this.profileService.getUserById(this.id).subscribe(user => {
+        this.userInfo = user[0];
+        this.emailAddress = user[0]['userKey'].email_address;
+        this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
+          (data) => {
+            this.idRole = data[0]['_id'];
+            this.userRole = data[0]['userRolesKey']['role_code'];
+          //  this.language_id = this.userInfo['language_id'];
+            this.form.controls['userType'].disable();
+            this.form.controls['homeCompany'].disable();
+            this.setForm();
+          });
+      });
+    } else {
+      this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
+      this.showCompany = true;
+      this.userInfo = connectedUser['user'][0];
+      this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
+      this.setForm();
+      this.form.controls['userType'].disable();
+      this.form.controls['homeCompany'].disable();
+      this.form.controls['roleCtrl'].disable();
+    }
     this.getRefdata();
   }
-
   /**
    * @description : initialization of the form
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      emailAddress: [{ value: '', disabled: true }],
+      emailAddress: [''],
       companyEmail: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -132,21 +162,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   setForm() {
     this.form.setValue({
-      emailAddress: this.user['userKey'].email_address,
-      companyEmail: this.user['company_email'],
-      firstName: this.user['first_name'],
-      lastName: this.user['last_name'],
-      profPhone: this.user['prof_phone'],
-      cellphoneNbr: this.user['cellphone_nbr'],
-      userType: this.user['user_type'],
-      twitterAccount: this.user['twitter_url'],
-      youtubeAccount: this.user['youtube_url'],
-      linkedinAccount: this.user['linkedin_url'],
+      emailAddress: this.userInfo['userKey'].email_address,
+      companyEmail: this.userInfo['company_email'],
+      firstName: this.userInfo['first_name'],
+      lastName: this.userInfo['last_name'],
+      profPhone: this.userInfo['prof_phone'],
+      cellphoneNbr: this.userInfo['cellphone_nbr'],
+      userType: this.userInfo['user_type'],
+      twitterAccount: this.userInfo['twitter_url'],
+      youtubeAccount: this.userInfo['youtube_url'],
+      linkedinAccount: this.userInfo['linkedin_url'],
       homeCompany: this.companyName,
-      genderProfil: this.user['gender_id'],
+      genderProfil: this.userInfo['gender_id'],
       roleCtrl: this.userRole,
-      languageCtrl: this.user['language_id'],
-      titleCtrl: this.user['title_id'],
+      languageCtrl: this.userInfo['language_id'] ? this.userInfo['language_id'] : '',
+      titleCtrl: this.userInfo['title_id'],
       titleFilterCtrl: '',
       languageFilterCtrl: '',
       roleFilterCtrl: '',
@@ -185,42 +215,91 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * or add a new user
    */
   async update(): Promise<void> {
-    const newUser = {
-      application_id: this.user['userKey'].application_id,
-      email_address: this.user['userKey'].email_address,
-      company_email: this.user['company_email'],
-      user_type: this.user['user_type'],
-      first_name: this.form.value.firstName,
-      last_name: this.form.value.lastName,
-      gender_id: this.form.value.genderProfil,
-      prof_phone: this.form.value.profPhone,
-      cellphone_nbr: this.form.value.cellphoneNbr,
-      language_id: this.form.value.languageCtrl,
-      title_id: this.form.value.titleCtrl,
-      updated_by: this.emailAddress,
-      linkedin_url: this.form.value.linkedinAccount,
-      twitter_url: this.form.value.twitterAccount,
-      youtube_url: this.form.value.youtubeAccount,
-      photo: this.user['photo']
-    };
+    if (this.router.url === '/manager/settings/users/add-user') {
+      const newUser = {
+        application_id: this.applicationId,
+        company_id: this.companyId,
+        email_address: this.form.value.emailAddress,
+        company_email: this.emailAddress,
+        user_type: this.form.value.userType,
+        staff_type_id: this.form.value.userType,
+        first_name: this.form.value.firstName,
+        last_name: this.form.value.lastName,
+        gender_id: this.form.value.genderProfil,
+        prof_phone: this.form.value.profPhone,
+        cellphone_nbr: this.form.value.cellphoneNbr,
+        language_id: this.form.value.language,
+        title_id: this.form.value.titleCtrl,
+        created_by: this.emailAddress,
+        updated_by: this.emailAddress,
+        role_code: this.form.value.roleCtrl,
+        granted_by: this.emailAddress,
+        linkedin_url: this.form.value.linkedinAccount,
+        twitter_url: this.form.value.twitterAccount,
+        youtube_url: this.form.value.youtubeAccount,
+      };
+      this.profileService.addNewProfile(newUser).subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err),
+      );
+    } else {
+      const newUser = {
+        application_id: this.user['userKey'].application_id,
+        email_address: this.userInfo['userKey'].email_address,
+        company_email: this.user['company_email'],
+        user_type: this.user['user_type'],
+        first_name: this.form.value.firstName,
+        last_name: this.form.value.lastName,
+        gender_id: this.form.value.genderProfil,
+        prof_phone: this.form.value.profPhone,
+        cellphone_nbr: this.form.value.cellphoneNbr,
+        language_id: this.form.value.languageCtrl,
+        title_id: this.form.value.titleCtrl,
+        updated_by: this.emailAddress,
+        linkedin_url: this.form.value.linkedinAccount,
+        twitter_url: this.form.value.twitterAccount,
+        youtube_url: this.form.value.youtubeAccount,
+        photo: this.userInfo['photo'],
+      };
 
-    const confirmation = {
-      title: 'edit',
-    };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '45%', '45%').subscribe((value) => {
-      if (value) {
-        this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
-          res => {
-            if (res) {
-              this.infoUser['user'][0] = res;
-              this.userService.connectedUser$.next(this.infoUser);
-            }
-          }));
-      }
-      this.subscriptionModal.unsubscribe();
-    });
+      const confirmation = {
+        title: 'edit',
+      };
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '45%', '45%').subscribe((value) => {
+        if (value) {
+          this.subscriptions.push(this.profileService.updateUser(newUser).subscribe(
+            res => {
+              if (res) {
+                const userRoleObject = {
+                  _id: this.idRole,
+                  application_id: this.applicationId,
+                  email_address: this.emailAddress,
+                  role_code: this.form.value.roleCtrl,
+                  granted_by: this.emailAddressStorage
+                };
+                if (newUser.email_address === this.emailAddressStorage) {
+                  this.profileService.UpdateUserRole(userRoleObject).subscribe(
+                    (data) => {
+                      this.infoUser['userroles'][0] = data;
+                    }
+                  );
+                  this.infoUser['user'][0] = res;
+
+                  this.userService.connectedUser$.next(this.infoUser);
+                } else {
+                  this.profileService.UpdateUserRole(userRoleObject).subscribe(
+                    (data) => {
+                      console.log(data);
+                    }
+                  );
+                }
+                }
+            }));
+        }
+        this.subscriptionModal.unsubscribe();
+      });
+    }
   }
-
   /**
    * @description: Deactivate account
    */
@@ -228,8 +307,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
     const desactivate = {
       title: 'desactivate',
     };
-    this.subscriptionModal =  this.modalService.displayConfirmationModal(desactivate, '45%', '45%').subscribe((value) => {
-      if (value ) {
+    this.subscriptionModal = this.modalService.displayConfirmationModal(desactivate, '45%', '45%').subscribe((value) => {
+      if (value) {
         console.log('compte desactivé');
         this.subscriptionModal.unsubscribe();
       }
@@ -244,7 +323,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   getLanguages(): void {
     this.languages = [];
     this.languages = this.appInitializerService.languageList.map((language) => {
-      return ({ value: language._id, viewValue: language.language_desc});
+      return ({ value: language._id, viewValue: language.language_desc });
     });
   }
 

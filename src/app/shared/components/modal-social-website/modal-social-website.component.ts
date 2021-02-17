@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'wid-modal-social-website',
@@ -43,10 +43,32 @@ export class ModalSocialWebsiteComponent implements OnInit {
       twitterAccount: ['', [Validators.required]],
       youtubeAccount: ['', [Validators.required]],
       linkedinAccount: ['', [Validators.required]],
+      others: this.formBuilder.array([]) ,
     });
     this.setForm();
   }
+  quantities(): FormArray {
+    return this.form.get('others') as FormArray;
+  }
 
+  newQuantity(): FormGroup {
+    return this.formBuilder.group({
+      qty: '',
+      price: '',
+    });
+  }
+
+  addQuantity() {
+    this.quantities().push(this.newQuantity());
+  }
+
+  removeQuantity(i: number) {
+    this.quantities().removeAt(i);
+  }
+
+  onSubmit() {
+    console.log(this.form.value);
+  }
   /**
    * @description : set the value of the form if it was an update user
    */
@@ -55,6 +77,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
       twitterAccount: 'Linkedin',
       youtubeAccount: 'Twitter',
       linkedinAccount: 'Youtube',
+      others: [],
     });
   }
   onNotify(res: boolean): void {

@@ -4,8 +4,8 @@
     <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
       <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
-        <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
-          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+        <img [src]="this.user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="user" />
       </div>
 
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
@@ -13,7 +13,7 @@
         <div fxLayout="row" fxFlex="80">
           <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
           </mat-icon>
-          <span class="cool-grey font-size-10">{{user.company_email}}</span>
+          <span class="cool-grey font-size-10">{{ this.emailAddress }}</span>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center" fxFlex="55">
           <div fxLayout="row" fxFlex="80">
@@ -105,7 +105,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.homecompany'| translate}}: </span>
-                  <span class="steel"> {{user.company_email}}</span>
+                  <span class="steel"> {{companyName}}</span>
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.email'| translate}}: </span>
-                  <span class="steel"> {{user.email_address}}</span>
+                  <span class="steel"> {{ emailAddress }}</span>
                 </div>
               </div>
 
@@ -131,30 +131,30 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'use.profcellphone'| translate}}: </span>
-                  <span class="steel"> {{user.cellphone_nbr}}</span>
+                  <span class="steel"> {{user.prof_phone}}</span>
                 </div>
               </div>
             </div>
 
             <div fxLayout="row">
-              <h5 class="steel"> {{'ser.socialnetwork'| translate}}:</h5>
+              <h5 class="steel"> {{'user.socialnetwork'| translate}}:</h5>
             </div>
             <div fxLayout="row">
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                  <span class="font-size-12 steel"> {{user.linkedin_url}} </span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.email_address}}</span>
+                  <span class="font-size-12 steel"> {{user.youtube_url}}</span>
                 </div>
               </div>
 
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                  <span class="font-size-12 steel"> {{user.twitter_url}} </span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
                   <span class="font-size-12 topaz"> + </span>
@@ -165,8 +165,7 @@
           </div>
           <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
-              <button mat-button color="accent" [routerLink]="['/manager/user/edit-profile']" mat-raised-button
-                class="btn-small white">
+              <button mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">
                 {{'user.edit'| translate}}
               </button>
             </div>

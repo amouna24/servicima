@@ -76,8 +76,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
     res.forEach(element => {
     element['profileTypeDesc'] = this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
     type.value === element['user_type']).viewValue;
+    if (element['title_id']) {
     element['profTitlesDesc'] = this.refData['PROF_TITLES'].find((title: IViewParam) =>
     title.value === element['title_id']).viewValue;
+    }
   });
       this.usersList = res;
       this.display(this.usersList);
@@ -150,7 +152,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @description: navigate to add user
    */
   addNewUser(): void {
-    this.router.navigate(['/manager/settings/users/add-user']);
+    this.router.navigateByUrl('/manager/settings/users/add-user', { state: { 'user': 'user'} });
   }
 
   /**
