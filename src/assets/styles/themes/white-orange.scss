@@ -12,6 +12,20 @@ $themeColorSidenav: $black-three;
 }
 
 /*******************
+   Right Sidenav
+*******************/
+wid-right-sidenave{
+  .icon{
+    fill: $blood-orange !important;
+    background: rgba($blood-orange, 0.1) !important;
+    color: $blood-orange !important;
+  }
+  .notif-item {
+    background: rgba($blood-orange, 0.2) !important;
+  }
+}
+
+/*******************
    Sidenav
 *******************/
 wid-sidenav {

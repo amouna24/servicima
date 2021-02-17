@@ -12,6 +12,20 @@ $themeColorSidenav: $black-three;
 }
 
 /*******************
+   Right Sidenav
+*******************/
+wid-right-sidenave{
+  .icon{
+    fill: $cherry-red !important;
+    background: rgba($cherry-red, 0.1) !important;
+    color: $cherry-red !important;
+  }
+  .notif-item {
+    background: rgba($cherry-red, 0.2) !important;
+  }
+}
+
+/*******************
    Sidenav
 *******************/
 wid-sidenav {
