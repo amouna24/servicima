@@ -38,7 +38,7 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
         (err) => {
           console.error(err);
         });
-    // get the current submenu
+    // Get the current submenu
     this.menu.forEach( el => this.currentState(el.children));
   }
   /**
