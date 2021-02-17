@@ -20,7 +20,7 @@
                     close
                   </span>
 </div>
-<div class="btn-validate" *ngIf="selectedFile.file" >
+<div class="btn-validate" *ngIf="selectedFile.file && singleUpload" >
                   <span class="material-icons" (click)="uploadFile()">
                     published_with_changes
                   </span>

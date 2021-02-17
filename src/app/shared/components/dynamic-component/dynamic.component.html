@@ -68,9 +68,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -85,7 +85,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -107,9 +107,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -128,9 +131,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -145,7 +148,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -167,9 +170,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -188,9 +194,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -205,7 +211,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -227,9 +233,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="87">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -248,9 +257,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -265,7 +274,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -287,9 +296,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -309,9 +321,9 @@
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                        placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
@@ -326,7 +338,7 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
                             </div>
@@ -348,9 +360,12 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -363,7 +378,7 @@
                               <mat-form-field appearance="outline">
                                 <textarea matInput placeholder="{{ sf.placeholder }}" rows="7"
                                           formControlName="{{sf.formControlName}}"></textarea>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
                             </div>
@@ -387,9 +402,9 @@
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                        placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
@@ -404,7 +419,7 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
                             </div>
@@ -426,9 +441,12 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -436,8 +454,10 @@
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100"
                                  fxLayoutAlign="center center" class="profile-image">
-                              <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar"
-                                                 [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                              <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
+                                                 [modelObject]="sf.imageInputs.modelObject"
+                                                 [singleUpload]="sf.imageInputs.singleUpload"
+                                                 [userType]="sf.imageInputs.userType"  (newFile)="getFile($event)"></wid-profile-image>
                             </div>
                           </ng-container>
                         </div>
@@ -455,8 +475,11 @@
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100"
                                  fxLayoutAlign="center center" class="profile-image">
-                              <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar"
-                                                 [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                              <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
+                                                 [modelObject]="sf.imageInputs.modelObject"
+                                                 [singleUpload]="sf.imageInputs.singleUpload"
+                                                 [userType]="sf.imageInputs.userType"
+                                                 (newFile)="getFile($event)"></wid-profile-image>
                             </div>
                           </ng-container>
                         </div>
@@ -469,9 +492,9 @@
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                        placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
@@ -486,7 +509,7 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
                             </div>
@@ -508,9 +531,12 @@
                                     {{v.viewValue}}
                                   </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -548,9 +574,9 @@
                           <mat-form-field appearance="outline">
                             <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                    placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                               {{'register.invalidemail' | translate}} </mat-error>
                           </mat-form-field>
                         </div>
@@ -565,7 +591,7 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
                         </div>
@@ -587,9 +613,12 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
+                          <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                         </div>
                       </ng-container>
                     </div>
@@ -608,9 +637,9 @@
                           <mat-form-field appearance="outline">
                             <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                    placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                               {{'register.invalidemail' | translate}} </mat-error>
                           </mat-form-field>
                         </div>
@@ -625,7 +654,7 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
                         </div>
@@ -647,9 +676,12 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                          <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                         </div>
                       </ng-container>
                     </div>
@@ -668,9 +700,9 @@
                           <mat-form-field appearance="outline">
                             <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                    placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                               {{'register.invalidemail' | translate}} </mat-error>
                           </mat-form-field>
                         </div>
@@ -685,7 +717,7 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
                         </div>
@@ -707,9 +739,12 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="87">
+                          <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                         </div>
                       </ng-container>
                     </div>
@@ -728,9 +763,9 @@
                           <mat-form-field appearance="outline">
                             <input type="{{ sf.inputType }}" (keyup)="keyUpHandler($event.target)" matInput
                                    placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                               {{'register.invalidemail' | translate}} </mat-error>
                           </mat-form-field>
                         </div>
@@ -745,7 +780,7 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
                         </div>
@@ -767,9 +802,12 @@
                                 {{v.viewValue}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                            <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                               {{ 'general.required' | translate }} </mat-error>
                           </mat-form-field>
+                        </div>
+                        <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
+                          <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                         </div>
                       </ng-container>
                     </div>
@@ -789,9 +827,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -806,7 +844,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -828,9 +866,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -843,7 +884,7 @@
                             <mat-form-field appearance="outline">
                               <textarea matInput placeholder="{{ sf.placeholder }}" rows="7"
                                         formControlName="{{sf.formControlName}}"></textarea>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -867,9 +908,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -884,7 +925,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -906,9 +947,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -916,8 +960,11 @@
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center"
                                class="profile-image">
-                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar"
-                                               [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
+                                               [modelObject]="sf.imageInputs.modelObject"
+                                               [singleUpload]="sf.imageInputs.singleUpload"
+                                               [userType]="sf.imageInputs.userType"
+                                               (newFile)="getFile($event)"></wid-profile-image>
                           </div>
                         </ng-container>
                       </div>
@@ -935,8 +982,12 @@
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center"
                                class="profile-image">
-                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage" [avatar]="sf.imageInputs.avatar"
-                                               [modelObject]="sf.imageInputs.modelObject"></wid-profile-image>
+                            <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()"
+                                               [avatar]="sf.imageInputs.avatar.getValue()"
+                                               [modelObject]="sf.imageInputs.modelObject"
+                                               [singleUpload]="sf.imageInputs.singleUpload"
+                                               [userType]="sf.imageInputs.userType"
+                                               (newFile)="getFile($event)"></wid-profile-image>
                           </div>
                         </ng-container>
                       </div>
@@ -949,9 +1000,9 @@
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
                                      placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
@@ -966,7 +1017,7 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
                           </div>
@@ -988,9 +1039,12 @@
                                   {{v.viewValue}}
                                 </mat-option>
                               </mat-select>
-                              <mat-error *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -1002,7 +1056,7 @@
               </section>
             </ng-template>
           </ng-container>
-          <div fxLayoutAlign="end center">
+          <div fxLayoutAlign="end center" [style]="{ minHeight: '139px'}">
             <button (click)="submitAction()" color="primary" [disabled]="!formData.valid" [style]="{marginRight: '4%'}" mat-raised-button
                     class="white btn-medium">Save
             </button>

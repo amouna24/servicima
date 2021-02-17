@@ -22,6 +22,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UtilsService } from '@core/services/utils/utils.service';
 import { listColor } from '@shared/statics/list-color.static';
 import { takeUntil } from 'rxjs/operators';
+import { userType } from '@shared/models/userProfileType.model';
 @Component({
   selector: 'wid-right-sidenave',
   templateUrl: './right-sidenave.component.html',
@@ -47,6 +48,8 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   menu = [];
   subMenu: IChildItem[] = [];
   parentMenu: string;
+  profileUserType = userType.UT_USER;
+
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/

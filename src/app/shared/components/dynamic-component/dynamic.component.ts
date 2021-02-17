@@ -21,6 +21,7 @@ export class DynamicComponent implements OnInit {
    * @description Form Group
    *************************************************************************/
   @Output() dynamicFormGroup = new EventEmitter<FormGroup>();
+  @Output() selectedFile = new EventEmitter<FormData>();
   @Output() keyUpEventValue = new EventEmitter<string>();
 
   /**************************************************************************
@@ -114,6 +115,10 @@ export class DynamicComponent implements OnInit {
 
   keyUpHandler(target) {
     this.keyUpEventValue.emit(target.value);
+  }
+
+  getFile(obj: FormData) {
+    this.selectedFile.emit(obj);
   }
 
 }

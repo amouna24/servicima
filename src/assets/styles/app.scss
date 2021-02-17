@@ -502,7 +502,7 @@ Paddings
   color: $black-three;
 }
 .red{
-  color: $error-red;
+  color: $error-red !important;
 }
 .steel-two {
   color: $steel-two;
@@ -605,7 +605,7 @@ Paddings
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
-  height: 85vh !important;
+  height: 82vh !important;
 }
 
 .dynamic-component-content {

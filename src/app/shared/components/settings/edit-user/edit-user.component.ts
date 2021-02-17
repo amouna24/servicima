@@ -12,8 +12,12 @@ import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { map } from 'rxjs/internal/operators/map';
+import { UploadService } from '@core/services/upload/upload.service';
+import { userType } from '@shared/models/userProfileType.model';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
+
 @Component({
   selector: 'wid-edit-user',
   templateUrl: './edit-user.component.html',
@@ -38,6 +42,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   avatar: any;
   haveImage: any;
   photo: FormData;
+  profileUserType = userType.UT_USER;
 
   /** subscription */
   subscriptionModal: Subscription;
@@ -50,6 +55,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private localStorageService: LocalStorageService,
               private modalService: ModalService,
               private formBuilder: FormBuilder,
+              private uploadService: UploadService,
               ) {
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
@@ -185,6 +191,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * or add a new user
    */
   async update(): Promise<void> {
+    const filename = await this.uploadService.uploadImage(this.photo)
+      .pipe(
+        map(
+          response => response.file.filename
+        ))
+      .toPromise();
     const newUser = {
       application_id: this.user['userKey'].application_id,
       email_address: this.user['userKey'].email_address,
@@ -201,7 +213,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       linkedin_url: this.form.value.linkedinAccount,
       twitter_url: this.form.value.twitterAccount,
       youtube_url: this.form.value.youtubeAccount,
-      photo: this.user['photo']
+      photo: filename,
     };
 
     const confirmation = {
@@ -219,6 +231,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
       this.subscriptionModal.unsubscribe();
     });
+    this.userService.getImage(filename);
   }
 
   /**
@@ -265,6 +278,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.form.get('youtubeAccount').setValue(null);
   }
 
+  getFile(obj: FormData) {
+    this.photo = obj;
+  }
   /**
    * @description destroy
    */
