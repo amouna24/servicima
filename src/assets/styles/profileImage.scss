@@ -4,7 +4,16 @@
 .profile-image {
   border-radius: 50%;
   position: relative;
-  img {
+  .edit-img {
+    max-width: 100%;
+    position: absolute;
+    max-height: 100%;
+    top: 1px;
+    width: 85px;
+    height: 85px;
+    clip-path: circle(45% at 50% 49%);
+  }
+  .show-img {
     width: 85px;
     height: 85px;
     border-radius: 50%;
@@ -76,9 +85,9 @@
   }
 }
 
-.progress {
-  position: absolute;
-  -webkit-filter: grayscale(0%);
+.progress::content {
+  z-index: 1 !important;
+/*  -webkit-filter: grayscale(0%);
   border-radius: 50%;
   animation-name: spinning-circle;
   animation-duration: 4s;
@@ -90,7 +99,7 @@
   background-repeat: no-repeat;
   background-size: 50% 50%, 50% 50%;
   background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-  background-image: linear-gradient(#377af5, #f0f3f8);
+  background-image: linear-gradient(#377af5, #f0f3f8);*/
 }
 
 @-webkit-keyframes spinning-circle {
@@ -132,3 +141,9 @@
 .mat-checkbox-inner-container {
   display: none !important;
 }
+.basic-container {
+  display: inline-block;
+  position: relative;
+  margin-top: 20px;
+}
+

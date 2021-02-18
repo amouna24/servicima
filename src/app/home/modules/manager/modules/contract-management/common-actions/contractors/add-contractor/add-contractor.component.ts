@@ -38,6 +38,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
+  isLoading = new BehaviorSubject<boolean>(false);
   private subscriptions: Subscription[] = [];
 
   /**************************************************************************
@@ -79,6 +80,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
+  backURL: string;
 
   /**************************************************************************
    * @description Menu Items List
@@ -442,6 +444,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           this.getContractorByID(params);
         }
       });
+    if (this.type === 'CUSTOMER') {
+      this.backURL = '/manager/contract-management/clients-contracts/clients-list';
+    } else if (this.type === 'SUPPLIER') {
+      this.backURL = '/manager/contract-management/suppliers-contracts/suppliers-list';
+    }
   }
 
   /**************************************************************************
@@ -492,10 +499,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   }
 
   updateForms(contractor: IContractor, contractorContact: IContractorContact) {
-    console.log('contractor', contractor);
-    console.log('contractorContact', contractorContact);
-    console.log('haveImage', this.haveImage.getValue());
-    console.log('avatar', this.avatar.getValue());
     this.contractorForm.patchValue({
       PERSONAL_INFORMATION : {
         socialReason: contractor.contractor_name,
@@ -777,6 +780,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Get Contractor to be updated
    *************************************************************************/
   getContractorByID(params) {
+    this.isLoading.next(true);
     forkJoin([
       this.contractorService.getContractors(`?_id=${atob(params.id)}`),
       this.contractorService.getContractorsContact(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}`)
@@ -792,6 +796,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           const av = await this.uploadService.getImage(res[0][0]['photo']);
           this.avatar.next(av);
           this.updateForms(this.contractorInfo, this.contractorContactInfo);
+          this.isLoading.next(false);
 
         },
         (error) => {
