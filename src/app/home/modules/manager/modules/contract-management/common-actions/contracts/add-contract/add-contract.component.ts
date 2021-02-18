@@ -97,13 +97,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
   ) {
     this.contractForm = new FormGroup({
     });
-    this.utilsService.addIcon(
-      [
-        { name: 'general', path: '../assets/icons/general.svg'},
-        { name: 'credit-card', path: '../assets/icons/credit-card.svg'},
-        { name: 'contact', path: '../assets/icons/contact.svg'},
-      ]
-    );
   }
 
   /**************************************************************************

@@ -5,9 +5,6 @@ const routes: Routes = [
   {
     path: 'users',
     loadChildren: () => import('./usersList/users-list.module').then(m => m.UserListModule),
-    data: {
-      breadcrumb: 'settings'
-    },
   },
 
   {
@@ -37,7 +34,7 @@ const routes: Routes = [
     path: 'home-company',
     loadChildren: () => import('./home-company/homeCompany.module').then(m => m.HomeCompanyModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'company'
     },
   },
 

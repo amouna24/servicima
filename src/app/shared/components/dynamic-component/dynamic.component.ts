@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
 import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 
@@ -17,6 +17,9 @@ export class DynamicComponent implements OnInit {
   @Input() menuItems: IDynamicMenu[];
   @Input() dynamicForm: IDynamicForm[];
   @Input() formData: FormGroup;
+  @Input() isLoading = new BehaviorSubject<boolean>(false);
+  @Input() title: string;
+  @Input() backURL: string;
   /**************************************************************************
    * @description Form Group
    *************************************************************************/

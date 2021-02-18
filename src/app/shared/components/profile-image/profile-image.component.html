@@ -1,7 +1,17 @@
 <div>
-<img [src]="haveImage ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="avatar"
-     [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
-<div class="progress" *ngIf="loading$ | async"></div>
+<!--<div class="progress" ></div>-->
+  <div class="basic-container">
+    <mat-progress-spinner
+      [color]="'primary'"
+      [mode]="(loading$ | async) ? 'indeterminate' : 'determinate'"
+      [value]="100"
+      [diameter]="85"
+      strokeWidth="2">
+    </mat-progress-spinner>
+    <img [src]="haveImage ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="edit-img"
+         [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+  </div>
+<!--  *ngIf="loading$ | async"-->
   <!--Input File accept only image with preview Image-->
   <div >
     <label for="{{page}}" class="btn-action">

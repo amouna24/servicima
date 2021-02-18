@@ -151,4 +151,10 @@ export const iconsList: IIcon[] = [
     name: 'wi_arrow-left',
     path: 'assets/icons/arrow-left.svg'
   },
+  /* arrow back */
+  {
+    name: 'wi_arrow_back',
+    path: 'assets/icons/arrow-back.svg',
+    viewBox: '0 0 25 11.811'
+  },
 ];

@@ -8,9 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomeCompanyComponent,
-    data: {
-      breadcrumb: 'company'
-    },
   },
   {
     path: 'edit-company',

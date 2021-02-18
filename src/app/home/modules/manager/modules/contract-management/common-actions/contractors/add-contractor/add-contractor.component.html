@@ -2,6 +2,9 @@
   [menuItems]="contractorItems"
   [dynamicForm]="dynamicForm"
   [formData]="contractorForm"
+  [isLoading]="isLoading"
+  [title]="title"
+  [backURL]="backURL"
   (dynamicFormGroup)="addNewContractor($event)"
   (selectedFile)="getFile($event)"
 >
