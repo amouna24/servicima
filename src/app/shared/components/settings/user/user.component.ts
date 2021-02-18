@@ -14,6 +14,7 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
 import { ModalService } from '@core/services/modal/modal.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 @Component({
   selector: 'wid-user',
@@ -44,6 +45,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private modalService: ModalService,
     private route: ActivatedRoute,
+    private uploadService: UploadService,
     private router: Router,
     private profileService: ProfileService
   ) {
@@ -56,12 +58,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: Loaded when component in init state
    */
   ngOnInit(): void {
-    this.userService.avatar$.subscribe(
-      avatar => {
-        this.avatar = avatar;
-      }
-    );
-
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.companyName = data['company'][0]['company_name'];
@@ -76,14 +72,18 @@ export class UserComponent implements OnInit, OnDestroy {
    * or the manager wants to add a new profile
    * or he wants to update the profile of one user
    */
-  checkComponentAction(connectedUser: IUserInfo): void {
+  checkComponentAction(connectedUser: IUserInfo) {
     this.route.queryParams.subscribe(params => {
       this.id = params.id || null;
     });
     if (this.id) {
-      this.profileService.getUserById(this.id).subscribe(user => {
+      this.profileService.getUserById(this.id).subscribe(async user => {
         this.user = user[0];
+        const ava = await this.uploadService.getImage(user[0]['photo']);
+        this.avatar = ava;
         this.emailAddress = this.user['userKey']['email_address'];
+        this.getRefdata();
+        this.getIcon();
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
             const list = ['ROLE'];
@@ -93,13 +93,19 @@ export class UserComponent implements OnInit, OnDestroy {
           });
       });
     } else {
+      this.userService.avatar$.subscribe(
+        avatar => {
+          this.avatar = avatar;
+        }
+      );
       this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
+      this.getRefdata();
+      this.getIcon();
     }
-    this.getRefdata();
-    this.getIcon();
+
   }
 
   /**

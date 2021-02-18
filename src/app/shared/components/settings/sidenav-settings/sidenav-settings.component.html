@@ -1,0 +1,42 @@
+<div class="setting-side-nav-container bg-denim full-screen-height"
+     fxLayout="row" fxLayoutAlign="start stretch" fxFlex="100">
+  <div class="setting-side-nav-menu bg-dark-grey-blue" fxFlex="20.8"
+       fxLayout="column" fxLayoutAlign="start center">
+    <div class="m-t-30 m-b-30" fxLayoutAlign="center center">
+      <img src="assets/img/logo-title.png" class="full-width">
+    </div>
+    <mat-nav-list fxLayoutGap="20px" fxFlex="100"
+                  fxLayout="column" fxLayoutAlign="start center">
+      <a [routerLink]="'/' + moduleName" mat-list-item fxLayoutAlign="center center" class="item border-radius-5"
+         routerLink="/">
+        <mat-icon class="icon" svgIcon="wi-dashboard"></mat-icon>
+      </a>
+      <ng-container *ngFor="let m of menu">
+        <mat-list-item (click)="getSubMenu(m.children)"
+                       [ngClass]="subMenu === m.children? 'active-menu-item' : ''"
+                       fxLayoutAlign="center center" class="item border-radius-5">
+          <mat-icon class="icon" [svgIcon]="m.icon"></mat-icon>
+        </mat-list-item>
+      </ng-container>
+      <mat-list-item>
+
+      </mat-list-item>
+    </mat-nav-list>
+
+  </div>
+  <div class="setting-side-nav-contant"
+       fxLayout="column" fxLayoutAlign="start start" fxFlex>
+    <h3 class="white p-l-10 p-t-20 p-b-20 m-0">Settings</h3>
+    <mat-nav-list *ngIf="subMenu" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="19px"
+                  class="p-l-10 p-r-10 full-width">
+      <ng-container *ngFor="let sMenu of subMenu">
+        <a mat-list-item [routerLink]="['/', moduleName, 'settings', sMenu.state]"
+           fxLayoutAlign="start center" routerLinkActive="active-submenu-item"
+           class="border-radius-10 submenu-item full-width">
+          <p class="pale-grey">{{sMenu.name}}</p>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </div>
+</div>
+

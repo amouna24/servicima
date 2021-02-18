@@ -15,6 +15,9 @@ import { IUserModel } from '@shared/models/user.model';
 import { IViewParam } from '@shared/models/view.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ICity } from '@shared/models/city.model';
+import { userType } from '@shared/models/userProfileType.model';
+import { UploadService } from '@core/services/upload/upload.service';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -31,9 +34,13 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
+              private uploadService: UploadService,
   ) {
   }
-
+  avatar: any;
+  haveImage: any;
+  photo: object;
+  profileUserType = userType.UT_USER;
   city: ICity;
   userCredentials: string;
   company: ICompanyModel;
@@ -65,14 +72,19 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
+    this.avatar = null;
+    this.photo = null;
     this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.city = { cities: '', code: '' };
     this.initForm();
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((info) => {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
         this.languageId = this.userInfo['user'][0]['language_id'];
         this.company = info['company'][0];
+        this.haveImage = this.company.photo;
+        const av = await this.uploadService.getImage(this.company.photo);
+        this.avatar = av;
         this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
@@ -117,6 +129,9 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       activityCodeCtrl: [''],
       currencyCtrl: [''],
       vatCtrl: [''],
+      faxNbr: [''],
+      phoneNbr1: [''],
+      phoneNbr2: [''],
       registryCountryCtrl: ['', [Validators.required]],
       countryCtrl: ['', [Validators.required]],
       legalFormFilterCtrl: [''],
@@ -153,6 +168,9 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       linkedinAccount: this.company['linkedin_url'],
       twitterAccount: this.company['twitter_url'],
       youtubeAccount: this.company['youtube_url'],
+      faxNbr: this.company?.fax_nbr,
+      phoneNbr1: (this.company?.phone_nbr1) ? (this.company?.phone_nbr1) : null,
+      phoneNbr2: (this.company?.phone_nbr2) ? (this.company?.phone_nbr2) : null,
       legalFormFilterCtrl: '',
       countryFilterCtrl: '',
       registryCountryFilterCtrl: '',
@@ -197,13 +215,21 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.utilsService.changeValueField(this.vatList, this.form.controls.vatFilterCtrl, this.filteredVat);
     this.utilsService.changeValueField(this.countryList, this.form.controls['countryFilterCtrl'], this.filteredCountry);
     this.utilsService.changeValueField(this.countryList, this.form.controls['registryCountryFilterCtrl'], this.filteredRegistryCountry);
-
   }
 
   /**
-   * @description : update company profile
+   * @description : update or edit company profile
    */
-  update(): void {
+ async addOrUpdate() {
+    let filename = null;
+    if (this.photo) {
+      filename = await this.uploadService.uploadImage(this.photo)
+        .pipe(
+          map(
+            response => response.file.filename
+          ))
+        .toPromise();
+    }
     const companyProfile = {
       _id: this.company._id,
       application_id: this.company.companyKey['application_id'],
@@ -230,6 +256,10 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       status: this.company.status,
       facebook_url: this.company['facebook_url'],
       phone_nbr: this.company['phone_nbr'],
+      photo: filename ? filename : this.company.photo,
+      phone_nbr1: this.form.value.phoneNbr1,
+      phone_nbr2: this.form.value.phoneNbr2,
+      fax_nbr: this.form.value.faxNbr,
     };
     const confirmation = {
       title: 'edit',
@@ -267,6 +297,9 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.form.get('linkedinAccount').setValue(null);
     this.form.get('twitterAccount').setValue(null);
     this.form.get('youtubeAccount').setValue(null);
+    this.form.get('faxNbr').setValue(null);
+    this.form.get('phoneNbr2').setValue(null);
+    this.form.get('phoneNbr1').setValue(null);
   }
 
   /**
@@ -294,6 +327,14 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.currenciesList = this.appInitializerService.currenciesList.map((currency) => {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC };
     });
+  }
+
+  /**
+   * @description: : get file
+   * @param obj: formData
+   */
+  getFile(obj: FormData) {
+    this.photo = obj;
   }
 
   /**

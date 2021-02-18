@@ -1,5 +1,19 @@
 <div class="container-edit bg-white border-radius-20 m-l-30">
   <wid-scrollbar class="scrollbar">
+
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+      <div fxLayout="row" class="line-height-3">
+
+        <div fxLayout="column" fxFlex="85"  class="font-size-25 steel">{{title}} User</div>
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey" [routerLink]="['/manager/settings/home-company']"> back</span>
+          </button>
+        </div>
+      </div>
+      <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
     <div fxLayout="row" fxFlexOffset="50px" fxFlex="100" class="p-t-20 font-size-12  min-full-screen-height" form
       [formGroup]="form">
       <div fxLayout="column" fxFlex="50" fxFlexOffset="50px">
@@ -57,7 +71,7 @@
           </div>
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="80">
-              <label class="font-size-12">{{'user.role' | translate | uppercase}} </label>
+              <label class="font-size-12 required">{{'users.role' | translate | uppercase}} </label>
               <mat-form-field appearance="outline">
                 <mat-select [placeholder]=" 'user.role' | translate | uppercase" formControlName="roleCtrl"
                   #singleSelect>
@@ -96,7 +110,7 @@
         <div fxLayout="column" fxFlex="100">
           <div fxLayout="column" fxFlex="30" fxLayoutAlign="space-evenly center">
             <div class="profile-image" fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
-              <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user">
+              <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
               </wid-profile-image>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
@@ -221,6 +235,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </wid-scrollbar>
 </div>

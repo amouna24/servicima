@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { Subject } from 'rxjs';
 import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
+import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 
 @Component({
   selector: 'wid-dynamic-component',
@@ -15,6 +16,13 @@ export class DynamicComponent implements OnInit {
    *************************************************************************/
   @Input() menuItems: IDynamicMenu[];
   @Input() dynamicForm: IDynamicForm[];
+  @Input() formData: FormGroup;
+  /**************************************************************************
+   * @description Form Group
+   *************************************************************************/
+  @Output() dynamicFormGroup = new EventEmitter<FormGroup>();
+  @Output() selectedFile = new EventEmitter<FormData>();
+  @Output() keyUpEventValue = new EventEmitter<string>();
 
   /**************************************************************************
    * @description Menu Items List
@@ -24,7 +32,8 @@ export class DynamicComponent implements OnInit {
 
   randomSubParent: any;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
     this.randomSubParent = document.getElementsByClassName('dynamic-component-content')[0];
@@ -41,6 +50,13 @@ export class DynamicComponent implements OnInit {
   }
 
   scroll(child) {
+    this.menuItems.forEach(
+      (item) => {
+        if (item.child.length > 0 && child === item.titleKey) {
+          child = item.child[0].titleKey;
+        }
+      }
+    );
     this.setSelectedItem(child.replace('#', ''));
     const childID = document.getElementById(child);
     // Where is the parent on page
@@ -61,4 +77,48 @@ export class DynamicComponent implements OnInit {
       this.randomSubParent.scrollTop = (childRect.top + this.randomSubParent.scrollTop) - parentRect.top;
     }
   }
+  childSelected(parent: string): boolean {
+    let res = false;
+    this.menuItems.forEach(
+      (menu) => {
+        if (menu.titleKey === parent) {
+          menu.child.forEach(
+            (child) => {
+              if (child.titleKey === this.valueOfSelectedItem) {
+                res = true;
+              }
+            }
+          );
+        }
+      }
+    );
+    return res;
+  }
+
+  /**
+   * Checking control validation
+   * @param form: FormGroup
+   * @param controlName: string => Equals to formControlName
+   * @param validationType: string => Equals to validators name
+   */
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return false;
+    }
+    return control.hasError(validationType) && (control.dirty || control.touched);
+  }
+
+  submitAction() {
+    this.dynamicFormGroup.emit(this.formData);
+  }
+
+  keyUpHandler(target) {
+    this.keyUpEventValue.emit(target.value);
+  }
+
+  getFile(obj: FormData) {
+    this.selectedFile.emit(obj);
+  }
+
 }

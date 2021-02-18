@@ -23,5 +23,6 @@ export interface IContractor {
   payment_cd?: string;
   creation_date?: Date;
   update_date?: Date;
+  photo?: string;
   status?: string;
 }

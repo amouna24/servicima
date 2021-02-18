@@ -24,6 +24,7 @@ export class UserService {
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
+  guestAvatar = new BehaviorSubject<any>(null);
 
   constructor(private httpClient: HttpClient,
               private router: Router,

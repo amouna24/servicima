@@ -34,6 +34,7 @@ import { EditUserComponent } from './components/settings/edit-user/edit-user.com
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
 import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settings/home-company/edit-company-home/edit-company-home.component';
+import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
     EditUserComponent,
     ModalSocialWebsiteComponent,
     EditCompanyHomeComponent,
+    SidenavSettingsComponent,
 
   ],
   imports: [
@@ -103,6 +105,8 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
     StepperComponent,
     AlertComponent,
     RightSidenaveComponent,
+    ScrollbarModule,
+    SidenavSettingsComponent,
     ScrollbarModule,
     DynamicComponent,
     EditCompanyHomeComponent

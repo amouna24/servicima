@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 
 import { IViewParam } from '@shared/models/view.model';
+import { iconsList } from '@shared/statics/list-icons.static';
+import { IIcon } from '@shared/models/icon.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -183,7 +186,7 @@ export class UtilsService {
    * @description Add icon
    * @param listOfIcons;
    */
-  addIcon(listOfIcons): void {
+  initializeIcons(listOfIcons: IIcon[] = iconsList): void {
     listOfIcons.forEach(
       (icon) => {
         this.matIconRegistry.addSvgIcon(
