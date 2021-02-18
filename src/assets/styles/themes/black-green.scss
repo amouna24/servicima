@@ -12,8 +12,32 @@ $themeColorSidenav: $pale-grey;
 }
 
 /*******************
+   Right Sidenav
+*******************/
+.right-side-nav-container{
+  .icon{
+    fill: $themeColor !important;
+    background: rgba($themeColor, 0.1) !important;
+    color: $themeColor !important;
+  }
+  .notif-item {
+    background: rgba($themeColor, 0.2) !important;
+  }
+}
+
+/*******************
    Sidenav
 *******************/
+wid-right-sidenave{
+  .icon{
+    fill: $themeColor !important;
+    background: rgba($themeColor, 0.1);
+  }
+  .notif-item {
+    background: rgba($themeColor, 0.2);
+  }
+}
+
 wid-sidenav {
   .icon {
     stroke: $themeColorSidenav;
