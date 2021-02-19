@@ -19,11 +19,16 @@ export class ModalSocialWebsiteComponent implements OnInit {
               private formBuilder: FormBuilder,
               private router: Router, ) {
   }
-  form: FormGroup;
 
+  form: FormGroup;
+  input1;
+  input2;
+  input3;
+  input = ['input1', 'input2', 'input3', 'input4'];
+  twitter;
   private subscriptions: Subscription[] = [];
-  list = ['Linkedin', 'Twitter', 'Youtube', 'facebook', 'whatsapp',
-          'instagram' , 'viber', 'skype', 'other' ];
+  list = ['linkedin_url', 'twitter_url', 'youtube_url', 'facebook', 'whatsapp',
+    'instagram', 'viber', 'skype', 'other'];
   modelConfig = {
     title: '',
     button: {
@@ -40,9 +45,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
         background: '#f3f6f9'
       },
     },
-    style: {
-
-    }
+    style: { }
   };
 
   ngOnInit(): void {
@@ -67,6 +70,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
     });
     this.setForm();
   }
+
   /**
    * @description : set the value of the form if it was an update user
    */
@@ -86,11 +90,11 @@ export class ModalSocialWebsiteComponent implements OnInit {
   }
 
   onNotify(res: boolean): void {
-   // console.log(res, 'res');
+    // console.log(res, 'res');
     if (res) {
       this.dialogRef.close();
     } else {
-      const updateUser = {
+     const updateUser = {
         application_id: this.data['userKey'].application_id,
         email_address: this.data['userKey'].email_address,
         company_email: this.data['company_email'],
@@ -108,13 +112,42 @@ export class ModalSocialWebsiteComponent implements OnInit {
         youtube_url: this.form.value.youtubeAccount,
         photo: this.data.photo,
       };
-          this.subscriptions.push(this.profileService.updateUser(updateUser).subscribe(
-            result => {
-              if (result) {
-                this.dialogRef.close();
-              }
-            })
-          );
-        }
+      console.log(updateUser, 'update user');
+     /* this.subscriptions.push(this.profileService.updateUser(updateUser).subscribe(
+        result => {
+          if (result) {
+            this.dialogRef.close();
+          }
+        })
+      );*/
+      console.log(this.input1, 'input1', this.input2, 'input2', this.input3, 'input3');
+    }
+  }
+
+  getValue(name, number) {
+    console.log(name, number);
+    this.list.forEach(element => {
+      if (name === element && number === 1) {
+        console.log(name, 'name');
+        this.input1 = name;
+        console.log(this.input1, 'input 1');
+      } else if (name === element && number === 2) {
+        this.input2 = name;
+        console.log(this.input2, 'input 2');
+      } else if (name === element && number === 3) {
+        this.input3 = name;
+        console.log(this.input3, 'input 3');
+      }
+    });
+  }
+  setValue() {
+    console.log('kkkkkkkkkkkkkkkkkkkk');
+    console.log(this.input1, 'this.llll');
+    this.list.forEach(element => {
+      if (this.input1 === element) {
+        this.twitter = this.form.value.input1;
+        console.log(this.twitter, 'dddd');
+      }
+    });
     }
 }

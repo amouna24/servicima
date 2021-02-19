@@ -11,7 +11,7 @@
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline" >
       <mat-select disableOptionCentering panelClass="panelColor" placeholder="{{ 'user.linkedinacc' | translate }}">
-        <mat-option  *ngFor="let twitter of list" [value]="twitter">
+        <mat-option  (click)="getValue(twitter,1)" *ngFor="let twitter of list" [value]="twitter">
           {{twitter}}
         </mat-option>
       </mat-select>
@@ -20,7 +20,7 @@
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline">
       <mat-select disableOptionCentering panelClass="panelColor" placeholder="{{ 'user.twitteracc' | translate }}">
-        <mat-option    *ngFor="let youtube of list" [value]="youtube">
+        <mat-option  (click)="getValue(youtube,2)"  *ngFor="let youtube of list" [value]="youtube">
           {{youtube}}
         </mat-option>
       </mat-select>
@@ -30,7 +30,7 @@
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline">
       <mat-select disableOptionCentering panelClass="panelColor"  placeholder="{{ 'user.youtubeacc' | translate }}">
-      <mat-option *ngFor="let linkedin of list" [value]="linkedin">
+      <mat-option (click)="getValue(linkedin,3)"  *ngFor="let linkedin of list" [value]="linkedin">
         {{linkedin}}
       </mat-option>
       </mat-select>
@@ -44,7 +44,7 @@
 
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
-         <input  autocomplete="off" matInput required
+         <input  autocomplete="off" matInput required (blur)="setValue()"
                 [placeholder]=" 'user.twitteracc' | translate | uppercase" formControlName="input1"
                 [ngStyle.xs]="{'font-size': '15px'}" />
         <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.twitterAccount.errors?.required">
@@ -53,7 +53,7 @@
      </div>
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
-         <input  autocomplete="off" matInput required
+         <input  autocomplete="off" matInput required (blur)="setValue()"
                 [placeholder]=" 'user.youtubeacc' | translate | uppercase" formControlName="input2"
                 [ngStyle.xs]="{'font-size': '15px'}"  />
          <mat-error class="wid-error-messages" *ngIf="form.controls.input2.errors?.required">
@@ -62,7 +62,7 @@
      </div>
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
-         <input autocomplete="off" matInput required
+         <input autocomplete="off" matInput required (blur)="setValue()"
                 [placeholder]=" 'user.linkedinacc' | translate | uppercase" formControlName="input3"
                 [ngStyle.xs]="{'font-size': '15px'}"  />
          <mat-error class="wid-error-messages" *ngIf="form.controls.input3.errors?.required">
