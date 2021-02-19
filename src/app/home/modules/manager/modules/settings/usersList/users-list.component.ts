@@ -39,7 +39,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
      private localStorageService: LocalStorageService) { }
 
   displayedColumns: string[] =
-    ['FirstName', 'LastName', 'Email', 'profileTypeDesc', 'profTitlesDesc', 'Created_by', 'Status', 'Actions'];
+    ['FirstName', 'LastName', 'Email', 'show', 'profileTypeDesc', 'profTitlesDesc', 'Created_by', 'Status', 'Actions'];
   dataSource: MatTableDataSource<IUserModel>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -76,8 +76,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
     res.forEach(element => {
     element['profileTypeDesc'] = this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
     type.value === element['user_type']).viewValue;
+    if (element['title_id']) {
     element['profTitlesDesc'] = this.refData['PROF_TITLES'].find((title: IViewParam) =>
     title.value === element['title_id']).viewValue;
+    }
   });
       this.usersList = res;
       this.display(this.usersList);
@@ -150,15 +152,23 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @description: navigate to add user
    */
   addNewUser(): void {
-    this.router.navigate(['/manager/settings/users/add-user']);
+    this.router.navigateByUrl('/manager/settings/users/add-user', { state: { 'user': 'user'} });
   }
 
+  showProfile(id) {
+    this.router.navigate(['/manager/user/profile'],
+      {
+        queryParams: {
+          'id': id._id
+        }
+      });
+  }
   /**
    * @description: navigate to the detail of the user
    * @param id: string
    */
   goTodetailUser(id: string): void {
-    this.router.navigate(['/manager/settings/users/update-user'],
+    this.router.navigate(['/manager/user/edit-profile'],
       {
         queryParams: {
           'id': id

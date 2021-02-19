@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
+import { UploadService } from '@core/services/upload/upload.service';
 @Component({
   selector: 'wid-home-company',
   templateUrl: './home-company.component.html',
@@ -25,7 +26,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
-  ) {
+              private uploadService: UploadService,
+) {
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
   }
@@ -43,6 +45,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   currency: string;
   country: string;
   vat: string;
+  avatar: any;
   countryList: IViewParam[] = [];
   legalFormList: IViewParam[] = [];
   vatList: IViewParam[] = [];
@@ -60,11 +63,13 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
     this.mapData();
     this.getRefdata();
     this.userCredentials = this.localStorageService.getItem('userCredentials');
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((info) => {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
         this.languageId = this.userInfo['user'][0]['language_id'];
         this.company = info['company'][0];
+        const ava = await this.uploadService.getImage(this.company['photo']);
+        this.avatar = ava;
         this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];

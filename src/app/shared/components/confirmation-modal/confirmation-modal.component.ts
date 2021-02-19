@@ -70,6 +70,27 @@ export class ConfirmationModalComponent implements OnInit {
         };
         break;
       }
+      case 'add': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'Confirm',
+              color: ' #f3f6f9',
+              background: '#0459bc'
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9'
+            },
+          },
+          style: { }
+        };
+        break;
+      }
       default: {
         return '';
       }

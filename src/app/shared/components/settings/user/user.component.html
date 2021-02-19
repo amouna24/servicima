@@ -4,23 +4,23 @@
     <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
       <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
-        <img [src]="user['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
-          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+        <img [src]="(this.user?.photo) ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="user" />
       </div>
 
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
-        <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
-        <div fxLayout="row" fxFlex="80">
-          <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
-          </mat-icon>
-          <span class="cool-grey font-size-10">{{user.company_email}}</span>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="55">
-          <div fxLayout="row" fxFlex="80">
-            <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon={{icon}}>
+        <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
+        <div fxLayout="column" fxFlex="80">
+          <div >
+            <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
             </mat-icon>
-            <span class="cool-grey font-size-10">{{gender}}</span>
+            <span class="cool-grey font-size-10">{{ this.emailAddress }}</span>
           </div>
+            <div>
+              <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon={{icon}}>
+              </mat-icon>
+              <span class="cool-grey font-size-10">{{gender}}</span>
+            </div>
         </div>
       </div>
       <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
@@ -28,7 +28,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
 
@@ -37,7 +37,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
 
@@ -46,7 +46,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-error-red white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
         </div>
@@ -65,17 +65,17 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.firstname'| translate}}: </span>
-                  <span class="steel"> {{user.first_name}}</span>
+                  <span class="steel"> {{user?.first_name}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.lang'| translate}}: </span>
-                  <span class="steel"> {{lang}}</span>
+                  <span class="steel"> {{lang ? lang : 'none'}} </span>
                 </div>
               </div>
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.lastname'| translate}}: </span>
-                  <span class="steel"> {{user.last_name}}</span>
+                  <span class="steel"> {{user?.last_name}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.gender'| translate}}: </span>
@@ -91,21 +91,21 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'user.job'| translate}}: </span>
-                  <span class="steel"> {{title}}</span>
+                  <span class="steel"> {{title ? title : 'none'}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.profiletype'| translate}}: </span>
-                  <span class="steel"> {{user.user_type | titlecase}}</span>
+                  <span class="steel"> {{user?.user_type | titlecase}}</span>
                 </div>
               </div>
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-                  <span> {{'user.role' | translate}}: </span>
+                  <span> {{'users.role' | translate}}: </span>
                   <span class="steel"> {{userRole | titlecase}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.homecompany'| translate}}: </span>
-                  <span class="steel"> {{user.company_email}}</span>
+                  <span class="steel"> {{companyName}}</span>
                 </div>
               </div>
             </div>
@@ -119,11 +119,11 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'user.directline'| translate}}: </span>
-                  <span class="steel"> {{user.cellphone_nbr}} </span>
+                  <span class="steel"> {{user?.cellphone_nbr? user?.cellphone_nbr : 'none'}} </span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.email'| translate}}: </span>
-                  <span class="steel"> {{user.email_address}}</span>
+                  <span class="steel"> {{ emailAddress }}</span>
                 </div>
               </div>
 
@@ -131,30 +131,30 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'use.profcellphone'| translate}}: </span>
-                  <span class="steel"> {{user.cellphone_nbr}}</span>
+                  <span class="steel"> {{user?.prof_phone ? user?.prof_phone : 'none'}}</span>
                 </div>
               </div>
             </div>
 
             <div fxLayout="row">
-              <h5 class="steel"> {{'ser.socialnetwork'| translate}}:</h5>
+              <h5 class="steel"> {{'user.socialnetwork'| translate}}:</h5>
             </div>
             <div fxLayout="row">
-              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" >
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.linkedin_url">
                   <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                  <span class="font-size-12 steel"> {{user?.linkedin_url}} </span>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.youtube_url" >
                   <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.email_address}}</span>
+                  <span class="font-size-12 steel"> {{user?.youtube_url}}</span>
                 </div>
               </div>
 
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.twitter_url">
                   <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user.cellphone_nbr}} </span>
+                  <span class="font-size-12 steel"> {{user?.twitter_url}} </span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
                   <span class="font-size-12 topaz"> + </span>
@@ -165,8 +165,7 @@
           </div>
           <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
-              <button mat-button color="accent" [routerLink]="['/manager/user/edit-profile']" mat-raised-button
-                class="btn-small white">
+              <button mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">
                 {{'user.edit'| translate}}
               </button>
             </div>

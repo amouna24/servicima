@@ -117,7 +117,6 @@ export class ChangePwdComponent implements OnInit {
       old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    console.log(newPassword, 'new password');
     this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.subscriptions.push(this.authService.logout().subscribe(() => {
