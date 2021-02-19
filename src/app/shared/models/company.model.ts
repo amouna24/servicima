@@ -11,4 +11,8 @@ export interface ICompanyModel {
   siret: string;
   socialReason: string;
   status: string;
+  photo: string;
+  fax_nbr: string;
+  phone_nbr1: string;
+  phone_nbr2: string;
 }

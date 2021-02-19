@@ -395,7 +395,9 @@ html body {
 .m-b-40 {
     margin-bottom: 40px;
 }
-
+.m-b-50 {
+    margin-bottom: 50px;
+}
 /*******************
     font weight
 *******************/
@@ -561,6 +563,9 @@ html body {
 .bg-denim{
   background-color: $denim;
 }
+.bg-ocean-blue{
+  background-color: $cerulean-blue !important;
+}
 /*******************
        logo
 *******************/
@@ -615,7 +620,7 @@ html body {
   height: 400px !important;
   padding: 20px;
 }
-.dynamic-component-container {
+.dynamic-component-container  {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
@@ -672,11 +677,8 @@ html body {
    user
 *******************/
 .container-show{
-  height: 95% !important;
-}
-.container-edit{
-  height: 95% !important;
-  width: 95%;
+  height: 88vh !important;
+  margin: 20px;
 }
 .container-btn{
   width: 43px;

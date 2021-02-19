@@ -3,11 +3,11 @@
     <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
       <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
-        <img src="assets/img/profile-pic.png" width="80" height="80" class="avatar"
-          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+        <img [src]="this.company['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
+             [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
       </div>
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
-        <span class="brownish-grey font-size-25">{{user.first_name}} {{ user.last_name}}</span>
+        <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
         <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
       </div>
       <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
@@ -15,7 +15,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
         </div>
@@ -23,7 +23,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
         </div>
@@ -31,7 +31,7 @@
           <button mat-button mat-raised-button class="btn-medium bg-error-red white">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-              <span class="font-size-14">{{user.first_name}} - {{user.last_name}}</span>
+              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
             </div>
           </button>
         </div>
@@ -100,11 +100,11 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> Phone 1: </span>
-                    <span class="steel"></span>
+                    <span class="steel">{{this.company['phone_nbr1']}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> Fax: </span>
-                    <span class="steel"> </span>
+                    <span class="steel">{{this.company['fax_nbr']}} </span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.city' | translate}}: </span>
@@ -122,7 +122,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> Phone 2: </span>
-                    <span class="steel"></span>
+                    <span class="steel"> {{this.company['phone_nbr2']}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.country' | translate}}: </span>

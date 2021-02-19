@@ -1,293 +1,338 @@
-<div class="border-radius-20  bg-white container-edit m-l-30 ">
+<div class="border-radius-20  dynamic-component-container m-l-30 ">
   <wid-scrollbar class="scrollbar">
-    <div fxLayout="row" fxFlexOffset="50px" fxFlex="100" class="p-t-20 font-size-12 " form [formGroup]="form"
-      fxLayoutGap="20px">
-      <div fxLayout="column" fxFlex="50">
-        <div fxLayout="column" fxFlex="100">
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label class="required">{{'homecompany.companyname' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input autocomplete="off" matInput required [placeholder]=" 'homecompany.companyname' | translate"
-                  formControlName="companyName" [ngStyle.xs]="{'font-size': '15px'}" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label class="required">{{'homecompany.email' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input matInput autocomplete="off" required [placeholder]="'homecompany.email' | translate"
-                  formControlName="emailAddress" [ngStyle.xs]="{'font-size': '15px'}">
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.registrationnumber' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input matInput autocomplete="off" [placeholder]="'homecompany.registrationnumber' | translate"
-                  formControlName="registrationNumber" [ngStyle.xs]="{'font-size': '15px'}">
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label class="required">{{'homecompany.registrationcountry' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <mat-select [placeholder]=" 'homecompany.registrationcountry' | translate"
-                  formControlName="registryCountryCtrl" #singleSelect>
-                  <mat-option>
-                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
-                      formControlName="registryCountryFilterCtrl"></ngx-mat-select-search>
-                  </mat-option>
-                  <mat-option *ngFor="let registryCountry of filteredRegistryCountry| async"
-                    [value]="registryCountry.value">
-                    {{registryCountry.viewValue}}
-                  </mat-option>
-                </mat-select>
-                <mat-error class="wid-error-messages" *ngIf="form.value.registryCountryCtrl?.errors?.required">
-                  {{ 'general.required' | translate }} </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.activitycode' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
-                <input matInput [placeholder]=" 'homecompany.activitycode' | translate"
-                  formControlName="activityCodeCtrl">
-              </mat-form-field>
-              <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl  ==='FRA'">
-                <mat-select [placeholder]=" 'homecompany.activitycode' | translate" formControlName="activityCodeCtrl"
-                  #singleSelect>
-                  <mat-option>
-                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="activityCodeFilterCtrl">
-                    </ngx-mat-select-search>
-                  </mat-option>
-                  <mat-option (blur)="setDescriptionActivity(activityCode.value)"
-                    *ngFor="let activityCode of filteredActivityCode| async" [value]="activityCode.value">
-                    {{activityCode.viewValue}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.currency' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <mat-select [placeholder]=" 'homecompany.currency' | translate" formControlName="currencyCtrl"
-                  #singleSelect>
-                  <mat-option>
-                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="currencyFilterCtrl">
-                    </ngx-mat-select-search>
-                  </mat-option>
-                  <mat-option *ngFor="let currency of filteredCurrency| async" [value]="currency.value">
-                    {{currency.viewValue}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.capital' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input autocomplete="off" matInput [placeholder]=" 'homecompany.capital' | translate"
-                  formControlName="capital" [ngStyle.xs]="{'font-size': '15px'}" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row" fxLayoutGap="10%">
-            <div fxLayout="column" fxFlex="22">
-              <label class="required">{{'homecompany.zipcode' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input required autocomplete="off" matInput required [placeholder]=" 'homecompany.zipcode' | translate"
-                  formControlName="zipCode" [ngStyle.xs]="{'font-size': '15px'}" (blur)="getCity(form.value.zipCode)" />
-                <mat-error class="wid-error-messages" *ngIf="form.controls.zipCode?.errors?.required">
-                  {{ 'general.required' | translate }}</mat-error>
-              </mat-form-field>
-            </div>
-            <div fxLayout="column" fxFlex="48">
-              <label class="required">{{'homecompany.city' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
-                <input autocomplete="off" required matInput required [placeholder]=" 'homecompany.city' | translate"
-                  formControlName="city" [ngStyle.xs]="{'font-size': '15px'}" />
-                <mat-error class="wid-error-messages" *ngIf="form.controls.city?.errors?.required">
-                  {{ 'general.required' | translate }}</mat-error>
-              </mat-form-field>
-              <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl ==='FRA'">
-                <mat-select formControlName="city" name="city" required [placeholder]=" 'homecompany.city' | translate"
-                  required>
-                  <div *ngFor="let city of city.cities ">
-                    <mat-option [value]="city.city">
-                      {{city.city}} </mat-option>
-                  </div>
-                </mat-select>
-                <mat-error class="wid-error-messages" *ngIf="form.value.city?.errors?.required">
-                  {{ 'general.required' | translate }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label class="required">{{'homecompany.country' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <mat-select [placeholder]=" 'homecompany.country' | translate" formControlName="countryCtrl"
-                  #singleSelect>
-                  <mat-option>
-                    <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                      noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="countryFilterCtrl">
-                    </ngx-mat-select-search>
-                  </mat-option>
-                  <mat-option *ngFor="let country of filteredCountry| async" [value]="country.value">
-                    {{country.viewValue}}
-                  </mat-option>
-                </mat-select>
-                <mat-error class="wid-error-messages" *ngIf="form.value.countryCtrl?.errors?.required"> {{
-                  'general.required' | translate }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.website' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input autocomplete="off" matInput [placeholder]=" 'homecompany.website' | translate"
-                  formControlName="webSite" [ngStyle.xs]="{'font-size': '15px'}" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div fxLayout="row">
-            <div fxLayout="column" fxFlex="80">
-              <label>{{'homecompany.employeenum' | translate | uppercase}} </label>
-              <mat-form-field appearance="outline">
-                <input autocomplete="off" matInput [placeholder]=" 'homecompany.employeenum' | translate"
-                  formControlName="employeeNum" [ngStyle.xs]="{'font-size': '15px'}" />
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div fxLayout="column" fxFlex="50" fxLayoutGap="25px" fxFlexOffset="25px">
-        <div fxLayout="column" fxFlex="100">
+   <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+     <div fxLayout="row" class="line-height-3">
 
-          <div fxLayout="column" fxFlex="45" fxLayoutAlign="space-evenly center" class="profile-image">
-            <img src="assets/img/profile-pic.png" width="80" height="80" class="avatar"
-              [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-              <div fxLayout="row" fxFlex="25">
-                <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-                    <span class="font-size-10">{{user.first_name}}</span>
-                  </div>
-                </button>
-              </div>
-              <div fxLayout="row" fxFlex="25">
-                <button mat-button mat-raised-button class="btn-small bg-info-blue white">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-                    <span class="font-size-10">{{user.first_name}}</span>
-                  </div>
-                </button>
-              </div>
-              <div fxLayout="row" fxFlex="25">
-                <button mat-button mat-raised-button class="btn-small bg-error-red white">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-                    <span class="font-size-10">{{user.first_name}}</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div fxLayout="column" fxFlex="55">
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="80">
-                <label>{{'homecompany.activitydescription' | translate| uppercase}} </label>
-                <mat-form-field appearance="outline">
-                  <textarea [placeholder]=" 'homecompany.activitydescription' | translate"  rows="6" formControlName="activityDescription" autocomplete="off" matInput
-                    [ngStyle.xs]="{'font-size': '15px'}">
+     <div fxLayout="column" fxFlex="85"  class="font-size-25 steel">Edit company</div>
+       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+         <button mat-raised-button  class="btn-small bg-pale-grey">
+           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+           </mat-icon>
+          <span class="cool-grey" [routerLink]="['/manager/settings/home-company']"> back</span>
+         </button>
+       </div>
+     </div>
+       <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+
+     <div fxLayout="row"  fxFlex="100" class="p-t-20 font-size-12 " form [formGroup]="form"
+          fxLayoutGap="20px">
+       <div fxLayout="column" fxFlex="50">
+         <div fxLayout="column" fxFlex="100">
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label class="required">{{'homecompany.companyname' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input autocomplete="off" matInput required [placeholder]=" 'homecompany.companyname' | translate"
+                        formControlName="companyName" [ngStyle.xs]="{'font-size': '15px'}" />
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label class="required">{{'homecompany.email' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input matInput autocomplete="off" required [placeholder]="'homecompany.email' | translate"
+                        formControlName="emailAddress" [ngStyle.xs]="{'font-size': '15px'}">
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.registrationnumber' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input matInput autocomplete="off" [placeholder]="'homecompany.registrationnumber' | translate"
+                        formControlName="registrationNumber" [ngStyle.xs]="{'font-size': '15px'}">
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label class="required">{{'homecompany.registrationcountry' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <mat-select [placeholder]=" 'homecompany.registrationcountry' | translate"
+                             formControlName="registryCountryCtrl" #singleSelect>
+                   <mat-option>
+                     <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                            formControlName="registryCountryFilterCtrl"></ngx-mat-select-search>
+                   </mat-option>
+                   <mat-option *ngFor="let registryCountry of filteredRegistryCountry| async"
+                               [value]="registryCountry.value">
+                     {{registryCountry.viewValue}}
+                   </mat-option>
+                 </mat-select>
+                 <mat-error class="wid-error-messages" *ngIf="form.value.registryCountryCtrl?.errors?.required">
+                   {{ 'general.required' | translate }} </mat-error>
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.activitycode' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
+                 <input matInput [placeholder]=" 'homecompany.activitycode' | translate"
+                        formControlName="activityCodeCtrl">
+               </mat-form-field>
+               <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl  ==='FRA'">
+                 <mat-select [placeholder]=" 'homecompany.activitycode' | translate" formControlName="activityCodeCtrl"
+                             #singleSelect>
+                   <mat-option>
+                     <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="activityCodeFilterCtrl">
+                     </ngx-mat-select-search>
+                   </mat-option>
+                   <mat-option (blur)="setDescriptionActivity(activityCode.value)"
+                               *ngFor="let activityCode of filteredActivityCode| async" [value]="activityCode.value">
+                     {{activityCode.viewValue}}
+                   </mat-option>
+                 </mat-select>
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.currency' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <mat-select [placeholder]=" 'homecompany.currency' | translate" formControlName="currencyCtrl"
+                             #singleSelect>
+                   <mat-option>
+                     <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="currencyFilterCtrl">
+                     </ngx-mat-select-search>
+                   </mat-option>
+                   <mat-option *ngFor="let currency of filteredCurrency| async" [value]="currency.value">
+                     {{currency.viewValue}}
+                   </mat-option>
+                 </mat-select>
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.capital' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input type="number" autocomplete="off" matInput [placeholder]=" 'homecompany.capital' | translate"
+                        formControlName="capital" [ngStyle.xs]="{'font-size': '15px'}" />
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row" fxLayoutGap="10%">
+             <div fxLayout="column" fxFlex="22">
+               <label class="required">{{'homecompany.zipcode' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input required autocomplete="off" matInput required [placeholder]=" 'homecompany.zipcode' | translate"
+                        formControlName="zipCode" [ngStyle.xs]="{'font-size': '15px'}" (blur)="getCity(form.value.zipCode)" />
+                 <mat-error class="wid-error-messages" *ngIf="form.controls.zipCode?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
+               </mat-form-field>
+             </div>
+             <div fxLayout="column" fxFlex="48">
+               <label class="required">{{'homecompany.city' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
+                 <input autocomplete="off" required matInput required [placeholder]=" 'homecompany.city' | translate"
+                        formControlName="city" [ngStyle.xs]="{'font-size': '15px'}" />
+                 <mat-error class="wid-error-messages" *ngIf="form.controls.city?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
+               </mat-form-field>
+               <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl ==='FRA'">
+                 <mat-select formControlName="city" name="city" required [placeholder]=" 'homecompany.city' | translate"
+                             required>
+                   <div *ngFor="let city of city.cities ">
+                     <mat-option [value]="city.city">
+                       {{city.city}} </mat-option>
+                   </div>
+                 </mat-select>
+                 <mat-error class="wid-error-messages" *ngIf="form.value.city?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label class="required">{{'homecompany.country' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <mat-select [placeholder]=" 'homecompany.country' | translate" formControlName="countryCtrl"
+                             #singleSelect>
+                   <mat-option>
+                     <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                            noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="countryFilterCtrl">
+                     </ngx-mat-select-search>
+                   </mat-option>
+                   <mat-option *ngFor="let country of filteredCountry| async" [value]="country.value">
+                     {{country.viewValue}}
+                   </mat-option>
+                 </mat-select>
+                 <mat-error class="wid-error-messages" *ngIf="form.value.countryCtrl?.errors?.required"> {{
+                   'general.required' | translate }}</mat-error>
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.phone1' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input [placeholder]=" 'homecompany.phone1' | translate" autocomplete="off" matInput formControlName="phoneNbr1"
+                        [ngStyle.xs]="{'font-size': '15px'}" />
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.fax' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input [placeholder]=" 'homecompany.fax' | translate" autocomplete="off" matInput formControlName="faxNbr"
+                        [ngStyle.xs]="{'font-size': '15px'}" />
+               </mat-form-field>
+             </div>
+           </div>
+           <div fxLayout="row">
+             <div fxLayout="column" fxFlex="80">
+               <label>{{'homecompany.website' | translate | uppercase}} </label>
+               <mat-form-field appearance="outline">
+                 <input autocomplete="off" matInput [placeholder]=" 'homecompany.website' | translate"
+                        formControlName="webSite" [ngStyle.xs]="{'font-size': '15px'}" />
+               </mat-form-field>
+             </div>
+           </div>
+         </div>
+       </div>
+       <div fxLayout="column" fxFlex="50" fxLayoutGap="25px" fxFlexOffset="25px">
+         <div fxLayout="column" fxFlex="100">
+
+           <div fxLayout="column" fxFlex="48" fxLayoutAlign="space-evenly center" class="profile-image">
+             <div class="profile-image" fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
+               <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
+               </wid-profile-image>
+             </div>
+             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+               <div fxLayout="row" fxFlex="25">
+                 <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
+                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
+                     <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
+                     <span class="font-size-10">{{user?.first_name}}</span>
+                   </div>
+                 </button>
+               </div>
+               <div fxLayout="row" fxFlex="25">
+                 <button mat-button mat-raised-button class="btn-small bg-info-blue white">
+                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
+                     <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
+                     <span class="font-size-10">{{user?.first_name}}</span>
+                   </div>
+                 </button>
+               </div>
+               <div fxLayout="row" fxFlex="25">
+                 <button mat-button mat-raised-button class="btn-small bg-error-red white">
+                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
+                     <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
+                     <span class="font-size-10">{{user?.first_name}}</span>
+                   </div>
+                 </button>
+               </div>
+             </div>
+           </div>
+           <div fxLayout="column" fxFlex="52">
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.activitydescription' | translate| uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                  <textarea [placeholder]=" 'homecompany.activitydescription' | translate"  rows="7" formControlName="activityDescription" autocomplete="off" matInput
+                            [ngStyle.xs]="{'font-size': '15px'}">
                   </textarea>
-                </mat-form-field>
-              </div>
-            </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="80">
-                <label>{{'homecompany.legalform' | translate | uppercase}} </label>
-                <mat-form-field appearance="outline">
-                  <mat-select [placeholder]=" 'homecompany.legalform' | translate" formControlName="legalFormCtrl" #singleSelect>
-                    <mat-option>
-                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                        noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="legalFormFilterCtrl">
-                      </ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="legalForm.value">
-                      {{legalForm.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="80">
-                <label>{{'homecompany.vat' | translate | uppercase}} </label>
-                <mat-form-field appearance="outline">
-                  <mat-select [placeholder]=" 'homecompany.vat' | translate" formControlName="vatCtrl" #singleSelect>
-                    <mat-option>
-                      <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
-                        noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="vatFilterCtrl">
-                      </ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option *ngFor="let vat of filteredVat| async" [value]="vat.value">
-                      {{vat.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="80">
-                <label class="required">{{'homecompany.adress' | translate| uppercase}} </label>
-                <mat-form-field appearance="outline">
-                  <textarea [placeholder]=" 'homecompany.adress' | translate" rows="9" formControlName="address" class="area-text" autocomplete="off" matInput required
-                    [ngStyle.xs]="{'font-size': '15px'}">
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.legalform' | translate | uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                   <mat-select [placeholder]=" 'homecompany.legalform' | translate" formControlName="legalFormCtrl" #singleSelect>
+                     <mat-option>
+                       <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                              noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="legalFormFilterCtrl">
+                       </ngx-mat-select-search>
+                     </mat-option>
+                     <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="legalForm.value">
+                       {{legalForm.viewValue}}
+                     </mat-option>
+                   </mat-select>
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.vat' | translate | uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                   <mat-select [placeholder]=" 'homecompany.vat' | translate" formControlName="vatCtrl" #singleSelect>
+                     <mat-option>
+                       <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                              noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="vatFilterCtrl">
+                       </ngx-mat-select-search>
+                     </mat-option>
+                     <mat-option *ngFor="let vat of filteredVat| async" [value]="vat.value">
+                       {{vat.viewValue}}
+                     </mat-option>
+                   </mat-select>
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label class="required">{{'homecompany.adress' | translate| uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                  <textarea [placeholder]=" 'homecompany.adress' | translate" rows="8" formControlName="address" class="area-text" autocomplete="off" matInput required
+                            [ngStyle.xs]="{'font-size': '15px'}">
                   </textarea>
-                  <mat-error class="wid-error-messages" *ngIf="form.controls.address?.errors?.required">
-                    {{ 'general.required' | translate }} </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="80">
-                <label>{{'homecompany.contactemail' | translate | uppercase}} </label>
-                <mat-form-field appearance="outline">
-                  <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="contactEmail"
-                    [ngStyle.xs]="{'font-size': '15px'}" />
-                </mat-form-field>
-              </div>
-            </div>
-            <div fxLayout="row" fxFlexFill>
-              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center flex-end" fxLayoutGap="28px" class="m-b-10">
-                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
-                  <span class="font-size-14"> {{ 'company.reset' | translate}}</span>
-                </button>
-                <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white" [disabled]="!form.valid"
-                  (click)="update()">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="font-size-14">{{ 'user.save' | translate}}</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                   <mat-error class="wid-error-messages" *ngIf="form.controls.address?.errors?.required">
+                     {{ 'general.required' | translate }} </mat-error>
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.phone2' | translate | uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                   <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="phoneNbr2"
+                          [ngStyle.xs]="{'font-size': '15px'}" />
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.contactemail' | translate | uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                   <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="contactEmail"
+                          [ngStyle.xs]="{'font-size': '15px'}" />
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row">
+               <div fxLayout="column" fxFlex="80">
+                 <label>{{'homecompany.employeenum' | translate | uppercase}} </label>
+                 <mat-form-field appearance="outline">
+                   <input autocomplete="off" matInput [placeholder]=" 'homecompany.employeenum' | translate"
+                          formControlName="employeeNum" [ngStyle.xs]="{'font-size': '15px'}" />
+                 </mat-form-field>
+               </div>
+             </div>
+             <div fxLayout="row" fxFlexFill>
+               <div fxLayout="row" fxFlex="80" fxLayoutAlign="center flex-end" fxLayoutGap="28px" class="m-b-50">
+                 <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
+                   <span class="font-size-14"> {{ 'company.reset' | translate}}</span>
+                 </button>
+                 <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white" [disabled]="!form.valid"
+                         (click)="addOrUpdate()">
+                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                     <span class="font-size-14">{{ 'user.save' | translate}}</span>
+                   </div>
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+
   </wid-scrollbar>
 </div>

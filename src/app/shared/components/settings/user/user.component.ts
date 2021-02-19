@@ -1,9 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { ProfileService } from '@core/services/profile/profile.service';
+import { ModalService } from '@core/services/modal/modal.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -11,7 +15,6 @@ import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
-import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-user',
@@ -26,39 +29,42 @@ export class UserComponent implements OnInit, OnDestroy {
   applicationId: string;
   emailAddress: string;
   languages: IViewParam[] = [];
-
+  path: string;
   avatar: any;
   gender: string;
   lang: string;
   title: string;
   icon: string;
-
+  id: string;
   /** subscription */
   private subscriptions: Subscription[] = [];
 
   constructor(private utilsService: UtilsService,
-              private appInitializerService: AppInitializerService,
-              private userService: UserService,
-              private localStorageService: LocalStorageService,
-              private modalService: ModalService,
+    private appInitializerService: AppInitializerService,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
+    private route: ActivatedRoute,
+    private uploadService: UploadService,
+    private router: Router,
+    private profileService: ProfileService
   ) {
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddress = this.localStorageService.getItem('userCredentials')['email_address'];
-    this.modalService.registerModals(
-      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
   }
 
   /**
    * @description: Loaded when component in init state
    */
   ngOnInit(): void {
-    this.userService.avatar$.subscribe(
-      avatar => {
-        this.avatar = avatar;
-      }
-    );
-
-  this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+    this.getConnectedUser();
+  }
+  /**
+   * @description: get connected user
+   */
+  getConnectedUser(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
+    this.modalService.registerModals(
+      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
+    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
@@ -66,18 +72,50 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     }));
   }
-
   /**
    * @description: check if the user is in his home profile
    * or the manager wants to add a new profile
    * or he wants to update the profile of one user
    */
-  checkComponentAction(connectedUser: IUserInfo): void {
+  checkComponentAction(connectedUser: IUserInfo) {
+    /***************** go id from route *****************
+     *******************************************************/
+    this.route.queryParams.subscribe(params => {
+      this.id = params.id || null;
+    });
+    /***************** administrator show another user *****************
+     *******************************************************************/
+    if (this.id) {
+      this.profileService.getUserById(this.id).subscribe(async user => {
+        this.user = user[0];
+        this.avatar = await this.uploadService.getImage(user[0]['photo']);
+        this.emailAddress = this.user['userKey']['email_address'];
+        this.getRefdata();
+        this.getIcon();
+        this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
+          (data) => {
+            const list = ['ROLE'];
+            const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+              list);
+            this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], refData['ROLE']);
+          });
+      });
+      /***************** current user show your profile *****************
+       *******************************************************************/
+    } else {
+      this.userService.avatar$.subscribe(
+        avatar => {
+          this.avatar = avatar;
+        }
+      );
       this.userRole = connectedUser['userroles'][0]['userRolesKey']['role_code'];
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
+      this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
-    this.getRefdata();
-    this.getIcon();
+      this.getRefdata();
+      this.getIcon();
+    }
+
   }
 
   /**
@@ -97,8 +135,26 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   getLanguages(): void {
     this.languages = this.appInitializerService.languageList.map((language) => {
-      return ({ value: language._id, viewValue: language.language_desc});
+      return ({ value: language._id, viewValue: language.language_desc });
     });
+  }
+
+  /**
+   * @description: Update
+   */
+  update(): void {
+    /***************** go to page update profile *****************
+     *******************************************************************/
+    if (this.id) {
+      this.router.navigate(['/manager/user/edit-profile'],
+        {
+          queryParams: {
+            'id': this.id
+          }
+        });
+    } else {
+      this.router.navigate(['/manager/user/edit-profile']);
+    }
   }
 
   /**
@@ -116,7 +172,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: Add link
    */
   addLink(): void {
-    this.modalService.displayModal('AddLink', null, '50%', '80%');
+    this.modalService.displayModal('AddLink', this.user, '50%', '80%');
   }
 
   /**

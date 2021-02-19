@@ -99,6 +99,9 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @description get module name
+   */
   getModuleName() {
     this.userService.moduleName$
       .pipe(
