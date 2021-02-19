@@ -13,6 +13,20 @@ $themeColorSidenav: $black-three;
 }
 
 /*******************
+   Right Sidenav
+*******************/
+.right-side-nav-container{
+  .icon{
+    fill: $lighter-green !important;
+    background: rgba($lighter-green, 0.1) !important;
+    color: $lighter-green !important;
+  }
+  .notif-item {
+    background: rgba($lighter-green, 0.2) !important;
+  }
+}
+
+/*******************
    Sidenav
 *******************/
 wid-sidenav {

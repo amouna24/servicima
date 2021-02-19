@@ -1,6 +1,9 @@
 <ol class="breadcrumb">
   <li *ngFor="let breadcrumb of breadcrumbs">
-    <span class="font-size-14 font-semi-bold steel" [routerLink]="breadcrumb.url" routerLinkActive="router-link-active">
+    <span class="font-size-12 font-semi-bold steel"
+          [routerLink]="breadcrumb.url"
+          routerLinkActive="router-link-active"
+          [routerLinkActiveOptions]="{ exact: true }">
       {{ breadcrumb.label }}
     </span>
   </li>

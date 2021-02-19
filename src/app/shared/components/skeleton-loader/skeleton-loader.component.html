@@ -1,1 +1,7 @@
-<div [ngStyle]="getMyStyles()" class="skelt-load loader"></div>
+<ng-container *ngFor="let row of rowsNbr">
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+  <ng-container *ngFor="let col of columnsNbr">
+      <div [ngStyle]="getMyStyles()" class="skelt-load loader"></div>
+  </ng-container>
+  </div>
+</ng-container>

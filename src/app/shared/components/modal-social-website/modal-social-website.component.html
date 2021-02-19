@@ -4,10 +4,13 @@
 
     <h5 class=" steel">Social website :</h5>
     <div fxLayout="row" fxFlex="80" fxLayoutGap="10px">
+
+
 <div fxLayout="column"  fxFlex="20">
+
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline" >
-      <mat-select disableOptionCentering panelClass="panelColor" formControlName="twitterAccount" placeholder="{{ 'user.linkedinacc' | translate }}">
+      <mat-select disableOptionCentering panelClass="panelColor" placeholder="{{ 'user.linkedinacc' | translate }}">
         <mat-option  *ngFor="let twitter of list" [value]="twitter">
           {{twitter}}
         </mat-option>
@@ -16,8 +19,8 @@
   </div>
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline">
-      <mat-select disableOptionCentering panelClass="panelColor" formControlName="youtubeAccount" placeholder="{{ 'user.twitteracc' | translate }}">
-        <mat-option *ngFor="let youtube of list" [value]="youtube">
+      <mat-select disableOptionCentering panelClass="panelColor" placeholder="{{ 'user.twitteracc' | translate }}">
+        <mat-option    *ngFor="let youtube of list" [value]="youtube">
           {{youtube}}
         </mat-option>
       </mat-select>
@@ -26,20 +29,23 @@
   </div>
   <div fxLayout="column" fxFlex="80">
     <mat-form-field appearance="outline">
-      <mat-select disableOptionCentering panelClass="panelColor" formControlName="linkedinAccount" placeholder="{{ 'user.youtubeacc' | translate }}">
+      <mat-select disableOptionCentering panelClass="panelColor"  placeholder="{{ 'user.youtubeacc' | translate }}">
       <mat-option *ngFor="let linkedin of list" [value]="linkedin">
         {{linkedin}}
       </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
+
 </div>
+
+
    <div fxLayout="column"  fxFlex="70">
 
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
          <input  autocomplete="off" matInput required
-                [placeholder]=" 'user.twitteracc' | translate | uppercase" formControlName="twitterAccount"
+                [placeholder]=" 'user.twitteracc' | translate | uppercase" formControlName="input1"
                 [ngStyle.xs]="{'font-size': '15px'}" />
         <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.twitterAccount.errors?.required">
            {{ 'general.required' | translate }}</mat-error> -->
@@ -48,46 +54,24 @@
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
          <input  autocomplete="off" matInput required
-                [placeholder]=" 'user.youtubeacc' | translate | uppercase" formControlName="youtubeAccount"
+                [placeholder]=" 'user.youtubeacc' | translate | uppercase" formControlName="input2"
                 [ngStyle.xs]="{'font-size': '15px'}"  />
-         <mat-error class="wid-error-messages" *ngIf="form.controls.youtubeAccount.errors?.required">
+         <mat-error class="wid-error-messages" *ngIf="form.controls.input2.errors?.required">
            {{ 'general.required' | translate }}</mat-error>
        </mat-form-field>
      </div>
      <div fxLayout="column" fxFlex="80">
        <mat-form-field appearance="outline">
          <input autocomplete="off" matInput required
-                [placeholder]=" 'user.linkedinacc' | translate | uppercase" formControlName="linkedinAccount"
+                [placeholder]=" 'user.linkedinacc' | translate | uppercase" formControlName="input3"
                 [ngStyle.xs]="{'font-size': '15px'}"  />
-         <mat-error class="wid-error-messages" *ngIf="form.controls.linkedinAccount.errors?.required">
+         <mat-error class="wid-error-messages" *ngIf="form.controls.input3.errors?.required">
            {{ 'general.required' | translate }}</mat-error>
        </mat-form-field>
      </div>
+
    </div>
 
   </div>
-    <span class="font-size-12 topaz cursor-pointer" (click)="addQuantity()"> + </span>
-    <div fxLayout="column" fxFlex="80" *ngFor="let quantity of quantities().controls; let i=index" [formGroupName]="i">
-     <div fxLayout="row" fxLayoutGap="10px" >
-       <div fxLayout="column" fxFlex="20">
-      <mat-form-field appearance="outline">
-        <mat-select disableOptionCentering panelClass="panelColor" formControlName="qty" placeholder="{{ 'user.linkedinacc' | translate }}">
-          <mat-option  *ngFor="let twitter of list" [value]="twitter">
-            {{twitter}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-       </div>
-       <div fxLayout="column" fxFlex="70">
-      <mat-form-field appearance="outline" >
-        <input autocomplete="off" matInput required
-               [placeholder]=" 'user.linkedinacc' | translate | uppercase" formControlName="price"
-               [ngStyle.xs]="{'font-size': '15px'}" />
-      <!--  <mat-error class="wid-error-messages" *ngIf="form.controls.linkedinAccount.errors?.required">
-          {{ 'general.required' | translate }}</mat-error>-->
-      </mat-form-field>
-       </div>
-     </div>
-    </div>
   </div>
 </wid-model-modal>

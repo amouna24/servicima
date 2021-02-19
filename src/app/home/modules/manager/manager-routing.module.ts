@@ -46,10 +46,16 @@ const routes: Routes = [
       },
       {
         path: 'settings',
+        data: {
+          breadcrumb: 'settings'
+        },
         loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
       },
       {
         path: 'user',
+        data: {
+          breadcrumb: 'user'
+        },
         loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
       }
     ]

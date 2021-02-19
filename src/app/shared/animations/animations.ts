@@ -19,7 +19,7 @@ const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
 const defaultMinPosition = '51px';
 
-export function mainContentAnimation(animationDuration: string = defaultDuration,
+export function mainContentAnimation(animationDuration: string = '400ms',
 minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth,
 maxWidthSetting: string = defaultSettingMaxWidth): AnimationTriggerMetadata {
   return trigger('mainContent', [

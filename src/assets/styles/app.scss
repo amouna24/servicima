@@ -614,11 +614,11 @@ html body {
   height: 400px !important;
   padding: 20px;
 }
-.wid-container {
+.dynamic-component-container  {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
-  height: 82vh !important;
+  height: 88vh !important;
 }
 
 .dynamic-component-content {
@@ -671,13 +671,8 @@ html body {
    user
 *******************/
 .container-show{
-  height: 82vh !important;
+  height: 88vh !important;
   margin: 20px;
-}
-.container-edit{
-  height: 82vh !important;
-  margin: 20px;
-  width: 95%;
 }
 .container-btn{
   width: 43px;

@@ -127,13 +127,13 @@ wid-sidenav {
     text-align: center;
     line-height: 43px;
     vertical-align: middle;
-    background-color: $duck-egg-blue;
+    background: rgba($water-blue, 0.1);
     color: $water-blue;
     border-radius: $border-radius-15;
   }
-  .alert-item {
+  .notif-item {
     border-radius: $border-radius-15;
-    background-color: $duck-egg-blue;
+    background: rgba($water-blue, 0.2);
   }
   .list-item {
     height: 50px !important;

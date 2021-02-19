@@ -8,15 +8,12 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    data: {
-      breadcrumb: 'home'
-    },
     children: [
       {
         path: 'manager',
         loadChildren: () => import('./modules/manager/manager.module').then(m => m.ManagerModule),
         data: {
-          breadcrumb: 'manager'
+          breadcrumb: 'home'
         },
       },
       {

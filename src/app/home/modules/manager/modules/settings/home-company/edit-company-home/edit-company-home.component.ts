@@ -40,7 +40,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   avatar: any;
   haveImage: any;
   photo: object;
-  profileUserType = userType.UT_USER;
+  profileUserType = userType.UT_COMPANY;
   city: ICity;
   userCredentials: string;
   company: ICompanyModel;

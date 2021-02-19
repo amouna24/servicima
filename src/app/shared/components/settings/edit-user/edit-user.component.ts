@@ -2,19 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/internal/operators/map';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { map } from 'rxjs/internal/operators/map';
-import { UploadService } from '@core/services/upload/upload.service';
 import { userType } from '@shared/models/userProfileType.model';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
@@ -62,14 +62,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private formBuilder: FormBuilder,
     private router: Router,
-              private uploadService: UploadService,
-              private route: ActivatedRoute
-  ) {
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
-    this.modalService.registerModals(
-      { modalName: 'changePassword', modalComponent: ChangePwdComponent });
-  }
+    private uploadService: UploadService,
+    private route: ActivatedRoute
+  ) { }
 
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
@@ -82,6 +77,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.initForm();
+    this.getConnectedUser();
+  }
+
+  /**
+   * @description: get connected user
+   */
+  getConnectedUser(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
+    this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.infoUser = data;
@@ -91,9 +95,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.checkComponentAction(data);
       }
     });
-
+    this.modalService.registerModals(
+      { modalName: 'changePassword', modalComponent: ChangePwdComponent });
   }
-
   /**
    * @description : check if the user is in his home profile
    * or the manager wants to add a new profile
@@ -105,29 +109,34 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.id = params.id || null;
     });
+
+    /***************** go to page Add user *****************
+     *******************************************************/
     if (this.router.url === '/manager/settings/users/add-user') {
       this.title = 'Add';
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
+      /***************** go to page Update user by id *****************
+       ****************************************************************/
     } else if (this.id) {
       this.title = 'Update';
       this.showCompany = true;
       this.profileService.getUserById(this.id).subscribe(async user => {
         this.userInfo = user[0];
         this.haveImage = user[0]['photo'];
-        const av = await this.uploadService.getImage(user[0]['photo']);
-        this.avatar = av;
+        this.avatar = await this.uploadService.getImage(user[0]['photo']);
         this.emailAddress = user[0]['userKey'].email_address;
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
             this.idRole = data[0]['_id'];
             this.userRole = data[0]['userRolesKey']['role_code'];
-          //  this.language_id = this.userInfo['language_id'];
             this.form.controls['userType'].disable();
             this.form.controls['homeCompany'].disable();
             this.setForm();
           });
       });
+      /***************** go to page Update profile user *****************
+       ****************************************************************/
     } else {
       this.title = 'Update';
       this.userService.avatar$.subscribe(
@@ -163,7 +172,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       genderProfil: ['', [Validators.required]],
       youtubeAccount: [''],
       linkedinAccount: [''],
-      homeCompany: [{ value: '', disabled: true}],
+      homeCompany: [{ value: '', disabled: true }],
       roleCtrl: [''],
       titleCtrl: [''],
       languageCtrl: [''],
@@ -230,7 +239,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description : update the user info
    * or add a new user
    */
-  async update(): Promise<void> {
+  async addOrUpdate(): Promise<void> {
     let filename = null;
     if (this.photo) {
       filename = await this.uploadService.uploadImage(this.photo)
@@ -240,6 +249,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
           ))
         .toPromise();
     }
+    /***************** Add user *************************************
+     ****************************************************************/
     if (this.router.url === '/manager/settings/users/add-user') {
       const newUser = {
         application_id: this.applicationId,
@@ -270,7 +281,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.subscriptionModal = this.modalService.displayConfirmationModal(add, '45%', '45%').subscribe((value) => {
         if (value) {
           this.profileService.addNewProfile(newUser).subscribe(
-            (res) => {
+            () => {
               this.router.navigate(['/manager/settings/users']);
             },
             (err) => console.error(err),
@@ -278,6 +289,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         }
         this.subscriptionModal.unsubscribe();
       });
+      /***************** Update user *************************************
+       ****************************************************************/
     } else {
       const updateUser = {
         application_id: this.user['userKey'].application_id,
@@ -312,19 +325,23 @@ export class EditUserComponent implements OnInit, OnDestroy {
                   role_code: this.form.value.roleCtrl,
                   granted_by: this.emailAddressStorage
                 };
+                /***************** Current user  *************************************
+                 ****************************************************************/
                 if (updateUser.email_address === this.emailAddressStorage) {
                   if (this.id) {
-                  this.profileService.UpdateUserRole(userRoleObject).subscribe(
-                    (data) => {
-                      this.infoUser['userroles'][0] = data;
-                    }
-                  );
+                    this.profileService.UpdateUserRole(userRoleObject).subscribe(
+                      (data) => {
+                        this.infoUser['userroles'][0] = data;
+                      }
+                    );
                   }
                   this.infoUser['user'][0] = res;
                   this.userService.connectedUser$.next(this.infoUser);
                   if (filename) {
                     this.userService.getImage(filename);
                   }
+                  /***************** Administrator update another user *************************************
+                   ****************************************************************/
                 } else {
                   this.profileService.UpdateUserRole(userRoleObject).subscribe(
                     (data) => {
@@ -332,7 +349,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
                     }
                   );
                 }
-                }
+              }
             }));
         }
         this.subscriptionModal.unsubscribe();
