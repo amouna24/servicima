@@ -33,6 +33,7 @@ export class AppInitializerService {
   countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
   licencesList: ILicenceModel[] = [];
+  initialized = 0;
 
   constructor(
     private httpClient: HttpClient,
@@ -55,6 +56,8 @@ export class AppInitializerService {
         this.licencesList = this.starterData['licences'];
         this.localStorageService.setItem('languages', this.languageList);
         this.translationCustomLoaderService.setTranslationLanguage();
+        this.initialized += 50;
+        console.log(this.initialized);
       },
       (err) => {
         console.error(err);
@@ -70,6 +73,8 @@ export class AppInitializerService {
         this.activityCodeList = data[0];
         this.countriesList = data[1];
         this.currenciesList = data[2];
+        this.initialized += 50;
+        console.log(this.initialized);
       });
   }
 }

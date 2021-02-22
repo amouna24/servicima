@@ -4,7 +4,6 @@ import { mainContentAnimation } from '@shared/animations/animations';
 import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
-import { Subject } from 'rxjs';
 import { listColor } from '@shared/statics/list-color.static';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
@@ -28,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   listColor: ITheme[];
   email: string;
   classColor: object;
-  isLoading$ = new Subject<boolean>();
   d_c_Form: FormGroup;
 
   /**************************************************************************
@@ -230,12 +228,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.displayClass();
-    this.userService.isLoadingAction$.subscribe(
-      (res) => {
-        this.isLoading$.next(res);
-      },
-      error => this.isLoading$.next(true)
-    );
     this.sidebarService.sidebarStateObservable$
       .subscribe((newState: string) => {
         this.sidebarState = newState;
