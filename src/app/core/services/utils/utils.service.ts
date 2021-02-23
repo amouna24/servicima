@@ -6,6 +6,8 @@ import { IIcon } from '@shared/models/icon.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IError } from '@shared/models/error.model';
+import { errorPages } from '@shared/statics/error-pages.static';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -257,4 +259,12 @@ export class UtilsService {
       .find(language => language._id === id).LanguageKey.language_code;
   }
 
+  /**************************************************************************
+   * @description get error page
+   * @param errCode: string
+   * @return object of type IError
+   *************************************************************************/
+  getErrorPage(errCode: string, pages: IError[] = errorPages): IError {
+    return pages.find(page => page.code === errCode);
+  }
 }
