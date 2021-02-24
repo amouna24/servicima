@@ -13,6 +13,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -80,7 +81,8 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
-    ScrollbarModule
+    ScrollbarModule,
+    DynamicDataTableModule,
   ],
   exports: [
     MaterialModule,
@@ -109,7 +111,8 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     SidenavSettingsComponent,
     ScrollbarModule,
     DynamicComponent,
-    EditCompanyHomeComponent
+    EditCompanyHomeComponent,
+    DynamicDataTableModule,
   ]
 })
 export class SharedModule { }
