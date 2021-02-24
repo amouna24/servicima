@@ -107,13 +107,13 @@
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutGap="25px" fxFlexOffset="25px">
           <div fxLayout="column" fxFlex="100">
-            <div fxLayout="column" fxFlex="30" fxLayoutAlign="space-evenly center">
-              <div class="profile-image" fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
-                <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user"
+            <div fxLayout="column" fxFlex="30" fxLayoutAlign="start center">
+              <div class="profile-image"  fxLayout="column" fxLayoutAlign="center start">
+                <wid-profile-image  [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user"
                   [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
                 </wid-profile-image>
               </div>
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="m-t-20">
                 <div fxLayout="row" fxFlex="25">
                   <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
