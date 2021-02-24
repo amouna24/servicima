@@ -49,7 +49,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
   emailAddressStorage: string;
   id: string;
   profileUserType = userType.UT_USER;
-
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -254,7 +253,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     if (this.router.url === '/manager/settings/users/add-user') {
       const newUser = {
         application_id: this.applicationId,
-        company_id: this.companyId,
+        company_id: this.utilsService.getCompanyId('ALL', 'ALL'),
         email_address: this.form.value.emailAddress,
         company_email: this.emailAddressStorage,
         user_type: this.form.value.userType,
