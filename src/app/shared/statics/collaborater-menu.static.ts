@@ -27,7 +27,7 @@ export const collaboraterMenu: IMenu[] = [
         name: 'hr-records',
         type: 'link',
         icon: 'dashboard',
-        feature: 'COLLAB_RH_ACCESS',
+        feature: 'HR_FOLDER_ACCESS',
     },
     {
         state: 'salary-slips',

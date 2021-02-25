@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent implements OnInit {
-
+  existForm = false;
   constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private modalService: ModalService, ) {
@@ -25,7 +25,7 @@ export class ConfirmationModalComponent implements OnInit {
   }
 
   displayStyle() {
-    switch (this.data.title) {
+    switch (this.data.code) {
       case 'desactivate': {
         this.modelConfig = {
           title: '',

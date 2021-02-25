@@ -22,7 +22,7 @@ export const candidateMenu: IMenu[] = [
         name: 'files',
         type: 'link',
         icon: 'dashboard',
-        feature: 'CANDIDATE_FILE_ACCESS',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
     },
     {
         state: 'visa-files',

@@ -45,6 +45,13 @@ const routes: Routes = [
         path: 'cv',
         loadChildren: () => import('@shared/modules/cv/cv.module').then(m => m.CvModule)
       },
+      {
+        path: 'user',
+        data: {
+          breadcrumb: 'user'
+        },
+        loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
+      }
     ]
   }
 ];

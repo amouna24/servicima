@@ -16,9 +16,9 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { userType } from '@shared/models/userProfileType.model';
+import { Location } from '@angular/common';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
-
 @Component({
   selector: 'wid-edit-user',
   templateUrl: './edit-user.component.html',
@@ -62,7 +62,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     private uploadService: UploadService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
   ) { }
 
   /** list filtered by search keyword */
@@ -194,7 +195,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       cellphoneNbr: this.userInfo['cellphone_nbr'],
       userType: this.userInfo['user_type'],
       twitterAccount: this.userInfo['twitter_url'],
-      youtubeAccount: this.userInfo['youtube_url'],
+      youtubeAccount: this.userInfo?.youtube_url ? this.userInfo?.youtube_url : 'none' ,
       linkedinAccount: this.userInfo['linkedin_url'],
       homeCompany: this.companyName,
       genderProfil: this.userInfo['gender_id'],
@@ -231,7 +232,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
-    this.modalService.displayModal('changePassword', null, '50%', '80%');
+    this.modalService.displayModal('changePassword', null, '570px', '520px');
   }
 
   /**
@@ -275,9 +276,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
         photo: filename ? filename : ''
       };
       const add = {
-        title: 'add',
+        code: 'add',
+        title: 'add your account',
       };
-      this.subscriptionModal = this.modalService.displayConfirmationModal(add, '45%', '45%').subscribe((value) => {
+      this.subscriptionModal = this.modalService.displayConfirmationModal(add, '528px', '300px').subscribe((value) => {
         if (value) {
           this.profileService.addNewProfile(newUser).subscribe(
             () => {
@@ -310,9 +312,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
         photo: filename ? filename : this.userInfo.photo,
       };
       const confirmation = {
-        title: 'edit',
+        code: 'edit',
+        title: 'edit your account',
       };
-      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '45%', '45%').subscribe((value) => {
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
         if (value) {
           this.subscriptions.push(this.profileService.updateUser(updateUser).subscribe(
             res => {
@@ -361,12 +364,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   deactivateAccount(): void {
     const desactivate = {
-      title: 'desactivate',
+      code: 'desactivate',
+      title: 'desactivate your account',
     };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(desactivate, '45%', '45%').subscribe((value) => {
+    this.subscriptionModal = this.modalService.displayConfirmationModal(desactivate, '560px', '300px').subscribe((value) => {
       if (value) {
         console.log('compte desactivé');
-        this.subscriptionModal.unsubscribe();
       }
       this.subscriptionModal.unsubscribe();
     });
@@ -410,4 +413,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 
+  /**
+   * @description back
+   */
+ back() {
+    this.location.back();
+ }
 }

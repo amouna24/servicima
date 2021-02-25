@@ -24,6 +24,8 @@ export class ModalComponent implements OnInit {
     },
     style: any
   };
+  @Input() form;
+  @Input() existForm;
 
   @Output() emitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 

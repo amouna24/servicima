@@ -57,7 +57,7 @@ const routes: Routes = [
           breadcrumb: 'user'
         },
         loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
-      }
+      },
     ]
   }
 ];

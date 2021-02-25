@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, Subscription } from 'rxjs';
+import { Location } from '@angular/common';
+import { map } from 'rxjs/internal/operators/map';
 
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -17,7 +19,6 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { ICity } from '@shared/models/city.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { UploadService } from '@core/services/upload/upload.service';
-import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -27,14 +28,15 @@ import { map } from 'rxjs/internal/operators/map';
 export class EditCompanyHomeComponent implements OnInit, OnDestroy {
 
   constructor(private utilsService: UtilsService,
-              private profileService: ProfileService,
-              private formBuilder: FormBuilder,
-              private userService: UserService,
-              private localStorageService: LocalStorageService,
-              private assetsDataService: AssetsDataService,
-              private appInitializerService: AppInitializerService,
-              private modalService: ModalService,
-              private uploadService: UploadService,
+    private profileService: ProfileService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private assetsDataService: AssetsDataService,
+    private appInitializerService: AppInitializerService,
+    private modalService: ModalService,
+    private uploadService: UploadService,
+    private location: Location,
   ) {
   }
   avatar: any;
@@ -220,59 +222,62 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description : update or edit company profile
    */
- async addOrUpdate() {
-    let filename = null;
-    if (this.photo) {
-      filename = await this.uploadService.uploadImage(this.photo)
-        .pipe(
-          map(
-            response => response.file.filename
-          ))
-        .toPromise();
-    }
-    const companyProfile = {
-      _id: this.company._id,
-      application_id: this.company.companyKey['application_id'],
-      email_address: this.company.companyKey.email_address,
-      company_name: this.company['company_name'],
-      registry_country: this.form.value.registryCountryCtrl,
-      reg_nbr: this.form.value.registrationNumber,
-      activity_desc: this.form.value.activityDescription,
-      activity_code: this.form.value.activityCodeCtrl,
-      currency_id: this.form.value.currencyCtrl,
-      legal_form: this.form.value.legalFormCtrl,
-      capital: this.form.value.capital,
-      vat_nbr: this.form.value.vatCtrl,
-      adress: this.form.value.address,
-      zip_code: this.form.value.zipCode,
-      country_id: this.form.value.countryCtrl,
-      city: this.form.value.city,
-      employee_nbr: this.form.value.employeeNum,
-      web_site: this.form.value.webSite,
-      contact_email: this.form.value.contactEmail,
-      linkedin_url: this.form.value.linkedinAccount,
-      twitter_url: this.form.value.twitterAccount,
-      youtube_url: this.form.value.youtubeAccount,
-      status: this.company.status,
-      facebook_url: this.company['facebook_url'],
-      phone_nbr: this.company['phone_nbr'],
-      photo: filename ? filename : this.company.photo,
-      phone_nbr1: this.form.value.phoneNbr1,
-      phone_nbr2: this.form.value.phoneNbr2,
-      fax_nbr: this.form.value.faxNbr,
-    };
-    const confirmation = {
-      title: 'edit',
-    };
-    this.subscription = this.modalService.displayConfirmationModal(confirmation, '50%', '40%').subscribe((value) => {
-      if (value === true) {
-        this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
-          this.userInfo['company'][0] = res;
-          this.userService.connectedUser$.next(this.userInfo);
-        }, (err) => console.error(err)));
+  async addOrUpdate(event) {
+    if (event.keyCode === 13 || !event.keyCode ) {
+      let filename = null;
+      if (this.photo) {
+        filename = await this.uploadService.uploadImage(this.photo)
+          .pipe(
+            map(
+              response => response.file.filename
+            ))
+          .toPromise();
       }
-      this.subscription.unsubscribe();
-    });
+      const companyProfile = {
+        _id: this.company._id,
+        application_id: this.company.companyKey['application_id'],
+        email_address: this.company.companyKey.email_address,
+        company_name: this.company['company_name'],
+        registry_country: this.form.value.registryCountryCtrl,
+        reg_nbr: this.form.value.registrationNumber,
+        activity_desc: this.form.value.activityDescription,
+        activity_code: this.form.value.activityCodeCtrl,
+        currency_id: this.form.value.currencyCtrl,
+        legal_form: this.form.value.legalFormCtrl,
+        capital: this.form.value.capital,
+        vat_nbr: this.form.value.vatCtrl,
+        adress: this.form.value.address,
+        zip_code: this.form.value.zipCode,
+        country_id: this.form.value.countryCtrl,
+        city: this.form.value.city,
+        employee_nbr: this.form.value.employeeNum,
+        web_site: this.form.value.webSite,
+        contact_email: this.form.value.contactEmail,
+        linkedin_url: this.form.value.linkedinAccount,
+        twitter_url: this.form.value.twitterAccount,
+        youtube_url: this.form.value.youtubeAccount,
+        status: this.company.status,
+        facebook_url: this.company['facebook_url'],
+        phone_nbr: this.company['phone_nbr'],
+        photo: filename ? filename : this.company.photo,
+        phone_nbr1: this.form.value.phoneNbr1,
+        phone_nbr2: this.form.value.phoneNbr2,
+        fax_nbr: this.form.value.faxNbr,
+      };
+      const confirmation = {
+        code: 'edit',
+        title: 'edit your company',
+      };
+      this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
+        if (value === true) {
+          this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
+            this.userInfo['company'][0] = res;
+            this.userService.connectedUser$.next(this.userInfo);
+          }, (err) => console.error(err)));
+        }
+        this.subscription.unsubscribe();
+      });
+    }
   }
 
   /**
@@ -337,6 +342,12 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.photo = obj;
   }
 
+  /**
+   * @description back
+   */
+  back() {
+    this.location.back();
+  }
   /**
    * @description destroy
    */

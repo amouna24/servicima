@@ -42,7 +42,7 @@
       <div fxLayout="column" fxFlex="90" fxLayoutGap="20px">
         <wid-scrollbar class="scrollbar">
           <div fxLayout="column" fxFlex="100" class="m-l-20">
-            <div fxLayout="column" fxFlex="100">
+            <div fxLayout="column" fxFlex="100" style="margin-top: 5%">
               <div fxLayout="row" fxLayoutGap="20px">
                 <h5 class="steel">{{'company.generalinformation' | translate}} </h5>
               </div>
@@ -54,7 +54,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'user.lang'| translate}}: </span>
-                    <span class="steel"> {{lang}}</span>
+                    <span class="steel"> {{descLanguage}}</span>
                   </div>
                 </div>
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
@@ -137,26 +137,35 @@
               <div fxLayout="row">
                 <h5 class="steel">{{'company.socialnetwork' | translate}}:</h5>
               </div>
-              <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-                    <span class="font-size-12 steel"> {{this.company['linkedin_url'] ? this.company['linkedin_url'] : 'none'}} </span>
+              <div fxLayout="column" fxLayoutGap="10px">
+                <div fxLayout="row" >
+                  <div fxLayout="column"  fxFlex="50" fxLayoutGap="10px">
+                    <div fxLayout="column"  fxFlex="50" *ngFor="let element of pairSelect;">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                        <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                        <span class="font-size-12 steel"> {{element.value}} </span>
+                      </div>
+                    </div>
                   </div>
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
-                    <span class="font-size-12 steel"> {{this.company['youtube_url'] ? this.company['youtube_url'] : 'none'}}</span>
+                  <div fxLayout="column"  fxFlex="50" >
+                    <div fxLayout="column" fxFlex="50"  *ngFor="let element of impairSelect;">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" >
+                        <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                        <span class="font-size-12 steel"> {{element.value}} </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-                    <span class="font-size-12 steel"> {{this.company['twitter_url'] ? this.company['twitter_url'] : 'none'}} </span>
+
+                <div fxLayout="row" fxLayoutGap="10px">
+                  <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                      <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                      <span class="font-size-12 steel"> Add link </span>
+                    </div>
                   </div>
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
-                    <span class="font-size-12 topaz"> + </span>
-                    <span class="font-size-12 steel"> {{'company.addlink' | translate}}</span>
-                  </div>
+
+
                 </div>
               </div>
             </div>

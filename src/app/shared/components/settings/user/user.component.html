@@ -58,7 +58,7 @@
       <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
         <div fxLayout="column" fxFlex="100" class="m-l-20">
           <div fxLayout="column" fxFlex="90">
-            <div fxLayout="row" fxLayoutGap="20px">
+            <div fxLayout="row" fxLayoutGap="20px" style="margin-top: 5%">
               <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
             </div>
             <div fxLayout="row">
@@ -139,29 +139,39 @@
             <div fxLayout="row">
               <h5 class="steel"> {{'user.socialnetwork'| translate}}:</h5>
             </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" >
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.linkedin_url">
-                  <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.linkedin_url}} </span>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.youtube_url" >
-                  <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.youtube_url}}</span>
+            <div fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout="row" >
+              <div fxLayout="column"  fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="column"  fxFlex="50" *ngFor="let element of impairList;">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                    <span class="font-size-12 steel"> {{element.value}} </span>
+                  </div>
                 </div>
               </div>
-
-              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.twitter_url">
-                  <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.twitter_url}} </span>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
-                  <span class="font-size-12 topaz"> + </span>
-                  <span class="font-size-12 steel"> Add link </span>
+              <div fxLayout="column"  fxFlex="50" >
+                <div fxLayout="column" fxFlex="50"  *ngFor="let element of pairList;">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" >
+                    <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                    <span class="font-size-12 steel"> {{element.value}} </span>
+                  </div>
                 </div>
               </div>
             </div>
+
+              <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                    <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                    <span class="font-size-12 steel"> Add link </span>
+                  </div>
+                </div>
+
+
+            </div>
+            </div>
+            <br>
+
           </div>
           <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">

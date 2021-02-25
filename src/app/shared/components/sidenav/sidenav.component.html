@@ -12,7 +12,7 @@
     <!---------------------------------------- menu container ------------------------------------------------------------>
     <div *ngIf="subMenu.length === 0; else subMenuContainer">
       <ng-container *ngFor=" let menuItem of menu">
-       <!-- <div *canBeDisplayed="{'feature':menuItem.feature}"> -->
+        <div *canBeDisplayed="{'feature':menuItem.feature}">
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel">
           <a  mat-list-item routerLinkActive="active-list-item" [routerLink]="['/', moduleName, menuItem.state]"
              class="list-item" [@iconAnimation]="sidebarState">
@@ -21,7 +21,7 @@
             <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
           </a>
         </ng-container>
-        <!--  </div> -->
+         </div>
         <ng-template #subMenuLabel>
           <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
                          [@iconAnimation]="sidebarState">

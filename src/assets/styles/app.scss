@@ -598,6 +598,9 @@ html body {
 .min-full-screen-height {
   min-height: $screen-height !important;
 }
+.height-50{
+  height: 50px;
+}
 .mat-raised-button{
   box-shadow: none !important;
 }
@@ -683,3 +686,15 @@ html body {
 .container-btn{
   width: 43px;
 }
+.btn-plus{
+  height: 17px !important;
+  padding: 0 0px !important;
+  min-width: 20px !important;
+  line-height: 1 !important;
+  border-color: #1bc5bd !important;
+}
+
+.mat-input-element::placeholder{
+  color: #afb1b8 !important;
+}
+

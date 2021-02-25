@@ -36,6 +36,9 @@ export class UserComponent implements OnInit, OnDestroy {
   title: string;
   icon: string;
   id: string;
+  showList = [];
+  pairList = [];
+  impairList = [];
   /** subscription */
   private subscriptions: Subscription[] = [];
 
@@ -112,10 +115,11 @@ export class UserComponent implements OnInit, OnDestroy {
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
+      console.log(this.user, 'this user');
       this.getRefdata();
       this.getIcon();
     }
-
+      this.getTable();
   }
 
   /**
@@ -172,9 +176,54 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: Add link
    */
   addLink(): void {
-    this.modalService.displayModal('AddLink', this.user, '50%', '80%');
+    this.modalService.displayModal('AddLink', this.user, '620px', '535px').subscribe((user) => {
+      if (user) {
+        this.user.youtube_url = user['youtube_url'];
+        this.user.linkedin_url = user['linkedin_url'];
+        this.user.twitter_url = user['twitter_url'];
+        this.user['facebook_url'] = user['facebook_url'];
+        this.user['instagram_url'] = user['instagram_url'];
+        this.user['whatsapp_url'] = user['whatsapp_url'];
+        this.user['viber_url'] = user['viber_url'];
+        this.user['skype_url'] = user['skype_url'];
+        this.user['other_url'] = user['other_url'];
+        this.getTable();
+      }
+    });
+
   }
 
+  /**
+   * @description: get network social when value  is not null
+   */
+  getTable() {
+    this.showList = [];
+    this.pairList = [];
+    this.impairList = [];
+    const list = [
+      { placeholder: 'user.linkedinacc', value: this.user?.linkedin_url},
+      { placeholder: 'user.whatsappacc', value: this.user?.whatsapp_url },
+      { placeholder: 'user.facebookacc', value: this.user?.facebook_url },
+      { placeholder: 'user.skypeacc', value: this.user?.skype_url },
+      { placeholder: 'user.otheracc', value: this.user?.other_url},
+      { placeholder: 'user.instagramacc', value: this.user?.instagram_url},
+      { placeholder: 'user.twitteracc', value: this.user?.twitter_url},
+      { placeholder: 'user.youtubeacc', value: this.user?.youtube_url},
+      { placeholder: 'user.viberacc', value: this.user?.viber_url},
+    ];
+    list.map((element) => {
+      if (element.value) {
+        this.showList.push(element);
+      }
+    } );
+    for (let i = 0; i < this.showList.length; i++) {
+      if (i % 2 ) {
+        this.pairList.push((this.showList[i]));
+      } else {
+        this.impairList.push((this.showList[i]));
+      }
+    }
+  }
   /**
    * @description: destroy
    */

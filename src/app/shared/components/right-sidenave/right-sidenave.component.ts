@@ -1,14 +1,25 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
-import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IUserModel } from '@shared/models/user.model';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { UserService } from '@core/services/user/user.service';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { ProfileService } from '@core/services/profile/profile.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
+import { ITheme } from '@shared/models/theme.model';
+import { listColor } from '@shared/statics/list-color.static';
+import { userType } from '@shared/models/userProfileType.model';
+import { IUserModel } from '@shared/models/user.model';
+
+// import { AuthService } from '../../../../../projects/auth-front-lib/src/public-api';
+
 import {
   accordionAnimation,
   buttonAnimation,
@@ -17,12 +28,6 @@ import {
   nameAnimation,
   sidebarAnimation
 } from '@shared/animations/animations';
-import { ITheme } from '@shared/models/theme.model';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { listColor } from '@shared/statics/list-color.static';
-import { takeUntil } from 'rxjs/operators';
-import { userType } from '@shared/models/userProfileType.model';
 @Component({
   selector: 'wid-right-sidenave',
   templateUrl: './right-sidenave.component.html',

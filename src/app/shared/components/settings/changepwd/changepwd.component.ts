@@ -10,6 +10,8 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { UserService } from '@core/services/user/user.service';
 
+// import { AuthService } from '../../../../../../projects/auth-front-lib/src/public-api';
+
 @Component({
   selector: 'wid-changepwd',
   templateUrl: './changepwd.component.html',
@@ -17,6 +19,7 @@ import { UserService } from '@core/services/user/user.service';
 })
 export class ChangePwdComponent implements OnInit {
   form: FormGroup;
+  existForm = true;
   hidePassword = true;
   hideConfirmPassword = true;
   hideOldPassword = true;
@@ -28,7 +31,7 @@ export class ChangePwdComponent implements OnInit {
     button: {
       buttonLeft: {
         visible: true,
-        name: 'Save',
+        name: 'save',
         color: '#f3f6f9',
         background: '#0067e0'
       },
@@ -95,13 +98,6 @@ export class ChangePwdComponent implements OnInit {
   passwordValidator(form: FormGroup) {
     const condition = form.get('password').value !== form.get('confirmPassword').value;
     return condition ? { passwordsDoNotMatch: true } : null;
-  }
-
-  /**
-   * @description CLose the dialog OnNoClick function
-   */
-  onClose(): void {
-    this.dialogRef.close();
   }
 
   /**

@@ -1,54 +1,45 @@
-<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" class="full-height ">
-
-  <div modal-body fxFlex="100" fxFlex.xs="50" fxLayout="column"  fxFlexOffset="9">
-    <h5 class=" steel"> Change password :</h5>
-    <div fxLayout="row" fxLayout.xs="column" [ngStyle.xs]="{'height': 'auto'}">
-      <form [formGroup]="form" class="form-class" [ngStyle.xs]="{'width': '100%', height:'100%'}">
-        <!-- old Password -->
-        <mat-label class="label"> old password </mat-label>
-        <div class="wid-form">
-          <mat-form-field appearance="outline">
-            <input [type]="hideOldPassword ? 'password' : 'text'" autocomplete="off" matInput
-                   class="wid-Value-input" formControlName="oldPassword" name="oldPassword" type="password"
-                   required />
-            <mat-icon class="icon-password" matSuffix (click)="hideOldPassword = !hideOldPassword">
-              {{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error class="wid-error-messages" *ngIf="form.controls.oldPassword.errors?.required">
-              Required filed</mat-error>
-          </mat-form-field>
-        </div>
-        <!-- new Password -->
-        <mat-label class="label"> Nouveau mot de passe </mat-label>
-        <div class="wid-form">
-          <mat-form-field appearance="outline">
-            <input [type]="hidePassword ? 'password' : 'text'" autocomplete="off" matInput
-                   class="wid-Value-input" formControlName="password" name="password" type="password"
-                   required />
-            <mat-icon class="icon-password" matSuffix (click)="hidePassword = !hidePassword">
-              {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error *ngIf="form.controls.password.errors?.required">Required filed</mat-error>
-            <mat-error *ngIf="form.controls.password.errors?.pattern">{{ 'updatepwd.invalidpwq' | translate }}.</mat-error>
-          </mat-form-field>
-        </div>
-        <!-- Confirm Password -->
-        <mat-label class="label"> Confirmez le mot de passe </mat-label>
-        <div class="wid-form">
-          <mat-form-field appearance="outline" [ngStyle.xs]="{'width': '96%'}">
-            <input [type]="hideConfirmPassword ? 'password' : 'text'" autocomplete="off" matInput
-                   class="wid-Value-input" formControlName="confirmPassword" name="confirmPassword"
-                   [errorStateMatcher]="errorMatcher" type="password" required />
-            <mat-icon class="icon-password" matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
-              {{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error class="wid-error-messages" *ngIf="form.controls.confirmPassword.errors?.required">
-              Required Field </mat-error>
-            <mat-error class="wid-error-messages" *ngIf="form.hasError('passwordsDoNotMatch')"> Passwords do
-              not match!</mat-error>
-          </mat-form-field>
-        </div>
-      </form>
+<wid-model-modal [modelConfig]="modelConfig" [form] ="form" [existForm]="existForm" (emitter)="onNotify($event)" form [formGroup]="form"  class="full-height ">
+  <div modal-body fxFlex="70" fxFlex.xs="50" fxLayout="column" class="cool-grey font-size-12" style="margin-top: -28px"
+    fxFlexOffset="9">
+    <h5 class=" steel"> {{'changepwd.title' | translate | titlecase}}:</h5>
+    <div style="margin-left: 58px" fxLayout="column">
+      <div fxLayout="column" fxFlex="100">
+        <mat-label class="black-three"> {{'changepwd.oldpwd' | translate | titlecase}} </mat-label>
+        <mat-form-field appearance="outline">
+          <input [type]="hideOldPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.oldpwd' | translate | titlecase"  matInput
+            formControlName="oldPassword" name="oldPassword"  autocomplete="off" required />
+          <mat-icon class="cursor-pointer" matSuffix (click)="hideOldPassword = !hideOldPassword">
+            {{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="form.controls.oldPassword.errors?.required">
+            Required filed</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100">
+        <mat-label class="black-three"> {{'changepwd.newpwd' | translate | titlecase}} </mat-label>
+        <mat-form-field appearance="outline">
+          <input [type]="hidePassword ? 'password' : 'text'" [placeholder]=" 'changepwd.newpwd' | translate | titlecase"  autocomplete="off" matInput formControlName="password"
+            name="password" type="password" required />
+          <mat-icon class="cursor-pointer" matSuffix (click)="hidePassword = !hidePassword">
+            {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="form.controls.password.errors?.required">Required filed</mat-error>
+          <mat-error *ngIf="form.controls.password.errors?.pattern">{{ 'updatepwd.invalidpwq' | translate }}.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100">
+        <mat-label class="black-three"> {{'changepwd.confirmpwd' | translate | titlecase}}  </mat-label>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width': '96%'}">
+          <input [type]="hideConfirmPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.confirmpwd' | translate | titlecase" autocomplete="off" matInput
+            formControlName="confirmPassword" name="confirmPassword" [errorStateMatcher]="errorMatcher" type="password"
+            required />
+          <mat-icon class="cursor-pointer" matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
+            {{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="form.controls.confirmPassword.errors?.required">
+            Required Field </mat-error>
+          <mat-error *ngIf="form.hasError('passwordsDoNotMatch')"> Passwords do
+            not match!</mat-error>
+        </mat-form-field>
+      </div>
     </div>
   </div>
-
 </wid-model-modal>
-
-

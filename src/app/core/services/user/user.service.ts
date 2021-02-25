@@ -45,6 +45,7 @@ export class UserService {
             )
            .subscribe(async (data) => {
                 this.userInfo = data;
+             console.log(this.userInfo, 'user info');
                 this.connectedUser$.next(data);
                 this.getImage(data['user'][0].photo);
                 this.redirectUser(data.userroles[0].userRolesKey.role_code);
@@ -147,5 +148,13 @@ export class UserService {
    *************************************************************************/
   getUserRole(applicatinId: string, email: string) {
    return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicatinId}&email_address=${email}`);
+  }
+  /**************************************************************************
+   * @description get company role features
+   * @param role: string
+   * @param email: string
+   *************************************************************************/
+  getCompnayRoleFeatures(role: string, email: string) {
+    return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}` + `?role_code=${role}&email_address=${email}`);
   }
 }
