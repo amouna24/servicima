@@ -16,7 +16,7 @@ export class ErrorComponent implements OnInit {
     this.error = this.utilService.getErrorPage(this.type);
   }
   getImageBeckground(img: string): any {
-    let url = '../../../../assets/img/';
+    let url = 'assets/img/';
     url += img;
     return { 'background-image': 'url(' + url + ')'};
   }
