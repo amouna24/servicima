@@ -35,6 +35,7 @@ import { ModalSocialWebsiteComponent } from './components/modal-social-website/m
 import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settings/home-company/edit-company-home/edit-company-home.component';
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,9 @@ import { SplashComponent } from './components/splash/splash.component';
     ModalSocialWebsiteComponent,
     EditCompanyHomeComponent,
     SidenavSettingsComponent,
+    ErrorComponent,
     SplashComponent,
+    ErrorComponent,
 
   ],
   imports: [
@@ -109,7 +112,10 @@ import { SplashComponent } from './components/splash/splash.component';
     ScrollbarModule,
     DynamicComponent,
     EditCompanyHomeComponent,
-    SplashComponent
+    ErrorComponent,
+    EditCompanyHomeComponent,
+    SplashComponent,
+    ErrorComponent
   ]
 })
 export class SharedModule { }

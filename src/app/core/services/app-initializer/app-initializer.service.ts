@@ -14,6 +14,7 @@ import { ICurrency } from '@shared/models/currency.model';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { IActivity } from '@shared/models/activity.model';
+import { SplashComponent } from '@shared/components/splash/splash.component';
 
 import { environment } from '../../../../environments/environment';
 import { TranslationCustomLoaderService } from '../translation/translation-custom-loader.service';
@@ -33,7 +34,6 @@ export class AppInitializerService {
   countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
   licencesList: ILicenceModel[] = [];
-  initialized = 0;
 
   constructor(
     private httpClient: HttpClient,
@@ -56,8 +56,6 @@ export class AppInitializerService {
         this.licencesList = this.starterData['licences'];
         this.localStorageService.setItem('languages', this.languageList);
         this.translationCustomLoaderService.setTranslationLanguage();
-        this.initialized += 50;
-        console.log(this.initialized);
       },
       (err) => {
         console.error(err);
@@ -73,8 +71,6 @@ export class AppInitializerService {
         this.activityCodeList = data[0];
         this.countriesList = data[1];
         this.currenciesList = data[2];
-        this.initialized += 50;
-        console.log(this.initialized);
       });
   }
 }
