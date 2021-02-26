@@ -15,9 +15,9 @@ import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { ErrorComponent } from './pages/error/error.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DataTableModule } from './data-table/data-table.module';
+import { ServerErrorComponent } from './pages/server-error/server-error.component';
 
 export function setupApp(
   translationCustomLoaderService: TranslationCustomLoaderService,
@@ -31,7 +31,7 @@ export function setupApp(
   declarations: [
     AppComponent,
     NotFoundComponent,
-    ErrorComponent,
+    ServerErrorComponent,
   ],
   imports: [
     CommonModule,

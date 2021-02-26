@@ -1,0 +1,29 @@
+@import 'src/assets/styles/variables.scss';
+.container{
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: 90% 50%;
+  .content-header{
+    .logo{
+      width: 50px;
+    }
+    .logoTiltle{
+      width: 86px;
+    }
+  }
+  .content {
+    min-height: 55% ;
+    .body{
+      padding-left: 3.5vw;
+      h1:nth-child(1){
+        margin-bottom: 2vh !important;
+        line-height: 1.5 !important;
+      }
+      .discription{
+        width: 450px;
+      }
+
+    }
+  }
+
+}

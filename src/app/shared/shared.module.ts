@@ -35,6 +35,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
 import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settings/home-company/edit-company-home/edit-company-home.component';
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     ModalSocialWebsiteComponent,
     EditCompanyHomeComponent,
     SidenavSettingsComponent,
+    ErrorComponent,
 
   ],
   imports: [
@@ -109,7 +111,8 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     SidenavSettingsComponent,
     ScrollbarModule,
     DynamicComponent,
-    EditCompanyHomeComponent
+    EditCompanyHomeComponent,
+    ErrorComponent
   ]
 })
 export class SharedModule { }
