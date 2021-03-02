@@ -15,6 +15,7 @@ export class ErrorComponent implements OnInit {
   ngOnInit(): void {
     this.error = this.utilService.getErrorPage(this.type);
   }
+
   getImageBeckground(img: string): any {
     let url = 'assets/img/';
     url += img;

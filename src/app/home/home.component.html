@@ -1,4 +1,4 @@
-<div [ngClass]="classColor" *ngIf="isLoading$ | async" >
+<div [ngClass]="classColor" >
 <mat-sidenav-container>
 
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
@@ -24,7 +24,7 @@
 
     <div fxFlex="93">
         <router-outlet>
-          <wid-spinner></wid-spinner>
+          <wid-splash></wid-splash>
 <!--          <wid-dynamic-component
             [menuItems]="menuItems"
             [dynamicForm]="dynamicForm"

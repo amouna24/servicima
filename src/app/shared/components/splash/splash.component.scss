@@ -1,0 +1,35 @@
+@import 'src/assets/styles/variables.scss';
+
+.container {
+  position: absolute;
+  z-index: 100;
+  background: $pale-grey;
+
+  .content-spinner {
+    .logo,
+    .logoTitle {
+      animation: blackAndWhite 3s;
+      animation-delay: 2s;
+      animation-iteration-count: infinite;
+      animation-name: blackAndWhite;
+    }
+  }
+
+  @keyframes blackAndWhite {
+    from {
+      -webkit-filter: grayscale(0%);
+      filter: grayscale(0%);
+      transform: translateY(0);
+    }
+    50% {
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%);
+      transform: translateY(0.5vh);
+    }
+    to {
+      -webkit-filter: grayscale(0%);
+      filter: grayscale(0%);
+      transform: translateY(0);
+    }
+  }
+}
