@@ -69,16 +69,30 @@ export class UserService {
         );
       }
       break;
-      case 'COLLABORATOR': {
+      case 'COLLAB': {
         this.moduleName$.next('collaborator');
-        this.router.navigate(['/collaborator']);
-        this.isLoadingSubject.next(false);
+        this.router.navigate(['/collaborator']).then(
+          (res) => {
+            if (res == null) {
+              this.isLoadingSubject.next(true);
+            } else if (res === true) {
+              this.isLoadingSubject.next(true);
+            }
+          }
+        );
       }
       break;
-      case 'CANDIDATE': {
+      case 'CAND': {
         this.moduleName$.next('candidate');
-        this.router.navigate(['/candidate']);
-        this.isLoadingSubject.next(false);
+        this.router.navigate(['/candidate']).then(
+          (res) => {
+            if (res == null) {
+              this.isLoadingSubject.next(true);
+            } else if (res === true) {
+              this.isLoadingSubject.next(true);
+            }
+          }
+        );
       }
       break;
       default:

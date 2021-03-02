@@ -5,6 +5,8 @@ import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/serv
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { RouterModule } from '@angular/router';
+import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 
 import { DataTableConfigComponent } from './components/data-table-config/data-table-config.component';
 
@@ -13,13 +15,15 @@ import { DataTableConfigComponent } from './components/data-table-config/data-ta
     DynamicDataTableComponent,
     DataTableConfigComponent,
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    FormsModule,
-    FlexLayoutModule
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        FormsModule,
+        FlexLayoutModule,
+        RouterModule,
+        ScrollbarModule
+    ],
   exports: [
     DynamicDataTableComponent,
   ],

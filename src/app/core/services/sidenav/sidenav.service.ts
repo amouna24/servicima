@@ -53,7 +53,7 @@ export class SidenavService {
         return this.managerMenu;
       case 'managerSetting':
         return this.managerSettingMenu;
-      case 'collaborater':
+      case 'collaborator':
         return this.collaboraterMenu;
       case 'candidate':
         return this.candidateMenu;

@@ -510,7 +510,7 @@ html body {
   color: $topaz !important;
 }
 .black-three {
-  color: $black-three;
+  color: $black-three !important;
 }
 .red{
   color: $error-red !important;
@@ -625,6 +625,7 @@ html body {
   background-color: $white;
   margin: 20px;
   height: 88vh !important;
+  width: 88vw;
 }
 
 .dynamic-component-content {

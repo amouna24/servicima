@@ -1,10 +1,31 @@
 <div class="page-container">
-    <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'LICENCE'">
-    </wid-data-table>
+<!--    <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'LICENCE'">
+    </wid-data-table>-->
 
   <!-- DYNAMIC DATA TABLE -->
-  <wid-dynamic-data-table [tableData]="ELEMENT_DATA " [tableCode]="'LICENCE'">
+<!--  <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'LICENCE'"
+    [header]="{ title: 'Licence management', addActionURL: '/manager/settings/licences', addActionText: 'New Licence'}"
+    [title]="'Licence list'"
+    (rowID)="updateOrDelete($event)"
+    (rowData)="showRowData($event)"
+  >
+  </wid-dynamic-data-table>-->
+  <!--         END        -->
+
+
+  <!-- DYNAMIC DATA TABLE -->
+  <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'USERS-LIST'"
+    [header]="{ title: 'Users management', addActionURL: '/manager/settings/licences', addActionText: 'New User'}"
+    [title]="'Users list'"
+    (rowID)="updateOrDelete($event)"
+    (rowData)="showRowData($event)"
+  >
   </wid-dynamic-data-table>
   <!--         END        -->
+
 
 </div>

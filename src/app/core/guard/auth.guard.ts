@@ -8,11 +8,11 @@ import {
 } from '@angular/router';
 /* RxJs imports */
 import { UserService } from '@core/services/user/user.service';
-import { FingerPrintService } from '@widigital-group/auth-npm-front';
+import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
 
 /* Specific imports */
 import { LocalStorageService } from '../services/storage/local-storage.service';
-// import { FingerPrintService } from '../../../../projects/auth-front-lib/src/lib/core/services/auth/fingerprint.service';
+// import { FingerPrintService, AuthService } from '../../../../projects/auth-front-lib/src/public-api';
 
 /**********************************************************************
  * AuthGard : Used to allow or not access to the requested roots
@@ -37,6 +37,7 @@ export class AuthGuard implements CanActivate {
               private router: Router,
               private localStorageService: LocalStorageService,
               private userService: UserService,
+              private authService: AuthService,
   ) {
   }
 
@@ -50,7 +51,21 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
-      /* Call the backend to check fingerprint is OK */
+    /* Call the backend to check fingerprint is OK */
+    if (state.root.queryParams.rg && state.root.queryParams.auto === 'yes') {
+      return new Promise<boolean>(resolve =>
+         this.authService.getAuthRegisterCode(state.root.queryParams.rg, 'AUTH-MODULE').subscribe( (res) => {
+          if (res) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        },
+           () => {
+             this.router.navigate(['/auth/login']);
+             resolve(false);
+           }));
+    } else {
       this.fingerPrintService.userConnected()
         .then(async (result) => {
           /* Fingerprint is OK, new token and credentials status returned */
@@ -83,6 +98,7 @@ export class AuthGuard implements CanActivate {
           }
     });
       return this.resolveValue;
+    }
   }
 
 }

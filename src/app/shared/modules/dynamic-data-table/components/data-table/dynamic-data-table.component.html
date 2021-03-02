@@ -1,1 +1,290 @@
-<p>dynamic-data-table works!</p>
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-20">{{ header.title }}</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button  class="btn-medium bg-cerulean-blue" routerLink="{{ header.addActionURL }}">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
+          </mat-icon>
+          <span class="white">{{ header.addActionText }}</span>
+        </button>
+      </div>
+  </div>
+  <div fxLayout="row" fxFlex="1" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="15" fxLayoutAlign="space-between center">
+      <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around">
+        <div fxLayout="row" fxFlex="45" fxLayoutAlign="space-evenly center">
+          <mat-label class="cool-grey font-size-12">
+            Licences :
+          </mat-label>
+          <mat-form-field appearance="outline" [style]="{'width': '70%', 'height': '80%', 'fontSize': '10px'}">
+            <mat-select disableOptionCentering panelClass="panelColor"
+                        placeholder="Licences">
+              <mat-option *ngFor="let v of ['test', 'test', 'test']" [value]="v">
+                {{v}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxFlex="45" fxLayoutAlign="space-evenly center">
+          <mat-label class="cool-grey font-size-12">
+            Status :
+          </mat-label>
+          <mat-form-field appearance="outline" [style]="{'width': '70%', 'height': '80%', 'fontSize': '10px'}">
+            <mat-select disableOptionCentering panelClass="panelColor"
+                        placeholder="Licences">
+              <mat-option *ngFor="let v of ['test', 'test', 'test']" [value]="v">
+                {{v}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    <div fxLayout="row" fxFlex="30" fxLayoutAlign="space-evenly center">
+      <div fxLayout="row" fxFlex="35">
+        <button mat-raised-button  class="btn-small bg-topaz">
+          <span class="white">Export</span>
+        </button>
+      </div>
+      <div fxLayout="row" fxFlex="35">
+        <button mat-raised-button  class="btn-small bg-topaz">
+          <span class="white">Import</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around">
+    <wid-scrollbar class="dynamic-component-content" style="width: 100%">
+      <cdk-table fxFlex="100" fxLayout="column" [dataSource]="dataSource" [trackBy]="identify">
+
+        <ng-container *ngFor="let col of columns;" >
+
+          <ng-container [ngSwitch]="col.type">
+
+            <ng-container *ngSwitchCase="'rowItem'">
+              <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
+                <cdk-header-cell
+                  fxLayout="row"
+                  [style]="{'height': '100%', 'width': '35%'}"
+                  fxLayoutAlign="space-around center"
+                  *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                </cdk-header-cell>
+                <cdk-cell
+                  fxLayout="row"
+                  fxLayoutAlign="space-around center"
+                  [style]="{'height': '100%', 'width': '35%'}"
+                  *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                  <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
+                </cdk-cell>
+              </ng-container>
+            </ng-container>
+
+
+
+            <ng-container *ngSwitchCase="'Actions'">
+              <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
+                <div fxFlex="100" fxLayout="column">
+                  <cdk-header-cell
+                    fxLayout="row"
+                    fxFlex="100"
+                    [style]="{'height': '100%'}"
+                    fxLayoutAlign="space-around center"
+                    *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                  </cdk-header-cell>
+
+                  <cdk-cell
+                    fxLayout="row"
+                    fxFlex="100"
+                    fxLayoutAlign="space-around center"
+                    [style]="{'height': '100%'}"
+                    *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                    <div fxLayout="row"
+                         fxFlex="100"
+                         fxLayoutAlign="center">
+                      <button mat-icon-button (click)="updateOrDelete(row._id)">
+                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="updateOrDelete(row._id)">
+                        <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="showRowData(row)">
+                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
+                      </button>
+
+                    </div>
+                  </cdk-cell>
+                </div>
+              </ng-container>
+
+            </ng-container>
+
+
+
+            <ng-container *ngSwitchDefault >
+
+                <ng-container cdkColumnDef="{{ col.prop }}">
+                  <cdk-header-cell
+                    fxLayout="row"
+                    fxFlex="100"
+                    [style]="{'height': '100%'}"
+                    fxLayoutAlign="space-around center"
+                    *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                  </cdk-header-cell>
+                  <ng-container [ngSwitch]="col.type">
+                    <ng-container *ngSwitchCase="'date'">
+                      <cdk-cell
+                        fxLayout="row"
+                        fxFlex="100"
+                        fxLayoutAlign="space-around center"
+                        [style]="{'height': '100%'}"
+                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                      </cdk-cell>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <cdk-cell
+                        fxLayout="row"
+                        fxFlex="100"
+                        fxLayoutAlign="space-around center"
+                        [style]="{'height': '100%'}"
+                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] }}
+                      </cdk-cell>
+                    </ng-container>
+                  </ng-container>
+
+                </ng-container>
+
+            </ng-container>
+
+
+          </ng-container>
+
+
+
+
+
+         <!--
+
+
+
+
+
+          <ng-container *ngIf="col.name !== 'Actions'; else actionsTemplate">
+
+            <div fxFlex="100" fxLayout="column">
+              <ng-container *ngIf="col.type === 'rowItem'; else flexed">
+                <cdk-header-cell
+                  fxLayout="row"
+                  [style]="{'height': '100%', 'width': '35%'}"
+                  fxLayoutAlign="space-around center"
+                  *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                </cdk-header-cell>
+              </ng-container>
+
+              <ng-template #flexed>
+                <cdk-header-cell
+                  fxLayout="row"
+                  fxFlex="100"
+                  [style]="{'height': '100%'}"
+                  fxLayoutAlign="space-around center"
+                  *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                </cdk-header-cell>
+              </ng-template>
+
+                <ng-container [ngSwitch]="col.type">
+
+                  <ng-container *ngSwitchCase="'rowItem'">
+
+                    <cdk-cell
+                      fxLayout="row"
+                      fxLayoutAlign="space-around center"
+                      [style]="{'height': '100%', 'width': '35%'}"
+                      *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                      <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
+                    </cdk-cell>
+
+                  </ng-container>
+
+
+                  <ng-container *ngSwitchCase="'date'">
+                    <cdk-cell
+                      fxLayout="row"
+                      fxFlex="100"
+                      fxLayoutAlign="space-around center"
+                      [style]="{'height': '100%'}"
+                      *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                    </cdk-cell>
+
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <cdk-cell
+                      fxLayout="row"
+                      fxFlex="100"
+                      fxLayoutAlign="space-around center"
+                      [style]="{'height': '100%'}"
+                      *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] }}
+                    </cdk-cell>
+                  </ng-container>
+
+                </ng-container>
+              </div>
+          </ng-container>
+
+                   <ng-template #actionsTemplate>
+                      <div fxFlex="100" fxLayout="column">
+                        <cdk-header-cell
+                          fxLayout="row"
+                          fxFlex="100"
+                          [style]="{'height': '100%'}"
+                          fxLayoutAlign="space-around center"
+                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                        </cdk-header-cell>
+
+                        <cdk-cell
+                          fxLayout="row"
+                          fxFlex="100"
+                          fxLayoutAlign="space-around center"
+                          [style]="{'height': '100%'}"
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                            <div fxLayout="row"
+                                 fxFlex="100"
+                                 fxLayoutAlign="center">
+                            <button mat-icon-button (click)="updateOrDelete(row._id)">
+                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="updateOrDelete(row._id)">
+                              <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="showRowData(row)">
+                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
+                            </button>
+
+                          </div>
+                        </cdk-cell>
+                      </div>
+                  </ng-template>-->
+
+        </ng-container>
+
+
+
+
+
+<!--        <ng-container cdkColumnDef="licence_desc">
+          <cdk-header-cell *cdkHeaderCellDef> licence_desc </cdk-header-cell>
+          <cdk-cell *cdkCellDef="let row"> {{row.licence_desc}} </cdk-cell>
+        </ng-container>-->
+
+        <cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></cdk-header-row>
+        <cdk-row *cdkRowDef="let row; columns: columnsList;"></cdk-row>
+
+      </cdk-table>
+
+
+    </wid-scrollbar>
+
+  </div>
+</div>

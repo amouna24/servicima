@@ -43,4 +43,10 @@ export class DynamicDataTableService {
       return { prop: config.dataListKey.column_code, name: config.column_desc, type: config.type || null };
     });
   }
+
+  generateColumnsList(configs: any[]): any[] {
+    return configs.map((config) => {
+      return  config.dataListKey.column_code;
+    });
+  }
 }

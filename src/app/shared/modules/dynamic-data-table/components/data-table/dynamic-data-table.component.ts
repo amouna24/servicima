@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { ConfigurationModalComponent } from '@dataTable/components/configuration-modal/configuration-modal.component';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -14,6 +15,10 @@ export class DynamicDataTableComponent implements OnInit {
 
   @Input() tableData: any[] = [];
   @Input() tableCode: string;
+  @Input() header: { title: string, addActionURL: string, addActionText: string};
+
+  @Output() rowID = new EventEmitter<string>();
+  @Output() rowData = new EventEmitter<any>();
 
   modalConfiguration: any;
   displayedColumns = [];
@@ -21,6 +26,8 @@ export class DynamicDataTableComponent implements OnInit {
   canBeFilteredColumns = [];
   columns = [];
   temp = [];
+  columnsList = [];
+  dataSource: any;
 
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
@@ -29,8 +36,6 @@ export class DynamicDataTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.temp = [...this.tableData];
-    console.log('data:', this.tableData);
-    console.log('tableCode', this.tableCode);
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent });
     this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
@@ -44,13 +49,14 @@ export class DynamicDataTableComponent implements OnInit {
         this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
           this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
         );
-        this.columns = this.dynamicDataTableService.generateColumns(this.displayedColumns);
-        console.log('modalConfiguration:', this.modalConfiguration);
-        console.log('displayedColumns', this.displayedColumns);
-        console.log('canBeDisplayedColumns:', this.canBeDisplayedColumns);
-        console.log('canBeFilteredColumns', this.canBeFilteredColumns);
-        console.log('columns:', this.columns);
+        this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
+        this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
+        this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+        this.columnsList.push('Actions');
+        this.dataSource = this.tableData;
         this.displayTableConfig();
+        console.log('columns', this.columns);
+        console.log('list', this.columnsList);
       }
     );
 
@@ -60,15 +66,36 @@ export class DynamicDataTableComponent implements OnInit {
     const data = {
       displayedColumns: this.dynamicDataTableService.generateColumns(this.displayedColumns),
       canBeDisplayedColumns: this.canBeDisplayedColumns,
-      actualColumns: this.columns
+      actualColumns: this.columns,
+      columnsList: this.columnsList,
     };
     this.modalService.displayModal('dynamicTableConfig', data, '40%').subscribe(
       (res) => {
         if (res.action === 'change') {
-          this.columns = [...res.actualColumns];
+          this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...res.actualColumns];
+          this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
+
+          this.columnsList = ['rowItem', ...res.columnsList];
+          this.columnsList.push('Actions');
+          console.log('columns',  this.columns);
+          console.log('columnsList',  this.columnsList);
+
         }
       }
     );
   }
 
+  identify(index, item) {
+    console.log('index', index);
+    console.log('item', item);
+    return item._id;
+  }
+
+  updateOrDelete(id: string) {
+    this.rowID.emit(id);
+  }
+
+  showRowData(rowData: any) {
+    this.rowData.emit(rowData);
+  }
 }

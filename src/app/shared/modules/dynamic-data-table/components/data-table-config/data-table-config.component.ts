@@ -16,12 +16,14 @@ export class DataTableConfigComponent implements OnInit {
   displayedColumns: any[];
   activeTheme = 'material';
   themes = ['dark', 'material'];
+  columnsList = [];
 
   constructor(public dialogRef: MatDialogRef<DataTableConfigComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private helperService: HelperService) { }
 
   ngOnInit(): void {
     this.displayedColumns = this.data.displayedColumns;
+    this.columnsList = this.data.columnsList;
     this.canBeDisplayedColumns = this.helperService.difference(this.data.canBeDisplayedColumns, this.displayedColumns, 'prop');
     this.displayedColumnsForm = new FormGroup({
       displayedColumns: new FormArray([])
@@ -72,6 +74,7 @@ export class DataTableConfigComponent implements OnInit {
   applyColumnsChanges() {
     this.data.actualColumns = [...this.displayedColumns];
     this.data.action = 'change';
+    this.data.columnsList = [...this.displayedColumns].map(col => col.prop);
     this.dialogRef.close(this.data);
   }
 
