@@ -19,7 +19,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
 import { UserComponent } from './components/settings/user/user.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
@@ -36,13 +35,14 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
 import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settings/home-company/edit-company-home/edit-company-home.component';
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
+import { SplashComponent } from './components/splash/splash.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
     /* Components */
     SidenavComponent,
     HeaderComponent,
-    SpinnerComponent,
     ChangePwdComponent,
     UserComponent,
     HomeCompanyComponent,
@@ -63,6 +63,9 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     ModalSocialWebsiteComponent,
     EditCompanyHomeComponent,
     SidenavSettingsComponent,
+    ErrorComponent,
+    SplashComponent,
+    ErrorComponent,
 
   ],
   imports: [
@@ -91,7 +94,6 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     ReactiveFormsModule,
     HeaderComponent,
     SidenavComponent,
-    SpinnerComponent,
     UserComponent,
     ChangePwdComponent,
     HomeCompanyComponent,
@@ -112,6 +114,8 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
     ScrollbarModule,
     DynamicComponent,
     EditCompanyHomeComponent,
+    ErrorComponent,
+    SplashComponent,
     DynamicDataTableModule,
   ]
 })

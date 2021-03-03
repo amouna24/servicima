@@ -14,6 +14,7 @@ import { ICurrency } from '@shared/models/currency.model';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { IActivity } from '@shared/models/activity.model';
+import { SplashComponent } from '@shared/components/splash/splash.component';
 
 import { environment } from '../../../../environments/environment';
 import { TranslationCustomLoaderService } from '../translation/translation-custom-loader.service';
