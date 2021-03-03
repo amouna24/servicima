@@ -11,7 +11,8 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi-eye',
-    path: 'assets/icons/eye-solid.svg'
+    path: 'assets/icons/eye-solid.svg',
+    viewBox: '0 -4 20.792 23.791'
   },
   {
     name: 'wi-archive',
@@ -19,7 +20,8 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi-marker',
-    path: 'assets/icons/marker-solid.svg'
+    path: 'assets/icons/marker-solid.svg',
+    viewBox: '0 -4 12.792 20.791'
   },
   /* Side Nav */
   {
@@ -157,4 +159,15 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/arrow-back.svg',
     viewBox: '0 0 25 11.811'
   },
+  /* Dynamic Data Table */
+  {
+    name: 'wi_add_user',
+    path: 'assets/icons/add-user.svg',
+  },
+  {
+    name: 'wi_row_polygon',
+    path: 'assets/icons/row-polygon.svg',
+    viewBox: '0 0 20 8'
+  },
+  /* ------------------ */
 ];

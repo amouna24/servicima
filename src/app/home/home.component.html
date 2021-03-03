@@ -1,4 +1,4 @@
-<div [ngClass]="classColor" >
+<div [ngClass]="classColor" *ngIf="isLoading$ | async" >
 <mat-sidenav-container>
 
   <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
