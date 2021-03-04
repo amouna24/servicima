@@ -1,53 +1,53 @@
-import { Directive, ElementRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import * as _ from 'lodash';
 @Directive({
   selector: '[canBeDisplayed]'
 })
-export class CanBeDisplayedDirective implements OnDestroy {
+export class CanBeDisplayedDirective implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private currentUser: any; // todo: use the right type when ready
   feature: string;
   license: string;
-  listFeatureArray = [];
   licenseUser: string;
-  inters = [];
+  availableFeature: string[] = [];
   licenceFeature: string[] = [];
-  companyrolesfeatures: string[] = [];
-  email_adress: string;
+  companyRolesFeatures = [];
+  email_address: string;
   constructor(
     private element: ElementRef,
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
     private userService: UserService,
-  ) {
+  ) { }
+
+  /**
+   * @description Loaded when component in init state
+   */
+  ngOnInit() {
+    this.getUserConnected();
   }
+
   /**
    * todo: Subscribe to the current User to get needed data
    */
   // Add a BehaviorSubject to emit the user object on authentication
   // than subscribe to it here
   // get the current user
-  getUserConnected(): void {
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+  getUserConnected() {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
-        this.email_adress = data['company'][0]['companyKey']['email_address'];
-        this.userService.getCompnayRoleFeatures(this.getRoleCode(data['userroles'][0]['userRolesKey']['role_code']), this.email_adress)
-          .subscribe((list) => {
-            this.listFeatureArray.push(Object.values(list).map(element => element['companyRoleFeaturesKey']['feature_code']));
-            console.log(this.listFeatureArray, 'list user role');
+        this.email_address = data['company'][0]['companyKey']['email_address'];
+        const arrayList = await this.userService.listFeatureRole[0];
+            this.companyRolesFeatures = [];
+            this.companyRolesFeatures.push(Object.values(arrayList).map(element => element['companyRoleFeaturesKey']['feature_code']));
             this.licenceFeature = data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
-            console.log(this.licenceFeature, 'list licence');
-            this.inters = _.intersection(this.licenceFeature, this.listFeatureArray[0]);
-            this.licenseUser = data['companylicence'][0]['companyLicenceKey']['licence_code'];
-            console.log(this.inters, 'inters');
+            this.availableFeature = _.intersection(this.licenceFeature, this.companyRolesFeatures[0]);
             this.currentUser = {
-              license: this.licenseUser,
-              features: this.inters
+              features: this.availableFeature
             };
-            this.updateView();
-          });
+          this.updateView();
       }
     },
       (error) => {
@@ -60,8 +60,6 @@ export class CanBeDisplayedDirective implements OnDestroy {
   set canBeDisplayed(params: any) {
     if (params) {
       this.feature = params.feature;
-      this.license = params.license;
-      this.getUserConnected();
     }
   }
 
@@ -83,28 +81,9 @@ export class CanBeDisplayedDirective implements OnDestroy {
   isDisplayed(): boolean {
     return this.currentUser &&
       this.currentUser.features &&
-      this.currentUser.license &&
       this.currentUser.features.includes(this.feature);
   }
 
-  /**
-   * @description Display image
-   */
-  getRoleCode(role): string {
-    switch (role) {
-      case 'CAND':
-        return 'CANDIDATE';
-        break;
-      case 'COLLAB':
-        return 'COLLABORATOR';
-        break;
-      case 'ADMIN':
-        return 'ADMIN';
-        break;
-      default:
-        return;
-    }
-  }
   ngOnDestroy() {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }

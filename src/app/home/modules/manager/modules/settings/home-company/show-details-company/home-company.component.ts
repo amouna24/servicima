@@ -16,6 +16,7 @@ import { IViewParam } from '@shared/models/view.model';
 import { ModalService } from '@core/services/modal/modal.service';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
+import { INetworkSocial } from '@shared/models/social-network.model';
 @Component({
   selector: 'wid-home-company',
   templateUrl: './home-company.component.html',
@@ -58,9 +59,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   /** subscription */
   private subscriptions: Subscription[] = [];
-  pairSelect = [];
-  impairSelect = [];
-  showList = [] ;
+  leftList: INetworkSocial[];
+  rightList: INetworkSocial[];
   /**
    * @description Loaded when component in init state
    */
@@ -137,9 +137,8 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   }
 
   getList() {
-    this.showList = [];
-    this.pairSelect = [];
-    this.impairSelect = [];
+    this.leftList = [];
+    this.rightList = [];
     const list = [
       { placeholder: 'user.linkedinacc', value: this.company['linkedin_url']},
       { placeholder: 'user.whatsappacc', value: this.company['whatsapp_url'] },
@@ -150,19 +149,10 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       { placeholder: 'user.twitteracc', value: this.company['twitter_url']},
       { placeholder: 'user.youtubeacc', value: this.company['youtube_url']},
       { placeholder: 'user.viberacc', value: this.company['viber_url']},
+      { placeholder: 'company.addlink', value: 'link'},
     ];
-    list.map((element) => {
-      if (element.value) {
-        this.showList.push(element);
-      }
-    } );
-    for (let i = 0; i < this.showList.length; i++) {
-      if (i % 2 ) {
-        this.pairSelect.push((this.showList[i]));
-      } else {
-        this.impairSelect.push((this.showList[i]));
-      }
-    }
+    this.utilsService.getList(list, this.leftList, this.rightList);
+
   }
 
   /**

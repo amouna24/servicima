@@ -1,0 +1,72 @@
+<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
+  <div class="title-container">
+    <span>Table Settings</span>
+  </div>
+  <div class="close-button-container">
+    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
+      <mat-icon class="icon material-icons-outlined">close</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<mat-tab-group id="table-config-tabs">
+  <mat-tab label="Personalize List Columns">
+    <mat-dialog-content class="modal-body-container">
+
+      <div class="config-wrapper" fxLayout="row wrap">
+        <div fxFlex="40" class="config-container">
+          <div class="title"><span>Available</span></div>
+          <div class="list-content">
+            <form [formGroup]="canBeDisplayedColumnsForm">
+              <mat-checkbox *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
+                            (change)="checkCanBeDisplayedColumn($event)">
+                <span>{{columns.name}}</span>
+              </mat-checkbox>
+            </form>
+          </div>
+        </div>
+        <div class="switch-buttons" fxFlex="20">
+          <button mat-icon-button tabindex="-1" (click)="addToDisplayColumn()"
+                  [disabled]="canBeDisplayedColumnsForm.get('canBeDisplayedColumns').value.length <= 0">
+            <mat-icon class="icon material-icons-outlined">keyboard_arrow_right</mat-icon>
+          </button>
+          <button mat-icon-button tabindex="-1" (click)="addToCanBeDisplayColumn()"
+                  [disabled]="displayedColumnsForm.get('displayedColumns').value.length <= 0">
+            <mat-icon class="icon material-icons-outlined">keyboard_arrow_left</mat-icon>
+          </button>
+        </div>
+        <div fxFlex="40" class="config-container">
+          <div class="title"><span>Displayed</span></div>
+          <div class="list-content">
+            <form [formGroup]="displayedColumnsForm">
+              <mat-checkbox *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
+                            (change)=checkDisplayedColumn($event)>
+                <span>{{columns.name}}</span>
+              </mat-checkbox>
+            </form>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-flat-button (click)="applyColumnsChanges()">Apply Changes</button>
+      <button mat-flat-button (click)="resetColumns()">Reset Changes</button>
+    </mat-dialog-actions>
+  </mat-tab>
+  <mat-tab label="Customize Table ">
+    <mat-dialog-content class="modal-body-container">
+      <div class="config-wrapper" fxLayout="row wrap">
+        <label id="theme-radio-group-label">Pick your theme</label>
+        <mat-radio-group aria-labelledby="theme-radio-group-label" class="example-radio-group"
+                         [(ngModel)]="activeTheme">
+          <mat-radio-button *ngFor="let theme of themes" [value]="theme">
+            {{theme}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-flat-button (click)="customizeTable()">Apply Changes</button>
+      <button mat-flat-button>Reset Changes</button>
+    </mat-dialog-actions>
+  </mat-tab>
+</mat-tab-group>

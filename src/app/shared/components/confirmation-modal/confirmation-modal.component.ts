@@ -91,8 +91,28 @@ export class ConfirmationModalComponent implements OnInit {
         };
         break;
       }
+      case 'changeStatus': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: this.data.status === 'ACTIVE' ? 'DESACTIVATE' : 'ACTIVATE',
+              color: this.data.status === 'ACTIVE' ? 'white' : 'black',
+              background: this.data.status === 'ACTIVE' ? 'red' : 'blue',
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9'
+            },
+          },
+          style: { }
+        };
+        break;
+      }
       default: {
-        return '';
       }
     }
   }

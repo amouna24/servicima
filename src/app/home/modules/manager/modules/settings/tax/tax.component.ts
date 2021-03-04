@@ -19,11 +19,25 @@ export class TaxComponent implements OnInit {
     this.companyTaxService.getTax().subscribe((data) => {
       this.ELEMENT_DATA = data;
       // to review
-      this.ELEMENT_DATA.forEach((tax) => {
-        tax['tax_code'] = tax['taxKey'].tax_code;
-        tax['tax_start_date'] = tax['taxKey'].tax_start_date;
-      });
       this.loaded = Promise.resolve(true);
     });
+  }
+
+  updateOrDelete(id: string) {
+    /*this.router.navigate(['/manager/user/edit-profile'],
+      {
+        queryParams: {
+          'id': id
+        }
+      });*/
+  }
+
+  showRowData(id: string) {
+   /* this.router.navigate(['/manager/user/profile'],
+      {
+        queryParams: {
+          'id': id['_id']
+        }
+      });*/
   }
 }

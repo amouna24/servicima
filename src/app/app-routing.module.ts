@@ -5,8 +5,8 @@ import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthModule } from '@widigital-group/auth-npm-front';
 
 // import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
-import { ErrorComponent } from './pages/error/error.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ServerErrorComponent } from './pages/server-error/server-error.component';
 
 const routes: Routes = [
 
@@ -26,7 +26,7 @@ const routes: Routes = [
     },
     {
         path: 'error',
-        component: ErrorComponent
+        component: ServerErrorComponent
     },
     {
         path: '**',

@@ -59,12 +59,11 @@ export class DashboardComponent implements OnInit {
               ) {
     this.credentials = this.localStorageService.getItem('userCredentials');
 
-    this.profileService.getAllUser( this.credentials['email_address']).subscribe((data) => {
-      this.ELEMENT_DATA = data;
+    /* this.profileService.getAllUser( this.credentials['email_address']).subscribe((data) => {
+      this.ELEMENT_DATA = data;/
     this.loaded = Promise.resolve(true);
-    });
+    })*/
   }
-
   ngOnInit(): void {
     /* MULTI FORM STEPPER TEST */
     this.frmDetails = this._formBuilder.group({

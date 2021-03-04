@@ -13,7 +13,6 @@ import {
   providedIn: 'root'
 })
 export class SpinnerService {
-
   public isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
 

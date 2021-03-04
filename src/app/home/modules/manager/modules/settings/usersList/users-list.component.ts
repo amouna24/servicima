@@ -1,27 +1,26 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 import { ProfileService } from '@core/services/profile/profile.service';
-import { IUserModel } from '@shared/models/user.model';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+
 import { UtilsService } from '@core/services/utils/utils.service';
+import { IUserModel } from '@shared/models/user.model';
 import { ICredentialsModel } from '@shared/models/credentials.model';
 import { IViewParam } from '@shared/models/view.model';
-import { Subscription } from 'rxjs';
 @Component({
   selector: 'wid-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit, OnDestroy {
+  loaded: Promise<boolean>;
+  ELEMENT_DATA = [];
   usersList: IUserModel[] = [];
-  filterArray: IUserModel[] = [];
-  isLoading = false;
   code: string;
   companyId: string;
   credentials: ICredentialsModel;
@@ -30,148 +29,85 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
-
   constructor(private router: Router,
      private profileService: ProfileService,
      private userService: UserService,
      private utilsService: UtilsService,
      private modalService: ModalService,
+     private appInitializerService: AppInitializerService,
      private localStorageService: LocalStorageService) { }
-
-  displayedColumns: string[] =
-    ['FirstName', 'LastName', 'Email', 'show', 'profileTypeDesc', 'profTitlesDesc', 'Created_by', 'Status', 'Actions'];
-  dataSource: MatTableDataSource<IUserModel>;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   /**
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-    this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.companyId = data['company'][0]['_id'];
-      }
-    });
-    this.load();
-    this.dataSource = new MatTableDataSource(this.usersList);
+    this.credentials = this.localStorageService.getItem('userCredentials');
+      this.getAllUsers();
   }
-
+  /**
+   * @description : get all users
+   */
+  getAllUsers(): void {
+    this.profileService.getAllUser(this.credentials['email_address']).subscribe(async (res) => {
+      this.ELEMENT_DATA = res;
+      this.ELEMENT_DATA.forEach((data) => {
+        this.getRefdata();
+        data['gender_id']  = this.utilsService.getViewValue(data['gender_id'], this.refData['GENDER']);
+        data['user_type'] =  this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
+          type.value ===  data['user_type']).viewValue;
+      });
+      this.loaded = Promise.resolve(true);
+    });
+  }
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
   getRefdata(): void {
-    const list = [ 'PROF_TITLES', 'PROFILE_TYPE'];
+    const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER'];
     this.refData = this.utilsService.getRefData(this.companyId, this.credentials['application_id'],
      list);
   }
-
-  /**
-   * @description: load data
-   */
-  load(): void {
-    this.credentials = this.localStorageService.getItem('userCredentials');
-    this.profileService.getAllUser(this.credentials['email_address']).subscribe((res) => {
-    this.getRefdata();
-    res.forEach(element => {
-    element['profileTypeDesc'] = this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
-    type.value === element['user_type']).viewValue;
-    if (element['title_id']) {
-    element['profTitlesDesc'] = this.refData['PROF_TITLES'].find((title: IViewParam) =>
-    title.value === element['title_id']).viewValue;
-    }
-  });
-      this.usersList = res;
-      this.display(this.usersList);
-    }
-    );
-  }
-
-  /**
-   * @description: Function to display data from modelList
-   * @return: Data Source
-   */
-  display(user: IUserModel[]): void {
-    this.isLoading = true;
-    this.dataSource = new MatTableDataSource(user);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'FirstName': {
-          return item.first_name.toLowerCase();
-        }
-        case 'LastName': {
-          return item.last_name.toLowerCase();
-        }
-        case 'Created_by': {
-          return item.created_by.toLowerCase();
-        }
-        case 'Email': {
-          return item['userKey']['email_address'].toLowerCase();
-        }
-        case 'Status': {
-          return item.status.toLowerCase();
-        }
-        default: {
-          return item[property];
-        }
-      }
-    };
-    this.dataSource.sort = this.sort;
-    this.isLoading = false;
-  }
-
-  /**
-   * @params filterValue
-   * @description table filter
-   */
-  applyFilter(filterValue: string): void {
-    this.filterArray = [];
-    this.usersList.filter(
-      (listUser) => {
-        if (
-          listUser['userKey']['email_address'].toLowerCase().includes(filterValue.toLowerCase()) ||
-          listUser.user_type.toLowerCase().includes(filterValue.toLowerCase()) ||
-          listUser.title_id.toLowerCase().includes(filterValue.toLowerCase()) ||
-          listUser.first_name.toLowerCase().includes(filterValue.toLowerCase()) ||
-          listUser.last_name.toLowerCase().includes(filterValue.toLowerCase()) ||
-          listUser.created_by.toLowerCase().includes(filterValue.toLowerCase())
-        ) {
-          this.filterArray.push(listUser);
-        }
-      },
-    );
-
-    if (this.dataSource.paginator) {
-      this.display(this.filterArray);
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  /**
-   * @description: navigate to add user
-   */
-  addNewUser(): void {
-    this.router.navigateByUrl('/manager/settings/users/add-user', { state: { 'user': 'user'} });
-  }
-
-  showProfile(id) {
-    this.router.navigate(['/manager/user/profile'],
-      {
-        queryParams: {
-          'id': id._id
-        }
-      });
-  }
-  /**
-   * @description: navigate to the detail of the user
-   * @param id: string
-   */
-  goTodetailUser(id: string): void {
+  /*  à effacer */
+  updateOrDelete(id: string) {
     this.router.navigate(['/manager/user/edit-profile'],
       {
         queryParams: {
           'id': id
+        }
+      });
+  }
+/*  à effacer */
+  showRowData(id: string) {
+    this.router.navigate(['/manager/user/profile'],
+      {
+        queryParams: {
+          'id': id['_id']
+        }
+      });
+  }
+
+  /**
+   * @description : show user
+   * @param data: object
+   */
+  showUser(data) {
+    this.router.navigate(['/manager/user/profile'],
+      {
+        queryParams: {
+          'id': data['_id']
+        }
+      });
+  }
+
+  /**
+   * @description : update user
+   * @param data: object
+   */
+  updateUser(data) {
+    this.router.navigate(['/manager/user/edit-profile'],
+      {
+        queryParams: {
+          'id': data._id
         }
       });
   }
@@ -181,27 +117,43 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param id: string
    * @param status: string
    */
-  onChangeStatus(id: string, status: string) {
+  onChangeStatus(id: string) {
     const confirmation = {
-      sentence: 'to change the status of this user',
+      code: 'changeStatus',
+      title: 'change the status',
+      status: id['status']
     };
 
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation).subscribe((value) => {
+    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.profileService.userChangeStatus(id, status, this.credentials['email_address']).subscribe(
-          () => {
-            this.load();
+        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.credentials['email_address']).subscribe(
+          (res) => {
           },
           (err) => console.error(err),
         ));
         this.subscriptionModal.unsubscribe();
       }
     });
-      }
+  }
+
+  /**
+   * @description : action
+   * @param rowAction: object
+   */
+/*  switchAction(rowAction: any) {
+    switch (rowAction.actionType) {
+      case ('show'): this.showUser(rowAction.data);
+        break;
+      case ('update'): this.updateUser(rowAction.data);
+        break;
+      case('delete'): this.onChangeStatus(rowAction.data);
+    }
+  }
   /**
    * @description destroy
    */
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
+
 }

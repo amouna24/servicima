@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { AuthService } from '@widigital-group/auth-npm-front';

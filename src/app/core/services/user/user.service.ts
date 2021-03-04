@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { IUserInfo } from '@shared/models/userInfo.model';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { environment } from 'src/environments/environment';
+
+import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -24,42 +26,45 @@ export class UserService {
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
-  guestAvatar = new BehaviorSubject<any>(null);
-
+  listFeatureRole = [];
   constructor(private httpClient: HttpClient,
-              private router: Router,
-              private localStorageService: LocalStorageService,
-              private sanitizer: DomSanitizer,
-              ) {
+    private router: Router,
+    private localStorageService: LocalStorageService,
+    private sanitizer: DomSanitizer,
+  ) {
   }
 
   /**************************************************************************
    * @description get user info
    *************************************************************************/
-    getUserInfo() {
-          this.userCredentials = this.localStorageService.getItem('userCredentials');
-          this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
-           `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
-            .pipe(
-              tap(() => this.isLoadingSubject.next(true)),
-            )
-           .subscribe(async (data) => {
-                this.userInfo = data;
-             console.log(this.userInfo, 'user info');
-                this.connectedUser$.next(data);
-                this.getImage(data['user'][0].photo);
-                this.redirectUser(data.userroles[0].userRolesKey.role_code);
-           });
+  getUserInfo(): void {
+    this.userCredentials = this.localStorageService.getItem('userCredentials');
+    this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
+      `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
+      .pipe(
+        tap(() => this.isLoadingSubject.next(true)),
+      )
+      .subscribe(async (data) => {
+        this.userInfo = data;
+        this.connectedUser$.next(data);
+        this.getImage(data['user'][0].photo);
+        const roleCode = data.userroles[0].userRolesKey.role_code;
+        this.getCompanyRoleFeatures(this.getRoleCode(roleCode), this.userInfo['company'][0]['companyKey']['email_address'])
+          .subscribe((list) => {
+            this.listFeatureRole[0] = list;
+            this.redirectUser(roleCode);
+          });
+      });
   }
   /**************************************************************************
    * @description Redirect User to specific route and set SideNav items
    * @param userRole Role of connected User
    *************************************************************************/
-  redirectUser(userRole) {
+  redirectUser(userRole: string): void {
     switch (userRole) {
       case 'ADMIN' || 'MANAGER' || 'HR-MANAGER' || 'SALES': {
         this.moduleName$.next('manager');
-        this.router.navigate(['/manager'] ).then(
+        this.router.navigate(['/manager']).then(
           (res) => {
             if (res == null) {
               this.isLoadingSubject.next(true);
@@ -69,7 +74,7 @@ export class UserService {
           }
         );
       }
-      break;
+        break;
       case 'COLLAB': {
         this.moduleName$.next('collaborator');
         this.router.navigate(['/collaborator']).then(
@@ -82,7 +87,7 @@ export class UserService {
           }
         );
       }
-      break;
+        break;
       case 'CAND': {
         this.moduleName$.next('candidate');
         this.router.navigate(['/candidate']).then(
@@ -95,7 +100,7 @@ export class UserService {
           }
         );
       }
-      break;
+        break;
       default:
         this.isLoadingSubject.next(false);
     }
@@ -138,7 +143,7 @@ export class UserService {
    * @description Emit message if image exist
    * @param message: string
    *************************************************************************/
-  haveImage(message): void {
+  haveImage(message: string): void {
     this.haveImage$.next(message);
   }
 
@@ -147,14 +152,32 @@ export class UserService {
    * @param message: string
    *************************************************************************/
   getUserRole(applicatinId: string, email: string) {
-   return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicatinId}&email_address=${email}`);
+    return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicatinId}&email_address=${email}`);
   }
   /**************************************************************************
    * @description get company role features
    * @param role: string
    * @param email: string
    *************************************************************************/
-  getCompnayRoleFeatures(role: string, email: string) {
+  getCompanyRoleFeatures(role: string, email: string) {
     return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}` + `?role_code=${role}&email_address=${email}`);
+  }
+  /**
+   * @description get role code
+   */
+  getRoleCode(role: string): string {
+    switch (role) {
+      case 'CAND':
+        return 'CANDIDATE';
+        break;
+      case 'COLLAB':
+        return 'COLLABORATOR';
+        break;
+      case 'ADMIN':
+        return 'ADMIN';
+        break;
+      default:
+        return;
+    }
   }
 }

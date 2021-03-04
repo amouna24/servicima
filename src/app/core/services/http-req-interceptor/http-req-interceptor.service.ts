@@ -1,8 +1,9 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpErrorReqHandlerService } from '@core/services/http-error-req-handler/http-error-req-handler.service';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, tap } from 'rxjs/operators';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 
@@ -10,7 +11,11 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class HttpReqInterceptorService implements HttpInterceptor {
   updatedRequest: any;
   token: string;
-  constructor(private router: Router, private localStorageService: LocalStorageService) { }
+  constructor(
+    private router: Router,
+    private localStorageService: LocalStorageService,
+    private httpErrorHandler: HttpErrorReqHandlerService
+    ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.localStorageService.getItem('currentToken')) {
@@ -20,12 +25,8 @@ export class HttpReqInterceptorService implements HttpInterceptor {
       headers: req.headers.set('Authorization', `Bearer ${this.token}`)
     });
     return next.handle(this.updatedRequest).pipe(
-      tap(
-        event => {
-        },
-        errorResponse => {
-          // handle http errors
-        }
+      catchError((error: HttpErrorResponse) =>
+        this.httpErrorHandler.handleError(error)
       )
     );
 

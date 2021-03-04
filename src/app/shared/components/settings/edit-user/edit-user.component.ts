@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
@@ -16,7 +17,6 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { userType } from '@shared/models/userProfileType.model';
-import { Location } from '@angular/common';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
 @Component({
@@ -416,7 +416,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   /**
    * @description back
    */
- back() {
-    this.location.back();
- }
+   back() {
+      this.location.back();
+   }
 }

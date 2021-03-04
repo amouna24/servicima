@@ -11,7 +11,8 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi-eye',
-    path: 'assets/icons/eye-solid.svg'
+    path: 'assets/icons/eye-solid.svg',
+    viewBox: '0 -4 20.792 23.791'
   },
   {
     name: 'wi-archive',
@@ -19,11 +20,12 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi-marker',
-    path: 'assets/icons/marker-solid.svg'
+    path: 'assets/icons/marker-solid.svg',
+    viewBox: '0 -4 12.792 20.791'
   },
   /* Side Nav */
   {
-    name: 'wi-dashboard',
+    name: 'wi_dashboard',
     path: 'assets/icons/dashboard.svg'
   },
   {
@@ -132,6 +134,26 @@ export const iconsList: IIcon[] = [
     name: 'wi_linkedin',
     path: 'assets/icons/linkedin-brands.svg'
   },
+  {
+    name: 'wi_facebook',
+    path: 'assets/icons/facebook-square-brands.svg'
+  },
+  {
+    name: 'wi_viber',
+    path: 'assets/icons/viber-brands.svg'
+  },
+  {
+    name: 'wi_skype',
+    path: 'assets/icons/skype-brands.svg'
+  },
+  {
+    name: 'wi_instagram',
+    path: 'assets/icons/instagram-square-brands.svg'
+  },
+  {
+    name: 'wi_other',
+    path: 'assets/icons/link-solid.svg'
+  },
   /* Gender Icons */
   {
     name: 'wi_male',
@@ -157,4 +179,15 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/arrow-back.svg',
     viewBox: '0 0 25 11.811'
   },
+  /* Dynamic Data Table */
+  {
+    name: 'wi_add_user',
+    path: 'assets/icons/add-user.svg',
+  },
+  {
+    name: 'wi_row_polygon',
+    path: 'assets/icons/row-polygon.svg',
+    viewBox: '0 0 20 8'
+  },
+  /* ------------------ */
 ];

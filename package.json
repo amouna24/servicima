@@ -44,7 +44,7 @@
     "@swimlane/ngx-datatable": "17.0.0",
     "@widigital-group/auth-npm-front": "^0.2.21",
     "angular-password-strength-meter": "2.0.0",
-    "lodash": "4.17.15",
+    "lodash": "^4.17.15",
     "ng-recaptcha": "5.0.0",
     "ngx-mat-select-search": "3.0.0",
     "ngx-spinner": "9.0.2",

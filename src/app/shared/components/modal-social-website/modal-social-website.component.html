@@ -19,10 +19,16 @@
             </div>
             <div fxLayout="column" fxFlex="67">
               <mat-form-field appearance="outline">
+                <span fxLayout="row" fxLayoutGap="5px">
+                <mat-icon class="icon material-icons-outlined" svgIcon='{{dynamicListSelect[i]?.res}}'>
+                </mat-icon>
                 <input autocomplete="off"
                        matInput class="wid-input-value"
                        [formControlName]=i
                        name="param_number1" />
+                   <mat-icon class="icon material-icons-outlined" svgIcon='wi-pen'>
+                </mat-icon>
+                </span>
                 <mat-error class="wid-error-messages" *ngIf=" getParam().controls">param number {{i+1}} must be Number</mat-error>
               </mat-form-field>
             </div>

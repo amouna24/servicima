@@ -13,6 +13,7 @@ import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { INetworkSocial } from '@shared/models/social-network.model';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
 
@@ -36,9 +37,8 @@ export class UserComponent implements OnInit, OnDestroy {
   title: string;
   icon: string;
   id: string;
-  showList = [];
-  pairList = [];
-  impairList = [];
+  leftList: INetworkSocial[];
+  rightList: INetworkSocial[];
   /** subscription */
   private subscriptions: Subscription[] = [];
 
@@ -115,11 +115,10 @@ export class UserComponent implements OnInit, OnDestroy {
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
-      console.log(this.user, 'this user');
       this.getRefdata();
       this.getIcon();
     }
-      this.getTable();
+      this.getList();
   }
 
   /**
@@ -187,19 +186,17 @@ export class UserComponent implements OnInit, OnDestroy {
         this.user['viber_url'] = user['viber_url'];
         this.user['skype_url'] = user['skype_url'];
         this.user['other_url'] = user['other_url'];
-        this.getTable();
+        this.getList();
       }
     });
-
   }
 
   /**
-   * @description: get network social when value  is not null
+   * @description: show network social
    */
-  getTable() {
-    this.showList = [];
-    this.pairList = [];
-    this.impairList = [];
+  getList() {
+    this.leftList = [];
+    this.rightList = [];
     const list = [
       { placeholder: 'user.linkedinacc', value: this.user?.linkedin_url},
       { placeholder: 'user.whatsappacc', value: this.user?.whatsapp_url },
@@ -210,19 +207,9 @@ export class UserComponent implements OnInit, OnDestroy {
       { placeholder: 'user.twitteracc', value: this.user?.twitter_url},
       { placeholder: 'user.youtubeacc', value: this.user?.youtube_url},
       { placeholder: 'user.viberacc', value: this.user?.viber_url},
+      { placeholder: 'company.addlink', value: 'link'},
     ];
-    list.map((element) => {
-      if (element.value) {
-        this.showList.push(element);
-      }
-    } );
-    for (let i = 0; i < this.showList.length; i++) {
-      if (i % 2 ) {
-        this.pairList.push((this.showList[i]));
-      } else {
-        this.impairList.push((this.showList[i]));
-      }
-    }
+     this.utilsService.getList(list, this.leftList, this.rightList);
   }
   /**
    * @description: destroy

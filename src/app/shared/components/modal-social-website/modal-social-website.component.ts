@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { ModalService } from '@core/services/modal/modal.service';
 import { ProfileService } from '@core/services/profile/profile.service';
+import { list } from '@shared/statics/network-social.static';
 @Component({
   selector: 'wid-modal-social-website',
   templateUrl: './modal-social-website.component.html',
@@ -33,39 +34,48 @@ export class ModalSocialWebsiteComponent implements OnInit {
   dynamicInput = [
     {
       select: 'twitter',
-      value: this.data?.twitter_url
+      value: this.data?.twitter_url,
+      maticon: 'wi_twitter'
     },
     {
       select: 'linkedin',
-      value: this.data?.linkedin_url
+      value: this.data?.linkedin_url,
+      maticon: 'wi_linkedin'
     },
     {
       select: 'youtube',
-      value: this.data?.youtube_url
+      value: this.data?.youtube_url,
+      maticon: 'wi_youtube'
     },
     {
       select: 'whatsapp',
-      value: this.data?.whatsapp_url
+      value: this.data?.whatsapp_url,
+      maticon: 'wi_whatsapp'
     },
     {
       select: 'viber',
-      value: this.data?.viber_url
+      value: this.data?.viber_url,
+      maticon: 'wi_viber'
     },
     {
       select: 'other',
-      value: this.data?.other_url
+      value: this.data?.other_url,
+      maticon: 'wi_other'
     },
     {
       select: 'facebook',
-      value: this.data?.facebook_url
+      value: this.data?.facebook_url,
+      maticon: 'wi_facebook'
     },
     {
       select: 'skype',
-      value: this.data?.skype_url
+      value: this.data?.skype_url,
+      maticon: 'wi_skype'
     },
     {
       select: 'instagram',
-      value: this.data?.instagram_url
+      value: this.data?.instagram_url,
+      maticon: 'wi_instagram'
     },
   ];
   dynamicListSelect = [];
@@ -107,17 +117,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
       'value': this['input9']
     }
   ];
-  list = [
-    { value: 'linkedin', selected: false },
-    { value: 'twitter', selected: false },
-    { value: 'youtube', selected: false },
-    { value: 'facebook', selected: false },
-    { value: 'whatsapp', selected: false },
-    { value: 'instagram', selected: false },
-    { value: 'viber', selected: false },
-    { value: 'skype', selected: false },
-    { value: 'other', selected: false },
-  ];
+  list = list;
   modelConfig = {
     title: '',
     button: {
@@ -145,7 +145,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
     });
     if (this.newTable.length === 0) {
       this.newTable.push({ select: 'linkedin',
-      value: ''}
+      value: '', maticon: 'wi_linkedin'}
     );
     }
     this.initForm();
@@ -157,7 +157,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
   initForm(): void {
     this.form = this.formBuilder.group({
       input4: this.formBuilder.array(this.newTable.map((res) => {
-        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select });
+        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select , 'res': res.maticon});
         this.leng = this.dynamicListSelect.length;
         for (let i = 0; i < this.leng; i++) {
           this.listInput[i].value = this.dynamicListSelect[i].select;
@@ -290,10 +290,10 @@ export class ModalSocialWebsiteComponent implements OnInit {
         for (let i = 1; i < 10; i++) {
           if (name === element.value && number === i) {
             this.listInput[i - 1].value = name;
-            console.log(this.listInput[i - 1].value, 'vbvvv');
             if (i === number) {
               this.form.get('input4.' + (i - 1)).setValue(this.data[name + '_url']);
               this.dynamicListSelect[number - 1 ].select = name;
+              this.dynamicListSelect[number - 1 ].res = this.displayIcon(name);
             }
           }
         }
@@ -338,6 +338,43 @@ export class ModalSocialWebsiteComponent implements OnInit {
         object.other_url = this.getInput(element.title);
       }
     });
+  }
+
+  /**
+   * @description Display icon
+   */
+  displayIcon(name): string {
+    switch (name) {
+      case 'linkedin':
+       return 'wi_linkedin';
+        break;
+      case 'twitter':
+        return 'wi_twitter';
+        break;
+      case 'whatsapp':
+        return 'wi_whatsapp';
+        break;
+      case 'youtube':
+        return 'wi_youtube';
+        break;
+      case 'viber':
+        return 'wi_viber';
+        break;
+      case 'other':
+        return 'wi_other';
+        break;
+      case 'facebook':
+        return 'wi_facebook';
+        break;
+      case 'skype':
+        return 'wi_skype';
+        break;
+      case 'instagram':
+        return 'wi_instagram';
+        break;
+      default:
+        return;
+    }
   }
 
 }
