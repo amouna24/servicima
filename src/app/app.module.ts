@@ -11,12 +11,13 @@ import { HttpReqInterceptorService } from '@core/services/http-req-interceptor/h
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { TranslationCustomLoaderService } from '@core/services/translation/translation-custom-loader.service';
 import { SharedModule } from '@shared/shared.module';
+import { DataTableModule } from '@dataTable/data-table.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { DataTableModule } from './data-table/data-table.module';
 import { ServerErrorComponent } from './pages/server-error/server-error.component';
 
 export function setupApp(
@@ -49,6 +50,7 @@ export function setupApp(
     AppRoutingModule,
     SharedModule,
     DataTableModule,
+    DynamicDataTableModule
   ],
   providers: [
     {

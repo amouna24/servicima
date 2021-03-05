@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
   <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-20">{{ title }}</h1>
+      <h1 class="steel font-size-24 font-medium">{{ title }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="{{ backURL }}">
@@ -52,7 +52,7 @@
 
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC FORM SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
     <div fxLayout="column" fxFlex="69">
-      <wid-scrollbar class="dynamic-component-content">
+      <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
         <form [formGroup]="formData" fxLayout="column" fxFlex="100">
           <ng-container *ngFor="let mi of menuItems">
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  FIRST ITEM AND ITS CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->

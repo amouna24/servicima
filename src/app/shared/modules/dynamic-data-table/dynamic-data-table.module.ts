@@ -15,15 +15,15 @@ import { DataTableConfigComponent } from './components/data-table-config/data-ta
     DynamicDataTableComponent,
     DataTableConfigComponent,
   ],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        FormsModule,
-        FlexLayoutModule,
-        RouterModule,
-        ScrollbarModule
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    FormsModule,
+    FlexLayoutModule,
+    RouterModule,
+    ScrollbarModule,
+  ],
   exports: [
     DynamicDataTableComponent,
   ],
