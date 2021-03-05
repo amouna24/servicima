@@ -6,7 +6,7 @@
   >
     <div
       class="thumb"
-      draggable="vertical"
+      [draggable]="'vertical'"
       [style.height.%]="verticalSize"
       [style.top.%]="verticalPosition"
       (dragged)="onVertical($event)"
@@ -19,7 +19,7 @@
   >
     <div
       class="thumb"
-      draggable="horizontal"
+      [draggable]="'horizontal'"
       [style.width.%]="horizontalSize"
       [style.left.%]="horizontalPosition"
       (dragged)="onHorizontal($event)"

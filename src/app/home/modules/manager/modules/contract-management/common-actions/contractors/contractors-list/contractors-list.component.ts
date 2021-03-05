@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { IContractorContact } from '@shared/models/contractorContact.model';
 import { takeUntil } from 'rxjs/operators';
@@ -28,6 +28,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title: string;
 
   /**************************************************************************
+   * @description Input from child's Components [SUPPLIERS, CLIENTS]
+   *************************************************************************/
+  redirectUrl: string;
+  addButtonLabel: string;
+
+  /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -45,12 +51,13 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['contractor_code', 'contractor_name', 'email_address',
     'contact_email', 'creation_date', 'status', 'show', 'Actions'];
   dataSource: MatTableDataSource<IContractor>;
-  @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true}) sort: MatSort;
-
+  ELEMENT_DATA = new BehaviorSubject<any>([]);
+  isLoading = new BehaviorSubject<boolean>(false);
   /*********** Contract Data Table ***********/
   contractorsList: IContractor[] = [];
   /*******************************************/
+  @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true}) sort: MatSort;
 
   constructor(
     private contractorService: ContractorsService,
@@ -71,6 +78,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   ngOnInit(): void {
     this.getInitialData();
+    this.addNewContractors();
   }
 
   /**************************************************************************
@@ -123,6 +131,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * else return empty Table
    *************************************************************************/
   getContractors() {
+    this.isLoading.next(true);
     this.contractorService.getContractors(`?contractor_type=${this.type}&?email_address=${this.userInfo.user[0]['company_email']}`)
       .pipe(
         takeUntil(this.destroy$)
@@ -130,12 +139,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
       (response) => {
         this.contractorsList = response;
-        this.display(this.contractorsList);
+        this.ELEMENT_DATA.next(this.contractorsList);
+        this.isLoading.next(false);
       },
       (error) => {
         if (error.error.msg_code === '0004') {
-          this.contractorsList = [];
-          this.display(this.contractorsList);
+          this.ELEMENT_DATA.next([]);
         }
       },
     );
@@ -146,11 +155,11 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   addNewContractors() {
     if ( this.type === 'SUPPLIER') {
-      this.router.navigate(
-        ['/manager/contract-management/suppliers-contracts/suppliers']);
+      this.redirectUrl = '/manager/contract-management/suppliers-contracts/suppliers';
+      this.addButtonLabel = 'New Supllier';
     } else {
-      this.router.navigate(
-        ['/manager/contract-management/clients-contracts/clients']);
+      this.redirectUrl = '/manager/contract-management/clients-contracts/clients';
+      this.addButtonLabel = 'New Client';
     }
   }
 
@@ -214,9 +223,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Contact of Contractor
    *************************************************************************/
   showContact(Contractor: IContractor): void {
-    const confirmation = {
-      sentence: 'to change the status of this user',
-    };
       this.contractorService.getContractorsContact(
         `?contractor_code=${Contractor.contractorKey.contractor_code}&email_address=${Contractor.contractorKey.email_address}`
       )
@@ -240,6 +246,16 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
           console.log(error);
         }
       );
+  }
+
+  switchAction(rowAction: any) {
+    switch (rowAction.actionType) {
+      case ('show'): this.showContact(rowAction.data);
+      break;
+      case ('update'): this.updateContractor(rowAction.data);
+      break;
+      case('delete'): this.onStatusChange(rowAction.data);
+    }
   }
 
   /**************************************************************************

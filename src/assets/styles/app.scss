@@ -452,6 +452,9 @@ html body {
 .font-size-20 {
     font-size: 20px;
 }
+.font-size-24 {
+    font-size: 24px;
+}
 .font-size-25 {
     font-size: 25px;
 }
@@ -620,28 +623,31 @@ html body {
   height: 400px !important;
   padding: 20px;
 }
+/*    DYNAMIC COMPONENT   */
 .dynamic-component-container  {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
   height: 88vh !important;
-  width: 88vw;
 }
 
 .dynamic-component-content {
   resize: both !important;
   scroll-behavior: smooth !important;
 }
+/* ---------------------- */
+
+/*  SCROLLBAR COMPONENT   */
+
 .sidenav-wrapper {
-  resize: both !important;
-  height: 400px !important;
+  height: 88vh !important;
 }
 .scrollbar {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  border-radius: 4px !important;
-  box-sizing: border-box !important;
+  resize: both !important;
+  scroll-behavior: smooth !important;
 }
+/* ---------------------- */
+
 /*******************
    cursor pointer
 *******************/

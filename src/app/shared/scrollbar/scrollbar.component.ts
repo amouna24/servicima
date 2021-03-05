@@ -59,6 +59,7 @@ export class ScrollbarComponent {
   }
 
   get hasVerticalBar(): boolean {
+    console.log('verticalSize', this.verticalSize);
     return this.verticalSize < 100;
   }
 

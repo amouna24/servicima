@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
-import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'wid-dynamic-component',
@@ -39,7 +39,7 @@ export class DynamicComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.randomSubParent = document.getElementsByClassName('dynamic-component-content')[0];
+    this.randomSubParent = document.getElementById('dynamic-component-content');
     this.valueOfSelectedItem = this.menuItems[0].titleKey;
   }
 
@@ -80,6 +80,7 @@ export class DynamicComponent implements OnInit {
       this.randomSubParent.scrollTop = (childRect.top + this.randomSubParent.scrollTop) - parentRect.top;
     }
   }
+
   childSelected(parent: string): boolean {
     let res = false;
     this.menuItems.forEach(
