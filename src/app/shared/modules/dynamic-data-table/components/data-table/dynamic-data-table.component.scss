@@ -1,15 +1,21 @@
-cdk-row, cdk-header-row, cdk-footer-row {
-  height: 50px;
-  border-bottom: 1px solid #ebebeb;
+table {
+  tr{
+    height: 50px;
+    border-bottom: 1px solid #ebebeb;
 
+  }
+
+  th, td {
+    height: 50px;
+    border-bottom: 1px solid #ebebeb;
+    text-align: center!important;
+  }
+
+  th {
+    background-color: white;
+  }
 }
-
-cdk-cell, cdk-header-cell, cdk-footer-cell {
-  height: 50px;
-  border-bottom: 1px solid #ebebeb;
-
-}
-
-cdk-header-cell {
-  background-color: white;
+.dynamic-data-table-content {
+  resize: both !important;
+  scroll-behavior: smooth !important;
 }

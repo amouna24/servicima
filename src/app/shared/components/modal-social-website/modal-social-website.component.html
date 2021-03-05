@@ -3,8 +3,8 @@
     <h5 class=" steel">Social website :</h5>
     <div fxLayout="column" fxFlex="80" fxLayoutGap="10px">
 
-      <div formArrayName = 'input4' >
-        <div *ngFor = "let ParamNumberControl of getParam().controls; let i = index">
+      <div formArrayName = 'input' >
+        <div *ngFor = "let networkSocialControl of getListNetworkSocial().controls; let i = index">
           <div fxLayout="row" fxFlex="100" fxLayoutGap="5%">
             <div fxLayout="column" fxFlex="23">
               <mat-form-field appearance="outline">
@@ -20,7 +20,7 @@
             <div fxLayout="column" fxFlex="67">
               <mat-form-field appearance="outline">
                 <span fxLayout="row" fxLayoutGap="5px">
-                <mat-icon class="icon material-icons-outlined" svgIcon='{{dynamicListSelect[i]?.res}}'>
+                <mat-icon class="icon material-icons-outlined" svgIcon='{{dynamicListSelect[i]?.matIcon}}'>
                 </mat-icon>
                 <input autocomplete="off"
                        matInput class="wid-input-value"
@@ -29,14 +29,14 @@
                    <mat-icon class="icon material-icons-outlined" svgIcon='wi-pen'>
                 </mat-icon>
                 </span>
-                <mat-error class="wid-error-messages" *ngIf=" getParam().controls">param number {{i+1}} must be Number</mat-error>
+                <mat-error class="wid-error-messages" *ngIf=" getListNetworkSocial().controls">param number {{i+1}} must be Number</mat-error>
               </mat-form-field>
             </div>
           </div>
         </div>
       </div>
       <div class="btn container-plus"  fxLayout="row" fxLayoutAlign="flex-end" >
-        <button [disabled]="getParam().length > 8 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddParam()" >+</button>
+        <button [disabled]="getListNetworkSocial().length > 8 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddAnotherNetworkSocial()" >+</button>
       </div>
     </div>
   </div>

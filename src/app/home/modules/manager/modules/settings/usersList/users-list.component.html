@@ -1,11 +1,9 @@
-<div *ngIf="loaded ">
 <wid-dynamic-data-table
   [tableData]="ELEMENT_DATA"
   [tableCode]="'USERS-LIST'"
+  [isLoading]="isLoading"
   [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User'}"
   [title]="'Users list'"
-  (rowID)="updateOrDelete($event)"
-  (rowData)="showRowData($event)"
+  (rowActionData)="switchAction($event)"
 >
 </wid-dynamic-data-table>
-</div>

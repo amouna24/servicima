@@ -2,11 +2,11 @@
   <div modal-body fxFlex="70" fxFlex.xs="50" fxLayout="column" class="cool-grey font-size-12" style="margin-top: -28px"
     fxFlexOffset="9">
     <h5 class=" steel"> {{'changepwd.title' | translate}}:</h5>
-    <div style="margin-left: 58px" fxLayout="column">
+    <div style="margin-left: 58px" fxLayout="column" fxLayoutGap="2px">
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.oldpwd' | translate | titlecase}} </mat-label>
+        <mat-label class="black-three"> {{'changepwd.oldpwd' | translate | uppercase}} </mat-label>
         <mat-form-field appearance="outline">
-          <input [type]="hideOldPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.oldpwd' | translate | titlecase"  matInput
+          <input [type]="hideOldPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.oldpwd' | translate "  matInput
             formControlName="oldPassword" name="oldPassword"  autocomplete="off" required />
           <mat-icon class="cursor-pointer" matSuffix (click)="hideOldPassword = !hideOldPassword">
             {{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -15,9 +15,9 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.newpwd' | translate | titlecase}} </mat-label>
+        <mat-label class="black-three"> {{'changepwd.newpwd' | translate | uppercase }} </mat-label>
         <mat-form-field appearance="outline">
-          <input [type]="hidePassword ? 'password' : 'text'" [placeholder]=" 'changepwd.newpwd' | translate | titlecase"  autocomplete="off" matInput formControlName="password"
+          <input [type]="hidePassword ? 'password' : 'text'" [placeholder]=" 'changepwd.newpwd' | translate "  autocomplete="off" matInput formControlName="password"
             name="password" type="password" required />
           <mat-icon class="cursor-pointer" matSuffix (click)="hidePassword = !hidePassword">
             {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -27,9 +27,9 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.confirmpwd' | translate | titlecase}}  </mat-label>
+        <mat-label class="black-three"> {{'changepwd.confirmpwd' | translate | uppercase}}  </mat-label>
         <mat-form-field appearance="outline" [ngStyle.xs]="{'width': '96%'}">
-          <input [type]="hideConfirmPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.confirmpwd' | translate | titlecase" autocomplete="off" matInput
+          <input [type]="hideConfirmPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.confirmpwd' | translate " autocomplete="off" matInput
             formControlName="confirmPassword" name="confirmPassword" [errorStateMatcher]="errorMatcher" type="password"
             required />
           <mat-icon class="cursor-pointer" matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">

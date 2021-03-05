@@ -452,6 +452,9 @@ html body {
 .font-size-20 {
     font-size: 20px;
 }
+.font-size-24 {
+    font-size: 24px;
+}
 .font-size-25 {
     font-size: 25px;
 }
@@ -623,6 +626,7 @@ html body {
   height: 400px !important;
   padding: 20px;
 }
+/*    DYNAMIC COMPONENT   */
 .dynamic-component-container  {
   @include get-page(servicima);
   background-color: $white;
@@ -635,16 +639,19 @@ html body {
   resize: both !important;
   scroll-behavior: smooth !important;
 }
+/* ---------------------- */
+
+/*  SCROLLBAR COMPONENT   */
+
 .sidenav-wrapper {
-  resize: both !important;
-  height: 400px !important;
+  height: 88vh !important;
 }
 .scrollbar {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  border-radius: 4px !important;
-  box-sizing: border-box !important;
+  resize: both !important;
+  scroll-behavior: smooth !important;
 }
+/* ---------------------- */
+
 /*******************
    cursor pointer
 *******************/
@@ -689,13 +696,27 @@ html body {
 }
 .btn-plus{
   height: 17px !important;
-  padding: 0 0px !important;
+  padding: 0 0 !important;
   min-width: 20px !important;
   line-height: 1 !important;
-  border-color: #1bc5bd !important;
+  border-color: $topaz !important;
 }
-
+/*******************
+   input style
+*******************/
 .mat-input-element::placeholder{
-  color: #afb1b8 !important;
+  color: $cool-grey !important;
+}
+// mat-input error outline color
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+  color: $error-red!important;
+  opacity: 0.8!important;
 }
 
+// mat-label error style
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: $error-red!important;
+}
+.mat-error{
+  color: $error-red !important;
+}

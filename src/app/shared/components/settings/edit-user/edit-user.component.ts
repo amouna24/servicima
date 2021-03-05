@@ -54,17 +54,17 @@ export class EditUserComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private utilsService: UtilsService,
-    private profileService: ProfileService,
-    private appInitializerService: AppInitializerService,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private modalService: ModalService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private uploadService: UploadService,
-    private route: ActivatedRoute,
-    private location: Location,
-  ) { }
+              private profileService: ProfileService,
+              private appInitializerService: AppInitializerService,
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
+              private modalService: ModalService,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private uploadService: UploadService,
+              private route: ActivatedRoute,
+              private location: Location,
+              ) { }
 
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
@@ -76,6 +76,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
+    this.modalService.registerModals(
+      { modalName: 'changePassword', modalComponent: ChangePwdComponent });
     this.initForm();
     this.getConnectedUser();
   }
@@ -95,8 +97,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.checkComponentAction(data);
       }
     });
-    this.modalService.registerModals(
-      { modalName: 'changePassword', modalComponent: ChangePwdComponent });
   }
   /**
    * @description : check if the user is in his home profile
@@ -131,6 +131,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
             this.idRole = data[0]['_id'];
             this.userRole = data[0]['userRolesKey']['role_code'];
             this.form.controls['userType'].disable();
+            this.form.controls['emailAddress'].disable();
             this.form.controls['homeCompany'].disable();
             this.setForm();
           });
@@ -150,11 +151,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.userInfo = connectedUser['user'][0];
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.setForm();
+      this.form.controls['emailAddress'].disable();
       this.form.controls['userType'].disable();
       this.form.controls['homeCompany'].disable();
       this.form.controls['roleCtrl'].disable();
     }
-    this.getRefdata();
+    this.getRefData();
   }
   /**
    * @description : initialization of the form
@@ -169,7 +171,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       cellphoneNbr: [''],
       userType: ['', [Validators.required]],
       twitterAccount: [''],
-      genderProfil: ['', [Validators.required]],
+      genderProfile: ['', [Validators.required]],
       youtubeAccount: [''],
       linkedinAccount: [''],
       homeCompany: [{ value: '', disabled: true }],
@@ -198,7 +200,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       youtubeAccount: this.userInfo?.youtube_url ? this.userInfo?.youtube_url : 'none' ,
       linkedinAccount: this.userInfo['linkedin_url'],
       homeCompany: this.companyName,
-      genderProfil: this.userInfo['gender_id'],
+      genderProfile: this.userInfo['gender_id'],
       roleCtrl: this.userRole,
       languageCtrl: this.userInfo['language_id'] ? this.userInfo['language_id'] : '',
       titleCtrl: this.userInfo['title_id'],
@@ -211,7 +213,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
-  getRefdata(): void {
+  getRefData(): void {
     const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
     const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
       list);
@@ -232,7 +234,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description  : Open dialog change password
    */
   onChangePassword(): void {
-    this.modalService.displayModal('changePassword', null, '570px', '520px');
+    this.modalService.displayModal('changePassword', null, '570px', '500px');
   }
 
   /**
@@ -261,7 +263,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         staff_type_id: this.form.value.userType,
         first_name: this.form.value.firstName,
         last_name: this.form.value.lastName,
-        gender_id: this.form.value.genderProfil,
+        gender_id: this.form.value.genderProfile,
         prof_phone: this.form.value.profPhone,
         cellphone_nbr: this.form.value.cellphoneNbr,
         language_id: this.form.value.languageCtrl,
@@ -300,7 +302,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         user_type: this.userInfo['user_type'],
         first_name: this.form.value.firstName,
         last_name: this.form.value.lastName,
-        gender_id: this.form.value.genderProfil,
+        gender_id: this.form.value.genderProfile,
         prof_phone: this.form.value.profPhone,
         cellphone_nbr: this.form.value.cellphoneNbr,
         language_id: this.form.value.languageCtrl,
@@ -342,12 +344,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
                   if (filename) {
                     this.userService.getImage(filename);
                   }
+                  this.back();
                   /***************** Administrator update another user *************************************
                    ****************************************************************/
                 } else {
                   this.profileService.UpdateUserRole(userRoleObject).subscribe(
                     (data) => {
                       console.log(data);
+                      this.back();
                     }
                   );
                 }
@@ -363,11 +367,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description: Deactivate account
    */
   deactivateAccount(): void {
-    const desactivate = {
-      code: 'desactivate',
-      title: 'desactivate your account',
+    const deactivate  = {
+      code: 'deactivate',
+      title: 'deactivate your account',
     };
-    this.subscriptionModal = this.modalService.displayConfirmationModal(desactivate, '560px', '300px').subscribe((value) => {
+    this.subscriptionModal = this.modalService.displayConfirmationModal(deactivate, '560px', '300px').subscribe((value) => {
       if (value) {
         console.log('compte desactivé');
       }
@@ -393,7 +397,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.form.get('firstName').setValue(null);
     this.form.get('emailAddress').setValue(null);
     this.form.get('lastName').setValue(null);
-    this.form.get('genderProfil').setValue(null);
+    this.form.get('genderProfile').setValue(null);
     this.form.get('profPhone').setValue(null);
     this.form.get('cellphoneNbr').setValue(null);
     this.form.get('languageCtrl').setValue(null);
@@ -406,12 +410,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
   getFile(obj: FormData) {
     this.photo = obj;
   }
-  /**
-   * @description destroy
-   */
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
-  }
 
   /**
    * @description back
@@ -419,4 +417,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
    back() {
       this.location.back();
    }
+
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+
 }

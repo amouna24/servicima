@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-
 import { UtilsService } from '@core/services/utils/utils.service';
-import { IUserModel } from '@shared/models/user.model';
+
 import { ICredentialsModel } from '@shared/models/credentials.model';
 import { IViewParam } from '@shared/models/view.model';
 @Component({
@@ -18,46 +17,48 @@ import { IViewParam } from '@shared/models/view.model';
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit, OnDestroy {
-  loaded: Promise<boolean>;
-  ELEMENT_DATA = [];
-  usersList: IUserModel[] = [];
-  code: string;
+  ELEMENT_DATA = new BehaviorSubject<any>([]);
   companyId: string;
   credentials: ICredentialsModel;
+  isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
 
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(private router: Router,
-     private profileService: ProfileService,
-     private userService: UserService,
-     private utilsService: UtilsService,
-     private modalService: ModalService,
-     private appInitializerService: AppInitializerService,
-     private localStorageService: LocalStorageService) { }
+              private profileService: ProfileService,
+              private userService: UserService,
+              private utilsService: UtilsService,
+              private modalService: ModalService,
+              private appInitializerService: AppInitializerService,
+              private localStorageService: LocalStorageService) { }
 
   /**
    * @description Loaded when component in init state
    */
-  ngOnInit(): void {
+  ngOnInit() {
     this.credentials = this.localStorageService.getItem('userCredentials');
-      this.getAllUsers();
+    this.getRefdata();
+    this.getAllUsers();
   }
   /**
    * @description : get all users
    */
-  getAllUsers(): void {
-    this.profileService.getAllUser(this.credentials['email_address']).subscribe(async (res) => {
-      this.ELEMENT_DATA = res;
-      this.ELEMENT_DATA.forEach((data) => {
-        this.getRefdata();
+  getAllUsers() {
+    this.isLoading.next(true);
+    this.subscriptions.push(this.profileService.getAllUser(this.credentials['email_address'])
+      .subscribe((res) => {
+      res.forEach( (data) => {
         data['gender_id']  = this.utilsService.getViewValue(data['gender_id'], this.refData['GENDER']);
+       if (data['user_type']) {
         data['user_type'] =  this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
           type.value ===  data['user_type']).viewValue;
+       }
       });
-      this.loaded = Promise.resolve(true);
-    });
+      this.ELEMENT_DATA.next(res);
+      this.isLoading.next(false);
+    }));
   }
   /**
    * @description : get the refData from appInitializer service and mapping data
@@ -66,24 +67,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
     const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER'];
     this.refData = this.utilsService.getRefData(this.companyId, this.credentials['application_id'],
      list);
-  }
-  /*  à effacer */
-  updateOrDelete(id: string) {
-    this.router.navigate(['/manager/user/edit-profile'],
-      {
-        queryParams: {
-          'id': id
-        }
-      });
-  }
-/*  à effacer */
-  showRowData(id: string) {
-    this.router.navigate(['/manager/user/profile'],
-      {
-        queryParams: {
-          'id': id['_id']
-        }
-      });
   }
 
   /**
@@ -128,6 +111,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
       if (value === true) {
         this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.credentials['email_address']).subscribe(
           (res) => {
+            if (res) {
+              this.getAllUsers();
+            }
           },
           (err) => console.error(err),
         ));
@@ -140,7 +126,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @description : action
    * @param rowAction: object
    */
-/*  switchAction(rowAction: any) {
+  switchAction(rowAction: any) {
     switch (rowAction.actionType) {
       case ('show'): this.showUser(rowAction.data);
         break;
@@ -155,5 +141,4 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
-
 }

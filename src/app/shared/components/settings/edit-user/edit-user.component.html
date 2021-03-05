@@ -1,9 +1,9 @@
 <div class="dynamic-component-container bg-white border-radius-20 m-l-30">
 
     <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
-      <div fxLayout="row" class="line-height-2" >
-        <div fxLayout="column" fxFlex="85" class="font-size-20 steel" *ngIf=" title === 'Add'" >{{ 'user.add' | translate | titlecase}} </div>
-        <div fxLayout="column" fxFlex="85" class="font-size-20 steel" *ngIf=" title === 'Update'" >{{ 'user.edit' | translate | titlecase}} </div>
+      <div fxFlex="7"  fxLayout="row" class="line-height-2">
+        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Add'" >{{ 'user.add' | translate | titlecase}} </div>
+        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Update'" >{{ 'user.edit' | translate | titlecase}} </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
           <button mat-raised-button class="btn-small bg-pale-grey" (click)="back()">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
@@ -12,11 +12,14 @@
           </button>
         </div>
       </div>
-      <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
-      <wid-scrollbar class="scrollbar">
-      <div fxLayout="row" fxFlex="100" class="p-t-20 font-size-12 " style="height: 80vh" form
+      <div fxFlex="2" fxLayout="row">
+        <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+      </div>
+
+      <div fxLayout="row" fxFlex="91" class="p-t-20 font-size-12 " form
         [formGroup]="form">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
+          <wid-scrollbar class="scrollbar">
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
@@ -42,35 +45,35 @@
                 </div>
               </div>
             </div>
-            <div fxLayout="column" fxFlex="50">
-              <div fxLayout="column" fxFlex="30" fxLayoutAlign="start center">
-                <div class="profile-image" fxLayout="column" fxLayoutAlign="center start">
+            <div fxLayout="column" fxFlex="50" fxLayoutAlign="flex-end flex-start" >
+              <div fxLayout="column" fxLayoutAlign="start center"  class="profile-image" style="width: 80%">
+                <div class="profile-image" fxLayout="row"  fxLayoutAlign="center start">
                   <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user"
                     [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
                   </wid-profile-image>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="m-t-20">
-                  <div fxLayout="row" fxFlex="25">
+                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20">
+                  <div fxLayout="row" fxFlex="33">
                     <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
                         <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-                        <span class="font-size-10">{{user.first_name}}</span>
+                        <span class="font-size-10">{{user?.first_name}}</span>
                       </div>
                     </button>
                   </div>
-                  <div fxLayout="row" fxFlex="25">
+                  <div fxLayout="row" fxFlex="33">
                     <button mat-button mat-raised-button class="btn-small bg-info-blue white">
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
                         <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-                        <span class="font-size-10">{{user.first_name}}</span>
+                        <span class="font-size-10">{{user?.first_name}}</span>
                       </div>
                     </button>
                   </div>
-                  <div fxLayout="row" fxFlex="25">
+                  <div fxLayout="row" fxFlex="33">
                     <button mat-button mat-raised-button class="btn-small bg-error-red white">
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
                         <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-                        <span class="font-size-10">{{user.first_name}}</span>
+                        <span class="font-size-10">{{user?.first_name}}</span>
                       </div>
                     </button>
                   </div>
@@ -82,7 +85,7 @@
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <label class="font-size-12 required">{{'user.gender' | translate | uppercase}} </label>
-              <mat-radio-group formControlName="genderProfil" fxLayout="row" fxLayoutGap="100px" class="line-height-4">
+              <mat-radio-group formControlName="genderProfile" fxLayout="row" fxLayoutGap="100px" class="line-height-4">
                 <mat-radio-button value="F">{{'sexe.femme' | translate}}</mat-radio-button>
                 <mat-radio-button value="M">{{'sexe.homme' | translate }}</mat-radio-button>
               </mat-radio-group>
@@ -251,10 +254,8 @@
             </div>
           </div>
           <br>
-
+          </wid-scrollbar>
         </div>
       </div>
-      </wid-scrollbar>
-
     </div>
 </div>

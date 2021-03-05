@@ -85,7 +85,6 @@ import { ErrorComponent } from './components/error/error.component';
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
-    DynamicDataTableModule,
   ],
   exports: [
     MaterialModule,
@@ -116,7 +115,6 @@ import { ErrorComponent } from './components/error/error.component';
     EditCompanyHomeComponent,
     ErrorComponent,
     SplashComponent,
-    DynamicDataTableModule,
   ]
 })
 export class SharedModule { }

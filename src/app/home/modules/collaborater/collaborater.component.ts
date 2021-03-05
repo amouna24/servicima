@@ -1,7 +1,4 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { mainContentAnimation } from '@shared/animations/animations';
 
 @Component({
@@ -14,30 +11,13 @@ import { mainContentAnimation } from '@shared/animations/animations';
 })
 export class CollaboraterComponent implements OnInit, OnDestroy {
 
-  mobileQuery: MediaQueryList;
-
-  sidebarState: string;
-
-  private mobileQueryListener: () => void;
-
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private sidebarService: SidenavService) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this.mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
-  }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
-  }
-  toggle() {
-    this.sidebarService.toggle();
+  constructor() {
   }
 
   ngOnInit() {
-    this.sidebarService.sidebarStateObservable$
-      .subscribe((newState: string) => {
-        this.sidebarState = newState;
-      });
+  }
+
+  ngOnDestroy(): void {
   }
 
 }

@@ -7,16 +7,16 @@ import { UserService } from '@core/services/user/user.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { ModalService } from '@core/services/modal/modal.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { Subscription } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
-import { ModalService } from '@core/services/modal/modal.service';
+import { INetworkSocial } from '@shared/models/social-network.model';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
-import { INetworkSocial } from '@shared/models/social-network.model';
 @Component({
   selector: 'wid-home-company',
   templateUrl: './home-company.component.html',
@@ -31,10 +31,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
               private uploadService: UploadService,
-) {
-    this.modalService.registerModals(
-      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
-  }
+) { }
 
   userCredentials: string;
   company: ICompanyModel;
@@ -55,19 +52,28 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   vatList: IViewParam[] = [];
   activityCodeList: IViewParam[] = [];
   currenciesList: IViewParam[] = [];
+  leftList: INetworkSocial[];
+  rightList: INetworkSocial[];
   /** subscription */
   subscription: Subscription;
   /** subscription */
   private subscriptions: Subscription[] = [];
-  leftList: INetworkSocial[];
-  rightList: INetworkSocial[];
   /**
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-    this.mapData();
-    this.getRefdata();
+    this.modalService.registerModals(
+      { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
     this.userCredentials = this.localStorageService.getItem('userCredentials');
+    this.mapData();
+    this.getRefData();
+    this.getDetailsCompany();
+  }
+
+  /**
+   * @description : get details company
+   */
+  getDetailsCompany(): void {
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
@@ -76,7 +82,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         const ava = await this.uploadService.getImage(this.company['photo']);
         this.avatar = ava;
         this.user = info['user'][0];
-        this.getList();
+        this.getListNetworkSocial();
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
         this.currency = this.utilsService.getViewValue(this.company['currency_id'], this.currenciesList);
@@ -86,11 +92,10 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
       }
     }, (err) => console.error(err)));
   }
-
   /**
    * @description : get the refData from local storage
    */
-  getRefdata(): void {
+  getRefData(): void {
     const list = ['VAT', 'LEGAL_FORM'];
     const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
       list);
@@ -131,12 +136,12 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         this.company['viber_url'] = user['viber_url'];
         this.company['skype_url'] = user['skype_url'];
         this.company['other_url'] = user['other_url'];
-        this.getList();
+        this.getListNetworkSocial();
       }
     });
   }
 
-  getList() {
+  getListNetworkSocial() {
     this.leftList = [];
     this.rightList = [];
     const list = [

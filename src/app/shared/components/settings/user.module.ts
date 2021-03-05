@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { DataTableModule } from '@dataTable/data-table.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { UserRoutingModule } from './user-routing.module';
 
@@ -12,7 +12,7 @@ import { UserRoutingModule } from './user-routing.module';
     CommonModule,
     SharedModule,
     UserRoutingModule,
-    DataTableModule,
+    DynamicDataTableModule
   ]
 })
 export class UserModule { }

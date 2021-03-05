@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { ContractManagementRoutingModule } from './contract-management-routing.module';
 import { ContractManagementComponent } from './contract-management.component';
@@ -25,6 +26,7 @@ import { ShowExtensionComponent } from './common-actions/contracts/show-extensio
         CommonModule,
         ContractManagementRoutingModule,
         SharedModule,
+        DynamicDataTableModule,
     ],
     exports: [
       ContractorsListComponent,

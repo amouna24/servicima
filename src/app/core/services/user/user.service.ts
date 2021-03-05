@@ -44,7 +44,7 @@ export class UserService {
       .pipe(
         tap(() => this.isLoadingSubject.next(true)),
       )
-      .subscribe(async (data) => {
+      .subscribe( (data) => {
         this.userInfo = data;
         this.connectedUser$.next(data);
         this.getImage(data['user'][0].photo);
@@ -66,9 +66,7 @@ export class UserService {
         this.moduleName$.next('manager');
         this.router.navigate(['/manager']).then(
           (res) => {
-            if (res == null) {
-              this.isLoadingSubject.next(true);
-            } else if (res === true) {
+            if (res == null || res === true) {
               this.isLoadingSubject.next(true);
             }
           }
@@ -79,9 +77,7 @@ export class UserService {
         this.moduleName$.next('collaborator');
         this.router.navigate(['/collaborator']).then(
           (res) => {
-            if (res == null) {
-              this.isLoadingSubject.next(true);
-            } else if (res === true) {
+            if (res == null || res === true) {
               this.isLoadingSubject.next(true);
             }
           }
@@ -92,9 +88,7 @@ export class UserService {
         this.moduleName$.next('candidate');
         this.router.navigate(['/candidate']).then(
           (res) => {
-            if (res == null) {
-              this.isLoadingSubject.next(true);
-            } else if (res === true) {
+            if (res == null || res === true) {
               this.isLoadingSubject.next(true);
             }
           }
@@ -133,7 +127,7 @@ export class UserService {
 
   /**************************************************************************
    * @description Emit class color
-   * @param object class color
+   * @param classColor class color
    *************************************************************************/
   emitClass(classColor: object): void {
     this.classSubject$.next(classColor);
@@ -149,10 +143,11 @@ export class UserService {
 
   /**************************************************************************
    * @description get user role
-   * @param message: string
+   * @param applicationId: string
+   * @param email: string
    *************************************************************************/
-  getUserRole(applicatinId: string, email: string) {
-    return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicatinId}&email_address=${email}`);
+  getUserRole(applicationId: string, email: string) {
+    return this.httpClient.get(`${environment.userRoleApiUrl}` + `?application_id=${applicationId}&email_address=${email}`);
   }
   /**************************************************************************
    * @description get company role features
@@ -169,13 +164,10 @@ export class UserService {
     switch (role) {
       case 'CAND':
         return 'CANDIDATE';
-        break;
       case 'COLLAB':
         return 'COLLABORATOR';
-        break;
       case 'ADMIN':
         return 'ADMIN';
-        break;
       default:
         return;
     }

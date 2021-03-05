@@ -162,11 +162,13 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * navigate from login
    */
   logout(): void {
-    this.authService.logout().subscribe(() => {
+    this.authService.logout().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
         this.sidenavService.toggleRightSideNav();
+        this.userService.connectedUser$.next(null);
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
-        this.userService.connectedUser$.next(null);
         this.router.navigate(['/auth/login']);
       },
       (err) => {

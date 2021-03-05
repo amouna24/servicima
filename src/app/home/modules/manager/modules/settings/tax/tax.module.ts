@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { DataTableModule } from '@dataTable/data-table.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { TaxRoutingModule } from './tax-routing.module';
 import { TaxComponent } from './tax.component';
@@ -14,7 +14,7 @@ import { TaxComponent } from './tax.component';
     CommonModule,
     SharedModule,
     TaxRoutingModule,
-    DataTableModule,
+    DynamicDataTableModule,
   ],
 })
 export class TaxModule {

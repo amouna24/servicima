@@ -14,7 +14,7 @@ export class CanBeDisplayedDirective implements OnInit, OnDestroy {
   availableFeature: string[] = [];
   licenceFeature: string[] = [];
   companyRolesFeatures = [];
-  email_address: string;
+  emailAddress: string;
   constructor(
     private element: ElementRef,
     private templateRef: TemplateRef<any>,
@@ -38,7 +38,7 @@ export class CanBeDisplayedDirective implements OnInit, OnDestroy {
   getUserConnected() {
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
-        this.email_address = data['company'][0]['companyKey']['email_address'];
+        this.emailAddress = data['company'][0]['companyKey']['email_address'];
         const arrayList = await this.userService.listFeatureRole[0];
             this.companyRolesFeatures = [];
             this.companyRolesFeatures.push(Object.values(arrayList).map(element => element['companyRoleFeaturesKey']['feature_code']));

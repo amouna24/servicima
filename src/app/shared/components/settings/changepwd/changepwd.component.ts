@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { UserService } from '@core/services/user/user.service';
   templateUrl: './changepwd.component.html',
   styleUrls: ['./changepwd.component.scss']
 })
-export class ChangePwdComponent implements OnInit {
+export class ChangePwdComponent implements OnInit, OnDestroy {
   form: FormGroup;
   existForm = true;
   hidePassword = true;
@@ -59,14 +59,6 @@ export class ChangePwdComponent implements OnInit {
     */
   ngOnInit(): void {
     this.initForm();
-  }
-
-  onNotify(res: boolean): void {
-    if (!res) {
-      this.dialogRef.close();
-    } else {
-      this.changePassword(this.form);
-    }
   }
 
   /**
@@ -113,7 +105,7 @@ export class ChangePwdComponent implements OnInit {
       old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    this.profileService.changePassword(newPassword).subscribe(
+    this.subscriptions.push(this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.subscriptions.push(this.authService.logout().subscribe(() => {
             localStorage.removeItem('userCredentials');
@@ -132,6 +124,22 @@ export class ChangePwdComponent implements OnInit {
         console.error(error);
         this.dialogRef.close();
       }
-    );
+    ));
   }
+
+  onNotify(res: boolean): void {
+    if (!res) {
+      this.dialogRef.close();
+    } else {
+      this.changePassword(this.form);
+    }
+  }
+
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+
 }

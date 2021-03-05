@@ -1,17 +1,18 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { ModalService } from '@core/services/modal/modal.service';
 import { ProfileService } from '@core/services/profile/profile.service';
-import { list } from '@shared/statics/network-social.static';
+
+import { IListInputNetworkSocial, IListNameNetworkSocial, IListNetworkSocial } from '@shared/models/social-network.model';
 @Component({
   selector: 'wid-modal-social-website',
   templateUrl: './modal-social-website.component.html',
   styleUrls: ['./modal-social-website.component.scss']
 })
-export class ModalSocialWebsiteComponent implements OnInit {
+export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   constructor(public dialogRef: MatDialogRef<ModalSocialWebsiteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private modalService: ModalService,
@@ -20,104 +21,20 @@ export class ModalSocialWebsiteComponent implements OnInit {
   }
   private subscriptions: Subscription[] = [];
   form: FormGroup;
-  leng = 0;
-  input1: string;
-  input2: string;
-  input3: string;
-  input4: string;
-  input5: string;
-  input6: string;
-  input7: string;
-  input8: string;
-  input9: string;
-  newTable = [];
-  dynamicInput = [
-    {
-      select: 'twitter',
-      value: this.data?.twitter_url,
-      maticon: 'wi_twitter'
-    },
-    {
-      select: 'linkedin',
-      value: this.data?.linkedin_url,
-      maticon: 'wi_linkedin'
-    },
-    {
-      select: 'youtube',
-      value: this.data?.youtube_url,
-      maticon: 'wi_youtube'
-    },
-    {
-      select: 'whatsapp',
-      value: this.data?.whatsapp_url,
-      maticon: 'wi_whatsapp'
-    },
-    {
-      select: 'viber',
-      value: this.data?.viber_url,
-      maticon: 'wi_viber'
-    },
-    {
-      select: 'other',
-      value: this.data?.other_url,
-      maticon: 'wi_other'
-    },
-    {
-      select: 'facebook',
-      value: this.data?.facebook_url,
-      maticon: 'wi_facebook'
-    },
-    {
-      select: 'skype',
-      value: this.data?.skype_url,
-      maticon: 'wi_skype'
-    },
-    {
-      select: 'instagram',
-      value: this.data?.instagram_url,
-      maticon: 'wi_instagram'
-    },
+  newTable: IListNetworkSocial[] = [];
+  dynamicListSelect: Array<{ input: string, select: string, matIcon?: string }> = [];
+  listInput: IListInputNetworkSocial[] = [];
+  list: IListNameNetworkSocial[] = [
+    { value: 'linkedin', selected: false },
+    { value: 'twitter', selected: false },
+    { value: 'youtube', selected: false },
+    { value: 'facebook', selected: false },
+    { value: 'whatsapp', selected: false },
+    { value: 'instagram', selected: false },
+    { value: 'viber', selected: false },
+    { value: 'skype', selected: false },
+    { value: 'other', selected: false },
   ];
-  dynamicListSelect = [];
-  listInput = [
-    {
-      'title': 'this.input1',
-      'value': this['input1']
-    },
-    {
-      'title': 'this.input2',
-      'value': this['input2']
-    },
-    {
-      'title': 'this.input3',
-      'value': this['input3']
-    },
-    {
-      'title': 'this.input4',
-      'value': this['input4']
-    },
-    {
-      'title': 'this.input5',
-      'value': this['input5']
-    },
-    {
-      'title': 'this.input6',
-      'value': this['input6']
-    },
-    {
-      'title': 'this.input7',
-      'value': this['input7']
-    },
-    {
-      'title': 'this.input8',
-      'value': this['input8']
-    },
-    {
-      'title': 'this.input9',
-      'value': this['input9']
-    }
-  ];
-  list = list;
   modelConfig = {
     title: '',
     button: {
@@ -138,14 +55,98 @@ export class ModalSocialWebsiteComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.dynamicInput.map((res) => {
+    const dynamicInput = [
+      {
+        select: 'twitter',
+        value: this.data?.twitter_url,
+        matIcon: 'wi_twitter'
+      },
+      {
+        select: 'linkedin',
+        value: this.data?.linkedin_url,
+        matIcon: 'wi_linkedin'
+      },
+      {
+        select: 'youtube',
+        value: this.data?.youtube_url,
+        matIcon: 'wi_youtube'
+      },
+      {
+        select: 'whatsapp',
+        value: this.data?.whatsapp_url,
+        matIcon: 'wi_whatsapp'
+      },
+      {
+        select: 'viber',
+        value: this.data?.viber_url,
+        matIcon: 'wi_viber'
+      },
+      {
+        select: 'other',
+        value: this.data?.other_url,
+        matIcon: 'wi_other'
+      },
+      {
+        select: 'facebook',
+        value: this.data?.facebook_url,
+        matIcon: 'wi_facebook'
+      },
+      {
+        select: 'skype',
+        value: this.data?.skype_url,
+        matIcon: 'wi_skype'
+      },
+      {
+        select: 'instagram',
+        value: this.data?.instagram_url,
+        matIcon: 'wi_instagram'
+      },
+    ];
+    this.listInput = [
+      {
+        'name': 'this.input1',
+        'value': this['input1']
+      },
+      {
+        'name': 'this.input2',
+        'value': this['input2']
+      },
+      {
+        'name': 'this.input3',
+        'value': this['input3']
+      },
+      {
+        'name': 'this.input4',
+        'value': this['input4']
+      },
+      {
+        'name': 'this.input5',
+        'value': this['input5']
+      },
+      {
+        'name': 'this.input6',
+        'value': this['input6']
+      },
+      {
+        'name': 'this.input7',
+        'value': this['input7']
+      },
+      {
+        'name': 'this.input8',
+        'value': this['input8']
+      },
+      {
+        'name': 'this.input9',
+        'value': this['input9']
+      }
+    ];
+    dynamicInput.map((res) => {
       if (res.value) {
         this.newTable.push(res);
       }
     });
     if (this.newTable.length === 0) {
-      this.newTable.push({ select: 'linkedin',
-      value: '', maticon: 'wi_linkedin'}
+      this.newTable.push({ select: 'linkedin', value: '', matIcon: 'wi_linkedin'}
     );
     }
     this.initForm();
@@ -156,10 +157,10 @@ export class ModalSocialWebsiteComponent implements OnInit {
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      input4: this.formBuilder.array(this.newTable.map((res) => {
-        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select , 'res': res.maticon});
-        this.leng = this.dynamicListSelect.length;
-        for (let i = 0; i < this.leng; i++) {
+      input: this.formBuilder.array(this.newTable.map((res) => {
+        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select , 'matIcon': res.matIcon});
+         const leng = this.dynamicListSelect.length;
+        for (let i = 0; i < leng; i++) {
           this.listInput[i].value = this.dynamicListSelect[i].select;
         }
         return res.value;
@@ -178,7 +179,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
     if (res) {
       this.dialogRef.close();
     } else {
-      if (this.data.zip_code) {
+      if (this.data.company_name) {
         const updateCompany = {
           _id: this.data._id,
           application_id: this.data.companyKey.application_id,
@@ -259,19 +260,19 @@ export class ModalSocialWebsiteComponent implements OnInit {
   /**
    * @description  get list array input
    */
-  getParam() {
-    return this.form.get('input4') as FormArray;
+  getListNetworkSocial() {
+    return this.form.get('input') as FormArray;
   }
 
   /**
    * @description  add social network
    */
-  onAddParam() {
+  onAddAnotherNetworkSocial() {
     const newControl1 = this.formBuilder.control('');
     this.dynamicListSelect.push({
       input: null, select: null
     });
-    return this.getParam().push(newControl1);
+    return this.getListNetworkSocial().push(newControl1);
   }
 
   /**
@@ -281,7 +282,6 @@ export class ModalSocialWebsiteComponent implements OnInit {
    * last value of select: string
    */
   getValue(name: string, number: number, lastValueSelect: string): void {
-    console.log(name, 'name', number, 'number', 'lan', lastValueSelect);
     this.list.find(el => el.value === name).selected = true;
     if (lastValueSelect) {
       this.list.find(el => el.value === lastValueSelect).selected = false;
@@ -291,9 +291,9 @@ export class ModalSocialWebsiteComponent implements OnInit {
           if (name === element.value && number === i) {
             this.listInput[i - 1].value = name;
             if (i === number) {
-              this.form.get('input4.' + (i - 1)).setValue(this.data[name + '_url']);
+              this.form.get('input.' + (i - 1)).setValue(this.data[name + '_url']);
               this.dynamicListSelect[number - 1 ].select = name;
-              this.dynamicListSelect[number - 1 ].res = this.displayIcon(name);
+              this.dynamicListSelect[number - 1 ].matIcon = this.displayIcon(name);
             }
           }
         }
@@ -307,7 +307,7 @@ export class ModalSocialWebsiteComponent implements OnInit {
   getInput(input): string {
     for (let i = 1; i < 10; i++) {
       if (input === 'this.input' + i) {
-        return this.form.value.input4[i - 1];
+        return this.form.value.input[i - 1];
     }
     }
   }
@@ -319,23 +319,23 @@ export class ModalSocialWebsiteComponent implements OnInit {
   setValue(object) {
     this.listInput.forEach(element => {
       if (element.value === 'twitter') {
-        object.twitter_url = this.getInput(element.title);
+        object.twitter_url = this.getInput(element.name);
       } else if (element.value === 'linkedin') {
-        object.linkedin_url = this.getInput(element.title);
+        object.linkedin_url = this.getInput(element.name);
       } else if (element.value === 'youtube') {
-        object.youtube_url = this.getInput(element.title);
+        object.youtube_url = this.getInput(element.name);
       } else if (element.value === 'instagram') {
-        object.instagram_url = this.getInput(element.title);
+        object.instagram_url = this.getInput(element.name);
       } else if (element.value === 'whatsapp') {
-        object.whatsapp_url = this.getInput(element.title);
+        object.whatsapp_url = this.getInput(element.name);
       } else if (element.value === 'viber') {
-        object.viber_url = this.getInput(element.title);
+        object.viber_url = this.getInput(element.name);
       } else if (element.value === 'skype') {
-        object.skype_url = this.getInput(element.title);
+        object.skype_url = this.getInput(element.name);
       } else if (element.value === 'facebook') {
-        object.facebook_url = this.getInput(element.title);
+        object.facebook_url = this.getInput(element.name);
       } else if (element.value === 'other') {
-        object.other_url = this.getInput(element.title);
+        object.other_url = this.getInput(element.name);
       }
     });
   }
@@ -343,38 +343,36 @@ export class ModalSocialWebsiteComponent implements OnInit {
   /**
    * @description Display icon
    */
-  displayIcon(name): string {
+  displayIcon(name: string): string {
     switch (name) {
       case 'linkedin':
        return 'wi_linkedin';
-        break;
       case 'twitter':
         return 'wi_twitter';
-        break;
       case 'whatsapp':
         return 'wi_whatsapp';
-        break;
       case 'youtube':
         return 'wi_youtube';
-        break;
       case 'viber':
         return 'wi_viber';
-        break;
       case 'other':
         return 'wi_other';
-        break;
       case 'facebook':
         return 'wi_facebook';
-        break;
       case 'skype':
         return 'wi_skype';
-        break;
       case 'instagram':
         return 'wi_instagram';
-        break;
       default:
         return;
     }
+  }
+
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 
 }

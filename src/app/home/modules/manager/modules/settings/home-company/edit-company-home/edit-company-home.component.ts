@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -11,6 +12,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
@@ -18,7 +20,6 @@ import { IViewParam } from '@shared/models/view.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ICity } from '@shared/models/city.model';
 import { userType } from '@shared/models/userProfileType.model';
-import { UploadService } from '@core/services/upload/upload.service';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -28,15 +29,16 @@ import { UploadService } from '@core/services/upload/upload.service';
 export class EditCompanyHomeComponent implements OnInit, OnDestroy {
 
   constructor(private utilsService: UtilsService,
-    private profileService: ProfileService,
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private assetsDataService: AssetsDataService,
-    private appInitializerService: AppInitializerService,
-    private modalService: ModalService,
-    private uploadService: UploadService,
-    private location: Location,
+              private profileService: ProfileService,
+              private formBuilder: FormBuilder,
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
+              private assetsDataService: AssetsDataService,
+              private appInitializerService: AppInitializerService,
+              private modalService: ModalService,
+              private uploadService: UploadService,
+              private location: Location,
+              private router: Router,
   ) {
   }
   avatar: any;
@@ -74,11 +76,24 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
+    this.InitializeData();
+    this.initForm();
+    this.getCompany();
+  }
+  /**
+   * @description Initialize data
+   */
+  InitializeData(): void {
     this.avatar = null;
     this.photo = null;
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.city = { cities: '', code: '' };
-    this.initForm();
+    this.userCredentials = this.localStorageService.getItem('userCredentials');
+  }
+
+  /**
+   * @description get company
+   */
+  getCompany(): void {
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
@@ -90,7 +105,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
-        this.getRefdata();
+        this.getRefData();
         this.getJsonData();
         this.setForm();
       }
@@ -100,7 +115,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from local storage
    */
-  getRefdata(): void {
+  getRefData(): void {
     const list = ['VAT', 'LEGAL_FORM'];
     const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
       list);
@@ -200,7 +215,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    */
   getJsonData(): void {
     this.mapData();
-    this.getRefdata();
+    this.getRefData();
     /* load the initial  list */
     this.filteredLegalForm.next(this.legalFormList.slice());
     this.filteredActivityCode.next(this.activityCodeList.slice());
@@ -273,6 +288,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
           this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
             this.userInfo['company'][0] = res;
             this.userService.connectedUser$.next(this.userInfo);
+            this.router.navigate(['/manager/settings/home-company']);
           }, (err) => console.error(err)));
         }
         this.subscription.unsubscribe();
