@@ -1,6 +1,5 @@
 <div class="container-show">
   <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
-
     <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
       <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image line-height-4">
@@ -10,13 +9,13 @@
 
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
         <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
-        <div fxLayout="column" fxFlex="80">
-          <div >
+        <div fxLayout="column" fxFlex="80" fxLayoutGap="5px">
+          <div fxLayout="row" fxFlexAlign="center">
             <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
             </mat-icon>
             <span class="cool-grey font-size-10">{{ this.emailAddress }}</span>
           </div>
-            <div>
+            <div  fxLayout="row" fxFlexAlign="start">
               <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon={{icon}}>
               </mat-icon>
               <span class="cool-grey font-size-10">{{gender}}</span>
@@ -54,11 +53,10 @@
     </div>
     <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
       fxFlexOffset="50px">
-
       <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
         <div fxLayout="column" fxFlex="100" class="m-l-20">
           <div fxLayout="column" fxFlex="90">
-            <div fxLayout="row" fxLayoutGap="20px">
+            <div fxLayout="row" fxLayoutGap="20px" style="margin-top: 5%">
               <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
             </div>
             <div fxLayout="row">
@@ -69,7 +67,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.lang'| translate}}: </span>
-                  <span class="steel"> {{lang ? lang : 'none'}} </span>
+                  <span class="steel"> {{langDesc ? langDesc : 'none'}} </span>
                 </div>
               </div>
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
@@ -139,29 +137,42 @@
             <div fxLayout="row">
               <h5 class="steel"> {{'user.socialnetwork'| translate}}:</h5>
             </div>
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" >
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.linkedin_url">
-                  <span class="font-size-12"> {{'user.linkedinacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.linkedin_url}} </span>
+            <div fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout="row" >
+              <div fxLayout="column"  fxFlex="50" fxLayoutGap="10px">
+                <div fxLayout="column"  *ngFor="let element of rightList;">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                       *ngIf="element.value ==='link'">
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                      <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                      <span class="font-size-12 steel"> {{element.placeholder| translate}} </span>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"  *ngIf="element.value !=='link'">
+                    <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                    <span class="font-size-12 steel"> {{element.value}} </span>
+                  </div>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.youtube_url" >
-                  <span class="font-size-12"> {{'user.youtubeacc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.youtube_url}}</span>
-                </div>
-              </div>
 
-              <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="user?.twitter_url">
-                  <span class="font-size-12"> {{'user.twitteracc'| translate}}: </span>
-                  <span class="font-size-12 steel"> {{user?.twitter_url}} </span>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
-                  <span class="font-size-12 topaz"> + </span>
-                  <span class="font-size-12 steel"> Add link </span>
+              </div>
+              <div fxLayout="column"   fxLayoutGap="10px" >
+                <div fxLayout="column"  *ngFor="let element of leftList;">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                       *ngIf="element.value ==='link'">
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
+                      <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                      <span class="font-size-12 steel"> {{element.placeholder| translate}} </span>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="element.value !=='link'" >
+                    <span class="font-size-12"> {{element.placeholder| translate}}: </span>
+                    <span class="font-size-12 steel"> {{element.value}} </span>
+                  </div>
                 </div>
               </div>
             </div>
+            </div>
+            <br>
           </div>
           <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">

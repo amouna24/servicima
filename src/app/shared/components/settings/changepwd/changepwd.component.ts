@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -10,13 +10,16 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { UserService } from '@core/services/user/user.service';
 
+// import { AuthService } from '../../../../../../projects/auth-front-lib/src/public-api';
+
 @Component({
   selector: 'wid-changepwd',
   templateUrl: './changepwd.component.html',
   styleUrls: ['./changepwd.component.scss']
 })
-export class ChangePwdComponent implements OnInit {
+export class ChangePwdComponent implements OnInit, OnDestroy {
   form: FormGroup;
+  existForm = true;
   hidePassword = true;
   hideConfirmPassword = true;
   hideOldPassword = true;
@@ -28,7 +31,7 @@ export class ChangePwdComponent implements OnInit {
     button: {
       buttonLeft: {
         visible: true,
-        name: 'Save',
+        name: 'save',
         color: '#f3f6f9',
         background: '#0067e0'
       },
@@ -56,14 +59,6 @@ export class ChangePwdComponent implements OnInit {
     */
   ngOnInit(): void {
     this.initForm();
-  }
-
-  onNotify(res: boolean): void {
-    if (!res) {
-      this.dialogRef.close();
-    } else {
-      this.changePassword(this.form);
-    }
   }
 
   /**
@@ -98,13 +93,6 @@ export class ChangePwdComponent implements OnInit {
   }
 
   /**
-   * @description CLose the dialog OnNoClick function
-   */
-  onClose(): void {
-    this.dialogRef.close();
-  }
-
-  /**
    * @description Change password
    * @param form: form
    */
@@ -117,7 +105,7 @@ export class ChangePwdComponent implements OnInit {
       old_password: form.get('oldPassword').value,
       updated_by: this.userCredentials['email_address'],
     };
-    this.profileService.changePassword(newPassword).subscribe(
+    this.subscriptions.push(this.profileService.changePassword(newPassword).subscribe(
       () => {
         this.subscriptions.push(this.authService.logout().subscribe(() => {
             localStorage.removeItem('userCredentials');
@@ -136,6 +124,22 @@ export class ChangePwdComponent implements OnInit {
         console.error(error);
         this.dialogRef.close();
       }
-    );
+    ));
   }
+
+  onNotify(res: boolean): void {
+    if (!res) {
+      this.dialogRef.close();
+    } else {
+      this.changePassword(this.form);
+    }
+  }
+
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+
 }

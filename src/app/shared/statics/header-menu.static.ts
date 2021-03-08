@@ -32,7 +32,7 @@ export const headerMenu: IHeaderMenu[] = [
       {
         state: 'users-list',
         name: 'User management',
-        icon: 'dashboard',
+        icon: 'wi_dashboard',
         feature: 'SETTINGS_USERS_ACCESS',
         type: 'link',
       },

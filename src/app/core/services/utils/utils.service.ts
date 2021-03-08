@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-
-import { IViewParam } from '@shared/models/view.model';
-import { iconsList } from '@shared/statics/list-icons.static';
-import { IIcon } from '@shared/models/icon.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { IError } from '@shared/models/error.model';
+import { INetworkSocial } from '@shared/models/social-network.model';
+import { IViewParam } from '@shared/models/view.model';
+import { IIcon } from '@shared/models/icon.model';
+
 import { errorPages } from '@shared/statics/error-pages.static';
+import { iconsList } from '@shared/statics/list-icons.static';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -17,6 +19,7 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class UtilsService {
   resList: IViewParam[] = [];
+  showList: INetworkSocial[];
   refData: { } = { };
    constructor(
     private appInitializerService: AppInitializerService,
@@ -266,5 +269,28 @@ export class UtilsService {
    *************************************************************************/
   getErrorPage(errCode: string, pages: IError[] = errorPages): IError {
     return pages.find(page => page.code === errCode);
+  }
+
+  /**************************************************************************
+   * @description get error page
+   * @param list: get all list of network social
+   * @param showList: get list of network social when is not null
+   * @param pairList: show pair list
+   * @param impairList: show impair list
+   *************************************************************************/
+  getList(list: INetworkSocial[] ,  pairList: INetworkSocial[] , impairList: INetworkSocial[] ): void {
+    this.showList = [];
+    list.map((element) => {
+      if (element.value) {
+        this.showList.push(element);
+      }
+    } );
+    for (let i = 0; i < this.showList.length; i++) {
+      if (i % 2 ) {
+        pairList.push((this.showList[i]));
+      } else {
+        impairList.push((this.showList[i]));
+      }
+    }
   }
 }

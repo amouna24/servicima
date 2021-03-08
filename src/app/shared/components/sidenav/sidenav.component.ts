@@ -1,15 +1,15 @@
 import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
-import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
-import { UserService } from '@core/services/user/user.service';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
-import { UtilsService } from '@core/services/utils/utils.service';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { IMenu } from '../../models/side-nav-menu/side-nav-menu.model';
+import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { UserService } from '@core/services/user/user.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+
+import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
+import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 
 import {
   accordionAnimation,
@@ -38,7 +38,6 @@ import {
 export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
   sidebarState: string;
-  panelOpenState = false;
   icontoShow = 'keyboard_arrow_left';
   company: string;
   iconBool = true;
@@ -62,7 +61,45 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
               private userService: UserService,
               private localStorageService: LocalStorageService,
               private utilService: UtilsService,
-  ) {
+  ) { }
+
+  ngOnChanges() {
+    this.menu = this.sidenavService.getMenu(this.moduleName);
+  }
+
+  ngOnInit() {
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.email = cred[ 'email_address'];
+    this.getModuleName();
+    this.getConnectedUser();
+    this.getLogo();
+    this.getState();
+    this.year = new Date().getFullYear();
+  }
+
+  /**************************************************************************
+   * @description get connected user
+   *************************************************************************/
+  getConnectedUser(): void {
+    this.userService.connectedUser$
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (info) => {
+          if (!!info) {
+            this.company = info['company'][0]['company_name'];
+          }
+        },
+        (err) => {
+          console.error(err);
+        });
+  }
+
+  /**************************************************************************
+   * @description get module name
+   *************************************************************************/
+  getModuleName(): void {
     this.userService.moduleName$
       .pipe(
         takeUntil(this.destroy$)
@@ -77,44 +114,32 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         (err) => {
           console.error(err);
         });
-      this.userService.connectedUser$
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(
-          (info) => {
-              if (!!info) {
-                this.company = info['company'][0]['company_name'];
-              }
-         },
-          (err) => {
-                console.error(err);
-        });
   }
 
-  ngOnChanges() {
-    this.menu = this.sidenavService.getMenu(this.moduleName);
-  }
-
-  ngOnInit() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred[ 'email_address'];
+  /**************************************************************************
+   * @description get logo
+   *************************************************************************/
+  getLogo(): void {
     const color = this.localStorageService.getItem(this.utilService.hashCode(this.email));
     if (color === 'whiteGreen' || color === 'whiteOrange' || color === 'whiteRed') {
       this.image = 'assets/img/logo-title-dark.png';
     } else {
       this.image = 'assets/img/logo-title.png';
     }
-    this.sidenavService.sidebarStateObservable$.
-      subscribe((newState: string) => {
-        this.sidebarState = newState;
-      }, (err) => {
-        console.error(err); });
-    this.panelOpenState = true;
     this.userService.colorSubject$.subscribe((col) => {
       this.image = col;
     });
-    this.year = new Date().getFullYear();
+  }
+
+  /**************************************************************************
+   * @description get state
+   *************************************************************************/
+  getState(): void {
+    this.sidenavService.sidebarStateObservable$.
+    subscribe((newState: string) => {
+      this.sidebarState = newState;
+    }, (err) => {
+      console.error(err); });
   }
 
   toggleSideNav() {

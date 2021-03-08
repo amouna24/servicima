@@ -27,7 +27,7 @@ export class LicenceManagementComponent implements OnInit {
     this.ELEMENT_DATA.forEach((data) => {
       data['licence_code'] = data['LicenceKey'].licence_code;
     });*/
-    this.profileService.getAllUser('dhia.othmen@widigital-group.com').subscribe(async (res) => {
+  /*  this.profileService.getAllUser('dhia.othmen@widigital-group.com').subscribe(async (res) => {
       if (!!res ) {
         this.ELEMENT_DATA = res;
         console.log(res);
@@ -37,7 +37,7 @@ export class LicenceManagementComponent implements OnInit {
         });
       }
 
-  });
+  });*/
 
   }
 

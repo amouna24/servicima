@@ -601,6 +601,9 @@ html body {
 .min-full-screen-height {
   min-height: $screen-height !important;
 }
+.height-50{
+  height: 50px;
+}
 .mat-raised-button{
   box-shadow: none !important;
 }
@@ -629,6 +632,7 @@ html body {
   background-color: $white;
   margin: 20px;
   height: 88vh !important;
+  // width: 88vw;
 }
 
 .dynamic-component-content {
@@ -689,4 +693,30 @@ html body {
 }
 .container-btn{
   width: 43px;
+}
+.btn-plus{
+  height: 17px !important;
+  padding: 0 0 !important;
+  min-width: 20px !important;
+  line-height: 1 !important;
+  border-color: $topaz !important;
+}
+/*******************
+   input style
+*******************/
+.mat-input-element::placeholder{
+  color: $cool-grey !important;
+}
+// mat-input error outline color
+.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+  color: $error-red!important;
+  opacity: 0.8!important;
+}
+
+// mat-label error style
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: $error-red!important;
+}
+.mat-error{
+  color: $error-red !important;
 }

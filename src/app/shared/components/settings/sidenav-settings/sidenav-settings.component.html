@@ -9,7 +9,7 @@
                   fxLayout="column" fxLayoutAlign="start center">
       <a [routerLink]="'/' + moduleName" mat-list-item fxLayoutAlign="center center" class="item border-radius-5"
          routerLink="/">
-        <mat-icon class="icon" svgIcon="wi-dashboard"></mat-icon>
+        <mat-icon class="icon" svgIcon="wi_dashboard"></mat-icon>
       </a>
       <ng-container *ngFor="let m of menu">
         <mat-list-item (click)="getSubMenu(m.children)"

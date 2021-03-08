@@ -1,9 +1,5 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { mainContentAnimation } from '@shared/animations/animations';
-import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-manager',

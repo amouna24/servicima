@@ -1,0 +1,43 @@
+<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" form [formGroup]="form" class="full-height ">
+  <div modal-body fxFlex="100" fxFlex.xs="50" fxLayout="column" class="cool-grey font-size-12" fxFlexOffset="9">
+    <h5 class=" steel">Social website :</h5>
+    <div fxLayout="column" fxFlex="80" fxLayoutGap="10px">
+
+      <div formArrayName = 'input' >
+        <div *ngFor = "let networkSocialControl of getListNetworkSocial().controls; let i = index">
+          <div fxLayout="row" fxFlex="100" fxLayoutGap="5%">
+            <div fxLayout="column" fxFlex="23">
+              <mat-form-field appearance="outline">
+                <mat-select  disableOptionCentering panelClass="panelColor"   [value]='dynamicListSelect[i]?.select' >
+                  <ng-container  *ngFor="let element of list">
+                  <mat-option [value]="element.value" (click)="getValue(element.value,i+1, dynamicListSelect[i]?.select)" *ngIf="!element.selected ||(element.value === dynamicListSelect[i]?.select)" >
+                    {{element.value}}
+                  </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="67">
+              <mat-form-field appearance="outline">
+                <span fxLayout="row" fxLayoutGap="5px">
+                <mat-icon class="icon material-icons-outlined" svgIcon='{{dynamicListSelect[i]?.matIcon}}'>
+                </mat-icon>
+                <input autocomplete="off"
+                       matInput class="wid-input-value"
+                       [formControlName]=i
+                       name="param_number1" />
+                   <mat-icon class="icon material-icons-outlined" svgIcon='wi-pen'>
+                </mat-icon>
+                </span>
+                <mat-error class="wid-error-messages" *ngIf=" getListNetworkSocial().controls">param number {{i+1}} must be Number</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn container-plus"  fxLayout="row" fxLayoutAlign="flex-end" >
+        <button [disabled]="getListNetworkSocial().length > 8 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddAnotherNetworkSocial()" >+</button>
+      </div>
+    </div>
+  </div>
+</wid-model-modal>

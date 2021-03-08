@@ -5,7 +5,7 @@ export const managerMenu: IMenu[] = [
         state: 'dashboard',
         name: 'dashboard',
         type: 'link',
-        icon: 'wi-dashboard',
+        icon: 'wi_dashboard',
         feature: 'DASHBOARD',
     },
     {
@@ -20,7 +20,7 @@ export const managerMenu: IMenu[] = [
         name: 'template.rh',
         type: 'link',
         icon: 'wi-HR',
-        feature: 'RH_ACCESS',
+        feature: 'HR_ACCESS',
     },
     {
         state: 'placements',

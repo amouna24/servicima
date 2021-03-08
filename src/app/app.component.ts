@@ -7,6 +7,7 @@ import { TranslationCustomLoaderService } from '@core/services/translation/trans
 import { UtilsService } from '@core/services/utils/utils.service';
 
 import { environment } from '../environments/environment';
+// import { AuthService } from '../../projects/auth-front-lib/src/public-api';
 @Component({
   selector: 'wid-root',
   templateUrl: './app.component.html',

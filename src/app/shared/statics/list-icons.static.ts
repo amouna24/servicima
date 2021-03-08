@@ -25,7 +25,7 @@ export const iconsList: IIcon[] = [
   },
   /* Side Nav */
   {
-    name: 'wi-dashboard',
+    name: 'wi_dashboard',
     path: 'assets/icons/dashboard.svg'
   },
   {
@@ -133,6 +133,26 @@ export const iconsList: IIcon[] = [
   {
     name: 'wi_linkedin',
     path: 'assets/icons/linkedin-brands.svg'
+  },
+  {
+    name: 'wi_facebook',
+    path: 'assets/icons/facebook-square-brands.svg'
+  },
+  {
+    name: 'wi_viber',
+    path: 'assets/icons/viber-brands.svg'
+  },
+  {
+    name: 'wi_skype',
+    path: 'assets/icons/skype-brands.svg'
+  },
+  {
+    name: 'wi_instagram',
+    path: 'assets/icons/instagram-square-brands.svg'
+  },
+  {
+    name: 'wi_other',
+    path: 'assets/icons/link-solid.svg'
   },
   /* Gender Icons */
   {

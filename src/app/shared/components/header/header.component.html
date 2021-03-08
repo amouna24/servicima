@@ -1,13 +1,15 @@
 <mat-toolbar fxFlexOffset="3" class="wid-header bg-white" fxLayout="row"
              fxLayoutAlign="center center" fxFlex="94">
-  <div fxLayout="row" fxFlex="60" fxLayoutAlign="start center" fxLayoutGap="20px">
-    <p class="font-semi-bold" >{{licenceCode }}</p>
-    <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
-    <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
-            mat-raised-button color="warn"   class="btn-small buy-btn" >
-      <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
-      <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
-    </button>
+  <div fxFlex="60">
+    <div  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="user['user_type']==='COMPANY'">
+      <p class="font-semi-bold" >{{licenceCode }}</p>
+      <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
+      <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+              mat-raised-button color="warn"   class="btn-small buy-btn" >
+        <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
+        <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
+      </button>
+    </div>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="flex-end center" fxFlex="40"  fxLayoutGap="50px" >

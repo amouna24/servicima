@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { UserComponent } from '@shared/components/settings/user/user.component';
 import { EditUserComponent } from '@shared/components/settings/edit-user/edit-user.component';
 

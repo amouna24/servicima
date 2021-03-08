@@ -95,8 +95,6 @@ export class DynamicDataTableComponent implements OnInit {
           this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
           this.columnsList.push('Actions');
           this.displayTableConfig();
-          console.log('columns', this.columns);
-          console.log('list', this.columnsList);
         }
       );
 
@@ -116,17 +114,12 @@ export class DynamicDataTableComponent implements OnInit {
 
           this.columnsList = ['rowItem', ...res.columnsList];
           this.columnsList.push('Actions');
-          console.log('columns',  this.columns);
-          console.log('columnsList',  this.columnsList);
-
         }
       }
     );
   }
 
   identify(index, item) {
-    console.log('index', index);
-    console.log('item', item);
     return item._id;
   }
 

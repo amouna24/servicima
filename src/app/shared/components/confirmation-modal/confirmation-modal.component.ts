@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent implements OnInit {
-
+  existForm = false;
   constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private modalService: ModalService, ) {
@@ -25,14 +25,14 @@ export class ConfirmationModalComponent implements OnInit {
   }
 
   displayStyle() {
-    switch (this.data.title) {
-      case 'desactivate': {
+    switch (this.data.code) {
+      case 'deactivate': {
         this.modelConfig = {
           title: '',
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Desactivate',
+              name: 'Deactivate',
               color: ' #f3f6f9',
               background: '#d24d57'
             },
@@ -91,8 +91,28 @@ export class ConfirmationModalComponent implements OnInit {
         };
         break;
       }
+      case 'changeStatus': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: this.data.status === 'ACTIVE' ? 'Deactivate' : 'ACTIVATE',
+              color: this.data.status === 'ACTIVE' ? 'white' : 'white',
+              background: this.data.status === 'ACTIVE' ? '#d24d57' : '#1bc5bd',
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9'
+            },
+          },
+          style: { }
+        };
+        break;
+      }
       default: {
-        return '';
       }
     }
   }

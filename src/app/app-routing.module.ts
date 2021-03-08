@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthModule } from '@widigital-group/auth-npm-front';
 
+// import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ServerErrorComponent } from './pages/server-error/server-error.component';
 

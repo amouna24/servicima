@@ -14,6 +14,12 @@ export interface IUserModel {
   title_id: string;
   linkedin_url: string;
   twitter_url: string;
+  whatsapp_url: string;
+  facebook_url: string;
+  skype_url: string;
+  other_url: string;
+  instagram_url: string;
+  viber_url: string;
   youtube_url: string;
   creation_date: string;
   created_by: string;

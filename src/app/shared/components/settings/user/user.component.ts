@@ -13,6 +13,7 @@ import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { INetworkSocial } from '@shared/models/social-network.model';
 
 import { ModalSocialWebsiteComponent } from '@shared/components/modal-social-website/modal-social-website.component';
 
@@ -29,13 +30,15 @@ export class UserComponent implements OnInit, OnDestroy {
   applicationId: string;
   emailAddress: string;
   languages: IViewParam[] = [];
-  path: string;
   avatar: any;
   gender: string;
-  lang: string;
+  langDesc: string;
   title: string;
   icon: string;
   id: string;
+  leftList: INetworkSocial[];
+  rightList: INetworkSocial[];
+  refData: { } = { };
   /** subscription */
   private subscriptions: Subscription[] = [];
 
@@ -90,14 +93,11 @@ export class UserComponent implements OnInit, OnDestroy {
         this.user = user[0];
         this.avatar = await this.uploadService.getImage(user[0]['photo']);
         this.emailAddress = this.user['userKey']['email_address'];
-        this.getRefdata();
+        this.getRefData();
         this.getIcon();
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
-            const list = ['ROLE'];
-            const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
-              list);
-            this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], refData['ROLE']);
+            this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], this.refData ['ROLE']);
           });
       });
       /***************** current user show your profile *****************
@@ -112,22 +112,22 @@ export class UserComponent implements OnInit, OnDestroy {
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
-      this.getRefdata();
+      this.getRefData();
       this.getIcon();
     }
-
+      this.getListNetworkSocial();
   }
 
   /**
    * @description: get the refData from appInitializer service and mapping data
    */
-  getRefdata(): void {
+  getRefData(): void {
     this.getLanguages();
     const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
-    const refData = this.utilsService.getRefData(this.companyId, this.applicationId, list);
-    this.gender = this.utilsService.getViewValue(this.user['gender_id'], refData['GENDER']);
-    this.lang = this.utilsService.getViewValue(this.user['language_id'], this.languages);
-    this.title = this.utilsService.getViewValue(this.user['title_id'], refData['PROF_TITLES']);
+     this.refData = this.utilsService.getRefData(this.companyId, this.applicationId, list);
+    this.gender = this.utilsService.getViewValue(this.user['gender_id'], this.refData ['GENDER']);
+    this.langDesc = this.utilsService.getViewValue(this.user['language_id'], this.languages);
+    this.title = this.utilsService.getViewValue(this.user['title_id'], this.refData ['PROF_TITLES']);
   }
 
   /**
@@ -143,7 +143,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: Update
    */
   update(): void {
-    /***************** go to page update profile *****************
+    /***************** go to update profile page *****************
      *******************************************************************/
     if (this.id) {
       this.router.navigate(['/manager/user/edit-profile'],
@@ -172,14 +172,51 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: Add link
    */
   addLink(): void {
-    this.modalService.displayModal('AddLink', this.user, '50%', '80%');
+    this.modalService.displayModal('AddLink', this.user, '620px', '535px').subscribe((user) => {
+      if (user) {
+        this.user['youtube_url'] = user['youtube_url'];
+        this.user['linkedin_url'] = user['linkedin_url'];
+        this.user['twitter_url'] = user['twitter_url'];
+        this.user['facebook_url'] = user['facebook_url'];
+        this.user['instagram_url'] = user['instagram_url'];
+        this.user['whatsapp_url'] = user['whatsapp_url'];
+        this.user['viber_url'] = user['viber_url'];
+        this.user['skype_url'] = user['skype_url'];
+        this.user['other_url'] = user['other_url'];
+        this.getListNetworkSocial();
+      }
+    });
   }
 
+  /**
+   * @description: show network social
+   */
+  getListNetworkSocial() {
+    this.leftList = [];
+    this.rightList = [];
+    const list = [
+      { placeholder: 'user.linkedinacc', value: this.user?.linkedin_url},
+      { placeholder: 'user.whatsappacc', value: this.user?.whatsapp_url },
+      { placeholder: 'user.facebookacc', value: this.user?.facebook_url },
+      { placeholder: 'user.skypeacc', value: this.user?.skype_url },
+      { placeholder: 'user.otheracc', value: this.user?.other_url},
+      { placeholder: 'user.instagramacc', value: this.user?.instagram_url},
+      { placeholder: 'user.twitteracc', value: this.user?.twitter_url},
+      { placeholder: 'user.youtubeacc', value: this.user?.youtube_url},
+      { placeholder: 'user.viberacc', value: this.user?.viber_url},
+      { placeholder: 'company.addlink', value: 'link'},
+    ];
+     this.utilsService.getList(list, this.leftList, this.rightList);
+  }
   /**
    * @description: destroy
    */
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+
+  getI() {
+
   }
 
 }

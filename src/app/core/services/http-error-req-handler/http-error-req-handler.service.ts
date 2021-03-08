@@ -36,6 +36,6 @@ export class HttpErrorReqHandlerService implements ErrorHandler {
       }
 
     }
-    return throwError('ERROR: ');
+    return throwError(error);
   }
 }
