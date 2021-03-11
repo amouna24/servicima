@@ -39,29 +39,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
   @Input() title: string;
 
   /**************************************************************************
-   * @description Static Customers And Status Declaration
-   *************************************************************************/
-  contractorsList: IContractor[] = [];
-
-  /**************************************************************************
    * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
    *************************************************************************/
-  countriesList: IViewParam[] = [];
-  filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
-  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   citiesList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  genderList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   legalList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   profileTitleList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  activityCodeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  collaboratorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
-    { value: 'test', viewValue: 'test'}
-  ]);
   paymentTermsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  contractorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description Declaring Form Group
@@ -120,10 +106,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Contractor code',
+          label: 'Contractor name',
           placeholder: 'Contractor code',
           type: FieldsType.SELECT,
-          selectFieldList: this.collaboratorsList,
+          selectFieldList: this.contractorsList,
           formControlName: 'contractor_code'
         },
         {
@@ -132,26 +118,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'collaborator_email'
-        },
-      ],
-    },
-    {
-      titleRef: 'INFORMATION',
-      fieldsLayout: FieldsAlignment.tow_items,
-      fields: [
-        {
-          label: 'Contract type',
-          placeholder: 'Type',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
-          formControlName: 'contract_type'
-        },
-        {
-          label: 'Contract date',
-          placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
-          formControlName: 'contract_date'
         },
       ],
     },
@@ -335,7 +301,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   public filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
 
   avatar: any;
-  selectedFile = { file: FormData, name: '' };
+  selectedFile = { file: FormData, name: ''};
 
   constructor(
     private contractsService: ContractsService,
@@ -353,8 +319,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.contractForm = new FormGroup({
-    });
+    this.contractForm = new FormGroup({ });
   }
 
   /**************************************************************************
@@ -375,7 +340,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       });
     this.sheetService.registerSheets(
       [
-        { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent },
+        { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
   }
 
@@ -410,7 +375,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.contractorsList = res;
+          this.contractorsList.next(
+            res.map(
+              (obj) => {
+                return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
+              }
+            )
+          );
         },
         (error) => {
           console.log(error);
@@ -419,8 +390,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         console.log(data.user[0]['company_email']);
+        console.log(data);
         this.userInfo = data;
         this.companyEmail = data.user[0]['company_email'];
+/*        this.collaboratorsList.next(data)*/
         this.getPaymentTerms();
       }
     }));
@@ -437,7 +410,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         contract_start_date: [contract === null ? '' : contract.contract_start_date],
         contract_end_date: [contract === null ? '' : contract.contract_end_date],
         contract_status: [contract === null ? '' : contract.contract_status],
-        attachments: [contract === null ? '' : this.getFile(contract.attachments)],
+        attachments: [contract === null ? '' : this.getFileName(contract.attachments)],
       }),
       SIGNER: this.formBuilder.group({
         signer_company_email: [contract === null ? '' : contract.signer_company_email],
@@ -518,11 +491,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
     Contract.contract_code = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.contract_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;
-    Contract.email_address  = this.canUpdate(this.contractId) ?
+    Contract.email_address = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.email_address : this.userInfo.company[0].companyKey.email_address;
     Contract.extension_code = this.canUpdate(this.contractId) ?
       this.contractExtensionInfo.contractExtensionKey.extension_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;
     Contract.contract_type = this.type;
+    Contract.contract_date = Date.now();
     Contract.attachments = this.canUpdate(this.contractId) ?
       this.contractInfo.attachments : await this.uploadFile(this.selectedFile.file);
     console.log('new Contract', Contract);
@@ -617,17 +591,22 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
    *************************************************************************/
-  getFile(id): string {
-    let caption;
-    this.uploadService.getFilesByName(id).subscribe(
-      (data) => {
-        console.log('data', data[0]);
-        caption = data[0].caption;
-        console.log('caption', caption);
-      }, error => {
-        console.log(error);
-      });
-    return caption;
+  getFileName(id): string {
+      let caption;
+      this.uploadService.getFilesByName(id).subscribe(
+        (data) => {
+          console.log('data', data[0]);
+          caption = data[0].caption;
+          console.log('caption', caption);
+        }, error => {
+          console.log(error);
+        });
+      return caption;
+  }
+
+  getFile(obj) {
+    this.selectedFile.file = obj.data;
+    this.selectedFile.name = obj.name;
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
