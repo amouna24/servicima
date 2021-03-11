@@ -1,6 +1,10 @@
+
 <div class="page-container">
-  <div *ngIf="loaded | async">
-    <wid-data-table [data]="ELEMENT_DATA " [tableCode]="'PAYMENT-TERMS'">
-    </wid-data-table>
-  </div>
+  <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'PAYMENT-TERMS'"
+    [header]="{ title: 'Payment information management', addActionURL: '', addActionText: 'New payment information'}"
+    [title]="'PAYMENT-TERMS'"
+    (rowActionData)="switchAction($event)">
+  </wid-dynamic-data-table>
 </div>

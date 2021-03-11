@@ -4,34 +4,25 @@
       class="bg-white border-radius-20">
       <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
         <img [src]="this.company['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
-             [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
       </div>
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
-        <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
+        <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
       </div>
       <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
-        <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px">
-          <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white">
+        <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px"
+          *ngFor=" let list of showList; let index = index">
+          <button mat-button mat-raised-button class="btn-medium white"
+            [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }"
+            *ngIf="index<3">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-              <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
-            </div>
-          </button>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="flex-end">
-          <button mat-button mat-raised-button class="btn-medium bg-info-blue white">
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-              <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
-            </div>
-          </button>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="flex-end">
-          <button mat-button mat-raised-button class="btn-medium bg-error-red white">
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-              <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-              <span class="font-size-14">{{user?.first_name}} - {{user?.last_name}}</span>
+              <div fxLayout="column" fxFlex="10">
+                <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
+              </div>
+              <div fxLayout="column" fxFlex="85">
+                <a [href]=list.lien target="_blank" class="font-size-12 white">{{list.value| spliceText: 14}}</a>
+              </div>
             </div>
           </button>
         </div>
@@ -73,9 +64,10 @@
               </div>
               <div fxLayout="column" fxLayoutGap="10px">
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" class="font-size-12">
-                  <div fxLayout="row" fxFlex="50"  fxLayoutAlign="start center" fxLayoutGap="5px">
+                  <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.activitycode' | translate}}: </span>
-                    <span class="steel"> {{this.company['activity_code'] ? this.company['activity_code'] : 'none'}}</span>
+                    <span class="steel"> {{this.company['activity_code'] ? this.company['activity_code'] :
+                      'none'}}</span>
                   </div>
                   <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.currency' | translate}}: </span>
@@ -85,7 +77,8 @@
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.activitydescription' | translate}}: </span>
-                    <span class="steel"> {{this.company['activity_desc'] ? this.company['activity_desc'] : 'none'}}</span>
+                    <span class="steel"> {{this.company['activity_desc'] ? this.company['activity_desc'] :
+                      'none'}}</span>
                   </div>
                 </div>
               </div>
@@ -118,7 +111,8 @@
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.contactemail' | translate}}: </span>
-                    <span class="steel"> {{this.company['contact_email'] ? this.company['contact_email'] : 'none'}}</span>
+                    <span class="steel"> {{this.company['contact_email'] ? this.company['contact_email'] :
+                      'none'}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> Phone 2: </span>
@@ -138,35 +132,43 @@
                 <h5 class="steel">{{'company.socialnetwork' | translate}}:</h5>
               </div>
               <div fxLayout="column" fxLayoutGap="10px">
-                <div fxLayout="row" >
-                  <div fxLayout="column"  fxFlex="50" fxLayoutGap="10px">
-                    <div fxLayout="column"  *ngFor="let element of rightList;">
+                <div fxLayout="row">
+                  <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                    <div fxLayout="column" *ngFor="let element of rightList;">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
-                           *ngIf="element.value ==='link'">
+                        *ngIf="element.value ==='link'">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
-                          <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                          <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button">+</button>
                           <span class="font-size-12 steel"> {{element.placeholder| translate}}: </span>
                         </div>
                       </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"  *ngIf="element.value !=='link'">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                        *ngIf="element.value !=='link'">
                         <span class="font-size-12"> {{element.placeholder| translate}} </span>
-                        <span class="font-size-12 steel"> {{element.value}} </span>
+                        <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
+                                                       'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                       'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
+                          [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
                     </div>
 
                   </div>
-                  <div fxLayout="column"   fxLayoutGap="10px" >
-                    <div fxLayout="column"  *ngFor="let element of leftList;">
+                  <div fxLayout="column" fxLayoutGap="10px">
+                    <div fxLayout="column" *ngFor="let element of leftList;">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
-                           *ngIf="element.value ==='link'">
+                        *ngIf="element.value ==='link'">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" (click)="addLink()">
-                          <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" >+</button>
+                          <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button">+</button>
                           <span class="font-size-12 steel"> {{element.placeholder| translate}} </span>
                         </div>
                       </div>
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="element.value !=='link'" >
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                        *ngIf="element.value !=='link'">
                         <span class="font-size-12"> {{element.placeholder| translate}} </span>
-                        <span class="font-size-12 steel"> {{element.value}} </span>
+                        <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
+                                                       'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                       'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
+                          [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
                     </div>
                   </div>

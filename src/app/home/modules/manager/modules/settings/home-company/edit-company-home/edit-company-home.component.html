@@ -15,7 +15,7 @@
       </div>
 
 
-      <div fxLayout="row" fxFlex="91" class="p-t-20 font-size-12 " form
+      <div fxLayout="row" fxFlex="90" class="p-t-20 font-size-12 " form
         [formGroup]="form" (keydown)="addOrUpdate($event)">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar >
@@ -47,32 +47,20 @@
                     [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
                   </wid-profile-image>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20">
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
+                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20" >
+                 <div fxLayout="row"  *ngFor=" let list of showList; let index = index">
+                  <button mat-button mat-raised-button class="btn-small white" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" style="width: 100%;">
+                        <div fxLayout="column" fxFlex="20">
+                          <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
+                        </div>
+                        <div fxLayout="column" fxFlex="80">
+                        <span class="font-size-10">{{list.value | spliceText: 10}}</span>
+                        </div>
                       </div>
                     </button>
+                 </div>
                   </div>
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-info-blue white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
-                      </div>
-                    </button>
-                  </div>
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-error-red white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -280,7 +268,7 @@
                 <div fxLayout="column" fxFlex="80">
                   <label class="required">{{'homecompany.adress' | translate| uppercase}} </label>
                   <mat-form-field appearance="outline">
-                    <textarea [placeholder]=" 'homecompany.adress' | translate" rows="8" formControlName="address"
+                    <textarea [placeholder]=" 'homecompany.adress' | translate" rows="7" formControlName="address"
                        autocomplete="off" matInput required [ngStyle.xs]="{'font-size': '15px'}">
                   </textarea>
                     <mat-error *ngIf="form.controls.address?.errors?.required">
@@ -338,9 +326,6 @@
               </div>
             </div>
           </div>
-
-
-
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
