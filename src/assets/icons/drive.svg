@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="tabler-icon-brand-google-drive" width="16.026" height="16.026" viewBox="0 0 16.026 16.026">
+    <defs>
+        <style>
+            .cls-2{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round}
+        </style>
+    </defs>
+    <path id="Path_1195" fill="none" d="M0 0h16.026v16.026H0z"/>
+    <path id="Path_1196" d="M9.01 8.339L5 15.016l-2-3.339L7.006 5z" class="cls-2" transform="translate(-.997 -1.661)"/>
+    <path id="Path_1197" d="M8 15h8.013l-2 3.339H6" class="cls-2" transform="translate(-1.994 -4.984)"/>
+    <path id="Path_1198" d="M13.006 11.677L9 5h4.006l4.006 6.677z" class="cls-2" transform="translate(-2.99 -1.661)"/>
+</svg>

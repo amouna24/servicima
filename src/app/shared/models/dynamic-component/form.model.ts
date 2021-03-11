@@ -17,6 +17,7 @@ export enum InputType {
   NUMBER = 'number',
   TEXT = 'text',
   PASSWORD = 'password',
+  DATE = 'date',
 }
 
 export enum FieldsType {
@@ -24,7 +25,8 @@ export enum FieldsType {
   INPUT = 'input',
   SELECT = 'select',
   SELECT_WITH_SEARCH = 'selectWithSearch',
-  SLIDE_TOGGLE = 'slideToggle'
+  SLIDE_TOGGLE = 'slideToggle',
+  UPLOAD_FILE = 'uploadFile'
 }
 
 export interface IFieldsObject {

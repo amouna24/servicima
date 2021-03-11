@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContractsService } from '@core/services/contracts/contracts.service';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -8,7 +8,7 @@ import { ContractorsService } from '@core/services/contractors/contractors.servi
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { IContractor } from '@shared/models/contractor.model';
 import { takeUntil } from 'rxjs/operators';
@@ -22,6 +22,8 @@ import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-she
 import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
+import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 
 @Component({
   selector: 'wid-add-contract',
@@ -39,13 +41,27 @@ export class AddContractComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Static Customers And Status Declaration
    *************************************************************************/
-  currenciesList: IViewParam[] = [];
-  statusList: IViewParam[] = [];
   contractorsList: IContractor[] = [];
-  paymentTermsList: ICompanyPaymentTermsModel[] = [];
-  collaboratorsList = [
+
+  /**************************************************************************
+   * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
+   *************************************************************************/
+  countriesList: IViewParam[] = [];
+  filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  citiesList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  genderList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  legalList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  profileTitleList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  activityCodeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  collaboratorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
     { value: 'test', viewValue: 'test'}
-  ];
+  ]);
+  paymentTermsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description Declaring Form Group
@@ -64,6 +80,248 @@ export class AddContractComponent implements OnInit, OnDestroy {
   contractInfo: IContract;
   contractExtensionInfo: IContractExtension;
   companyEmail: string;
+
+  /**************************************************************************
+   * @description Dynamic Component
+   *************************************************************************/
+  backURL: string;
+  isLoading = new BehaviorSubject<boolean>(false);
+  /**************************************************************************
+   * @description Menu Items List
+   *************************************************************************/
+  contractItems: IDynamicMenu[] = [
+    {
+      title: 'Contract',
+      titleKey: 'CONTRACT',
+      child: [
+        {
+          title: 'Information',
+          titleKey: 'INFORMATION',
+        },
+        {
+          title: 'Signer',
+          titleKey: 'SIGNER',
+        },
+        {
+          title: 'Rate',
+          titleKey: 'RATE',
+        },
+      ]
+    },
+    {
+      title: 'Contract Extension',
+      titleKey: 'CONTRACT_EXTENSION',
+      child: []
+    },
+  ];
+  dynamicForm: IDynamicForm[] = [
+    {
+      titleRef: 'INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Contractor code',
+          placeholder: 'Contractor code',
+          type: FieldsType.SELECT,
+          selectFieldList: this.collaboratorsList,
+          formControlName: 'contractor_code'
+        },
+        {
+          label: 'Collaborator email',
+          placeholder: 'Collaborator email',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'collaborator_email'
+        },
+      ],
+    },
+    {
+      titleRef: 'INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Contract type',
+          placeholder: 'Type',
+          type: FieldsType.SELECT,
+          selectFieldList: this.statusList,
+          formControlName: 'contract_type'
+        },
+        {
+          label: 'Contract date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'contract_date'
+        },
+      ],
+    },
+    {
+      titleRef: 'INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Start date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'contract_start_date'
+        },
+        {
+          label: 'End date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'contract_start_date'
+        },
+      ],
+    },
+    {
+      titleRef: 'INFORMATION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Status',
+          placeholder: 'Status',
+          type: FieldsType.SELECT,
+          selectFieldList: this.statusList,
+          formControlName: 'contract_status'
+        },
+        {
+          label: 'Attachments',
+          placeholder: 'File',
+          type: FieldsType.UPLOAD_FILE,
+          inputType: InputType.TEXT,
+          formControlName: 'attachments'
+        },
+      ],
+    },
+    {
+      titleRef: 'SIGNER',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Company email',
+          placeholder: 'exp@email.com',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'signer_company_email',
+        },
+        {
+          label: 'Contractor email',
+          placeholder: 'exp@email.com',
+          type: FieldsType.INPUT,
+          inputType: InputType.EMAIL,
+          formControlName: 'signer_contractor_email',
+        },
+      ],
+    },
+    {
+      titleRef: 'SIGNER',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Company signature date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'signature_company_date',
+        },
+        {
+          label: 'Contractor signature date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'signature_contractor_date',
+        },
+      ],
+    },
+    {
+      titleRef: 'RATE',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'contract_rate',
+        },
+        {
+          label: 'Currency',
+          placeholder: 'Currency',
+          type: FieldsType.SELECT,
+          selectFieldList: this.currencyList,
+          formControlName: 'currency_cd',
+        },
+      ],
+    },
+    {
+      titleRef: 'RATE',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'Payment',
+          placeholder: 'Payment',
+          type: FieldsType.SELECT,
+          selectFieldList: this.paymentTermsList,
+          formControlName: 'payment_terms',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_EXTENSION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Start date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'extension_start_date',
+        },
+        {
+          label: 'End date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.INPUT,
+          inputType: InputType.DATE,
+          formControlName: 'extension_end_date',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_EXTENSION',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'extension_rate',
+        },
+        {
+          label: 'Currency',
+          placeholder: 'Currency',
+          type: FieldsType.SELECT,
+          selectFieldList: this.currencyList,
+          formControlName: 'extension_currency_cd',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_EXTENSION',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'Status',
+          placeholder: 'Status',
+          type: FieldsType.SELECT,
+          selectFieldList: this.statusList,
+          formControlName: 'extension_status',
+        },
+      ],
+    },
+  ];
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -132,10 +390,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * 3 get current UserInfo
    *************************************************************************/
   getInitialData() {
-    this.mapData();
     /************ get currencies List and next the value to the subject ************/
-    this.filteredCurrencies.next(this.currenciesList.slice());
-    this.utilsService.changeValueField(this.currenciesList, this.contractForm.controls.filterCurrencyControl, this.filteredCurrencies);
+    /********************************** CURRENCY **********************************/
+    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
+      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
+    }));
 
     /*---------------------------------------------------------------*/
     this.utilsService.getRefData(
@@ -143,7 +402,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.utilsService.getApplicationID('ALL'),
       ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
-    this.statusList = this.utilsService.refData['CONTRACT_STATUS'];
+    this.statusList.next(this.utilsService.refData['CONTRACT_STATUS']);
     this.contractorService
       .getContractors(`?contractor_type=${this.type}`)
       .pipe(
@@ -167,43 +426,39 @@ export class AddContractComponent implements OnInit, OnDestroy {
     }));
   }
 
-  /**
-   * @description: : mapping data
-   */
-  mapData(): void {
-    this.appInitializerService.currenciesList.forEach((currency) => {
-      this.currenciesList.push({ value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC});
-    });
-  }
-
   /* Init Contract Form*/
   initContractForm(contract: IContract, contractExtension: IContractExtension) {
     this.contractForm = this.formBuilder.group({
-      contractor_code: [contract === null ? '' : contract.contractor_code, Validators.required],
-      collaborator_email: [contract === null ? '' : contract.collaborator_email, Validators.required],
-      contract_type: [contract === null ? '' : contract.contract_type],
-      contract_start_date: [contract === null ? '' : contract.contract_start_date],
-      contract_end_date: [contract === null ? '' : contract.contract_end_date],
-      contract_date: [contract === null ? '' : contract.contract_date, [Validators.required]],
-      contract_status: [contract === null ? '' : contract.contract_status],
-      signer_company_email: [contract === null ? '' : contract.signer_company_email],
-      signer_contractor_email: [contract === null ? '' : contract.signer_contractor_email],
-      signature_company_date: [contract === null ? '' : contract.signature_company_date],
-      signature_contractor_date: [contract === null ? '' : contract.signature_contractor_date],
-      contract_rate: [contract === null ? '' : contract.contract_rate, Validators.required],
-      currency_cd: [contract === null ? '' : contract.currency_cd],
-      payment_terms: [contract === null ? '' : contract.payment_terms],
-      attachments: [contract === null ? '' : this.getFile(contract.attachments)],
-      /* Contract Extension */
-      extension_start_date: [contractExtension === null ? '' : contractExtension.extension_start_date],
-      extension_end_date: [contractExtension === null ? '' : contractExtension.extension_end_date],
-      extension_status: [contractExtension === null ? '' : contractExtension.extension_status],
-      extension_rate: [contractExtension === null ? '' : contractExtension.extension_rate, Validators.required],
-      extension_currency_cd: [contractExtension === null ? '' : contractExtension.extension_currency_cd],
-      /* Filter Form Control */
-      filterCurrencyControl: [''],
-      paymentTermsControl: [''],
-
+      INFORMATION: this.formBuilder.group({
+        contractor_code: [contract === null ? '' : contract.contractor_code, Validators.required],
+        collaborator_email: [contract === null ? '' : contract.collaborator_email, Validators.required],
+        contract_type: [contract === null ? '' : contract.contract_type],
+        contract_date: [contract === null ? '' : contract.contract_date, [Validators.required]],
+        contract_start_date: [contract === null ? '' : contract.contract_start_date],
+        contract_end_date: [contract === null ? '' : contract.contract_end_date],
+        contract_status: [contract === null ? '' : contract.contract_status],
+        attachments: [contract === null ? '' : this.getFile(contract.attachments)],
+      }),
+      SIGNER: this.formBuilder.group({
+        signer_company_email: [contract === null ? '' : contract.signer_company_email],
+        signer_contractor_email: [contract === null ? '' : contract.signer_contractor_email],
+        signature_company_date: [contract === null ? '' : contract.signature_company_date],
+        signature_contractor_date: [contract === null ? '' : contract.signature_contractor_date],
+      }),
+      RATE: this.formBuilder.group({
+        contract_rate: [contract === null ? '' : contract.contract_rate, Validators.required],
+        currency_cd: [contract === null ? '' : contract.currency_cd],
+        payment_terms: [contract === null ? '' : contract.payment_terms],
+        filterCurrencyControl: [''],
+        paymentTermsControl: [''],
+      }),
+      CONTRACT_EXTENSION: this.formBuilder.group({
+        extension_start_date: [contractExtension === null ? '' : contractExtension.extension_start_date],
+        extension_end_date: [contractExtension === null ? '' : contractExtension.extension_end_date],
+        extension_status: [contractExtension === null ? '' : contractExtension.extension_status],
+        extension_rate: [contractExtension === null ? '' : contractExtension.extension_rate, Validators.required],
+        extension_currency_cd: [contractExtension === null ? '' : contractExtension.extension_currency_cd],
+      }),
     });
   }
 
@@ -240,7 +495,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (companyPaymentTerms) => {
-          this.paymentTermsList = companyPaymentTerms;
+          this.paymentTermsList.next(
+            companyPaymentTerms.map(
+              (obj) => {
+                return { value: obj.companyPaymentTermsKey.payment_terms_code, viewValue: obj.payment_terms_desc};
+              }
+            )
+          );
         },
         (error) => {
           console.log(error);
@@ -251,7 +512,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   /**
    * @description Create New Contract
    */
-  async createNewContract() {
+  async createNewContract(data: FormGroup) {
     const Contract = this.contractForm.value;
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
