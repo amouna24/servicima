@@ -17,8 +17,11 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { userType } from '@shared/models/userProfileType.model';
+import { SocialNetwork } from '@core/services/utils/social-network';
+import { INetworkSocial } from '@shared/models/social-network.model';
 
 import { ChangePwdComponent } from '../changepwd/changepwd.component';
+
 @Component({
   selector: 'wid-edit-user',
   templateUrl: './edit-user.component.html',
@@ -48,6 +51,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   idRole: string;
   emailAddressStorage: string;
   id: string;
+  showList: INetworkSocial[] = [];
   profileUserType = userType.UT_USER;
   /** subscription */
   subscriptionModal: Subscription;
@@ -64,6 +68,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private uploadService: UploadService,
               private route: ActivatedRoute,
               private location: Location,
+              private socialNetwork: SocialNetwork,
               ) { }
 
   /** list filtered by search keyword */
@@ -174,8 +179,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
       genderProfile: ['', [Validators.required]],
       youtubeAccount: [''],
       linkedinAccount: [''],
+      whatsappAccount: [''],
+      facebookAccount: [''],
+      skypeAccount: [''],
+      otherAccount: [''],
+      instagramAccount: [''],
+      viberAccount: [''],
       homeCompany: [{ value: '', disabled: true }],
-      roleCtrl: [''],
+      roleCtrl: ['', [Validators.required]],
       titleCtrl: [''],
       languageCtrl: [''],
       titleFilterCtrl: [''],
@@ -199,6 +210,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
       twitterAccount: this.userInfo['twitter_url'],
       youtubeAccount: this.userInfo?.youtube_url ? this.userInfo?.youtube_url : 'none' ,
       linkedinAccount: this.userInfo['linkedin_url'],
+      whatsappAccount: this.userInfo['whatsapp_url'],
+      facebookAccount: this.userInfo['facebook_url'],
+      skypeAccount: this.userInfo['skype_url'],
+      otherAccount: this.userInfo['other_url'],
+      instagramAccount: this.userInfo['instagram_url'],
+      viberAccount: this.userInfo['viber_url'],
       homeCompany: this.companyName,
       genderProfile: this.userInfo['gender_id'],
       roleCtrl: this.userRole,
@@ -208,6 +225,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
       languageFilterCtrl: '',
       roleFilterCtrl: '',
     });
+    const list = this.socialNetwork.getListNetwork(this.userInfo, 'company').filter((item) => {
+      if (item.value ) {
+        return item;
+      }
+    });
+    this.showList = list;
   }
 
   /**
@@ -287,7 +310,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
             () => {
               this.router.navigate(['/manager/settings/users']);
             },
-            (err) => console.error(err),
+            (err) => {
+              console.error(err);
+              alert('error:' + err);
+            },
           );
         }
         this.subscriptionModal.unsubscribe();

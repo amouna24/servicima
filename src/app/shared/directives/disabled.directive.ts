@@ -1,24 +1,17 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  OnInit,
-  TemplateRef,
-  ViewContainerRef
-} from '@angular/core';
-import * as _ from 'lodash';
+import { AfterViewInit, Directive, ElementRef, Input, OnInit } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
+import * as _ from 'lodash';
+
 @Directive({
-  selector: '[canBeDisplayed]'
+  selector: '[disableControl]'
 })
-export class CanBeDisplayedDirective implements OnInit {
+export class DisableControlDirective implements OnInit , AfterViewInit {
   private currentUser: any; // todo: use the right type when ready
   feature: string;
   availableFeature = [];
+  validator: boolean;
   constructor(
     private element: ElementRef,
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
     private userService: UserService,
   ) { }
 
@@ -30,6 +23,12 @@ export class CanBeDisplayedDirective implements OnInit {
   }
 
   /**
+   * @description update view
+   */
+  ngAfterViewInit() {
+   this.updateView();
+  }
+  /**
    * todo: Subscribe to the current User to get needed data
    */
   // Add a BehaviorSubject to emit the user object on authentication
@@ -40,35 +39,38 @@ export class CanBeDisplayedDirective implements OnInit {
     this.currentUser = {
       features: this.availableFeature
     };
-    this.updateView();
   }
   @Input()
-  set canBeDisplayed(params: any) {
-    if (params) {
+  set disableControl(params: any) {
+    if (params && params.validator === undefined) {
       this.feature = params.feature;
+      this.validator = true;
+    } else if (params) {
+      this.feature = params.feature;
+      this.validator = params.validator;
     }
+    this.updateView();
   }
   /**
-   * Insert or remove the html element from the DOM
+   * Disabled or active the html element from the DOM
    */
   updateView() {
-    if (this.isDisplayed()) {
-      this.viewContainer.clear();
-      this.viewContainer.createEmbeddedView(this.templateRef);
+    if (this.isDisplayed() && this.validator) {
+      this.element.nativeElement.disabled = false;
     } else {
-      this.viewContainer.clear();
+      this.element.nativeElement.disabled = true;
     }
   }
 
   /**
-   * if the HTML element can be displayed or not depending on the connected user
+   * if the HTML element can be disabled or not depending on the connected user
    */
   isDisplayed(): boolean {
     if (!this.userService.licenceFeature.includes(this.feature)) {
       return false;
     }
-      return this.currentUser &&
-        this.currentUser.features &&
-        this.currentUser.features.includes(this.feature);
+    return this.currentUser &&
+      this.currentUser.features &&
+      this.currentUser.features.includes(this.feature);
   }
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
+import { BehaviorSubject } from 'rxjs';
+import { ILicenceModel } from '@shared/models/licence.model';
 
 @Component({
   selector: 'wid-licence-management',
@@ -9,8 +10,8 @@ import { ProfileService } from '@core/services/profile/profile.service';
   styleUrls: ['./licence-management.component.scss']
 })
 export class LicenceManagementComponent implements OnInit {
-  loaded: Promise<boolean>;
-  ELEMENT_DATA = [];
+  ELEMENT_DATA = new BehaviorSubject<ILicenceModel[]>([]);
+  isLoading = new BehaviorSubject<boolean>(false);
   licence = [];
   licence_code;
   constructor(
@@ -22,31 +23,21 @@ export class LicenceManagementComponent implements OnInit {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-/*      this.ELEMENT_DATA = this.appInitializerService.licencesList;
-   // to review
-    this.ELEMENT_DATA.forEach((data) => {
-      data['licence_code'] = data['LicenceKey'].licence_code;
-    });*/
-  /*  this.profileService.getAllUser('dhia.othmen@widigital-group.com').subscribe(async (res) => {
-      if (!!res ) {
-        this.ELEMENT_DATA = res;
-        console.log(res);
-        this.ELEMENT_DATA.forEach((data) => {
-          data['email_address'] = data['userKey'].email_address;
-          data['application_id'] = data['userKey'].application_id;
-        });
-      }
-
-  });*/
-
+    this.ELEMENT_DATA.next(this.appInitializerService.licencesList);
   }
 
-  updateOrDelete(rowID: string) {
-    console.log('rowID', rowID);
-  }
-
-  showRowData(rowData: any) {
-    console.log('rowData', rowData);
+  /**
+   * @description : action
+   * @param rowAction: object
+   */
+  switchAction(rowAction: any) {
+    /* switch (rowAction.actionType) {
+       case ('show'): this.showUser(rowAction.data);
+         break;
+       case ('update'): this.updateUser(rowAction.data);
+         break;
+       case('delete'): this.onChangeStatus(rowAction.data);
+     }*/
   }
 
 }

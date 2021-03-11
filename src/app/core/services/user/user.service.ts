@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 
@@ -26,7 +25,8 @@ export class UserService {
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
-  listFeatureRole = [];
+  companyRolesFeatures = [];
+  licenceFeature: string[];
   constructor(private httpClient: HttpClient,
     private router: Router,
     private localStorageService: LocalStorageService,
@@ -41,18 +41,21 @@ export class UserService {
     this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
       `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
-      .pipe(
-        tap(() => this.isLoadingSubject.next(true)),
-      )
       .subscribe( (data) => {
         this.userInfo = data;
         this.connectedUser$.next(data);
         this.getImage(data['user'][0].photo);
         const roleCode = data.userroles[0].userRolesKey.role_code;
+
         this.getCompanyRoleFeatures(this.getRoleCode(roleCode), this.userInfo['company'][0]['companyKey']['email_address'])
           .subscribe((list) => {
-            this.listFeatureRole[0] = list;
+            this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
+            if (this.companyRolesFeatures.length > 1) {
+              this.companyRolesFeatures.splice(0, this.companyRolesFeatures.length - 1);
+            }
+            this.licenceFeature =  data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
             this.redirectUser(roleCode);
+            this.isLoadingSubject.next(true);
           });
       });
   }
@@ -64,39 +67,19 @@ export class UserService {
     switch (userRole) {
       case 'ADMIN' || 'MANAGER' || 'HR-MANAGER' || 'SALES': {
         this.moduleName$.next('manager');
-        this.router.navigate(['/manager']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+        this.router.navigate(['/manager']);
       }
         break;
       case 'COLLAB': {
         this.moduleName$.next('collaborator');
-        this.router.navigate(['/collaborator']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+        this.router.navigate(['/collaborator']);
       }
         break;
       case 'CAND': {
         this.moduleName$.next('candidate');
-        this.router.navigate(['/candidate']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+        this.router.navigate(['/candidate']);
       }
         break;
-      default:
-        this.isLoadingSubject.next(false);
     }
   }
 

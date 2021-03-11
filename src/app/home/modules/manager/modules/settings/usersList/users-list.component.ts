@@ -11,13 +11,14 @@ import { UtilsService } from '@core/services/utils/utils.service';
 
 import { ICredentialsModel } from '@shared/models/credentials.model';
 import { IViewParam } from '@shared/models/view.model';
+import { IUserModel } from '@shared/models/user.model';
 @Component({
   selector: 'wid-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit, OnDestroy {
-  ELEMENT_DATA = new BehaviorSubject<any>([]);
+  ELEMENT_DATA = new BehaviorSubject<IUserModel[]>([]);
   companyId: string;
   credentials: ICredentialsModel;
   isLoading = new BehaviorSubject<boolean>(false);

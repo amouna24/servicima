@@ -22,10 +22,8 @@
                 <span fxLayout="row" fxLayoutGap="5px">
                 <mat-icon class="icon material-icons-outlined" svgIcon='{{dynamicListSelect[i]?.matIcon}}'>
                 </mat-icon>
-                <input autocomplete="off"
-                       matInput class="wid-input-value"
-                       [formControlName]=i
-                       name="param_number1" />
+                <input autocomplete="off" [type]="dynamicListSelect[i]?.type"
+                       matInput [formControlName]=i />
                    <mat-icon class="icon material-icons-outlined" svgIcon='wi-pen'>
                 </mat-icon>
                 </span>

@@ -1,10 +1,10 @@
 <wid-model-modal [modelConfig]="modelConfig" [form] ="form" [existForm]="existForm" (emitter)="onNotify($event)" form [formGroup]="form"  class="full-height ">
-  <div modal-body fxFlex="70" fxFlex.xs="50" fxLayout="column" class="cool-grey font-size-12" style="margin-top: -28px"
+  <div modal-body fxFlex="70" fxFlex.xs="50" fxLayout="column" class="cool-grey font-size-12" [ngStyle]="{'margin-top': '-28px'}"
     fxFlexOffset="9">
-    <h5 class=" steel"> {{'changepwd.title' | translate}}:</h5>
-    <div style="margin-left: 58px" fxLayout="column" fxLayoutGap="2px">
+    <h5 class=" steel"> {{'changepwd.title' | translate | capitalizeFirstLetter}}:</h5>
+    <div [ngStyle]="{'margin-left': '58px'}"fxLayout="column" fxLayoutGap="2px">
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.oldpwd' | translate | uppercase}} </mat-label>
+        <mat-label class="black-three"> {{'changepwd.oldpwd' | translate | capitalizeFirstLetter}} </mat-label>
         <mat-form-field appearance="outline">
           <input [type]="hideOldPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.oldpwd' | translate "  matInput
             formControlName="oldPassword" name="oldPassword"  autocomplete="off" required />
@@ -15,7 +15,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.newpwd' | translate | uppercase }} </mat-label>
+        <mat-label class="black-three"> {{'changepwd.newpwd' | translate | capitalizeFirstLetter }} </mat-label>
         <mat-form-field appearance="outline">
           <input [type]="hidePassword ? 'password' : 'text'" [placeholder]=" 'changepwd.newpwd' | translate "  autocomplete="off" matInput formControlName="password"
             name="password" type="password" required />
@@ -27,7 +27,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="100">
-        <mat-label class="black-three"> {{'changepwd.confirmpwd' | translate | uppercase}}  </mat-label>
+        <mat-label class="black-three"> {{'changepwd.confirmpwd' | translate | capitalizeFirstLetter}}  </mat-label>
         <mat-form-field appearance="outline" [ngStyle.xs]="{'width': '96%'}">
           <input [type]="hideConfirmPassword ? 'password' : 'text'" [placeholder]=" 'changepwd.confirmpwd' | translate " autocomplete="off" matInput
             formControlName="confirmPassword" name="confirmPassword" [errorStateMatcher]="errorMatcher" type="password"

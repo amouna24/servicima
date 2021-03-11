@@ -14,6 +14,9 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
+import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
+import { SpliceText } from '@core/services/pipe/splice-text';
+import { DisableControlDirective } from '@shared/directives/disabled.directive';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -54,6 +57,9 @@ import { ErrorComponent } from './components/error/error.component';
     RightSidenaveComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    DisableControlDirective,
+    CapitalizeFirstLetter,
+    SpliceText,
     UploadSheetComponent,
     AlertComponent,
     DynamicComponent,
@@ -115,6 +121,9 @@ import { ErrorComponent } from './components/error/error.component';
     EditCompanyHomeComponent,
     ErrorComponent,
     SplashComponent,
+    CapitalizeFirstLetter,
+    SpliceText,
+    DisableControlDirective,
   ]
 })
 export class SharedModule { }

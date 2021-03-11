@@ -14,7 +14,6 @@ export class SplashComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private spinnerService: SpinnerService,
-    private appInitializer: AppInitializerService
   ) {
 
   }
