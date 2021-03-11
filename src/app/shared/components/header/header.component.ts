@@ -13,6 +13,8 @@ import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 
+import { LicenceExpirationComponent } from '../../../home/modules/manager/modules/settings/licence/licence-expiration/licence-expiration.component';
+
 @Component({
   selector: 'wid-header',
   templateUrl: './header.component.html',
@@ -44,6 +46,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
  ngOnInit(): void {
+    this.modalsServices.registerModals(
+      { modalName: 'expirationLicence', modalComponent: LicenceExpirationComponent });
     this.userService.avatar$.subscribe(
       avatar => {
         if (!!avatar) {
@@ -63,18 +67,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-     /*   if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
-          this.modalsServices.displayModal('expirationLicense', null , '40%')
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-              (resp) => {
-              },
-              (error) => {
-                console.error(error);
-              });
-        }*/
+       if (this.endLicence <= 16 && this.licenceType === 'TRIAL') {
+         this.modalsServices.displayModal('expirationLicence', null, '570px', '480px');
+        }
       }
     });
   }
