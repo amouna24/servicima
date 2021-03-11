@@ -2,8 +2,8 @@
 
     <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
       <div fxFlex="7"  fxLayout="row" class="line-height-2">
-        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Add'" >{{ 'user.add' | translate | titlecase}} </div>
-        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Update'" >{{ 'user.edit' | translate | titlecase}} </div>
+        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Add'" >{{ 'user.add' | translate | capitalizeFirstLetter}} </div>
+        <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Update'" >{{ 'user.edit' | translate | capitalizeFirstLetter}} </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
           <button mat-raised-button class="btn-small bg-pale-grey" (click)="back()">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">

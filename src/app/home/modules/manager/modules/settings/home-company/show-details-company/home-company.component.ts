@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils/utils.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -8,11 +9,11 @@ import { AssetsDataService } from '@core/services/assets-data/assets-data.servic
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { ModalService } from '@core/services/modal/modal.service';
+import { SocialNetwork } from '@core/services/utils/socialNetwork';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { Subscription } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { INetworkSocial } from '@shared/models/social-network.model';
 
@@ -30,6 +31,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
+              private  socialNetwork: SocialNetwork,
               private uploadService: UploadService,
 ) { }
 
@@ -56,6 +58,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   rightList: INetworkSocial[];
   /** subscription */
   subscription: Subscription;
+  showList = [];
   /** subscription */
   private subscriptions: Subscription[] = [];
   /**
@@ -82,7 +85,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         const ava = await this.uploadService.getImage(this.company['photo']);
         this.avatar = ava;
         this.user = info['user'][0];
-        this.getListNetworkSocial();
+        this.getListNetworkSocial(this.company, 'company');
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
         this.currency = this.utilsService.getViewValue(this.company['currency_id'], this.currenciesList);
@@ -125,39 +128,26 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @description  : Add link
    */
   addLink(): void {
-    this.modalService.displayModal('AddLink', this.company, '620px', '535px').subscribe((user) => {
-      if (user) {
-        this.company['youtube_url'] = user['youtube_url'];
-        this.company['linkedin_url'] = user['linkedin_url'];
-        this.company['twitter_url'] = user['twitter_url'];
-        this.company['facebook_url'] = user['facebook_url'];
-        this.company['instagram_url'] = user['instagram_url'];
-        this.company['whatsapp_url'] = user['whatsapp_url'];
-        this.company['viber_url'] = user['viber_url'];
-        this.company['skype_url'] = user['skype_url'];
-        this.company['other_url'] = user['other_url'];
-        this.getListNetworkSocial();
+    this.modalService.displayModal('AddLink', this.company, '620px', '535px').subscribe((company) => {
+      if (company) {
+        this.socialNetwork.updateNetworkSocial(this.company, company);
+        this.getListNetworkSocial(this.company, 'company');
       }
     });
   }
 
-  getListNetworkSocial() {
+  getListNetworkSocial(value, placeholder) {
     this.leftList = [];
     this.rightList = [];
-    const list = [
-      { placeholder: 'user.linkedinacc', value: this.company['linkedin_url']},
-      { placeholder: 'user.whatsappacc', value: this.company['whatsapp_url'] },
-      { placeholder: 'user.facebookacc', value: this.company['facebook_url'] },
-      { placeholder: 'user.skypeacc', value: this.company['skype_url'] },
-      { placeholder: 'user.otheracc', value: this.company['other_url']},
-      { placeholder: 'user.instagramacc', value: this.company['instagram_url']},
-      { placeholder: 'user.twitteracc', value: this.company['twitter_url']},
-      { placeholder: 'user.youtubeacc', value: this.company['youtube_url']},
-      { placeholder: 'user.viberacc', value: this.company['viber_url']},
-      { placeholder: 'company.addlink', value: 'link'},
-    ];
-    this.utilsService.getList(list, this.leftList, this.rightList);
+    const list = this.socialNetwork.getListNetwork(value, placeholder);
 
+    this.socialNetwork.getList(list, this.leftList, this.rightList);
+    this.showList = [ ...this.leftList, ...this.rightList];
+    this.showList = this.showList.filter((item) => {
+      if (item.value !==  'link' ) {
+        return item;
+      }
+    });
   }
 
   /**
