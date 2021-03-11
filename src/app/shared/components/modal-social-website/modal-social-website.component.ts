@@ -22,7 +22,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   form: FormGroup;
   newTable: IListNetworkSocial[] = [];
-  dynamicListSelect: Array<{ input: string, select: string, matIcon?: string }> = [];
+  dynamicListSelect: Array<{ input: string, select: string, matIcon?: string, type?: string }> = [];
   listInput: IListInputNetworkSocial[] = [];
   list: IListNameNetworkSocial[] = [
     { value: 'linkedin', selected: false },
@@ -59,47 +59,56 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
       {
         select: 'twitter',
         value: this.data?.twitter_url,
-        matIcon: 'wi_twitter'
+        matIcon: 'wi_twitter',
+        type: 'text',
       },
       {
         select: 'linkedin',
         value: this.data?.linkedin_url,
-        matIcon: 'wi_linkedin'
+        matIcon: 'wi_linkedin',
+        type: 'text',
       },
       {
         select: 'youtube',
         value: this.data?.youtube_url,
-        matIcon: 'wi_youtube'
+        matIcon: 'wi_youtube',
+        type: 'text',
       },
       {
         select: 'whatsapp',
         value: this.data?.whatsapp_url,
-        matIcon: 'wi_whatsapp'
+        matIcon: 'wi_whatsapp',
+        type: 'number',
       },
       {
         select: 'viber',
         value: this.data?.viber_url,
-        matIcon: 'wi_viber'
+        matIcon: 'wi_viber',
+        type: 'number',
       },
       {
         select: 'other',
         value: this.data?.other_url,
-        matIcon: 'wi_other'
+        matIcon: 'wi_other',
+        type: 'text',
       },
       {
         select: 'facebook',
         value: this.data?.facebook_url,
-        matIcon: 'wi_facebook'
+        matIcon: 'wi_facebook',
+        type: 'text',
       },
       {
         select: 'skype',
         value: this.data?.skype_url,
-        matIcon: 'wi_skype'
+        matIcon: 'wi_skype',
+        type: 'text',
       },
       {
         select: 'instagram',
         value: this.data?.instagram_url,
-        matIcon: 'wi_instagram'
+        matIcon: 'wi_instagram',
+        type: 'text',
       },
     ];
     this.listInput = [
@@ -146,7 +155,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
       }
     });
     if (this.newTable.length === 0) {
-      this.newTable.push({ select: 'linkedin', value: '', matIcon: 'wi_linkedin'}
+      this.newTable.push({ select: 'linkedin', value: '', matIcon: 'wi_linkedin', type: 'string'}
     );
     }
     this.initForm();
@@ -158,7 +167,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   initForm(): void {
     this.form = this.formBuilder.group({
       input: this.formBuilder.array(this.newTable.map((res) => {
-        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select , 'matIcon': res.matIcon});
+        this.dynamicListSelect.push({ 'input': res.value, 'select': res.select , 'matIcon': res.matIcon, type: res.type});
          const leng = this.dynamicListSelect.length;
         for (let i = 0; i < leng; i++) {
           this.listInput[i].value = this.dynamicListSelect[i].select;
@@ -274,6 +283,17 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
     });
     return this.getListNetworkSocial().push(newControl1);
   }
+  /**
+   * @description  get pseudo
+   * param value: value of input
+   * param lien: lien of social network without pseudo
+   */
+   getPseudo(value: string, lien: string): string {
+     if (value.includes(lien)) {
+    return  value.replace(lien, '');
+     }
+     return value;
+  }
 
   /**
    * @description  get social network selected
@@ -283,7 +303,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
    */
   getValue(name: string, number: number, lastValueSelect: string): void {
     this.list.find(el => el.value === name).selected = true;
-    if (lastValueSelect) {
+    if (lastValueSelect && lastValueSelect !== name ) {
       this.list.find(el => el.value === lastValueSelect).selected = false;
     }
       this.list.forEach(element => {
@@ -293,7 +313,8 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
             if (i === number) {
               this.form.get('input.' + (i - 1)).setValue(this.data[name + '_url']);
               this.dynamicListSelect[number - 1 ].select = name;
-              this.dynamicListSelect[number - 1 ].matIcon = this.displayIcon(name);
+              this.dynamicListSelect[number - 1 ].matIcon = this.displayIcon(name).icon;
+              this.dynamicListSelect[number - 1].type = this.displayIcon(name).type;
             }
           }
         }
@@ -319,21 +340,21 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   setValue(object) {
     this.listInput.forEach(element => {
       if (element.value === 'twitter') {
-        object.twitter_url = this.getInput(element.name);
+        object.twitter_url = this.getPseudo(this.getInput(element.name), 'https://twitter.com/');
       } else if (element.value === 'linkedin') {
-        object.linkedin_url = this.getInput(element.name);
+        object.linkedin_url =  this.getPseudo(this.getInput(element.name), 'https://www.linkedin.com/in/');
       } else if (element.value === 'youtube') {
-        object.youtube_url = this.getInput(element.name);
+        object.youtube_url = this.getPseudo(this.getInput(element.name), 'https://www.youtube.com/');
       } else if (element.value === 'instagram') {
-        object.instagram_url = this.getInput(element.name);
+        object.instagram_url = this.getPseudo(this.getInput(element.name), 'https://www.insatgram.com/');
       } else if (element.value === 'whatsapp') {
         object.whatsapp_url = this.getInput(element.name);
       } else if (element.value === 'viber') {
         object.viber_url = this.getInput(element.name);
       } else if (element.value === 'skype') {
-        object.skype_url = this.getInput(element.name);
+        object.skype_url = this.getPseudo(this.getInput(element.name), 'https://www.skype.com/');
       } else if (element.value === 'facebook') {
-        object.facebook_url = this.getInput(element.name);
+        object.facebook_url =  this.getPseudo(this.getInput(element.name), 'https://www.facebook.com/');
       } else if (element.value === 'other') {
         object.other_url = this.getInput(element.name);
       }
@@ -343,26 +364,26 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   /**
    * @description Display icon
    */
-  displayIcon(name: string): string {
+  displayIcon(name: string): any {
     switch (name) {
       case 'linkedin':
-       return 'wi_linkedin';
+       return { icon: 'wi_linkedin', type: 'text'};
       case 'twitter':
-        return 'wi_twitter';
+        return { icon: 'wi_twitter', type: 'text'};
       case 'whatsapp':
-        return 'wi_whatsapp';
+        return { icon: 'wi_whatsapp', type: 'number'};
       case 'youtube':
-        return 'wi_youtube';
+        return { icon: 'wi_youtube', type: 'text'};
       case 'viber':
-        return 'wi_viber';
+        return { icon: 'wi_viber', type: 'number'};
       case 'other':
-        return 'wi_other';
+        return { icon: 'wi_other', type: 'text'};
       case 'facebook':
-        return 'wi_facebook';
+        return { icon: 'wi_facebook', type: 'text'};
       case 'skype':
-        return 'wi_skype';
+        return { icon: 'wi_skype', type: 'text'};
       case 'instagram':
-        return 'wi_instagram';
+        return { icon: 'wi_instagram', type: 'text'};
       default:
         return;
     }

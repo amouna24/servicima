@@ -280,7 +280,7 @@
                 <div fxLayout="column" fxFlex="80">
                   <label class="required">{{'homecompany.adress' | translate| uppercase}} </label>
                   <mat-form-field appearance="outline">
-                    <textarea [placeholder]=" 'homecompany.adress' | translate" rows="8" formControlName="address"
+                    <textarea [placeholder]=" 'homecompany.adress' | translate" rows="7" formControlName="address"
                        autocomplete="off" matInput required [ngStyle.xs]="{'font-size': '15px'}">
                   </textarea>
                     <mat-error *ngIf="form.controls.address?.errors?.required">
@@ -338,9 +338,6 @@
               </div>
             </div>
           </div>
-
-
-
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">

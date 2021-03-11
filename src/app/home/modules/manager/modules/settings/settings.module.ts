@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { DataTableModule } from '@dataTable/data-table.module';
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
@@ -31,6 +32,7 @@ import { RoleManagementComponent } from './role-management/role-management.compo
     SettingsRoutingModule,
     SharedModule,
     DataTableModule,
+    DynamicDataTableModule,
   ],
 })
 export class SettingsModule {

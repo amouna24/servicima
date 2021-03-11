@@ -124,7 +124,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell
-                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop].length > 30 ? row[col.prop].substring(0, 20)+'...' : row[col.prop] }}
+                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop]?.length > 30 ? row[col.prop].substring(0, 20)+'...' : row[col.prop] }}
                       </td>
                     </ng-container>
                   </ng-container>
