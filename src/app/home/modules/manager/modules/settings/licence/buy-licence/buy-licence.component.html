@@ -1,98 +1,157 @@
-<div class="dialog-container">
-  <ng-template canBeDisplayed [canBeDisplayed]='param' >
-  <h1 class="title"> Acheter un forfait particuliers</h1>
-</ng-template>
-  <mat-vertical-stepper [linear]="isLinear" #stepper>
-    <mat-step>
-      <form>
-        <ng-template matStepLabel>Compte</ng-template>
-        <div fxLayout="row" fxLayoutGap="25px">
-          <div > {{name}}: {{emailAddress}}</div>
-          <button mat-button color='primary' class="button-logout"> Deconnexion</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <form>
-        <ng-template matStepLabel>Facturation</ng-template>
-        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group">
-          <mat-radio-button class="example-radio-button" *ngFor="let facturation of facturations" [value]="facturation">
-            {{facturation}}
-          </mat-radio-button>
-        </mat-radio-group>
-        <div>
-          <button mat-button color="primary" matStepperNext>Continue</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Paiement</ng-template>
+<div class="dynamic-component-container"
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Buy Licence</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
 
-      <form [formGroup]="paymentForm">
-        <div>
-          <div>
-            <!-- Email address -->
-            <mat-list>
-              <mat-divider></mat-divider>
-              <mat-radio-group @slideView name="payment" formControlName="payment">
-                <mat-radio-button @slideView class="example-radio-button" [value]="3">
-                  <img src="assets/img/paypal.png" height="42px" alt="">
-                </mat-radio-button>
-                <mat-divider></mat-divider>
-                <mat-radio-button @slideView class="example-radio-button" [value]="1">
-                  <img src="assets/img/carte-credit.jpg" height="32px" class="img-card" alt="">
-                </mat-radio-button>
-                <mat-divider></mat-divider>
-                <mat-radio-button @slideView class="example-radio-button" [value]="2">
-                  <img src="assets/img/sepa.png" height="42px" alt="">
-                </mat-radio-button>
-              </mat-radio-group>
-            </mat-list>
-            <div @slideInOut *ngIf='paymentForm.value.payment === 2' style="width: 80%;margin: auto;">
-              <div fxLayout="row" fxLayoutGap="50px">
-                <mat-form-field appearance="outline">
-                  <input [placeholder]=" 'user.lastname' | translate | uppercase" autocomplete="off" matInput
-                    class="wid-input-value" formControlName="lastName" name="lastName" required />
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <input [placeholder]=" 'user.firstname' | translate | uppercase" autocomplete="off" matInput
-                    class="wid-input-value" formControlName="firstName" name="firstName" required />
-                </mat-form-field>
+  </div>
+  <div class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
+    <div fxFlex="58" class="full-height" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="28"
+      fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+        <div fxFlex="20">
+          <h2 class="steel font-normal font-size-17">Billing</h2>
+        </div>
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
+          <mat-radio-group fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px"
+                           (change)="billingPack=$event.value" [value]="billingPack"
+                           class="p-l-5">
+            <mat-radio-button class="black font-size-12 font-normal" value="year">
+              Annual billing <sup *ngIf="saving" class="red">saving {{saving}}%</sup>
+            </mat-radio-button>
+            <mat-radio-button class="black font-size-12 font-normal" value="month">
+              Monthly Billing
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+      </div>
+      <div class="full-width bg-white border-radius-20 p-t-10 p-l-20 p-r-20"
+           fxLayout="column" fxLayoutAlign="start start"
+           fxFlex>
+        <div fxFlex="12">
+          <h2 class="steel font-normal font-size-17">Paiement</h2>
+        </div>
+        <div fxFlex class="full-width">
+          <mat-radio-group class="full-width">
+          <mat-accordion class="full-width" fxLayout="column" fxLayoutGap="3px">
+
+            <mat-expansion-panel hideToggle
+                                 class="border-radius-10"
+                                 (opened)="paiementMethode[0] = true"
+                                 (closed)="paiementMethode[0] = false">
+              <mat-expansion-panel-header class="p-5 p-l-20">
+                <mat-panel-title>
+                  <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
+                                    [checked]="paiementMethode[0]">
+                    Credit card
+                  </mat-radio-button>
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>Form here.</p>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle
+                                 class="border-radius-10"
+                                 (opened)="paiementMethode[1] = true"
+                                 (closed)="paiementMethode[1] = false">
+              <mat-expansion-panel-header class="p-5 p-l-20">
+                <mat-panel-title>
+                  <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
+                                    [checked]="paiementMethode[1]">
+                    Paypal
+                  </mat-radio-button>
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>Form here. </p>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle
+                                 class="border-radius-10"
+                                 (opened)="paiementMethode[2] = true"
+                                 (closed)="paiementMethode[2] = false">
+              <mat-expansion-panel-header class="p-5 p-l-20">
+                <mat-panel-title>
+                  <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
+                                    [checked]="paiementMethode[2]">
+                    Sepa
+                  </mat-radio-button>
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>Form here.</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <div fxFlex class="full-height"  fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+      <div class="full-width bg-white border-radius-20 p-t-10 p-l-20"
+           fxLayout="column" fxFlex="28" fxLayoutGap="20px" >
+       <div fxFlex="20">
+         <h2 class="steel font-normal font-size-17">Compte</h2>
+       </div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px" class="p-l-5 m-0" fxFlex>
+          <div fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
+            <img [src]="haveImage ? avatar :'assets/img/default.jpg'"  class="img-rounded avatar" fxFlex="100">
+          </div>
+          <div fxFlex fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="6px">
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="full-width">
+              <div fxFlex="23" >
+                <p class="font-size-12 black font-normal m-0">Full name:</p>
               </div>
-              <mat-form-field appearance="outline" class="container-input">
-                <input [placeholder]=" 'COUNTRY'" autocomplete="off" matInput class="wid-input-value"
-                  formControlName="country" name="country" required />
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="container-input">
-                <input [placeholder]=" 'IBAN'" autocomplete="off" matInput class="wid-input-value"
-                  formControlName="iban" name="iban" required />
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="container-input">
-                <input [placeholder]=" 'ADRESSE DE FACTURATION'" autocomplete="off" matInput class="wid-input-value"
-                  formControlName="address" name="address" required />
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="container-input">
-                <input [placeholder]=" 'SUITE DE ADRESSE DE FACTURATION'" autocomplete="off" matInput
-                  class="wid-input-value" formControlName="suiteAddress" name="suiteAddress" required />
-              </mat-form-field>
-              <div fxLayout="row" fxLayoutGap="50px">
-                <mat-form-field appearance="outline">
-                  <input [placeholder]=" 'COMMUNE/VILLE'" autocomplete="off" matInput class="wid-input-value"
-                    formControlName="city" name="city" required />
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <input [placeholder]=" 'CODE POSTAL'" autocomplete="off" matInput class="wid-input-value"
-                    formControlName="zipCode" name="zipCode" required />
-                </mat-form-field>
+              <div fxFlex >
+                <p class="black font-size-12 font-light m-0" >{{name}}</p>
               </div>
-              <div class="container-button">
-                <button mat-button class="button-next" [disabled]="!paymentForm.valid"> SUIVANT</button>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="full-width">
+              <div fxFlex="23" >
+                <p class="font-size-12 black font-normal m-0">Email:</p>
+              </div>
+              <div fxFlex >
+                <p class="black font-size-12 font-light m-0" >{{emailAddress}} </p>
               </div>
             </div>
           </div>
         </div>
-      </form>
+        <div fxFlex="10" fxLayout="column" fxLayoutAlign="start end" class="p-l-10">
+          <a class="denim font-size-10 font-light">Disconnection</a>
+        </div>
+      </div>
+      <div class="full-width bg-white border-radius-20 p-10 p-l-20"
+           fxLayout="column" fxLayoutAlign="start start" fxFlex>
+        <div class="full-width border-bottom" fxFlex>
+          <div class="border-bottom full-width" fxLayout="column" fxLayoutGap="0">
+            <h4 class="steel font-light font-size-12">Licence type</h4>
+            <h2 class="steel font-normal font-size-17">{{licence.LicenceKey.licence_code}}</h2>
+          </div>
+          <div>
 
-    </mat-step>
-  </mat-vertical-stepper>
+          </div>
+        </div>
+        <div fxFlex="30" class="full-width">
+          <div fxLayout="row" fxLayoutAlign="space-between center"
+               class="border-bottom full-width">
+            <p class="black font-normal font-size-17">Total:</p>
+            <p class="black font-normal font-size-17">€{{total()}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

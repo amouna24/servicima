@@ -4,7 +4,7 @@
     <div  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="user['user_type']==='COMPANY'">
       <p class="font-semi-bold" >{{licenceCode }}</p>
       <p class="font-size-14 font-extra-light cerulean-blue" *ngIf="licenceType == 'TRIAL'">{{endLicence}} jours restants</p>
-      <button (click)="licenceType == 'TRIAL'? expirationLicence(): UpgradeLicence()"
+      <button (click)="licenceType == 'TRIAL'? UpgradeLicence() : expirationLicence()"
               mat-raised-button color="warn"   class="btn-small buy-btn" >
         <mat-icon class="mat-icon-btn" svgIcon="wi-bag"></mat-icon>
         <span class="white"> {{licenceType == 'TRIAL' ? 'Acheter maintenant' : 'Mettre à niveau' }}</span>
