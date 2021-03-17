@@ -15,7 +15,7 @@
       </div>
 
 
-      <div fxLayout="row" fxFlex="91" class="p-t-20 font-size-12 " form
+      <div fxLayout="row" fxFlex="90" class="p-t-20 font-size-12 " form
         [formGroup]="form" (keydown)="addOrUpdate($event)">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar >
@@ -41,38 +41,26 @@
               </div>
             </div>
             <div fxLayout="column" fxFlex="50" fxLayoutAlign="flex-end flex-start" >
-              <div fxLayout="column" fxLayoutAlign="start center"  class="profile-image" style="width: 80%">
+              <div fxLayout="column" fxLayoutAlign="start center"  class="profile-image" [ngStyle]="{'width': '86%'}">
                 <div class="profile-image" fxLayout="row"  fxLayoutAlign="center start">
                   <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user"
                     [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
                   </wid-profile-image>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20">
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-ocean-blue white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_linkedin"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
+                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20" >
+                 <div fxLayout="row"  *ngFor=" let list of showList; let index = index">
+                  <button mat-button mat-raised-button class="btn-small white" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                        <div fxLayout="column" fxFlex="20">
+                          <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
+                        </div>
+                        <div fxLayout="column" fxFlex="80">
+                        <span class="font-size-10">{{list.value | spliceText: 10}}</span>
+                        </div>
                       </div>
                     </button>
+                 </div>
                   </div>
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-info-blue white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_twitter"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
-                      </div>
-                    </button>
-                  </div>
-                  <div fxLayout="row" fxFlex="33">
-                    <button mat-button mat-raised-button class="btn-small bg-error-red white">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" class="container-btn">
-                        <mat-icon class="icon material-icons-outlined" svgIcon="wi_youtube"> </mat-icon>
-                        <span class="font-size-10">{{user?.first_name}}</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -369,11 +357,11 @@
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
               <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
+                <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
                   <span class="font-size-14"> {{ 'company.reset' | translate}}</span>
                 </button>
-                <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white" [disabled]="!form.valid"
-                  (click)="addOrUpdate($event)">
+                <button mat-button mat-raised-button class="btn-medium white" color="primary" [disableControl]="{'feature':'SOURCING_ACCESSs', 'validator': form.valid}"
+                  (click)="addOrUpdate($event)" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14">{{ 'user.save' | translate}}</span>
                   </div>

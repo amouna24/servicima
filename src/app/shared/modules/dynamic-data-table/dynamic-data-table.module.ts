@@ -7,6 +7,7 @@ import { MaterialModule } from '@shared/modules/material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
+import { SharedModule } from '@shared/shared.module';
 
 import { DataTableConfigComponent } from './components/data-table-config/data-table-config.component';
 
@@ -23,6 +24,7 @@ import { DataTableConfigComponent } from './components/data-table-config/data-ta
     FlexLayoutModule,
     RouterModule,
     ScrollbarModule,
+    SharedModule,
   ],
   exports: [
     DynamicDataTableComponent,

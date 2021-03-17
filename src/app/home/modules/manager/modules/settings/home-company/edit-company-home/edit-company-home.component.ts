@@ -20,6 +20,8 @@ import { IViewParam } from '@shared/models/view.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ICity } from '@shared/models/city.model';
 import { userType } from '@shared/models/userProfileType.model';
+import { SocialNetwork } from '@core/services/utils/social-network';
+import { INetworkSocial } from '@shared/models/social-network.model';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -39,6 +41,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private uploadService: UploadService,
               private location: Location,
               private router: Router,
+              private  socialNetwork: SocialNetwork,
   ) {
   }
   avatar: any;
@@ -59,6 +62,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   vatList: IViewParam[] = [];
   activityCodeList: IViewParam[] = [];
   currenciesList: IViewParam[] = [];
+  showList: INetworkSocial[] = [];
   /** subscription */
   subscription: Subscription;
 
@@ -108,6 +112,12 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.getRefData();
         this.getJsonData();
         this.setForm();
+        this.showList = this.socialNetwork.getListNetwork(this.company, 'company');
+        this.showList = this.showList.filter((item) => {
+          if (item.value ) {
+            return item;
+          }
+        });
       }
     }, (err) => console.error(err)));
   }
@@ -142,6 +152,12 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       linkedinAccount: [''],
       twitterAccount: [''],
       youtubeAccount: [''],
+      whatsappAccount: [''],
+      facebookAccount: [''],
+      skypeAccount: [''],
+      otherAccount: [''],
+      instagramAccount: [''],
+      viberAccount: [''],
       legalFormCtrl: [''],
       activityCodeCtrl: [''],
       currencyCtrl: [''],
@@ -185,6 +201,12 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       linkedinAccount: this.company['linkedin_url'],
       twitterAccount: this.company['twitter_url'],
       youtubeAccount: this.company['youtube_url'],
+      whatsappAccount: this.company['whatsapp_url'],
+      facebookAccount: this.company['facebook_url'],
+      skypeAccount: this.company['skype_url'],
+      otherAccount: this.company['other_url'],
+      instagramAccount: this.company['instagram_url'],
+      viberAccount: this.company['viber_url'],
       faxNbr: this.company?.fax_nbr,
       phoneNbr1: (this.company?.phone_nbr1) ? (this.company?.phone_nbr1) : null,
       phoneNbr2: (this.company?.phone_nbr2) ? (this.company?.phone_nbr2) : null,

@@ -14,7 +14,6 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
 import { ITheme } from '@shared/models/theme.model';
-import { listColor } from '@shared/statics/list-color.static';
 import { userType } from '@shared/models/userProfileType.model';
 import { IUserModel } from '@shared/models/user.model';
 
@@ -138,17 +137,9 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    */
   getSelectedTheme(): void {
     const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred[ 'email_address'];
-    this.listColor = listColor;
-    if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-      this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-          element.status = true;
-        }
-      });
-    }
+    this.email = cred['email_address'];
+    this.listColor = this.utilService.getTheme();
   }
-
   /**
    * @description toggle sidenav
    */

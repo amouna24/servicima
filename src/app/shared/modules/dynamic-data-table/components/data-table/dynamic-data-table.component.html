@@ -4,7 +4,7 @@
         <h1 class="steel font-size-24 font-medium" >{{ header.title }}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button  class="btn-medium bg-cerulean-blue" routerLink="{{ header.addActionURL }}">
+        <button [disableControl]="{'feature':'SOURCING_ACCESS'}" mat-raised-button  class="btn-medium bg-cerulean-blue" routerLink="{{ header.addActionURL }}">
           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
           </mat-icon>
           &nbsp;
@@ -132,7 +132,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell
-                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop]?.length > 30 ? row[col.prop].substring(0, 20)+'...' : row[col.prop] }}
+                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
                       </td>
                     </ng-container>
                   </ng-container>

@@ -8,7 +8,7 @@ import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { SocialNetwork } from '@core/services/utils/socialNetwork';
+import { SocialNetwork } from '@core/services/utils/social-network';
 import { UtilsService } from '@core/services/utils/utils.service';
 
 import { IViewParam } from '@shared/models/view.model';
@@ -40,7 +40,7 @@ export class UserComponent implements OnInit, OnDestroy {
   leftList: INetworkSocial[];
   rightList: INetworkSocial[];
   refData: { } = { };
-  showList = [];
+  showList: INetworkSocial[] = [];
   /** subscription */
   private subscriptions: Subscription[] = [];
 
@@ -102,6 +102,7 @@ export class UserComponent implements OnInit, OnDestroy {
           (data) => {
             this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], this.refData ['ROLE']);
           });
+        this.getListNetworkSocial(this.user, 'user');
       });
       /***************** current user show your profile *****************
        *******************************************************************/
@@ -197,8 +198,8 @@ export class UserComponent implements OnInit, OnDestroy {
       return item;
       }
     });
-    console.log(this.showList, 'show list');
   }
+
   /**
    * @description: destroy
    */

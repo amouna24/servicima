@@ -38,17 +38,19 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   modelConfig = {
     title: '',
     button: {
-      buttonRight: {
-        visible: true,
-        name: 'save',
-        color: ' #f3f6f9',
-        background: '#0067e0'
-      },
       buttonLeft: {
         visible: true,
         name: 'cancel',
         color: '#232323',
-        background: '#f3f6f9'
+        background: '#f3f6f9',
+        nextValue: false,
+      },
+      buttonRight: {
+        visible: true,
+        name: 'save',
+        color: ' #f3f6f9',
+        background: '#0067e0',
+        nextValue: true,
       },
     },
     style: { }
@@ -185,7 +187,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
    * param res: boolean
    */
   onNotify(res: boolean): void {
-    if (res) {
+    if (!res) {
       this.dialogRef.close();
     } else {
       if (this.data.company_name) {
@@ -346,7 +348,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
       } else if (element.value === 'youtube') {
         object.youtube_url = this.getPseudo(this.getInput(element.name), 'https://www.youtube.com/');
       } else if (element.value === 'instagram') {
-        object.instagram_url = this.getPseudo(this.getInput(element.name), 'https://www.insatgram.com/');
+        object.instagram_url = this.getPseudo(this.getInput(element.name), 'https://www.instagram.com/');
       } else if (element.value === 'whatsapp') {
         object.whatsapp_url = this.getInput(element.name);
       } else if (element.value === 'viber') {

@@ -9,7 +9,7 @@ import { AssetsDataService } from '@core/services/assets-data/assets-data.servic
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { SocialNetwork } from '@core/services/utils/socialNetwork';
+import { SocialNetwork } from '@core/services/utils/social-network';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
@@ -31,7 +31,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
-              private  socialNetwork: SocialNetwork,
+              private socialNetwork: SocialNetwork,
               private uploadService: UploadService,
 ) { }
 
@@ -58,7 +58,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   rightList: INetworkSocial[];
   /** subscription */
   subscription: Subscription;
-  showList = [];
+  showList: INetworkSocial[] = [];
   /** subscription */
   private subscriptions: Subscription[] = [];
   /**
