@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { IModalModel } from '@shared/models/modal.model';
 
 @Component({
   selector: 'wid-model-modal',
@@ -6,24 +7,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  @Input() modelConfig: {
-    title: string,
-    button: {
-      buttonLeft: {
-        visible: boolean,
-        name: string,
-        color: string,
-        background: string
-      },
-      buttonRight: {
-        visible: boolean,
-        name: string,
-        color: string,
-        background: string
-      },
-    },
-    style: any
-  };
+  @Input() modelConfig: IModalModel;
   @Input() form;
   @Input() existForm;
   @Output() emitter: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -32,10 +16,7 @@ export class ModalComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  confirm() {
-    this.emitter.emit(true);
-  }
-  cancel() {
-    this.emitter.emit(false);
+  confirm(nextValue) {
+    this.emitter.emit(nextValue);
   }
 }

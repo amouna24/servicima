@@ -16,14 +16,9 @@ export class ShowModalComponent implements OnInit {
         visible: true,
         name: 'Close',
         color: '#232323',
-        background: '#f3f6f9'
-      },
-      buttonRight: {
-        visible: false,
-        name: 'save',
-        color: ' #f3f6f9',
-        background: '#0067e0'
-      },
+        background: '#f3f6f9',
+        nextValue: false,
+      }
     },
     style: {
       colorTitle: '#0067e0',
@@ -51,7 +46,7 @@ export class ShowModalComponent implements OnInit {
    * param res: boolean
    */
   onNotify(res: boolean): void {
-    if (res) {
+    if (!res) {
       this.dialogRef.close();
     }
   }

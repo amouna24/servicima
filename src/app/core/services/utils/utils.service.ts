@@ -4,12 +4,12 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { IError } from '@shared/models/error.model';
-import { INetworkSocial } from '@shared/models/social-network.model';
 import { IViewParam } from '@shared/models/view.model';
 import { IIcon } from '@shared/models/icon.model';
 
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
+import { ITheme } from '@shared/models/theme.model';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -20,7 +20,6 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
-
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
@@ -269,5 +268,37 @@ export class UtilsService {
    *************************************************************************/
   getErrorPage(errCode: string, pages: IError[] = errorPages): IError {
     return pages.find(page => page.code === errCode);
+  }
+
+  /**************************************************************************
+   * @description get Theme
+   * @return list of theme
+   *************************************************************************/
+  getTheme(): ITheme[] {
+    const cred = this.localStorageService.getItem('userCredentials');
+    const email = cred['email_address'];
+    const listColor = [
+      { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
+      { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
+      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
+      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
+      { 'color': 'cobalt', 'status': false , 'image': 'cobalt.png'},
+      { 'color': 'blue', 'status': false , 'image': 'blue.png'},
+      { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
+      { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
+      { 'color': 'lighterPurple', 'status': false , 'image': 'lighterPurple.png'},
+      { 'color': 'mango', 'status': false , 'image': 'mango.png'},
+      { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
+      { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
+      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
+    ];
+    if (this.localStorageService.getItem(this.hashCode(email))) {
+       listColor.map(element => {
+        if (element.color === this.localStorageService.getItem(this.hashCode(email))) {
+          element.status = true;
+        }
+      });
+      return listColor;
+    }
   }
 }

@@ -8,7 +8,7 @@
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="user" />
       </div>
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
-        <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
+        <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <div fxLayout="column" fxFlex="80" fxLayoutGap="5px">
           <div fxLayout="row">
             <mat-icon class="icon material-icons-outlined icon-male cool-grey" svgIcon="wi_email">
@@ -33,8 +33,7 @@
                 <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
               </div>
               <div fxLayout="column" fxFlex="85">
-                <a [href]=list.lien target="_blank" class="font-size-12 white">{{list.value.length > 14 ?
-                  list.value.substring(0, 11)+'...' : list.value}}</a>
+                <a [href]=list.lien target="_blank" class="font-size-12 white">{{list.value| spliceText: 14}}</a>
               </div>
             </div>
           </button>
@@ -46,15 +45,15 @@
       <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
         <div fxLayout="column" fxFlex="100" class="m-l-20">
           <div fxLayout="column" fxFlex="90">
-            <div fxLayout="row" fxLayoutGap="20px" style="margin-top: 5%">
+            <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{'margin-top': '5%'}">
               <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
             </div>
             <div fxLayout="row">
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
-                  <span> {{'user.firstname'| translate}}: </span>
-                  <span class="steel"> {{user?.first_name}}</span>
-                </div>
+                  <span> {{'user.firstname'| translate }}: </span>
+                  <span class="steel"> {{user?.first_name | spliceText: 40}}</span>
+                  </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.lang'| translate}}: </span>
                   <span class="steel"> {{langDesc ? langDesc : 'none'}} </span>
@@ -63,7 +62,7 @@
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.lastname'| translate}}: </span>
-                  <span class="steel"> {{user?.last_name}}</span>
+                  <span class="steel"> {{user?.last_name | spliceText: 40}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.gender'| translate}}: </span>
@@ -139,7 +138,7 @@
                       <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
                                                      'color':element.lien ===null ? 'auto' : '#1bc5bd',
                                                      'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
-                        [href]=element.lien class="font-size-12 steel"> {{element.value}} </a>
+                        [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                     </div>
                   </div>
 
@@ -157,7 +156,7 @@
                       <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
                                                      'color':element.lien ===null ? 'auto' : '#1bc5bd',
                                                      'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
-                        [href]=element.lien class="font-size-12 steel"> {{element.value}} </a>
+                        [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                     </div>
                   </div>
                 </div>
@@ -167,9 +166,9 @@
           </div>
           <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
-              <button mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">
-                {{'user.edit'| translate}}
-              </button>
+                <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">
+                  {{'user.edit'| translate}}
+                </button>
             </div>
           </div>
         </div>

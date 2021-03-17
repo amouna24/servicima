@@ -5,7 +5,6 @@ import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subject } from 'rxjs';
-import { listColor } from '@shared/statics/list-color.static';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
@@ -217,18 +216,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred['email_address'];
-    this.listColor = listColor;
-    if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-      this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-          element.status = true;
-        }
-      });
-    //  this.displayClass();
-    }
-
+  this.listColor = this.utilService.getTheme();
     this.displayClass();
     this.userService.isLoadingAction$.subscribe(
       (res) => {

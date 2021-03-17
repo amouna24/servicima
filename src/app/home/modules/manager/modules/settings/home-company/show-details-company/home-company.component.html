@@ -7,7 +7,7 @@
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
       </div>
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
-        <span class="brownish-grey font-size-25">{{user?.first_name}} {{ user?.last_name}}</span>
+        <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
       </div>
       <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
@@ -21,8 +21,7 @@
                 <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
               </div>
               <div fxLayout="column" fxFlex="85">
-                <a [href]=list.lien target="_blank" class="font-size-12 white">{{list.value.length > 14 ?
-                  list.value.substring(0, 11)+'...' : list.value}}</a>
+                <a [href]=list.lien target="_blank" class="font-size-12 white">{{list.value| spliceText: 14}}</a>
               </div>
             </div>
           </button>
@@ -31,10 +30,11 @@
     </div>
     <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
       fxFlexOffset="50px">
-      <div fxLayout="column" fxFlex="90" fxLayoutGap="20px">
-        <wid-scrollbar class="scrollbar">
-          <div fxLayout="column" fxFlex="100" class="m-l-20">
-            <div fxLayout="column" fxFlex="100" style="margin-top: 5%">
+      <div fxLayout="column" fxFlex="85" fxLayoutGap="20px">
+
+          <div fxLayout="column" fxFlex="96" class="m-l-20">
+            <wid-scrollbar class="scrollbar">
+            <div fxLayout="column" fxFlex="100" [ngStyle]="{'margin-top': '5%'}">
               <div fxLayout="row" fxLayoutGap="20px">
                 <h5 class="steel">{{'company.generalinformation' | translate}} </h5>
               </div>
@@ -149,7 +149,7 @@
                         <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
                                                        'color':element.lien ===null ? 'auto' : '#1bc5bd',
                                                        'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
-                          [href]=element.lien class="font-size-12 steel"> {{element.value}} </a>
+                          [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
                     </div>
 
@@ -169,19 +169,19 @@
                         <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
                                                        'color':element.lien ===null ? 'auto' : '#1bc5bd',
                                                        'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
-                          [href]=element.lien class="font-size-12 steel"> {{element.value}} </a>
+                          [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            </wid-scrollbar>
           </div>
-        </wid-scrollbar>
       </div>
       <div fxLayout="column" fxFlex="10" fxLayoutGap="20px" fxLayoutAlign="center">
         <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10 m-b-10" fxLayoutGap="15px">
-          <button mat-button color="accent" [routerLink]="['/manager/settings/home-company/edit-company']"
+          <button [disableControl]="{'feature':'SOURCING_ACCESS'}" mat-button color="accent" [routerLink]="['/manager/settings/home-company/edit-company']"
             mat-raised-button class="btn-small white">
             {{'company.edit' | translate}}
           </button>

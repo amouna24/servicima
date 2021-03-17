@@ -12,17 +12,12 @@ export class ShowExtensionComponent implements OnInit {
     title: 'Show contract details',
     button: {
       buttonLeft: {
-        visible: false,
-        name: 'Close',
-        color: '#232323',
-        background: '#f3f6f9'
-      },
-      buttonRight: {
         visible: true,
         name: 'Close',
         color: '#232323',
-        background: '#f3f6f9'
-      },
+        background: '#f3f6f9',
+        nextValue: false,
+      }
     },
     style: {
       colorTitle: '#0067e0',

@@ -2,6 +2,8 @@ export interface INetworkSocial {
   placeholder: string;
   value: string;
   lien?: string;
+  icon?: string;
+  color?: string;
 }
 export interface IListNameNetworkSocial {
   selected: boolean;
