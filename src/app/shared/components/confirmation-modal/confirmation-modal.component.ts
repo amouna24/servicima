@@ -97,9 +97,9 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: this.data.status === 'ACTIVE' ? 'Deactivate' : 'Activate',
-              color: this.data.status === 'ACTIVE' ? 'white' : 'white',
-              background: this.data.status === 'ACTIVE' ? '#d24d57' : '#1bc5bd',
+              name: this.data.status === 'A' ? 'Deactivate' : 'Activate',
+              color: this.data.status === 'A' ? 'white' : 'white',
+              background: this.data.status === 'A' ? '#d24d57' : '#1bc5bd',
             },
             buttonRight: {
               visible: true,

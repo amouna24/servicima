@@ -9,6 +9,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IContractExtension } from '@shared/models/contractExtension.model';
 import { ModalService } from '@core/services/modal/modal.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { ShowExtensionComponent } from '../show-extension/show-extension.component';
 
@@ -54,6 +55,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
     private contractService: ContractsService,
     private router: Router,
     private modalsServices: ModalService,
+    private userService: UserService,
   ) {
   }
 
@@ -89,7 +91,8 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    */
   getContracts() {
     this.isLoading.next(true);
-    this.contractService.getContracts('').subscribe(
+    this.contractService.getContracts(`?email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .subscribe(
       (response) => {
         // this.contractsList = response;
         // this.dataSource = new MatTableDataSource(this.contractsList);
@@ -137,7 +140,14 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           this.contactExtensionInfo = res[0];
-          this.modalsServices.displayModal('showExtension', { ext : this.contactExtensionInfo, file: Contract.attachments }, '40%')
+          this.modalsServices.displayModal(
+            'showExtension',
+            {
+              contract: Contract,
+              ext : this.contactExtensionInfo,
+              file: Contract.attachments
+            },
+            '55%')
             .pipe(
               takeUntil(this.destroy$)
             )

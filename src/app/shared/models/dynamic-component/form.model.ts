@@ -26,7 +26,8 @@ export enum FieldsType {
   SELECT = 'select',
   SELECT_WITH_SEARCH = 'selectWithSearch',
   SLIDE_TOGGLE = 'slideToggle',
-  UPLOAD_FILE = 'uploadFile'
+  UPLOAD_FILE = 'uploadFile',
+  DATE_PICKER = 'datePicker',
 }
 
 export interface IFieldsObject {

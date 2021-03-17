@@ -128,16 +128,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Start date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
+          type: FieldsType.DATE_PICKER,
           formControlName: 'contract_start_date'
         },
         {
           label: 'End date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
-          formControlName: 'contract_start_date'
+          type: FieldsType.DATE_PICKER,
+          formControlName: 'contract_end_date'
         },
       ],
     },
@@ -188,15 +186,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Company signature date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
+          type: FieldsType.DATE_PICKER,
           formControlName: 'signature_company_date',
         },
         {
           label: 'Contractor signature date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
+          type: FieldsType.DATE_PICKER,
           formControlName: 'signature_contractor_date',
         },
       ],
@@ -241,15 +237,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Start date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
+          type: FieldsType.DATE_PICKER,
           formControlName: 'extension_start_date',
         },
         {
           label: 'End date',
           placeholder: 'dd/mm/yyyy',
-          type: FieldsType.INPUT,
-          inputType: InputType.DATE,
+          type: FieldsType.DATE_PICKER,
           formControlName: 'extension_end_date',
         },
       ],
@@ -368,8 +362,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
     this.statusList.next(this.utilsService.refData['CONTRACT_STATUS']);
+    this.subscriptions.push(
+      this.userService.connectedUser$.subscribe((data) => {
+      if (!!data) {
+        this.userInfo = data;
+        this.companyEmail = data.user[0]['company_email'];
+        this.getPaymentTerms();
+      }
+    })
+    );
     this.contractorService
-      .getContractors(`?contractor_type=${this.type}`)
+      .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
       .pipe(
         takeUntil(this.destroy$)
       )
@@ -387,30 +390,20 @@ export class AddContractComponent implements OnInit, OnDestroy {
           console.log(error);
         },
       );
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        console.log(data.user[0]['company_email']);
-        console.log(data);
-        this.userInfo = data;
-        this.companyEmail = data.user[0]['company_email'];
-/*        this.collaboratorsList.next(data)*/
-        this.getPaymentTerms();
-      }
-    }));
   }
 
   /* Init Contract Form*/
-  initContractForm(contract: IContract, contractExtension: IContractExtension) {
+  async initContractForm(contract: IContract, contractExtension: IContractExtension) {
     this.contractForm = this.formBuilder.group({
       INFORMATION: this.formBuilder.group({
         contractor_code: [contract === null ? '' : contract.contractor_code, Validators.required],
-        collaborator_email: [contract === null ? '' : contract.collaborator_email, Validators.required],
+        collaborator_email: [contract === null ? '' : contract.collaborator_email, [Validators.required, Validators.email]],
         contract_type: [contract === null ? '' : contract.contract_type],
-        contract_date: [contract === null ? '' : contract.contract_date, [Validators.required]],
+        contract_date: [contract === null ? '' : contract.contract_date],
         contract_start_date: [contract === null ? '' : contract.contract_start_date],
         contract_end_date: [contract === null ? '' : contract.contract_end_date],
         contract_status: [contract === null ? '' : contract.contract_status],
-        attachments: [contract === null ? '' : this.getFileName(contract.attachments)],
+        attachments: [contract === null ? '' : await this.getFileName(contract.attachments)],
       }),
       SIGNER: this.formBuilder.group({
         signer_company_email: [contract === null ? '' : contract.signer_company_email],
@@ -486,7 +479,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Create New Contract
    */
   async createNewContract(data: FormGroup) {
-    const Contract = this.contractForm.value;
+    const Contract = {
+      ...this.contractForm.controls.INFORMATION.value,
+      ...this.contractForm.controls.SIGNER.value,
+      ...this.contractForm.controls.RATE.value,
+      ...this.contractForm.controls.CONTRACT_EXTENSION.value,
+    };
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
     Contract.contract_code = this.canUpdate(this.contractId) ?
@@ -591,17 +589,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description : GET IMAGE FROM BACK AS BLOB
    *  create Object from blob and convert to url
    *************************************************************************/
-  getFileName(id): string {
-      let caption;
+  getFileName(id) {
       this.uploadService.getFilesByName(id).subscribe(
         (data) => {
-          console.log('data', data[0]);
-          caption = data[0].caption;
-          console.log('caption', caption);
+          this.contractForm.patchValue( {
+            INFORMATION: {
+              attachments: data[0].caption
+                        }
+            }
+          );
         }, error => {
           console.log(error);
         });
-      return caption;
   }
 
   getFile(obj) {

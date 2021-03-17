@@ -118,6 +118,7 @@ import { ErrorComponent } from './components/error/error.component';
     ErrorComponent,
     SplashComponent,
     CapitalizeFirstLetter,
+    ModalComponent,
   ]
 })
 export class SharedModule { }

@@ -1,39 +1,85 @@
-<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
-  <div class="title-container">
-    <span>Contact Info</span>
+<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" class="full-height ">
+  <div modal-body fxLayout="row wrap" fxLayout.xs="row" fxFlexFill fxLayoutAlign="center space-between">
+    <section fxLayout="column" fxFlex="80">
+        <div fxLayout="row">
+          <h1 class="steel font-size-18">Information </h1>
+        </div>
+        <div fxLayout="row" fxFlex="100">
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="black font-size-12">Code: {{  data.contract.contractKey.contract_code }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Contractor name: {{ data.contract.contractor_code }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Start date: {{ data.contract.contract_start_date | date }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Attachments: <a href="http://192.168.1.22:8067/show/{{data.file}}" target="_blank" mat-list-item><mat-icon>attachment</mat-icon> </a></mat-list-item>
+            </mat-list>
+          </div>
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="black font-size-12">Status: {{  data.contract.contract_status }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Collaborator email: {{ data.contract.collaborator_email }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">End date: {{ data.contract.contract_end_date | date }}</mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Signer </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Company email: {{ data.contract.signer_company_email }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Company signature date: {{ data.contract.signature_company_date | date }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Contractor email: {{ data.contract.signer_contractor_email }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Contractor signature date: {{ data.contract.signature_contractor_date | date }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Rate </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Rate: {{ data.contract.contract_rate }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Payment: {{ data.contract.payment_terms }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Currency: {{ data.contract.currency_cd }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Extension </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Code: {{ data.ext.contractExtensionKey.extension_code }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Start date: {{ data.ext.extension_start_date | date }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Rate: {{ data.ext.extension_rate }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Status: {{ data.ext.extension_status }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">End Date: {{ data.ext.extension_end_date | date }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Currency: {{ data.ext.extension_currency_cd }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
   </div>
-  <div class="close-button-container">
-    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
-      <mat-icon class="icon material-icons-outlined">close</mat-icon>
-    </button>
-  </div>
-</mat-toolbar>
-<mat-dialog-content class="modal-body-container">
+</wid-model-modal>
 
-  <div class="config-wrapper" fxLayout="row wrap" fxLayout.xs="row" fxFlexFill>
-    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-      <mat-list role="list">
-        <mat-list-item role="listitem">EXTENSION START DATE</mat-list-item>
-        <mat-list-item role="listitem">EXTENSION END DATE</mat-list-item>
-        <mat-list-item role="listitem">EXTENSION STATUS</mat-list-item>
-        <mat-list-item role="listitem">EXTENSION RATE</mat-list-item>
-        <mat-list-item role="listitem">EXTENSION CURRENCY CODE</mat-list-item>
-        <mat-list-item role="listitem">CONTRACT FILE</mat-list-item>
-      </mat-list>
-    </div>
-    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-      <mat-list role="list">
-        <mat-list-item role="listitem">{{ data.ext.extension_start_date | date }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.ext.extension_end_date | date }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.ext.extension_status }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.ext.extension_rate }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.ext.extension_currency_cd }}</mat-list-item>
-        <a href="http://192.168.1.22:8067/show/{{data.file}}" mat-list-item>Show Contract
-        </a>
-      </mat-list>
-    </div>
-  </div>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button [mat-dialog-close]="data">Cancel</button>
-</mat-dialog-actions>
