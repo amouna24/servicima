@@ -10,9 +10,15 @@ import { IIcon } from '@shared/models/icon.model';
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
 import { ITheme } from '@shared/models/theme.model';
+import { HttpClient } from '@angular/common/http';
+import { IRefdataModel } from '@shared/models/refdata.model';
+import { ICompanyTaxModel } from '@shared/models/companyTax.model';
+import { IFeatureModel } from '@shared/models/feature.model';
+import { ICompanyPaymentTermsModel } from '@shared/models/companyPaymentTerms.model';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +32,8 @@ export class UtilsService {
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private matSnackBar: MatSnackBar
+    private matSnackBar: MatSnackBar,
+    private httpClient: HttpClient,
   ) {
 
   }
@@ -114,7 +121,18 @@ export class UtilsService {
         value.companyKey.application_id === this.getApplicationID(applicationCode)
       )._id;
   }
-
+  /**************************************************************************
+   * @description Get Company ID
+   * @param COMPANY_EMAIL the email_address
+   * @param APPLICATION_CODE of Application
+   * @return ID of company
+   *************************************************************************/
+  getCompanyIdd(companyEmail: string): string {
+    return this.appInitializerService.companiesList
+      .find(value =>
+        value.companyKey.email_address === companyEmail
+      )._id;
+  }
   /**************************************************************************
    * @description Get Application NAME
    * @param APPLICATION_ID the application id
@@ -134,7 +152,7 @@ export class UtilsService {
     return this.appInitializerService.companyList
       .find(value =>
         value._id === companyId
-      ).name;
+      ).company_name;
   }
 
   /**
@@ -179,7 +197,7 @@ export class UtilsService {
   differenceDay(date1: Date, date2: number): number {
     const endDate: any = new Date(date1);
     const startDate: any = new Date(date2);
-    let days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    let days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
     if (days < 0) {
       days = 0;
       return days;
@@ -303,5 +321,51 @@ export class UtilsService {
     } else {
       return this.listColor;
     }
+  }
+  getRefTypeId(type) {
+   return this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id;
+  }
+  getRole(company, application) {
+    const id = this.getRefTypeId('ROLE');
+      return this.httpClient
+        .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
+    }
+  getRoleAll(company, application) {
+    const id = this.getRefTypeId('ROLE');
+    return this.httpClient
+      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
+  }
+  getPaymentMethode(company, application) {
+    const id = this.getRefTypeId('PAYMENT_MODE');
+    return this.httpClient
+      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
+  }
+  getPaymentMethodeAll(company, application) {
+    const id = this.getRefTypeId('PAYMENT_MODE');
+    return this.httpClient
+      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
+  }
+  getCompanyPaymentTerms(email) {
+    return this.httpClient
+      .get<ICompanyPaymentTermsModel[]>(`${environment.companyPaymentTermsApiUrl}?company_email=${email}`);
+  }
+  getCompanyTax(email) {
+    return this.httpClient
+      .get<ICompanyTaxModel[]>(`${environment.companyTaxApiUrl}?company_email=${email}`);
+  }
+  /**
+   * @description Get all existing features
+   */
+  getAllFeatures(language) {
+    return this.httpClient
+      .get<IFeatureModel[]>(`${environment.featuresApiUrl}?language_id=${language}`);
+  }
+  addRole(role) {
+    return this.httpClient
+      .post(`${environment.refDataApiUrl}`, role);
+  }
+  addFeatureRole(role) {
+    return this.httpClient
+      .post(`${environment.companyRoleFeaturesApiUrl}`, role);
   }
 }

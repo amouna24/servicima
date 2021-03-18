@@ -11,6 +11,7 @@ import { IContractorContact } from '@shared/models/contractorContact.model';
 import { takeUntil } from 'rxjs/operators';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { UserService } from '@core/services/user/user.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { ShowModalComponent } from '../show-modal/show-modal.component';
 
@@ -38,13 +39,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
   private subscriptions: Subscription[] = [];
-
+  subscriptionModal: Subscription;
   /**************************************************************************
    * @description UserInfo
    *************************************************************************/
   userInfo: IUserInfo;
   contractorContactInfo: IContractorContact;
-
   /**************************************************************************
    * @description UserInfo
    *************************************************************************/
@@ -64,6 +64,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private router: Router,
     private modalsServices: ModalService,
+    private uploadService: UploadService,
   ) {
   }
 
@@ -132,8 +133,9 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   getContractors() {
     this.isLoading.next(true);
-    this.contractorService.getContractors(`?contractor_type=${this.type}&?email_address=${this.userInfo.user[0]['company_email']}`)
-      .pipe(
+    this.contractorService.getContractors(
+      `?contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
+    ).pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(
@@ -168,10 +170,16 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Contractor Status
    *************************************************************************/
   onStatusChange(Contractor) {
+    console.log('contra', Contractor);
     const confirmation = {
-      sentence: 'to change the status of this user',
+      code: 'changeStatus',
+      title: 'change the status',
+      status: Contractor['status']
     };
-    this.modalsServices.displayConfirmationModal(confirmation)
+    this.subscriptionModal = this.modalsServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .pipe(
+        takeUntil(this.destroy$)
+      )
       .subscribe(
         (res) => {
           if (res === true) {
@@ -182,6 +190,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
                 )
                 .subscribe(
                 (res1) => {
+                  console.log('A', res1);
                   this.getContractors();
                 }
               );
@@ -192,10 +201,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
                 )
                 .subscribe(
                 (res1) => {
+                  console.log('D', res1);
                   this.getContractors();
                 }
               );
             }
+            this.subscriptionModal.unsubscribe();
           }
         }
       );
@@ -222,7 +233,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @param Contractor contractor Object
    * @return: Contact of Contractor
    *************************************************************************/
-  showContact(Contractor: IContractor): void {
+  async showContact(Contractor: IContractor) {
       this.contractorService.getContractorsContact(
         `?contractor_code=${Contractor.contractorKey.contractor_code}&email_address=${Contractor.contractorKey.email_address}`
       )
@@ -232,7 +243,13 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           this.contractorContactInfo = res[0];
-          this.modalsServices.displayModal('showContact', this.contractorContactInfo, '40%')
+          this.modalsServices.displayModal(
+            'showContact',
+            {
+              contractor: Contractor,
+              contractorInfo: this.contractorContactInfo,
+            },
+            '55%')
             .pipe(
               takeUntil(this.destroy$)
             )

@@ -12,8 +12,8 @@ import { UpgradeLicenceComponent } from './licence/upgrade-licence/upgrade-licen
 import { LicenceExpirationComponent } from './licence/licence-expiration/licence-expiration.component';
 import { LicenceManagementComponent } from './licence/licence-management/licence-management.component';
 import { PaymentMethodsManagementComponent } from './payment/payment-methods-management/payment-methods-management.component';
-import { PaymentInfoComponent } from './payment/payment-info/payment-info.component';
-import { RoleManagementComponent } from './role-management/role-management.component';
+import { PaymentInfoComponent } from './payment/payment-info/payment-info-company-management/payment-info.component';
+import { RoleManagementComponent } from './role-management/role-management/role-management.component';
 
 @NgModule({
   declarations: [

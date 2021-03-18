@@ -76,6 +76,14 @@ export const ManagerSettingMenu: IMenu[] = [
     feature: 'OTHER',
     children: [
       {
+        state: 'home-company',
+        name: 'Company Profile',
+        type: 'link',
+        icon: 'wi_company',
+        //  feature: 'company-profile',
+        feature: 'SOURCING_ACCESS' // change feature with correct name
+      },
+      {
         state: 'departments',
         name: 'Departments',
         icon: 'assignment',

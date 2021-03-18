@@ -19,8 +19,8 @@
         *ngIf="isLoading" nbrRow=8
         nbrColumn=2
       ></wid-skeleton-loader>
-      <div fxLayout="row" fxFlex="90" class="p-t-20 font-size-12" *ngIf="!isLoading" form
-        [formGroup]="form" (keydown)="addOrUpdate($event)">
+      <div fxLayout="row" fxFlex="89" class="p-t-20 font-size-12" *ngIf="!isLoading" form
+        [formGroup]="form">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar >
           <div fxLayout="row">
@@ -323,7 +323,7 @@
                 <div fxLayout="column" fxFlex="80">
                   <label>{{'homecompany.contactemail' | translate | uppercase}} </label>
                   <mat-form-field appearance="outline">
-                    <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="phoneNbr2"
+                    <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="contactEmail"
                            [ngStyle.xs]="{'font-size': '15px'}" />
                   </mat-form-field>
                 </div>
@@ -361,11 +361,11 @@
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
               <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
+                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
                   <span class="font-size-14"> {{ 'company.reset' | translate}}</span>
                 </button>
-                <button mat-button mat-raised-button class="btn-medium white" color="primary" [disableControl]="{'feature':'SOURCING_ACCESSs', 'validator': form.valid}"
-                  (click)="addOrUpdate($event)" >
+                <button mat-button mat-raised-button class="btn-medium white" color="primary"
+                  (click)="addOrUpdate()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14">{{ 'user.save' | translate}}</span>
                   </div>

@@ -4,9 +4,10 @@ import { SharedModule } from '@shared/shared.module';
 import { DataTableModule } from '@dataTable/data-table.module';
 
 import { RoleRoutingModule } from './role-management-routing.module';
+import { AddRoleComponent } from './add-role/add-role.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [AddRoleComponent],
   imports: [
     CommonModule,
     RoleRoutingModule,

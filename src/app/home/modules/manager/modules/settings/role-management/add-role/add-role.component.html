@@ -1,0 +1,303 @@
+<!--<wid-model-modal [formGroup]="form" [modelConfig]="modelConfig" (emitter)="onNotify($event)"  class="full-height ">
+  <div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12" fxFlexOffset="9">
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+   <div fxLayout="column" fxFlex="40">
+    <label class="font-size-12 black-three required">{{'addrole.company' | translate | capitalizeFirstLetter}} </label>
+    <mat-form-field appearance="outline">
+      <input autocomplete="off" matInput required [placeholder]=" 'addrole.company' | translate | capitalizeFirstLetter"
+             formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" />
+      <mat-error class="wid-error-messages" *ngIf="form.controls.company?.errors?.required">
+        {{ 'general.required' | translate }}</mat-error>
+    </mat-form-field>
+   </div>
+   <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'addrole.language' | translate | capitalizeFirstLetter}} </label>
+    <mat-form-field appearance="outline">
+      <mat-select [placeholder]=" 'addrole.language' | translate | uppercase" formControlName="languageCtrl">
+        <mat-option>
+          <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                 noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="languageFilterCtrl">
+          </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let language of filteredLanguage| async" [value]="language.value">
+          {{language.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error class="wid-error-messages" *ngIf="form.value.languageCtrl?.errors?.required">
+        {{ 'manager.reqfield' | translate }} </mat-error>
+    </mat-form-field>
+    </div>
+    </div>
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+      <div fxLayout="column" fxFlex="40">
+        <label class="font-size-12 black-three  required">{{'addrole.rolename' | translate | uppercase}} </label>
+        <mat-form-field appearance="outline">
+          <input autocomplete="off" matInput required [placeholder]=" 'addrole.rolename' | translate | capitalizeFirstLetter"
+                 formControlName="roleName" [ngStyle.xs]="{'font-size': '15px'}" />
+          <mat-error class="wid-error-messages" *ngIf="form.controls.roleName?.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+        <label class="font-size-12 black-three  required">{{'addrole.feature' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <mat-select [placeholder]=" 'addrole.feature' | translate" [formControl]="toppingsControl" multiple
+                      #singleSelect>
+            <mat-option>
+              <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                     noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                     formControlName="legalFormFilterCtrl">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="legalForm.value">
+              {{legalForm.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="40" >
+        <label class="font-size-12 black-three  required">{{'addrole.roledesc' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <textarea [placeholder]=" 'addrole.roledesc' | translate" rows="7"
+                    formControlName="roleDescription" autocomplete="off" matInput
+                    [ngStyle.xs]="{'font-size': '15px'}">
+                  </textarea>
+          <mat-error class="wid-error-messages" *ngIf="form.controls.roleDescription?.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" fxlayoutgap="20px">
+          <label class="font-size-12 black-three  required">{{'addrole.featurerole' | translate | capitalizeFirstLetter}}  </label>
+          </div>
+          <div fxLayout="row" style="border: 2px solid #afb1b8;padding: 15px;width: 92%" >
+          <mat-select-trigger>
+            <mat-chip-list>
+              <mat-chip *ngFor="let topping of toppingsControl.value"
+                        [removable]="true" (removed)="onToppingRemoved(topping)">
+                {{ topping }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </mat-select-trigger>
+      <br/>
+    </div>
+
+  </div>
+</wid-model-modal>
+
+-->
+
+
+
+<!--
+<div  fxLayout="column" fxFlex="100">
+<div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+  <div fxLayout="column" fxFlex="56">
+    <h1 class="steel font-size-24 font-medium">Dgdhtht</h1>
+  </div>
+  <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+    <img src="assets/icons/close.svg" class="bg-close">
+  </div>
+
+
+</div>
+<div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+  <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+</div>
+
+  <div fxLayout="column"  [formGroup]="form"  style="
+    margin-left: 47px;">
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+      <div fxLayout="column" fxFlex="40">
+        <label class="font-size-12 black-three required">{{'addrole.company' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <input autocomplete="off" matInput required [placeholder]=" 'addrole.company' | translate | capitalizeFirstLetter"
+                 formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" />
+          <mat-error class="wid-error-messages" *ngIf="form.controls.company?.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="40" >
+        <label class="font-size-12 black-three  required">{{'addrole.language' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <mat-select [placeholder]=" 'addrole.language' | translate | uppercase" formControlName="languageCtrl">
+            <mat-option>
+              <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                     noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="languageFilterCtrl">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let language of filteredLanguage| async" [value]="language.value">
+              {{language.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error class="wid-error-messages" *ngIf="form.value.languageCtrl?.errors?.required">
+            {{ 'manager.reqfield' | translate }} </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+      <div fxLayout="column" fxFlex="40">
+        <label class="font-size-12 black-three  required">{{'addrole.rolename' | translate | uppercase}} </label>
+        <mat-form-field appearance="outline">
+          <input autocomplete="off" matInput required [placeholder]=" 'addrole.rolename' | translate | capitalizeFirstLetter"
+                 formControlName="roleName" [ngStyle.xs]="{'font-size': '15px'}" />
+          <mat-error class="wid-error-messages" *ngIf="form.controls.roleName?.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+        <label class="font-size-12 black-three  required">{{'addrole.feature' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <mat-select [placeholder]=" 'addrole.feature' | translate" [formControl]="toppingsControl" multiple
+                      #singleSelect>
+            <mat-option>
+              <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                     noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                     formControlName="legalFormFilterCtrl">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="legalForm.value">
+              {{legalForm.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="40" >
+        <label class="font-size-12 black-three  required">{{'addrole.roledesc' | translate | capitalizeFirstLetter}} </label>
+        <mat-form-field appearance="outline">
+          <textarea [placeholder]=" 'addrole.roledesc' | translate" rows="7"
+                    formControlName="roleDescription" autocomplete="off" matInput
+                    [ngStyle.xs]="{'font-size': '15px'}">
+                  </textarea>
+          <mat-error class="wid-error-messages" *ngIf="form.controls.roleDescription?.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" fxlayoutgap="20px">
+      <label class="font-size-12 black-three  required">{{'addrole.featurerole' | translate | capitalizeFirstLetter}}  </label>
+    </div>
+    <div fxLayout="row" style="border: 2px solid #afb1b8;padding: 15px;width: 92%" >
+      <mat-select-trigger>
+        <mat-chip-list>
+          <mat-chip *ngFor="let topping of toppingsControl.value"
+                    [removable]="true" (removed)="onToppingRemoved(topping)">
+            {{ topping }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </mat-select-trigger>
+      <br/>
+    </div>
+  </div>
+
+</div>-->
+<div style="min-height: 100%;">
+<div  fxLayout="column" fxFlex="100" >
+<div fxLayout="row"  fxLayoutAlign="space-around center">
+  <div fxLayout="column" fxFlex="56">
+    <h1 class="steel font-size-24 font-medium">Add Role</h1>
+  </div>
+  <div fxLayout="column" fxFlex="5" fxLayoutAlign="center end" class="font-size-25 steel" (click)="onNotify(false)">
+    <img src="assets/icons/close.svg" class="bg-close">
+  </div>
+</div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+<div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12" style="margin-left: 60px;margin-top: 15px"  >
+
+
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three required">{{'addrole.company' | translate | capitalizeFirstLetter}} </label>
+      <mat-form-field appearance="outline">
+        <input autocomplete="off" matInput required [placeholder]=" 'addrole.company' | translate | capitalizeFirstLetter"
+               formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" />
+        <mat-error class="wid-error-messages" *ngIf="form.controls.company?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'addrole.language' | translate | capitalizeFirstLetter}} </label>
+      <mat-form-field appearance="outline">
+        <mat-select [placeholder]=" 'addrole.language' | translate | uppercase" formControlName="languageCtrl">
+          <mat-option>
+            <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                   noEntriesFoundLabel="{{ 'general.nodata' | translate }}" formControlName="languageFilterCtrl">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let language of filteredLanguage| async" [value]="language.value">
+            {{language.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error class="wid-error-messages" *ngIf="form.value.languageCtrl?.errors?.required">
+          {{ 'manager.reqfield' | translate }} </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three  required">{{'addrole.rolename' | translate | uppercase}} </label>
+      <mat-form-field appearance="outline">
+        <input autocomplete="off" matInput required [placeholder]=" 'addrole.rolename' | translate | capitalizeFirstLetter"
+               formControlName="roleName" [ngStyle.xs]="{'font-size': '15px'}" />
+        <mat-error class="wid-error-messages" *ngIf="form.controls.roleName?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+      <label class="font-size-12 black-three  required">{{'addrole.feature' | translate | capitalizeFirstLetter}} </label>
+      <mat-form-field appearance="outline">
+        <mat-select [placeholder]=" 'addrole.feature' | translate" [formControl]="toppingsControl"   multiple
+                    #singleSelect>
+          <mat-option >
+            <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                   noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                   formControlName="legalFormFilterCtrl">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let legalForm of filteredLegalForm| async" [value]="{'value': legalForm.value,'viewValue':legalForm.viewValue}">
+            {{legalForm.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'addrole.roledesc' | translate | capitalizeFirstLetter}} </label>
+      <mat-form-field appearance="outline">
+          <textarea [placeholder]=" 'addrole.roledesc' | translate" rows="7"
+                    formControlName="roleDescription" autocomplete="off" matInput
+                    [ngStyle.xs]="{'font-size': '15px'}">
+                  </textarea>
+        <mat-error class="wid-error-messages" *ngIf="form.controls.roleDescription?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" fxlayoutgap="20px">
+    <label class="font-size-12 black-three  required">{{'addrole.featurerole' | translate | capitalizeFirstLetter}}  </label>
+  </div>
+
+  <div fxLayout="row" style="border: 2px solid #afb1b8;padding-bottom: 15px;
+  padding-left: 15px;padding-top: 15px;width: 90% ;height: 150px;" >
+    <wid-scrollbar class="scrollbar">
+    <mat-select-trigger>
+
+      <mat-chip-list>
+        <mat-chip *ngFor="let topping of toppingsControl.value"
+                  [removable]="true" (removed)="onToppingRemoved(topping)">
+          {{ topping.viewValue }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-select-trigger>
+    </wid-scrollbar>
+
+    <br/>
+  </div>
+
+</div>
+
+  <div class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" style="margin-right: 10px">
+    <button mat-raised-button class="btn-small bg-pale-grey black-three"(click)="onNotify(false)">Cancel</button>
+    <button mat-raised-button class="btn-small bg-ocean-blue white" (click)="onNotify(true)">Confirm</button>
+  </div>
+
+</div>
+</div>

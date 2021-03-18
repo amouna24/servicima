@@ -16,10 +16,11 @@ export const environment = {
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8090/admin/loadauthstarterdata/v1',
+  featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
-  contractExtensionApiUrl: 'http://192.168.1.22:3061/servicima/contractextensions/v1',
+  contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',

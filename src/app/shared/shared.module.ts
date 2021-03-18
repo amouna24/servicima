@@ -87,7 +87,6 @@ import { ErrorComponent } from './components/error/error.component';
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
@@ -124,6 +123,7 @@ import { ErrorComponent } from './components/error/error.component';
     CapitalizeFirstLetter,
     SpliceText,
     DisableControlDirective,
+    ModalComponent,
   ]
 })
 export class SharedModule { }

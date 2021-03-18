@@ -193,7 +193,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       homeCompany: [{ value: '', disabled: true }],
       roleCtrl: ['', [Validators.required]],
       titleCtrl: [''],
-      languageCtrl: [''],
+      languageCtrl: ['', [Validators.required]],
       titleFilterCtrl: [''],
       languageFilterCtrl: [''],
       roleFilterCtrl: [''],
@@ -231,7 +231,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       roleFilterCtrl: '',
     });
     const list = this.socialNetwork.getListNetwork(this.userInfo, 'company').filter((item) => {
-      if (item.value ) {
+      if (item.value  &&  item.value !== 'link') {
         return item;
       }
     });
@@ -249,7 +249,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.genderList = refData['GENDER'];
     this.typeList = refData['PROFILE_TYPE'];
     this.roleList = refData['ROLE'];
-    console.log(this.roleList, 'role list');
     this.getLanguages();
     this.filteredTitle.next(this.titleList.slice());
     this.filteredLanguage.next(this.languages.slice());

@@ -20,7 +20,7 @@
         *ngIf="isLoading" nbrRow=8
         nbrColumn=2
       ></wid-skeleton-loader>
-      <div fxLayout="row" fxFlex="88" class="p-t-20 font-size-12 " *ngIf="!isLoading" form
+      <div fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 " *ngIf="!isLoading" form
         [formGroup]="form">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar class="scrollbar">
@@ -101,7 +101,7 @@
                 <div fxLayout="column" fxFlex="80">
                   <label class="font-size-12">{{'use.profcellphone' | translate | uppercase}} </label>
                   <mat-form-field appearance="outline">
-                    <input autocomplete="off" matInput [placeholder]=" 'user.directline' | translate | uppercase"
+                    <input autocomplete="off" matInput [placeholder]=" 'use.profcellphone' | translate | uppercase"
                       formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}" />
                   </mat-form-field>
                 </div>
@@ -146,7 +146,7 @@
                 <div fxLayout="column" fxFlex="80">
                   <label class="font-size-12 required">{{'users.role' | translate | uppercase}} </label>
                   <mat-form-field appearance="outline">
-                    <mat-select [placeholder]=" 'user.role' | translate | uppercase" formControlName="roleCtrl"
+                    <mat-select [placeholder]=" 'users.role' | translate | uppercase" formControlName="roleCtrl"
                       #singleSelect>
                       <mat-option>
                         <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
@@ -199,7 +199,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="font-size-12">{{'user.lang' | translate | uppercase}} </label>
+                  <label class="font-size-12 required">{{'user.lang' | translate | uppercase}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'user.lang' | translate | uppercase" formControlName="languageCtrl">
                       <mat-option>
@@ -232,11 +232,13 @@
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
               <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()" >
+                <div *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
+                <button  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14"> {{ 'user.reset' | translate}}</span>
                   </div>
                 </button>
+                </div>
                 <button [disableControl]="{'feature':'SOURCING_ACCESS', 'validator': form.valid}" mat-button mat-raised-button  class="btn-medium white" color="primary"
                   (click)="addOrUpdate()">
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">

@@ -167,7 +167,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="element.value !=='link'">
                       <span class="font-size-12"> {{element.placeholder| translate}}: </span>
                       <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
-                                                     'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                     'color':element.lien ===null ? 'auto' : 'auto',
                                                      'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
                         [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                     </div>
@@ -185,7 +185,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="element.value !=='link'">
                       <span class="font-size-12"> {{element.placeholder| translate}}: </span>
                       <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
-                                                     'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                     'color':element.lien ===null ? 'auto' : 'auto',
                                                      'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
                         [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                     </div>

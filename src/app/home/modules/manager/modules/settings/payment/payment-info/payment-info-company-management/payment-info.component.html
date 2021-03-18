@@ -1,0 +1,12 @@
+
+<div class="page-container">
+  <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'COMPANY_PAYMENT_TERMS'"
+    [header]="{ title: 'Payment info management', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
+    , addActionText: 'New payment info'}"
+    [title]="'Payment info list'"
+    (rowActionData)="switchAction($event)"
+  >
+  </wid-dynamic-data-table>
+</div>

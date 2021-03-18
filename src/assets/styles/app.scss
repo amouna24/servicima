@@ -429,7 +429,7 @@ html body {
    font-size: 10px;
 }
 .font-size-12 {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 .font-size-14 {
     font-size: 14px !important;
@@ -634,7 +634,7 @@ html body {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
-  height: 88vh !important;
+  height: 87vh !important;
   // width: 88vw;
 }
 
@@ -723,3 +723,16 @@ html body {
 .mat-error{
   color: $error-red !important;
 }
+/*******************
+   Bottom Sheet
+*******************/
+.bottom-sheet {
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 24px !important;
+  padding: 0 !important;
+  height: 500px !important;
+}
+wid-upload-sheet {
+  min-height: 100% !important;
+}
+/******************/

@@ -117,7 +117,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.showList = this.socialNetwork.getListNetwork(this.company, 'company');
         this.showList = this.showList.filter((item) => {
-          if (item.value ) {
+          if (item.value &&  item.value !== 'link') {
             return item;
           }
         });
@@ -262,8 +262,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description : update or edit company profile
    */
-  async addOrUpdate(event) {
-    if (event.keyCode === 13 || !event.keyCode ) {
+  async addOrUpdate() {
       let filename = null;
       if (this.photo) {
         filename = await this.uploadService.uploadImage(this.photo)
@@ -318,7 +317,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         }
         this.subscription.unsubscribe();
       });
-    }
   }
 
   /**
