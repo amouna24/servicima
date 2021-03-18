@@ -25,4 +25,5 @@ export interface IContractor {
   update_date?: Date;
   photo?: string;
   status?: string;
+  activity_sector: string;
 }

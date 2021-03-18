@@ -32,7 +32,8 @@ export class SheetService {
   displaySheet(sheetName: string, sheetData?: object): Observable<any> {
     const sheetComponent = this.getSheetComponentRef(sheetName);
     const dialogRef = this._bottomSheet.open(sheetComponent, {
-      data: sheetData
+      data: sheetData,
+      panelClass: 'bottom-sheet'
     });
     return dialogRef.afterDismissed();
   }

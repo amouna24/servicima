@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class SuppliersContractsListComponent implements OnInit {
 
   type = 'SUPPLIER';
-  title = 'SUPPLIERS CONTRACTS MANAGEMENT';
+  title = 'Contracts List';
 
   constructor() { }
 
