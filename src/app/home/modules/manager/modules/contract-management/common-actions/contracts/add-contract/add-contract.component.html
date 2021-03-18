@@ -1,3 +1,17 @@
+<wid-dynamic-component
+  [menuItems]="contractItems"
+  [dynamicForm]="dynamicForm"
+  [formData]="contractForm"
+  [isLoading]="isLoading"
+  [title]="title"
+  [backURL]="backURL"
+  (dynamicFormGroup)="createNewContract($event)"
+  (selectedDoc)="getFile($event)"
+>
+</wid-dynamic-component>
+
+<!--
+
 <div class="contract-container">
   <div>
     <h2 class="contract-title">{{ title }}</h2>
@@ -223,6 +237,7 @@
 
 
 </div>
-<!--
+&lt;!&ndash;
 
+&ndash;&gt;
 -->

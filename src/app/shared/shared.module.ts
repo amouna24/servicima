@@ -124,6 +124,7 @@ import { ErrorComponent } from './components/error/error.component';
     CapitalizeFirstLetter,
     SpliceText,
     DisableControlDirective,
+    ModalComponent,
   ]
 })
 export class SharedModule { }

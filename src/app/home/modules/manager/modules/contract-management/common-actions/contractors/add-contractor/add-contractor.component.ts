@@ -520,7 +520,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         fax: contractor.fax_nbr,
       },
       ORGANISATION: {
-        activitySector: '',
+        activitySector: contractor.activity_sector,
         paymentMode: contractor.payment_cd,
         currency: contractor.currency_cd,
         vatNumber: contractor.vat_nbr,
@@ -652,6 +652,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     newContractor.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
     newContractor.photo = filename ? filename : '';
     /*** ADDRESS ***/
+    newContractor.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
     newContractor.country_cd = this.contractorForm.controls.ADDRESS['controls'].registryCountryCtrl.value;
     newContractor.zip_code = this.contractorForm.controls.ADDRESS['controls'].zipCode.value;
     newContractor.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
@@ -662,6 +663,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     newContractor.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phoneTwo.value;
     newContractor.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax.value;
     /*** ORGANISATION ***/
+    newContractor.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activitySector.value;
     newContractor.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].paymentMode.value;
     newContractor.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency.value;
     newContractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vatNumber.value;
@@ -695,6 +697,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       updatedC.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
       updatedC.photo = filename ? filename : this.contractorInfo.photo;
       /*** ADDRESS ***/
+      updatedC.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
       updatedC.country_cd = this.contractorForm.controls.ADDRESS['controls'].registryCountryCtrl.value;
       updatedC.zip_code = this.contractorForm.controls.ADDRESS['controls'].zipCode.value;
       updatedC.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
@@ -705,6 +708,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       updatedC.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phoneTwo.value;
       updatedC.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax.value;
       /*** ORGANISATION ***/
+      updatedC.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activitySector.value;
       updatedC.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].paymentMode.value;
       updatedC.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency.value;
       updatedC.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vatNumber.value;
