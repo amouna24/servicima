@@ -51,6 +51,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   idRole: string;
   emailAddressStorage: string;
   id: string;
+  isLoading: boolean;
   showList: INetworkSocial[] = [];
   profileUserType = userType.UT_USER;
   /** subscription */
@@ -91,6 +92,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * @description: get connected user
    */
   getConnectedUser(): void {
+    this.isLoading = true;
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
     this.userService.connectedUser$.subscribe((data) => {
@@ -121,6 +123,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.title = 'Add';
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
+      this.isLoading = false;
       /***************** go to page Update user by id *****************
        ****************************************************************/
     } else if (this.id) {
@@ -139,6 +142,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
             this.form.controls['emailAddress'].disable();
             this.form.controls['homeCompany'].disable();
             this.setForm();
+            this.isLoading = false;
           });
       });
       /***************** go to page Update profile user *****************
@@ -160,6 +164,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.form.controls['userType'].disable();
       this.form.controls['homeCompany'].disable();
       this.form.controls['roleCtrl'].disable();
+      this.isLoading = false;
     }
     this.getRefData();
   }
@@ -207,15 +212,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
       profPhone: this.userInfo['prof_phone'],
       cellphoneNbr: this.userInfo['cellphone_nbr'],
       userType: this.userInfo['user_type'],
-      twitterAccount: this.userInfo['twitter_url'],
-      youtubeAccount: this.userInfo?.youtube_url ? this.userInfo?.youtube_url : 'none' ,
-      linkedinAccount: this.userInfo['linkedin_url'],
-      whatsappAccount: this.userInfo['whatsapp_url'],
-      facebookAccount: this.userInfo['facebook_url'],
-      skypeAccount: this.userInfo['skype_url'],
-      otherAccount: this.userInfo['other_url'],
-      instagramAccount: this.userInfo['instagram_url'],
-      viberAccount: this.userInfo['viber_url'],
+      twitterAccount: this.userInfo?.twitter_url ? this.userInfo?.twitter_url : '',
+      youtubeAccount: this.userInfo?.youtube_url ? this.userInfo?.youtube_url : '' ,
+      linkedinAccount: this.userInfo?.linkedin_url ? this.userInfo?.linkedin_url : '',
+      whatsappAccount: this.userInfo?.whatsapp_url ? this.userInfo?.whatsapp_url : '',
+      facebookAccount: this.userInfo?.facebook_url ? this.userInfo?.facebook_url : '',
+      skypeAccount: this.userInfo?.skype_url ? this.userInfo?.skype_url : '',
+      otherAccount: this.userInfo?.other_url ? this.userInfo?.other_url : '',
+      instagramAccount: this.userInfo?.instagram_url ? this.userInfo?.instagram_url : '',
+      viberAccount: this.userInfo?.viber_url  ? this.userInfo?.viber_url : '',
       homeCompany: this.companyName,
       genderProfile: this.userInfo['gender_id'],
       roleCtrl: this.userRole,
@@ -244,6 +249,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.genderList = refData['GENDER'];
     this.typeList = refData['PROFILE_TYPE'];
     this.roleList = refData['ROLE'];
+    console.log(this.roleList, 'role list');
     this.getLanguages();
     this.filteredTitle.next(this.titleList.slice());
     this.filteredLanguage.next(this.languages.slice());

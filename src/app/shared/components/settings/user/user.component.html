@@ -7,7 +7,12 @@
         <img [src]="(this.user?.photo) ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="user" />
       </div>
-      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=3
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15" *ngIf="!isLoading">
         <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <div fxLayout="column" fxFlex="80" fxLayoutGap="5px">
           <div fxLayout="row">
@@ -22,7 +27,13 @@
           </div>
         </div>
       </div>
-      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=3
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px"  *ngIf="!isLoading">
+
         <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px"
           *ngFor=" let list of showList; let index = index">
           <button mat-button mat-raised-button class="btn-medium white"
@@ -48,7 +59,12 @@
             <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{'margin-top': '5%'}">
               <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
             </div>
-            <div fxLayout="row">
+            <wid-skeleton-loader
+              height="25" width="250"
+              *ngIf="isLoading" nbrRow=2
+              nbrColumn=2
+            ></wid-skeleton-loader>
+            <div fxLayout="row"   *ngIf="!isLoading">
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                   <span> {{'user.firstname'| translate }}: </span>
@@ -73,7 +89,12 @@
             <div fxLayout="row">
               <h5 class="steel">{{'user.professionalinformation'| translate}}:</h5>
             </div>
-            <div fxLayout="row">
+            <wid-skeleton-loader
+              height="25" width="250"
+              *ngIf="isLoading"  nbrRow=2
+              nbrColumn=2
+            ></wid-skeleton-loader>
+            <div fxLayout="row" *ngIf="!isLoading">
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'user.job'| translate}}: </span>
@@ -98,8 +119,12 @@
             <div fxLayout="row">
               <h5 class="steel"> {{'user.contact'| translate}}:</h5>
             </div>
-
-            <div fxLayout="row">
+            <wid-skeleton-loader
+              height="25" width="250"
+              *ngIf="isLoading"  nbrRow=2
+              nbrColumn=2
+            ></wid-skeleton-loader>
+            <div fxLayout="row"  *ngIf="!isLoading">
               <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                   <span> {{'user.directline'| translate}}: </span>
@@ -123,8 +148,14 @@
             <div fxLayout="row">
               <h5 class="steel"> {{'user.socialnetwork'| translate}}:</h5>
             </div>
+
             <div fxLayout="column" fxLayoutGap="10px">
-              <div fxLayout="row">
+              <wid-skeleton-loader
+                height="25" width="250"
+                *ngIf="isLoading" nbrRow=2
+                nbrColumn=2
+              ></wid-skeleton-loader>
+              <div fxLayout="row"  *ngIf="!isLoading">
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                   <div fxLayout="column" *ngFor="let element of rightList;">
                     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" *ngIf="element.value ==='link'">
@@ -164,7 +195,7 @@
             </div>
             <br>
           </div>
-          <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
+            <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
                 <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">
                   {{'user.edit'| translate}}

@@ -216,7 +216,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-  this.listColor = this.utilService.getTheme();
     this.displayClass();
     this.userService.isLoadingAction$.subscribe(
       (res) => {
@@ -239,6 +238,10 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): void {
+    this.listColor = this.utilService.getTheme();
+    this.userService.classSubject$.subscribe((col) => {
+      this.classColor = col;
+    });
     this.classColor = {
       'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
@@ -246,9 +249,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
       'whiteRed': this.listColor[12].status
     };
-    this.userService.classSubject$.subscribe((col) => {
-      this.classColor = col;
-    });
   }
 
   submit(data: FormGroup) {

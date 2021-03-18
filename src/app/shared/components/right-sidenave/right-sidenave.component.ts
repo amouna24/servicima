@@ -83,6 +83,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
    this.getModuleName();
    this.getSelectedTheme();
+   this.listColor = this.utilService.listColor;
    this.getStateSidenav();
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {

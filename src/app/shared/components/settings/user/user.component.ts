@@ -37,6 +37,7 @@ export class UserComponent implements OnInit, OnDestroy {
   title: string;
   icon: string;
   id: string;
+  isLoading: boolean;
   leftList: INetworkSocial[];
   rightList: INetworkSocial[];
   refData: { } = { };
@@ -67,6 +68,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: get connected user
    */
   getConnectedUser(): void {
+    this.isLoading = true;
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
@@ -101,6 +103,7 @@ export class UserComponent implements OnInit, OnDestroy {
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
             this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], this.refData ['ROLE']);
+            this.isLoading = false;
           });
         this.getListNetworkSocial(this.user, 'user');
       });
@@ -118,6 +121,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.user = connectedUser['user'][0];
       this.getRefData();
       this.getIcon();
+      this.isLoading = false;
     }
       this.getListNetworkSocial(this.user, 'user');
   }
