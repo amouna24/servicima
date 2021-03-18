@@ -42,6 +42,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   applicationId: string;
   languageId: string;
   descLanguage: string;
+  isLoading: boolean;
   languages: IViewParam[];
   user: IUserModel;
   form: FormGroup;
@@ -77,6 +78,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    * @description : get details company
    */
   getDetailsCompany(): void {
+    this.isLoading = true;
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
@@ -92,6 +94,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         this.country = this.utilsService.getViewValue(this.company['country_id'], this.countryList);
         this.descLanguage = this.utilsService.getViewValue(this.userInfo['user'][0]['language_id'], this.languages);
         this.vat = this.utilsService.getViewValue(this.company['vat_nbr'], this.vatList);
+        this.isLoading = false;
       }
     }, (err) => console.error(err)));
   }

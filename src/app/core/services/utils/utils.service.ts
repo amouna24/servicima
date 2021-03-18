@@ -20,6 +20,7 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UtilsService {
   resList: IViewParam[] = [];
   refData: { } = { };
+  listColor: ITheme[] = [];
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
@@ -275,9 +276,7 @@ export class UtilsService {
    * @return list of theme
    *************************************************************************/
   getTheme(): ITheme[] {
-    const cred = this.localStorageService.getItem('userCredentials');
-    const email = cred['email_address'];
-    const listColor = [
+    this.listColor = [
       { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
       { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
       { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
@@ -292,13 +291,17 @@ export class UtilsService {
       { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
       { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
     ];
+    const cred = this.localStorageService.getItem('userCredentials');
+    const email = cred['email_address'];
     if (this.localStorageService.getItem(this.hashCode(email))) {
-       listColor.map(element => {
+       this.listColor.map(element => {
         if (element.color === this.localStorageService.getItem(this.hashCode(email))) {
           element.status = true;
         }
       });
-      return listColor;
+      return this.listColor;
+    } else {
+      return this.listColor;
     }
   }
 }

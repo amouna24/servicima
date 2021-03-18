@@ -56,6 +56,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   applicationId: string;
   languageId: string;
   user: IUserModel;
+  isLoading: boolean;
   form: FormGroup;
   countryList: IViewParam[] = [];
   legalFormList: IViewParam[] = [];
@@ -98,6 +99,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    * @description get company
    */
   getCompany(): void {
+    this.isLoading = true;
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (info) => {
       if (!!info) {
         this.userInfo = info;
@@ -112,6 +114,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.getRefData();
         this.getJsonData();
         this.setForm();
+        this.isLoading = false;
         this.showList = this.socialNetwork.getListNetwork(this.company, 'company');
         this.showList = this.showList.filter((item) => {
           if (item.value ) {
@@ -198,15 +201,15 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       employeeNum: this.company['employee_nbr'],
       webSite: this.company['web_site'],
       contactEmail: this.company['contact_email'],
-      linkedinAccount: this.company['linkedin_url'],
-      twitterAccount: this.company['twitter_url'],
-      youtubeAccount: this.company['youtube_url'],
-      whatsappAccount: this.company['whatsapp_url'],
-      facebookAccount: this.company['facebook_url'],
-      skypeAccount: this.company['skype_url'],
-      otherAccount: this.company['other_url'],
-      instagramAccount: this.company['instagram_url'],
-      viberAccount: this.company['viber_url'],
+      twitterAccount: this.company?.twitter_url ? this.company?.twitter_url : '',
+      youtubeAccount: this.company?.youtube_url ? this.company?.youtube_url : '' ,
+      linkedinAccount: this.company?.linkedin_url ? this.company?.linkedin_url : '',
+      whatsappAccount: this.company?.whatsapp_url ? this.company?.whatsapp_url : '',
+      facebookAccount: this.company?.facebook_url ? this.company?.facebook_url : '',
+      skypeAccount: this.company?.skype_url ? this.company?.skype_url : '',
+      otherAccount: this.company?.other_url ? this.company?.other_url : '',
+      instagramAccount: this.company?.instagram_url ? this.company?.instagram_url : '',
+      viberAccount: this.company?.viber_url  ? this.company?.viber_url : '',
       faxNbr: this.company?.fax_nbr,
       phoneNbr1: (this.company?.phone_nbr1) ? (this.company?.phone_nbr1) : null,
       phoneNbr2: (this.company?.phone_nbr2) ? (this.company?.phone_nbr2) : null,

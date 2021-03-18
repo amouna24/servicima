@@ -6,11 +6,21 @@
         <img [src]="this.company['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
       </div>
-      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=2
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15"  *ngIf="!isLoading" >
         <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
       </div>
-      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=3
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px" *ngIf="!isLoading">
         <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px"
           *ngFor=" let list of showList; let index = index">
           <button mat-button mat-raised-button class="btn-medium white"
@@ -38,7 +48,13 @@
               <div fxLayout="row" fxLayoutGap="20px">
                 <h5 class="steel">{{'company.generalinformation' | translate}} </h5>
               </div>
-              <div fxLayout="row">
+
+              <wid-skeleton-loader
+                height="25" width="250"
+                *ngIf="isLoading" nbrRow=2
+                nbrColumn=2
+              ></wid-skeleton-loader>
+              <div fxLayout="row"  *ngIf="!isLoading">
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.companyname' | translate}}: </span>
@@ -60,10 +76,16 @@
                   </div>
                 </div>
               </div>
+
               <div fxLayout="row">
                 <h5 class="steel">{{'company.organisation' | translate}}:</h5>
               </div>
-              <div fxLayout="column" fxLayoutGap="10px">
+              <wid-skeleton-loader
+                height="25" width="250"
+                *ngIf="isLoading" nbrRow=2
+                nbrColumn=2
+              ></wid-skeleton-loader>
+              <div fxLayout="column" fxLayoutGap="10px" *ngIf="!isLoading">
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.activitycode' | translate}}: </span>
@@ -83,10 +105,17 @@
                   </div>
                 </div>
               </div>
+
+
               <div fxLayout="row">
                 <h5 class="steel"> {{'company.contact' | translate}}:</h5>
               </div>
-              <div fxLayout="row">
+              <wid-skeleton-loader
+                height="25" width="250"
+                *ngIf="isLoading" nbrRow=2
+                nbrColumn=2
+              ></wid-skeleton-loader>
+              <div fxLayout="row" *ngIf="!isLoading">
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.website' | translate}}: </span>
@@ -129,10 +158,16 @@
                   </div>
                 </div>
               </div>
+
               <div fxLayout="row">
                 <h5 class="steel">{{'company.socialnetwork' | translate}}:</h5>
               </div>
-              <div fxLayout="column" fxLayoutGap="10px">
+              <wid-skeleton-loader
+                height="25" width="250"
+                *ngIf="isLoading" nbrRow=2
+                nbrColumn=2
+              ></wid-skeleton-loader>
+              <div fxLayout="column" fxLayoutGap="10px" *ngIf="!isLoading">
                 <div fxLayout="row">
                   <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                     <div fxLayout="column" *ngFor="let element of rightList;">

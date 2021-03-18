@@ -47,7 +47,7 @@ export class UserService {
         this.getImage(data['user'][0].photo);
         const roleCode = data.userroles[0].userRolesKey.role_code;
 
-        this.getCompanyRoleFeatures(this.getRoleCode(roleCode), this.userInfo['company'][0]['companyKey']['email_address'])
+        this.getCompanyRoleFeatures(roleCode, this.userInfo['company'][0]['companyKey']['email_address'])
           .subscribe((list) => {
             this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
             if (this.companyRolesFeatures.length > 1) {
@@ -70,12 +70,12 @@ export class UserService {
         this.router.navigate(['/manager']);
       }
         break;
-      case 'COLLAB': {
+      case 'COLLABORATOR': {
         this.moduleName$.next('collaborator');
         this.router.navigate(['/collaborator']);
       }
         break;
-      case 'CAND': {
+      case 'CANDIDATE': {
         this.moduleName$.next('candidate');
         this.router.navigate(['/candidate']);
       }
@@ -139,20 +139,5 @@ export class UserService {
    *************************************************************************/
   getCompanyRoleFeatures(role: string, email: string) {
     return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}` + `?role_code=${role}&email_address=${email}`);
-  }
-  /**
-   * @description get role code
-   */
-  getRoleCode(role: string): string {
-    switch (role) {
-      case 'CAND':
-        return 'CANDIDATE';
-      case 'COLLAB':
-        return 'COLLABORATOR';
-      case 'ADMIN':
-        return 'ADMIN';
-      default:
-        return;
-    }
   }
 }
