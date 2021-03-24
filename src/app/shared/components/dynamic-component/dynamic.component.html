@@ -93,6 +93,39 @@
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
+                            </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
                               <mat-label class="black font-size-12">
                                 {{ sf.label }} :
@@ -155,6 +188,39 @@
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                               <mat-label class="black font-size-12">
@@ -219,6 +285,39 @@
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
+                            </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="87">
                               <mat-label class="black font-size-12">
                                 {{ sf.label }} :
@@ -281,6 +380,39 @@
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
                               <mat-label class="black font-size-12">
@@ -345,6 +477,39 @@
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
+                              </div>
+                              <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                  <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <div fxLayout="row" fxFlex="100">
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                      {{ 'general.required' | translate }} </mat-error>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                      {{'register.invalidemail' | translate}} </mat-error>
+                                  </mat-form-field>
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                    <span class="white">Browse</span>
+                                  </button>
+                                </div>
+
                               </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                                 <mat-label class="black font-size-12">
@@ -426,6 +591,39 @@
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
+                              </div>
+                              <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                  <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <div fxLayout="row" fxFlex="100">
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                      {{ 'general.required' | translate }} </mat-error>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                      {{'register.invalidemail' | translate}} </mat-error>
+                                  </mat-form-field>
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                    <span class="white">Browse</span>
+                                  </button>
+                                </div>
+
                               </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                                 <mat-label class="black font-size-12">
@@ -517,6 +715,39 @@
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
+                              <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                  <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                  {{ sf.label }} :
+                                </mat-label>
+                                <div fxLayout="row" fxFlex="100">
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
+                                      {{ 'general.required' | translate }} </mat-error>
+                                    <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
+                                      {{'register.invalidemail' | translate}} </mat-error>
+                                  </mat-form-field>
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                    <span class="white">Browse</span>
+                                  </button>
+                                </div>
+
+                              </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                                 <mat-label class="black font-size-12">
                                   {{ sf.label }} :
@@ -606,6 +837,39 @@
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                              <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <span class="white">Browse</span>
+                              </button>
+                            </div>
+
+                          </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
                             <mat-label class="black font-size-12">
                               {{ sf.label }} :
@@ -668,6 +932,39 @@
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                              <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <span class="white">Browse</span>
+                              </button>
+                            </div>
+
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                             <mat-label class="black font-size-12">
@@ -732,6 +1029,39 @@
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                              <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <span class="white">Browse</span>
+                              </button>
+                            </div>
+
+                          </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="87">
                             <mat-label class="black font-size-12">
                               {{ sf.label }} :
@@ -788,12 +1118,45 @@
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input type="{{ sf.inputType }}" (keyup)="keyUpHandler($event.target)" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" value="">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                              <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <span class="white">Browse</span>
+                              </button>
+                            </div>
+
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
                             <mat-label class="black font-size-12">
@@ -858,6 +1221,39 @@
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                               <mat-label class="black font-size-12">
@@ -939,6 +1335,39 @@
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                               <mat-label class="black font-size-12">
@@ -1031,6 +1460,39 @@
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                                {{ sf.label }} :
+                              </mat-label>
+                              <div fxLayout="row" fxFlex="100">
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                    {{ 'general.required' | translate }} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                    {{'register.invalidemail' | translate}} </mat-error>
+                                </mat-form-field>
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <span class="white">Browse</span>
+                                </button>
+                              </div>
+
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
                               <mat-label class="black font-size-12">

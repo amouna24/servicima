@@ -1,11 +1,10 @@
 <div class="page-container">
-<div *ngIf="loaded ">
   <wid-dynamic-data-table
-    [tableData]="ELEMENT_DATA " [tableCode]="'TAX'"
-    [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User'}"
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'TAX'"
+    [header]="{ title: 'Tax management', addActionURL: '', addActionText: 'New Tax'}"
     [title]="'Users list'"
-    (rowID)="updateOrDelete($event)"
-    (rowData)="showRowData($event)"
+    (rowActionData)="switchAction($event)"
   >
   </wid-dynamic-data-table>
 </div>

@@ -4,7 +4,7 @@
         <h1 class="steel font-size-24 font-medium" >{{ header.title }}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button  class="btn-medium bg-cerulean-blue" routerLink="{{ header.addActionURL }}">
+        <button [disableControl]="{'feature':'SOURCING_ACCESS'}" mat-raised-button  class="btn-medium bg-cerulean-blue" routerLink="{{ header.addActionURL }}">
           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
           </mat-icon>
           &nbsp;
@@ -15,34 +15,26 @@
   <div fxLayout="row" fxFlex="1" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div fxLayout="row" fxFlex="15" fxLayoutAlign="space-between center">
-      <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around">
-        <div fxLayout="row" fxFlex="45" fxLayoutAlign="space-evenly center">
-          <mat-label class="cool-grey font-size-12">
-            Licences :
-          </mat-label>
-          <mat-form-field appearance="outline" [style]="{'width': '70%', 'height': '80%', 'fontSize': '10px'}">
-            <mat-select disableOptionCentering panelClass="panelColor"
-                        placeholder="Licences">
-              <mat-option *ngFor="let v of ['test', 'test', 'test']" [value]="v">
-                {{v}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row" fxFlex="45" fxLayoutAlign="space-evenly center">
-          <mat-label class="cool-grey font-size-12">
-            Status :
-          </mat-label>
-          <mat-form-field appearance="outline" [style]="{'width': '70%', 'height': '80%', 'fontSize': '10px'}">
-            <mat-select disableOptionCentering panelClass="panelColor"
-                        placeholder="Licences">
-              <mat-option *ngFor="let v of ['test', 'test', 'test']" [value]="v">
-                {{v}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-between center">
+      <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
+          <div fxLayout="row" fxFlex="80" fxLayoutGap="20px">
+            <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
+              <input matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
+              <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
+            </mat-form-field>
+            <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" (click)="displayTableConfig()">
+              <mat-icon svgIcon="wi_adjustments" class="icon material-icons-outlined steel"></mat-icon>
+            </button>
+            <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" >
+              <mat-icon svgIcon="wi_filter" class="icon material-icons-outlined steel"></mat-icon>
+            </button>
+            <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}">
+              <span class="cool-grey">Run</span>
+            </button>
+            <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" >
+              <span class="cool-grey">Save</span>
+            </button>
+          </div>
       </div>
     <div fxLayout="row" fxFlex="30" fxLayoutAlign="space-evenly center">
       <div fxLayout="row" fxFlex="35">
@@ -132,7 +124,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell
-                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop].length > 30 ? row[col.prop].substring(0, 20)+'...' : row[col.prop] }}
+                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
                       </td>
                     </ng-container>
                   </ng-container>

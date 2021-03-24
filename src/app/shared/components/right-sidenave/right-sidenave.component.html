@@ -13,7 +13,7 @@
         <wid-profile-image [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="true" [userType]="profileUserType" ></wid-profile-image>
       </div>
       <div fxFlex="59" fxLayout="column" fxLayoutAlign="center start">
-          <span class="brownish-grey font-size-14">{{user.first_name}} {{ user.last_name}}</span>
+          <span class="brownish-grey font-size-14">{{user.first_name | spliceText: 15}} {{ user.last_name | spliceText: 15}} </span>
           <span class="cool-grey font-size-10">{{user.userKey.email_address}}</span>
       </div>
     </div>
@@ -29,6 +29,7 @@
         </span>
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
+        <!--  <ng-container *canBeDisplayed="{'feature':menuItem.feature}"> -->
             <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
                class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
@@ -38,8 +39,11 @@
               <span class="font-light font-size-14"
                     [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
+          <!-- </ng-container> -->
           </ng-container>
+
           <ng-template #subMenuLabel>
+            <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
             <div fxLayout="column" class="cursor-pointer">
               <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
                              [@iconAnimation]="sidebarState">
@@ -50,6 +54,7 @@
                 <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
               </mat-list-item>
             </div>
+            </ng-container>
           </ng-template>
 
         </ng-container>

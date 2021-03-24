@@ -254,6 +254,12 @@ Paddings
 .p-b-40 {
     padding-bottom: 40px;
 }
+/*******************
+      decoration
+*******************/
+.underlined{
+  text-decoration: underline;
+}
 
 /*******************
       align
@@ -360,7 +366,7 @@ html body {
 }
 
 .m-t-10 {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 
 .m-t-15 {
@@ -369,6 +375,10 @@ html body {
 
 .m-t-20 {
     margin-top: 20px !important;
+}
+
+.m-t-25 {
+  margin-top: 25px !important;
 }
 
 .m-t-30 {
@@ -443,7 +453,7 @@ html body {
   font-size: 11px;
 }
 .font-size-12 {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 .font-size-14 {
     font-size: 14px !important;
@@ -472,6 +482,9 @@ html body {
 .font-size-25 {
     font-size: 25px;
 }
+.font-size-28 {
+  font-size: 28px;
+}
 .font-size-38{
   font-size: 38px;
 }
@@ -481,7 +494,6 @@ html body {
 /*******************
        Line height
 *******************/
-
 .line-height-2{
   line-height: 2;
 }
@@ -654,7 +666,8 @@ html body {
 .dynamic-component-container  {
   @include get-page(servicima);
   margin: 20px;
-  height: 88vh !important;
+  height: 87vh !important;
+  // width: 88vw;
 }
 
 .dynamic-component-content {
@@ -742,3 +755,16 @@ html body {
 .mat-error{
   color: $error-red !important;
 }
+/*******************
+   Bottom Sheet
+*******************/
+.bottom-sheet {
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 24px !important;
+  padding: 0 !important;
+  height: 500px !important;
+}
+wid-upload-sheet {
+  min-height: 100% !important;
+}
+/******************/

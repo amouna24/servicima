@@ -5,7 +5,7 @@
       <h1 class="steel font-size-24 font-medium">Buy Licence</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+      <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
         </mat-icon>
         <span class="cool-grey">back</span>
@@ -22,7 +22,7 @@
         </div>
         <div fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
           <mat-radio-group fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px"
-                           (change)="billingChange($event)" [value]="billingPack"
+                           (change)="billingChange($event)" [value]="billingPack" [disabled]="paymentService.paidFor"
                            class="p-l-5">
             <mat-radio-button class="black font-size-12 font-normal" value="year">
               Annual billing <sup *ngIf="saving" class="red">saving {{saving}}%</sup>
@@ -41,17 +41,17 @@
           <h2 class="steel font-normal font-size-17">Paiement</h2>
         </div>
         <div fxFlex class="full-width">
-          <mat-radio-group class="full-width">
+          <mat-radio-group class="full-width" [disabled]="paymentService.paidFor">
           <mat-accordion class="full-width" fxLayout="column" fxLayoutGap="3px">
 
             <mat-expansion-panel hideToggle
                                  class="border-radius-10"
-                                 (opened)="paiementMethode[0] = true"
-                                 (closed)="paiementMethode[0] = false">
+                                 (opened)="paiementMethode[0].checked = true"
+                                 (closed)="paiementMethode[0].checked = false">
               <mat-expansion-panel-header class="p-5 p-l-20">
                 <mat-panel-title>
                   <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
-                                    [checked]="paiementMethode[0]">
+                                    [checked]="paiementMethode[0].checked">
                     Credit card
                   </mat-radio-button>
                 </mat-panel-title>
@@ -63,12 +63,12 @@
 
             <mat-expansion-panel hideToggle
                                  class="border-radius-10"
-                                 (opened)="paiementMethode[1] = true"
-                                 (closed)="paiementMethode[1] = false">
+                                 (opened)="paiementMethode[1].checked = true"
+                                 (closed)="paiementMethode[1].checked = false">
               <mat-expansion-panel-header class="p-5 p-l-20">
                 <mat-panel-title>
                   <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
-                                    [checked]="paiementMethode[1]">
+                                    [checked]="paiementMethode[1].checked">
                     Paypal
                   </mat-radio-button>
                 </mat-panel-title>
@@ -81,7 +81,8 @@
               </ng-container>
                 <div [hidden]="paymentService.error" fxLayout="row" fxLayoutAlign="start center">
                   <p class="black font-size-12 font-semi-bold" fxFlex="30" >{{ licence.licence_desc }} :</p>
-                  <div [fxHide]="paymentService.paidFor" #paypal fxFlex="60" ></div>
+                  <div [fxHide]="paymentService.paidFor || billingPack !== 'month'"  #paypalmonth fxFlex="60" ></div>
+                  <div [fxHide]="paymentService.paidFor || billingPack !== 'year'" #paypalyear fxFlex="60" ></div>
                   <wid-alert [fxShow]="paymentService.paidFor && !paymentService.error"
                              type="success" message="success" fxFlex ></wid-alert>
 
@@ -92,12 +93,12 @@
 
             <mat-expansion-panel hideToggle
                                  class="border-radius-10"
-                                 (opened)="paiementMethode[2] = true"
-                                 (closed)="paiementMethode[2] = false">
+                                 (opened)="paiementMethode[2].checked = true"
+                                 (closed)="paiementMethode[2].checked = false">
               <mat-expansion-panel-header class="p-5 p-l-20">
                 <mat-panel-title>
                   <mat-radio-button class="black font-size-12 font-normal line-height-1-5"
-                                    [checked]="paiementMethode[2]">
+                                    [checked]="paiementMethode[2].checked">
                     Sepa
                   </mat-radio-button>
                 </mat-panel-title>
@@ -159,11 +160,11 @@
           <div fxLayout="row" fxLayoutAlign="space-between center"
                class="border-bottom full-width">
             <p class="black font-normal font-size-17">Total:</p>
-            <p class="black font-normal font-size-17">€{{total()}}</p>
+            <p class="black font-normal font-size-17">{{total()+' '+licence.price_currency_id}}</p>
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="end end" class="full-width">
-          <button mat-button routerLink="/manager/settings/licences/complete-update" [disabled]="paymentService.paidFor" class="btn-small bg-denim white" >Next</button>
+          <button mat-button (click)="confirm()" [disabled]="!paymentService.paidFor" class="btn-small bg-denim white" >Next</button>
           <button mat-button class="btn-small bg-white denim" >Cancel</button>
         </div>
       </div>

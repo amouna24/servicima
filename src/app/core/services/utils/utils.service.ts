@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { Location } from '@angular/common';
 
 import { IError } from '@shared/models/error.model';
-import { INetworkSocial } from '@shared/models/social-network.model';
 import { IViewParam } from '@shared/models/view.model';
 import { IIcon } from '@shared/models/icon.model';
 
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
+import { ITheme } from '@shared/models/theme.model';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -19,14 +20,15 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class UtilsService {
   resList: IViewParam[] = [];
-  showList: INetworkSocial[];
   refData: { } = { };
-   constructor(
+  listColor: ITheme[] = [];
+  constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private matSnackBar: MatSnackBar
+    private matSnackBar: MatSnackBar,
+    private location: Location
   ) {
 
   }
@@ -57,7 +59,7 @@ export class UtilsService {
         if (!map) {
           filterRefData.forEach(
             (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
             },
           );
           return this.refData[type] = this.resList;
@@ -79,7 +81,7 @@ export class UtilsService {
         } else {
           filterRefData.forEach(
             (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc});
+              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
             },
           );
           this.refData[String(`${type}`)] = this.resList;
@@ -165,12 +167,12 @@ export class UtilsService {
     filterCtrl.valueChanges
       .subscribe(
         (res) => {
-        this.filterData(list, filterCtrl, filtered);
-      },
+          this.filterData(list, filterCtrl, filtered);
+        },
         (e) => {
           console.log('e', e);
         }
-        );
+      );
   }
 
   /**
@@ -203,6 +205,13 @@ export class UtilsService {
     );
 
   }
+  /**
+   * @description Back to previous route
+   * *
+   */
+  previousRoute() {
+    this.location.back();
+  }
 
   /**
    * @description Open SnackBar
@@ -210,8 +219,8 @@ export class UtilsService {
    *  @param action;
    * *
    */
-  openSnackBar(message: string, action?: string , duration?: number) {
-    this.matSnackBar.open(message, action , {
+  openSnackBar(message: string, action?: string, duration?: number) {
+    this.matSnackBar.open(message, action, {
       duration,
       horizontalPosition: 'end',
       verticalPosition: 'bottom',
@@ -236,11 +245,11 @@ export class UtilsService {
    *************************************************************************/
   getViewValue(id: string, list): string {
     if (id) {
-    return list
-      .find(value =>
-        value.value === id
-      ).viewValue;
-  }
+      return list
+        .find(value =>
+          value.value === id
+        ).viewValue;
+    }
   }
 
   /**
@@ -272,25 +281,36 @@ export class UtilsService {
   }
 
   /**************************************************************************
-   * @description get error page
-   * @param list: get all list of network social
-   * @param showList: get list of network social when is not null
-   * @param pairList: show pair list
-   * @param impairList: show impair list
+   * @description get Theme
+   * @return list of theme
    *************************************************************************/
-  getList(list: INetworkSocial[] ,  pairList: INetworkSocial[] , impairList: INetworkSocial[] ): void {
-    this.showList = [];
-    list.map((element) => {
-      if (element.value) {
-        this.showList.push(element);
-      }
-    } );
-    for (let i = 0; i < this.showList.length; i++) {
-      if (i % 2 ) {
-        pairList.push((this.showList[i]));
-      } else {
-        impairList.push((this.showList[i]));
-      }
+  getTheme(): ITheme[] {
+    this.listColor = [
+      { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
+      { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
+      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
+      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
+      { 'color': 'cobalt', 'status': false , 'image': 'cobalt.png'},
+      { 'color': 'blue', 'status': false , 'image': 'blue.png'},
+      { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
+      { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
+      { 'color': 'lighterPurple', 'status': false , 'image': 'lighterPurple.png'},
+      { 'color': 'mango', 'status': false , 'image': 'mango.png'},
+      { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
+      { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
+      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
+    ];
+    const cred = this.localStorageService.getItem('userCredentials');
+    const email = cred['email_address'];
+    if (this.localStorageService.getItem(this.hashCode(email))) {
+       this.listColor.map(element => {
+        if (element.color === this.localStorageService.getItem(this.hashCode(email))) {
+          element.status = true;
+        }
+      });
+      return this.listColor;
+    } else {
+      return this.listColor;
     }
   }
 }

@@ -8,9 +8,10 @@ import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { SocialNetwork } from '@core/services/utils/social-network';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { IViewParam } from '@shared/models/view.model';
-import { UtilsService } from '@core/services/utils/utils.service';
 import { IUserModel } from '@shared/models/user.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { INetworkSocial } from '@shared/models/social-network.model';
@@ -36,9 +37,11 @@ export class UserComponent implements OnInit, OnDestroy {
   title: string;
   icon: string;
   id: string;
+  isLoading: boolean;
   leftList: INetworkSocial[];
   rightList: INetworkSocial[];
   refData: { } = { };
+  showList: INetworkSocial[] = [];
   /** subscription */
   private subscriptions: Subscription[] = [];
 
@@ -49,6 +52,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private route: ActivatedRoute,
     private uploadService: UploadService,
+    private socialNetwork: SocialNetwork,
     private router: Router,
     private profileService: ProfileService
   ) {
@@ -64,6 +68,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * @description: get connected user
    */
   getConnectedUser(): void {
+    this.isLoading = true;
     this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
@@ -98,7 +103,9 @@ export class UserComponent implements OnInit, OnDestroy {
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
             this.userRole = this.utilsService.getViewValue(data[0]['userRolesKey']['role_code'], this.refData ['ROLE']);
+            this.isLoading = false;
           });
+        this.getListNetworkSocial(this.user, 'user');
       });
       /***************** current user show your profile *****************
        *******************************************************************/
@@ -114,8 +121,9 @@ export class UserComponent implements OnInit, OnDestroy {
       this.user = connectedUser['user'][0];
       this.getRefData();
       this.getIcon();
+      this.isLoading = false;
     }
-      this.getListNetworkSocial();
+      this.getListNetworkSocial(this.user, 'user');
   }
 
   /**
@@ -174,16 +182,8 @@ export class UserComponent implements OnInit, OnDestroy {
   addLink(): void {
     this.modalService.displayModal('AddLink', this.user, '620px', '535px').subscribe((user) => {
       if (user) {
-        this.user['youtube_url'] = user['youtube_url'];
-        this.user['linkedin_url'] = user['linkedin_url'];
-        this.user['twitter_url'] = user['twitter_url'];
-        this.user['facebook_url'] = user['facebook_url'];
-        this.user['instagram_url'] = user['instagram_url'];
-        this.user['whatsapp_url'] = user['whatsapp_url'];
-        this.user['viber_url'] = user['viber_url'];
-        this.user['skype_url'] = user['skype_url'];
-        this.user['other_url'] = user['other_url'];
-        this.getListNetworkSocial();
+        this.socialNetwork.updateNetworkSocial(this.user, user);
+        this.getListNetworkSocial(this.user, 'user');
       }
     });
   }
@@ -191,32 +191,24 @@ export class UserComponent implements OnInit, OnDestroy {
   /**
    * @description: show network social
    */
-  getListNetworkSocial() {
+  getListNetworkSocial(value, placeholder) {
+    const list = this.socialNetwork.getListNetwork(value, placeholder);
     this.leftList = [];
     this.rightList = [];
-    const list = [
-      { placeholder: 'user.linkedinacc', value: this.user?.linkedin_url},
-      { placeholder: 'user.whatsappacc', value: this.user?.whatsapp_url },
-      { placeholder: 'user.facebookacc', value: this.user?.facebook_url },
-      { placeholder: 'user.skypeacc', value: this.user?.skype_url },
-      { placeholder: 'user.otheracc', value: this.user?.other_url},
-      { placeholder: 'user.instagramacc', value: this.user?.instagram_url},
-      { placeholder: 'user.twitteracc', value: this.user?.twitter_url},
-      { placeholder: 'user.youtubeacc', value: this.user?.youtube_url},
-      { placeholder: 'user.viberacc', value: this.user?.viber_url},
-      { placeholder: 'company.addlink', value: 'link'},
-    ];
-     this.utilsService.getList(list, this.leftList, this.rightList);
+    this.socialNetwork.getList(list, this.leftList, this.rightList);
+    this.showList = [ ...this.leftList, ...this.rightList];
+    this.showList = this.showList.filter((item) => {
+      if (item.value !==  'link' ) {
+      return item;
+      }
+    });
   }
+
   /**
    * @description: destroy
    */
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
-  }
-
-  getI() {
-
   }
 
 }

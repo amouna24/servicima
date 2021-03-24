@@ -94,7 +94,6 @@ export class DynamicDataTableComponent implements OnInit {
           this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
           this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
           this.columnsList.push('Actions');
-          this.displayTableConfig();
         }
       );
 

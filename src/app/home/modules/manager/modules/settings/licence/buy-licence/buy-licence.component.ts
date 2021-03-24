@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,16 +9,31 @@ import { MatRadioChange } from '@angular/material/radio';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Subject } from 'rxjs';
+import { UtilsService } from '@core/services/utils/utils.service';
 declare var paypal;
 @Component({
   selector: 'wid-buy-licence',
   templateUrl: './buy-licence.component.html',
   styleUrls: ['./buy-licence.component.scss'],
 })
-export class BuyLicenceComponent implements OnInit, OnDestroy {
-  @ViewChild('paypal', { static: true}) paypalElement: ElementRef;
+export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('paypalyear', { static: true}) paypalYearElement: ElementRef;
+  @ViewChild('paypalmonth', { static: true}) paypalMonthElement: ElementRef;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  paiementMethode: boolean[] = [false, false, false];
+  paiementMethode: any[] = [
+    {
+      name: 'credit card',
+      checked: false
+    },
+    {
+      name: 'paypal',
+      checked: false
+    },
+    {
+      name: 'sepa',
+      checked: false
+    }
+  ];
   name: string;
   emailAddress: string;
   avatar: any;
@@ -32,7 +47,8 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
               public paymentService: PaymentService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private utilService: UtilsService) {
   }
 
   /**
@@ -42,9 +58,11 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
     await this.getParam();
     await this.userInfo();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
-    this.paypalInit();
   }
 
+  ngAfterViewInit(): void {
+    this.paypalInit();
+  }
   /**
    * @description Get query params
    */
@@ -103,6 +121,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
    * @description Change billing pack
    */
   billingChange(event: MatRadioChange): void {
+    this.billingPack = event.value;
     this.router.navigate([
       '/manager/settings/licences/buy-licence',
       this.licence.LicenceKey.licence_code,
@@ -112,10 +131,10 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
   /**
    * @description Calculate total price
    */
-  total(): string {
-    if (this.billingPack === 'year') {
+  total(billing: string = this.billingPack): string {
+    if (billing === 'year') {
       return this.licence.pack_annual_price;
-    } else if (this.billingPack === 'month') {
+    } else if (billing === 'month') {
       return this.licence.pack_monthly_price;
     } else {
       return '0';
@@ -135,8 +154,22 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
    */
   paypalInit(): void {
     paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total()))
-      .render(this.paypalElement.nativeElement);
+      .Buttons(this.paymentService.paypal(this.licence, this.total('year')))
+      .render(this.paypalYearElement.nativeElement);
+    paypal
+      .Buttons(this.paymentService.paypal(this.licence, this.total('month')))
+      .render(this.paypalMonthElement.nativeElement);
+  }
+  /**
+   * @description back to previous route
+   */
+  backClicked() {
+    this.utilService.previousRoute();
+  }
+  confirm() {
+    this.router.navigate(
+      ['/manager/settings/licences/complete-update'],
+    { state: { payment: this.paymentService.paymentMethode , detail: this.paymentService.detail } });
   }
 
   /**
@@ -147,5 +180,4 @@ export class BuyLicenceComponent implements OnInit, OnDestroy {
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
   }
-
 }

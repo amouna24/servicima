@@ -152,7 +152,8 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi_other',
-    path: 'assets/icons/link-solid.svg'
+    path: 'assets/icons/link-solid.svg',
+    viewBox: '4 -17 25 46'
   },
   /* Gender Icons */
   {
@@ -189,5 +190,27 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/row-polygon.svg',
     viewBox: '0 0 20 8'
   },
+  {
+    name: 'wi_adjustments',
+    path: 'assets/icons/adjustments.svg'
+  },
+  {
+    name: 'wi_filter',
+    path: 'assets/icons/filter.svg'
+  },
   /* ------------------ */
+  /*   Bottom Sheet     */
+  {
+    name: 'wi_upload',
+    path: 'assets/icons/upload.svg',
+  },
+  {
+    name: 'wi_drive',
+    path: 'assets/icons/drive.svg',
+  },
+  /* ------------------ */
+  {
+    name: 'wi_print',
+    path: 'assets/icons/printer.svg',
+  }
 ];

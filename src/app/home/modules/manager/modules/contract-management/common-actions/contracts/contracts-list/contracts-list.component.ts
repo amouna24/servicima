@@ -5,10 +5,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ContractsService } from '@core/services/contracts/contracts.service';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IContractExtension } from '@shared/models/contractExtension.model';
 import { ModalService } from '@core/services/modal/modal.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { ShowExtensionComponent } from '../show-extension/show-extension.component';
 
@@ -35,33 +36,26 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   contactExtensionInfo: IContractExtension;
 
+  /**************************************************************************
+   * @description Input from child's Components [SUPPLIERS, CLIENTS]
+   *************************************************************************/
+  redirectUrl: string;
+  addButtonLabel: string;
+
   displayedColumns: string[] = ['contract_code', 'contractor_code', 'collaborator_email',
     'contract_status', 'show', 'Actions'];
   dataSource: MatTableDataSource<IContract>;
+  ELEMENT_DATA = new BehaviorSubject<any>([]);
+  isLoading = new BehaviorSubject<boolean>(false);
 
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
-
-  /* Static Customers And Status Declaration */
-  Customers = [
-    { email: 'olivier@europcar.fr', name: 'Olivier'},
-    { email: 'frank@canalplus.fr', name: 'Frank'}
-  ];
-  Status = [
-    { value: 'Signed', viewValue: 'Signed'},
-    { value: 'Draft', viewValue: 'Draft'},
-  ];
-  /*******************************************/
-
-  /*********** Contract Data Table ***********/
-  contractsList: IContract[] = [];
-
-  /*******************************************/
 
   constructor(
     private contractService: ContractsService,
     private router: Router,
     private modalsServices: ModalService,
+    private userService: UserService,
   ) {
   }
 
@@ -74,6 +68,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.getContracts();
+    this.addNewContract();
     this.modalsServices.registerModals(
       { modalName: 'showExtension', modalComponent: ShowExtensionComponent });
   }
@@ -95,17 +90,23 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description Get Contracts List
    */
   getContracts() {
-    this.contractService.getContracts('').subscribe(
+    this.isLoading.next(true);
+    this.contractService.getContracts(`?email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .subscribe(
       (response) => {
-        this.contractsList = response;
-        this.dataSource = new MatTableDataSource(this.contractsList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        // this.contractsList = response;
+        // this.dataSource = new MatTableDataSource(this.contractsList);
+        // this.dataSource.paginator = this.paginator;
+        // this.dataSource.sort = this.sort;
+        this.ELEMENT_DATA.next(response);
+        this.isLoading.next(false);
       },
       (error) => {
+        this.isLoading.next(true);
         if (error.error.msg_code === '0004') {
-          this.contractsList = [];
-          this.dataSource = new MatTableDataSource(this.contractsList);
+          this.ELEMENT_DATA.next([]);
+          // this.contractsList = [];
+          // this.dataSource = new MatTableDataSource(this.contractsList);
         }
       },
     );
@@ -116,11 +117,11 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    */
   addNewContract() {
     if ( this.type === 'SUPPLIER') {
-      this.router.navigate(
-        ['/manager/contract-management/suppliers-contracts/contracts'], { queryParams: {  id: '' } });
+      this.redirectUrl = '/manager/contract-management/suppliers-contracts/contracts';
+      this.addButtonLabel = 'New Contract';
     } else {
-      this.router.navigate(
-        ['/manager/contract-management/clients-contracts/contract-create'], { queryParams: {  id: '' } });
+      this.redirectUrl = '/manager/contract-management/clients-contracts/contract-create';
+      this.addButtonLabel = 'New Contract';
     }
   }
 
@@ -129,7 +130,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @param Contract Contract Object
    * @return: Contract
    *************************************************************************/
-  showContact(Contract: IContract): void {
+  showContract(Contract: IContract): void {
     this.contractService.getContractExtension(
       `?contract_code=${Contract.contractKey.contract_code}&email_address=${Contract.contractKey.email_address}`
     )
@@ -139,7 +140,14 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           this.contactExtensionInfo = res[0];
-          this.modalsServices.displayModal('showExtension', { ext : this.contactExtensionInfo, file: Contract.attachments }, '40%')
+          this.modalsServices.displayModal(
+            'showExtension',
+            {
+              contract: Contract,
+              ext : this.contactExtensionInfo,
+              file: Contract.attachments
+            },
+            '55%')
             .pipe(
               takeUntil(this.destroy$)
             )
@@ -169,6 +177,20 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
           ea: btoa(Contract.contractKey.email_address)
         }
       });
+  }
+  /**************************************************************************
+   * @description: Function to call updateMail Dialog with current data
+   * @param rowAction contract Object
+   * @return: Updated Table
+   *************************************************************************/
+  switchAction(rowAction: any) {
+    switch (rowAction.actionType) {
+      case ('show'): this.showContract(rowAction.data);
+        break;
+      case ('update'): this.updateContract(rowAction.data);
+        break;
+      case('delete'): console.log('EDIT ME');
+    }
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator

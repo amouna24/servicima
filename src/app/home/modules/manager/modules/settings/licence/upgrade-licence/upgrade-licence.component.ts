@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LicenceService } from '@core/services/licence/licence.service';
 import { ILicenceFeatureModel } from '@shared/models/licenceFeature.model';
 import { take } from 'rxjs/operators';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-upgrade-licence',
@@ -14,7 +15,8 @@ export class UpgradeLicenceComponent implements OnInit {
   licences: ILicenceModel[];
   features: ILicenceFeatureModel[];
   constructor( private licenceService: LicenceService,
-               private router: Router) { }
+               private router: Router,
+               private utilService: UtilsService) { }
 
   /**
    * @description Loaded when component in init state
@@ -44,6 +46,12 @@ export class UpgradeLicenceComponent implements OnInit {
         return 'bg-purpley';
       }
     }
+  }
+  /**
+   * @description back to previous route
+   */
+  backClicked() {
+    this.utilService.previousRoute();
   }
   /**
    * @param Licence code
