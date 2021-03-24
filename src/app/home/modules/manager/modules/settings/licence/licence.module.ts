@@ -12,6 +12,7 @@ import { LicenceRoutingModule } from './licence-routing.module';
     LicenceRoutingModule,
     SharedModule,
     DataTableModule,
+
   ]
 })
 export class LicenceModule { }

@@ -22,7 +22,7 @@
         </div>
         <div fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
           <mat-radio-group fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px"
-                           (change)="billingPack=$event.value" [value]="billingPack"
+                           (change)="billingChange($event)" [value]="billingPack"
                            class="p-l-5">
             <mat-radio-button class="black font-size-12 font-normal" value="year">
               Annual billing <sup *ngIf="saving" class="red">saving {{saving}}%</sup>
@@ -75,7 +75,19 @@
                 <mat-panel-description>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <p>Form here. </p>
+              <ng-container *ngIf="paymentService.error">
+                <wid-alert type="error"
+                           message="something went wrong please try again" fxFlex ></wid-alert>
+              </ng-container>
+                <div [hidden]="paymentService.error" fxLayout="row" fxLayoutAlign="start center">
+                  <p class="black font-size-12 font-semi-bold" fxFlex="30" >{{ licence.licence_desc }} :</p>
+                  <div [fxHide]="paymentService.paidFor" #paypal fxFlex="60" ></div>
+                  <wid-alert [fxShow]="paymentService.paidFor && !paymentService.error"
+                             type="success" message="success" fxFlex ></wid-alert>
+
+                </div>
+
+
             </mat-expansion-panel>
 
             <mat-expansion-panel hideToggle
@@ -105,7 +117,7 @@
        <div fxFlex="20">
          <h2 class="steel font-normal font-size-17">Compte</h2>
        </div>
-        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px" class="p-l-5 m-0" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px" class="p-l-5 m-0" fxFlex="60">
           <div fxFlex="15" fxLayout="row" fxLayoutAlign="center center">
             <img [src]="haveImage ? avatar :'assets/img/default.jpg'"  class="img-rounded avatar" fxFlex="100">
           </div>
@@ -128,8 +140,8 @@
             </div>
           </div>
         </div>
-        <div fxFlex="10" fxLayout="column" fxLayoutAlign="start end" class="p-l-10">
-          <a class="denim font-size-10 font-light">Disconnection</a>
+        <div fxFlex="20" fxLayout="column" fxLayoutAlign="start end" class="p-r-10">
+          <a class="denim font-size-10 font-light" (click)="logout()">Disconnection</a>
         </div>
       </div>
       <div class="full-width bg-white border-radius-20 p-10 p-l-20"
@@ -149,6 +161,10 @@
             <p class="black font-normal font-size-17">Total:</p>
             <p class="black font-normal font-size-17">€{{total()}}</p>
           </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end end" class="full-width">
+          <button mat-button routerLink="/manager/settings/licences/complete-update" [disabled]="paymentService.paidFor" class="btn-small bg-denim white" >Next</button>
+          <button mat-button class="btn-small bg-white denim" >Cancel</button>
         </div>
       </div>
     </div>

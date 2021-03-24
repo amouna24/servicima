@@ -3,7 +3,6 @@ import { ILicenceModel } from '@shared/models/licence.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { HttpClient } from '@angular/common/http';
 import { ILicenceFeatureModel } from '@shared/models/licenceFeature.model';
-import { ILicenceKeyModel } from '@shared/models/licenceKey.model';
 
 import { Observable } from 'rxjs';
 
@@ -16,7 +15,7 @@ export class LicenceService {
   licenceFeatures: ILicenceFeatureModel[];
   constructor(
     private appInitializer: AppInitializerService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
   ) { }
   /*------------------------------------ LICENCE --------------------------------------*/
   /**************************************************************************

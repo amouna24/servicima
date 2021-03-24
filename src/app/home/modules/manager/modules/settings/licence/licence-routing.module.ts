@@ -31,7 +31,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'buy-licence',
+    path: 'buy-licence/:licence/:pack',
     component: BuyLicenceComponent,
     data: {
       breadcrumb: 'buy licence'

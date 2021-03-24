@@ -58,13 +58,11 @@ export class UpgradeLicenceComponent implements OnInit {
    * @description Navigate to buy licence page
    */
   buyLicence(code: string, billing: string): void {
-    this.router.navigate(['/manager/settings/licences/buy-licence'],
-      {
-        queryParams: {
-          licence : code,
-          pack: billing
-        }
-      });
+    this.router.navigate([
+      '/manager/settings/licences/buy-licence',
+      code,
+      billing
+    ]);
   }
 
 }

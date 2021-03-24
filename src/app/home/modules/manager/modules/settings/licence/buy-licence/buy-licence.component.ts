@@ -1,17 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { SpinnerService } from '@core/services/spinner/spinner.service';
-import { ActivatedRoute } from '@angular/router';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { LicenceService } from '@core/services/licence/licence.service';
-
+import { PaymentService } from '@core/services/payment/payment.service';
+import { MatRadioChange } from '@angular/material/radio';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '@widigital-group/auth-npm-front';
+import { Subject } from 'rxjs';
+declare var paypal;
 @Component({
   selector: 'wid-buy-licence',
   templateUrl: './buy-licence.component.html',
   styleUrls: ['./buy-licence.component.scss'],
 })
-export class BuyLicenceComponent implements OnInit {
+export class BuyLicenceComponent implements OnInit, OnDestroy {
+  @ViewChild('paypal', { static: true}) paypalElement: ElementRef;
+  destroy$: Subject<boolean> = new Subject<boolean>();
   paiementMethode: boolean[] = [false, false, false];
   name: string;
   emailAddress: string;
@@ -23,7 +29,10 @@ export class BuyLicenceComponent implements OnInit {
   constructor(private licenceService: LicenceService,
               private userService: UserService,
               private spinnerService: SpinnerService,
-              private route: ActivatedRoute) {
+              public paymentService: PaymentService,
+              private activatedRoute: ActivatedRoute,
+              private authService: AuthService,
+              private router: Router) {
   }
 
   /**
@@ -33,21 +42,22 @@ export class BuyLicenceComponent implements OnInit {
     await this.getParam();
     await this.userInfo();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
+    this.paypalInit();
   }
 
   /**
    * @description Get query params
    */
   async getParam(): Promise<void> {
-    this.route.queryParams.subscribe(
+    this.activatedRoute.paramMap.subscribe(
       params => {
-        this.billingPack = params['pack'];
-        this.licence = this.licenceService.getLicenceByCode(params['licence']);
+        this.billingPack = params.get('pack');
+        this.licence = this.licenceService.getLicenceByCode(params.get('licence'));
       }
     );
-    console.log(this.licence);
-    console.log(new Date().toLocaleString());
-    console.log(new Date(this.licence.licence_start_date).toLocaleString());
+    if ((!this.licence) || (this.billingPack !== 'month' && this.billingPack !== 'year') ) {
+      await this.router.navigate(['/manager/settings/licences/upgrade-licence']);
+    }
   }
 
   /**
@@ -72,6 +82,33 @@ export class BuyLicenceComponent implements OnInit {
       }
     );
   }
+
+  /**
+   * @description logout: remove fingerprint and local storage
+   */
+  logout(): void {
+    this.authService.logout().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+        this.userService.connectedUser$.next(null);
+        localStorage.removeItem('userCredentials');
+        localStorage.removeItem('currentToken');
+        this.router.navigate(['/auth/login']);
+      },
+      (err) => {
+        console.error(err);
+      });
+  }
+  /**
+   * @description Change billing pack
+   */
+  billingChange(event: MatRadioChange): void {
+    this.router.navigate([
+      '/manager/settings/licences/buy-licence',
+      this.licence.LicenceKey.licence_code,
+      event.value
+    ]);
+  }
   /**
    * @description Calculate total price
    */
@@ -93,4 +130,22 @@ export class BuyLicenceComponent implements OnInit {
     const year: number = + this.licence.pack_annual_price;
     return  ((month - year) / month) * 100 ;
   }
+  /**
+   * @description setup paypal smart button
+   */
+  paypalInit(): void {
+    paypal
+      .Buttons(this.paymentService.paypal(this.licence, this.total()))
+      .render(this.paypalElement.nativeElement);
+  }
+
+  /**
+   * @description Destroy All subscriptions declared with takeUntil operator
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
+  }
+
 }
