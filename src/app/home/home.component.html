@@ -1,7 +1,7 @@
 <div [ngClass]="classColor" *ngIf="isLoading$ | async" >
 <mat-sidenav-container>
 
-  <mat-sidenav class="side-nav-container" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
+  <mat-sidenav class="side-nav-container full-height" mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]=0
                [fixedBottomGap]=0 >
     <ng-container *ngIf="displaySidenavSetting();else sidenav">
       <wid-sidenav-settings fxFill ></wid-sidenav-settings>
