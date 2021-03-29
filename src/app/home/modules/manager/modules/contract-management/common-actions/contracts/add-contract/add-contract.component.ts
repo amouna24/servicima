@@ -336,6 +336,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
+    if (this.type === 'CLIENT') {
+      this.backURL = '/manager/contract-management/clients-contracts/contracts-list';
+    } else if (this.type === 'SUPPLIER') {
+      this.backURL = '/manager/contract-management/suppliers-contracts/contracts-list';
+    }
   }
 
   /**************************************************************************
@@ -398,7 +403,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       INFORMATION: this.formBuilder.group({
         contractor_code: [contract === null ? '' : contract.contractor_code, Validators.required],
         collaborator_email: [contract === null ? '' : contract.collaborator_email, [Validators.required, Validators.email]],
-        contract_type: [contract === null ? '' : contract.contract_type],
         contract_date: [contract === null ? '' : contract.contract_date],
         contract_start_date: [contract === null ? '' : contract.contract_start_date],
         contract_end_date: [contract === null ? '' : contract.contract_end_date],
@@ -511,12 +515,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             console.log('updated successfully', res);
-            if (this.type === 'CUSTOMER') {
+            if (this.type === 'CLIENT') {
               this.router.navigate(
-                ['/manager/contract-management/clients-contracts/clients-list']);
+                ['/manager/contract-management/clients-contracts/contracts-list']);
             } else if (this.type === 'SUPPLIER') {
               this.router.navigate(
-                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+                ['/manager/contract-management/suppliers-contracts/contracts-list']);
             }
           },
           (error) => {
@@ -536,12 +540,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             console.log('added successfully', response);
-            if (this.type === 'CUSTOMER') {
+            if (this.type === 'CLIENT') {
               this.router.navigate(
-                ['/manager/contract-management/clients-contracts/clients-list']);
+                ['/manager/contract-management/clients-contracts/contracts-list']);
             } else if (this.type === 'SUPPLIER') {
               this.router.navigate(
-                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+                ['/manager/contract-management/suppliers-contracts/contracts-list']);
             }
           },
           (error) => {

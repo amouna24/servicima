@@ -74,30 +74,19 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * @description Filter Date with specific value
-   * @param event Value to filter with
-   */
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  /**
    * @description Get Contracts List
    */
   getContracts() {
     this.isLoading.next(true);
-    this.contractService.getContracts(`?email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+    this.contractService.getContracts(
+      `?contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .pipe(
+        takeUntil(
+          this.destroy$
+        )
+      )
       .subscribe(
       (response) => {
-        // this.contractsList = response;
-        // this.dataSource = new MatTableDataSource(this.contractsList);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
         this.ELEMENT_DATA.next(response);
         this.isLoading.next(false);
       },
@@ -105,8 +94,6 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
         this.isLoading.next(true);
         if (error.error.msg_code === '0004') {
           this.ELEMENT_DATA.next([]);
-          // this.contractsList = [];
-          // this.dataSource = new MatTableDataSource(this.contractsList);
         }
       },
     );
@@ -120,7 +107,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       this.redirectUrl = '/manager/contract-management/suppliers-contracts/contracts';
       this.addButtonLabel = 'New Contract';
     } else {
-      this.redirectUrl = '/manager/contract-management/clients-contracts/contract-create';
+      this.redirectUrl = '/manager/contract-management/clients-contracts/contracts';
       this.addButtonLabel = 'New Contract';
     }
   }

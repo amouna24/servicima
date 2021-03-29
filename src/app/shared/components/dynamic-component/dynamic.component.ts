@@ -29,6 +29,8 @@ export class DynamicComponent implements OnInit, OnDestroy {
   @Output() selectedFile = new EventEmitter<FormData>();
   @Output() selectedDoc = new EventEmitter<{ data: FormData, name: string }>();
   @Output() keyUpEventValue = new EventEmitter<string>();
+  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string }>();
+  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -153,6 +155,20 @@ export class DynamicComponent implements OnInit, OnDestroy {
       );
   }
 
+  identify(index, item) {
+    return item._id;
+  }
+
+  /**************************************************************************
+   * @description Open Dialog Panel
+   *************************************************************************/
+  feedDataTable(form: FormGroup, action) {
+    this.listOfObjects.emit({ form, action });
+  }
+
+  actionRowData(action: string, rowData: any) {
+    this.rowActionData.emit({ actionType: action, data: rowData});
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
