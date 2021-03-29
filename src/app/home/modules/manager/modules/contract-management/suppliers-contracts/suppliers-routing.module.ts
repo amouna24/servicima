@@ -9,14 +9,14 @@ import { SuppliersContractsListComponent } from './contracts/suppliers-contracts
 const routes: Routes = [
       {
         path: 'contracts',
-        component: AddSupplierContractComponent, // a modifier
+        component: AddSupplierContractComponent,
         data: {
           breadcrumb: 'new contract'
         },
       },
       {
         path: 'contracts-list',
-        component: SuppliersContractsListComponent, // a modifier
+        component: SuppliersContractsListComponent,
         data: {
           breadcrumb: 'contracts'
         },

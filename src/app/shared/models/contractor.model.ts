@@ -26,4 +26,5 @@ export interface IContractor {
   photo?: string;
   status?: string;
   activity_sector: string;
+  contractor_contacts: any;
 }

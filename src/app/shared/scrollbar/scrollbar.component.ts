@@ -1,17 +1,16 @@
 import {
-  AfterContentChecked,
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
   Inject,
-  OnInit
 } from '@angular/core';
 
 @Component({
   selector: 'wid-scrollbar',
   templateUrl: './scrollbar.component.html',
-  styleUrls: ['./scrollbar.component.scss']
+  styleUrls: ['./scrollbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScrollbarComponent {
   constructor(
