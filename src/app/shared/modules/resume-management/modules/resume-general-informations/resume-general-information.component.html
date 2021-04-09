@@ -1,0 +1,57 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="column" fxFlex="4"   ></div>
+  <div fxLayout="column" fxFlex="90"    >
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxFlex="56">
+          <h1 class="steel font-size-24 font-medium">Resume</h1>
+        </div>
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+      </div>
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+      <div fxLayout="column" fxFlex="86">
+        <h4 class="steel font-size-18 font-small">General information</h4>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="70" fxLayoutAlign="center center ">
+        <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
+          <h1>Project</h1>
+
+        </wid-scrollbar>
+    </div>
+    <div fxLayout="row" fxFlex="9"fxLayoutAlign="center ">
+      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
+        <button mat-raised-button  class="btn-small bg-primaryColor white"   >
+          Save
+        </button>
+
+
+      </div>
+    </div>
+
+
+
+
+  </div>
+  <div fxLayout="column" fxFlex="4" >
+
+
+  </div>
+
+
+
+<!--<div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+
+</div>
+
+
+
+</div>-->

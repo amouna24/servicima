@@ -21,8 +21,8 @@ const routes: Routes = [
         loadChildren: () => import('./modules/visa-files/visa-files.module').then(m => m.VisaFilesModule)
       },
       {
-        path: 'cv',
-        loadChildren: () => import('@shared/modules/cv/cv.module').then(m => m.CvModule)
+        path: 'resume',
+        loadChildren: () => import('@shared/modules/resume-management/resume-management.module').then(m => m.ResumeManagementModule)
       },
       {
         path: 'user',

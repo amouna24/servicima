@@ -40,6 +40,7 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
+import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { ErrorComponent } from './components/error/error.component';
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
+    ResumeManagementModule,
   ],
   exports: [
     MaterialModule,
@@ -125,6 +127,7 @@ import { ErrorComponent } from './components/error/error.component';
     SpliceText,
     DisableControlDirective,
     ModalComponent,
+    ResumeManagementModule,
   ]
 })
 export class SharedModule { }

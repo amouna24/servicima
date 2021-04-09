@@ -31,11 +31,73 @@ export const candidateMenu: IMenu[] = [
         icon: 'wi_dashboard',
         feature: 'CANDIDATE_VISA_FILE_ACCESS',
     },
-    {
-        state: 'cv',
-        name: 'cv',
-        type: 'link',
+  {
+    state: 'resume',
+    name: 'Resume management',
+    type: 'sub',
+    icon: 'wi_dashboard',
+    feature: 'SOURCING_CAND_FILE_ACCESS',
+    children: [
+      {
+        state: '',
+        name: 'General informations',
         icon: 'wi_dashboard',
-        feature: 'CANDIDATE_CV_ACCESS',
-    },
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'professionalExperience',
+        name: 'Professional experience',
+        icon: 'wi-user',
+        feature: 'CONTRACT_ACCESS',
+        type: 'sub',
+        child: [
+          {
+            state: 'projects',
+            name: 'Projects',
+            icon: 'wi_add_user',
+            feature: 'CONTRACT_ACCESS',
+            type: 'link',
+          }
+        ]
+      },
+      {
+        state: 'technicalSkills',
+        name: 'Technical skills',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'functionalSkills',
+        name: 'Functional skills ',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'intervention',
+        name: 'Level of interventions',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'language',
+        name: 'Language ',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'dynamicSection',
+        name: 'Dynamic section',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+
+
+    ]
+  },
 ];
