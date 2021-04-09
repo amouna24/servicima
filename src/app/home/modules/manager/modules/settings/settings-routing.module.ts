@@ -23,6 +23,14 @@ const routes: Routes = [
   },
 
   {
+    path: 'timesheet-setting',
+    loadChildren: () => import('./timesheet management/timesheet-management.module').then(m => m.TimesheetManagementModule),
+    data: {
+      breadcrumb: 'settings'
+    },
+  },
+
+  {
     path: 'payment-info',
     loadChildren: () => import('./payment/payment-info/payment-info.module').then(m => m.PaymentInfoModule),
     data: {

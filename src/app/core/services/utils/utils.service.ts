@@ -9,91 +9,23 @@ import { IIcon } from '@shared/models/icon.model';
 
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
-import { ITheme } from '@shared/models/theme.model';
-import { HttpClient } from '@angular/common/http';
-import { IRefdataModel } from '@shared/models/refdata.model';
-import { ICompanyTaxModel } from '@shared/models/companyTax.model';
-import { IFeatureModel } from '@shared/models/feature.model';
-import { ICompanyPaymentTermsModel } from '@shared/models/companyPaymentTerms.model';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
-import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
-  resList: IViewParam[] = [];
-  refData: { } = { };
-  listColor: ITheme[] = [];
+
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private matSnackBar: MatSnackBar,
-    private httpClient: HttpClient,
   ) {
 
-  }
-
-  /**
-   * @description get refData with specific type
-   * @param company: company
-   * application :application
-   * languageId: language id
-   * type: array code type example ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE']]
-   */
-  getRefData(company: string, application: string, listType: string[], map?: boolean): any {
-    const languageId = this.localStorageService.getItem('language').langId;
-    listType.forEach((type) => {
-      this.resList = [];
-      let filterRefData = this.appInitializerService.refDataList.filter(
-        (element) => {
-          if (
-            element.RefDataKey.ref_type_id ===
-            this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
-            element.RefDataKey.application_id === application &&
-            element.RefDataKey.company_id === company &&
-            element.RefDataKey.language_id === languageId) {
-            return element;
-          }
-        });
-      if (filterRefData.length > 0) {
-        if (!map) {
-          filterRefData.forEach(
-            (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-            },
-          );
-          return this.refData[type] = this.resList;
-        } else {
-          return this.refData[String(`${type}`)] = filterRefData;
-        }
-      } else if (filterRefData.length === 0) {
-        filterRefData = this.appInitializerService.refDataList.filter(
-          element =>
-            element.RefDataKey.ref_type_id ===
-            this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
-            element.RefDataKey.application_id === this.appInitializerService.applicationList
-              .find(app => app.ApplicationKey.application_code === 'ALL')._id &&
-            element.RefDataKey.company_id === this.appInitializerService.companyList
-              .find(comp => comp.companyKey.email_address === 'ALL')._id &&
-            element.RefDataKey.language_id === languageId);
-        if (map) {
-          this.refData[String(`${type}`)] = filterRefData;
-        } else {
-          filterRefData.forEach(
-            (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-            },
-          );
-          this.refData[String(`${type}`)] = this.resList;
-        }
-      }
-    });
-    return this.refData;
   }
 
   /*----------- IT WORKS FOR ANY APPLICATIONS AND COMPANY -------------*/
@@ -115,24 +47,13 @@ export class UtilsService {
    * @return ID of company
    *************************************************************************/
   getCompanyId(companyEmail: string, applicationCode?: string): string {
-    return this.appInitializerService.companyList
-      .find(value =>
-        value.companyKey.email_address === companyEmail &&
-        value.companyKey.application_id === this.getApplicationID(applicationCode)
-      )._id;
-  }
-  /**************************************************************************
-   * @description Get Company ID
-   * @param COMPANY_EMAIL the email_address
-   * @param APPLICATION_CODE of Application
-   * @return ID of company
-   *************************************************************************/
-  getCompanyIdd(companyEmail: string): string {
     return this.appInitializerService.companiesList
       .find(value =>
-        value.companyKey.email_address === companyEmail
+        value.companyKey.email_address === companyEmail &&
+        value.companyKey.application_id === applicationCode
       )._id;
   }
+
   /**************************************************************************
    * @description Get Application NAME
    * @param APPLICATION_ID the application id
@@ -155,44 +76,19 @@ export class UtilsService {
       ).company_name;
   }
 
-  /**
-   * @description:  filter data (languages, gender, legal form ...)
-   */
-  filterData(refDataList: IViewParam[], refDataFilterCtrl: any, filteredRefData: any): void {
-    if (!refDataList) {
-      return;
-    }
-    /* get the search keyword */
-    let search = refDataFilterCtrl.value;
-    if (!search) {
-      filteredRefData.next(refDataList.slice());
-      return;
-    }
-    search = search.toLowerCase();
-
-    /* filter data */
-    filteredRefData.next(
-      refDataList.filter(refData => refData.viewValue.toLowerCase().indexOf(search) > -1),
-    );
+  /**************************************************************************
+   * @description Get refType id
+   * @param type: type code of refType
+   * @return id of retype
+   *************************************************************************/
+  getRefTypeId(type) {
+    return this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id;
   }
-
-  /**
-   * @description listen for search field value changes
-   */
-  changeValueField(list: any[], filterCtrl: any, filtered: any) {
-    filterCtrl.valueChanges
-      .subscribe(
-        (res) => {
-          this.filterData(list, filterCtrl, filtered);
-        },
-        (e) => {
-          console.log('e', e);
-        }
-      );
-  }
-
   /**
    * @description calculate difference date between two date
+   * @param date1: date
+   * @param date2: date
+   * @return difference between two date
    */
   differenceDay(date1: Date, date2: number): number {
     const endDate: any = new Date(date1);
@@ -289,83 +185,43 @@ export class UtilsService {
     return pages.find(page => page.code === errCode);
   }
 
-  /**************************************************************************
-   * @description get Theme
-   * @return list of theme
-   *************************************************************************/
-  getTheme(): ITheme[] {
-    this.listColor = [
-      { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
-      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
-      { 'color': 'cobalt', 'status': false , 'image': 'cobalt.png'},
-      { 'color': 'blue', 'status': false , 'image': 'blue.png'},
-      { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'lighterPurple', 'status': false , 'image': 'lighterPurple.png'},
-      { 'color': 'mango', 'status': false , 'image': 'mango.png'},
-      { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
-      { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
-      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
-    ];
-    const cred = this.localStorageService.getItem('userCredentials');
-    const email = cred['email_address'];
-    if (this.localStorageService.getItem(this.hashCode(email))) {
-       this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem(this.hashCode(email))) {
-          element.status = true;
-        }
-      });
-      return this.listColor;
-    } else {
-      return this.listColor;
-    }
-  }
-  getRefTypeId(type) {
-   return this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id;
-  }
-  getRole(company, application) {
-    const id = this.getRefTypeId('ROLE');
-      return this.httpClient
-        .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
-    }
-  getRoleAll(company, application) {
-    const id = this.getRefTypeId('ROLE');
-    return this.httpClient
-      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
-  }
-  getPaymentMethode(company, application) {
-    const id = this.getRefTypeId('PAYMENT_MODE');
-    return this.httpClient
-      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
-  }
-  getPaymentMethodeAll(company, application) {
-    const id = this.getRefTypeId('PAYMENT_MODE');
-    return this.httpClient
-      .get<IRefdataModel[]>(`${environment.refDataApiUrl}?ref_type_id=${id}&company_id=${company}&application_id=${application}`);
-  }
-  getCompanyPaymentTerms(email) {
-    return this.httpClient
-      .get<ICompanyPaymentTermsModel[]>(`${environment.companyPaymentTermsApiUrl}?company_email=${email}`);
-  }
-  getCompanyTax(email) {
-    return this.httpClient
-      .get<ICompanyTaxModel[]>(`${environment.companyTaxApiUrl}?company_email=${email}`);
-  }
+  /****************************** Filter list with mat-select ************************/
+  /*********************************************************************************** */
+
   /**
-   * @description Get all existing features
+   * @description:  filter data (languages, gender, legal form ...)
    */
-  getAllFeatures(language) {
-    return this.httpClient
-      .get<IFeatureModel[]>(`${environment.featuresApiUrl}?language_id=${language}`);
+  filterData(refDataList: IViewParam[], refDataFilterCtrl: any, filteredRefData: any): void {
+    if (!refDataList) {
+      return;
+    }
+    /* get the search keyword */
+    let search = refDataFilterCtrl.value;
+    if (!search) {
+      filteredRefData.next(refDataList.slice());
+      return;
+    }
+    search = search.toLowerCase();
+
+    /* filter data */
+    filteredRefData.next(
+      refDataList.filter(refData => refData.viewValue.toLowerCase().indexOf(search) > -1),
+    );
   }
-  addRole(role) {
-    return this.httpClient
-      .post(`${environment.refDataApiUrl}`, role);
+
+  /**
+   * @description listen for search field value changes
+   */
+  changeValueField(list: any[], filterCtrl: any, filtered: any) {
+    filterCtrl.valueChanges
+      .subscribe(
+        (res) => {
+          this.filterData(list, filterCtrl, filtered);
+        },
+        (e) => {
+          console.log('e', e);
+        }
+      );
   }
-  addFeatureRole(role) {
-    return this.httpClient
-      .post(`${environment.companyRoleFeaturesApiUrl}`, role);
-  }
+
 }

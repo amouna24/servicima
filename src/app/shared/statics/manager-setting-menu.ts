@@ -53,6 +53,13 @@ export const ManagerSettingMenu: IMenu[] = [
         type: 'link',
       },
       {
+        state: 'timesheet-setting',
+        name: 'timesheet Setting',
+        icon: 'assignment',
+        feature: 'SETTINGS_INVOICES_ACCESS', // à changer
+        type: 'link',
+      },
+      {
         state: 'payment-methods',
         name: 'Payment methods',
         icon: 'assignment',

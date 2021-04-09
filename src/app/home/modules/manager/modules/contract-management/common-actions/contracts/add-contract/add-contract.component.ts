@@ -24,6 +24,8 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-add-contract',
@@ -58,7 +60,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Declare the new ContractId to be used on update
    *************************************************************************/
   contractId: string;
-
+  /**************************************************************************
+   * @description Declare application id
+   *************************************************************************/
+  applicationId: string;
   /**************************************************************************
    * @description UserInfo
    *************************************************************************/
@@ -312,6 +317,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private route: ActivatedRoute,
+    private refdataService: RefdataService,
+    private localStorageService: LocalStorageService,
   ) {
     this.contractForm = new FormGroup({ });
   }
@@ -319,9 +326,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  ngOnInit(): void {
+ async ngOnInit() {
     this.initContractForm(null, null);
-    this.getInitialData();
+   await this.getInitialData();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
@@ -353,29 +360,30 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * initialize local tables
    * 3 get current UserInfo
    *************************************************************************/
-  getInitialData() {
+ async getInitialData() {
+  const cred = this.localStorageService.getItem('userCredentials');
+  this.applicationId = cred['application_id'];
     /************ get currencies List and next the value to the subject ************/
     /********************************** CURRENCY **********************************/
     this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
-
-    /*---------------------------------------------------------------*/
-    this.utilsService.getRefData(
-      this.utilsService.getCompanyId('ALL', 'ALL'),
-      this.utilsService.getApplicationID('ALL'),
-      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
-    );
-    this.statusList.next(this.utilsService.refData['CONTRACT_STATUS']);
     this.subscriptions.push(
       this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.userInfo = data;
-        this.companyEmail = data.user[0]['company_email'];
-        this.getPaymentTerms();
-      }
-    })
+        if (!!data) {
+          this.userInfo = data;
+          this.companyEmail = data.user[0]['company_email'];
+          this.getPaymentTerms();
+        }
+      })
     );
+    /*---------------------------------------------------------------*/
+   await this.refdataService.getRefData(
+      this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+      this.applicationId,
+      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
+    );
+    this.statusList.next(this.refdataService.refData['CONTRACT_STATUS']);
     this.contractorService
       .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
       .pipe(

@@ -10,6 +10,7 @@ import { AuthService } from '@widigital-group/auth-npm-front';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { ThemeService } from '@core/services/themes/theme.service';
 
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
@@ -69,6 +70,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private localStorageService: LocalStorageService,
     private utilService: UtilsService,
+    private themeService: ThemeService,
   ) {
     this.menu = sidenavRightMenu;
   }
@@ -83,7 +85,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
    this.getModuleName();
    this.getSelectedTheme();
-   this.listColor = this.utilService.listColor;
+   this.listColor = this.themeService.listColor;
    this.getStateSidenav();
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
@@ -139,7 +141,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   getSelectedTheme(): void {
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred['email_address'];
-    this.listColor = this.utilService.getTheme();
+    this.listColor = this.themeService.getTheme();
   }
   /**
    * @description toggle sidenav
@@ -161,6 +163,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         this.userService.connectedUser$.next(null);
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
+        localStorage.removeItem('email_adress');
         this.router.navigate(['/auth/login']);
       },
       (err) => {

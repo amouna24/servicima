@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { ProfileService } from '@core/services/profile/profile.service';
-import { BehaviorSubject } from 'rxjs';
-import { ILicenceModel } from '@shared/models/licence.model';
+import { UserService } from '@core/services/user/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'wid-licence-management',
@@ -10,22 +9,37 @@ import { ILicenceModel } from '@shared/models/licence.model';
   styleUrls: ['./licence-management.component.scss']
 })
 export class LicenceManagementComponent implements OnInit {
-  ELEMENT_DATA = new BehaviorSubject<ILicenceModel[]>([]);
-  isLoading = new BehaviorSubject<boolean>(false);
-  licence = [];
-  licence_code;
+  form: FormGroup;
+  typeLicence: string;
+  periodicity: string;
+  companyEmail: string;
+  startDate: Date;
   constructor(
     private appInitializerService: AppInitializerService,
-    private profileService: ProfileService,
+    private userService: UserService,
+    private formBuilder: FormBuilder,
   ) { }
 
   /**
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
-    this.ELEMENT_DATA.next(this.appInitializerService.licencesList);
+  this.userService.connectedUser$.subscribe((data) => {
+    this.companyEmail = data.user[0].company_email;
+    this.startDate = data['companylicence'][0].licence_start_date;
+    this.typeLicence = data['companylicence'][0].companyLicenceKey.licence_code;
+    this.periodicity = this.getPeriodicity(data['companylicence'][0].bill_periodicity);
+    this.initForm();
+  });
   }
-
+  /**
+   * @description : initialization of the form
+   */
+  initForm(): void {
+    this.form = this.formBuilder.group({
+      contactEmail: [{ value: this.companyEmail, disabled: true }],
+    });
+  }
   /**
    * @description : action
    * @param rowAction: object
@@ -40,4 +54,14 @@ export class LicenceManagementComponent implements OnInit {
      }*/
   }
 
+  backClicked() {
+
+  }
+
+  getPeriodicity(code) {
+    switch (code) {
+      case ('M'): return 'monthly';
+      case ('Y'): return 'yearly';
+    }
+  }
 }

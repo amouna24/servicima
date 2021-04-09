@@ -132,11 +132,15 @@ export class DynamicDataTableComponent implements OnInit {
     this.rowActionData.emit({ actionType: action, data: rowData});
   }
   add(type) {
-    if (type === 'page') {
-      this.router.navigate([ this.header.addActionURL ]);
-    } else {
+    if (type === 'dialog') {
       this.modalsServices.displayModal(this.header.addActionDialog.modalName, this.header.addActionDialog.data,
-                                       this.header.addActionDialog.width, this.header.addActionDialog.height);
+        this.header.addActionDialog.width, this.header.addActionDialog.height).subscribe((data) => {
+        if (data) {
+          this.tableData.next(data);
+        }
+      });
+    } else {
+      this.router.navigate([ this.header.addActionURL ]);
     }
 
   }

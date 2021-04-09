@@ -20,6 +20,8 @@ import { userType } from '@shared/models/userProfileType.model';
 import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-add-contractor',
@@ -71,7 +73,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description Declare the new ContractorId to be used on update
    *************************************************************************/
   contractorId: string;
-
+    /**************************************************************************
+   * @description Declare application id
+   *************************************************************************/
+  applicationId: string;
   /**************************************************************************
    * @description UserInfo
    *************************************************************************/
@@ -466,6 +471,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     private companyTaxService: CompanyTaxService,
     private uploadService: UploadService,
     private sanitizer: DomSanitizer,
+    private refdataService: RefdataService,
+    private localStorageService: LocalStorageService
   ) {
     this.initContractForm();
   }
@@ -473,8 +480,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  ngOnInit(): void {
-    this.getInitialData();
+ async ngOnInit() {
+    await this.getInitialData();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
@@ -592,7 +599,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * initialize local tables
    * 3 get current UserInfo
    *************************************************************************/
-  getInitialData() {
+ async getInitialData() {
+  const cred = this.localStorageService.getItem('userCredentials');
+  this.applicationId = cred['application_id'];
     /********************************** COUNTRY **********************************/
     this.appInitializerService.countriesList.forEach((country) => {
       this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC});
@@ -618,18 +627,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.activityCodeList.next(this.appInitializerService.activityCodeList.map((activityCode) => {
       return { value: activityCode.NAF, viewValue: activityCode.NAF };
     }));
-    /********************************** REF DATA **********************************/
-    this.utilsService.getRefData(
-      this.utilsService.getCompanyId('ALL', 'ALL'),
-      this.utilsService.getApplicationID('ALL'),
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE']
-    );
-    /******************************** ACTIVITY CODE *******************************/
-    this.statusList.next(this.utilsService.refData['CONTRACT_STATUS']);
-    this.legalList.next(this.utilsService.refData['LEGAL_FORM']);
-    this.genderList.next(this.utilsService.refData['GENDER']);
-    this.profileTitleList.next(this.utilsService.refData['PROF_TITLES']);
-    this.paymentModeList.next(this.utilsService.refData['PAYMENT_MODE']);
     /************************************ USER ************************************/
     this.subscriptions = this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
@@ -638,6 +635,18 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         this.getCompanyTax();
       }
     });
+    /********************************** REF DATA **********************************/
+   await this.refdataService.getRefData(
+      this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+      this.applicationId,
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE']
+    );
+    /******************************** ACTIVITY CODE *******************************/
+    this.statusList.next(this.refdataService.refData['CONTRACT_STATUS']);
+    this.legalList.next(this.refdataService.refData['LEGAL_FORM']);
+    this.genderList.next(this.refdataService.refData['GENDER']);
+    this.profileTitleList.next(this.refdataService.refData['PROF_TITLES']);
+    this.paymentModeList.next(this.refdataService.refData['PAYMENT_MODE']);
   }
 
   /**************************************************************************

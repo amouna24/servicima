@@ -1,9 +1,127 @@
-<div class="page-container">
-  <wid-dynamic-data-table
-    [tableData]="ELEMENT_DATA"
-    [tableCode]="'LICENCE'"
-    [header]="{ title: 'Licence management', addActionURL: '', addActionText: 'New licence'}"
-    [title]="'Licence list'"
-    (rowActionData)="switchAction($event)">
-  </wid-dynamic-data-table>
+<div class="licence-container"
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Subscription Detail</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+
+  </div>
+  <div [formGroup]="form" class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
+    <div fxFlex="100" class="full-height" fxLayout="column" fxLayoutAlign="start start"  fxLayoutGap="10px" >
+      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="100"
+           fxLayout="column" fxLayoutAlign="start start">
+        <div fxLayout="column" fxFlex="90" style="width: 100%;font-size: 12px" class="m-l-40 m-t-30" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
+         <div fxLayout="row" >
+           <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
+             <div>Contact</div>
+           </div>
+           <div fxLayout="column" fxFlex="25">
+             <mat-form-field appearance="outline">
+               <input formControlName="contactEmail" style="font-size: 12px" autocomplete="off" matInput required placeholder="email@exp.com"
+                      [ngStyle.xs]="{'font-size': '15px'}" />
+             <mat-error class="wid-error-messages">
+                 {{ 'general.required' | translate }}</mat-error>
+             </mat-form-field>
+           </div>
+         </div>
+
+        <div fxLayout="row" >
+          <div fxLayout="column" fxFlex="30">
+            Account creation date
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            {{this.startDate | date}}
+          </div>
+        </div>
+
+        <div fxLayout="row"   >
+          <div fxLayout="column" fxFlex="30">
+            Subscription type
+          </div>
+          <div  fxFlex="25">
+            {{typeLicence | titlecase}} pack <sup style="color: #405e84; font-size: 8px">({{periodicity}})</sup>
+          </div>
+          <div fxLayout="column" fxFlex="30">
+            <button mat-raised-button class="btn-medium" style="background-color:#f3f6f9;color:#405e84;  font-size: 11px !important;">Renew or edit subscription </button>
+          </div>
+        </div>
+
+        <div fxLayout="row"  >
+          <div fxLayout="column" fxFlex="30">
+            Your subscription amount <sup style=" font-size: 8px; color: #405e84">auto. renewal without obligation
+          </sup>
+          </div>
+          <div  fxFlex="12">
+            80.50€ <sup style="color: #405e84; font-size: 8px"> per month</sup>
+          </div>
+          <div fxLayout="row" fxFlex="20" style="text-decoration: underline;color: #405e84" fxLayoutAlign="flex-start center" >
+            <div fxLayout="column" >
+              <mat-icon class="icon material-icons-outlined"  svgIcon="wi-external-link">
+              </mat-icon>
+            </div>
+
+            <div  fxLayout="column" style="font-size: 8px"> History</div>
+          </div>
+        </div>
+
+        <div fxLayout="row"  >
+          <div fxLayout="column" fxFlex="30">
+            User licenses <sup style=" font-size: 8px; color: #405e84">
+            Additional user (mensuel) 5.00€
+          </sup>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            30 <sup style=" font-size: 8px; color: #405e84;margin-left: 20px;"> (free 25 + extra 5) </sup>
+
+          </div>
+          <div fxLayout="column" fxFlex="30">
+            <button mat-raised-button class="btn-medium" style="background-color:#f3f6f9;color:#405e84;  font-size: 11px !important;">Users management
+            </button>
+          </div>
+        </div>
+
+        <div fxLayout="row"  >
+          <div fxLayout="column" fxFlex="30">
+            Next sampling
+          </div>
+          <div  fxFlex="12">
+            15.00€ <sup style=" font-size: 8px; color: #405e84;">  31/05/2021 </sup>
+          </div>
+          <div fxLayout="row" fxFlex="20" style="text-decoration: underline;color: #405e84" fxLayoutAlign="flex-start center" >
+            <div fxLayout="column" >
+              <mat-icon class="icon material-icons-outlined"  svgIcon="wi-external-link">
+              </mat-icon>
+            </div>
+
+            <div  fxLayout="column" style="font-size: 8px"> next invoice </div>
+          </div>
+
+        </div>
+
+        <div fxLayout="row"  fxLayoutAlign="start center ">
+          <div fxLayout="column" fxFlex="30">
+            Payment information
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <div fxLayout="row" >
+            <div fxLayout="column" fxFlex="35">  **** **** ****  </div>
+            <div fxLayout="column"  fxFlex="50">1411 12/2022</div>
+            </div>
+          </div>
+          <div  fxLayout="column" fxFlex="30" >
+            <button mat-raised-button class="btn-medium" style="background-color:#f3f6f9;color:#405e84;  font-size: 11px !important; " >Edit credit card
+            </button>
+          </div>
+        </div>
+        </div>
+        </div>
+      </div>
+    </div>
 </div>

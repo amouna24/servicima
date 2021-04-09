@@ -16,7 +16,7 @@
         <div fxLayout="column" fxFlex="40">
           <label class="font-size-12 black-three required">{{'addpaymentterms.delay' | translate | capitalizeFirstLetter}} </label>
           <mat-form-field appearance="outline">
-            <input type="number" autocomplete="off" matInput required [placeholder]=" 'addpaymentterms.delay' | translate | capitalizeFirstLetter"
+            <input type="number" class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentterms.delay' | translate | capitalizeFirstLetter"
                    formControlName="delay" [ngStyle.xs]="{'font-size': '15px'}" />
             <mat-error class="wid-error-messages" *ngIf="form.controls.delay?.errors?.required">
               {{ 'general.required' | translate }}</mat-error>
@@ -33,7 +33,7 @@
           <mat-form-field appearance="outline">
              <textarea [placeholder]=" 'addpaymentterms.Description' | translate" rows="7"
                        formControlName="paymentTermsDesc" autocomplete="off" matInput
-                       [ngStyle.xs]="{'font-size': '15px'}">
+                       [ngStyle.xs]="{'font-size': '15px'}" class="black-three">
                   </textarea>
             <mat-error class="wid-error-messages" *ngIf="form.controls.paymentTermsDesc?.errors?.required">
               {{ 'general.required' | translate }}</mat-error>

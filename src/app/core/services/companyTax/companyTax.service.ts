@@ -32,4 +32,24 @@ export class CompanyTaxService {
     return this.httpClient.get<ITaxModel[]>(`${environment.taxApiUrl}` );
   }
 
+  /**************************************************************************
+   * @description add tax by company
+   * @param companyTax object to add
+   * @returns message code
+   *************************************************************************/
+  addCompanyTax(companyTax) {
+    return this.httpClient
+      .post(`${environment.companyTaxApiUrl}`, companyTax);
+  }
+
+  /**************************************************************************
+   * @description update tax by company
+   * @param companyTax object to update
+   * @returns message code
+   *************************************************************************/
+  updateCompanyTax(companyTax) {
+    return this.httpClient
+      .put(`${environment.companyTaxApiUrl}`, companyTax);
+  }
+
 }
