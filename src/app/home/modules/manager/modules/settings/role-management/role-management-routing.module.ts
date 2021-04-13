@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RoleManagementComponent } from './role-management.component';
+import { RoleManagementComponent } from './role-management/role-management.component';
 
 const routes: Routes = [
 

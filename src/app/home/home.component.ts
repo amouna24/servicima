@@ -9,6 +9,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ThemeService } from '@core/services/themes/theme.service';
 
 import { Router } from '@angular/router';
 
@@ -196,7 +197,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private utilService: UtilsService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService,
   ) {
     this.d_c_Form = this.formBuilder.group({
         ADDRESS: this.formBuilder.group({
@@ -238,7 +240,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): void {
-    this.listColor = this.utilService.getTheme();
+    this.listColor = this.themeService.getTheme();
     this.userService.classSubject$.subscribe((col) => {
       this.classColor = col;
     });

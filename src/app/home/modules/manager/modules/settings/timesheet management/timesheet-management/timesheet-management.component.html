@@ -1,0 +1,12 @@
+<div class="page-container">
+  <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'TIMESHEET_SETTING'"
+    [header]="{ title: 'Timesheet settings management',type:'dialog', addActionText: 'New Timesheet settings',
+        addActionDialog: { modalName: 'add', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '513px' }}"
+
+    [title]="'Timesheet settings list'"
+    (rowActionData)="switchAction($event)"
+  >
+  </wid-dynamic-data-table>
+</div>

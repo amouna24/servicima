@@ -2,6 +2,10 @@ import { IIcon } from '@shared/models/icon.model';
 
 export const iconsList: IIcon[] = [
   {
+    name: 'wi-external-link',
+    path: 'assets/icons/external-link.svg'
+  },
+  {
     name: 'wi-bag',
     path: 'assets/icons/bag.svg'
   },

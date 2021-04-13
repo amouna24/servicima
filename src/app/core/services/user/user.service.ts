@@ -25,6 +25,7 @@ export class UserService {
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
+  userType: string;
   companyRolesFeatures = [];
   licenceFeature: string[];
   constructor(private httpClient: HttpClient,
@@ -43,10 +44,10 @@ export class UserService {
       `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
       .subscribe( (data) => {
         this.userInfo = data;
+        this.userType = this.userInfo['user'][0].user_type;
         this.connectedUser$.next(data);
         this.getImage(data['user'][0].photo);
         const roleCode = data.userroles[0].userRolesKey.role_code;
-
         this.getCompanyRoleFeatures(roleCode, this.userInfo['company'][0]['companyKey']['email_address'])
           .subscribe((list) => {
             this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
@@ -54,7 +55,7 @@ export class UserService {
               this.companyRolesFeatures.splice(0, this.companyRolesFeatures.length - 1);
             }
             this.licenceFeature =  data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
-            this.redirectUser(roleCode);
+            this.redirectUser(this.userType);
             this.isLoadingSubject.next(true);
           });
       });
@@ -65,8 +66,9 @@ export class UserService {
    *************************************************************************/
   redirectUser(userRole: string): void {
     switch (userRole) {
-      case 'ADMIN' || 'MANAGER' || 'HR-MANAGER' || 'SALES': {
-        this.moduleName$.next('manager');
+      case 'COMPANY':
+      case 'STAFF':
+      { this.moduleName$.next('manager');
         this.router.navigate(['/manager']);
       }
         break;
@@ -138,6 +140,6 @@ export class UserService {
    * @param email: string
    *************************************************************************/
   getCompanyRoleFeatures(role: string, email: string) {
-    return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}` + `?role_code=${role}&email_address=${email}`);
+    return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}?role_code=${role}&email_address=${email}`);
   }
 }

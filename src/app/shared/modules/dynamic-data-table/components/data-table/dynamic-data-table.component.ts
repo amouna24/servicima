@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
-import { ConfigurationModalComponent } from '@dataTable/components/configuration-modal/configuration-modal.component';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -17,7 +16,8 @@ export class DynamicDataTableComponent implements OnInit {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
-  @Input() header: { title: string, addActionURL: string, addActionText: string};
+  @Input() header: { title: string, addActionURL: string, addActionText: string, type: string,
+    addActionDialog: { modalName: string, modalComponent: string, data: object, width: string, height: string } };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
 
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
@@ -36,6 +36,8 @@ export class DynamicDataTableComponent implements OnInit {
     private modalService: ModalService,
     private utilService: UtilsService,
     private appInitializerService: AppInitializerService,
+    private router: Router,
+    private modalsServices: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -70,6 +72,10 @@ export class DynamicDataTableComponent implements OnInit {
         if (dataS.language_id) {
           dataS['language_id'] = this.appInitializerService.languageList.find((type) =>
             type._id === dataS['language_id']).language_desc;
+        }
+        if (dataS.company_id) {
+          dataS['company_id'] = this.appInitializerService.companiesList.find((type) =>
+            type._id === dataS['company_id']).company_name;
         }
       });
     });
@@ -124,5 +130,18 @@ export class DynamicDataTableComponent implements OnInit {
 
   actionRowData(action: string, rowData: any) {
     this.rowActionData.emit({ actionType: action, data: rowData});
+  }
+  add(type) {
+    if (type === 'dialog') {
+      this.modalsServices.displayModal(this.header.addActionDialog.modalName, this.header.addActionDialog.data,
+        this.header.addActionDialog.width, this.header.addActionDialog.height).subscribe((data) => {
+        if (data) {
+          this.tableData.next(data);
+        }
+      });
+    } else {
+      this.router.navigate([ this.header.addActionURL ]);
+    }
+
   }
 }

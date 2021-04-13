@@ -8,6 +8,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 import { ICredentialsModel } from '@shared/models/credentials.model';
 import { IViewParam } from '@shared/models/view.model';
@@ -33,20 +34,28 @@ export class UsersListComponent implements OnInit, OnDestroy {
               private utilsService: UtilsService,
               private modalService: ModalService,
               private appInitializerService: AppInitializerService,
-              private localStorageService: LocalStorageService) { }
+              private localStorageService: LocalStorageService,
+              private refdataService: RefdataService, ) { }
 
   /**
    * @description Loaded when component in init state
    */
-  ngOnInit() {
+ async ngOnInit() {
     this.credentials = this.localStorageService.getItem('userCredentials');
-    this.getRefdata();
-    this.getAllUsers();
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyId = userInfo['company'][0]['_id'];
+          }
+        });
+   await this.getAllUsers();
   }
   /**
    * @description : get all users
    */
-  getAllUsers() {
+ async getAllUsers() {
+    await this.getRefdata();
     this.isLoading.next(true);
     this.subscriptions.push(this.profileService.getAllUser(this.credentials['email_address'])
       .subscribe((res) => {
@@ -64,9 +73,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
-  getRefdata(): void {
-    const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER'];
-    this.refData = this.utilsService.getRefData(this.companyId, this.credentials['application_id'],
+ async getRefdata() {
+    const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER', 'ROLE'];
+    this.refData = await this.refdataService.getRefData( this.companyId , this.credentials['application_id'],
      list);
   }
 
@@ -111,9 +120,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
         this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.credentials['email_address']).subscribe(
-          (res) => {
+          async (res) => {
             if (res) {
-              this.getAllUsers();
+             await this.getAllUsers();
             }
           },
           (err) => console.error(err),

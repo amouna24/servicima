@@ -6,11 +6,12 @@
   position: relative;
   .edit-img {
     max-width: 100%;
+    min-width: 100%;
     position: absolute;
     max-height: 100%;
+    min-height: 100%;
     top: 1px;
-    width: 85px;
-    height: 85px;
+
     clip-path: circle(45% at 50% 49%);
   }
   .show-img {
@@ -136,10 +137,6 @@
     border-radius: 50px;
     overflow: hidden;
   }
-}
-
-.mat-checkbox-inner-container {
-  display: none !important;
 }
 .basic-container {
   display: inline-block;
