@@ -167,9 +167,15 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.utilService.previousRoute();
   }
   confirm() {
-    this.router.navigate(
-      ['/manager/settings/licences/complete-update'],
-    { state: { payment: this.paymentService.paymentMethode , detail: this.paymentService.detail } });
+    if (this.paymentService.detail.status === 'COMPLETED') {
+      this.router.navigate(
+        ['/manager/settings/licences/complete-update'],
+        { state: {
+          payment: this.paymentService.paymentMethode,
+            detail: this.paymentService.detail
+        }
+        });
+    }
   }
 
   /**

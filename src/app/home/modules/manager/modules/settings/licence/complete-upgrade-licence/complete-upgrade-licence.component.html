@@ -27,10 +27,10 @@
           <h5 class="black" fxFlexAlign="start start">Order details :</h5>
           <div fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlexAlign="start center">
           <p class="black-three">Selected package</p>
-          <h5 class="denim font-size-18 m-0"></h5>
-          <p class="black font-size-12 font-normal m-t-10">Total : 25.00€</p>
-          <p class="black font-size-12 font-light">Payment method : Paypal</p>
-          <p class="black font-size-12 font-light">Purchase date : 04/03/2020 10:42AM</p>
+          <h5 class="denim font-size-18 m-0">{{detail.detail.licence}}</h5>
+          <p class="black font-size-12 font-normal m-t-10">Total : {{detail.detail.total}}</p>
+          <p class="black font-size-12 font-light">Payment method : {{detail.payment}}</p>
+          <p class="black font-size-12 font-light">Purchase date : {{detail.detail.create_time | date:'short' }}</p>
           </div>
           <div fxFlex="20" fxLayout="column" fxLayoutAlign="center start" >
             <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">

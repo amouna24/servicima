@@ -8,6 +8,7 @@ export enum FieldsAlignment {
   tow_items_with_textarea = 'TWO_ITEMS_WITH_TEXTAREA',
   tow_items = 'TWO_ITEMS',
   one_item_at_left = 'ONE_ITEM_LEFT',
+  one_item_at_right = 'ONE_ITEM_RIGHT',
   one_item_at_center = 'ONE_ITEM_CENTER',
   one_item_stretch = 'ONE_ITEM_STRETCH',
 }
@@ -18,6 +19,8 @@ export enum InputType {
   TEXT = 'text',
   PASSWORD = 'password',
   DATE = 'date',
+  ACTIONS = 'Actions',
+  ROW_ITEM = 'rowItem'
 }
 
 export enum FieldsType {
@@ -28,8 +31,15 @@ export enum FieldsType {
   SLIDE_TOGGLE = 'slideToggle',
   UPLOAD_FILE = 'uploadFile',
   DATE_PICKER = 'datePicker',
+  DATA_TABLE = 'dataTable',
+  ADD_MORE = 'addMore'
 }
 
+export interface IColumnsDef {
+  name: string;
+  prop: string;
+  type: InputType;
+}
 export interface IFieldsObject {
   label?: string;
   placeholder?: string;
@@ -45,6 +55,11 @@ export interface IFieldsObject {
     modelObject: any;
     singleUpload: boolean;
     userType: userType;
+  };
+  dataTable ?: {
+    displayedColumns: string[],
+    columns: IColumnsDef[],
+    dataSource: BehaviorSubject<any[]>;
   };
 }
 
