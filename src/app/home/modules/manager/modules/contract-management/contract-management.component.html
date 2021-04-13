@@ -1,1 +1,51 @@
-<router-outlet></router-outlet>
+<div  fxLayout="column" fxFlex="100" class="dynamic-component-container border-radius-20">
+  <div  fxLayout="row" fxFlex="45" fxLayoutAlign="space-around center" >
+    <div fxFlex.gt-sm="20" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <div fxLayout="column" fxFlex="100" >
+              <span class="white font-size-20">Client</span>
+              <a class="white font-size-10">Add new</a>
+              <span class="white font-size-20 line-height-3">{{ getCount('CLIENT') }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="20" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+              <span class="white font-size-20">Client Contract</span>
+              <span class="white font-size-10">Create contract</span>
+              <span class="white font-size-20 line-height-3">{{ getCount('CLIENT_C') }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="20" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+              <span class="white font-size-20">Supplier</span>
+              <span class="white font-size-10">March 2017</span>
+              <span class="white font-size-20 line-height-3">{{ getCount('SUPPLIER') }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="20" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <span class="white font-size-20">Supplier Contract</span>
+            <span class="white font-size-10">Create contract</span>
+            <span class="white font-size-20 line-height-3">{{ getCount('SUPPLIER_C') }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -31,6 +31,7 @@ export class CompleteUpgradeLicenceComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
+    console.log(this.detail);
     this.userService.connectedUser$.pipe(takeUntil(this.destroy$)).subscribe((userInfo) => {
       if (userInfo) {
         this.user = userInfo['user'][0];

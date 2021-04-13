@@ -140,6 +140,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe(
       (response) => {
+        console.log('contractors List', response);
         this.contractorsList = response;
         this.ELEMENT_DATA.next(this.contractorsList);
         this.isLoading.next(false);
@@ -170,7 +171,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Contractor Status
    *************************************************************************/
   onStatusChange(Contractor) {
-    console.log('contra', Contractor);
     const confirmation = {
       code: 'changeStatus',
       title: 'change the status',
@@ -190,7 +190,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
                 )
                 .subscribe(
                 (res1) => {
-                  console.log('A', res1);
                   this.getContractors();
                 }
               );
@@ -201,7 +200,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
                 )
                 .subscribe(
                 (res1) => {
-                  console.log('D', res1);
                   this.getContractors();
                 }
               );
@@ -255,7 +253,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
             )
             .subscribe(
             (resp) => {
-              console.log(resp);
             }
           );
         },
@@ -265,6 +262,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       );
   }
 
+  /**************************************************************************
+   * @description get selected Action From Dynamic DataTABLE
+   * @param rowAction Object { data, rowAction }
+   * data _id
+   * rowAction [show, update, delete]
+   *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
       case ('show'): this.showContact(rowAction.data);

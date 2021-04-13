@@ -1,10 +1,10 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
   <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">{{ title }}</h1>
+      <h1 class="steel font-size-24 font-medium">{{ title | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="{{ backURL }}">
+      <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="{{ backURL | translate }}">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
         <span class="cool-grey">back</span>
@@ -802,8 +802,8 @@
               </ng-container>
             </ng-container>
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   ITEM WITHOUT CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
-            <ng-template #childSection>
-              <section id="#{{mi.titleKey}}" fxLayout="column" fxFlex="100" (mouseenter)="setSelectedItem(mi.titleKey)"
+            <ng-template #childSection><!--fxFlex="100"-->
+              <section id="#{{mi.titleKey}}" fxLayout="column"  (mouseenter)="setSelectedItem(mi.titleKey)"
                        formGroupName="{{ mi.titleKey }}">
 
                 <!------------------------ TITLE  ------------------------->
@@ -1011,12 +1011,27 @@
                     </ng-container>
                     <!------------------ END OF ONE ITEM LEFT LAYOUT ------------------->
 
-                    <!------------------- ONE ITEM STRETCH LAYOUT ---------------------->
-                    <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_STRETCH'">
+                    <!---------------------- ONE ITEM RIGHT LAYOUT ------------------------>
+                    <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_RIGHT'">
                       <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
-                           fxLayoutAlign="space-evenly center">
+                           fxLayoutAlign="end center">
                         <ng-container *ngFor="let sf of ff.fields">
-                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="87">
+                          <div *ngIf="sf.type === 'addMore'" fxLayout="column" fxFlex="30">
+                            <div fxLayout="row" fxLayoutAlign="space-around start">
+                              <button mat-icon-button mat-raised-button color="primary" type="button"
+                                      (click)="feedDataTable(
+                                    formData.controls[mi.titleKey]['controls'], 'update')">
+                                <mat-icon class="white">done</mat-icon>
+                              </button>
+                              <button mat-icon-button mat-raised-button color="accent" type="button"
+                                      (click)="feedDataTable(
+                                    formData.controls[mi.titleKey]['controls'], 'addMore')">
+                                <mat-icon class="white">add</mat-icon>
+                              </button>
+                            </div>
+
+                          </div>
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                             <mat-label class="black font-size-12">
                               {{ sf.label }} :
                             </mat-label>
@@ -1044,6 +1059,102 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
+                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                  {{ 'general.required' | translate }} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                              </mat-form-field>
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <span class="white">Browse</span>
+                              </button>
+                            </div>
+
+                          </div>
+                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor"
+                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label  | translate }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <mat-select disableOptionCentering panelClass="panelColor" required
+                                          formControlName="{{sf.formControlName}}"
+                                          placeholder="{{ sf.placeholder | translate }}">
+                                <mat-option>
+                                  <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
+                                                         noEntriesFoundLabel="{{ 'general.nodata' | translate }}"
+                                                         formControlName="{{sf.searchControlName}}"></ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let v of sf.filteredList | async"
+                                            [value]="v.value">
+                                  {{v.viewValue}}
+                                </mat-option>
+                              </mat-select>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <!------------------ END OF ONE ITEM RIGHT LAYOUT ------------------->
+
+                    <!------------------- ONE ITEM STRETCH LAYOUT ---------------------->
+                    <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_STRETCH'">
+                      <div *ngIf="ff.titleRef === mi.titleKey" fxLayout="row" fxFlex="100"
+                           fxLayoutAlign="space-evenly center">
+                        <ng-container *ngFor="let sf of ff.fields">
+                          <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="87">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="87">
+                            <mat-label class="black font-size-12">
+                              {{ sf.label }} :
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                              <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
+                                {{ 'general.required' | translate }} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
+                                {{'register.invalidemail' | translate}} </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="87">
                             <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
                               {{ sf.label }} :
                             </mat-label>
@@ -1098,6 +1209,82 @@
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                             </mat-form-field>
+                          </div>
+                          <div *ngIf="sf.type === 'dataTable'" fxLayout="column" fxFlex="87">
+                            <table cdk-table [style]="{'width': '100%', height: '100%'}" [dataSource]="sf.dataTable.dataSource.getValue()" [trackBy]="identify">
+                                <ng-container *ngFor="let col of sf.dataTable.columns;" >
+                                  <ng-container [ngSwitch]="col.type">
+
+                                    <ng-container *ngSwitchCase="'rowItem'">
+
+                                      <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
+                                        <th cdk-header-cell
+                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                        </th>
+                                        <td cdk-cell
+                                            *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                                          <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
+                                        </td>
+
+                                      </ng-container>
+
+                                    </ng-container>
+
+                                    <ng-container *ngSwitchCase="'Actions'">
+
+                                      <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
+
+                                        <th cdk-header-cell
+                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                        </th>
+                                        <td cdk-cell
+                                            *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                                          <div fxLayout="row"
+                                               fxFlex
+                                               fxLayoutAlign="center">
+                                            <button mat-icon-button (click)="actionRowData('update', row)">
+                                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="actionRowData('delete', row)">
+                                              <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="actionRowData('show', row)">
+                                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
+                                            </button>
+
+                                          </div>
+                                        </td>
+
+                                      </ng-container>
+
+                                    </ng-container>
+
+                                    <ng-container *ngSwitchDefault >
+                                      <ng-container cdkColumnDef="{{ col.prop }}">
+                                        <th cdk-header-cell
+                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                        </th>
+                                        <ng-container [ngSwitch]="col.type">
+                                          <ng-container *ngSwitchCase="'date'">
+                                            <td cdk-cell
+                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                                            </td>
+                                          </ng-container>
+                                          <ng-container *ngSwitchDefault>
+                                            <td cdk-cell
+                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
+                                            </td>
+                                          </ng-container>
+                                        </ng-container>
+                                      </ng-container>
+                                    </ng-container>
+
+                                  </ng-container>
+
+                                </ng-container>
+                              <tr cdk-header-row *cdkHeaderRowDef="sf.dataTable.displayedColumns; sticky: true"></tr>
+                              <tr cdk-row *cdkRowDef="let row; columns: sf.dataTable.displayedColumns;"></tr>
+                            </table>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="87">
                             <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>

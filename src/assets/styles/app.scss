@@ -679,11 +679,13 @@ html body {
 /*  SCROLLBAR COMPONENT   */
 
 .sidenav-wrapper {
-  height: 88vh !important;
+  resize: both !important;
 }
 .scrollbar {
-  resize: both !important;
-  scroll-behavior: smooth !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
 }
 /* ---------------------- */
 

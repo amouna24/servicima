@@ -9,7 +9,7 @@ export class PaymentService {
 
   paidFor = false;
   error = false;
-  detail: any[];
+  detail: any;
   paymentMethode: string;
   constructor(
     private utilsService: UtilsService
@@ -46,7 +46,13 @@ export class PaymentService {
         return await actions.order.capture().then(
           (details) => {
            if (details.status === 'COMPLETED') {
-             this.detail = details;
+             this.detail = {
+               status: details.status,
+               licence: licence.LicenceKey.licence_code ,
+               total,
+               create_time: details.create_time,
+
+             };
              this.paidFor = true;
              this.paymentMethode = 'Paypal';
              this.utilsService.openSnackBar('Transaction completed by ' + details.payer.name.given_name, null, 3000);
