@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ICompanyTaxModel } from '@shared/models/companyTax.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { AddTaxCompanyComponent } from '../add-tax-company/add-tax-company.component';
 
@@ -18,7 +18,7 @@ export class TaxComponent implements OnInit , OnDestroy {
   isLoading = new BehaviorSubject<boolean>(false);
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
-              private localStorageService: LocalStorageService,
+              private userService: UserService,
               private modalService: ModalService,
               private companyTaxService: CompanyTaxService) { }
 
@@ -32,14 +32,17 @@ export class TaxComponent implements OnInit , OnDestroy {
     this.getAllTax();
   }
 
+  /**
+   * @description get all tax by company
+   */
   getAllTax() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    const email = cred['email_address'];
+    const email = this.userService.emailAddress;
     this.subscriptions.push(this.companyTaxService.getCompanyTax(email).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
   }
+
   /**
    * @description : action
    * @param rowAction: object
@@ -54,6 +57,10 @@ export class TaxComponent implements OnInit , OnDestroy {
      }
   }
 
+  /**
+   * @description : update tax
+   * @param data: object to update
+   */
   updateTax(data) {
     this.modalService.displayModal('addTax', data,
       '657px', '480px').subscribe((res) => {

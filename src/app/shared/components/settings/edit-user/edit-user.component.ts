@@ -6,7 +6,6 @@ import { ReplaySubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -53,6 +52,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   emailAddressStorage: string;
   id: string;
   isLoading: boolean;
+  add: string;
   showList: INetworkSocial[] = [];
   profileUserType = userType.UT_USER;
   /** subscription */
@@ -63,7 +63,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private appInitializerService: AppInitializerService,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private modalService: ModalService,
               private formBuilder: FormBuilder,
               private router: Router,
@@ -72,7 +71,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private location: Location,
               private socialNetwork: SocialNetwork,
               private refdataService: RefdataService,
-              ) { }
+              ) {
+    this.id = this.router.getCurrentNavigation().extras.state?.id;
+    this.add = this.router.getCurrentNavigation().extras.state?.action;
+    console.log(this.add, 'action');
+    console.log(this.id, 'id');
+  }
 
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
@@ -95,8 +99,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   getConnectedUser(): void {
     this.isLoading = true;
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
+    this.applicationId = this.userService.applicationId;
+    this.emailAddressStorage = this.userService.emailAddress;
     this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.infoUser = data;
@@ -115,13 +119,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
  async checkComponentAction(connectedUser: IUserInfo) {
     this.avatar = null;
     this.photo = null;
-    this.route.queryParams.subscribe(params => {
-      this.id = params.id || null;
-    });
+
+    console.log(this.id, 'iiiiiiiiiiiiiiiid');
 
     /***************** go to page Add user *****************
      *******************************************************/
-    if (this.router.url === '/manager/settings/users/add-user') {
+    if (this.add) {
       this.title = 'Add';
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
@@ -283,10 +286,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
     }
     /***************** Add user *************************************
      ****************************************************************/
-    if (this.router.url === '/manager/settings/users/add-user') {
+    if (this.add) {
       const newUser = {
         application_id: this.applicationId,
-        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getCompanyId('ALL')),
+        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
         email_address: this.form.value.emailAddress,
         company_email: this.emailAddressStorage,
         user_type: this.form.value.userType,

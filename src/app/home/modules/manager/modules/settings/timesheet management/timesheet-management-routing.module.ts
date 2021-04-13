@@ -8,9 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: TimesheetManagementComponent,
-    data: {
-      breadcrumb: 'role'
-    },
   },
 ];
 

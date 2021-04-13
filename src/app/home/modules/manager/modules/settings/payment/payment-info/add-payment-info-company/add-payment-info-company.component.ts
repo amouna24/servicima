@@ -1,14 +1,15 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IViewParam } from '@shared/models/view.model';
-import { ReplaySubject, Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ModalService } from '@core/services/modal/modal.service';
+
+import { ReplaySubject, Subscription } from 'rxjs';
+
 import { UtilsService } from '@core/services/utils/utils.service';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UserService } from '@core/services/user/user.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CompanyPaymentTermsService } from '@core/services/companyPaymentTerms/company-payment-terms.service';
+
+import { ICompanyModel } from '@shared/models/company.model';
+import { IViewParam } from '@shared/models/view.model';
 
 @Component({
   selector: 'wid-add-payment-info-company',
@@ -17,30 +18,22 @@ import { CompanyPaymentTermsService } from '@core/services/companyPaymentTerms/c
 })
 export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  company;
-  applicationId: string;
-  emailAddress: string;
+  action: string;
+  company: ICompanyModel;
   languages: IViewParam[] = [];
   public filteredLanguage = new ReplaySubject(1);
-  featureList = [];
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(public dialogRef: MatDialogRef<AddPaymentInfoCompanyComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private modalService: ModalService,
               private formBuilder: FormBuilder,
               private utilsService: UtilsService,
               private companyPaymentTermsService: CompanyPaymentTermsService,
-              private appInitializerService: AppInitializerService,
-              private userService: UserService,
-              private localStorageService: LocalStorageService, ) {
+              private userService: UserService, ) {
   }
 
   ngOnInit(): void {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.applicationId = cred['application_id'];
-    this.emailAddress = cred['email_address'];
     this.userService.connectedUser$.subscribe(
       (userInfo) => {
         if (userInfo) {
@@ -49,7 +42,10 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
       });
     this.initForm();
      if (this.data) {
+       this.action = 'update';
        this.setForm();
+     } else {
+       this.action = 'add';
      }
   }
 
@@ -58,7 +54,7 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      paymentTermsCode: ['', [Validators.required]],
+      paymentTermsCode: [''],
       paymentTermsDesc: ['', [Validators.required]],
       delay: ['', [Validators.required]],
       endOfMonthFlag: [''],
@@ -85,20 +81,20 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
     } else {
       if (this.data) {
         const paymentTermsCompany = {
-          application_id: this.applicationId,
-          company_email: this.emailAddress,
+          application_id: this.userService.applicationId,
+          company_email: this.userService.emailAddress,
           payment_terms_code: this.data.companyPaymentTermsKey.payment_terms_code,
           payment_terms_desc: this.form.value.paymentTermsDesc,
           delay: this.form.value.delay,
           end_of_month_flag: this.form.value.endOfMonthFlag ? 'Y' : 'N'
         };
         this.subscriptions.push(this.companyPaymentTermsService.updateCompanyPaymentTerms(paymentTermsCompany).subscribe(() => {
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         }));
       } else {
       const paymentTermsCompany = {
-        application_id: this.applicationId,
-        company_email: this.emailAddress,
+        application_id: this.userService.applicationId,
+        company_email: this.userService.emailAddress,
         payment_terms_code:  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-PAYMENT_TERMS`,
         payment_terms_desc: this.form.value.paymentTermsDesc,
         delay: this.form.value.delay,
@@ -106,7 +102,7 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
       };
         this.subscriptions.push(this.companyPaymentTermsService.addCompanyPaymentTerms(paymentTermsCompany).subscribe((paymentTerms) => {
         if (paymentTerms) {
-          this.subscriptions.push( this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress).subscribe((data) => {
+          this.subscriptions.push( this.companyPaymentTermsService.getCompanyPaymentTerms(this.userService.emailAddress).subscribe((data) => {
             this.dialogRef.close(data);
           }));
         }

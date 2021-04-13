@@ -11,7 +11,6 @@ import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UploadService } from '@core/services/upload/upload.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
@@ -35,7 +34,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
@@ -51,7 +49,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   photo: object;
   profileUserType = userType.UT_COMPANY;
   city: ICity;
-  userCredentials: string;
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
@@ -95,7 +92,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.avatar = null;
     this.photo = null;
     this.city = { cities: '', code: '' };
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
   }
 
   /**

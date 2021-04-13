@@ -2,6 +2,7 @@
   <wid-dynamic-data-table
     [tableData]="ELEMENT_DATA"
     [tableCode]="'COMPANY_TAX'"
+    [isLoading]="isLoading"
     [header]="{ title: 'Company tax management',type:'dialog', addActionText: 'New tax',
     addActionDialog: { modalName: 'addTax', modalComponent: 'AddTaxCompanyComponent', data: null, width: '657px', height: '480px' }}"
     [title]="'COMPANY TAX list'"

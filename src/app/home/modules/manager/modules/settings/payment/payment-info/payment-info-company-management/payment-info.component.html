@@ -2,6 +2,7 @@
 <div class="page-container">
   <wid-dynamic-data-table
     [tableData]="ELEMENT_DATA"
+    [isLoading]="isLoading"
     [tableCode]="'COMPANY_PAYMENT_TERMS'"
     [header]="{ title: 'Payment info management',type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
     , addActionText: 'New payment info'}"

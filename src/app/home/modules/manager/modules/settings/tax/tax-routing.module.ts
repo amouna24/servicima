@@ -7,9 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: TaxComponent,
-    data: {
-      breadcrumb: 'tax'
-    },
   },
 ];
 

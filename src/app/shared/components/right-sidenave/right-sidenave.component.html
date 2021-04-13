@@ -1,6 +1,6 @@
-<div class="full-height sidenav-wrapper">
+<div class="full-height sidenav-wrapper" >
   <wid-scrollbar class="scrollbar">
-  <div fxLayout="column" fxFlex="100" fxLayoutAlign="start stretch" fxLayoutGap="15px">
+  <div fxLayout="column" fxFlex="100" [state]="sidebarState" (clickOutside)="closeMenu()" fxLayoutAlign="start stretch" fxLayoutGap="15px">
     <div  fxLayout="row" >
       <div fxFlex="15"  fxLayout="column" >
         <div fxLayoutAlign="center start" fxFlexOffset="10">
@@ -29,7 +29,7 @@
         </span>
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
-        <!--  <ng-container *canBeDisplayed="{'feature':menuItem.feature}"> -->
+          <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
             <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
                class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
@@ -39,7 +39,7 @@
               <span class="font-light font-size-14"
                     [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
-          <!-- </ng-container> -->
+           </ng-container>
           </ng-container>
 
           <ng-template #subMenuLabel>

@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * @description  : Open right sidenav
    */
   toggleSideNav() {
-    this.sidenavService.toggleRightSideNav();
+    this.sidenavService.toggleRightSideNav(true);
   }
   /**
    * @description destroy subscriptions

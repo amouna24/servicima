@@ -22,7 +22,7 @@ export const sidenavRightMenu = [
     type: 'link',
     icon: 'wi_settings',
     // feature: 'settings'
-    feature: 'SOURCING_ACCESS' // change feature with correct name
+    feature: 'SETTING-MANAGER' // change feature with correct name
   },
   {
     state: 'themes',

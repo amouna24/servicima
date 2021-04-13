@@ -8,7 +8,7 @@ export const environment = {
   /************************** ADMINISTRATION *****************************/
   translateApiUrl: 'http://192.168.1.22:8000/admin/translates/v1',
   languageApiUrl: 'http://192.168.1.22:8001/admin/languages/v1',
-  refDataApiUrl: 'http://127.0.0.1:8002/admin/refdatas/v1',
+  refDataApiUrl: 'http://192.168.1.22:8002/admin/refdatas/v1',
   refTypeApiUrl: 'http://192.168.1.22:8003/admin/reftypes/v1',
   applicationApiUrl: 'http://192.168.1.22:8004/admin/applications/v1',
   moduleApiUrl: 'http://192.168.1.22:8005/admin/modules/v1',

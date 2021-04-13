@@ -1,9 +1,10 @@
 
-<div style="min-height: 100%;">
+<div class="full-height">
 <div fxLayout="column"  fxFlex="100" >
     <div fxLayout="row" fxLayoutAlign="space-around center">
-      <div fxLayout="column" fxFlex="56">
-        <h1 class="steel font-size-24 font-medium">Add Payment Terms </h1>
+      <div fxLayout="column" fxFlex="80">
+        <h1 class="steel font-size-24 font-medium" *ngIf="action === 'update'">	{{'updatepaymentterms.title' | translate | capitalizeFirstLetter}} </h1>
+        <h1 class="steel font-size-24 font-medium" *ngIf="action === 'add'">	{{'addpaymentterms.title' | translate | capitalizeFirstLetter}} </h1>
       </div>
       <div fxLayout="column" fxFlex="5" fxLayoutAlign="center end" class="font-size-25 steel" (click)="onNotify(false)">
         <img src="assets/icons/close.svg" class="bg-close">
@@ -13,9 +14,9 @@
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
 
-  <div style="height: 128px">
+  <div class="container-payment-method">
     <wid-scrollbar class="scrollbar">
-    <div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12" style="margin-left: 60px;margin-top: 15px"  >
+    <div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12 m-l-60 m-t-15" >
 
       <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
         <div fxLayout="column" fxFlex="40" fxFlexAlign="center">
@@ -30,7 +31,7 @@
         <div fxLayout="column" fxFlex="40"  fxFlexAlign="center">
           <label class="font-size-12 black-three required">{{'addpaymentmethod.methodname' | translate | capitalizeFirstLetter}} </label>
           <mat-form-field appearance="outline">
-            <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentterms.delay' | translate | capitalizeFirstLetter"
+            <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentmethod.methodname' | translate | capitalizeFirstLetter"
                    formControlName="methodName" [ngStyle.xs]="{'font-size': '15px'}" />
             <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
               {{ 'general.required' | translate }}</mat-error>
@@ -38,13 +39,13 @@
         </div>
       </div>
       <div formArrayName = 'input' >
-        <div *ngFor = "let networkSocialControl of getListNetworkSocial().controls; let i = index">
+        <div *ngFor = "let paymentMethodControl of getListPaymentMethods().controls; let i = index">
           <div [formGroupName]="i">
           <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
             <div fxLayout="column" fxFlex="40">
               <label class="font-size-12 black-three required">{{'addpaymentmethod.language' | translate | capitalizeFirstLetter}} </label>
               <mat-form-field appearance="outline">
-                <mat-select formControlName="grade" >
+                <mat-select formControlName="lang" [placeholder]=" 'addpaymentmethod.language' | translate | capitalizeFirstLetter" >
                   <ng-container *ngFor="let language of languages">
                   <mat-option  (click)="getValue(language.value, i)"
                                [value]=language.value
@@ -61,8 +62,8 @@
             <div fxLayout="column" fxFlex="40">
               <label class="font-size-12 black-three required">{{'addpaymentmethod.translate' | translate | capitalizeFirstLetter}} </label>
               <mat-form-field appearance="outline">
-                <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentterms.delay' | translate | capitalizeFirstLetter"
-                       formControlName='value' [ngStyle.xs]="{'font-size': '15px'}" />
+                <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentmethod.translate' | translate | capitalizeFirstLetter"
+                       formControlName='refDataDesc' [ngStyle.xs]="{'font-size': '15px'}" />
                 <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
                   {{ 'general.required' | translate }}</mat-error>
               </mat-form-field>
@@ -72,15 +73,15 @@
       </div>
       </div>
       <div class="btn container-plus"  fxLayout="row" fxLayoutAlign="flex-end" >
-        <button [disabled]="getListNetworkSocial().length >= languages.length - 1 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddAnotherNetworkSocial()" >+</button>
+        <button [disabled]="getListPaymentMethods().length >= languages.length - 1 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddAnotherTranslate()" >+</button>
       </div>
       </div>
     </wid-scrollbar>
     </div>
   <br>
-      <div class="modal-footer"  fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" style="margin-right: 10px">
+      <div class="modal-footer"  fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10">
         <button mat-raised-button class="btn-small bg-pale-grey black-three" (click)="onNotify(false)">Cancel</button>
-        <button mat-raised-button class="btn-small bg-ocean-blue white" (click)="onNotify(true)">Confirm</button>
+        <button mat-raised-button class="btn-small bg-ocean-blue white" [disabled]="form.invalid" (click)="onNotify(true)">Confirm</button>
     </div>
   <br>
 
