@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
+import { SharedModule } from '@shared/shared.module';
+
 import { ProfileImageComponent } from '@shared/components/profile-image/profile-image.component';
 
 import { ResumeManagementRoutingModule } from './resume-management-routing.module';
@@ -15,7 +17,6 @@ import { ResumeDynamicSectionComponent } from './modules/resume-dynamic-section/
 import { ResumeFuncSkillComponent } from './modules/resume-functional-skills/resume-func-skill.component';
 import { ResumeCertifDiplomaComponent } from './modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from './modules/resume-done/resume-done.component';
-import {SharedModule} from "@shared/shared.module";
 
 @NgModule({
   declarations: [

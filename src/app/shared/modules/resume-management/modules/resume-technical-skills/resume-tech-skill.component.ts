@@ -23,9 +23,6 @@ export class ResumeTechSkillComponent implements OnInit {
   /**
    * @description Create Form
    */
-  /**
-   * @description Create Form
-   */
   createForm() {
     this.CreationForm = this.fb.group({
       technical_skill_code: Math.random(),

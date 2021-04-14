@@ -1,25 +1,58 @@
-<p>resume-func-skill works!</p>
-<div fxLayout="column" fxFlexFill  fxLayoutAlign="center center" >
+<form [formGroup]="CreationForm" (submit)="createFunctionalSkill()">
 
-  <div fxLayout="row" fxFlex="90"  class="Background"   >
-    <div fxLayout="column" fxFlex="4"   >
-    </div>
-    <div fxLayout="column" fxFlex="92">
+  <div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
 
+    <div fxLayout="column" fxFlex="4"   ></div>
 
-      <div fxLayout="row" fxFlex="15" ></div>
-      <div fxLayout="row" fxFlex="75" ></div>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end" >
-        <div fxLayout="column"   >
-          <button [routerLink]="['functionalSkills']"> Next </button>
+    <div fxLayout="column" fxFlex="90"    >
+
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxFlex="56">
+          <h1 class="steel font-size-24 font-medium">Resume</h1>
         </div>
-
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
       </div>
+      <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+        <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+      </div>
+      <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Functional skills</h4>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
+
+        <wid-scrollbar fxFlexFill >
+          <div fxLayout="column" fxFlex="8"   ></div>
+
+          <div fxLayout="column" fxFlex="80"  >
+            <div fxLayout="column">
+              Skill title:
+              <p>
+                <mat-form-field appearance="outline">
+                  <input   formControlName="skill" matInput placeholder="Skill title" required>
+                </mat-form-field>
+              </p></div>
+          </div>
+        </wid-scrollbar>
+      </div>
+      <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
+          <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
+            Save
+          </button>
+
+
+        </div>
+      </div>
+
+
     </div>
-    <div fxLayout="column" fxFlex="4" >
-    </div>
-
-
-
   </div>
-</div>
+</form>
