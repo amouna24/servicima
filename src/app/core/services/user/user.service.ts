@@ -43,6 +43,7 @@ export class UserService {
       `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
       .subscribe( (data) => {
         this.userInfo = data;
+        console.log('User info =', this.userInfo);
         this.connectedUser$.next(data);
         this.getImage(data['user'][0].photo);
         const roleCode = data.userroles[0].userRolesKey.role_code;

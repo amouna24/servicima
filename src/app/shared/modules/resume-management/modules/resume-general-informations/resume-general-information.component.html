@@ -1,6 +1,10 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+
   <div fxLayout="column" fxFlex="4"   ></div>
+  <form [formGroup]="CreationForm" (submit)="createResume()">
+
   <div fxLayout="column" fxFlex="90"    >
+
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
           <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -21,15 +25,58 @@
         <h4 class="steel font-size-18 font-small">General information</h4>
       </div>
     </div>
-    <div fxLayout="row" fxFlex="70" fxLayoutAlign="center center ">
-        <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
-          <h1>Project</h1>
+    <div fxLayout="row" fxFlex="70" fxLayoutAlign="center" >
+      <wid-scrollbar fxFlexFill >
+        <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+          <div   fxLayout="column" fxFlex="30"  fxLayoutAlign=" start" >
+            <div fxlayout="row"  >
+              <span>Name:</span>
+                <div><p>
+                  <mat-form-field appearance="outline">
+                    <input   formControlName="init_name" matInput placeholder="Name" required>
+                  </mat-form-field>
+                </p></div>
+              <div >Actual job:
+                <p>
+                  <mat-form-field appearance="outline">
+                    <input  formControlName="actual_job" matInput placeholder="Actual job" required>
+                  </mat-form-field>
+                </p></div>
+              <div >Language:
+                <p>
+                  <mat-form-field appearance="outline">
+                      <mat-label>Language</mat-label>
+                      <mat-select formControlName="language_id">
+                        <mat-option value="FR">French</mat-option>
+                        <mat-option value="EN">English</mat-option>
+                        <mat-option value="ESP">Spanish</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                </p></div>
+              <section class="example-section">
+                <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox></section>
 
-        </wid-scrollbar>
+             <div *ngIf="showYears">
+              <br>
+              <div >Years of experience:
+                <p>
+                  <mat-form-field appearance="outline">
+                    <input matInput  formControlName="years_of_experience" placeholder="Years of experience" >
+                  </mat-form-field>
+                </p></div></div>
+            </div>
+          </div>
+          <div   fxLayout="column" fxFlex="43"  fxLayoutAlign=" start" >
+            <div fxFlex="30"  fxLayout="column"  fxLayoutAlign="center center" class="profile-image">
+              <wid-profile-image [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
+            </div>
+          </div>
+        </div>
+      </wid-scrollbar>
     </div>
-    <div fxLayout="row" fxFlex="9"fxLayoutAlign="center ">
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
       <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-        <button mat-raised-button  class="btn-small bg-primaryColor white"   >
+        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
           Save
         </button>
 
@@ -39,8 +86,9 @@
 
 
 
-
   </div>
+  </form>
+
   <div fxLayout="column" fxFlex="4" >
 
 
@@ -55,3 +103,6 @@
 
 
 </div>-->
+
+
+</div>

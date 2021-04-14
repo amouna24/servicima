@@ -97,7 +97,6 @@ export const candidateMenu: IMenu[] = [
         type: 'link',
       },
 
-
     ]
   },
 ];

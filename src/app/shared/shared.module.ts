@@ -92,7 +92,6 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
-    ResumeManagementModule,
   ],
   exports: [
     MaterialModule,
@@ -127,7 +126,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SpliceText,
     DisableControlDirective,
     ModalComponent,
-    ResumeManagementModule,
+    ProfileImageComponent,
   ]
 })
 export class SharedModule { }
