@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
+import { SharedModule } from '@shared/shared.module';
 
 import { ResumeProExpRoutingModule } from './resume-pro-exp-routing.module';
 import { ProExpComponent } from './modules/professional-experiences/pro-exp.component';
@@ -20,7 +21,8 @@ import { ProExpProjectsComponent } from './modules/professional-experiences-proj
     ResumeProExpRoutingModule,
     FlexModule,
     MaterialModule,
-    ScrollbarModule
+    ScrollbarModule,
+    SharedModule,
   ],
   exports: [
     ProExpComponent,

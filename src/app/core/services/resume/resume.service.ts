@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { IResumeModel } from '@shared/models/resume.model';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
+import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
+import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
+import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import {IResumeInterventionModel} from "@shared/models/resumeIntervention.model";
-import {IResumeLanguageModel} from "@shared/models/resumeLanguage.model";
 
 @Injectable({
   providedIn: 'root'
@@ -173,6 +174,34 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   updateLanguage(language: IResumeLanguageModel): Observable<any> {
     return this.httpClient.put<IResumeLanguageModel>(`${environment.resumeLanguageApiUrl}`, language);
+  }
+
+  /*-------------------------------------------------------------------------------------*/
+  /*------------------------------------ RESUME-PROFESSIONAL-EXPERIENCE--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Professional experience  List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Professional experience Observable<ILanguage[]>
+   *************************************************************************/
+  getProExp(filter: string): Observable<IResumeProfessionalExperienceModel[]> {
+    return this.httpClient.get<IResumeProfessionalExperienceModel[]>(`${environment.resumeProfessionalExperienceApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description Add new Professional experience
+   * @param proExp: Professional experience model
+   *************************************************************************/
+  addProExp(proExp: IResumeProfessionalExperienceModel): Observable<any> {
+    return this.httpClient.post<IResumeProfessionalExperienceModel>(`${environment.resumeProfessionalExperienceApiUrl}`, proExp);
+  }
+
+  /**************************************************************************
+   * @description Update Professional experience Status
+   * @param proExp: updated  Professional experience Object
+   *************************************************************************/
+  updateProExp(proExp: IResumeLanguageModel): Observable<any> {
+    return this.httpClient.put<IResumeProfessionalExperienceModel>(`${environment.resumeProfessionalExperienceApiUrl}`, proExp);
   }
 
   /*-------------------------------------------------------------------------------------*/

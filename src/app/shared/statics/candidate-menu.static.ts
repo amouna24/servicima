@@ -50,16 +50,7 @@ export const candidateMenu: IMenu[] = [
         name: 'Professional experience',
         icon: 'wi-user',
         feature: 'CONTRACT_ACCESS',
-        type: 'sub',
-        child: [
-          {
-            state: 'projects',
-            name: 'Projects',
-            icon: 'wi_add_user',
-            feature: 'CONTRACT_ACCESS',
-            type: 'link',
-          }
-        ]
+        type: 'link',
       },
       {
         state: 'technicalSkills',

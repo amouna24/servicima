@@ -30,7 +30,7 @@ export const sidenavRightMenu = [
     type: 'sub',
     icon: 'wi_theme',
    //  feature: 'themes',
-    feature: 'SOURCING_ACCESS', // change feature with correct name
+    feature: 'SOURCING_CAND_FILE_ACCESS', // change feature with correct name
     children: [
       {
         state: 'themes',

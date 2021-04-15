@@ -1,28 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { show } from 'cli-cursor';
-import { ResumeService } from '@core/services/resume/resume.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
+import { ResumeService } from '@core/services/resume/resume.service';
 
 @Component({
-  selector: 'wid-resume-language',
-  templateUrl: './resume-language.component.html',
-  styleUrls: ['./resume-language.component.scss']
+  selector: 'wid-languageform',
+  templateUrl: './languageform.component.html',
+  styleUrls: ['./languageform.component.scss']
 })
-export class ResumeLanguageComponent implements OnInit {
+export class LanguageformComponent implements OnInit {
+
   rating = 0;
   starCount = 5;
   color: ThemePalette = 'accent';
-   ratingArr = [];
+  ratingArr = [];
   CreationForm: FormGroup ;
   language: IResumeLanguageModel;
-  ShowLanguage1 = false;
-  ShowLanguage2 = false;
-  ShowLanguage3 = false;
-  ShowLanguage4 = false;
-  ShowLanguage5 = false;
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +65,7 @@ export class ResumeLanguageComponent implements OnInit {
     console.log('rating', this.rating);
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
-      this.resumeService.addLanguage(this.language).subscribe(data => console.log('Intervention=', data));
+      this.resumeService.addLanguage(this.language).subscribe(data => console.log('Language=', data));
 
     } else { console.log('Form is not valid');
     }

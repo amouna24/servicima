@@ -1,24 +1,96 @@
-<div>Professional experiences</div>
+<form [formGroup]="CreationForm" (submit)="createProExp()">
+  <div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
 
-<div fxLayout="column" fxFlexFill  fxLayoutAlign="center center" >
+  <div fxLayout="column" fxFlex="4"   ></div>
 
-  <div fxLayout="row" fxFlex="90"  class="Background"   >
-    <div fxLayout="column" fxFlex="92">
+  <div fxLayout="column" fxFlex="90"    >
 
-
-      <div fxLayout="row" fxFlex="15" ></div>
-      <div fxLayout="row" fxFlex="75" ></div>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end" >
-        <div fxLayout="column"   >
-          <button [routerLink]="['projects']"> Next </button>
-        </div>
-
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-24 font-medium">Resume</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
       </div>
     </div>
-    <div fxLayout="column" fxFlex="4" >
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+      <div fxLayout="column" fxFlex="86">
+        <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="4"></div>
+    <div fxLayout="row" fxFlex="60" fxLayoutAlign="space-around">
+      <div fxLayout="column" fxFlex="90"  >
+        <div fxLayout="row" fxFlex="60" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+          <div fxLayout="column" fxFlexFill fxLayoutGap="5px" >
+            <div fxLayout="row" fxFlex="1"></div>
+            <div fxLayout="row"    fxFlex="40" fxLayoutAlign="space-around center">
+              <div fxLayout="column" fxFlex="35" >
+                Position:
+                <p>
+                  <mat-form-field appearance="outline">
+                    <input   formControlName="position" matInput placeholder="Position" required>
+                  </mat-form-field>
+                </p></div>
+              <div fxLayout="column"  fxFlex="35">
+                Customer:
+                <p>
+                  <mat-form-field appearance="outline">
+                    <input   formControlName="customer" matInput placeholder="Customer" required>
+                  </mat-form-field>
+                </p></div>
+            </div>
+            <div fxLayout="row"    fxFlex="40" fxLayoutAlign="space-around center">
+              <div fxLayout="column" fxFlex="35">
+                Start Date:
+                <mat-form-field class="example-full-width">
+                  <mat-label>Start date :</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="start_date">
+                  <mat-datepicker-toggle matSuffix [for]="picker">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div fxLayout="column" fxFlex="35">
+                End date:
+                <mat-form-field class="example-full-width">
+                  <mat-label>End date:</mat-label>
+                  <input matInput [matDatepicker]="pickerEnd" formControlName="end_date">
+                  <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+            </div>
+          </div>
+            <div fxLayout="row"    fxFlex="20" >
+              <div fxLayout="column" fxFlex="90" fxLayoutAlign="start end">
+              <button mat-raised-button type="submit" class="btn-small bg-pale-grey"   >
+                Add
+              </button></div>
+            </div>
+      </div>
 
 
-
+    </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
+      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
+        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
+          Save
+        </button>
+      </div>
   </div>
 </div>
+
+</div>
+</div>
+</div>
+</form>
