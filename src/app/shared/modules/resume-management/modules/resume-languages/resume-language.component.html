@@ -28,10 +28,47 @@
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
 
         <wid-scrollbar fxFlexFill >
-          <wid-languageform></wid-languageform>
-          <wid-languageform></wid-languageform>
-          <wid-languageform></wid-languageform>
+          <form [formGroup]="sendLanguage">
 
+            <div formArrayName="Field">
+              <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                <div fxLayout="column" fxFlex="25"  >
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Language</mat-label>
+                    <mat-select formControlName="resume_language_code">
+                      <mat-option value="FR">French</mat-option>
+                      <mat-option value="EN">English</mat-option>
+                      <mat-option value="ESP">Spanish</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                </div>
+                <div fxLayout="column" fxFlex="8"   ></div>
+                <div fxLayout="column" fxLayoutAlign="20">
+                  <div fxLayout="row" fxFlexFill>
+                    <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                      <mat-icon>
+                        {{showIcon(i)}}
+                      </mat-icon>
+                    </button>
+                    <mat-error *ngIf="starCount == null || starCount == 0">
+                      Star count is <strong>required</strong> and cannot be zero
+                    </mat-error>
+                  </div>
+
+
+                </div>
+                <div fxLayout="column" fxFlex="5"  fxLayoutAlign=" center"  >
+                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createLanguage()">Add</button>
+                </div>
+
+
+
+            </div>
+            </div>
+
+          </form>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">

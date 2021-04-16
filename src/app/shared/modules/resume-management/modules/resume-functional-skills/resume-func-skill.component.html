@@ -1,4 +1,3 @@
-<form [formGroup]="CreationForm" (submit)="createFunctionalSkill()">
 
   <div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
 
@@ -29,17 +28,27 @@
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
 
         <wid-scrollbar fxFlexFill >
+          <form [formGroup]="sendFuncSkill">
+
+            <div formArrayName="Field">
+              <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex">
           <div fxLayout="column" fxFlex="8"   ></div>
 
           <div fxLayout="column" fxFlex="80"  >
-            <div fxLayout="column">
               Skill title:
               <p>
                 <mat-form-field appearance="outline">
                   <input   formControlName="skill" matInput placeholder="Skill title" required>
                 </mat-form-field>
-              </p></div>
+              </p>
+            <div fxLayout="row" fxLayoutAlign="end end" >
+              <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createFunctionalSkill()">Add</button>
+            </div>
           </div>
+              </div>
+            </div>
+
+          </form>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
@@ -55,4 +64,3 @@
 
     </div>
   </div>
-</form>

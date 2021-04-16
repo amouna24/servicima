@@ -16,6 +16,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
 import { takeUntil } from 'rxjs/operators';
 import { ResumeService } from '@core/services/resume/resume.service';
+import {IResumeModel} from "@shared/models/resume.model";
 
 @Component({
   selector: 'wid-resume-general-information',
@@ -34,6 +35,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   subMenu: IChildItem[] = [];
   parentMenu: string;
   profileUserType = userType.UT_RESUME;
+  generalInfo: IResumeModel;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -102,7 +104,7 @@ showHideYears() {
       language_id: '',
       years_of_experience : 2000,
       actual_job : '',
-      image : 'image-testval',
+      image : '',
       init_name : '',
       status : 'A'
 });
@@ -112,7 +114,8 @@ showHideYears() {
    * @description Create Resume
    */
   createResume() {
-
+this.generalInfo = this.CreationForm.value;
+this.generalInfo.image = this.avatar;
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
       this.resumeService.addResume(this.CreationForm.value).subscribe(data => console.log('Resume =', data));
@@ -233,6 +236,9 @@ showHideYears() {
       default:
         this.userService.emitColor('assets/img/logo-title.png');
     }
+  }
+  setprofilePicture(){
+
   }
 
 }

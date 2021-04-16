@@ -4,6 +4,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { ProfileImageComponent } from '@shared/components/profile-image/profile-image.component';
 
@@ -18,7 +19,6 @@ import { ResumeFuncSkillComponent } from './modules/resume-functional-skills/res
 import { ResumeCertifDiplomaComponent } from './modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from './modules/resume-done/resume-done.component';
 import { LanguageformComponent } from './modules/resume-languages/languageform/languageform.component';
-
 @NgModule({
   declarations: [
     ResumeGeneralInformationComponent,
@@ -38,6 +38,7 @@ import { LanguageformComponent } from './modules/resume-languages/languageform/l
     MaterialModule,
     ScrollbarModule,
     SharedModule,
+    ReactiveFormsModule,
   ],
   exports: [
     ResumeGeneralInformationComponent,

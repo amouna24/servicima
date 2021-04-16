@@ -109,7 +109,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    * @param funcSkill: Functional skill model
    *************************************************************************/
   addFunctionalSkills(funcSkill: IResumeFunctionalSkillsModel): Observable<any> {
-    return this.httpClient.post<IResumeFunctionalSkillsModel>(`${environment.resumeTechnicalSkillsApiUrl}`, funcSkill);
+    return this.httpClient.post<IResumeFunctionalSkillsModel>(`${environment.resumeFunctionalSkillsApiUrl}`, funcSkill);
   }
 
   /**************************************************************************

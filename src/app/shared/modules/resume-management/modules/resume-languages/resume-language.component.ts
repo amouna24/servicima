@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { show } from 'cli-cursor';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
 
@@ -12,30 +10,29 @@ import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
   styleUrls: ['./resume-language.component.scss']
 })
 export class ResumeLanguageComponent implements OnInit {
+  sendLanguage: FormGroup;
   rating = 0;
   starCount = 5;
   color: ThemePalette = 'accent';
-   ratingArr = [];
-  CreationForm: FormGroup ;
+  ratingArr = [];
+  arrayLanguageCount = 0;
   language: IResumeLanguageModel;
-  ShowLanguage1 = false;
-  ShowLanguage2 = false;
-  ShowLanguage3 = false;
-  ShowLanguage4 = false;
-  ShowLanguage5 = false;
-
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
   ) {
   }
 
+  get inputFields() {
+    return this.sendLanguage.get('Field') as FormArray;
+  }
   ngOnInit() {
     this.createForm();
     console.log('a ' + this.starCount);
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
+
     console.log(this.ratingArr);
   }
   onClick(rating: number) {
@@ -56,25 +53,32 @@ export class ResumeLanguageComponent implements OnInit {
    * @description Create Form
    */
   createForm() {
-    this.CreationForm = this.fb.group({
-      resume_language_code: '',
-      resume_code : Math.random().toString(),
-      level : this.rating,
-    });
+    this.sendLanguage = this.fb.group({
+      Field: this.fb.array([this.fb.group(
+        {
+          resume_language_code: '',
+          resume_code : Math.random().toString(),
+          level : '',
+        })])});
   }
   /**
    * @description Create Language
    */
   createLanguage() {
-    this.language = this.CreationForm.value;
-    this.language.level = this.rating.toString();
-    console.log('rating', this.rating);
-    if (this.CreationForm.valid) {
-      console.log(this.CreationForm.value);
-      this.resumeService.addLanguage(this.language).subscribe(data => console.log('Intervention=', data));
+    this.language = this.sendLanguage.controls.Field.value;
+    this.language[this.arrayLanguageCount].level = this.rating.toString();
+    this.language[this.arrayLanguageCount].resume_code = Math.random();
+    if (this.sendLanguage.controls.Field.valid) {
+      console.log('table language', this.language[this.arrayLanguageCount], 'index=', this.arrayLanguageCount);
+      this.resumeService.addLanguage(this.language[this.arrayLanguageCount]).subscribe(data => console.log('Language=', data));
+      this.inputFields.push(this.fb.group({
+        resume_language_code: '',
+        resume_code : Math.random().toString(),
+        level : this.rating}));
 
     } else { console.log('Form is not valid');
     }
-  }
+    this.arrayLanguageCount++;
 
+  }
 }

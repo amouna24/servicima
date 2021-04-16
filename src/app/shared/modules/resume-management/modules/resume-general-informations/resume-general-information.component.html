@@ -67,9 +67,25 @@
             </div>
           </div>
           <div   fxLayout="column" fxFlex="43"  fxLayoutAlign=" start" >
-            <div fxFlex="30"  fxLayout="column"  fxLayoutAlign="center center" class="profile-image">
-              <wid-profile-image [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
+            <div fxLayout="row" fxFlexFill >
+            <div  fxLayout="column"     class="profile-image">
+              <wid-profile-image fxLayoutAlign="start start" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
             </div>
+            <div fxLayout="column" fxFlex fxLayoutAlign="center start" class="m-l-10 m-b-5" >
+              <div fxLayout="row">
+              First Name : Khmayes
+            </div>
+            <div fxLayout="row">
+              Last name : Bounguicha
+            </div>
+              <div fxLayout="row">
+                Company : Widigital
+              </div>
+              <div fxLayout="row">
+                <a>Set Profile picture as CV picture</a>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </wid-scrollbar>
