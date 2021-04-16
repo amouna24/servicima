@@ -3,7 +3,7 @@ import { ILicenceModel } from '@shared/models/licence.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { HttpClient } from '@angular/common/http';
 import { ILicenceFeatureModel } from '@shared/models/licenceFeature.model';
-
+import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
@@ -56,5 +56,13 @@ export class LicenceService {
    *************************************************************************/
   getLicencesFeatures(): Observable<ILicenceFeatureModel[]> {
     return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl);
+  }
+  /*------------------------------------ COMPANY LICENCE --------------------------------------*/
+  /**************************************************************************
+   * @description Add licence company
+   * @return licence
+   *************************************************************************/
+  addCompanyLicence(companyLicence: ICompanyLicenceModel): Observable<ICompanyLicenceModel> {
+    return this.httpClient.post<ICompanyLicenceModel>(environment.companyLicenceApiUrl , companyLicence);
   }
 }

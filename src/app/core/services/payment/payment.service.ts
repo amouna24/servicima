@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { LicenceService } from '@core/services/licence/licence.service';
+import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +14,12 @@ export class PaymentService {
   detail: any;
   paymentMethode: string;
   constructor(
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private licenceService: LicenceService
   ) {
   }
 
-  paypal(licence: ILicenceModel, total): any {
+  paypal(licence: ILicenceModel, total, companyLicence: ICompanyLicenceModel): any {
     // tslint:disable-next-line:prefer-const
     return {
       createOrder: (data, actions) => {
@@ -51,10 +54,17 @@ export class PaymentService {
                licence: licence.LicenceKey.licence_code ,
                total,
                create_time: details.create_time,
-
              };
              this.paidFor = true;
              this.paymentMethode = 'Paypal';
+             this.licenceService.addCompanyLicence(companyLicence).subscribe(
+               (res) => {
+                 console.log(res);
+               },
+               (err) => {
+                 console.error(err);
+               }
+             );
              this.utilsService.openSnackBar('Transaction completed by ' + details.payer.name.given_name, null, 3000);
            }
           }

@@ -42,11 +42,11 @@
                <div class="full-width p-l-10 p-r-10" fxLayout="row" fxLayoutAlign="start start">
                  <p class="black font-size-11 p-b-10 font-light feature" fxFlex="100">{{licence.free_user_nbr}} Users</p>
                </div>
-           <!-- <ng-container *ngFor="let feature of getLicenceFeatures(licence)">
+            <ng-container *ngFor="let feature of getLicenceFeatures(licence)">
                <div class="full-width p-l-10 p-r-10" fxLayout="row" fxLayoutAlign="start center">
-                 <p class="black font-size-11 p-b-10 font-light feature" fxFlex="100">{{feature.LicenceFeaturesKey.feature_code}}</p>
+                 <p class="black font-size-11 p-b-10 font-light feature" fxFlex="100">{{getFeatureDesc(feature).feature_desc}}</p>
                </div>
-             </ng-container>-->
+             </ng-container>
            </div>
           </div>
           <button mat-button  class="m-b-15 btn-medium white font-size-10 font-light"

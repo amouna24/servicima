@@ -286,7 +286,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     if (this.router.url === '/manager/settings/users/add-user') {
       const newUser = {
         application_id: this.applicationId,
-        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getCompanyId('ALL')),
         email_address: this.form.value.emailAddress,
         company_email: this.emailAddressStorage,
         user_type: this.form.value.userType,

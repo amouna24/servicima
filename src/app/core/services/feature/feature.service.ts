@@ -15,6 +15,6 @@ export class FeatureService {
    */
   getAllFeatures(language: string) {
     return this.httpClient
-      .get<IFeatureModel[]>(`${environment.featuresApiUrl}?language_id=${language}`);
+      .get<IFeatureModel[]>(`${environment.featuresApiUrl}`);
   }
 }

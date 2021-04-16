@@ -32,7 +32,7 @@ export const environment = {
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
-  companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
+  companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8091/auth/v1',
   redirectionHomeUrl: '/',

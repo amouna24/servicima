@@ -13,6 +13,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { ICredentialsModel } from '@shared/models/credentials.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ProfileService } from '@core/services/profile/profile.service';
+import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 declare var paypal;
 @Component({
   selector: 'wid-buy-licence',
@@ -46,6 +47,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   extraUser: number;
   licence: ILicenceModel;
   credentials: ICredentialsModel;
+  companyLicence: ICompanyLicenceModel;
   usersNbr: number;
   constructor(private licenceService: LicenceService,
               private userService: UserService,
@@ -67,9 +69,12 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.userInfo();
     this.credentials = this.localStorageService.getItem('userCredentials');
     await this.getAllUsers();
+    this.companyLicence = this.initCompanyLicence();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
   }
-
+  /**
+   * @description Loaded after component complete init state
+   */
   ngAfterViewInit(): void {
     this.paypalInit();
   }
@@ -125,26 +130,11 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * @description logout: remove fingerprint and local storage
-   */
-  logout(): void {
-    this.authService.logout().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-        this.userService.connectedUser$.next(null);
-        localStorage.removeItem('userCredentials');
-        localStorage.removeItem('currentToken');
-        this.router.navigate(['/auth/login']);
-      },
-      (err) => {
-        console.error(err);
-      });
-  }
-  /**
    * @description Change billing pack
    */
   billingChange(event: MatRadioChange): void {
     this.billingPack = event.value;
+    this.companyLicence = this.initCompanyLicence();
     this.router.navigate([
       '/manager/settings/licences/buy-licence',
       this.licence.LicenceKey.licence_code,
@@ -177,10 +167,10 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   paypalInit(): void {
     paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('year')))
+      .Buttons(this.paymentService.paypal(this.licence, this.total('year'), this.initCompanyLicence('year')))
       .render(this.paypalYearElement.nativeElement);
     paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('month')))
+      .Buttons(this.paymentService.paypal(this.licence, this.total('month'), this.initCompanyLicence('month')))
       .render(this.paypalMonthElement.nativeElement);
   }
   /**
@@ -189,6 +179,25 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   backClicked() {
     this.utilService.previousRoute();
   }
+  initCompanyLicence(periodicity = this.billingPack): ICompanyLicenceModel {
+    // tslint:disable-next-line:prefer-const
+    let companyLicence: ICompanyLicenceModel;
+    companyLicence.CompanyLicenceKey.application_id = this.credentials.credentialsKey.application_id;
+    companyLicence.CompanyLicenceKey.email_adress = this.emailAddress;
+    companyLicence.CompanyLicenceKey.licence_code = this.licence.LicenceKey.licence_code;
+    companyLicence.CompanyLicenceKey.licence_type = 'STANDARD';
+    const startDate = new Date();
+    const endDate = periodicity === 'month' ?
+      new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDay()) :
+      new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDay());
+    companyLicence.licence_start_date = startDate.toString();
+    companyLicence.licence_end_date = endDate.toString();
+    companyLicence.bill_periodicity = periodicity === 'month' ? 'M' : 'Y';
+    return companyLicence;
+  }
+  /**
+   * @description confirmation
+   */
   confirm() {
     if (this.paymentService.detail.status === 'COMPLETED') {
       this.router.navigate(
@@ -201,6 +210,22 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * @description logout: remove fingerprint and local storage
+   */
+  logout(): void {
+    this.authService.logout().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+        this.userService.connectedUser$.next(null);
+        localStorage.removeItem('userCredentials');
+        localStorage.removeItem('currentToken');
+        this.router.navigate(['/auth/login']);
+      },
+      (err) => {
+        console.error(err);
+      });
+  }
   /**
    * @description Destroy All subscriptions declared with takeUntil operator
    */
