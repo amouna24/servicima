@@ -1,0 +1,160 @@
+<div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Timesheet</h1>
+    </div>
+
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" >
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+
+  <div fxLayout="row" fxFlex="5" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="56">
+      <div fxLayout="row" fxLayoutAlign="start " class="bg-white border-radius-20" fxLayoutGap="20px">
+
+        <div fxLayout="column" fxFlex="30" >
+          <h1 class="steel font-size-24 font-medium">
+            <mat-form-field appearance="outline">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+              <input matInput placeholder="Search">
+            </mat-form-field>
+          </h1>
+        </div>
+        <div fxLayout="column">
+          <h1 class="steel font-size-24 font-medium">
+            <mat-form-field appearance="outline">
+              <mat-label>Sort By</mat-label>
+              <mat-select>
+                <mat-option value="">
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </h1>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="white btn-small bg-topaz" >
+        <span class="bg-topaz">New</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+
+    <div fxLayout="column" fxFlex="90">
+        <mat-accordion >
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" class="help-blue">
+                <div fxLayout="column" fxFlex="80">
+                  <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="2">
+                      <div fxLayout="row" fxLayoutGap="2px">
+                        <mat-divider vertical style="height:100px"></mat-divider>
+                      </div>
+
+                    </div>
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="2">
+                      <div fxLayout="row" fxLayoutGap="2px">
+                        <mat-divider vertical style="height:100px"></mat-divider>
+                      </div>
+
+                    </div>
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="2">
+                      <div fxLayout="row" fxLayoutGap="2px">
+                        <mat-divider vertical style="height:100px"></mat-divider>
+                      </div>
+
+                    </div>
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="2">
+                      <div fxLayout="row" fxLayoutGap="2px">
+                        <mat-divider vertical style="height:100px"></mat-divider>
+                      </div>
+
+                    </div>
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="2">
+                      <div fxLayout="row" fxLayoutGap="2px">
+                        <mat-divider vertical style="height:100px"></mat-divider>
+                      </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="12">
+                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="20">
+                  <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="20">
+                      <button mat-mini-fab disabled>
+                        <mat-icon svgIcon="wi-marker"></mat-icon>
+                      </button>
+                    </div>
+                    <div fxLayout="column" fxFlex="20">
+                      <button mat-mini-fab disabled>
+                        <mat-icon svgIcon="wi-marker"></mat-icon>
+                      </button>
+                    </div>
+                    <div fxLayout="column" fxFlex="20">
+                      <button mat-mini-fab disabled>
+                        <mat-icon svgIcon="wi-eye"></mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel-header>
+
+            <mat-form-field fxLayout="row" fxFlex="10" fxLayoutAlign="start center">
+              <mat-label>First name</mat-label>
+              <input matInput>
+            </mat-form-field>
+
+          </mat-expansion-panel>
+
+        </mat-accordion>
+    </div>
+
+  </div>
+
+
+
+
+  <!--  <div fxLayout="row" fxFlex="93">-->
+
+<!--  </div>-->
+
+
+</div>
+

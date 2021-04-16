@@ -30,6 +30,13 @@ export const collaboraterMenu: IMenu[] = [
         feature: 'HR_FOLDER_ACCESS',
     },
     {
+      state: 'timesheet',
+      name: 'timesheet',
+      type: 'link',
+      icon: 'wi_dashboard',
+      feature: 'HR_FOLDER_ACCESS',
+    },
+    {
         state: 'salary-slips',
         name: 'salary-slips',
         type: 'link',

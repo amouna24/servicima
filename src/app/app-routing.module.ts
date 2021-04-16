@@ -28,6 +28,7 @@ const routes: Routes = [
         path: 'error',
         component: ServerErrorComponent
     },
+
     {
         path: '**',
         redirectTo: '/notfound'

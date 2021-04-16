@@ -18,7 +18,10 @@ const routes: Routes = [
       },
       {
         path: 'collaborator',
-        loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule)
+        loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule),
+        data: {
+          breadcrumb: 'Collaborator'
+        },
       },
       {
         path: 'candidate',

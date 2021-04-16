@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CollaboraterComponent } from './collaborater.component';
+import { TimesheetsListComponent } from './modules/timesheet/timesheets-list/timesheets-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: CollaboraterComponent,
+    // component: CollaboraterComponent,
+    component: TimesheetsListComponent,
     children: [
       {
         path: 'annual-interviews',
@@ -29,6 +31,11 @@ const routes: Routes = [
         path: 'salary-slips',
         loadChildren: () => import('./modules/salary-slips/salary-slips.module').then(m => m.SalarySlipsModule)
       },
+      {
+        path: 'timesheet',
+        loadChildren: () => import('./modules/timesheet/timesheet.module').then(m => m.TimesheetModule)
+      },
+
       {
         path: 'training',
         loadChildren: () => import('./modules/training/training.module').then(m => m.TrainingModule)

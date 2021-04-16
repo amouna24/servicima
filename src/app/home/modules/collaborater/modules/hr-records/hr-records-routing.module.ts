@@ -7,6 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: HrRecordsComponent,
+    data: {
+      breadcrumb: 'test'
+    },
   }
 ];
 
