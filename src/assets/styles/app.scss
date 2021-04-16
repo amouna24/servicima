@@ -443,6 +443,9 @@ html body {
 /*******************
     font size
 *******************/
+.font-size-8 {
+    font-size: 8px;
+}
 .font-size-9 {
     font-size: 9px;
 }
@@ -667,12 +670,21 @@ html body {
   @include get-page(servicima);
   margin: 20px;
   height: 87vh !important;
+  background-color: $white;
   // width: 88vw;
 }
 
 .dynamic-component-content {
   resize: both !important;
   scroll-behavior: smooth !important;
+}
+
+/*    licence container   */
+.licence-container  {
+  @include get-page(servicima);
+  margin: 20px;
+  height: 87vh !important;
+  // width: 88vw;
 }
 /* ---------------------- */
 

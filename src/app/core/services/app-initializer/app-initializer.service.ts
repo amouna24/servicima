@@ -33,6 +33,7 @@ export class AppInitializerService {
   countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
   licencesList: ILicenceModel[] = [];
+  companiesList: ICompanyModel[];
 
   constructor(
     private httpClient: HttpClient,
@@ -47,6 +48,7 @@ export class AppInitializerService {
     await this.httpClient.get(environment.loadAuthStarterDataApiUrl).toPromise().then(
       (data) => {
         this.starterData = data;
+        this.getCompanies();
         this.applicationList = this.starterData['applications'];
         this.companyList = this.starterData['companyall'];
         this.languageList = this.starterData['languages'];
@@ -71,5 +73,11 @@ export class AppInitializerService {
         this.countriesList = data[1];
         this.currenciesList = data[2];
       });
+  }
+  getCompanies() {
+      return this.httpClient
+        .get<any>(`${environment.companyApiUrl}`).subscribe((company) => {
+          this.companiesList = company;
+        });
   }
 }

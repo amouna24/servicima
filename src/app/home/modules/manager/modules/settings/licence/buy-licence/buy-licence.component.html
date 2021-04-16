@@ -1,4 +1,4 @@
-<div class="dynamic-component-container"
+<div class="licence-container"
      fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="column" fxFlex="56">
@@ -152,9 +152,25 @@
             <h4 class="steel font-light font-size-12">Licence type</h4>
             <h2 class="steel font-normal font-size-17">{{licence.LicenceKey.licence_code}}</h2>
           </div>
-          <div>
 
+          <div *ngIf="usersNbr>0" fxLayout="row" fxFlexAlign="center center" class="border-bottom">
+            <div class="full-width" fxLayout="column" fxLayoutGap="0">
+              <p class="black font-normal font-size-12">{{usersNbr - extraUser}} User</p>
+              <p class="black font-light font-size-8 m-0 m-b-10">{{licence.free_user_nbr}} free user</p>
+            </div>
+            <p class="black font-normal font-size-12">0€</p>
           </div>
+
+          <div *ngIf="usersNbr>0" fxLayout="row" fxFlexAlign="center center">
+            <div class="full-width" fxLayout="column" fxLayoutGap="0">
+              <p class="black font-normal font-size-12">{{extraUser}} Extra user</p>
+              <p class="black font-light font-size-8 m-0 m-b-10">
+                €{{billingPack === 'month' ? licence.pack_monthly_price : licence.pack_annual_price}}/month per user
+              </p>
+            </div>
+            <p class="black font-normal font-size-12">{{billingPack === 'month' ? licence.pack_monthly_price * extraUser : licence.pack_annual_price * extraUser}}€</p>
+          </div>
+
         </div>
         <div fxFlex="30" class="full-width">
           <div fxLayout="row" fxLayoutAlign="space-between center"

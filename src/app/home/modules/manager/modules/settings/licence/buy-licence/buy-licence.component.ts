@@ -10,6 +10,9 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { ICredentialsModel } from '@shared/models/credentials.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { ProfileService } from '@core/services/profile/profile.service';
 declare var paypal;
 @Component({
   selector: 'wid-buy-licence',
@@ -40,14 +43,19 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   haveImage: any;
   billingPack: string;
   saving: string;
+  extraUser: number;
   licence: ILicenceModel;
+  credentials: ICredentialsModel;
+  usersNbr: number;
   constructor(private licenceService: LicenceService,
               private userService: UserService,
               private spinnerService: SpinnerService,
               public paymentService: PaymentService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
+              private profileService: ProfileService,
               private router: Router,
+              private localStorageService: LocalStorageService,
               private utilService: UtilsService) {
   }
 
@@ -57,6 +65,8 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit(): Promise<void> {
     await this.getParam();
     await this.userInfo();
+    this.credentials = this.localStorageService.getItem('userCredentials');
+    await this.getAllUsers();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
   }
 
@@ -76,6 +86,19 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     if ((!this.licence) || (this.billingPack !== 'month' && this.billingPack !== 'year') ) {
       await this.router.navigate(['/manager/settings/licences/upgrade-licence']);
     }
+  }
+
+  /**
+   * @description : get all users
+   */
+  async getAllUsers() {
+    await this.profileService.getAllUser(this.credentials['email_address']).subscribe(
+      (data ) => {
+        this.usersNbr = data.length;
+        this.extraUser = data.length - this.licence.free_user_nbr;
+        this.extraUser = this.extraUser > 0 ? this.extraUser : 0;
+      }
+    );
   }
 
   /**
@@ -131,14 +154,14 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * @description Calculate total price
    */
-  total(billing: string = this.billingPack): string {
+  total(billing: string = this.billingPack): number {
+    let total = 0;
     if (billing === 'year') {
-      return this.licence.pack_annual_price;
+      total = this.licence.pack_annual_price + (this.extraUser * this.licence.annual_extra_user_price);
     } else if (billing === 'month') {
-      return this.licence.pack_monthly_price;
-    } else {
-      return '0';
+      total = this.licence.pack_monthly_price + (this.extraUser * this.licence.monthly_extra_user_price);
     }
+    return total;
   }
   /**
    * @description calculate saving percentage

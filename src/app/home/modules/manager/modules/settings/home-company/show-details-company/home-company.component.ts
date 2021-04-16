@@ -10,6 +10,7 @@ import { AppInitializerService } from '@core/services/app-initializer/app-initia
 import { UploadService } from '@core/services/upload/upload.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SocialNetwork } from '@core/services/utils/social-network';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
@@ -33,6 +34,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private modalService: ModalService,
               private socialNetwork: SocialNetwork,
               private uploadService: UploadService,
+              private refdataService: RefdataService,
 ) { }
 
   userCredentials: string;
@@ -103,7 +105,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    */
   getRefData(): void {
     const list = ['VAT', 'LEGAL_FORM'];
-    const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+    const refData = this.refdataService.getRefData(this.companyId, this.applicationId,
       list);
     this.legalFormList = refData['LEGAL_FORM'];
     this.vatList = refData['VAT'];
