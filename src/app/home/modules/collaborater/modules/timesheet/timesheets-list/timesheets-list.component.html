@@ -1,9 +1,10 @@
 <div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+<!--  <wid-timesheet-header></wid-timesheet-header>-->
 
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Timesheet</h1>
+      <h1 class="steel font-size-28 font-medium">Timesheet</h1>
     </div>
 
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
@@ -49,80 +50,83 @@
     </div>
 
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="white btn-small bg-topaz" >
+      <button mat-raised-button class="white btn-medium bg-topaz" >
         <span class="bg-topaz">New</span>
       </button>
     </div>
 
   </div>
 
+  <wid-add-timesheet></wid-add-timesheet>
+
   <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="90">
         <mat-accordion >
           <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" class="help-blue">
+            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue" >
+              <div fxLayout="row" fxFlex="50" fxLayoutAlign=" center" class="help-blue">
                 <div fxLayout="column" fxFlex="80">
                   <div fxLayout="row">
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="2">
-                      <div fxLayout="row" fxLayoutGap="2px">
-                        <mat-divider vertical style="height:100px"></mat-divider>
+                      <div fxLayout="column" fxFlex="12">
+                        <div class="height-30 m-t-30">Week start on:</div>
+                        <div class="height-30">text</div>
                       </div>
+                      <div fxLayout="column" fxFlex="2">
+                        <div fxLayout="row" fxLayoutGap="2px">
+                          <mat-divider vertical style="height:100px"></mat-divider>
+                        </div>
 
-                    </div>
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="2">
-                      <div fxLayout="row" fxLayoutGap="2px">
-                        <mat-divider vertical style="height:100px"></mat-divider>
                       </div>
+                      <div fxLayout="column" fxFlex="12">
+                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                      </div>
+                      <div fxLayout="column" fxFlex="2">
+                        <div fxLayout="row" fxLayoutGap="2px">
+                          <mat-divider vertical style="height:100px"></mat-divider>
+                        </div>
 
-                    </div>
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="2">
-                      <div fxLayout="row" fxLayoutGap="2px">
-                        <mat-divider vertical style="height:100px"></mat-divider>
                       </div>
+                      <div fxLayout="column" fxFlex="12">
+                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                      </div>
+                      <div fxLayout="column" fxFlex="2">
+                        <div fxLayout="row" fxLayoutGap="2px">
+                          <mat-divider vertical style="height:100px"></mat-divider>
+                        </div>
 
-                    </div>
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="2">
-                      <div fxLayout="row" fxLayoutGap="2px">
-                        <mat-divider vertical style="height:100px"></mat-divider>
                       </div>
+                      <div fxLayout="column" fxFlex="12">
+                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                      </div>
+                      <div fxLayout="column" fxFlex="2">
+                        <div fxLayout="row" fxLayoutGap="2px">
+                          <mat-divider vertical style="height:100px"></mat-divider>
+                        </div>
 
-                    </div>
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="2">
-                      <div fxLayout="row" fxLayoutGap="2px">
-                        <mat-divider vertical style="height:100px"></mat-divider>
                       </div>
-                    </div>
-                    <div fxLayout="column" fxFlex="12">
-                      <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                    </div>
+                      <div fxLayout="column" fxFlex="12">
+                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                      </div>
+                      <div fxLayout="column" fxFlex="2">
+                        <div fxLayout="row" fxLayoutGap="2px">
+                          <mat-divider vertical style="height:100px"></mat-divider>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxFlex="12">
+                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
+                      </div>
                   </div>
                 </div>
                 <div fxLayout="column" fxFlex="20">
                   <div fxLayout="row">
                     <div fxLayout="column" fxFlex="20">
-                      <button mat-mini-fab disabled>
+                      <button mat-mini-fab>
                         <mat-icon svgIcon="wi-marker"></mat-icon>
                       </button>
                     </div>
                     <div fxLayout="column" fxFlex="20">
-                      <button mat-mini-fab disabled>
+                      <button mat-mini-fab>
                         <mat-icon svgIcon="wi-marker"></mat-icon>
                       </button>
                     </div>
@@ -147,14 +151,6 @@
     </div>
 
   </div>
-
-
-
-
-  <!--  <div fxLayout="row" fxFlex="93">-->
-
-<!--  </div>-->
-
 
 </div>
 

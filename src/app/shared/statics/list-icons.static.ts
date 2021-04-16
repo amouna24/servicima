@@ -2,6 +2,10 @@ import { IIcon } from '@shared/models/icon.model';
 
 export const iconsList: IIcon[] = [
   {
+    name: 'wi-clock',
+    path: 'assets/icons/clock.svg'
+  },
+  {
     name: 'wi-bag',
     path: 'assets/icons/bag.svg'
   },
@@ -85,6 +89,10 @@ export const iconsList: IIcon[] = [
   {
     name: 'wi_alert_warning',
     path: 'assets/icons/warning.svg'
+  },
+  {
+    name: 'wi-close-normal',
+    path: 'assets/icons/close.svg'
   },
   {
     name: 'wi-close',

@@ -40,6 +40,7 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
+import { TimesheetHeaderComponent } from './components/timesheet/timesheet-header/timesheet-header.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { ErrorComponent } from './components/error/error.component';
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
+    TimesheetHeaderComponent,
 
   ],
   imports: [
@@ -125,6 +127,7 @@ import { ErrorComponent } from './components/error/error.component';
     SpliceText,
     DisableControlDirective,
     ModalComponent,
+    TimesheetHeaderComponent,
   ]
 })
 export class SharedModule { }

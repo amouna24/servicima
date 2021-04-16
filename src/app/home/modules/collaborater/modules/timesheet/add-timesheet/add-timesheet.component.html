@@ -1,0 +1,204 @@
+
+<div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+  <div fxLayout="column" fxFlex="90">
+    <mat-accordion >
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue" >
+          <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between center" class="help-blue">
+            <div fxLayout="column" fxFlex="15">
+              <div>Week start on:</div>
+              <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="50" fxLayoutAlign="center end">
+              <button class="duck-egg-blue">
+                <mat-icon svgIcon="wi-close-normal"></mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="25" >
+            <div fxLayout="row">
+              <h1 class="font-size-17 font-normal">Category :</h1>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                  <mat-label>Catégory</mat-label>
+                  <mat-select>
+                    <mat-option value="">
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <div fxLayout="row">
+              <h1 class="font-size-17 font-normal">Project :</h1>
+            </div>
+            <div fxLayout="row">
+              <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                <mat-label>Project</mat-label>
+                <mat-select>
+                  <mat-option value="">
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <div fxLayout="row">
+              <h1 class="font-size-17 font-normal">Task :</h1>
+            </div>
+            <div fxLayout="row">
+              <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                <mat-label>task</mat-label>
+                <mat-select>
+                  <mat-option value="">
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <div fxLayout="row">
+              <h1 class="font-size-17 font-normal">Comment :</h1>
+            </div>
+            <div fxLayout="row">
+              <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                <input matInput placeholder="comment">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="24">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">MON :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">TUE :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="23">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">WED :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">THU :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="24">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">FRI :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">SAT :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <div fxLayout="row" fxLayoutGap="20px">
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">SUN :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="46">
+                <div fxLayout="row">
+                  <h1 class="font-size-17 font-normal">Total :</h1>
+                </div>
+                <div fxLayout="row">
+                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                    <input matInput placeholder="00h 00m">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxLayout="column" fxFlex="70">
+            <div><button mat-button class="decoration red ">Delete timesheet</button></div>
+          </div>
+          <div fxLayout="column" fxFlex="30">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+              <button mat-raised-button class="white btn-medium bg-cerulean-blue">
+                <span class="font-size-17">Submit</span>
+              </button>
+              <button mat-raised-button class="white btn-medium duck-egg-blue" >
+                <span class="font-size-17 cerulean-blue">Save</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
+
+</div>
