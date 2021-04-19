@@ -9,9 +9,6 @@ const routes: Routes = [
   {
     path: '',
     component: UsersListComponent,
-    data: {
-      breadcrumb: 'users'
-    },
   },
   {
     path: 'add-user',
@@ -22,9 +19,16 @@ const routes: Routes = [
   },
   {
     path: 'update-user',
-    component: UserComponent,
+    component: EditUserComponent,
     data: {
       breadcrumb: 'update user'
+    },
+  },
+  {
+    path: 'show-user',
+    component: EditUserComponent,
+    data: {
+      breadcrumb: 'show user'
     },
   },
 ];

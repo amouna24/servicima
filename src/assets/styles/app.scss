@@ -315,7 +315,9 @@ html body {
 .m-l-40 {
     margin-left: 40px;
 }
-
+.m-l-60 {
+  margin-left: 60px;
+}
 .m-r-5 {
     margin-right: 5px;
 }
@@ -422,14 +424,20 @@ html body {
 /*******************
     font size
 *******************/
+.font-size-8 {
+  font-size: 8px;
+}
 .font-size-9 {
     font-size: 9px;
 }
 .font-size-10 {
    font-size: 10px;
 }
+.font-size-11 {
+  font-size: 11px;
+}
 .font-size-12 {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 .font-size-14 {
     font-size: 14px !important;
@@ -493,6 +501,9 @@ html body {
 }
 .cool-grey {
   color: $cool-grey;
+}
+.denim{
+  color: $denim !important;
 }
 .black {
     color: $black;
@@ -634,7 +645,7 @@ html body {
   @include get-page(servicima);
   background-color: $white;
   margin: 20px;
-  height: 88vh !important;
+  height: 87vh !important;
   // width: 88vw;
 }
 
@@ -642,16 +653,26 @@ html body {
   resize: both !important;
   scroll-behavior: smooth !important;
 }
+
+/*    licence container   */
+.licence-container  {
+  @include get-page(servicima);
+  margin: 20px;
+  height: 87vh !important;
+  // width: 88vw;
+}
 /* ---------------------- */
 
 /*  SCROLLBAR COMPONENT   */
 
 .sidenav-wrapper {
-  height: 88vh !important;
+  resize: both !important;
 }
 .scrollbar {
-  resize: both !important;
-  scroll-behavior: smooth !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
 }
 /* ---------------------- */
 
@@ -723,3 +744,16 @@ html body {
 .mat-error{
   color: $error-red !important;
 }
+/*******************
+   Bottom Sheet
+*******************/
+.bottom-sheet {
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 24px !important;
+  padding: 0 !important;
+  height: 500px !important;
+}
+wid-upload-sheet {
+  min-height: 100% !important;
+}
+/******************/

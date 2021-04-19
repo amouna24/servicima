@@ -9,18 +9,17 @@ export class SkeletonLoaderComponent implements OnInit {
 
   rowsNbr =  [];
   columnsNbr = [];
-  @Input() skeletonGrid: { rows: number, columns: number};
   @Input() width;
   @Input() height;
+  @Input() nbrRow;
+  @Input() nbrColumn;
   @Input() circle: boolean;
 
   constructor() {
-
   }
-
   ngOnInit(): void {
-    this.rowsNbr = Array(this.skeletonGrid?.rows ? this.skeletonGrid?.rows : 5).fill(null).map((x, i) => i);
-    this.columnsNbr = Array(this.skeletonGrid?.rows ? this.skeletonGrid?.rows : 2).fill(null).map((x, i) => i);
+    this.rowsNbr = Array(this.nbrRow ? parseInt(this.nbrRow, 10) : 5).fill(null).map((x, i) => i);
+    this.columnsNbr = Array(this.nbrColumn ? parseInt(this.nbrColumn, 10) : 2).fill(null).map((x, i) => i);
   }
 
   getMyStyles() {

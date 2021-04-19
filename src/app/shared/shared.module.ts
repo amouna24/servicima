@@ -15,7 +15,10 @@ import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
-import { SpliceText } from '@core/services/pipe/splice.text';
+import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+
+import { SpliceText } from '@core/services/pipe/splice-text';
+import { DisableControlDirective } from '@shared/directives/disabled.directive';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -56,6 +59,8 @@ import { ErrorComponent } from './components/error/error.component';
     RightSidenaveComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    ClickOutsideDirective,
+    DisableControlDirective,
     CapitalizeFirstLetter,
     SpliceText,
     UploadSheetComponent,
@@ -85,7 +90,6 @@ import { ErrorComponent } from './components/error/error.component';
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
@@ -120,7 +124,10 @@ import { ErrorComponent } from './components/error/error.component';
     ErrorComponent,
     SplashComponent,
     CapitalizeFirstLetter,
+    ClickOutsideDirective,
     SpliceText,
+    DisableControlDirective,
+    ModalComponent,
   ]
 })
 export class SharedModule { }

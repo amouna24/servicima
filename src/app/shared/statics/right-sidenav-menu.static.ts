@@ -1,32 +1,36 @@
 
 export const sidenavRightMenu = [
-  {
+  /*{
     state: '/settings/home-company',
     name: 'Company Profile',
     type: 'link',
     icon: 'wi_company',
-    feature: 'company-profile',
-  },
+  //  feature: 'company-profile',
+    feature: 'SOURCING_ACCESS' // change feature with correct name
+  },*/
   {
     state: '/user/profile',
     name: 'My Account',
     type: 'link',
     icon: 'wi_user',
-    feature: 'my-account',
+    // feature: 'my-account',
+    feature:  'SOURCING_CAND_FILE_ACCESS'  || 'SOURCING_ACCESS'  // change feature with correct name
   },
   {
     state: '/settings/users',
     name: 'Settings',
     type: 'link',
     icon: 'wi_settings',
-    feature: 'settings'
+    // feature: 'settings'
+    feature: 'SETTING-MANAGER' // change feature with correct name
   },
   {
     state: 'themes',
     name: 'Themes',
     type: 'sub',
     icon: 'wi_theme',
-    feature: 'themes',
+   //  feature: 'themes',
+    feature: 'SOURCING_ACCESS', // change feature with correct name
     children: [
       {
         state: 'themes',

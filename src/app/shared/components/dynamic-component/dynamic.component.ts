@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
 import { FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { SheetService } from '@core/services/sheet/sheet.service';
 
 @Component({
   selector: 'wid-dynamic-component',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss']
 })
-export class DynamicComponent implements OnInit {
+export class DynamicComponent implements OnInit, OnDestroy {
 
   /**************************************************************************
    * @description Menu Items List
@@ -25,18 +27,29 @@ export class DynamicComponent implements OnInit {
    *************************************************************************/
   @Output() dynamicFormGroup = new EventEmitter<FormGroup>();
   @Output() selectedFile = new EventEmitter<FormData>();
+  @Output() selectedDoc = new EventEmitter<{ data: FormData, name: string }>();
   @Output() keyUpEventValue = new EventEmitter<string>();
+  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string }>();
+  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
+
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   /**************************************************************************
    * @description Menu Items List
    *************************************************************************/
   selectedItem = new Subject<string>();
+  selectedDocName: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   valueOfSelectedItem = '';
 
   randomSubParent: any;
 
   constructor(
-  ) { }
+    private sheetService: SheetService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.randomSubParent = document.getElementById('dynamic-component-content');
@@ -123,6 +136,46 @@ export class DynamicComponent implements OnInit {
 
   getFile(obj: FormData) {
     this.selectedFile.emit(obj);
+  }
+
+  /**************************************************************************
+   * @description Open Dialog Panel
+   *************************************************************************/
+  openUploadSheet() {
+    this.sheetService.displaySheet('uploadSheetComponent', null)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (res) => {
+          this.selectedDoc.emit({ data: res.file, name: res.name});
+          this.selectedDocName.next(res.name);
+          console.log('res', res);
+        }
+      );
+  }
+
+  identify(index, item) {
+    return item._id;
+  }
+
+  /**************************************************************************
+   * @description Open Dialog Panel
+   *************************************************************************/
+  feedDataTable(form: FormGroup, action) {
+    this.listOfObjects.emit({ form, action });
+  }
+
+  actionRowData(action: string, rowData: any) {
+    this.rowActionData.emit({ actionType: action, data: rowData});
+  }
+  /**************************************************************************
+   * @description Destroy All subscriptions declared with takeUntil operator
+   *************************************************************************/
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 
 }

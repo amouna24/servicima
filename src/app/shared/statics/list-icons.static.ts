@@ -2,6 +2,10 @@ import { IIcon } from '@shared/models/icon.model';
 
 export const iconsList: IIcon[] = [
   {
+    name: 'wi-external-link',
+    path: 'assets/icons/external-link.svg'
+  },
+  {
     name: 'wi-bag',
     path: 'assets/icons/bag.svg'
   },
@@ -152,7 +156,8 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi_other',
-    path: 'assets/icons/link-solid.svg'
+    path: 'assets/icons/link-solid.svg',
+    viewBox: '4 -17 25 46'
   },
   /* Gender Icons */
   {
@@ -188,6 +193,24 @@ export const iconsList: IIcon[] = [
     name: 'wi_row_polygon',
     path: 'assets/icons/row-polygon.svg',
     viewBox: '0 0 20 8'
+  },
+  {
+    name: 'wi_adjustments',
+    path: 'assets/icons/adjustments.svg'
+  },
+  {
+    name: 'wi_filter',
+    path: 'assets/icons/filter.svg'
+  },
+  /* ------------------ */
+  /*   Bottom Sheet     */
+  {
+    name: 'wi_upload',
+    path: 'assets/icons/upload.svg',
+  },
+  {
+    name: 'wi_drive',
+    path: 'assets/icons/drive.svg',
   },
   /* ------------------ */
 ];

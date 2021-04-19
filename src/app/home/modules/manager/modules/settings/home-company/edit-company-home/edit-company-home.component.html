@@ -14,16 +14,20 @@
         <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
       </div>
 
-
-      <div fxLayout="row" fxFlex="90" class="p-t-20 font-size-12 " form
-        [formGroup]="form" (keydown)="addOrUpdate($event)">
+      <wid-skeleton-loader
+        height="35" width="250"
+        *ngIf="isLoading" nbrRow=8
+        nbrColumn=2
+      ></wid-skeleton-loader>
+      <div fxLayout="row" fxFlex="89" class="p-t-20 font-size-12" *ngIf="!isLoading" form
+        [formGroup]="form">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar >
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="required">{{'homecompany.companyname' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.companyname' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input autocomplete="off" matInput required [placeholder]=" 'homecompany.companyname' | translate"
                       formControlName="companyName" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -32,7 +36,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="required">{{'homecompany.email' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.email' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input matInput autocomplete="off" required [placeholder]="'homecompany.email' | translate"
                       formControlName="emailAddress" [ngStyle.xs]="{'font-size': '15px'}">
@@ -41,21 +45,22 @@
               </div>
             </div>
             <div fxLayout="column" fxFlex="50" fxLayoutAlign="flex-end flex-start" >
-              <div fxLayout="column" fxLayoutAlign="start center"  class="profile-image" style="width: 80%">
+              <div fxLayout="column" fxLayoutAlign="start center"  class="profile-image" [ngStyle]="{'width': '80%'}">
                 <div class="profile-image" fxLayout="row"  fxLayoutAlign="center start">
                   <wid-profile-image [haveImage]="haveImage" [avatar]="this.avatar" [modelObject]="user"
-                    [singleUpload]="false" [userType]="profileUserType" (newFile)="getFile($event)">
+                    [singleUpload]="false" height="122" width="122" [userType]="profileUserType" [diameter]="130" (newFile)="getFile($event)">
                   </wid-profile-image>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="10px" class="m-t-20" >
-                 <div fxLayout="row"  *ngFor=" let list of showList; let index = index">
-                  <button mat-button mat-raised-button class="btn-small white" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
-                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px" style="width: 100%;">
+              </div>
+                <div fxLayout="row"   fxFlex="100" fxLayoutGap="10px" class="m-t-20" style="width: 80%;"  [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'"  >
+                 <div fxLayout="column"  *ngFor=" let list of showList; let index = index" [fxFlex]="showList.length ===3 ? 33 : 40">
+                  <button mat-button mat-raised-button class="btn-small white overwrite-btn-small" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                         <div fxLayout="column" fxFlex="20">
                           <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
                         </div>
                         <div fxLayout="column" fxFlex="80">
-                        <span class="font-size-10">{{list.value | spliceText: 10}}</span>
+                        <span class="font-size-10">{{list.value | spliceText: 15}}</span>
                         </div>
                       </div>
                     </button>
@@ -63,12 +68,11 @@
                   </div>
               </div>
             </div>
-          </div>
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.registrationnumber' | translate | uppercase}} </label>
+                  <label>{{'homecompany.registrationnumber' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input matInput autocomplete="off" [placeholder]="'homecompany.registrationnumber' | translate"
                       formControlName="registrationNumber" [ngStyle.xs]="{'font-size': '15px'}">
@@ -81,7 +85,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="required">{{'homecompany.registrationcountry' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.registrationcountry' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'homecompany.registrationcountry' | translate"
                       formControlName="registryCountryCtrl" #singleSelect>
@@ -102,7 +106,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.activitycode' | translate | uppercase}} </label>
+                  <label>{{'homecompany.activitycode' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
                     <input matInput [placeholder]=" 'homecompany.activitycode' | translate"
                       formControlName="activityCodeCtrl">
@@ -128,7 +132,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.activitydescription' | translate| uppercase}} </label>
+                  <label>{{'homecompany.activitydescription' | translate| capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <textarea [placeholder]=" 'homecompany.activitydescription' | translate" rows="7"
                       formControlName="activityDescription" autocomplete="off" matInput
@@ -143,7 +147,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.currency' | translate | uppercase}} </label>
+                  <label>{{'homecompany.currency' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'homecompany.currency' | translate" formControlName="currencyCtrl"
                       #singleSelect>
@@ -161,7 +165,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.capital' | translate | uppercase}} </label>
+                  <label>{{'homecompany.capital' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input type="number" autocomplete="off" matInput [placeholder]=" 'homecompany.capital' | translate"
                       formControlName="capital" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -172,7 +176,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.legalform' | translate | uppercase}} </label>
+                  <label>{{'homecompany.legalform' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'homecompany.legalform' | translate" formControlName="legalFormCtrl"
                       #singleSelect>
@@ -191,7 +195,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.vat' | translate | uppercase}} </label>
+                  <label>{{'homecompany.vat' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'homecompany.vat' | translate" formControlName="vatCtrl" #singleSelect>
                       <mat-option>
@@ -212,7 +216,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row" fxLayoutGap="10%">
                 <div fxLayout="column" fxFlex="22">
-                  <label class="required">{{'homecompany.zipcode' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.zipcode' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input required autocomplete="off" matInput required
                       [placeholder]=" 'homecompany.zipcode' | translate" formControlName="zipCode"
@@ -222,7 +226,7 @@
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" fxFlex="48">
-                  <label class="required">{{'homecompany.city' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.city' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline" *ngIf="form.value.registryCountryCtrl !=='FRA'">
                     <input autocomplete="off" required matInput required [placeholder]=" 'homecompany.city' | translate"
                       formControlName="city" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -244,7 +248,7 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="required">{{'homecompany.country' | translate | uppercase}} </label>
+                  <label class="required">{{'homecompany.country' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select [placeholder]=" 'homecompany.country' | translate" formControlName="countryCtrl"
                       #singleSelect>
@@ -266,7 +270,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="required">{{'homecompany.adress' | translate| uppercase}} </label>
+                  <label class="required">{{'homecompany.adress' | translate| capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <textarea [placeholder]=" 'homecompany.adress' | translate" rows="7" formControlName="address"
                        autocomplete="off" matInput required [ngStyle.xs]="{'font-size': '15px'}">
@@ -286,7 +290,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.phone1' | translate | uppercase}} </label>
+                  <label>{{'homecompany.phone1' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input [placeholder]=" 'homecompany.phone1' | translate" autocomplete="off" matInput formControlName="phoneNbr1"
                            [ngStyle.xs]="{'font-size': '15px'}" />
@@ -295,7 +299,7 @@
               </div>
                   <div fxLayout="row">
                     <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.fax' | translate | uppercase}} </label>
+                  <label>{{'homecompany.fax' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input [placeholder]=" 'homecompany.fax' | translate" autocomplete="off" matInput formControlName="faxNbr"
                            [ngStyle.xs]="{'font-size': '15px'}" />
@@ -308,7 +312,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.phone2' | translate | uppercase}} </label>
+                  <label>{{'homecompany.phone2' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input [placeholder]=" 'homecompany.phone2' | translate" autocomplete="off" matInput formControlName="phoneNbr2"
                            [ngStyle.xs]="{'font-size': '15px'}" />
@@ -317,9 +321,9 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.contactemail' | translate | uppercase}} </label>
+                  <label>{{'homecompany.contactemail' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
-                    <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="phoneNbr2"
+                    <input [placeholder]=" 'homecompany.contactemail' | translate" autocomplete="off" matInput formControlName="contactEmail"
                            [ngStyle.xs]="{'font-size': '15px'}" />
                   </mat-form-field>
                 </div>
@@ -330,7 +334,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.website' | translate | uppercase}} </label>
+                  <label>{{'homecompany.website' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input autocomplete="off" matInput [placeholder]=" 'homecompany.website' | translate"
                       formControlName="webSite" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -341,7 +345,7 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label>{{'homecompany.employeenum' | translate | uppercase}} </label>
+                  <label>{{'homecompany.employeenum' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
                     <input autocomplete="off" matInput [placeholder]=" 'homecompany.employeenum' | translate"
                       formControlName="employeeNum" [ngStyle.xs]="{'font-size': '15px'}" />
@@ -357,11 +361,11 @@
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
               <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()">
+                <button mat-button mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
                   <span class="font-size-14"> {{ 'company.reset' | translate}}</span>
                 </button>
-                <button mat-button mat-raised-button class="btn-medium bg-ocean-blue white" [disabled]="!form.valid"
-                  (click)="addOrUpdate($event)">
+                <button mat-button mat-raised-button class="btn-medium white" color="primary"
+                  (click)="addOrUpdate()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14">{{ 'user.save' | translate}}</span>
                   </div>

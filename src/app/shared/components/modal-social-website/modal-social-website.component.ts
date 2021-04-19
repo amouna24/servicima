@@ -38,17 +38,19 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
   modelConfig = {
     title: '',
     button: {
-      buttonRight: {
+      buttonLeft: {
         visible: true,
         name: 'cancel',
         color: '#232323',
-        background: '#f3f6f9'
+        background: '#f3f6f9',
+        nextValue: false,
       },
-      buttonLeft: {
+      buttonRight: {
         visible: true,
         name: 'save',
         color: ' #f3f6f9',
-        background: '#0067e0'
+        background: '#0067e0',
+        nextValue: true,
       },
     },
     style: { }

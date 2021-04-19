@@ -34,11 +34,13 @@ export class ConfirmationModalComponent implements OnInit {
               visible: true,
               name: 'Deactivate',
               color: ' #f3f6f9',
+              nextValue: true,
               background: '#d24d57'
             },
             buttonRight: {
               visible: true,
               name: 'cancel',
+              nextValue: false,
               color: '#232323',
               background: '#f3f6f9'
             },
@@ -57,11 +59,13 @@ export class ConfirmationModalComponent implements OnInit {
               visible: true,
               name: 'Confirm',
               color: ' #f3f6f9',
+              nextValue: true,
               background: '#0459bc'
             },
             buttonRight: {
               visible: true,
               name: 'cancel',
+              nextValue: false,
               color: '#232323',
               background: '#f3f6f9'
             },
@@ -78,13 +82,15 @@ export class ConfirmationModalComponent implements OnInit {
               visible: true,
               name: 'Confirm',
               color: ' #f3f6f9',
-              background: '#0459bc'
+              background: '#0459bc',
+              nextValue: true,
             },
             buttonRight: {
               visible: true,
               name: 'cancel',
               color: '#232323',
-              background: '#f3f6f9'
+              background: '#f3f6f9',
+              nextValue: false,
             },
           },
           style: { }
@@ -97,15 +103,17 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: this.data.status === 'ACTIVE' ? 'Deactivate' : 'Activate',
-              color: this.data.status === 'ACTIVE' ? 'white' : 'white',
-              background: this.data.status === 'ACTIVE' ? '#d24d57' : '#1bc5bd',
+              name: this.data.status === 'A' ? 'Deactivate' : 'Activate',
+              color: this.data.status === 'A' ? 'white' : 'white',
+              background: this.data.status === 'A' ? '#d24d57' : '#1bc5bd',
+              nextValue: true,
             },
             buttonRight: {
               visible: true,
               name: 'cancel',
               color: '#232323',
-              background: '#f3f6f9'
+              background: '#f3f6f9',
+              nextValue: false,
             },
           },
           style: { }
