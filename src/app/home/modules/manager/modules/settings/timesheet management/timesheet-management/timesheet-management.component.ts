@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { TimesheetSettingService } from '@core/services/timesheet-setting/timesheet-setting.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { AddPaymentInfoCompanyComponent } from '../../payment/payment-info/add-payment-info-company/add-payment-info-company.component';
 
@@ -16,12 +16,11 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
 
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
-  email: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
-              private localStorageService: LocalStorageService,
+              private userService: UserService,
               private modalService: ModalService,
               private timesheetSettingService: TimesheetSettingService, ) {
   }
@@ -40,9 +39,7 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
    * @description get timesheet setting by company
    */
   getTimesheetSetting(): void {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred['email_address'];
-    this.subscriptions.push(this.timesheetSettingService.getCompanyTimesheetSetting(this.email).subscribe((data) => {
+    this.subscriptions.push(this.timesheetSettingService.getCompanyTimesheetSetting(this.userService.emailAddress).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));

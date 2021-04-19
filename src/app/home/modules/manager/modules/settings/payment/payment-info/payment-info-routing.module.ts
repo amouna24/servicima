@@ -7,9 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: PaymentInfoComponent,
-    data: {
-      breadcrumb: 'payment info'
-    },
   },
 ];
 

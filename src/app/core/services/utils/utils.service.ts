@@ -32,7 +32,7 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Application ID
-   * @param APPLICATION_CODE the application code
+   * @param applicationCode the application code
    * @return the ID of APPLICATION_CODE
    *************************************************************************/
   getApplicationID(applicationCode: string): string {
@@ -42,21 +42,21 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Company ID
-   * @param COMPANY_EMAIL the email_address
-   * @param APPLICATION_CODE of Application
+   * @param companyEmail the email_address
+   * @param applicationId Application id
    * @return ID of company
    *************************************************************************/
-  getCompanyId(companyEmail: string, applicationCode?: string): string {
+  getCompanyId(companyEmail: string, applicationId?: string): string {
     return this.appInitializerService.companiesList
       .find(value =>
         value.companyKey.email_address === companyEmail &&
-        value.companyKey.application_id === applicationCode
+        value.companyKey.application_id === applicationId
       )._id;
   }
 
   /**************************************************************************
    * @description Get Application NAME
-   * @param APPLICATION_ID the application id
+   * @param applicationId the application id
    * @return the NAME of APPLICATION_ID
    *************************************************************************/
   getApplicationName(applicationId: string): string {
@@ -66,7 +66,7 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Company NAME
-   * @param COMPANY_ID the companyID
+   * @param companyId the companyID
    * @return NAME of company
    *************************************************************************/
   getCompanyName(companyId: string): string {
@@ -122,6 +122,7 @@ export class UtilsService {
    * @description Open SnackBar
    * @param message;
    *  @param action;
+   *  @param duration
    * *
    */
   openSnackBar(message: string, action?: string, duration?: number) {
@@ -179,12 +180,23 @@ export class UtilsService {
   /**************************************************************************
    * @description get error page
    * @param errCode: string
-   * @return object of type IError
+   * @return pages of type IError
    *************************************************************************/
   getErrorPage(errCode: string, pages: IError[] = errorPages): IError {
     return pages.find(page => page.code === errCode);
   }
 
+  /**
+   * @description remove element
+   * @param array: array
+   * @returns toRemove element to remove
+   */
+   removeElement<T>(array: T[], toRemove: T): void {
+    const index = array.indexOf(toRemove);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
+  }
   /****************************** Filter list with mat-select ************************/
   /*********************************************************************************** */
 

@@ -1,9 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '@core/services/user/user.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { Subscription } from 'rxjs';
@@ -13,15 +12,13 @@ import { Subscription } from 'rxjs';
   templateUrl: './add-payment-method.component.html',
   styleUrls: ['./add-payment-method.component.scss']
 })
-export class AddPaymentMethodComponent implements OnInit {
+export class AddPaymentMethodComponent implements OnInit, OnDestroy {
   form: FormGroup;
+  action: string;
   company: string;
   companyId: string;
   language: string;
-  listArray = [];
   languages = [];
-  applicationId: string;
-  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -30,7 +27,6 @@ export class AddPaymentMethodComponent implements OnInit {
                @Inject(MAT_DIALOG_DATA) public data: any,
                private appInitializerService: AppInitializerService,
                public dialogRef: MatDialogRef<AddPaymentMethodComponent>,
-               private localStorageService: LocalStorageService,
                private utilsService: UtilsService,
                private refdataService: RefdataService) { }
 
@@ -44,9 +40,11 @@ export class AddPaymentMethodComponent implements OnInit {
       });
     this.getLanguages();
     this.initForm();
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.applicationId = cred['application_id'];
-    this.emailAddress = cred['email_address'];
+    if (this.data) {
+      this.action = 'update';
+    } else {
+      this.action = 'add';
+    }
   }
   /**
    * @description : initialization of the form
@@ -55,11 +53,11 @@ export class AddPaymentMethodComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       company: [{ value: this.company, disabled: true }],
-      language: [this.data ? this.data.data.RefDataKey.language_id : '', [Validators.required]],
+      language: [this.data ? this.data.data.RefDataKey.language_id : ''],
       methodName : [this.data ? this.data.data.ref_data_desc : '', [Validators.required]],
       input: this.formBuilder.array(this.data ? this.data.list.map(data => this.formBuilder.group({
-        grade: [data.RefDataKey.language_id],
-        value: [data.ref_data_desc]
+        lang: [data.RefDataKey.language_id],
+        refDataDesc: [data.ref_data_desc]
       })) : []),
     });
   }
@@ -72,39 +70,88 @@ export class AddPaymentMethodComponent implements OnInit {
     if (!res) {
       this.dialogRef.close();
     } else {
-      this.addMethodPaymentTerms();
+      if (this.data) {
+        this.updatePaymentMethod();
+      } else {
+        this.addPaymentMethod();
+
+      }
     }
   }
-
   /**
    * @description  get list array input
    */
-  getListNetworkSocial() {
+  getListPaymentMethods() {
     return this.form.get('input') as FormArray;
   }
   /**
-   * @description  add social network
+   * @description  add translate
    */
-  onAddAnotherNetworkSocial() {
-    return this.getListNetworkSocial().push(this.formBuilder.group({ grade: '', value: '' }));
+  onAddAnotherTranslate() {
+    return this.getListPaymentMethods().push(this.formBuilder.group({ lang: '', refDataDesc: '' }));
   }
+
   /**
    * @description: get languages
    */
   getLanguages(): void {
-     this.language = this.localStorageService.getItem('language').langId;
+     this.language = this.userService.language.langId;
     this.languages = [];
     this.languages = this.appInitializerService.languageList.map((lang) => {
       return ({ value: lang._id, viewValue: lang.language_desc, selected: false });
     });
     this.languages.find(el => el.value === this.language).selected = true;
   }
+
   getValue(value, rang) {
     this.languages.find(el => el.value === value).selected = true;
   }
-  addMethodPaymentTerms() {
-    if (this.data) {
-      if (this.form.value.methodName !== this.data.data.ref_data_desc) {
+
+  /**
+   * @description : add payment method
+   */
+  addPaymentMethod() {
+    const methodPaymentTerms = {
+      application_id: this.userService.applicationId,
+      email_address: this.userService.emailAddress,
+      company_id: this.companyId,
+      ref_type_id: this.utilsService.getRefTypeId('PAYMENT_MODE'),
+      language_id: this.language,
+      ref_data_code: this.form.value.methodName.split(' ').join('').toUpperCase(),
+      ref_data_desc: this.form.value.methodName
+    };
+    this.subscriptions.push(this.refdataService.addrefdata(methodPaymentTerms).subscribe(async (data) => {
+      if (data) {
+        console.log(data);
+      }
+
+      this.form.value.input.map((response) => {
+        const methodPayment = {
+          application_id: this.userService.applicationId,
+          email_address: this.userService.emailAddress,
+          company_id: this.companyId,
+          ref_type_id: this.utilsService.getRefTypeId('PAYMENT_MODE'),
+          language_id: response.lang,
+          ref_data_code: this.form.value.methodName.split(' ').join('').toUpperCase(),
+          ref_data_desc: response.refDataDesc
+        };
+        this.subscriptions.push(this.refdataService.addrefdata(methodPayment).subscribe((res) => {
+          if (res) {
+            console.log(res);
+          }
+        }));
+      });
+      const allList = await this.refdataService
+        .getRefData( this.utilsService.getCompanyId(this.userService.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+          ['PAYMENT_MODE'], true);
+      this.dialogRef.close(allList['PAYMENT_MODE']);
+    }));
+  }
+  /**
+   * @description : update payment method
+   */
+  updatePaymentMethod() {
+    if (this.form.value.methodName !== this.data.data.ref_data_desc) {
       const methodPaymentMethod = {
         application_id: this.data.data.RefDataKey.application_id ,
         email_address: this.data.data.RefDataKey.email_address ,
@@ -114,83 +161,45 @@ export class AddPaymentMethodComponent implements OnInit {
         ref_data_code: this.data.data.RefDataKey.ref_data_code ,
         ref_data_desc: this.form.value.methodName
       };
-        this.refdataService.updaterefdata(methodPaymentMethod).subscribe((data) => {
+      this.subscriptions.push(this.refdataService.updaterefdata(methodPaymentMethod).subscribe((data) => {
+        if (data) {
+        }
+      }));
+    }
+    /* update payment method desc with other languages and add it if is not exist */
+    let i = 0;
+    this.form.value.input.map((desc) => {
+
+      const PaymentMethodUpdated = {
+        application_id: this.data.data.RefDataKey.application_id,
+        email_address: this.data.data.RefDataKey.email_address,
+        company_id: this.data.data.RefDataKey.company_id,
+        ref_type_id: this.data.data.RefDataKey.ref_type_id,
+        language_id: desc.lang,
+        ref_data_code: this.data.data.RefDataKey.ref_data_code,
+        ref_data_desc: desc.refDataDesc
+      };
+      if (i < this.data.list.length ) {
+        this.subscriptions.push(this.refdataService.updaterefdata(PaymentMethodUpdated).subscribe((data) => {
+          if (data) {
+            i = i + 1;
+          }
+        }));
+        this.dialogRef.close(true);
+      } else {
+        this.subscriptions.push(this.refdataService.addrefdata(PaymentMethodUpdated).subscribe((data) => {
           if (data) {
           }
-        });
+        }));
       }
-      /* update role desc with other languages and add it if is not exist */
-      let i = 0;
-      this.form.value.input.map((desc) => {
-        if (i < this.data.list.length ) {
-          const roleUpdated = {
-            application_id: this.data.data.RefDataKey.application_id,
-            email_address: this.data.data.RefDataKey.email_address,
-            company_id: this.data.data.RefDataKey.company_id,
-            ref_type_id: this.data.data.RefDataKey.ref_type_id,
-            language_id: desc.grade,
-            ref_data_code: this.data.data.RefDataKey.ref_data_code,
-            ref_data_desc: desc.value
-          };
-          this.refdataService.updaterefdata(roleUpdated).subscribe((data) => {
-            if (data) {
-              i = i + 1;
-            }
-          });
-          this.dialogRef.close();
-        } else {
-          const listRoleUpdated = {
-            application_id: this.data.data.RefDataKey.application_id,
-            email_address: this.data.data.RefDataKey.email_address,
-            company_id: this.data.data.RefDataKey.company_id,
-            ref_type_id: this.data.data.RefDataKey.ref_type_id,
-            language_id: desc.grade,
-            ref_data_code: this.data.data.RefDataKey.ref_data_code,
-            ref_data_desc: desc.value
-          };
-          this.refdataService.addrefdata(listRoleUpdated).subscribe((data) => {
-            if (data) {
-            }
-          });
-        }
-      });
-      this.dialogRef.close();
-
-    } else {
-    const methodPaymenetTerms = {
-      application_id: this.applicationId,
-      email_address: this.emailAddress,
-      company_id: this.companyId,
-      ref_type_id: this.utilsService.getRefTypeId('PAYMENT_MODE'),
-      language_id: this.language,
-      ref_data_code: this.form.value.methodName.split(' ').join('').toUpperCase(),
-      ref_data_desc: this.form.value.methodName
-    };
-    this.refdataService.addrefdata(methodPaymenetTerms).subscribe(async (data) => {
-      if (data) {
-        console.log(data);
-      }
-
-    this.form.value.input.map((response) => {
-      const methodPayment = {
-        application_id: this.applicationId,
-        email_address: this.emailAddress,
-        company_id: this.companyId,
-        ref_type_id: this.utilsService.getRefTypeId('PAYMENT_MODE'),
-        language_id: response.grade,
-        ref_data_code: this.form.value.methodName.split(' ').join('').toUpperCase(),
-        ref_data_desc: response.value
-      };
-      this.refdataService.addrefdata(methodPayment).subscribe((res) => {
-        if (res) {
-          console.log(res);
-        }
-      });
     });
-    const allList = await this.refdataService.getRefData( this.utilsService.getCompanyId(this.emailAddress, this.applicationId) , this.applicationId,
-        ['PAYMENT_MODE'], true);
-    this.dialogRef.close(allList['PAYMENT_MODE']);
-    });
-    }
-    }
+    this.dialogRef.close(true);
+
+  }
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
 }

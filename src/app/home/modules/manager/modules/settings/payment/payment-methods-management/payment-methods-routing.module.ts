@@ -8,9 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: PaymentMethodsManagementComponent,
-    data: {
-      breadcrumb: 'payment methods'
-    },
   },
 ];
 

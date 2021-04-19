@@ -140,7 +140,7 @@ export class DynamicDataTableComponent implements OnInit {
         }
       });
     } else {
-      this.router.navigate([ this.header.addActionURL ]);
+      this.router.navigate([ this.header.addActionURL ], { state: { action: 'add' } });
     }
 
   }

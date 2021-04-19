@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IRefdataModel } from '@shared/models/refdata.model';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { AddRoleComponent } from '../add-role/add-role.component';
 
@@ -13,38 +13,34 @@ import { AddRoleComponent } from '../add-role/add-role.component';
   templateUrl: './role-management.component.html',
   styleUrls: ['./role-management.component.scss']
 })
-export class RoleManagementComponent implements OnInit {
+export class RoleManagementComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
-  applicationId: string;
-  email: string;
   constructor(private utilService: UtilsService,
-              private localStorageService: LocalStorageService,
               private modalService: ModalService,
-              private utilsService: UtilsService,
+              private userService: UserService,
               private refdataService: RefdataService) { }
 
   /**
    * @description Loaded when component in init state
    */
-  async ngOnInit() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.applicationId = cred['application_id'];
-    this.email = cred['email_address'];
+   ngOnInit() {
     this.modalService.registerModals(
-      { modalName: 'add', modalComponent: AddRoleComponent });
+      { modalName: 'addRole', modalComponent: AddRoleComponent });
     this.isLoading.next(true);
-   await this.getRole();
+    this.getRole().then(() => this.isLoading.next(false));
   }
 
+  /**
+   * @description : get role
+   */
  async getRole() {
     const data = await this.getRefdata();
     this.ELEMENT_DATA.next(data['ROLE']);
-    this.isLoading.next(false);
   }
   /**
    * @description : action
@@ -59,39 +55,45 @@ export class RoleManagementComponent implements OnInit {
        case('delete'): this.onChangeStatus(rowAction.data);
      }
   }
+
+  /**
+   * @description : update role
+   * @param data: object to update
+   */
   updateRole(data) {
-    const language = this.localStorageService.getItem('language').langId;
+    const language = this.userService.language.langId;
     let listArray = [];
-    this.refdataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
+    this.subscriptions.push(this.refdataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
       data.RefDataKey.ref_data_code, data.RefDataKey.ref_type_id).subscribe((allList) => {
-      listArray = allList;
-      listArray = listArray.filter((list) => {
+      listArray = allList.filter((list) => {
         if (list.RefDataKey.language_id !== language) {
           return list;
         }
       });
       const obj = { data, list: listArray};
-    this.modalService.displayModal('add', obj,
+    this.modalService.displayModal('addRole', obj,
       '657px', '520px').subscribe(async (res) => {
         if (res) {
        await this.getRole();
         }
     });
-    });
+    }));
   }
+
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
   async getRefdata() {
     const list = ['ROLE'];
-    this.refData =  await this.refdataService.getRefData( this.utilService.getCompanyId(this.email, this.applicationId) , this.applicationId,
+    this.refData =  await this.refdataService
+      .getRefData( this.utilService.getCompanyId(this.userService.emailAddress, this.userService.applicationId) , this.userService.applicationId,
       list, true);
     return this.refData;
   }
+
   /**
    * @description : change the status
    * @param id: string
-   * @param status: string
    */
   onChangeStatus(id: string) {
     const confirmation = {
@@ -102,7 +104,7 @@ export class RoleManagementComponent implements OnInit {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.email).subscribe(
+        this.subscriptions.push(this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
           async (res) => {
             if (res) {
               await this.getRole();
@@ -113,5 +115,12 @@ export class RoleManagementComponent implements OnInit {
         this.subscriptionModal.unsubscribe();
       }
     });
+  }
+
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 }

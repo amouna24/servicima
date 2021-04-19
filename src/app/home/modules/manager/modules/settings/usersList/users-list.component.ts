@@ -5,12 +5,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 
-import { ICredentialsModel } from '@shared/models/credentials.model';
 import { IViewParam } from '@shared/models/view.model';
 import { IUserModel } from '@shared/models/user.model';
 @Component({
@@ -21,7 +19,6 @@ import { IUserModel } from '@shared/models/user.model';
 export class UsersListComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<IUserModel[]>([]);
   companyId: string;
-  credentials: ICredentialsModel;
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
 
@@ -34,14 +31,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
               private utilsService: UtilsService,
               private modalService: ModalService,
               private appInitializerService: AppInitializerService,
-              private localStorageService: LocalStorageService,
               private refdataService: RefdataService, ) { }
 
   /**
    * @description Loaded when component in init state
    */
- async ngOnInit() {
-    this.credentials = this.localStorageService.getItem('userCredentials');
+  ngOnInit() {
     this.userService.connectedUser$
       .subscribe(
         (userInfo) => {
@@ -49,15 +44,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
             this.companyId = userInfo['company'][0]['_id'];
           }
         });
-   await this.getAllUsers();
+    this.isLoading.next(true);
+    this.getAllUsers().then(() => this.isLoading.next(false));
   }
   /**
    * @description : get all users
    */
  async getAllUsers() {
     await this.getRefdata();
-    this.isLoading.next(true);
-    this.subscriptions.push(this.profileService.getAllUser(this.credentials['email_address'])
+    this.subscriptions.push(this.profileService.getAllUser(this.userService.emailAddress)
       .subscribe((res) => {
       res.forEach( (data) => {
         data['gender_id']  = this.utilsService.getViewValue(data['gender_id'], this.refData['GENDER']);
@@ -67,7 +62,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
        }
       });
       this.ELEMENT_DATA.next(res);
-      this.isLoading.next(false);
     }));
   }
   /**
@@ -75,7 +69,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    */
  async getRefdata() {
     const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER', 'ROLE'];
-    this.refData = await this.refdataService.getRefData( this.companyId , this.credentials['application_id'],
+    this.refData = await this.refdataService.getRefData( this.companyId , this.userService.applicationId,
      list);
   }
 
@@ -84,11 +78,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param data: object
    */
   showUser(data) {
-    this.router.navigate(['/manager/user/profile'],
-      {
-        queryParams: {
-          'id': data['_id']
-        }
+    this.router.navigate(['/manager/settings/users/show-user'],
+      { state: { id: data._id }
       });
   }
 
@@ -97,11 +88,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param data: object
    */
   updateUser(data) {
-    this.router.navigate(['/manager/user/edit-profile'],
-      {
-        queryParams: {
-          'id': data._id
-        }
+    this.router.navigate(['/manager/settings/users/update-user'],
+      { state: { id: data._id }
       });
   }
 
@@ -119,7 +107,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.credentials['email_address']).subscribe(
+        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
           async (res) => {
             if (res) {
              await this.getAllUsers();

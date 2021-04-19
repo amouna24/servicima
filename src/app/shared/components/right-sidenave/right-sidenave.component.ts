@@ -54,7 +54,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   subMenu: IChildItem[] = [];
   parentMenu: string;
   profileUserType = userType.UT_USER;
-
+  firstClick: boolean;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -133,6 +133,12 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.error(err);
     });
+    this.sidenavService.firstClick$.
+    subscribe((firstClick: boolean) => {
+      this.firstClick = firstClick;
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   /**
@@ -147,8 +153,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * @description toggle sidenav
    */
   toggleSideNav(): void {
+    this.firstClick = true;
     this.sidenavService.toggleRightSideNav();
     this.subMenu = [];
+    this.sidenavService.firstClick$.next(false);
   }
 
   /**
@@ -164,6 +172,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
         localStorage.removeItem('email_adress');
+        this.sidenavService.firstClick$.next(false);
         this.router.navigate(['/auth/login']);
       },
       (err) => {
@@ -229,5 +238,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
   }
-
+  closeMenu() {
+    if (this.firstClick) {
+      this.sidenavService.toggleRightSideNav();
+      this.subMenu = [];
+    }
+    }
 }

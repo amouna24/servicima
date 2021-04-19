@@ -1,14 +1,14 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IViewParam } from '@shared/models/view.model';
-import { ReplaySubject, Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ModalService } from '@core/services/modal/modal.service';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+
+import { ReplaySubject, Subscription } from 'rxjs';
+
 import { UserService } from '@core/services/user/user.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
+
+import { ICompanyModel } from '@shared/models/company.model';
+import { IViewParam } from '@shared/models/view.model';
 
 @Component({
   selector: 'wid-add-tax-company',
@@ -16,32 +16,24 @@ import { CompanyTaxService } from '@core/services/companyTax/companyTax.service'
   styleUrls: ['./add-tax-company.component.scss']
 })
 export class AddTaxCompanyComponent implements OnInit , OnDestroy {
-
+  action: string;
   form: FormGroup;
-  company;
-  applicationId: string;
+  company: ICompanyModel;
   languages: IViewParam[] = [];
+
   public filteredLanguage = new ReplaySubject(1);
-  featureList = [];
-  emailAddress: string;
+
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(public dialogRef: MatDialogRef<AddTaxCompanyComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private modalService: ModalService,
               private formBuilder: FormBuilder,
-              private utilsService: UtilsService,
-              private appInitializerService: AppInitializerService,
               private userService: UserService,
-              private companyTaxService: CompanyTaxService,
-              private localStorageService: LocalStorageService) {
+              private companyTaxService: CompanyTaxService, ) {
   }
 
   ngOnInit(): void {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.applicationId = cred['application_id'];
-    this.emailAddress = cred['email_address'];
     this.userService.connectedUser$.subscribe(
       (userInfo) => {
         if (userInfo) {
@@ -50,7 +42,10 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
       });
     this.initForm();
     if (this.data) {
+      this.action = 'update';
       this.setForm();
+    } else {
+      this.action = 'add';
     }
   }
 
@@ -61,8 +56,8 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
     this.form = this.formBuilder.group({
       startingDate: ['', [Validators.required]],
       taxRate: ['', [Validators.required]],
-      fiscalComment: ['', [Validators.required]],
       description: ['', [Validators.required]],
+      fiscalComment: [''],
       inactiveDate: [''],
     });
   }
@@ -89,8 +84,8 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
     } else {
       if (this.data) {
         const taxCompany = {
-          application_id: this.applicationId,
-          company_email: this.emailAddress,
+          application_id: this.userService.applicationId,
+          company_email: this.userService.emailAddress,
           tax_code: this.data.companyTaxKey.tax_code,
           tax_start_date: this.data.companyTaxKey.tax_start_date,
           tax_desc: this.form.value.description,
@@ -100,13 +95,13 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
         };
         this.subscriptions.push(this.companyTaxService.updateCompanyTax(taxCompany).subscribe((data) => {
           if (data) {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           }
         }));
       } else {
       const taxCompany = {
-        application_id: this.applicationId,
-        company_email: this.emailAddress,
+        application_id: this.userService.applicationId,
+        company_email: this.userService.emailAddress,
         tax_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TC`,
         tax_start_date: this.form.value.startingDate,
         tax_desc: this.form.value.description,
@@ -117,7 +112,7 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
       };
         this.subscriptions.push(this.companyTaxService.addCompanyTax(taxCompany).subscribe((data) => {
       if (data) {
-        this.subscriptions.push(this.companyTaxService.getCompanyTax(this.emailAddress).subscribe((response) => {
+        this.subscriptions.push(this.companyTaxService.getCompanyTax(this.userService.emailAddress).subscribe((response) => {
         if (response) {
           this.dialogRef.close(response);
         }
