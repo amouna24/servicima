@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { environment } from '../../../../../environments/environment';
 
@@ -9,13 +10,17 @@ import { environment } from '../../../../../environments/environment';
 })
 export class DynamicDataTableService {
 
-  applicationId = '5eac544a92809d7cd5dae21f'; // to do : get the app Id from the user info
-  languageId = '5eac544ad4cb666637fe1353'; // to do : get the language Id from the user info
+  applicationId: string;
+  languageId: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private localStorageService: LocalStorageService, ) {
   }
 
   getDefaultTableConfig(tableCode: string): Observable<any> {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
+    this.languageId = this.localStorageService.getItem('language').langId;
     return this.httpClient.get(`${environment.dataListsUrl}?application_id=${this.applicationId}&` +
       `language_id=${this.languageId}&data_table_code=${tableCode}`);
   }
