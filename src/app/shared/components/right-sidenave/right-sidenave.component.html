@@ -1,6 +1,6 @@
-<div class="full-height sidenav-wrapper">
+<div class="full-height sidenav-wrapper" >
   <wid-scrollbar class="scrollbar">
-  <div fxLayout="column" fxFlex="100" fxLayoutAlign="start stretch" fxLayoutGap="15px">
+  <div fxLayout="column" fxFlex="100" [state]="sidebarState" (clickOutside)="closeMenu()" fxLayoutAlign="start stretch" fxLayoutGap="15px">
     <div  fxLayout="row" >
       <div fxFlex="15"  fxLayout="column" >
         <div fxLayoutAlign="center start" fxFlexOffset="10">
@@ -9,10 +9,10 @@
           </a>
         </div>
       </div>
-      <div fxFlex="26"  fxLayout="column"  fxLayoutAlign="center start" class="profile-image">
+      <div fxFlex="30"  fxLayout="column"  fxLayoutAlign="center center" class="profile-image">
         <wid-profile-image [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="true" [userType]="profileUserType" ></wid-profile-image>
       </div>
-      <div fxFlex="59" fxLayout="column" fxLayoutAlign="center start">
+      <div fxFlex="55" fxLayout="column" fxLayoutAlign="center start">
           <span class="brownish-grey font-size-14">{{user.first_name | spliceText: 15}} {{ user.last_name | spliceText: 15}} </span>
           <span class="cool-grey font-size-10">{{user.userKey.email_address}}</span>
       </div>
@@ -29,6 +29,7 @@
         </span>
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
+          <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
             <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
                class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
@@ -38,8 +39,11 @@
               <span class="font-light font-size-14"
                     [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
+           </ng-container>
           </ng-container>
+
           <ng-template #subMenuLabel>
+            <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
             <div fxLayout="column" class="cursor-pointer">
               <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
                              [@iconAnimation]="sidebarState">
@@ -50,6 +54,7 @@
                 <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
               </mat-list-item>
             </div>
+            </ng-container>
           </ng-template>
 
         </ng-container>
@@ -124,47 +129,6 @@
         </mat-accordion>
       </div>
     </ng-template>
-
-
-    <!-- <div fxFlex="90" fxLayout="row" fxLayoutAlign="space-around center" fxFlexOffset="5">
-       <div  fxFlex="100" fxLayout="column" fxLayoutAlign="start" fxFlexOffset="2">
-         <mat-nav-list>
-           <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/manager']"
-              class="list-item">
-             <mat-icon class="icon material-icons-outlined" svgIcon="wi_company"></mat-icon>
-             <span class="font-light font-size-14">Company profile</span>
-           </a>
-         </mat-nav-list>
-         <mat-nav-list>
-           <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/manager']"
-              class="list-item">
-             <mat-icon class="icon material-icons-outlined" svgIcon="wi_user"></mat-icon>
-             <span class="font-light font-size-14">My account</span>
-           </a>
-         </mat-nav-list>
-         <mat-nav-list>
-           <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/manager/settings']"
-              class="list-item">
-             <mat-icon class="icon material-icons-outlined" svgIcon="wi_settings"></mat-icon>
-             <span class="font-light font-size-14">Setting</span>
-           </a>
-         </mat-nav-list>
-         <mat-nav-list>
-           <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/theme']"
-              class="list-item">
-             <mat-icon class="icon material-icons-outlined" svgIcon="wi_logout"></mat-icon>
-             <span class="font-light font-size-14">Themes</span>
-           </a>
-         </mat-nav-list>
-         <mat-nav-list>
-           <a mat-list-item routerLinkActive="active-list-item" [routerLink]="['/manager']"
-              class="list-item" (click)="logout()">
-             <mat-icon class="icon material-icons-outlined" svgIcon="wi_logout"></mat-icon>
-             <span class="font-light font-size-14">Logout</span>
-           </a>
-         </mat-nav-list>
-       </div>
-     </div> -->
 
   </wid-scrollbar>
 </div>

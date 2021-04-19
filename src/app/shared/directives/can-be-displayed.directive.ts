@@ -1,20 +1,20 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { UserService } from '@core/services/user/user.service';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewContainerRef
+} from '@angular/core';
 import * as _ from 'lodash';
+import { UserService } from '@core/services/user/user.service';
 @Directive({
   selector: '[canBeDisplayed]'
 })
-export class CanBeDisplayedDirective implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+export class CanBeDisplayedDirective implements OnInit {
   private currentUser: any; // todo: use the right type when ready
   feature: string;
-  license: string;
-  licenseUser: string;
-  availableFeature: string[] = [];
-  licenceFeature: string[] = [];
-  companyRolesFeatures = [];
-  emailAddress: string;
+  availableFeature = [];
   constructor(
     private element: ElementRef,
     private templateRef: TemplateRef<any>,
@@ -36,33 +36,18 @@ export class CanBeDisplayedDirective implements OnInit, OnDestroy {
   // than subscribe to it here
   // get the current user
   getUserConnected() {
-    this.subscriptions.push(this.userService.connectedUser$.subscribe(async (data) => {
-      if (!!data) {
-        this.emailAddress = data['company'][0]['companyKey']['email_address'];
-        const arrayList = await this.userService.listFeatureRole[0];
-            this.companyRolesFeatures = [];
-            this.companyRolesFeatures.push(Object.values(arrayList).map(element => element['companyRoleFeaturesKey']['feature_code']));
-            this.licenceFeature = data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
-            this.availableFeature = _.intersection(this.licenceFeature, this.companyRolesFeatures[0]);
-            this.currentUser = {
-              features: this.availableFeature
-            };
-          this.updateView();
-      }
-    },
-      (error) => {
-        console.log(error);
-      }
-    ));
+    this.availableFeature = _.intersection(this.userService.licenceFeature, this.userService.companyRolesFeatures[0]);
+    this.currentUser = {
+      features: this.availableFeature
+    };
+    this.updateView();
   }
-
   @Input()
   set canBeDisplayed(params: any) {
     if (params) {
       this.feature = params.feature;
     }
   }
-
   /**
    * Insert or remove the html element from the DOM
    */
@@ -79,12 +64,11 @@ export class CanBeDisplayedDirective implements OnInit, OnDestroy {
    * if the HTML element can be displayed or not depending on the connected user
    */
   isDisplayed(): boolean {
-    return this.currentUser &&
-      this.currentUser.features &&
-      this.currentUser.features.includes(this.feature);
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+    if (!this.userService.licenceFeature.includes(this.feature)) {
+      return false;
+    }
+      return this.currentUser &&
+        this.currentUser.features &&
+        this.currentUser.features.includes(this.feature);
   }
 }

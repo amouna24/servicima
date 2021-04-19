@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="tabler-icon-external-link" width="8.02" height="8.02" viewBox="0 0 8.02 8.02">
+    <defs>
+        <style>
+            .cls-2{fill:none;stroke:#405e84;stroke-linecap:round;stroke-linejoin:round;stroke-width:.5px}
+        </style>
+    </defs>
+    <path id="Path_1210" fill="none" d="M0 0h8.02v8.02H0z"/>
+    <path id="Path_1211" d="M6.339 7H4.668A.668.668 0 0 0 4 7.668v3.008a.668.668 0 0 0 .668.668h3.008a.668.668 0 0 0 .668-.668V9.005" class="cls-2" transform="translate(-2.663 -4.661)"/>
+    <path id="Line_56" d="M0 2L2 0" class="cls-2" transform="translate(4 2.02)"/>
+    <path id="Path_1212" d="M15 4h1.671v1.671" class="cls-2" transform="translate(-9.987 -2.663)"/>
+</svg>

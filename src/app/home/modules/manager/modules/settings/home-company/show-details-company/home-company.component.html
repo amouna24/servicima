@@ -1,16 +1,26 @@
 <div class="container-show">
   <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
-    <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="start center" fxFill
+    <div fxLayout="column" fxFlex="30" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
-      <div fxLayout="column" fxFlex="30" fxLayoutGap="30px" fxLayoutAlign="center start" class="profile-image">
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign="center start" class="profile-image">
         <img [src]="this.company['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
       </div>
-      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=2
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxLayoutGap="5px" fxFlex="15"  *ngIf="!isLoading" >
         <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
         <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
       </div>
-      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px">
+      <wid-skeleton-loader
+        height="25" width="250"
+        *ngIf="isLoading" nbrRow=3
+        nbrColumn=1
+      ></wid-skeleton-loader>
+      <div fxLayout="column" fxFlex="55" fxLayoutGap="20px" *ngIf="!isLoading">
         <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px"
           *ngFor=" let list of showList; let index = index">
           <button mat-button mat-raised-button class="btn-medium white"
@@ -30,14 +40,24 @@
     </div>
     <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
       fxFlexOffset="50px">
-      <div fxLayout="column" fxFlex="90" fxLayoutGap="20px">
-        <wid-scrollbar class="scrollbar">
-          <div fxLayout="column" fxFlex="100" class="m-l-20">
-            <div fxLayout="column" fxFlex="100" style="margin-top: 5%">
+
+      <div fxLayout="column" fxFlex="85" fxLayoutGap="20px"  fxLayoutAlign="center">
+        <div fxLayout="column" fxLayoutAlign="center">
+        <wid-skeleton-loader
+          height="35" width="250"
+          *ngIf="isLoading" nbrRow=8
+          nbrColumn=2
+        ></wid-skeleton-loader>
+        </div>
+          <div fxLayout="column" fxFlex="96" class="m-l-20" *ngIf="!isLoading">
+            <wid-scrollbar class="scrollbar">
+            <div fxLayout="column" fxFlex="100" [ngStyle]="{'margin-top': '5%'}">
               <div fxLayout="row" fxLayoutGap="20px">
                 <h5 class="steel">{{'company.generalinformation' | translate}} </h5>
               </div>
-              <div fxLayout="row">
+
+
+              <div fxLayout="row" >
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.companyname' | translate}}: </span>
@@ -59,10 +79,12 @@
                   </div>
                 </div>
               </div>
+
               <div fxLayout="row">
                 <h5 class="steel">{{'company.organisation' | translate}}:</h5>
               </div>
-              <div fxLayout="column" fxLayoutGap="10px">
+
+              <div fxLayout="column" fxLayoutGap="10px" >
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.activitycode' | translate}}: </span>
@@ -82,10 +104,12 @@
                   </div>
                 </div>
               </div>
+
+
               <div fxLayout="row">
                 <h5 class="steel"> {{'company.contact' | translate}}:</h5>
               </div>
-              <div fxLayout="row">
+              <div fxLayout="row" *ngIf="!isLoading">
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.website' | translate}}: </span>
@@ -128,9 +152,11 @@
                   </div>
                 </div>
               </div>
+
               <div fxLayout="row">
                 <h5 class="steel">{{'company.socialnetwork' | translate}}:</h5>
               </div>
+
               <div fxLayout="column" fxLayoutGap="10px">
                 <div fxLayout="row">
                   <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
@@ -146,7 +172,7 @@
                         *ngIf="element.value !=='link'">
                         <span class="font-size-12"> {{element.placeholder| translate}} </span>
                         <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
-                                                       'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                       'color':element.lien ===null ? 'auto' : 'auto',
                                                        'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
                           [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
@@ -166,7 +192,7 @@
                         *ngIf="element.value !=='link'">
                         <span class="font-size-12"> {{element.placeholder| translate}} </span>
                         <a target="_blank" [ngStyle]="{'pointer-events': element.lien ===null ? 'none' : 'auto',
-                                                       'color':element.lien ===null ? 'auto' : '#1bc5bd',
+                                                       'color':element.lien ===null ? 'auto' : 'auto',
                                                        'text-decoration':element.lien ===null ? 'auto' : 'underline'}"
                           [href]=element.lien class="font-size-12 steel"> {{element.value | spliceText: 35}} </a>
                       </div>
@@ -175,12 +201,12 @@
                 </div>
               </div>
             </div>
+            </wid-scrollbar>
           </div>
-        </wid-scrollbar>
       </div>
       <div fxLayout="column" fxFlex="10" fxLayoutGap="20px" fxLayoutAlign="center">
         <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10 m-b-10" fxLayoutGap="15px">
-          <button mat-button color="accent" [routerLink]="['/manager/settings/home-company/edit-company']"
+          <button [disableControl]="{'feature':'SOURCING_ACCESS'}" mat-button color="accent" [routerLink]="['/manager/settings/home-company/edit-company']"
             mat-raised-button class="btn-small white">
             {{'company.edit' | translate}}
           </button>

@@ -2,8 +2,8 @@ import { IContractorKey } from '@shared/models/contractorKey.model';
 
 export interface IContractor {
   /* ID */
-  _id: string;
-  contractorKey: IContractorKey;
+  _id?: string;
+  contractorKey?: IContractorKey;
   contractor_name: string;
   language?: string;
   registry_code?: string;
@@ -19,10 +19,15 @@ export interface IContractor {
   contact_email?: string;
   web_site?: string;
   currency_cd?: string;
-  taxe_cd?: string;
+  tax_cd?: string;
   payment_cd?: string;
-  creation_date?: Date;
-  update_date?: Date;
+  creation_date?: number;
+  update_date?: number;
   photo?: string;
   status?: string;
+  activity_sector: string;
+  application_id: string;
+  email_address: string;
+  contractor_code: string;
+  contractor_type: string;
 }

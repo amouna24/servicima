@@ -7,12 +7,16 @@ import { ClientsListComponent } from './clients/clients-list/clients-list.compon
 import { ContractManagementModule } from '../contract-management.module';
 import { AddClientComponent } from './clients/add-client/add-client.component';
 import { ClientsContractsComponent } from './clients-contracts.component';
+import { AddClientContractComponent } from './contracts/add-client-contract/add-client-contract.component';
+import { ClientsContractsListComponent } from './contracts/clients-contracts-list/clients-contracts-list.component';
 
 @NgModule({
   declarations: [
     AddClientComponent,
     ClientsListComponent,
-    ClientsContractsComponent
+    ClientsContractsComponent,
+    AddClientContractComponent,
+    ClientsContractsListComponent
   ],
   imports: [
     CommonModule,

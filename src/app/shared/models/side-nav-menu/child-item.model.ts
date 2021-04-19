@@ -6,5 +6,6 @@ export interface IChildItem {
     feature: string;
     icon: string;
     type?: string;
+    queryParams?: object;
     child?: ISubChild[];
 }

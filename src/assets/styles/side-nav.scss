@@ -8,7 +8,7 @@ wid-sidenav {
   .side-nav-container {
     height: $height-100;
     width: $width-100;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
     .icon {
       text-align: center;
       vertical-align: middle;
@@ -105,10 +105,10 @@ wid-sidenav {
     bottom: 64px;
   }
 
-  .servicima-logo {
+/*  .servicima-logo {
     margin-bottom: 12px;
     margin-top: auto;
-  }
+  }*/
 
 
 }

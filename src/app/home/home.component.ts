@@ -5,11 +5,11 @@ import { ITheme } from '@shared/models/theme.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subject } from 'rxjs';
-import { listColor } from '@shared/statics/list-color.static';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ThemeService } from '@core/services/themes/theme.service';
 
 import { Router } from '@angular/router';
 
@@ -197,7 +197,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private utilService: UtilsService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService,
   ) {
     this.d_c_Form = this.formBuilder.group({
         ADDRESS: this.formBuilder.group({
@@ -217,18 +218,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.email = cred['email_address'];
-    this.listColor = listColor;
-    if (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-      this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-          element.status = true;
-        }
-      });
-    //  this.displayClass();
-    }
-
     this.displayClass();
     this.userService.isLoadingAction$.subscribe(
       (res) => {
@@ -251,6 +240,10 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): void {
+    this.listColor = this.themeService.getTheme();
+    this.userService.classSubject$.subscribe((col) => {
+      this.classColor = col;
+    });
     this.classColor = {
       'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
@@ -258,9 +251,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
       'whiteRed': this.listColor[12].status
     };
-    this.userService.classSubject$.subscribe((col) => {
-      this.classColor = col;
-    });
   }
 
   submit(data: FormGroup) {

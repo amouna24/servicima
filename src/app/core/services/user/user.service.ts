@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 
@@ -16,7 +15,9 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class UserService {
   userInfo: IUserInfo;
-  userCredentials: string;
+  applicationId: string;
+  emailAddress: string;
+  language;
   moduleName$ = new BehaviorSubject<string>(null);
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   redirected = false;
@@ -26,33 +27,48 @@ export class UserService {
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoadingAction$ = this.isLoadingSubject.asObservable();
   avatar$ = new BehaviorSubject<any>(null);
-  listFeatureRole = [];
+  userType: string;
+  companyRolesFeatures = [];
+  licenceFeature: string[];
   constructor(private httpClient: HttpClient,
     private router: Router,
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer,
   ) {
+    this.getDataFromLocalStorage();
   }
 
+  /**************************************************************************
+   * @description get data from local storage
+   *************************************************************************/
+  getDataFromLocalStorage(): void {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
+    this.emailAddress = userCredentials?.email_address;
+    this.language = this.localStorageService.getItem('language');
+  }
   /**************************************************************************
    * @description get user info
    *************************************************************************/
   getUserInfo(): void {
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
+    this.getDataFromLocalStorage();
     this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
-      `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
-      .pipe(
-        tap(() => this.isLoadingSubject.next(true)),
-      )
+      `/getprofileinfos?application_id=${this.applicationId}&email_address=${this.emailAddress}`)
       .subscribe( (data) => {
         this.userInfo = data;
+        this.userType = this.userInfo['user'][0].user_type;
         this.connectedUser$.next(data);
         this.getImage(data['user'][0].photo);
         const roleCode = data.userroles[0].userRolesKey.role_code;
-        this.getCompanyRoleFeatures(this.getRoleCode(roleCode), this.userInfo['company'][0]['companyKey']['email_address'])
+        this.getCompanyRoleFeatures(roleCode, this.userInfo['company'][0]['companyKey']['email_address'])
           .subscribe((list) => {
-            this.listFeatureRole[0] = list;
-            this.redirectUser(roleCode);
+            this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
+            if (this.companyRolesFeatures.length > 1) {
+              this.companyRolesFeatures.splice(0, this.companyRolesFeatures.length - 1);
+            }
+            this.licenceFeature =  data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
+            this.redirectUser(this.userType);
+            this.isLoadingSubject.next(true);
           });
       });
   }
@@ -62,41 +78,22 @@ export class UserService {
    *************************************************************************/
   redirectUser(userRole: string): void {
     switch (userRole) {
-      case 'ADMIN' || 'MANAGER' || 'HR-MANAGER' || 'SALES': {
-        this.moduleName$.next('manager');
-        this.router.navigate(['/manager']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+      case 'COMPANY':
+      case 'STAFF':
+      { this.moduleName$.next('manager');
+        this.router.navigate(['/manager']);
       }
         break;
-      case 'COLLAB': {
+      case 'COLLABORATOR': {
         this.moduleName$.next('collaborator');
-        this.router.navigate(['/collaborator']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+        this.router.navigate(['/collaborator']);
       }
         break;
-      case 'CAND': {
+      case 'CANDIDATE': {
         this.moduleName$.next('candidate');
-        this.router.navigate(['/candidate']).then(
-          (res) => {
-            if (res == null || res === true) {
-              this.isLoadingSubject.next(true);
-            }
-          }
-        );
+        this.router.navigate(['/candidate']);
       }
         break;
-      default:
-        this.isLoadingSubject.next(false);
     }
   }
 
@@ -155,21 +152,6 @@ export class UserService {
    * @param email: string
    *************************************************************************/
   getCompanyRoleFeatures(role: string, email: string) {
-    return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}` + `?role_code=${role}&email_address=${email}`);
-  }
-  /**
-   * @description get role code
-   */
-  getRoleCode(role: string): string {
-    switch (role) {
-      case 'CAND':
-        return 'CANDIDATE';
-      case 'COLLAB':
-        return 'COLLABORATOR';
-      case 'ADMIN':
-        return 'ADMIN';
-      default:
-        return;
-    }
+    return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}?role_code=${role}&email_address=${email}`);
   }
 }

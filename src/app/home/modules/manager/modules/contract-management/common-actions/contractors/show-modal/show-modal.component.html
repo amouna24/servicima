@@ -1,36 +1,116 @@
-<mat-toolbar class="modal-header-container" fxLayoutAlign="start center">
-  <div class="title-container">
-    <span>Contact Info</span>
-  </div>
-  <div class="close-button-container">
-    <button mat-icon-button tabindex="-1" [mat-dialog-close]="data">
-      <mat-icon class="icon material-icons-outlined">close</mat-icon>
-    </button>
-  </div>
-</mat-toolbar>
-<mat-dialog-content class="modal-body-container">
+<wid-model-modal [modelConfig]="modelConfig" (emitter)="onNotify($event)" class="full-height ">
+  <div modal-body fxLayout="row wrap" fxLayout.xs="row" fxFlexFill fxLayoutAlign="center space-between">
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Personal information </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Contractor code: {{  data.contractor.contractorKey.contractor_code }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Social Reason: {{  data.contractor.contractor_name }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Registry number: {{ data.contractor.registry_code }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">language: {{ data.contractor.language }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50"  fxLayoutAlign="center center">
+          <mat-list role="list" fxLayout="column" fxFlex="100">
+            <div fxLayout="column" fxFlex="100"
+                 class="profile-image line-height-4">
+              <img [src]="(data.contractor?.photo) ? contractorAvatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
+                   [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+            </div>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Address </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Address: {{ data.contractor.address }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Zip code: {{ data.contractor.zip_code }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Country: {{ data.contractor.country_cd }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">City: {{ data.contractor.city }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">General Contact </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Web site: {{ data.contractor.web_site }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Phone 1: {{ data.contractor.phone_nbr }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Fax: {{ data.contractor.payment_cd }}</mat-list-item>
 
-  <div class="config-wrapper" fxLayout="row wrap" fxLayout.xs="row" fxFlexFill>
-    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-      <mat-list role="list">
-        <mat-list-item role="listitem">MAIN CONTACT</mat-list-item>
-        <mat-list-item role="listitem">FIRST NAME</mat-list-item>
-        <mat-list-item role="listitem">LAST NAME</mat-list-item>
-        <mat-list-item role="listitem">PHONE NUMBER</mat-list-item>
-        <mat-list-item role="listitem">CELL PHONE NUMBER</mat-list-item>
-      </mat-list>
-    </div>
-    <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-      <mat-list role="list">
-        <mat-list-item role="listitem">{{ data.main_contact }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.first_name }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.last_name }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.phone_nbr }}</mat-list-item>
-        <mat-list-item role="listitem">{{ data.cell_phone_nbr }}</mat-list-item>
-      </mat-list>
-    </div>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Email: {{ data.contractor.contact_email }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Phone 2: {{ data.contractor.phone2_nbr }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Organisation </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Activity Sector: {{ data.contractor.activity_sector }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Currency: {{ data.contractor.currency_cd }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Legal Form: {{ data.contractor.legal_form }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Payment Mode: {{ data.contractor.payment_cd }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">VAT Number: {{ data.contractor.vat_nbr }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Company Tax: {{ data.contractor.tax_cd }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
+    <section fxLayout="column" fxFlex="80">
+      <div fxLayout="row">
+        <h1 class="steel font-size-18">Contact </h1>
+      </div>
+      <div fxLayout="row" fxFlex="100">
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Contact code: {{ data.contractorInfo.contractorContactKey.contractor_code }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">First name: {{ data.contractorInfo.first_name }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Email: {{ data.contractorInfo.contractorContactKey.contact_email }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Gender: {{ data.contractorInfo.gender_cd }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Phone: {{ data.contractorInfo.phone_nbr }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Language: {{ data.contractorInfo.language_cd }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Can Sign: {{ data.contractorInfo.can_sign_contract }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Last name: {{ data.contractorInfo.last_name }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Main Contact: {{ data.contractorInfo.main_contact }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Title: {{ data.contractorInfo.title_cd }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">Cellphone: {{ data.contractorInfo.cell_phone_nbr }}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </section>
   </div>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button [mat-dialog-close]="data">Cancel</button>
-</mat-dialog-actions>
+</wid-model-modal>
+

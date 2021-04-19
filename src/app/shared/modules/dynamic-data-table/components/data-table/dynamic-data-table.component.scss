@@ -17,5 +17,16 @@ table {
 }
 .dynamic-data-table-content {
   resize: both !important;
-  scroll-behavior: smooth !important;
+}
+
+.data-table-search-bar {
+  span {
+    z-index: 1;
+    top: -18.4px;
+    left: 11px;
+  }
+  input {
+    padding: 3px 35px !important;
+    height: 25px !important;
+  }
 }
