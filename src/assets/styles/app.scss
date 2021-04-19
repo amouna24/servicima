@@ -315,7 +315,9 @@ html body {
 .m-l-40 {
     margin-left: 40px;
 }
-
+.m-l-60 {
+  margin-left: 60px;
+}
 .m-r-5 {
     margin-right: 5px;
 }
@@ -422,11 +424,17 @@ html body {
 /*******************
     font size
 *******************/
+.font-size-8 {
+  font-size: 8px;
+}
 .font-size-9 {
     font-size: 9px;
 }
 .font-size-10 {
    font-size: 10px;
+}
+.font-size-11 {
+  font-size: 11px;
 }
 .font-size-12 {
     font-size: 12px !important;
@@ -493,6 +501,9 @@ html body {
 }
 .cool-grey {
   color: $cool-grey;
+}
+.denim{
+  color: $denim !important;
 }
 .black {
     color: $black;
@@ -641,6 +652,14 @@ html body {
 .dynamic-component-content {
   resize: both !important;
   scroll-behavior: smooth !important;
+}
+
+/*    licence container   */
+.licence-container  {
+  @include get-page(servicima);
+  margin: 20px;
+  height: 87vh !important;
+  // width: 88vw;
 }
 /* ---------------------- */
 

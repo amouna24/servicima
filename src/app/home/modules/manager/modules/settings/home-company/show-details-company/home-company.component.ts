@@ -3,13 +3,13 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { SocialNetwork } from '@core/services/utils/social-network';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
 import { IUserModel } from '@shared/models/user.model';
@@ -27,15 +27,14 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
 
   constructor(private utilsService: UtilsService,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
               private socialNetwork: SocialNetwork,
               private uploadService: UploadService,
+              private refdataService: RefdataService,
 ) { }
 
-  userCredentials: string;
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
@@ -68,7 +67,6 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.mapData();
     this.getRefData();
     this.getDetailsCompany();
@@ -103,7 +101,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
    */
   getRefData(): void {
     const list = ['VAT', 'LEGAL_FORM'];
-    const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+    const refData = this.refdataService.getRefData(this.companyId, this.applicationId,
       list);
     this.legalFormList = refData['LEGAL_FORM'];
     this.vatList = refData['VAT'];

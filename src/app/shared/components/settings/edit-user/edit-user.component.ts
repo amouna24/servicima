@@ -6,11 +6,11 @@ import { ReplaySubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -52,6 +52,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   emailAddressStorage: string;
   id: string;
   isLoading: boolean;
+  add: string;
   showList: INetworkSocial[] = [];
   profileUserType = userType.UT_USER;
   /** subscription */
@@ -62,7 +63,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private appInitializerService: AppInitializerService,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private modalService: ModalService,
               private formBuilder: FormBuilder,
               private router: Router,
@@ -70,7 +70,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private location: Location,
               private socialNetwork: SocialNetwork,
-              ) { }
+              private refdataService: RefdataService,
+              ) {
+    this.id = this.router.getCurrentNavigation().extras.state?.id;
+    this.add = this.router.getCurrentNavigation().extras.state?.action;
+    console.log(this.add, 'action');
+    console.log(this.id, 'id');
+  }
 
   /** list filtered by search keyword */
   public filteredLanguage = new ReplaySubject(1);
@@ -93,15 +99,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
    */
   getConnectedUser(): void {
     this.isLoading = true;
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
-    this.emailAddressStorage = this.localStorageService.getItem('userCredentials')['email_address'];
-    this.userService.connectedUser$.subscribe((data) => {
+    this.applicationId = this.userService.applicationId;
+    this.emailAddressStorage = this.userService.emailAddress;
+    this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.infoUser = data;
         this.user = data['user'][0];
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
-        this.checkComponentAction(data);
+       await this.checkComponentAction(data);
       }
     });
   }
@@ -110,16 +116,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
    * or the manager wants to add a new profile
    * or he wants to update the profile of one user
    */
-  checkComponentAction(connectedUser: IUserInfo) {
+ async checkComponentAction(connectedUser: IUserInfo) {
     this.avatar = null;
     this.photo = null;
-    this.route.queryParams.subscribe(params => {
-      this.id = params.id || null;
-    });
+
+    console.log(this.id, 'iiiiiiiiiiiiiiiid');
 
     /***************** go to page Add user *****************
      *******************************************************/
-    if (this.router.url === '/manager/settings/users/add-user') {
+    if (this.add) {
       this.title = 'Add';
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
@@ -129,7 +134,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     } else if (this.id) {
       this.title = 'Update';
       this.showCompany = true;
-      this.profileService.getUserById(this.id).subscribe(async user => {
+      this.subscriptions.push(this.profileService.getUserById(this.id).subscribe(async user => {
         this.userInfo = user[0];
         this.haveImage = user[0]['photo'];
         this.avatar = await this.uploadService.getImage(user[0]['photo']);
@@ -144,7 +149,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
             this.setForm();
             this.isLoading = false;
           });
-      });
+      }));
       /***************** go to page Update profile user *****************
        ****************************************************************/
     } else {
@@ -166,7 +171,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.form.controls['roleCtrl'].disable();
       this.isLoading = false;
     }
-    this.getRefData();
+   await this.getRefData();
   }
   /**
    * @description : initialization of the form
@@ -193,7 +198,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       homeCompany: [{ value: '', disabled: true }],
       roleCtrl: ['', [Validators.required]],
       titleCtrl: [''],
-      languageCtrl: [''],
+      languageCtrl: ['', [Validators.required]],
       titleFilterCtrl: [''],
       languageFilterCtrl: [''],
       roleFilterCtrl: [''],
@@ -231,7 +236,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       roleFilterCtrl: '',
     });
     const list = this.socialNetwork.getListNetwork(this.userInfo, 'company').filter((item) => {
-      if (item.value ) {
+      if (item.value  &&  item.value !== 'link') {
         return item;
       }
     });
@@ -241,15 +246,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
-  getRefData(): void {
+ async getRefData() {
     const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
-    const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+    const refData = await this.refdataService.getRefData(this.companyId, this.applicationId,
       list);
     this.titleList = refData['PROF_TITLES'];
     this.genderList = refData['GENDER'];
     this.typeList = refData['PROFILE_TYPE'];
     this.roleList = refData['ROLE'];
-    console.log(this.roleList, 'role list');
     this.getLanguages();
     this.filteredTitle.next(this.titleList.slice());
     this.filteredLanguage.next(this.languages.slice());
@@ -282,10 +286,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
     }
     /***************** Add user *************************************
      ****************************************************************/
-    if (this.router.url === '/manager/settings/users/add-user') {
+    if (this.add) {
       const newUser = {
         application_id: this.applicationId,
-        company_id: this.utilsService.getCompanyId('ALL', 'ALL'),
+        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
         email_address: this.form.value.emailAddress,
         company_email: this.emailAddressStorage,
         user_type: this.form.value.userType,
@@ -312,7 +316,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(add, '528px', '300px').subscribe((value) => {
         if (value) {
-          this.profileService.addNewProfile(newUser).subscribe(
+          this.subscriptions.push( this.profileService.addNewProfile(newUser).subscribe(
             () => {
               this.router.navigate(['/manager/settings/users']);
             },
@@ -320,7 +324,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
               console.error(err);
               alert('error:' + err);
             },
-          );
+          ));
         }
         this.subscriptionModal.unsubscribe();
       });
@@ -365,11 +369,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
                  ****************************************************************/
                 if (updateUser.email_address === this.emailAddressStorage) {
                   if (this.id) {
-                    this.profileService.UpdateUserRole(userRoleObject).subscribe(
+                    this.subscriptions.push(this.profileService.UpdateUserRole(userRoleObject).subscribe(
                       (data) => {
                         this.infoUser['userroles'][0] = data;
                       }
-                    );
+                    ));
                   }
                   this.infoUser['user'][0] = res;
                   this.userService.connectedUser$.next(this.infoUser);
@@ -380,12 +384,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
                   /***************** Administrator update another user *************************************
                    ****************************************************************/
                 } else {
-                  this.profileService.UpdateUserRole(userRoleObject).subscribe(
+                  this.subscriptions.push(this.profileService.UpdateUserRole(userRoleObject).subscribe(
                     (data) => {
                       console.log(data);
                       this.back();
                     }
-                  );
+                  ));
                 }
               }
             }));

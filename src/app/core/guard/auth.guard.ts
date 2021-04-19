@@ -66,7 +66,7 @@ export class AuthGuard implements CanActivate {
              resolve(false);
            }));
     } else {
-      this.fingerPrintService.userConnected()
+      this.fingerPrintService.userConnected( this.localStorageService.getItem('email_adress'))
         .then(async (result) => {
           /* Fingerprint is OK, new token and credentials status returned */
           if (result) {

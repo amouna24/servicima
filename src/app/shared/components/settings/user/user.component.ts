@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { SocialNetwork } from '@core/services/utils/social-network';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { IUserModel } from '@shared/models/user.model';
@@ -48,14 +48,15 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private utilsService: UtilsService,
     private appInitializerService: AppInitializerService,
     private userService: UserService,
-    private localStorageService: LocalStorageService,
     private modalService: ModalService,
     private route: ActivatedRoute,
     private uploadService: UploadService,
     private socialNetwork: SocialNetwork,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private refdataService: RefdataService,
   ) {
+    this.id = this.router.getCurrentNavigation().extras.state?.id;
   }
 
   /**
@@ -69,14 +70,14 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   getConnectedUser(): void {
     this.isLoading = true;
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
+    this.applicationId = this.userService.applicationId;
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+    this.subscriptions.push(this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
-        this.checkComponentAction(data);
+       await this.checkComponentAction(data);
       }
     }));
   }
@@ -85,12 +86,7 @@ export class UserComponent implements OnInit, OnDestroy {
    * or the manager wants to add a new profile
    * or he wants to update the profile of one user
    */
-  checkComponentAction(connectedUser: IUserInfo) {
-    /***************** go id from route *****************
-     *******************************************************/
-    this.route.queryParams.subscribe(params => {
-      this.id = params.id || null;
-    });
+ async checkComponentAction(connectedUser: IUserInfo) {
     /***************** administrator show another user *****************
      *******************************************************************/
     if (this.id) {
@@ -98,7 +94,7 @@ export class UserComponent implements OnInit, OnDestroy {
         this.user = user[0];
         this.avatar = await this.uploadService.getImage(user[0]['photo']);
         this.emailAddress = this.user['userKey']['email_address'];
-        this.getRefData();
+       await this.getRefData();
         this.getIcon();
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
@@ -119,7 +115,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.applicationId = connectedUser['user'][0]['userKey'].application_id;
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.user = connectedUser['user'][0];
-      this.getRefData();
+      await this.getRefData();
       this.getIcon();
       this.isLoading = false;
     }
@@ -129,10 +125,10 @@ export class UserComponent implements OnInit, OnDestroy {
   /**
    * @description: get the refData from appInitializer service and mapping data
    */
-  getRefData(): void {
+ async getRefData() {
     this.getLanguages();
     const list = ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE'];
-     this.refData = this.utilsService.getRefData(this.companyId, this.applicationId, list);
+     this.refData = await this.refdataService.getRefData(this.companyId, this.applicationId, list);
     this.gender = this.utilsService.getViewValue(this.user['gender_id'], this.refData ['GENDER']);
     this.langDesc = this.utilsService.getViewValue(this.user['language_id'], this.languages);
     this.title = this.utilsService.getViewValue(this.user['title_id'], this.refData ['PROF_TITLES']);

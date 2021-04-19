@@ -5,6 +5,9 @@ import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/com
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { Router } from '@angular/router';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -15,7 +18,8 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
-  @Input() header: { title: string, addActionURL: string, addActionText: string};
+  @Input() header: { title: string, addActionURL: string, addActionText: string, type: string,
+    addActionDialog: { modalName: string, modalComponent: string, data: object, width: string, height: string } };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
 
@@ -40,18 +44,23 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private utilService: UtilsService,
     private appInitializerService: AppInitializerService,
+    private router: Router,
+    private modalsServices: ModalService,
+    private refDataServices: RefdataService,
+    private localStorageService: LocalStorageService,
   ) { }
 
-  ngOnInit(): void {
-    this.getDataSource();
+  async ngOnInit() {
+    await this.getDataSource();
     this.getDataList();
   }
 
-  getDataSource() {
-    this.utilService.getRefData(
-      this.utilService.getCompanyId('ALL', 'ALL'),
-      this.utilService.getApplicationID('ALL'),
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE']
+  async getDataSource() {
+    await this.refDataServices.getRefData(
+      this.utilService.getCompanyId(
+        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
+      this.localStorageService.getItem('userCredentials')['application_id'],
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE'],
     );
     this.tableData.subscribe((res) => {
       let keys;
@@ -81,6 +90,10 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           dataS['language_id'] = this.appInitializerService.languageList.find((type) =>
             type._id === dataS['language_id']).language_desc;
         }
+        if (dataS.company_id) {
+          dataS['company_id'] = this.appInitializerService.companiesList.find((type) =>
+            type._id === dataS['company_id']).company_name;
+        }
         if (dataS.language) {
           dataS['language'] = this.appInitializerService.languageList.find((type) =>
             type.LanguageKey.language_code === dataS['language']).language_desc;
@@ -95,23 +108,23 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         }
         /*** ***********************           REF DATA           *********************** ***/
         if (dataS.payment_cd) {
-          dataS['payment_cd'] = this.utilService.refData['PAYMENT_MODE'].find((type) =>
+          dataS['payment_cd'] = this.refDataServices.refData['PAYMENT_MODE'].find((type) =>
             type.value === dataS['payment_cd']).viewValue;
         }
         if (dataS.gender_cd) {
-          dataS['gender_cd'] = this.utilService.refData['GENDER'].find((type) =>
+          dataS['gender_cd'] = this.refDataServices.refData['GENDER'].find((type) =>
             type.value === dataS['gender_cd']).viewValue;
         }
         if (dataS.contract_status) {
-          dataS['contract_status'] = this.utilService.refData['CONTRACT_STATUS'].find((type) =>
+          dataS['contract_status'] = this.refDataServices.refData['CONTRACT_STATUS'].find((type) =>
             type.value === dataS['contract_status']).viewValue;
         }
         if (dataS.legal_form) {
-          dataS['legal_form'] = this.utilService.refData['LEGAL_FORM'].find((type) =>
+          dataS['legal_form'] = this.refDataServices.refData['LEGAL_FORM'].find((type) =>
             type.value === dataS['legal_form']).viewValue;
         }
         if (dataS.title_cd) {
-          dataS['title_cd'] = this.utilService.refData['PROF_TITLES'].find((type) =>
+          dataS['title_cd'] = this.refDataServices.refData['PROF_TITLES'].find((type) =>
             type.value === dataS['title_cd']).viewValue;
         }
       });
@@ -167,6 +180,20 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   actionRowData(action: string, rowData: any) {
     this.rowActionData.emit({ actionType: action, data: rowData});
+  }
+
+  add(type) {
+    if (type === 'dialog') {
+      this.modalsServices.displayModal(this.header.addActionDialog.modalName, this.header.addActionDialog.data,
+        this.header.addActionDialog.width, this.header.addActionDialog.height).subscribe((data) => {
+        if (data) {
+          this.tableData.next(data);
+        }
+      });
+    } else {
+      this.router.navigate([ this.header.addActionURL ], { state: { action: 'add' } });
+    }
+
   }
 
   /**************************************************************************

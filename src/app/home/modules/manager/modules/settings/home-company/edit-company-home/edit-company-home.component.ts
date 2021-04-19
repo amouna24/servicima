@@ -11,7 +11,6 @@ import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UploadService } from '@core/services/upload/upload.service';
 
 import { ICompanyModel } from '@shared/models/company.model';
@@ -22,6 +21,7 @@ import { ICity } from '@shared/models/city.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { SocialNetwork } from '@core/services/utils/social-network';
 import { INetworkSocial } from '@shared/models/social-network.model';
+import { RefdataService } from '@core/services/refdata/refdata.service';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -34,7 +34,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
@@ -42,6 +41,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private location: Location,
               private router: Router,
               private  socialNetwork: SocialNetwork,
+              private refdataService: RefdataService,
   ) {
   }
   avatar: any;
@@ -49,7 +49,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   photo: object;
   profileUserType = userType.UT_COMPANY;
   city: ICity;
-  userCredentials: string;
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
@@ -58,6 +57,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   user: IUserModel;
   isLoading: boolean;
   form: FormGroup;
+  refData;
   countryList: IViewParam[] = [];
   legalFormList: IViewParam[] = [];
   vatList: IViewParam[] = [];
@@ -92,7 +92,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.avatar = null;
     this.photo = null;
     this.city = { cities: '', code: '' };
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
   }
 
   /**
@@ -111,13 +110,15 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
-        this.getRefData();
-        this.getJsonData();
+        await this.getRefData();
+        this.legalFormList =  this.refData['LEGAL_FORM'];
+        this.vatList = this.refData['VAT'];
+        await this.getJsonData();
         this.setForm();
         this.isLoading = false;
         this.showList = this.socialNetwork.getListNetwork(this.company, 'company');
         this.showList = this.showList.filter((item) => {
-          if (item.value ) {
+          if (item.value &&  item.value !== 'link') {
             return item;
           }
         });
@@ -128,12 +129,10 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from local storage
    */
-  getRefData(): void {
+  async getRefData() {
     const list = ['VAT', 'LEGAL_FORM'];
-    const refData = this.utilsService.getRefData(this.companyId, this.applicationId,
+    this.refData = await this.refdataService.getRefData(this.companyId, this.applicationId,
       list);
-    this.legalFormList = refData['LEGAL_FORM'];
-    this.vatList = refData['VAT'];
   }
 
   /**
@@ -238,9 +237,9 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description get currencies and countries data from json
    */
-  getJsonData(): void {
+ async getJsonData() {
     this.mapData();
-    this.getRefData();
+   await this.getRefData();
     /* load the initial  list */
     this.filteredLegalForm.next(this.legalFormList.slice());
     this.filteredActivityCode.next(this.activityCodeList.slice());
@@ -262,8 +261,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description : update or edit company profile
    */
-  async addOrUpdate(event) {
-    if (event.keyCode === 13 || !event.keyCode ) {
+  async addOrUpdate() {
       let filename = null;
       if (this.photo) {
         filename = await this.uploadService.uploadImage(this.photo)
@@ -318,7 +316,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         }
         this.subscription.unsubscribe();
       });
-    }
   }
 
   /**

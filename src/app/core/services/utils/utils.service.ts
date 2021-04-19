@@ -9,7 +9,6 @@ import { IIcon } from '@shared/models/icon.model';
 
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
-import { ITheme } from '@shared/models/theme.model';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
@@ -18,75 +17,15 @@ import { LocalStorageService } from '../storage/local-storage.service';
   providedIn: 'root'
 })
 export class UtilsService {
-  resList: IViewParam[] = [];
-  refData: { } = { };
-  listColor: ITheme[] = [];
+
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private matSnackBar: MatSnackBar
+    private matSnackBar: MatSnackBar,
   ) {
 
-  }
-
-  /**
-   * @description get refData with specific type
-   * @param company: company
-   * application :application
-   * languageId: language id
-   * type: array code type example ['GENDER', 'PROF_TITLES', 'PROFILE_TYPE', 'ROLE']]
-   */
-  getRefData(company: string, application: string, listType: string[], map?: boolean): any {
-    const languageId = this.localStorageService.getItem('language').langId;
-    listType.forEach((type) => {
-      this.resList = [];
-      let filterRefData = this.appInitializerService.refDataList.filter(
-        (element) => {
-          if (
-            element.RefDataKey.ref_type_id ===
-            this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
-            element.RefDataKey.application_id === application &&
-            element.RefDataKey.company_id === company &&
-            element.RefDataKey.language_id === languageId) {
-            return element;
-          }
-        });
-      if (filterRefData.length > 0) {
-        if (!map) {
-          filterRefData.forEach(
-            (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-            },
-          );
-          return this.refData[type] = this.resList;
-        } else {
-          return this.refData[String(`${type}`)] = filterRefData;
-        }
-      } else if (filterRefData.length === 0) {
-        filterRefData = this.appInitializerService.refDataList.filter(
-          element =>
-            element.RefDataKey.ref_type_id ===
-            this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id &&
-            element.RefDataKey.application_id === this.appInitializerService.applicationList
-              .find(app => app.ApplicationKey.application_code === 'ALL')._id &&
-            element.RefDataKey.company_id === this.appInitializerService.companyList
-              .find(comp => comp.companyKey.email_address === 'ALL')._id &&
-            element.RefDataKey.language_id === languageId);
-        if (map) {
-          this.refData[String(`${type}`)] = filterRefData;
-        } else {
-          filterRefData.forEach(
-            (element) => {
-              this.resList.push({ value: element.RefDataKey.ref_data_code, viewValue: element.ref_data_desc });
-            },
-          );
-          this.refData[String(`${type}`)] = this.resList;
-        }
-      }
-    });
-    return this.refData;
   }
 
   /*----------- IT WORKS FOR ANY APPLICATIONS AND COMPANY -------------*/
@@ -104,14 +43,14 @@ export class UtilsService {
   /**************************************************************************
    * @description Get Company ID
    * @param companyEmail the email_address
-   * @param applicationCode of Application
+   * @param applicationId Application id
    * @return ID of company
    *************************************************************************/
-  getCompanyId(companyEmail: string, applicationCode?: string): string {
-    return this.appInitializerService.companyList
+  getCompanyId(companyEmail: string, applicationId?: string): string {
+    return this.appInitializerService.companiesList
       .find(value =>
         value.companyKey.email_address === companyEmail &&
-        value.companyKey.application_id === this.getApplicationID(applicationCode)
+        value.companyKey.application_id === applicationId
       )._id;
   }
 
@@ -134,52 +73,27 @@ export class UtilsService {
     return this.appInitializerService.companyList
       .find(value =>
         value._id === companyId
-      ).name;
+      ).company_name;
   }
 
-  /**
-   * @description:  filter data (languages, gender, legal form ...)
-   */
-  filterData(refDataList: IViewParam[], refDataFilterCtrl: any, filteredRefData: any): void {
-    if (!refDataList) {
-      return;
-    }
-    /* get the search keyword */
-    let search = refDataFilterCtrl.value;
-    if (!search) {
-      filteredRefData.next(refDataList.slice());
-      return;
-    }
-    search = search.toLowerCase();
-
-    /* filter data */
-    filteredRefData.next(
-      refDataList.filter(refData => refData.viewValue.toLowerCase().indexOf(search) > -1),
-    );
+  /**************************************************************************
+   * @description Get refType id
+   * @param type: type code of refType
+   * @return id of retype
+   *************************************************************************/
+  getRefTypeId(type) {
+    return this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id;
   }
-
-  /**
-   * @description listen for search field value changes
-   */
-  changeValueField(list: any[], filterCtrl: any, filtered: any) {
-    filterCtrl.valueChanges
-      .subscribe(
-        (res) => {
-          this.filterData(list, filterCtrl, filtered);
-        },
-        (e) => {
-          console.log('e', e);
-        }
-      );
-  }
-
   /**
    * @description calculate difference date between two date
+   * @param date1: date
+   * @param date2: date
+   * @return difference between two date
    */
   differenceDay(date1: Date, date2: number): number {
     const endDate: any = new Date(date1);
     const startDate: any = new Date(date2);
-    let days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    let days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
     if (days < 0) {
       days = 0;
       return days;
@@ -208,6 +122,7 @@ export class UtilsService {
    * @description Open SnackBar
    * @param message;
    *  @param action;
+   *  @param duration
    * *
    */
   openSnackBar(message: string, action?: string, duration?: number) {
@@ -265,43 +180,60 @@ export class UtilsService {
   /**************************************************************************
    * @description get error page
    * @param errCode: string
-   * @return object of type IError
+   * @return pages of type IError
    *************************************************************************/
   getErrorPage(errCode: string, pages: IError[] = errorPages): IError {
     return pages.find(page => page.code === errCode);
   }
 
-  /**************************************************************************
-   * @description get Theme
-   * @return list of theme
-   *************************************************************************/
-  getTheme(): ITheme[] {
-    this.listColor = [
-      { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
-      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
-      { 'color': 'cobalt', 'status': false , 'image': 'cobalt.png'},
-      { 'color': 'blue', 'status': false , 'image': 'blue.png'},
-      { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'lighterPurple', 'status': false , 'image': 'lighterPurple.png'},
-      { 'color': 'mango', 'status': false , 'image': 'mango.png'},
-      { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
-      { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
-      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
-    ];
-    const cred = this.localStorageService.getItem('userCredentials');
-    const email = cred['email_address'];
-    if (this.localStorageService.getItem(this.hashCode(email))) {
-       this.listColor.map(element => {
-        if (element.color === this.localStorageService.getItem(this.hashCode(email))) {
-          element.status = true;
-        }
-      });
-      return this.listColor;
-    } else {
-      return this.listColor;
+  /**
+   * @description remove element
+   * @param array: array
+   * @returns toRemove element to remove
+   */
+   removeElement<T>(array: T[], toRemove: T): void {
+    const index = array.indexOf(toRemove);
+    if (index !== -1) {
+      array.splice(index, 1);
     }
   }
+  /****************************** Filter list with mat-select ************************/
+  /*********************************************************************************** */
+
+  /**
+   * @description:  filter data (languages, gender, legal form ...)
+   */
+  filterData(refDataList: IViewParam[], refDataFilterCtrl: any, filteredRefData: any): void {
+    if (!refDataList) {
+      return;
+    }
+    /* get the search keyword */
+    let search = refDataFilterCtrl.value;
+    if (!search) {
+      filteredRefData.next(refDataList.slice());
+      return;
+    }
+    search = search.toLowerCase();
+
+    /* filter data */
+    filteredRefData.next(
+      refDataList.filter(refData => refData.viewValue.toLowerCase().indexOf(search) > -1),
+    );
+  }
+
+  /**
+   * @description listen for search field value changes
+   */
+  changeValueField(list: any[], filterCtrl: any, filtered: any) {
+    filterCtrl.valueChanges
+      .subscribe(
+        (res) => {
+          this.filterData(list, filterCtrl, filtered);
+        },
+        (e) => {
+          console.log('e', e);
+        }
+      );
+  }
+
 }
