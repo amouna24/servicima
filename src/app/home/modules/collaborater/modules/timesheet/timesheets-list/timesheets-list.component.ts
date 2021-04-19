@@ -15,7 +15,7 @@ export class TimesheetsListComponent implements OnInit {
   constructor(private timesheetService: TimesheetService) { }
 
   ngOnInit(): void {
-    this.timesheetService.getAllTimesheet().subscribe(
+    this.timesheetService.getTimesheet('').subscribe(
       data => {
         this.listTimesheet = data;
         console.log(this.listTimesheet);

@@ -15,9 +15,6 @@ export class TimesheetService {
   ) { }
 
   /*------------------------------------ TIMESHEET --------------------------------------*/
-  getAllTimesheet(): Observable<ITimesheetModel[]> {
-    return this.httpClient.get<ITimesheetModel[]>(environment.timesheetApiUrl);
-  }
   /**************************************************************************
    * @description Get Timesheet List
    * @param filter search query like [ ?id=123 ]

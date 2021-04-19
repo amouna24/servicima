@@ -21,23 +21,23 @@ export class AddTimesheetComponent implements OnInit {
   createForm() {
     this.creationForm = this.fb.group(
       {
-        application_id : 'iddd',
-        email_address : 'idd',
-        company_email : 'idd',
-        timesheet_week : 'ii',
+        application_id : Math.random().toString(),
+        email_address : 'iddssdd',
+        company_email : 'idddssd',
+        timesheet_week : 'iidssd',
         task_code : 'idd',
-        date : ['', Validators.required],
+        start_date : ['', Validators.required],
         end_date : 'tt',
         timesheet_status : 'draft',
         comment : '',
-        mon : '',
-        tue : '',
-        wed : '',
-        thu : '',
-        fri : '',
-        sat : '',
-        sun : '',
-        total : '',
+        monday : '',
+        tuesday : '',
+        wednesday : '',
+        thursday : '',
+        friday : '',
+        saturday : '',
+        sunday : '',
+        total_week_hours : '',
         customer_timesheet : ''
       }
     );
