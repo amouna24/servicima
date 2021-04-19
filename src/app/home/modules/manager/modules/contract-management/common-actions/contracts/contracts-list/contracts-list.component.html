@@ -4,6 +4,7 @@
   [isLoading]="isLoading"
   [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
   (rowActionData)="switchAction($event)"
+  [allowedActions]="{update: true, delete: true, show: true}"
 >
 </wid-dynamic-data-table>
 

@@ -120,6 +120,29 @@ export class ConfirmationModalComponent implements OnInit {
         };
         break;
       }
+      case 'delete': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'Delete',
+              color: 'white',
+              background: '#d24d57',
+              nextValue: true,
+            },
+            buttonRight: {
+              visible: true,
+              name: 'cancel',
+              color: '#232323',
+              background: '#f3f6f9',
+              nextValue: false,
+            },
+          },
+          style: { }
+        };
+        break;
+      }
       default: {
       }
     }
