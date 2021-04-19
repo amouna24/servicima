@@ -17,11 +17,12 @@ export class DynamicComponent implements OnInit, OnDestroy {
    * @description Menu Items List
    *************************************************************************/
   @Input() menuItems: IDynamicMenu[];
-  @Input() dynamicForm: IDynamicForm[];
+  @Input() dynamicForm = new BehaviorSubject<IDynamicForm[]>([]);
   @Input() formData: FormGroup;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() title: string;
   @Input() backURL: string;
+  @Input() allowedTableActions: { update: boolean, delete: boolean, show: boolean };
   /**************************************************************************
    * @description Form Group
    *************************************************************************/
