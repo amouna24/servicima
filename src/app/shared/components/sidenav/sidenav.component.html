@@ -67,17 +67,17 @@
                     <a mat-list-item routerLinkActive="active-sub-menu-child-item"
                        *ngFor="let subChildMenu of subMenuItem.child"
                        [routerLink]="['/', moduleName, parentMenu, subMenuItem.state, subChildMenu.state]"
+                       [queryParams]="subChildMenu?.queryParams"
+                       [routerLinkActiveOptions]="{exact: true}"
                        class="font-light font-size-14 sub-menu-child-item " [@labelAnimation]="sidebarState">
                       {{subChildMenu.name }}
                     </a>
                   </mat-expansion-panel>
                 </ng-template>
-
               </ng-container>
             </mat-accordion>
           </div>
         </ng-template>
-
       </mat-nav-list>
     </div>
 

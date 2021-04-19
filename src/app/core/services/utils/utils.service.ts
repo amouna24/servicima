@@ -93,7 +93,7 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Application ID
-   * @param APPLICATION_CODE the application code
+   * @param applicationCode the application code
    * @return the ID of APPLICATION_CODE
    *************************************************************************/
   getApplicationID(applicationCode: string): string {
@@ -103,8 +103,8 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Company ID
-   * @param COMPANY_EMAIL the email_address
-   * @param APPLICATION_CODE of Application
+   * @param companyEmail the email_address
+   * @param applicationCode of Application
    * @return ID of company
    *************************************************************************/
   getCompanyId(companyEmail: string, applicationCode?: string): string {
@@ -117,7 +117,7 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Application NAME
-   * @param APPLICATION_ID the application id
+   * @param applicationId the application id
    * @return the NAME of APPLICATION_ID
    *************************************************************************/
   getApplicationName(applicationId: string): string {
@@ -127,7 +127,7 @@ export class UtilsService {
 
   /**************************************************************************
    * @description Get Company NAME
-   * @param COMPANY_ID the companyID
+   * @param companyId the companyID
    * @return NAME of company
    *************************************************************************/
   getCompanyName(companyId: string): string {

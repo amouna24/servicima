@@ -11,7 +11,8 @@ import { IContractorContact } from '@shared/models/contractorContact.model';
 import { takeUntil } from 'rxjs/operators';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { UserService } from '@core/services/user/user.service';
-import { UploadService } from '@core/services/upload/upload.service';
+import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
+import { ICompanyTaxModel } from '@shared/models/companyTax.model';
 
 import { ShowModalComponent } from '../show-modal/show-modal.component';
 
@@ -55,6 +56,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   isLoading = new BehaviorSubject<boolean>(false);
   /*********** Contract Data Table ***********/
   contractorsList: IContractor[] = [];
+  companyTaxList: ICompanyTaxModel[] = [];
   /*******************************************/
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
@@ -64,7 +66,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private router: Router,
     private modalsServices: ModalService,
-    private uploadService: UploadService,
   ) {
   }
 
@@ -93,12 +94,14 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * 3 get current UserInfo
    *************************************************************************/
   getInitialData() {
-    this.subscriptions.push(this.userService.connectedUser$.subscribe((data) => {
+    this.subscriptions.push(
+      this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.userInfo = data;
         this.getContractors();
       }
-    }));
+    })
+    );
     this.modalsServices.registerModals(
       { modalName: 'showContact', modalComponent: ShowModalComponent });
   }

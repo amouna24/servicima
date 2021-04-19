@@ -14,14 +14,15 @@ export class ContractorsService {
 
   constructor(
     private httpClient: HttpClient,
-  ) { }
+  ) {
+  }
 
   /**************************************************************************
    * @description Get Contractors List
    * @returns All Contractors <list>
    *************************************************************************/
   getContractors(filter: string): Observable<IContractor[]> {
-    return this.httpClient.get<IContractor[]>(`${environment.contractorApiUrl}/${filter}` );
+    return this.httpClient.get<IContractor[]>(`${environment.contractorApiUrl}/${filter}`);
   }
 
   /**************************************************************************
@@ -29,8 +30,9 @@ export class ContractorsService {
    * @returns All contractorContact <list>
    *************************************************************************/
   getContractorsContact(filter: string): Observable<IContractorContact[]> {
-    return this.httpClient.get<IContractorContact[]>(`${environment.contractorContactApiUrl}/${filter}` );
+    return this.httpClient.get<IContractorContact[]>(`${environment.contractorContactApiUrl}/${filter}`);
   }
+
   /**************************************************************************
    * @description Add new Contractor
    * @param Contractor Model
@@ -93,5 +95,13 @@ export class ContractorsService {
    *************************************************************************/
   disableContractorContact(ID: string): Observable<any> {
     return this.httpClient.delete<IContractorContact>(`${environment.contractorContactApiUrl}/disable?_id=${ID}`);
+  }
+
+  /**************************************************************************
+   * @description Disable IContractorContact Status
+   * @param ID of the IContractorContact
+   *************************************************************************/
+  deleteContractorContact(ID: string): Observable<any> {
+    return this.httpClient.delete<IContractorContact>(`${environment.contractorContactApiUrl}/?_id=${ID}`);
   }
 }

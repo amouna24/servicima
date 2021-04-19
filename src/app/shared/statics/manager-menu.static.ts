@@ -77,6 +77,7 @@ export const managerMenu: IMenu[] = [
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
+                queryParams: { contract_status: 'RUN' },
               },
               {
                 state: 'contracts-list',
@@ -84,6 +85,8 @@ export const managerMenu: IMenu[] = [
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
+                queryParams: { contract_status: 'EXPIRED' },
+
               },
               {
                 state: 'contracts-list',
@@ -128,6 +131,7 @@ export const managerMenu: IMenu[] = [
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
+                queryParams: { contract_status: 'RUN' },
               },
               {
                 state: 'contracts-list',
@@ -135,6 +139,7 @@ export const managerMenu: IMenu[] = [
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
+                queryParams: { contract_status: 'EXPIRED' },
               },
               {
                 state: 'contracts-list',

@@ -73,7 +73,7 @@
                       *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
                     </th>
                     <td cdk-cell
-                      *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                      *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
                       <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
                     </td>
 
@@ -89,17 +89,17 @@
                       *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
                     </th>
                     <td cdk-cell
-                      *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                      *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
                       <div fxLayout="row"
                            fxFlex
                            fxLayoutAlign="center">
-                        <button mat-icon-button (click)="actionRowData('update', row)">
+                        <button mat-icon-button (click)="actionRowData('update', row)" *ngIf="allowedActions.update">
                           <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
                         </button>
-                        <button mat-icon-button (click)="actionRowData('delete', row)">
+                        <button mat-icon-button (click)="actionRowData('delete', row)" *ngIf="allowedActions.delete">
                           <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
                         </button>
-                        <button mat-icon-button (click)="actionRowData('show', row)">
+                        <button mat-icon-button (click)="actionRowData('show', row)" *ngIf="allowedActions.show">
                           <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
                         </button>
 
