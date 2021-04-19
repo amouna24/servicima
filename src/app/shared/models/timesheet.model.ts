@@ -1,9 +1,9 @@
-import { ITimesheetKey } from '@shared/models/timesheetKey.model';
+import { ITimesheetKeyModel } from '@shared/models/timesheetKey.model';
 
-export interface ITimesheet {
+export interface ITimesheetModel {
   /* ID */
   _id: string;
-  TimeSheetKey: ITimesheetKey;
+  TimeSheetKey: ITimesheetKeyModel;
   start_date?: string;
   end_date?: string;
   timesheet_status?: string;

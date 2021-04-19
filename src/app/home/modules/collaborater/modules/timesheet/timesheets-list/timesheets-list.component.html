@@ -1,6 +1,6 @@
 <div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
 <!--  <wid-timesheet-header></wid-timesheet-header>-->
-
+<!--******************** header ***************************-->
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="56">
@@ -21,6 +21,7 @@
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
 
+<!--********************** Filter *********************-->
   <div fxLayout="row" fxFlex="5" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="column" fxFlex="56">
       <div fxLayout="row" fxLayoutAlign="start " class="bg-white border-radius-20" fxLayoutGap="20px">
@@ -56,76 +57,69 @@
     </div>
 
   </div>
+<!--*******************************************************-->
 
   <wid-add-timesheet></wid-add-timesheet>
 
+<!--******************** list-timesheet ******************-->
   <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="90">
         <mat-accordion >
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue" >
-              <div fxLayout="row" fxFlex="50" fxLayoutAlign=" center" class="help-blue">
-                <div fxLayout="column" fxFlex="80">
-                  <div fxLayout="row">
-                      <div fxLayout="column" fxFlex="12">
-                        <div class="height-30 m-t-30">Week start on:</div>
-                        <div class="height-30">text</div>
-                      </div>
-                      <div fxLayout="column" fxFlex="2">
-                        <div fxLayout="row" fxLayoutGap="2px">
-                          <mat-divider vertical style="height:100px"></mat-divider>
-                        </div>
-
-                      </div>
-                      <div fxLayout="column" fxFlex="12">
-                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                      </div>
-                      <div fxLayout="column" fxFlex="2">
-                        <div fxLayout="row" fxLayoutGap="2px">
-                          <mat-divider vertical style="height:100px"></mat-divider>
-                        </div>
-
-                      </div>
-                      <div fxLayout="column" fxFlex="12">
-                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                      </div>
-                      <div fxLayout="column" fxFlex="2">
-                        <div fxLayout="row" fxLayoutGap="2px">
-                          <mat-divider vertical style="height:100px"></mat-divider>
-                        </div>
-
-                      </div>
-                      <div fxLayout="column" fxFlex="12">
-                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                      </div>
-                      <div fxLayout="column" fxFlex="2">
-                        <div fxLayout="row" fxLayoutGap="2px">
-                          <mat-divider vertical style="height:100px"></mat-divider>
-                        </div>
-
-                      </div>
-                      <div fxLayout="column" fxFlex="12">
-                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                      </div>
-                      <div fxLayout="column" fxFlex="2">
-                        <div fxLayout="row" fxLayoutGap="2px">
-                          <mat-divider vertical style="height:100px"></mat-divider>
-                        </div>
-                      </div>
-                      <div fxLayout="column" fxFlex="12">
-                        <div fxLayout="row"> <h6>Week start on:</h6> </div>
-                      </div>
+          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" class="m-b-15">
+            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
+              <div fxLayout="row" fxFlex="50" fxLayoutAlign=" space-around center" class="help-blue">
+                <div fxLayout="column" fxFlex="70">
+                  <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                      <h1 class="font-size-15 font-normal">Week start on:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">{{item.start_date}}</div>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                      <h1 class="font-size-15 font-normal">Categorie:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">categorie</div>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                      <h1 class="font-size-15 font-normal">State:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">{{item.timesheet_status}}</div>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                      <h1 class="font-size-15 font-normal">Project:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">project</div>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                      <h1 class="font-size-15 font-normal">Task:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">task</div>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-around center" >
+                      <h1 class="font-size-15 font-normal">Total:</h1>
+                      <div class="font-size-17 font-normal steel m-b-15">{{item.total_week_hours}}</div>
+                    </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="20">
-                  <div fxLayout="row">
-                    <div fxLayout="column" fxFlex="20">
+                <div fxLayout="column" fxLayoutAlign="center" fxFlex="30">
+                  <div fxLayout="row" fxLayoutAlign="end center">
+                    <div fxLayout="column" fxFlex="10">
                       <button mat-mini-fab>
                         <mat-icon svgIcon="wi-marker"></mat-icon>
                       </button>
                     </div>
-                    <div fxLayout="column" fxFlex="20">
+                    <div fxLayout="column" fxFlex="10">
                       <button mat-mini-fab>
                         <mat-icon svgIcon="wi-marker"></mat-icon>
                       </button>
@@ -140,10 +134,47 @@
               </div>
             </mat-expansion-panel-header>
 
-            <mat-form-field fxLayout="row" fxFlex="10" fxLayoutAlign="start center">
-              <mat-label>First name</mat-label>
-              <input matInput>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-around center" class="help-blue bg-pale-grey border-radius-buttom-15 p-r-65 p-l-65">
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">MON</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.monday}}</div>
+              </div>
+              <div fxLayout="column">
+                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">TUE</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.tuesday}}</div>
+              </div>
+              <div fxLayout="column">
+                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">WED</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.wednesday}}</div>
+              </div>
+              <div fxLayout="column">
+                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">THU</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.thursday}}</div>
+              </div>
+              <div fxLayout="column">
+                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">FRI</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.start_date}}</div>
+              </div>
+              <div fxLayout="column">
+                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-around center">
+                <h1 class="font-size-15 font-normal">SUN</h1>
+                <div class="font-size-17 font-normal steel m-b-15">{{item.sunday}}</div>
+              </div>
+            </div>
 
           </mat-expansion-panel>
 
@@ -152,5 +183,6 @@
 
   </div>
 
+<!--  *******************************************************-->
 </div>
 

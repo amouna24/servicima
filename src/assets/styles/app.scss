@@ -210,6 +210,11 @@ Paddings
     padding-right: 40px;
 }
 
+.p-r-65{
+  padding-right: 65px;
+}
+
+
 .p-t-0 {
     padding-top: 0;
 }
@@ -246,7 +251,7 @@ Paddings
     padding-bottom: 30px;
 }
 
-.p-b-40 {
+.p-l-40 {
     padding-bottom: 40px;
 }
 
@@ -283,6 +288,9 @@ Paddings
 }
 .border-radius-right-5{
   border-radius: 0 $border-radius-5 $border-radius-5 0;
+}
+.border-radius-buttom-15{
+  border-radius: 0 0 $border-radius-15 $border-radius-15 ;
 }
 /*******************
       Margin
