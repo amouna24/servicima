@@ -41,6 +41,8 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { TimesheetHeaderComponent } from './components/timesheet/timesheet-header/timesheet-header.component';
+import { TimesheetFilterComponent } from './components/timesheet/timesheet-filter/timesheet-filter.component';
+import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-empty-page/timesheet-empty-page.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,8 @@ import { TimesheetHeaderComponent } from './components/timesheet/timesheet-heade
     SplashComponent,
     ErrorComponent,
     TimesheetHeaderComponent,
+    TimesheetFilterComponent,
+    TimesheetEmptyPageComponent,
 
   ],
   imports: [
@@ -128,6 +132,8 @@ import { TimesheetHeaderComponent } from './components/timesheet/timesheet-heade
     DisableControlDirective,
     ModalComponent,
     TimesheetHeaderComponent,
+    TimesheetFilterComponent,
+    TimesheetEmptyPageComponent,
   ]
 })
 export class SharedModule { }

@@ -1,67 +1,8 @@
 <div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-<!--  <wid-timesheet-header></wid-timesheet-header>-->
-<!--******************** header ***************************-->
-  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
-
-    <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-28 font-medium">Timesheet</h1>
-    </div>
-
-    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="btn-small bg-pale-grey" >
-        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-        </mat-icon>
-        <span class="cool-grey">back</span>
-      </button>
-    </div>
-
-  </div>
-
-  <div fxLayout="row" fxFlex="2" fxLayoutAlign="center">
-    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
-  </div>
-
-<!--********************** Filter *********************-->
-  <div fxLayout="row" fxFlex="5" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
-    <div fxLayout="column" fxFlex="56">
-      <div fxLayout="row" fxLayoutAlign="start " class="bg-white border-radius-20" fxLayoutGap="20px">
-
-        <div fxLayout="column" fxFlex="30" >
-          <h1 class="steel font-size-24 font-medium">
-            <mat-form-field appearance="outline">
-              <mat-icon matSuffix>mode_edit</mat-icon>
-              <input matInput placeholder="Search">
-            </mat-form-field>
-          </h1>
-        </div>
-        <div fxLayout="column">
-          <h1 class="steel font-size-24 font-medium">
-            <mat-form-field appearance="outline">
-              <mat-label>Sort By</mat-label>
-              <mat-select>
-                <mat-option value="">
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </h1>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="white btn-medium bg-topaz" >
-        <span class="bg-topaz">New</span>
-      </button>
-    </div>
-
-  </div>
-<!--*******************************************************-->
 
   <wid-add-timesheet></wid-add-timesheet>
 
-<!--******************** list-timesheet ******************-->
+<!--******************** list-timesheet **</wid-add-timesheet>****************-->
   <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="90">

@@ -10,6 +10,14 @@ import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 export class AddTimesheetComponent implements OnInit {
 
   creationForm: FormGroup;
+  minDate = new Date(Date.now());
+  mon = 0;
+  tue = 0;
+  wed = 0;
+  totale = this.mon + this.tue + this.wed;
+  thu: number;
+  total: number;
+  // total = (parseInt(this.mon).val()) + parseInt(this.thu).val());
 
   constructor( private fb: FormBuilder,
                 private timesheetService: TimesheetService) { }
