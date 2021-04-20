@@ -1,25 +1,125 @@
-<p>resume-certif-diploma works!</p>
-<div fxLayout="column" fxFlexFill  fxLayoutAlign="center center" >
+<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
 
-  <div fxLayout="row" fxFlex="90"  class="Background"   >
-    <div fxLayout="column" fxFlex="4"   >
-    </div>
-    <div fxLayout="column" fxFlex="92">
-
-
-      <div fxLayout="row" fxFlex="15" ></div>
-      <div fxLayout="row" fxFlex="75" ></div>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end" >
-        <div fxLayout="column"   >
-          <button [routerLink]="['technicalSkills']"> Next </button>
-        </div>
-
+  <div fxLayout="column" fxFlex="4"   ></div>
+  <div fxLayout="column" fxFlex="90"    >
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-24 font-medium">Resume</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
       </div>
     </div>
-    <div fxLayout="column" fxFlex="4" >
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+      <div fxLayout="column" fxFlex="86">
+        <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="4"></div>
+    <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around">
+
+      <div fxLayout="column" fxFlex="90"  style="width: 100%" >
+        <wid-scrollbar fxFlexFill>
+          <div fxLayout="column" fxFlexFill >
+            <div  *ngFor="let item of getCertifDiploma let pointIndex=index">
+              <br>
+              <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
+                <div fxLayout="column" fxFlex>
+                  <p>{{item.diploma}}</p>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
+                  <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
+                </div>
+
+              </div>
+
+            </div>
+            <form [formGroup]="sendCertifDiploma" class="full-height">
+              <div fxLayout="row"  fxFlexFill style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+                <div fxLayout="column" fxFlexFill  >
+                  <div fxLayout="row" fxFlex="2"></div>
+                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="35" >
+                      Diploma:
+                      <p>
+                        <mat-form-field appearance="outline">
+                          <input   formControlName="diploma" matInput placeholder="Position" required>
+                        </mat-form-field>
+                      </p></div>
+                    <div fxLayout="column"  fxFlex="35">
+                      Establishment:
+                      <p>
+                        <mat-form-field appearance="outline">
+                          <input   formControlName="establishment" matInput placeholder="Customer" required>
+                        </mat-form-field>
+                      </p></div>
+                  </div>
+                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="35">
+                      Start Date:
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Start date :</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="start_date">
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex="35">
+                      End date:
+                      <mat-form-field class="example-full-width">
+                        <mat-label>End date:</mat-label>
+                        <input matInput [matDatepicker]="pickerEnd" formControlName="end_date">
+                        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+                          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #pickerEnd></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="70">
+
+                    Description:
+                      <mat-form-field appearance="outline">
+                    <mat-form-field class="example-full-width">
+                      <textarea matInput formControlName="certif_diploma_desc" rows="10" cols="50"></textarea>
+                    </mat-form-field>
+                      </mat-form-field>
+                    </div>
+                  <div fxLayout="row"    fxFlex="10" >
+                    <div fxLayout="column" fxFlex="90" fxLayoutAlign="start end">
+                      <button mat-raised-button type="submit" class="btn-small bg-pale-grey"   (click)="createCertifDiploma()" >
+                        Add
+                      </button></div>
+                  </div>
+                  <div fxLayout="row"    fxFlex="8" ></div>
+
+                  </div>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </wid-scrollbar>
+        <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
+          <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
+            <button mat-raised-button type="submit" class="btn-small bg-primaryColor white" [routerLink]="['technicalSkills']"  >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
 
 
-
+    </div>
   </div>
 </div>

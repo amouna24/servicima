@@ -1,0 +1,46 @@
+<form [formGroup]="sendProjectSection" class="full-height">
+  <div fxLayout="column" fxFlex="8"   ></div>
+  <div fxLayout="column" fxFlex="80"  >
+    <div fxLayout="row" >
+      <div fxLayout="column" fxFlex="30">
+        Section title:
+        <p>
+          <mat-form-field appearance="outline">
+            <input   formControlName="section_title" matInput placeholder="Section title"   required>
+          </mat-form-field>
+        </p>
+      </div>
+      <div fxLayout="column" fxFlex="30"  >
+        Section type:
+          <mat-form-field appearance="outline" class="width-50">
+            <mat-label>Section type</mat-label>
+            <mat-select >
+              <mat-option value="FR">French</mat-option>
+              <mat-option value="EN">English</mat-option>
+              <mat-option value="ESP">Spanish</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+    </div>
+    <div fxLayout="row">
+      <div>
+       Section description:
+          <p>
+            <mat-form-field appearance="outline">
+              <mat-form-field class="example-full-width">
+                <textarea matInput formControlName="section_desc" placeholder="Section description" rows="10" cols="50"></textarea>
+              </mat-form-field>                    </mat-form-field>
+          </p>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div fxLayout="row" >
+
+    </div>
+    <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end" >
+      <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createProjectSection()">Add</button>
+    </div>
+  </div>
+</form>

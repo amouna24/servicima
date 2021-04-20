@@ -28,33 +28,45 @@
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
 
         <wid-scrollbar fxFlexFill >
-          <form [formGroup]="sendIntervention">
+          <div fxLayout="column" fxFlexFill >
+          <div  *ngFor="let item of getIntervention let pointIndex=index">
+            <br>
+            <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
+              <div fxLayout="column" fxFlex>
+                <p>{{item}}</p>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
+                <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
+              </div>
 
-            <div formArrayName="Field">
-              <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex">
-          <div fxLayout="column" fxFlex="8"   ></div>
+            </div>
 
+          </div>
+            <div>
+            <form [formGroup]="sendIntervention">
+              <div fxLayout="column" fxFlex="8"   ></div>
           <div fxLayout="column" fxFlex="80"  >
             Level of intervention:
               <p>
                 <mat-form-field appearance="outline">
                   <mat-form-field class="example-full-width">
-                    <textarea matInput formControlName="level_of_intervention_desc" placeholder="Level of intervention" rows="10" cols="50"></textarea>
+                    <textarea matInput formControlName="level_of_intervention_desc"  rows="10" cols="20"></textarea>
                   </mat-form-field>
                 </mat-form-field>
               </p>
             <div fxLayout="row" fxLayoutAlign="end end" >  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createIntervention()">Add</button></div>
           </div>
-              </div>
-            </div>
 
-          </form>
+
+            </form>
+            </div>
+          </div>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-          <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
-            Save
+          <button mat-raised-button type="submit" class="btn-small bg-primaryColor white" [routerLink]="['']"   >
+            Next
           </button>
 
 

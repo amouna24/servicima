@@ -31,47 +31,57 @@
     </div>
     <div fxLayout="row" fxFlex="4"></div>
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="space-around">
-       <div fxLayout="column" fxFlex="86"  >
+      <wid-scrollbar fxFlexFill>
+       <div fxLayout="column" fxFlex="86" *ngIf="!showSection" >
           <div fxLayout="row" fxFlex="60" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
               <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
                 <div fxLayout="row" fxFlex="8"></div>
                 <div fxLayout="row" fxLayoutAlign="center"><span>No custom section available</span></div>
-                <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button type="submit" class="btn-large bg-primaryColor white"  >
+                <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="showCustomSection()" class="btn-large bg-primaryColor white"  >
              Add section
                 </button></div>
           </div></div>
        </div>
-
-      <form [formGroup]="sendSection">
-
-        <div formArrayName="Field">
-          <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex">
-            <div fxLayout="column" fxFlex="8"   ></div>
-
-            <div fxLayout="column" fxFlex="80"  >
-              <div fxLayout="column">
-                Skill title:
-                <p>
-                  <mat-form-field appearance="outline">
-                    <input   formControlName="technical_skill_desc" matInput placeholder="Skill title" required>
-                  </mat-form-field>
-                </p></div>
-              <div fxLayout="column" >Technologies:
-                <p>
-                  <mat-form-field appearance="outline">
-                    <mat-form-field class="example-full-width">
-                      <textarea matInput formControlName="technologies" placeholder="Skill description" rows="10" cols="50"></textarea>
-                    </mat-form-field>                    </mat-form-field>
-                </p></div>
-              <div fxLayout="row" fxLayoutAlign="end end" >
-                <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createSection()">Add</button>
+        <div fxLayout="column" fxFlexFill *ngIf="showSection" >
+          <div  *ngFor="let item of getSection let pointIndex=index">
+            <br>
+            <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
+              <div fxLayout="column" fxFlex>
+                <p>{{item.section_title}}</p>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
+                <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
               </div>
             </div>
           </div>
+          <div>
+            <form [formGroup]="sendSection">
+              <div fxLayout="column" fxFlex="8"   ></div>
+              <div fxLayout="column" fxFlex="80"  >
+                <div fxLayout="column">
+                  Section title:
+                  <p>
+                    <mat-form-field appearance="outline">
+                      <input   formControlName="section_title" matInput placeholder="Section title" required>
+                    </mat-form-field>
+                  </p></div>
+                <div fxLayout="column" >Section description:
+                  <p>
+                    <mat-form-field appearance="outline">
+                      <mat-form-field class="example-full-width">
+                        <textarea matInput formControlName="section_desc" placeholder="Section description" rows="10" cols="50"></textarea>
+                      </mat-form-field>                    </mat-form-field>
+                  </p></div>
+                <div fxLayout="row" fxLayoutAlign="end end" >
+                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createSection()">Add</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
 
-      </form>
 
+      </wid-scrollbar>
 
        </div>
     <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">

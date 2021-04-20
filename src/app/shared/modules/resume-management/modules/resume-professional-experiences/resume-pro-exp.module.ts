@@ -9,12 +9,14 @@ import { ResumeProExpRoutingModule } from './resume-pro-exp-routing.module';
 import { ProExpComponent } from './modules/professional-experiences/pro-exp.component';
 import { ProExpListComponent } from './modules/professional-experiences-list/pro-exp-list.component';
 import { ProExpProjectsComponent } from './modules/professional-experiences-projects/pro-exp-projects.component';
+import { ProjectSectionComponent } from './modules/project-section/project-section.component';
 
 @NgModule({
   declarations: [
     ProExpComponent,
     ProExpListComponent,
     ProExpProjectsComponent,
+    ProjectSectionComponent,
   ],
   imports: [
     CommonModule,

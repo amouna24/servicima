@@ -7,7 +7,7 @@ export interface IResumeCertificationDiplomaModel {
   diploma: string;
   start_date: string;
   end_date: string;
-  certif_date_desc: string;
+  certif_diploma_desc: string;
   resume_code: string;
   certif_diploma_code: string;
 }

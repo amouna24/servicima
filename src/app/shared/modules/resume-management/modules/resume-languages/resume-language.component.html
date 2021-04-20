@@ -26,12 +26,41 @@
         </div>
       </div>
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
-
         <wid-scrollbar fxFlexFill >
-          <form [formGroup]="sendLanguage">
+          <div fxLayout="column" fxFlexFill >
+            <div  *ngFor="let item of getLanguage let pointIndex=index">
+              <br>
+              <div fxLayout="column" fxFlex="25"  >
 
-            <div formArrayName="Field">
-              <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{item.resume_language_code}}</mat-label>
+                  <mat-select [value]="item.resume_language_code"  disabled>
+                    <mat-option value="FR">French</mat-option>
+                    <mat-option value="EN">English</mat-option>
+                    <mat-option value="ESP">Spanish</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+              <div fxLayout="column" fxFlex="8"   ></div>
+              <div fxLayout="column" fxLayoutAlign="20">
+                <div fxLayout="row" fxFlexFill>
+
+                  <button mat-icon-button color="accent" *ngFor="let ratingId of ratingArr"    [matTooltip]="ratingId+1" matTooltipPosition="above">
+                    <mat-icon>
+                      {{showValidateIcon(1)}}
+                    </mat-icon>
+                  </button>
+                  <mat-error *ngIf="starCount == null || starCount == 0">
+                    Star count is <strong>required</strong> and cannot be zero
+                  </mat-error>
+                </div>
+
+
+              </div>
+
+            </div>
+          <form [formGroup]="sendLanguage" >
                 <div fxLayout="column" fxFlex="25"  >
 
                   <mat-form-field appearance="outline">
@@ -47,7 +76,7 @@
                 <div fxLayout="column" fxFlex="8"   ></div>
                 <div fxLayout="column" fxLayoutAlign="20">
                   <div fxLayout="row" fxFlexFill>
-                    <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
                       <mat-icon>
                         {{showIcon(i)}}
                       </mat-icon>
@@ -65,10 +94,8 @@
 
 
 
-            </div>
-            </div>
-
           </form>
+          </div>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">

@@ -1,25 +1,117 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
-  <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-    <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Professional experience project </h1>
+<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
+
+  <div fxLayout="column" fxFlex="4"   ></div>
+
+  <div fxLayout="column" fxFlex="90"    >
+
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-24 font-medium">Resume</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
+      </div>
     </div>
-    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
-        <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-        </mat-icon>
-        <span class="cool-grey">back</span>
-      </button>
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+      <div fxLayout="column" fxFlex="86">
+        <h4 class="steel font-size-18 font-small">Custom Sections</h4>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="4"></div>
+    <div fxLayout="row" fxFlex="60" fxLayoutAlign="space-around">
+      <wid-scrollbar fxFlexFill>
+        <div fxLayout="column" fxFlex="86" *ngIf="!showProject" >
+          <div fxLayout="row" fxFlex="60" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+            <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
+              <div fxLayout="row" fxFlex="8"></div>
+              <div fxLayout="row" fxLayoutAlign="center"><span>No Project available</span></div>
+              <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="onShowProject()" class="btn-large bg-primaryColor white"  >
+                Add Project
+              </button></div>
+            </div></div>
+        </div>
+        <div fxLayout="column" fxFlexFill *ngIf="showProject" >
+          <div  *ngFor="let item of getProject let pointIndex=index">
+            <br>
+            <div   style="background-color: #e8f1f9;border-radius: 10px"  >
+              <div fxLayout="column" fxFlex="60">
+                <p>{{item.project_title}}</p>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="30">
+                <button mat-raised-button class="steel-two" style="border-radius: 5px">Add section</button>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center" style="width: 90%" fxFlex="10">
+                <button mat-raised-button class="steel-two" style="border-radius: 5px">Edit</button>
+              </div>
+            </div>
+            <wid-project-section></wid-project-section>
+          </div>
+          <div>
+            <form [formGroup]="sendProject" class="full-height">
+              <div fxLayout="column" fxFlex="8"   ></div>
+              <div fxLayout="column" fxFlex="80"  >
+                <div fxLayout="row">
+
+                  <div fxLayout="column" fxFlex="80">
+                    Project title:
+                    <p>
+                      <mat-form-field appearance="outline">
+                        <input   formControlName="project_title" matInput placeholder="Project title"   required>
+                      </mat-form-field>
+                    </p>
+                  </div>
+                  </div>
+
+                <div fxLayout="row" >
+                  <div fxLayout="column" fxFlex="40">
+                  Start Date:
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Start date :</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="start_date">
+                    <mat-datepicker-toggle matSuffix [for]="picker">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" fxFlex="40">
+                  End date:
+                  <mat-form-field class="example-full-width">
+                    <mat-label>End date:</mat-label>
+                    <input matInput [matDatepicker]="pickerEnd" formControlName="end_date">
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                </div>
+                <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end" >
+                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createProject()">Add</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </wid-scrollbar>
+
+    </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
+      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
+        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
+          Save
+        </button>
+
+
+      </div>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
-  </div>
 
-  <div fxLayout="row" fxFlex="93">
-    <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
-      <h1>Project</h1>
-
-    </wid-scrollbar>
-
-  </div>
 </div>

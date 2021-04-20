@@ -87,6 +87,13 @@ export const candidateMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
+      {
+        state: 'certifDiploma',
+        name: 'Certifications and Diploma',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
 
     ]
   },

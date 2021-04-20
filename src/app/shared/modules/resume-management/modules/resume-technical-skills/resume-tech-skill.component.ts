@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
+import { takeUntil } from 'rxjs/operators';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-resume-tech-skill',
@@ -12,15 +14,49 @@ export class ResumeTechSkillComponent implements OnInit {
   sendTechSkill: FormGroup;
   arrayTechSkillCount = 0;
   TechSkill: IResumeTechnicalSkillsModel;
-  get inputFields() {
-    return this.sendTechSkill.get('Field') as FormArray;
+  techSkillArray: IResumeTechnicalSkillsModel[] = [];
+  resume_code: string;
+  technical_skill: string;
+  get getTech() {
+    return this.techSkillArray;
   }
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
+    private userService: UserService,
   ) { }
 
+  getTechnicalSkillsInfo() {
+    this.resumeService.getResume(
+      // tslint:disable-next-line:max-line-length
+      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .subscribe(
+        (response) => {
+          this.resume_code = response[0].ResumeKey.resume_code.toString();
+          console.log('resume code 1 =', this.resume_code);
+          this.resumeService.getTechnicalSkills(
+            `?resume_code=${this.resume_code}`)
+            .subscribe(
+              (responseOne) => {
+                console.log('response', responseOne);
+                this.techSkillArray = responseOne;
+              },
+              (error) => {
+                if (error.error.msg_code === '0004') {
+                }
+              },
+            );
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+
+  }
+
   ngOnInit(): void {
+    this.getTechnicalSkillsInfo();
     this.createForm();
   }
 
@@ -29,33 +65,25 @@ export class ResumeTechSkillComponent implements OnInit {
    */
   createForm() {
     this.sendTechSkill = this.fb.group({
-      Field: this.fb.array([this.fb.group({
-      technical_skill_code: Math.random(),
-      resume_code : 'a',
       technical_skill_desc : '',
       technologies: '',
-      skill_index: '',
-      })])});
+      });
   }
   /**
    * @description Create Technical skill
    */
   createTechnicalSkill() {
-    this.TechSkill = this.sendTechSkill.controls.Field.value;
-    this.TechSkill[this.arrayTechSkillCount].resume_code = Math.random();
-    this.TechSkill[this.arrayTechSkillCount].technical_skill_code = Math.random();
-    this.TechSkill[this.arrayTechSkillCount].skill_index = this.arrayTechSkillCount;
-    if (this.sendTechSkill.controls.Field.valid) {
-      console.log('technical skill input= ', this.TechSkill[this.arrayTechSkillCount]);
-      this.resumeService.addTechnicalSkills(this.TechSkill[this.arrayTechSkillCount]).subscribe(data => console.log('Technical skill =', data));
-      this.inputFields.push(this.fb.group({
-        technical_skill_code: Math.random(),
-        resume_code : 'a',
-        technical_skill_desc : '',
-        technologies: '',
-        skill_index: '0', }));
+    this.TechSkill = this.sendTechSkill.value;
+    this.TechSkill.resume_code = this.resume_code.toString();
+    this.TechSkill.technical_skill_code = Math.random().toString();
+    this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
+    if (this.sendTechSkill.valid) {
+      console.log('technical skill input= ', this.TechSkill);
+      this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => console.log('Technical skill =', data));
+      this.getTech.push(this.TechSkill);
     } else { console.log('Form is not valid');
     }
+    this.sendTechSkill.reset();
     this.arrayTechSkillCount++;
 
   }

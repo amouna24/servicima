@@ -16,7 +16,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
 import { takeUntil } from 'rxjs/operators';
 import { ResumeService } from '@core/services/resume/resume.service';
-import {IResumeModel} from "@shared/models/resume.model";
+import { IResumeModel } from '@shared/models/resume.model';
 
 @Component({
   selector: 'wid-resume-general-information',
@@ -36,6 +36,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
   parentMenu: string;
   profileUserType = userType.UT_RESUME;
   generalInfo: IResumeModel;
+  firstname: string = this.userService.connectedUser$.getValue().user[0]['first_name'];
+  lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
+  company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -99,10 +102,10 @@ showHideYears() {
     this.CreationForm = this.fb.group({
       application_id : this.localStorageService.getItem('userCredentials').application_id,
       email_address : this.localStorageService.getItem('userCredentials').email_address,
-      company_email : 'sqdsq',
+      company_email : this.company,
       resume_code : Math.random(),
       language_id: '',
-      years_of_experience : 2000,
+      years_of_experience : null,
       actual_job : '',
       image : '',
       init_name : '',
@@ -115,7 +118,9 @@ showHideYears() {
    */
   createResume() {
 this.generalInfo = this.CreationForm.value;
+/*
 this.generalInfo.image = this.avatar;
+*/
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
       this.resumeService.addResume(this.CreationForm.value).subscribe(data => console.log('Resume =', data));
@@ -237,8 +242,4 @@ this.generalInfo.image = this.avatar;
         this.userService.emitColor('assets/img/logo-title.png');
     }
   }
-  setprofilePicture(){
-
-  }
-
 }
