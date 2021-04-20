@@ -38,7 +38,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   temp = [];
   columnsList = [];
   dataSource: any;
-
+  refData: { } = { };
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -48,20 +48,16 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     private modalsServices: ModalService,
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
+    await this.getRefData();
     await this.getDataSource();
     this.getDataList();
   }
 
-  async getDataSource() {
-    await this.refDataServices.getRefData(
-      this.utilService.getCompanyId(
-        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
-      this.localStorageService.getItem('userCredentials')['application_id'],
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE'],
-    );
+   getDataSource() {
     this.tableData.subscribe((res) => {
       let keys;
       this.tableData.getValue().map((data) => {
@@ -91,7 +87,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
             type._id === dataS['language_id']).language_desc;
         }
         if (dataS.company_id) {
-          dataS['company_id'] = this.appInitializerService.companiesList.find((type) =>
+          dataS['company_id'] = this.utilService.companiesList.find((type) =>
             type._id === dataS['company_id']).company_name;
         }
         if (dataS.language) {
@@ -108,24 +104,28 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         }
         /*** ***********************           REF DATA           *********************** ***/
         if (dataS.payment_cd) {
-          dataS['payment_cd'] = this.refDataServices.refData['PAYMENT_MODE'].find((type) =>
+          dataS['payment_cd'] = this.refData['PAYMENT_MODE'].find((type) =>
             type.value === dataS['payment_cd']).viewValue;
         }
         if (dataS.gender_cd) {
-          dataS['gender_cd'] = this.refDataServices.refData['GENDER'].find((type) =>
+          dataS['gender_cd'] = this.refData['GENDER'].find((type) =>
             type.value === dataS['gender_cd']).viewValue;
         }
         if (dataS.contract_status) {
-          dataS['contract_status'] = this.refDataServices.refData['CONTRACT_STATUS'].find((type) =>
+          dataS['contract_status'] = this.refData['CONTRACT_STATUS'].find((type) =>
             type.value === dataS['contract_status']).viewValue;
         }
         if (dataS.legal_form) {
-          dataS['legal_form'] = this.refDataServices.refData['LEGAL_FORM'].find((type) =>
+          dataS['legal_form'] = this.refData['LEGAL_FORM'].find((type) =>
             type.value === dataS['legal_form']).viewValue;
         }
         if (dataS.title_cd) {
-          dataS['title_cd'] = this.refDataServices.refData['PROF_TITLES'].find((type) =>
+          dataS['title_cd'] = this.refData['PROF_TITLES'].find((type) =>
             type.value === dataS['title_cd']).viewValue;
+        }
+        if (dataS.user_type) {
+          dataS['user_type'] = this.refData['PROFILE_TYPE'].find((type) =>
+            type.value === dataS['user_type']).viewValue;
         }
       });
     });
@@ -194,6 +194,15 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
       this.router.navigate([ this.header.addActionURL ], { state: { action: 'add' } });
     }
 
+  }
+  async getRefData() {
+  this.refData =  await this.refDataServices.getRefData(
+      this.utilService.getCompanyId(
+        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
+      this.localStorageService.getItem('userCredentials')['application_id'],
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
+    false
+    );
   }
 
   /**************************************************************************

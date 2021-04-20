@@ -1,14 +1,10 @@
 /* Angular core imports */
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate, CanActivateChild,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 /* RxJs imports */
 import { UserService } from '@core/services/user/user.service';
 import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 /* Specific imports */
 import { LocalStorageService } from '../services/storage/local-storage.service';
@@ -38,6 +34,7 @@ export class AuthGuard implements CanActivate {
               private localStorageService: LocalStorageService,
               private userService: UserService,
               private authService: AuthService,
+              private utilService: UtilsService,
   ) {
   }
 
@@ -82,6 +79,7 @@ export class AuthGuard implements CanActivate {
               this.resolveValue = true;
              } else if (this.emailAddress && this.applicationId) { /* User Active => Allow access to requested ressource */
               this.userService.getUserInfo();
+              this.utilService.getCompanies();
               this.userService.isLoadingAction$.subscribe(
                 (res) => {
                   this.resolveValue = res;
