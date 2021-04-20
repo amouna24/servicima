@@ -16,6 +16,7 @@ export class RefdataService {
   resList: IViewParam[] = [];
   refData: { } = { };
   refdataList = [];
+  refDataNotMapping = [];
   constructor(private httpClient: HttpClient,
               private appInitializerService: AppInitializerService,
               private localStorageService: LocalStorageService, ) { }
@@ -27,12 +28,13 @@ export class RefdataService {
    * @param map: mapping result value and view value or no
    */
   getRefData(company: string, application: string, listType: string[], map?: boolean): Promise<any> {
+    let RefDataWithMappingLength = 0;
+    let RefDataWithNoMappingLength = 0;
     this.refData = [];
+    this.refDataNotMapping = [];
     const languageId = this.localStorageService.getItem('language').langId;
-    this.refdataList = [];
     return  new Promise<any>(resolve =>
       listType.forEach((type) => {
-        this.resList = [];
         const typeId = this.appInitializerService.refTypeList.find(refType => refType.RefTypeKey.ref_type_code === type)._id;
         this.getRefDataByType(company, application, typeId).subscribe((data) => {
           this.refdataList = data;
@@ -55,12 +57,17 @@ export class RefdataService {
                 },
               );
               this.refData[type] = this.resList;
+              RefDataWithMappingLength ++;
+              if (listType.length === RefDataWithMappingLength ) {
+                resolve(this.refData);
+              }
             } else {
-              this.refData[String(`${type}`)] = filterRefData;
+              RefDataWithNoMappingLength ++;
+              this.refDataNotMapping[type] = filterRefData;
+              if (listType.length === RefDataWithNoMappingLength) {
+                resolve(this.refDataNotMapping);
+              }
             }
-          }
-          if ((Object.values(this.refData).length === listType.length )) {
-            resolve(this.refData);
           }
         });
 

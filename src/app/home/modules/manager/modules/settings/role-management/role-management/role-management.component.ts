@@ -17,6 +17,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
+  data: { };
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -32,15 +33,20 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addRole', modalComponent: AddRoleComponent });
     this.isLoading.next(true);
-    this.getRole().then(() => this.isLoading.next(false));
+    this.getRole().then((data) => {
+      if (data) {
+        this.ELEMENT_DATA.next(this.data['ROLE']);
+        this.isLoading.next(false);
+      }
+    });
   }
 
   /**
    * @description : get role
    */
  async getRole() {
-    const data = await this.getRefdata();
-    this.ELEMENT_DATA.next(data['ROLE']);
+    this.data = await this.getRefdata();
+    return this.data;
   }
   /**
    * @description : action

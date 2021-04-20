@@ -2,28 +2,32 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
 
 import { IError } from '@shared/models/error.model';
 import { IViewParam } from '@shared/models/view.model';
 import { IIcon } from '@shared/models/icon.model';
+import { ICompanyModel } from '@shared/models/company.model';
 
 import { errorPages } from '@shared/statics/error-pages.static';
 import { iconsList } from '@shared/statics/list-icons.static';
 
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
-
+  companiesList: ICompanyModel[];
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private matSnackBar: MatSnackBar,
+    private httpClient: HttpClient,
   ) {
 
   }
@@ -39,7 +43,17 @@ export class UtilsService {
     return this.appInitializerService.applicationList
       .find(value => value.ApplicationKey.application_code === applicationCode)._id;
   }
-
+  /**************************************************************************
+   * @description Get Application ID
+   * @param applicationCode the application code
+   * @return the ID of APPLICATION_CODE
+   *************************************************************************/
+   getCompanies() {
+    return this.httpClient
+      .get<any>(`${environment.companyApiUrl}`).subscribe((company) => {
+        this.companiesList = company;
+      });
+  }
   /**************************************************************************
    * @description Get Company ID
    * @param companyEmail the email_address
@@ -47,7 +61,7 @@ export class UtilsService {
    * @return ID of company
    *************************************************************************/
   getCompanyId(companyEmail: string, applicationId?: string): string {
-    return this.appInitializerService.companiesList
+    return this.companiesList
       .find(value =>
         value.companyKey.email_address === companyEmail &&
         value.companyKey.application_id === applicationId
