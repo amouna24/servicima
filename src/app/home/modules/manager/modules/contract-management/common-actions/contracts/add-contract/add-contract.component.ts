@@ -26,6 +26,7 @@ import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { ProfileService } from '@core/services/profile/profile.service';
 
 @Component({
   selector: 'wid-add-contract',
@@ -50,7 +51,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentTermsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-
+  collaboratorList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  staffList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   /**************************************************************************
    * @description Declaring Form Group
    *************************************************************************/
@@ -105,7 +107,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       child: []
     },
   ];
-  dynamicForm: IDynamicForm[] = [
+  dynamicForm: BehaviorSubject<IDynamicForm[] > = new BehaviorSubject<IDynamicForm[]>([
     {
       titleRef: 'INFORMATION',
       fieldsLayout: FieldsAlignment.tow_items,
@@ -120,8 +122,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Collaborator email',
           placeholder: 'Collaborator email',
-          type: FieldsType.INPUT,
-          inputType: InputType.EMAIL,
+          type: FieldsType.SELECT,
+          selectFieldList: this.collaboratorList,
           formControlName: 'collaborator_email'
         },
       ],
@@ -171,8 +173,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Company email',
           placeholder: 'exp@email.com',
-          type: FieldsType.INPUT,
-          inputType: InputType.EMAIL,
+          type: FieldsType.SELECT,
+          selectFieldList: this.staffList,
           formControlName: 'signer_company_email',
         },
         {
@@ -286,7 +288,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
       ],
     },
-  ];
+  ]);
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -319,6 +321,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private refdataService: RefdataService,
     private localStorageService: LocalStorageService,
+    private profileService: ProfileService,
   ) {
     this.contractForm = new FormGroup({ });
   }
@@ -375,7 +378,23 @@ export class AddContractComponent implements OnInit, OnDestroy {
           this.companyEmail = data.user[0]['company_email'];
           this.getPaymentTerms();
         }
-      })
+      }),
+      this.profileService.getAllUser(this.userService.emailAddress)
+        .subscribe((res) => {
+          this.collaboratorList.next(
+            res.filter(value => value.user_type === 'COLLABORATOR').map(
+              (obj) => {
+                return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
+              }
+            )
+          );
+          this.staffList.next(res.filter(value => value.user_type === 'STAFF').map(
+            (obj) => {
+              return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
+            }
+            )
+          );
+        })
     );
     /*---------------------------------------------------------------*/
    await this.refdataService.getRefData(

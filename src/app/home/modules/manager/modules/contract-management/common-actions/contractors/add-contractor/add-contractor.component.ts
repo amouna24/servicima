@@ -1038,39 +1038,46 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       }
         break;
       case 'addMore': {
-        this.contactList.next([]);
-        this.contractorContactInfo.push(
-          {
-            first_name: this.contractorForm.controls.CONTACT['controls'].first_name.value,
-            last_name: this.contractorForm.controls.CONTACT['controls'].last_name.value,
-            main_contact: this.contractorForm.controls.CONTACT['controls'].main_contact.value,
-            contact_email: this.contractorForm.controls.CONTACT['controls'].contact_email.value,
-            gender_cd: this.contractorForm.controls.CONTACT['controls'].gender_cd.value,
-            title_cd:       this.refdataService.refData['PROF_TITLES'].find((type) =>
-              type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue,
-            phone_nbr: this.contractorForm.controls.CONTACT['controls'].phone_nbr.value,
-            cell_phone_nbr: this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value,
-            language_cd: this.contractorForm.controls.CONTACT['controls'].language_cd.value,
-            can_sign_contract: this.contractorForm.controls.CONTACT['controls'].can_sign_contract.value,
-          }
-        );
-        this.contactList.next(this.contractorContactInfo.slice());
-        this.contractorForm.patchValue(
-          {
-            CONTACT: {
-              first_name: '',
-              last_name: '',
-              main_contact: '',
-              contact_email: '',
-              gender_cd: '',
-              title_cd: '',
-              phone_nbr: '',
-              cell_phone_nbr: '',
-              language_cd: '',
-              can_sign_contract: '',
-            },
-          }
-        );
+        if (
+          !this.contractorForm.controls.CONTACT['controls'].contact_email.value &&
+          this.contractorForm.controls.CONTACT['controls'].contact_email.value === '' ) {
+          this.utilsService.openSnackBar('Email Address Required', 'close', 1000);
+        } else {
+          this.contactList.next([]);
+          this.contractorContactInfo.push(
+            {
+              first_name: this.contractorForm.controls.CONTACT['controls'].first_name.value,
+              last_name: this.contractorForm.controls.CONTACT['controls'].last_name.value,
+              main_contact: this.contractorForm.controls.CONTACT['controls'].main_contact.value,
+              contact_email: this.contractorForm.controls.CONTACT['controls'].contact_email.value,
+              gender_cd: this.contractorForm.controls.CONTACT['controls'].gender_cd.value,
+              title_cd: this.contractorForm.controls.CONTACT['controls'].title_cd.value ? this.refdataService.refData['PROF_TITLES'].find((type) =>
+                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue : '',
+              phone_nbr: this.contractorForm.controls.CONTACT['controls'].phone_nbr.value,
+              cell_phone_nbr: this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value,
+              language_cd: this.contractorForm.controls.CONTACT['controls'].language_cd.value,
+              can_sign_contract: this.contractorForm.controls.CONTACT['controls'].can_sign_contract.value,
+            }
+          );
+          this.contactList.next(this.contractorContactInfo.slice());
+          this.contractorForm.patchValue(
+            {
+              CONTACT: {
+                first_name: '',
+                last_name: '',
+                main_contact: '',
+                contact_email: '',
+                gender_cd: '',
+                title_cd: '',
+                phone_nbr: '',
+                cell_phone_nbr: '',
+                language_cd: '',
+                can_sign_contract: '',
+              },
+            }
+          );
+          this.utilsService.openSnackBar('Contact Added', 'close', 1000);
+        }
       }
       break;
     }
