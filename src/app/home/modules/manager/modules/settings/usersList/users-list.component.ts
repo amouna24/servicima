@@ -5,11 +5,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { RefdataService } from '@core/services/refdata/refdata.service';
 
-import { IViewParam } from '@shared/models/view.model';
 import { IUserModel } from '@shared/models/user.model';
 @Component({
   selector: 'wid-users-list',
@@ -29,14 +26,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private userService: UserService,
               private utilsService: UtilsService,
-              private modalService: ModalService,
-              private appInitializerService: AppInitializerService,
-              private refdataService: RefdataService, ) { }
+              private modalService: ModalService, ) { }
 
   /**
    * @description Loaded when component in init state
    */
   ngOnInit() {
+    this.isLoading.next(true);
     this.userService.connectedUser$
       .subscribe(
         (userInfo) => {
@@ -44,33 +40,17 @@ export class UsersListComponent implements OnInit, OnDestroy {
             this.companyId = userInfo['company'][0]['_id'];
           }
         });
-    this.isLoading.next(true);
-    this.getAllUsers().then(() => this.isLoading.next(false));
+    this.getAllUsers();
   }
   /**
    * @description : get all users
    */
- async getAllUsers() {
-    await this.getRefdata();
+  getAllUsers() {
     this.subscriptions.push(this.profileService.getAllUser(this.userService.emailAddress)
       .subscribe((res) => {
-      res.forEach( (data) => {
-        data['gender_id']  = this.utilsService.getViewValue(data['gender_id'], this.refData['GENDER']);
-       if (data['user_type']) {
-        data['user_type'] =  this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
-          type.value ===  data['user_type']).viewValue;
-       }
-      });
       this.ELEMENT_DATA.next(res);
+        this.isLoading.next(false);
     }));
-  }
-  /**
-   * @description : get the refData from appInitializer service and mapping data
-   */
- async getRefdata() {
-    const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER', 'ROLE'];
-    this.refData = await this.refdataService.getRefData( this.companyId , this.userService.applicationId,
-     list);
   }
 
   /**
