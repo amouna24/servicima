@@ -14,9 +14,8 @@ export class AddTimesheetComponent implements OnInit {
   mon = 0;
   tue = 0;
   wed = 0;
-  totale = this.mon + this.tue + this.wed;
+  totale = 0;
   thu: number;
-  total: number;
   // total = (parseInt(this.mon).val()) + parseInt(this.thu).val());
 
   constructor( private fb: FormBuilder,
@@ -24,6 +23,15 @@ export class AddTimesheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+    // this.creationForm.get('monday').valueChanges.subscribe((selectedValue: number) => {
+    //   this.mon = selectedValue;
+    // });
+    // this.creationForm.get('tuesday').valueChanges.subscribe((selectedValue: number) => {
+    //   this.tue = selectedValue;
+    // });
+    // this.creationForm.get('wednesday').valueChanges.subscribe((selectedValue: number) => {
+    //   this.wed = selectedValue;
+    // });
   }
 
   createForm() {
@@ -50,7 +58,9 @@ export class AddTimesheetComponent implements OnInit {
       }
     );
   }
-
+showTotal() {
+  console.log(this.totale);
+}
   createTimesheet(formDirective: FormGroupDirective) {
     if (this.creationForm.valid) {
       console.log(this.creationForm.value);
@@ -64,4 +74,7 @@ export class AddTimesheetComponent implements OnInit {
 
   }
 
+  total(): number {
+    return this.mon + this.tue ;
+  }
 }

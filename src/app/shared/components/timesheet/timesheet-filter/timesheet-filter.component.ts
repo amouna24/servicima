@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AddTimesheetComponent } from '../../../../home/modules/collaborater/modules/timesheet/add-timesheet/add-timesheet.component';
+
 @Component({
   selector: 'wid-timesheet-filter',
   templateUrl: './timesheet-filter.component.html',
@@ -11,5 +13,4 @@ export class TimesheetFilterComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

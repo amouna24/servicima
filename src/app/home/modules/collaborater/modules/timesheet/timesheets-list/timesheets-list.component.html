@@ -1,13 +1,13 @@
 <div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-
+<ng-container *ngIf="bool">
   <wid-add-timesheet></wid-add-timesheet>
+</ng-container>
 
-<!--******************** list-timesheet **</wid-add-timesheet>****************-->
+<!--******************** list-timesheet ****************-->
   <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
 
     <div fxLayout="column" fxFlex="90">
-        <mat-accordion >
-          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" class="m-b-15">
+          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" class="m-b-15" [expanded]="panelOpenState">
             <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
               <div fxLayout="row" fxFlex="50" fxLayoutAlign=" space-around center" class="help-blue">
                 <div fxLayout="column" fxFlex="70">
@@ -66,7 +66,7 @@
                       </button>
                     </div>
                     <div fxLayout="column" fxFlex="20">
-                      <button mat-mini-fab disabled>
+                      <button mat-mini-fab (click)="togglePanel()">
                         <mat-icon svgIcon="wi-eye"></mat-icon>
                       </button>
                     </div>
@@ -118,12 +118,9 @@
             </div>
 
           </mat-expansion-panel>
-
-        </mat-accordion>
     </div>
 
   </div>
 
-<!--  *******************************************************-->
 </div>
 

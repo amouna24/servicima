@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { FormControl } from '@angular/forms';
@@ -12,13 +12,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./timesheets-list.component.scss']
 })
 export class TimesheetsListComponent implements OnInit {
-  panelOpenState = false;
-  hide = true;
-  listTimesheet: ITimesheetModel[] = [];
-  // myControl: FormControl = new FormControl();
-  // options = ['One', 'Two', 'Three'];
-  // filteredOptions: Observable<string[]>;
+  @Input() bool: boolean;
   constructor(private timesheetService: TimesheetService) { }
+  listTimesheet: ITimesheetModel[] = [];
+  panelOpenState: boolean;
+
+  togglePanel() {
+    this.panelOpenState = !this.panelOpenState;
+  }
 
   ngOnInit(): void {
     this.timesheetService.getTimesheet('').subscribe(
@@ -29,13 +30,5 @@ export class TimesheetsListComponent implements OnInit {
       error => console.log(error)
     );
   }
-  //   this.filteredOptions = this.myControl.valueChanges.pipe(
-  //     startWith(''),
-  //     map(val => this.filter(val))
-  //   );
-  // }
-  // filter(val: string): string[] {
-  //   return this.options.filter(option => option.toLowerCase().indexOf(val.toLowerCase()) === 0);
-  // }
 
 }
