@@ -1,9 +1,9 @@
-import { ITimesheetTaskKey } from '@shared/models/timesheetTaskKey.model';
+import { ITimesheetTaskKeyModel } from '@shared/models/timesheetTaskKey.model';
 
-export interface ITimesheetTask {
+export interface ITimesheetTaskModel {
   /* ID */
   _id: string;
-  timesheetTaskKey: ITimesheetTaskKey;
+  timesheetTaskKey: ITimesheetTaskKeyModel;
   task_desc?: string;
   start_date?: string;
   end_date?: string;

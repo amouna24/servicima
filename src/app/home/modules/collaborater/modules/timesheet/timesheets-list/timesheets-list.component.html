@@ -1,11 +1,11 @@
-<div class="dynamic-component-container" fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-<ng-container *ngIf="bool">
-  <wid-add-timesheet></wid-add-timesheet>
-</ng-container>
+<div fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
 
-<!--******************** list-timesheet ****************-->
-  <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+  <ng-container *ngIf="bool">
+    <wid-add-timesheet></wid-add-timesheet>
+  </ng-container>
 
+  <!--******************** list-timesheet ****************-->
+  <div fxLayout="row" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="90">
           <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" class="m-b-15" [expanded]="panelOpenState">
             <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
@@ -66,7 +66,7 @@
                       </button>
                     </div>
                     <div fxLayout="column" fxFlex="20">
-                      <button mat-mini-fab (click)="togglePanel()">
+                      <button mat-mini-fab (click)="togglePanel(item)">
                         <mat-icon svgIcon="wi-eye"></mat-icon>
                       </button>
                     </div>
@@ -74,7 +74,6 @@
                 </div>
               </div>
             </mat-expansion-panel-header>
-
             <div fxLayout="row" fxLayoutAlign="space-around center" class="help-blue bg-pale-grey border-radius-buttom-15 p-r-65 p-l-65">
               <div fxLayout="column" fxLayoutAlign="space-around center">
                 <h1 class="font-size-15 font-normal">MON</h1>
@@ -116,7 +115,6 @@
                 <div class="font-size-17 font-normal steel m-b-15">{{item.sunday}}</div>
               </div>
             </div>
-
           </mat-expansion-panel>
     </div>
 

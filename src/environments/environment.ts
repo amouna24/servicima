@@ -15,7 +15,7 @@ export const environment = {
   dataListsUrl: 'http://192.168.1.22:8006/admin/datalists/v1',
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
-  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8090/admin/loadauthstarterdata/v1',
+  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
@@ -27,10 +27,10 @@ export const environment = {
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
 
   /************************* TIMESHEET + PROJECT + TASK + COMPANY-TIMESHEET-SETTING ******************************/
-  timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
-  timesheetProjectApiUrl: 'http://127.0.0.1:8081/servicima/timesheetproject/v1',
-  timesheetTaskApiUrl: 'http://127.0.0.1:8082/servicima/timesheettask/v1',
-  companyTimesheetSettingApiUrl: 'http://127.0.0.1:8068/servicima/companytimesheetsetting/v1',
+  timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  timesheetProjectApiUrl: 'http://192.168.1.22:8081/servicima/timesheetproject/v1',
+  timesheetTaskApiUrl: 'http://192.168.1.22:8082/servicima/timesheettask/v1',
+  companyTimesheetSettingApiUrl: 'http://192.168.1.22:8068/servicima/companytimesheetsetting/v1',
 
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
@@ -38,7 +38,7 @@ export const environment = {
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
   companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
-  userGatewayApiUrl: 'http://192.168.1.22:8091/auth/v1',
+  userGatewayApiUrl: 'http://192.168.1.22:8101/auth/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

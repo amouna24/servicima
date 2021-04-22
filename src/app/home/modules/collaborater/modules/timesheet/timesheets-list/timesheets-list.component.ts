@@ -17,8 +17,9 @@ export class TimesheetsListComponent implements OnInit {
   listTimesheet: ITimesheetModel[] = [];
   panelOpenState: boolean;
 
-  togglePanel() {
+  togglePanel(item) {
     this.panelOpenState = !this.panelOpenState;
+    console.log(item);
   }
 
   ngOnInit(): void {

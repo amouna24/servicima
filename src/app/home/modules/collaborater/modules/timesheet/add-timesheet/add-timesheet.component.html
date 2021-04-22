@@ -1,5 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
-  <div fxLayout="column" fxFlex="90">
+<ng-container *ngIf="close">
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="90">
       <Form [formGroup]="creationForm" (submit)="createTimesheet(formDirective)" #formDirective="ngForm">
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue" >
@@ -14,7 +15,7 @@
                 </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end">
-                <button class="duck-egg-blue">
+                <button class="duck-egg-blue" (click)="closeClick()">
                   <mat-icon svgIcon="wi-close-normal"></mat-icon>
                 </button>
               </div>
@@ -43,7 +44,8 @@
                 <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                   <mat-label>Project</mat-label>
                   <mat-select>
-                    <mat-option value="projet">projet
+                    <mat-option *ngFor="let project of listTimesheetProject" [value]="project.project_desc">
+                      {{ project.project_desc }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -57,7 +59,8 @@
                 <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                   <mat-label>task</mat-label>
                   <mat-select>
-                    <mat-option value="task">task
+                    <mat-option *ngFor="let task of listTimesheetTask" [value]="task.task_desc">
+                      {{ task.task_desc }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -85,7 +88,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (change)="mon=$event.target.value">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -96,7 +99,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" (change)="tue=$event.target.value" formControlName="tuesday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -111,7 +114,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -122,7 +125,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -137,7 +140,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -148,7 +151,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -163,7 +166,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday">
+                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday" (input)="calculTotal()">
                     </mat-form-field>
                   </div>
                 </div>
@@ -174,7 +177,7 @@
                   <div fxLayout="row">
                     <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                       <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" [value]="total()" formControlName="total_week_hours" [readonly]="true">
+                      <input matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
                     </mat-form-field>
                   </div>
                 </div>
@@ -198,6 +201,7 @@
           </div>
         </mat-expansion-panel>
       </Form>
-  </div>
+    </div>
 
-</div>
+  </div>
+</ng-container>

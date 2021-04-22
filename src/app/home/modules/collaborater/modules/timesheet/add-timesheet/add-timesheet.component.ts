@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
+import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
+import { ITimesheetTaskModel } from '@shared/models/timeshetTask.model';
 
 @Component({
   selector: 'wid-add-timesheet',
@@ -8,40 +10,50 @@ import { TimesheetService } from '@core/services/timesheet/timesheet.service';
   styleUrls: ['./add-timesheet.component.scss']
 })
 export class AddTimesheetComponent implements OnInit {
-
+  close = true;
   creationForm: FormGroup;
   minDate = new Date(Date.now());
-  mon = 0;
-  tue = 0;
-  wed = 0;
-  totale = 0;
-  thu: number;
-  // total = (parseInt(this.mon).val()) + parseInt(this.thu).val());
+  listTimesheetProject: ITimesheetProjectModel[] = [];
+  listTimesheetTask: ITimesheetTaskModel[] = [];
+  totalWeek: any;
 
   constructor( private fb: FormBuilder,
                 private timesheetService: TimesheetService) { }
 
   ngOnInit(): void {
     this.createForm();
-    // this.creationForm.get('monday').valueChanges.subscribe((selectedValue: number) => {
-    //   this.mon = selectedValue;
-    // });
-    // this.creationForm.get('tuesday').valueChanges.subscribe((selectedValue: number) => {
-    //   this.tue = selectedValue;
-    // });
-    // this.creationForm.get('wednesday').valueChanges.subscribe((selectedValue: number) => {
-    //   this.wed = selectedValue;
-    // });
+    this.getAllProjects();
+    this.getAllTasks();
+  }
+
+  getAllProjects() {
+    this.timesheetService.getTimesheetProject('').subscribe(
+      data => {
+        this.listTimesheetProject = data;
+        console.log(this.listTimesheetProject);
+      },
+      error => console.log(error)
+    );
+  }
+
+  getAllTasks() {
+    this.timesheetService.getTimesheetTask('').subscribe(
+      data => {
+        this.listTimesheetTask = data;
+        console.log(this.listTimesheetTask);
+      },
+      error => console.log(error)
+    );
   }
 
   createForm() {
     this.creationForm = this.fb.group(
       {
         application_id : Math.random().toString(),
-        email_address : 'iddssdd',
-        company_email : 'idddssd',
-        timesheet_week : 'iidssd',
-        task_code : 'idd',
+        email_address : 'wid-email-address',
+        company_email : 'wid-company-email',
+        timesheet_week : 'wid-timesheet-week',
+        task_code : 'wid-task-code',
         start_date : ['', Validators.required],
         end_date : 'tt',
         timesheet_status : 'draft',
@@ -58,9 +70,7 @@ export class AddTimesheetComponent implements OnInit {
       }
     );
   }
-showTotal() {
-  console.log(this.totale);
-}
+
   createTimesheet(formDirective: FormGroupDirective) {
     if (this.creationForm.valid) {
       console.log(this.creationForm.value);
@@ -71,10 +81,20 @@ showTotal() {
         error => console.log(error)
       );
     }
-
   }
 
-  total(): number {
-    return this.mon + this.tue ;
+  closeClick(): void {
+    this.close = !this.close;
+  }
+  calculTotal() {
+    const mondayValue = this.creationForm.value.monday;
+    const tuesdayValue = this.creationForm.value.tuesday;
+    const wednesdayValue = this.creationForm.value.wednesday;
+    const thursdayValue = this.creationForm.value.thursday;
+    const fridayValue = this.creationForm.value.friday;
+    const saturdayValue = this.creationForm.value.saturday;
+    const sundayValue = this.creationForm.value.sunday;
+
+    this.totalWeek = mondayValue + tuesdayValue + wednesdayValue + thursdayValue + fridayValue + saturdayValue + sundayValue;
   }
 }

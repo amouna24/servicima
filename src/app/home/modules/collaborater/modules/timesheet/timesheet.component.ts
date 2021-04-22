@@ -15,11 +15,10 @@ export class TimesheetComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   showHide() {
     this.new = !this.new;
   }
-
 }

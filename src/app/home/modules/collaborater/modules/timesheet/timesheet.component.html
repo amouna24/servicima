@@ -29,21 +29,11 @@
   </div>
 
   <!--**************************** Empty timesheet *************************-->
-<!--  <wid-timesheet-empty-page></wid-timesheet-empty-page>-->
+<!--    <wid-empty-page-timesheet></wid-empty-page-timesheet>-->
 
   <!--**************************** List timesheet *************************-->
-  <wid-timesheets-list [bool]="new"></wid-timesheets-list>
+  <wid-scrollbar>
+    <wid-timesheets-list [bool]="new"></wid-timesheets-list>
+  </wid-scrollbar>
+
 </div>
-
-
-
-
-
-
-
-
-
-
-<!--<div fxLayout="row" fxLayoutAlign="space-around center" class="border-radius-20 ">-->
-<!--  <button class="nav-item" [routerLink]="['/collaborator/timesheet']"> test </button>-->
-<!--</div>-->
