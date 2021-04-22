@@ -1,8 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
-
-  <div fxLayout="column" fxFlex="4"   ></div>
-
-  <div fxLayout="column" fxFlex="90"    >
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
       <div fxLayout="column" fxFlex="56">
@@ -19,99 +15,99 @@
     <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
-    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
-      <div fxLayout="column" fxFlex="86">
-        <h4 class="steel font-size-18 font-small">Custom Sections</h4>
-      </div>
-    </div>
-    <div fxLayout="row" fxFlex="4"></div>
-    <div fxLayout="row" fxFlex="60" fxLayoutAlign="space-around">
-      <wid-scrollbar fxFlexFill>
-        <div fxLayout="column" fxFlex="86" *ngIf="!showProject" >
-          <div fxLayout="row" fxFlex="60" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
-            <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
-              <div fxLayout="row" fxFlex="8"></div>
-              <div fxLayout="row" fxLayoutAlign="center"><span>No Project available</span></div>
-              <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="onShowProject()" class="btn-large bg-primaryColor white"  >
-                Add Project
-              </button></div>
-            </div></div>
+    <div fxLayout="column" fxFlex="100">
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Custom Sections</h4>
         </div>
-        <div fxLayout="column" fxFlexFill *ngIf="showProject" >
-          <div  *ngFor="let item of getProject let pointIndex=index">
-            <br>
-            <div   style="background-color: #e8f1f9;border-radius: 10px"  >
-              <div fxLayout="column" fxFlex="60">
-                <p>{{item.project_title}}</p>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="30">
-                <button mat-raised-button class="steel-two" style="border-radius: 5px">Add section</button>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center center" style="width: 90%" fxFlex="10">
-                <button mat-raised-button class="steel-two" style="border-radius: 5px">Edit</button>
-              </div>
-            </div>
-            <wid-project-section></wid-project-section>
-          </div>
-          <div>
-            <form [formGroup]="sendProject" class="full-height">
-              <div fxLayout="column" fxFlex="8"   ></div>
-              <div fxLayout="column" fxFlex="80"  >
-                <div fxLayout="row">
+      </div>
+      <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
 
-                  <div fxLayout="column" fxFlex="80">
-                    Project title:
-                    <p>
+        <wid-scrollbar class="full-width full-height">
+          <div fxLayout="column" fxFlex="86" class="p-l-65 p-r-65" fxLayoutAlign=" center" *ngIf="!showProject" >
+            <div fxLayout="row" fxFlex="60"  class="full-width" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+              <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
+                <div fxLayout="row" fxFlex="8"></div>
+                <div fxLayout="row" fxLayoutAlign="center"><span>No Project available</span></div>
+                <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="onShowProject()" class="btn-large bg-primaryColor white"  >
+                  Add Project
+                </button></div>
+              </div></div>
+          </div>
+          <div fxLayout="column" fxFlex="100" *ngIf="showProject" class="p-l-65 p-r-65" fxLayoutAlign=" center">
+              <div  *ngFor="let item of getProject let pointIndex=index" fxLayout="row" fxFlex="15"   class="width-82">
+                <div class="bg-pale-grey border-radius-15 full-width">
+                <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="20"  >
+                  <p >{{item.project_title}}</p>
+                </div>
+                <div fxLayout="column"  fxFlex="70" fxLayoutAlign="center none">
+                  <div fxLayout="row" fxLayoutAlign="end" class="p-r-20" >
+                  <button mat-raised-button class="steel-two btn-small bg-white"  (click)="showAddSectionEvent()">Add section</button>
+                  </div>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center none" class="p-r-20" fxFlex="10">
+                  <button mat-raised-button class="steel-two btn-small bg-white" >Edit</button>
+                </div>
+              </div>
+              </div>
+              <div fxLayout="row" class="width-82"  *ngIf="showAddSection">
+                <wid-project-section class="full-width"></wid-project-section>
+              </div>
+            <br>
+              <form [formGroup]="sendProject" class="full-height full-width">
+                <div fxLayout="column" fxFlex="9"   ></div>
+                <div fxLayout="row" fxFlex="82"class="border-radius-10 pale-grey height-70 "  style="border-style: solid">
+                <div fxLayout="column" fxFlex="95" fxLayoutAlign="center" class="p-l-65 " >
+                  <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="80">
+                      <mat-label class="black font-size-12">
+                        Project title:                      </mat-label>
                       <mat-form-field appearance="outline">
                         <input   formControlName="project_title" matInput placeholder="Project title"   required>
                       </mat-form-field>
-                    </p>
+                    </div>
                   </div>
+                  <div fxLayout="row"  >
+                    <div fxLayout="column" fxFlex="30">
+                      <mat-label class="black font-size-12">
+                        Start Date:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date">
+                        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex="50" >
+                      <div fxLayout="row" fxLayoutAlign="end end">
+                        <div fxLayout="column" fxFlex="60">
+                      <mat-label class="black font-size-12">
+                        End date:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date">
+                        <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
+                        <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                      </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-
-                <div fxLayout="row" >
-                  <div fxLayout="column" fxFlex="40">
-                  Start Date:
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Start date :</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="start_date">
-                    <mat-datepicker-toggle matSuffix [for]="picker">
-                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-                    </mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="column" fxFlex="40">
-                  End date:
-                  <mat-form-field class="example-full-width">
-                    <mat-label>End date:</mat-label>
-                    <input matInput [matDatepicker]="pickerEnd" formControlName="end_date">
-                    <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-                    </mat-datepicker-toggle>
-                    <mat-datepicker #pickerEnd></mat-datepicker>
-                  </mat-form-field>
+                  <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end" >
+                    <button type="submit" mat-raised-button type="submit" class="steel-two bg-pale-grey btn-medium" style="width: 30%" (click)="createProject()">Add</button>
+                  </div>
                 </div>
                 </div>
-                <div fxLayout="row" fxFlex="20" fxLayoutAlign="end end" >
-                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createProject()">Add</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </wid-scrollbar>
-
-    </div>
-    <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
-          Save
-        </button>
-
-
+              </form>
+            </div>
+        </wid-scrollbar>
       </div>
-    </div>
-  </div>
-
+      </div>
+      <div fxLayout="column" fxFlex="10">
+        <div fxLayout="row" fxLayoutAlign="end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}">
+            Save
+          </button>
+        </div>
+      </div>
 </div>

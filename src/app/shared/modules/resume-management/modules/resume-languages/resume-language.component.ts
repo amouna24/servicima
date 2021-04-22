@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
-import {UserService} from "@core/services/user/user.service";
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-resume-language',

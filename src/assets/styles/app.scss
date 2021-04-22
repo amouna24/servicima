@@ -209,7 +209,9 @@ Paddings
 .p-r-40 {
     padding-right: 40px;
 }
-
+.p-r-65{
+  padding-right: 65px;
+}
 .p-t-0 {
     padding-top: 0;
 }
@@ -527,6 +529,9 @@ html body {
 /*******************
  background colors
 *******************/
+.bg-cool-grey {
+  background-color: $cool-grey !important;
+}
 .bg-primaryColor {
   background-color: $primaryColor !important;
 }
@@ -605,7 +610,7 @@ html body {
   min-height: $screen-height !important;
 }
 .height-50{
-  height: 50px;
+  height: 50%;
 }
 .mat-raised-button{
   box-shadow: none !important;

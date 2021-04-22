@@ -29,7 +29,9 @@ export class ProExpComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+/*
     this.getProExpInfo();
+*/
   }
   getProExpInfo() {
     this.resumeService.getResume(
@@ -83,7 +85,9 @@ export class ProExpComponent implements OnInit {
     this.ProExp.professional_experience_code = this.professional_experience_code;
     if (this.sendProExp.valid) {
       console.log('ProExp input= ', this.ProExp);
+/*
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
+*/
      this.proExpArray.push(this.ProExp);
     } else { console.log('Form is not valid');
     }

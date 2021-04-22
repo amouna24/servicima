@@ -1,7 +1,6 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
-  <div fxLayout="column" fxFlex="4"   ></div>
-  <form [formGroup]="CreationForm" (submit)="createResume()">
+  <form [formGroup]="CreationForm" (submit)="createResume()" class="full-width full-height" fxFlexFill>
 
   <div fxLayout="column" fxFlex="90"    >
 
@@ -25,64 +24,70 @@
         <h4 class="steel font-size-18 font-small">General information</h4>
       </div>
     </div>
-    <div fxLayout="row" fxFlex="70" fxLayoutAlign="center" >
+    <div fxLayout="row" fxFlex="71" fxLayoutAlign="center" >
       <wid-scrollbar fxFlexFill >
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-          <div   fxLayout="column" fxFlex="30"  fxLayoutAlign=" start" >
-            <div fxlayout="row"  >
-              <span>Name:</span>
-                <div><p>
-                  <mat-form-field appearance="outline">
-                    <input   formControlName="init_name" matInput placeholder="Name" required>
-                  </mat-form-field>
-                </p></div>
-              <div >Actual job:
-                <p>
-                  <mat-form-field appearance="outline">
-                    <input  formControlName="actual_job" matInput placeholder="Actual job" required>
-                  </mat-form-field>
-                </p></div>
-              <div >Language:
-                <p>
-                  <mat-form-field appearance="outline">
-                      <mat-label>Language</mat-label>
-                      <mat-select formControlName="language_id">
-                        <mat-option value="FR">French</mat-option>
-                        <mat-option value="EN">English</mat-option>
-                        <mat-option value="ESP">Spanish</mat-option>
-                      </mat-select>
-                  </mat-form-field>
-                </p></div>
-              <section class="example-section">
-                <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox></section>
-
-             <div *ngIf="showYears">
-              <br>
-              <div >Years of experience:
-                <p>
-                  <mat-form-field appearance="outline">
-                    <input matInput  formControlName="years_of_experience" placeholder="Years of experience" >
-                  </mat-form-field>
-                </p></div></div>
+          <div   fxLayout="column" fxFlex="25"  class="height-90" fxLayoutGap="10px" fxLayoutAlign=" start" >
+            <div fxlayout="row" fxFlex >
+              <mat-label class="black font-size-12">
+                Name:
+              </mat-label>
+              <mat-form-field appearance="outline" class="width-110">
+                <input    formControlName="init_name" matInput placeholder="Name" required>
+              </mat-form-field></div>
+            <div fxlayout="row" fxFlex >
+              <mat-label class="black font-size-12">
+                Actual job:
+              </mat-label>
+              <mat-form-field appearance="outline">
+                <input    formControlName="actual_job" matInput placeholder="Actual job" required>
+              </mat-form-field></div>
+            <div>
+            <mat-label class="black font-size-12">
+              Language:
+            </mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select disableOptionCentering panelClass="panelColor"
+                           placeholder="Language" formControlName="language_id">
+                <mat-option value="FR">French</mat-option>
+                <mat-option value="EN">English</mat-option>
+                <mat-option value="ESP">Spanish</mat-option>
+              </mat-select>
+            </mat-form-field>
             </div>
+            <div fxLayout="row" fxFlex>
+              <section class="example-section">
+                <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox>
+              </section></div>
+            <div fxLayout="row" fxFlex>
+             <div *ngIf="showYears">
+               <mat-label class="black font-size-12">
+                 Years of experience:
+               </mat-label>
+               <mat-form-field appearance="outline" class="width-83">
+                 <input   matInput  formControlName="years_of_experience" placeholder="Years of experience" >
+               </mat-form-field>
+             </div>
+        </div>
           </div>
-          <div   fxLayout="column" fxFlex="43"  fxLayoutAlign=" start" >
-            <div fxLayout="row" fxFlexFill >
-            <div  fxLayout="column"     class="profile-image">
+          <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" class="height-80">
+            <div fxLayout="row"  fxLayoutAlign="center center" fxFlex="40" class="bg-pale-grey border-radius-10 width-77">
+            <div  fxLayout="column"     class="profile-image p-l-30">
               <wid-profile-image fxLayoutAlign="start start" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
             </div>
-            <div fxLayout="column" fxFlex fxLayoutAlign="center start" class="m-l-10 m-b-5" >
+            <div fxLayout="column" fxFlex fxLayoutAlign="center start" class="m-l-10 m-b-5"  >
               <div fxLayout="row">
-              First Name : {{firstname}}
+                <p class="font-normal font-size-12" > First Name : </p> <p class="font-light font-size-12" >{{firstname}}</p>
             </div>
             <div fxLayout="row">
-              Last name : {{lastname}}
+              <p class="font-normal font-size-12" > Last name :  </p> <p class="font-light font-size-12" >{{lastname}}</p>
+
             </div>
               <div fxLayout="row">
-                Company : {{company}}
+                <p class="font-normal font-size-12" > Company :  </p> <p class="font-light font-size-12" >{{company}}</p>
               </div>
               <div fxLayout="row">
-                <a>Set Profile picture as CV picture</a>
+                <p class="font-normal font-size-12" > Set Profile picture as CV picture  </p>
               </div>
             </div>
           </div>

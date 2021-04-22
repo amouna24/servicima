@@ -6,13 +6,14 @@ import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSki
 import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
-
+import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
+import { IResumeSectionModel } from '@shared/models/resumeSection.model';
+import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
-import {IResumeSectionModel} from "@shared/models/resumeSection.model";
-import {IResumeProjectModel} from "@shared/models/resumeProject.model";
+import {IResumeProjectDetailsModel} from "@shared/models/resumeProjectDetails.model";
+import {IResumeProjectDetailsSectionModel} from "@shared/models/resumeProjectDetailsSection.model";
 
 @Injectable({
   providedIn: 'root'
@@ -281,6 +282,56 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   updateProject(project: IResumeProjectModel): Observable<any> {
     return this.httpClient.put<IResumeProjectModel>(`${environment.resumeProjectApiUrl}`, project);
+  }
+  /*-------------------------------------------------------------------------------------*/
+  /*------------------------------------ RESUME-PROJECT-DETAILS--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Project Details  List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IProjectDetails[]>
+   *************************************************************************/
+  getProjectDetails(filter: string): Observable<IResumeProjectDetailsModel[]> {
+    return this.httpClient.get<IResumeProjectDetailsModel[]>(`${environment.resumeProjectDetailsApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new Project Details
+   * @param projectDet : Project model
+   *************************************************************************/
+  addProjectDetails(projectDet: IResumeProjectDetailsModel): Observable<any> {
+    return this.httpClient.post<IResumeProjectDetailsModel>(`${environment.resumeProjectDetailsApiUrl}`, projectDet);
+  }
+  /**************************************************************************
+   * @description Update Project Details Status
+   * @param project: updated  Project Details Object
+   *************************************************************************/
+  updateProjectDetails(projectDet: IResumeProjectDetailsModel): Observable<any> {
+    return this.httpClient.put<IResumeProjectDetailsModel>(`${environment.resumeProjectDetailsApiUrl}`, projectDet);
+  }
+  /*-------------------------------------------------------------------------------------*/
+  /*------------------------------------ RESUME-PROJECT-DETAILS-Section--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Project Details Section List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IProjectDetailsSection[]>
+   *************************************************************************/
+  getProjectDetailsSection(filter: string): Observable<IResumeProjectDetailsSectionModel[]> {
+    return this.httpClient.get<IResumeProjectDetailsSectionModel[]>(`${environment.resumeProjectDetailsSectionApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new Project Section Details Section
+   * @param projectDetSec : Project Section model
+   *************************************************************************/
+  addProjectDetailsSection(projectDetSec: IResumeProjectDetailsSectionModel): Observable<any> {
+    return this.httpClient.post<IResumeProjectDetailsSectionModel>(`${environment.resumeProjectDetailsSectionApiUrl}`, projectDetSec);
+  }
+  /**************************************************************************
+   * @description Update Project Details Section Status
+   * @param projectDetSec: updated  Project Details Section Object
+   *************************************************************************/
+  updateProjectDetailsSection(projectDetSec: IResumeProjectDetailsSectionModel): Observable<any> {
+    return this.httpClient.put<IResumeProjectDetailsSectionModel>(`${environment.resumeProjectDetailsSectionApiUrl}`, projectDetSec);
   }
   /*-------------------------------------------------------------------------------------*/
 

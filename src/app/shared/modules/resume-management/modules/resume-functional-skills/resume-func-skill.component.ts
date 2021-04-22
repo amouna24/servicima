@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
 import { BehaviorSubject, Subject } from 'rxjs';
-import {UserService} from "@core/services/user/user.service";
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-resume-func-skill',

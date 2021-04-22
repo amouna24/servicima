@@ -19,6 +19,7 @@ export class ProExpProjectsComponent implements OnInit {
   ProjectArray: IResumeProjectModel[] = [];
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
   project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P`;
+  showAddSection = false;
   get getProject() {
     return this.ProjectArray;
   }
@@ -53,6 +54,9 @@ export class ProExpProjectsComponent implements OnInit {
     this.createForm();
     this.getProjectInfo();
   }
+  showAddSectionEvent() {
+    this.showAddSection = !this.showAddSection;
+  }
   createForm() {
     this.sendProject = this.fb.group({
       project_title: '',
@@ -66,7 +70,9 @@ export class ProExpProjectsComponent implements OnInit {
     this.Project.professional_experience_code = this.professional_experience_code;
     this.Project.project_code = this.project_code;
     if (this.sendProject.valid) {
+/*
       this.resumeService.addProject(this.Project).subscribe(data => console.log('Project =', data));
+*/
       this.getProject.push(this.Project);
     } else { console.log('Form is not valid');
     }
