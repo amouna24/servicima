@@ -99,7 +99,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
       });
       this.filteredRoleFeature.next(this.featureList.slice());
       this.utilsService.changeValueField(this.featureList, this.form.controls.roleFeatureFilterCtrl, this.filteredRoleFeature);
-    });
+    }, error => console.error(error));
   }
 
   /**
@@ -118,7 +118,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
         return roleFeatures.value;
       });
       this.roleFeatureControl.setValue(addListFeatureRole);
-    });
+    }, error => console.error(error));
   }
 
   /**
@@ -226,9 +226,9 @@ export class AddRoleComponent implements OnInit, OnDestroy {
       });
       this.subscriptions.push(this.roleFeatureService.addManyFeatureRole(this.arrayToAddRoleFeature).subscribe(async (featureRole) => {
       await this.getAllRole();
-      }));
+      }, error => console.error(error)));
     }
-  }));
+  }, error => console.error(error)));
 
   /* Add role with other language */
   this.form.value.input.map((element) => {
@@ -245,8 +245,8 @@ export class AddRoleComponent implements OnInit, OnDestroy {
       if (data) {
         console.log(data);
       }
-    }));
-  });
+    }, error => console.error(error)));
+  }, error => console.error(error));
 }
 
   /**
@@ -269,7 +269,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
           if (data) {
             console.log(data);
           }
-        }));
+        }, error => console.error(error)));
       }
       /* update role with other languages and add it if is not exist */
       let i = 0;
@@ -288,12 +288,12 @@ export class AddRoleComponent implements OnInit, OnDestroy {
             if (data) {
               i = i + 1;
             }
-          }));
+          }, error => console.error(error)));
         } else {
           this.subscriptions.push(this.refdataService.addrefdata(roleUpdated).subscribe((data) => {
             if (data) {
             }
-          }));
+          }, error => console.error(error)));
         }
       });
       // remove roles features
@@ -305,9 +305,9 @@ export class AddRoleComponent implements OnInit, OnDestroy {
           .subscribe((data) => {
             if (data) {
               this.subscriptions.push(this.roleFeatureService.deleteFeatureRole(data[0]['_id']).subscribe(() => {
-              }));
+              }, error => console.error(error)));
             }
-          }));
+          }, error => console.error(error)));
       });
 
       // add roles features
@@ -322,8 +322,8 @@ export class AddRoleComponent implements OnInit, OnDestroy {
         };
         this.subscriptions.push( this.roleFeatureService.addFeatureRole(roleFeature).subscribe((featureRole) => {
           console.log(featureRole);
-        }));
-      });
+        }, error => console.error(error)));
+      }, error => console.error(error));
       this.dialogRef.close(true);
     }
   }

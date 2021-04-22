@@ -19,4 +19,13 @@ export class TimesheetSettingService {
     return this.httpClient
       .get<ICompanyTimesheetSettingModel[]>(`${environment.companyTimesheetSettingApiUrl}?company_email=${email}`);
   }
+
+  /**
+   * @description update company timesheet setting
+   * @param timesheetSetting: object to update
+   */
+  updateCompanyTimesheetSetting(timesheetSetting: object) {
+    return this.httpClient
+      .put(`${environment.companyTimesheetSettingApiUrl}`, timesheetSetting);
+  }
 }

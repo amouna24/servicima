@@ -17,6 +17,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   refData: { } = { };
   ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
+  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -32,6 +33,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addPaymentTermsMethode', modalComponent: AddPaymentMethodComponent });
     this.isLoading.next(true);
+    this.getConnectedUser();
     this.getPaymentMethode().then(() => this.isLoading.next(false));
   }
 
@@ -39,6 +41,20 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
     const data = await this.getRefdata();
     this.ELEMENT_DATA.next(data['PAYMENT_MODE']);
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
+  }
+
   /**
    * @description : action
    * @param rowAction: object
@@ -59,7 +75,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   async getRefdata() {
     const list = ['PAYMENT_MODE'];
     this.refData =  await this.refdataService
-      .getRefData( this.utilService.getCompanyId(this.userService.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
       list, true);
     return this.refData;
   }
@@ -77,7 +93,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
+        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
              await this.getPaymentMethode();

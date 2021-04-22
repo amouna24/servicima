@@ -28,7 +28,8 @@ export class ThemeService {
       { 'color': 'mango', 'status': false , 'image': 'mango.png'},
       { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
       { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
-      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
+      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'},
+      { 'color': 'setting', 'status': false , 'image': 'whiteRed.png'}
     ];
     const cred = this.localStorageService.getItem('userCredentials');
     const email = cred['email_address'];
