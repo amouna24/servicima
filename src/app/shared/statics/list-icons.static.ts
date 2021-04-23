@@ -23,6 +23,14 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/user-slash-solid.svg'
   },
   {
+    name: 'wi-file-export',
+    path: 'assets/icons/file-export.svg'
+  },
+  {
+    name: 'wi_timesheet',
+    path: 'assets/icons/timesheet.svg'
+  },
+  {
     name: 'wi-marker',
     path: 'assets/icons/marker-solid.svg',
     viewBox: '0 -4 12.792 20.791'

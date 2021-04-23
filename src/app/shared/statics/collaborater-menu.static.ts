@@ -33,7 +33,7 @@ export const collaboraterMenu: IMenu[] = [
       state: 'timesheet',
       name: 'timesheet',
       type: 'link',
-      icon: 'wi_dashboard',
+      icon: 'wi_timesheet',
       feature: 'HR_FOLDER_ACCESS',
     },
     {

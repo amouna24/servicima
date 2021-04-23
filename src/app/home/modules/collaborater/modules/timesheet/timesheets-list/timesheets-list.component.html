@@ -1,13 +1,13 @@
-<div fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+<div fxLayout="column" fxLayoutGap="20px" fxFlex="100" class="cool-grey" >
 
-  <ng-container *ngIf="bool">
-    <wid-add-timesheet></wid-add-timesheet>
-  </ng-container>
+
 
   <!--******************** list-timesheet ****************-->
   <div fxLayout="row" fxLayoutAlign="space-around center">
-    <div fxLayout="column" fxFlex="90">
-          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" class="m-b-15" [expanded]="panelOpenState">
+    <div fxLayout="column" fxFlex="90" fxLayoutGap="15px">
+
+        <wid-add-timesheet *ngIf="bool" [object]="timesheet" ></wid-add-timesheet>
+          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" [expanded]="panelOpenState">
             <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
               <div fxLayout="row" fxFlex="50" fxLayoutAlign=" space-around center" class="help-blue">
                 <div fxLayout="column" fxFlex="70">
@@ -47,29 +47,36 @@
                     <div fxLayout="column">
                       <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
                     </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" >
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17" >
                       <h1 class="font-size-15 font-normal">Total:</h1>
                       <div class="font-size-17 font-normal steel m-b-15">{{item.total_week_hours}}</div>
                     </div>
                   </div>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center" fxFlex="30">
-                  <div fxLayout="row" fxLayoutAlign="end center">
-                    <div fxLayout="column" fxFlex="10">
-                      <button mat-mini-fab>
-                        <mat-icon svgIcon="wi-marker"></mat-icon>
+                  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" >
+                      <button mat-button class="btn-timesheet border-cool-gray border-radius-5">
+                        <mat-icon svgIcon="wi-file-export" class="cool-grey"></mat-icon>
                       </button>
-                    </div>
-                    <div fxLayout="column" fxFlex="10">
-                      <button mat-mini-fab>
-                        <mat-icon svgIcon="wi-marker"></mat-icon>
+
+                      <button mat-button (click)="editTimesheet(item)" class="btn-timesheet border-cool-gray border-radius-5">
+                        <mat-icon svgIcon="wi-marker" class="cool-grey"></mat-icon>
                       </button>
-                    </div>
-                    <div fxLayout="column" fxFlex="20">
-                      <button mat-mini-fab (click)="togglePanel(item)">
-                        <mat-icon svgIcon="wi-eye"></mat-icon>
+
+                      <button mat-button (click)="togglePanel()" class="btn-timesheet border-cool-gray border-radius-5">
+                        <mat-icon svgIcon="wi-eye" class="cool-grey"></mat-icon>
                       </button>
-                    </div>
+
+<!--                    <div fxLayout="column" fxFlex="10" class="border">-->
+<!--                      <button mat-button class="icon-btn-medium bg-pale-grey" mat-mini-fab>-->
+<!--                        <mat-icon class="icon material-icons-outlined" svgIcon="wi-marker"></mat-icon>-->
+<!--                      </button>-->
+<!--                    </div>-->
+<!--                    <div fxLayout="column" fxFlex="10" class="border">-->
+<!--                      <button mat-button class="icon-btn-medium bg-pale-grey" (click)="togglePanel(item)">-->
+<!--                        <mat-icon class="icon material-icons-outlined" svgIcon="wi-eye"></mat-icon>-->
+<!--                      </button>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </div>

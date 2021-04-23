@@ -16,20 +16,25 @@ export class TimesheetsListComponent implements OnInit {
   constructor(private timesheetService: TimesheetService) { }
   listTimesheet: ITimesheetModel[] = [];
   panelOpenState: boolean;
-
-  togglePanel(item) {
-    this.panelOpenState = !this.panelOpenState;
-    console.log(item);
-  }
+  timesheet: ITimesheetModel;
+  object: string;
 
   ngOnInit(): void {
     this.timesheetService.getTimesheet('').subscribe(
       data => {
         this.listTimesheet = data;
-        console.log(this.listTimesheet);
       },
       error => console.log(error)
     );
+  }
+
+  togglePanel() {
+    this.panelOpenState = !this.panelOpenState;
+  }
+
+  editTimesheet(item) {
+    this.timesheet = item;
+    console.log(this.timesheet);
   }
 
 }

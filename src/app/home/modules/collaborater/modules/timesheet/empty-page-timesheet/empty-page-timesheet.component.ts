@@ -12,4 +12,8 @@ export class EmptyPageTimesheetComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addTimesheet() {
+
+  }
+
 }

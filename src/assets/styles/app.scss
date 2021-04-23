@@ -272,7 +272,7 @@ Paddings
       Radius
 *******************/
 .border-radius-5{
-  border-radius:$border-radius-5;
+  border-radius:$border-radius-5 !important;
 }
 .border-radius-10{
   border-radius: $border-radius-10;
@@ -750,7 +750,11 @@ wid-upload-sheet {
 }
 /******************/
 
-.borderColor {
-  border-color: $cool-grey;
-  border-style: solid;
+.border {
+  border: solid 2px $pale-grey;
 }
+
+.border-cool-gray {
+  border: solid 3px $cool-grey !important;
+}
+
