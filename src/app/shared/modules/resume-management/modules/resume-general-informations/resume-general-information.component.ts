@@ -107,7 +107,7 @@ showHideYears() {
       language_id: '',
       years_of_experience : null,
       actual_job : '',
-      image : '',
+      image : this.avatar,
       init_name : '',
       status : 'A'
 });
@@ -123,7 +123,9 @@ this.generalInfo.image = this.avatar;
 */
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
+/*
       this.resumeService.addResume(this.CreationForm.value).subscribe(data => console.log('Resume =', data));
+*/
 
     } else { console.log('Form is not valid');
     }

@@ -15,7 +15,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   arrayFuncSkillCount = 0;
   FuncSkill: IResumeFunctionalSkillsModel;
   funcSkillArray: IResumeFunctionalSkillsModel[] = [];
-  resume_code: string;
+  resume_code = '';
   get getFunc() {
     return this.funcSkillArray;
   }
@@ -27,7 +27,9 @@ export class ResumeFuncSkillComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+/*
     this.getFuncSkillsInfo();
+*/
   }
   getFuncSkillsInfo() {
     this.resumeService.getResume(
@@ -76,7 +78,9 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.FuncSkill.index = this.arrayFuncSkillCount;
     console.log('model=', this.FuncSkill);
     if (this.sendFuncSkill.valid) {
+/*
       this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => console.log('functional skill =', data));
+*/
       this.getFunc.push(this.FuncSkill);
     } else { console.log('Form is not valid');
     }

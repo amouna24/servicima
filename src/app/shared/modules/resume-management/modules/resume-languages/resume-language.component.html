@@ -27,54 +27,55 @@
       </div>
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
         <wid-scrollbar fxFlexFill >
-          <div fxLayout="column" fxFlexFill >
+          <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
             <div  *ngFor="let item of getLanguage let pointIndex=index">
-              <br>
-              <div fxLayout="column" fxFlex="25"  >
-
+              <div fxLayout="row" fxLayoutAlign="space-around center" >
+              <div fxLayout="column" fxFlex="30"  >
+                <mat-label class="black font-size-12">
+                  Language:
+                </mat-label>
                 <mat-form-field appearance="outline">
-                  <mat-label>{{item.resume_language_code}}</mat-label>
-                  <mat-select [value]="item.resume_language_code"  disabled>
+                  <mat-select   disableOptionCentering panelClass="panelColor"
+                             [placeholder]="item.resume_language_code"  disabled>
                     <mat-option value="FR">French</mat-option>
                     <mat-option value="EN">English</mat-option>
                     <mat-option value="ESP">Spanish</mat-option>
                   </mat-select>
                 </mat-form-field>
-
               </div>
-              <div fxLayout="column" fxFlex="8"   ></div>
               <div fxLayout="column" fxLayoutAlign="20">
                 <div fxLayout="row" fxFlexFill>
 
-                  <button mat-icon-button color="accent" *ngFor="let ratingId of ratingArr"    [matTooltip]="ratingId+1" matTooltipPosition="above">
+                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"   [matTooltip]="ratingId+1" matTooltipPosition="above">
                     <mat-icon>
-                      {{showValidateIcon(1)}}
+                      {{showIconDisabled(+item.level,i)}}
                     </mat-icon>
                   </button>
-                  <mat-error *ngIf="starCount == null || starCount == 0">
-                    Star count is <strong>required</strong> and cannot be zero
-                  </mat-error>
+
                 </div>
 
 
               </div>
+                <div fxLayout="column" fxFlex="16"    ></div>
 
+                </div>
             </div>
-          <form [formGroup]="sendLanguage" >
-                <div fxLayout="column" fxFlex="25"  >
-
+          <form [formGroup]="sendLanguage" class="full-width full-height" >
+            <div fxLayout="row" fxLayoutAlign="space-around center" >
+                <div fxLayout="column" fxFlex="30"  >
+                  <mat-label class="black font-size-12">
+                    Language:
+                  </mat-label>
                   <mat-form-field appearance="outline">
-                    <mat-label>Language</mat-label>
-                    <mat-select formControlName="resume_language_code">
+                    <mat-select disableOptionCentering panelClass="panelColor"
+                                placeholder="Language" formControlName="resume_language_code">
                       <mat-option value="FR">French</mat-option>
                       <mat-option value="EN">English</mat-option>
                       <mat-option value="ESP">Spanish</mat-option>
                     </mat-select>
                   </mat-form-field>
-
                 </div>
-                <div fxLayout="column" fxFlex="8"   ></div>
-                <div fxLayout="column" fxLayoutAlign="20">
+                <div fxLayout="column" fxLayoutAlign="30">
                   <div fxLayout="row" fxFlexFill>
                     <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
                       <mat-icon>
@@ -88,10 +89,10 @@
 
 
                 </div>
-                <div fxLayout="column" fxFlex="5"  fxLayoutAlign=" center"  >
-                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createLanguage()">Add</button>
+                <div fxLayout="column" fxFlex="16"    >
+                  <button type="submit" mat-raised-button type="submit"  class="bg-pale-grey btn-medium black" (click)="createLanguage()">Add</button>
                 </div>
-
+            </div>
 
 
           </form>
@@ -99,12 +100,17 @@
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-          <button mat-raised-button  class="btn-small bg-primaryColor white"   >
-            Save
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
           </button>
-
-
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end ">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/dynamicSection']">
+            Next
+          </button>
         </div>
       </div>
 

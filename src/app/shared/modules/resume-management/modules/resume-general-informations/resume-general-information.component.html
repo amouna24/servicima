@@ -24,11 +24,11 @@
         <h4 class="steel font-size-18 font-small">General information</h4>
       </div>
     </div>
-    <div fxLayout="row" fxFlex="71" fxLayoutAlign="center" >
+    <div fxLayout="row" fxFlex="65" fxLayoutAlign="center" >
       <wid-scrollbar fxFlexFill >
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-          <div   fxLayout="column" fxFlex="25"  class="height-90" fxLayoutGap="10px" fxLayoutAlign=" start" >
-            <div fxlayout="row" fxFlex >
+          <div   fxLayout="column" fxFlex="18"  class="height-90" fxLayoutGap="10px" fxLayoutAlign=" start" >
+            <div fxlayout="row"  >
               <mat-label class="black font-size-12">
                 Name:
               </mat-label>
@@ -55,7 +55,7 @@
               </mat-select>
             </mat-form-field>
             </div>
-            <div fxLayout="row" fxFlex>
+            <div fxLayout="row" fxFlex="10">
               <section class="example-section">
                 <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox>
               </section></div>
@@ -64,66 +64,39 @@
                <mat-label class="black font-size-12">
                  Years of experience:
                </mat-label>
-               <mat-form-field appearance="outline" class="width-83">
+               <mat-form-field appearance="outline" class="full-width">
                  <input   matInput  formControlName="years_of_experience" placeholder="Years of experience" >
                </mat-form-field>
              </div>
         </div>
           </div>
           <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" class="height-80">
-            <div fxLayout="row"  fxLayoutAlign="center center" fxFlex="40" class="bg-pale-grey border-radius-10 width-77">
-            <div  fxLayout="column"     class="profile-image p-l-30">
-              <wid-profile-image fxLayoutAlign="start start" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
+            <div fxLayout="row"  fxLayoutAlign="center center" fxFlex="40" class="bg-pale-grey border-radius-10 width-83">
+            <div  fxLayout="column"     class="profile-image p-l-30 height-50">
+              <wid-profile-image fxLayoutAlign="start start" class="full-height full-width" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="false" [userType]="profileUserType" ></wid-profile-image>
             </div>
-            <div fxLayout="column" fxFlex fxLayoutAlign="center start" class="m-l-10 m-b-5"  >
-              <div fxLayout="row">
-                <p class="font-normal font-size-12" > First Name : </p> <p class="font-light font-size-12" >{{firstname}}</p>
-            </div>
-            <div fxLayout="row">
-              <p class="font-normal font-size-12" > Last name :  </p> <p class="font-light font-size-12" >{{lastname}}</p>
-
-            </div>
-              <div fxLayout="row">
-                <p class="font-normal font-size-12" > Company :  </p> <p class="font-light font-size-12" >{{company}}</p>
-              </div>
-              <div fxLayout="row">
-                <p class="font-normal font-size-12" > Set Profile picture as CV picture  </p>
-              </div>
+            <div fxLayout="column" fxLayoutAlign="start" fxFlex="90"  class="m-l-10 m-t-20"  >
+              <div fxLayout="row" class="m-b--9">
+                <p class="font-normal font-size-12" > First Name : </p> <p class="font-light font-size-12" >{{firstname}}</p></div>
+              <div fxLayout="row" class="m-b--9">
+                <p class="font-normal font-size-12" > Last name :  </p> <p class="font-light font-size-12" >{{lastname}}</p></div>
+              <div fxLayout="row" class="m-b--9">
+                <p class="font-normal font-size-12" > Company :  </p> <p class="font-light font-size-12" >{{company}}</p></div>
             </div>
           </div>
           </div>
         </div>
       </wid-scrollbar>
     </div>
-    <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
+    <div fxLayout="row" fxFlex="8" fxLayoutAlign="center " >
+      <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" (click)="createResume()" [routerLink]="['/candidate/resume/professionalExperience']">
           Next
         </button>
-
-
       </div>
     </div>
-
-
-
   </div>
   </form>
-
-  <div fxLayout="column" fxFlex="4" >
-
-
   </div>
 
 
-
-<!--<div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
-
-</div>
-
-
-
-</div>-->
-
-
-</div>

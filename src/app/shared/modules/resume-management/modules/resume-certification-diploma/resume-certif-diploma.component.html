@@ -22,79 +22,77 @@
         <h4 class="steel font-size-18 font-small">Professional experiences</h4>
       </div>
     </div>
-    <div fxLayout="row" fxFlex="4"></div>
     <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around">
 
-      <div fxLayout="column" fxFlex="90"  style="width: 100%" >
+      <div fxLayout="column" fxFlex="100"  >
         <wid-scrollbar fxFlexFill>
-          <div fxLayout="column" fxFlexFill >
-            <div  *ngFor="let item of getCertifDiploma let pointIndex=index">
-              <br>
-              <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
-                <div fxLayout="column" fxFlex>
+          <div fxLayout="column" fxLayoutGap="10px" >
+            <div  *ngFor="let item of getCertifDiploma let pointIndex=index" class="p-l-65">
+
+              <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
+                <div fxLayout="column" fxFlex="20"   class="p-l-20">
                   <p>{{item.diploma}}</p>
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
-                  <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
+                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>
                 </div>
-
               </div>
-
             </div>
-            <form [formGroup]="sendCertifDiploma" class="full-height">
-              <div fxLayout="row"  fxFlexFill style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
-                <div fxLayout="column" fxFlexFill  >
+            <form [formGroup]="sendCertifDiploma" class="full-height p-l-65">
+              <div fxLayout="row"  fxFlex="90"  class="border-radius-10 pale-grey width-90" fxLayoutAlign="space-arround center" style="border-style: solid">
+                <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center" >
                   <div fxLayout="row" fxFlex="2"></div>
-                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
+                  <div fxLayout="row"    fxFlex="25"  fxLayoutAlign="space-around center">
                     <div fxLayout="column" fxFlex="35" >
-                      Diploma:
-                      <p>
-                        <mat-form-field appearance="outline">
-                          <input   formControlName="diploma" matInput placeholder="Position" required>
-                        </mat-form-field>
-                      </p></div>
-                    <div fxLayout="column"  fxFlex="35">
-                      Establishment:
-                      <p>
-                        <mat-form-field appearance="outline">
-                          <input   formControlName="establishment" matInput placeholder="Customer" required>
-                        </mat-form-field>
-                      </p></div>
-                  </div>
-                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxFlex="35">
-                      Start Date:
-                      <mat-form-field class="example-full-width">
-                        <mat-label>Start date :</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="start_date">
-                        <mat-datepicker-toggle matSuffix [for]="picker">
-                          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-                        </mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                    <div fxLayout="column" fxFlex="35">
-                      End date:
-                      <mat-form-field class="example-full-width">
-                        <mat-label>End date:</mat-label>
-                        <input matInput [matDatepicker]="pickerEnd" formControlName="end_date">
-                        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-                          <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-                        </mat-datepicker-toggle>
-                        <mat-datepicker #pickerEnd></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxFlex="70">
-
-                    Description:
+                      <mat-label class="black font-size-12">
+                        establishment:
+                      </mat-label>
                       <mat-form-field appearance="outline">
-                    <mat-form-field class="example-full-width">
-                      <textarea matInput formControlName="certif_diploma_desc" rows="10" cols="50"></textarea>
-                    </mat-form-field>
+                        <input   formControlName="establishment" matInput placeholder="Establishment" required>
                       </mat-form-field>
                     </div>
+                    <div fxLayout="column"  fxFlex="35">
+                      <mat-label class="black font-size-12">
+                        diploma:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input   formControlName="diploma" matInput placeholder="Diploma" required>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="35">
+                      <mat-label class="black font-size-12">
+                        Start Date:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date">
+                        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex="35">
+                      <mat-label class="black font-size-12">
+                        End date:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date">
+                        <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
+                        <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row"    fxFlex="40" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="85">
+                    <mat-label class="black font-size-12">
+                      Description:
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Description" rows="7"
+                                        formControlName="certif_diploma_desc"></textarea>
+                    </mat-form-field>
+                    </div>
+                  </div>
                   <div fxLayout="row"    fxFlex="10" >
                     <div fxLayout="column" fxFlex="90" fxLayoutAlign="start end">
                       <button mat-raised-button type="submit" class="btn-small bg-pale-grey"   (click)="createCertifDiploma()" >
@@ -102,8 +100,6 @@
                       </button></div>
                   </div>
                   <div fxLayout="row"    fxFlex="8" ></div>
-
-                  </div>
                 </div>
 
               </div>
@@ -111,11 +107,19 @@
           </div>
         </wid-scrollbar>
         <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-          <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-            <button mat-raised-button type="submit" class="btn-small bg-primaryColor white" [routerLink]="['technicalSkills']"  >
+          <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+            <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+              <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+              </mat-icon>
+              <span class="cool-grey">back</span>
+            </button>
+          </div>
+          <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end" [style]="{ minHeight: '139px'}">
+            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/done']">
               Next
             </button>
           </div>
+
         </div>
       </div>
 

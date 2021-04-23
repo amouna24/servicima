@@ -577,6 +577,9 @@ html body {
 .bg-ocean-blue{
   background-color: $cerulean-blue !important;
 }
+.bg-pale-grey-four{
+  background-color: $pale-grey-four !important;
+}
 /*******************
        logo
 *******************/
@@ -591,6 +594,9 @@ html body {
 /*******************
  full-width-height
 *******************/
+.width-90{
+  width: 90%
+}
 .full-width {
   width: 100%;
 }

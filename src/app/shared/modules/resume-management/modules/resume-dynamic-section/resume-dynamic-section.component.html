@@ -30,27 +30,26 @@
       </div>
     </div>
     <div fxLayout="row" fxFlex="4"></div>
-    <div fxLayout="row" fxFlex="60" fxLayoutAlign="space-around">
+    <div fxLayout="row" fxFlex="60"  >
       <wid-scrollbar fxFlexFill>
-       <div fxLayout="column" fxFlex="86" *ngIf="!showSection" >
-          <div fxLayout="row" fxFlex="60" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+       <div fxLayout="column" fxFlex="86" *ngIf="!showSection" fxLayoutAlign=" center">
+          <div fxLayout="row" fxFlex="60" class="width-80" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
               <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
                 <div fxLayout="row" fxFlex="8"></div>
-                <div fxLayout="row" fxLayoutAlign="center"><span>No custom section available</span></div>
+                <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No custom section available</span></div>
                 <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="showCustomSection()" class="btn-large bg-primaryColor white"  >
              Add section
                 </button></div>
           </div></div>
        </div>
-        <div fxLayout="column" fxFlexFill *ngIf="showSection" >
-          <div  *ngFor="let item of getSection let pointIndex=index">
-            <br>
-            <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
-              <div fxLayout="column" fxFlex>
+        <div fxLayout="column" fxFlexFill *ngIf="showSection" fxLayoutGap="10px" >
+          <div  *ngFor="let item of getSection let pointIndex=index" class="p-l-65">
+            <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
+              <div fxLayout="column" fxFlex="20"   class="p-l-20">
                 <p>{{item.section_title}}</p>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
-                <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>
               </div>
             </div>
           </div>
@@ -59,21 +58,24 @@
               <div fxLayout="column" fxFlex="8"   ></div>
               <div fxLayout="column" fxFlex="80"  >
                 <div fxLayout="column">
-                  Section title:
-                  <p>
-                    <mat-form-field appearance="outline">
-                      <input   formControlName="section_title" matInput placeholder="Section title" required>
-                    </mat-form-field>
-                  </p></div>
-                <div fxLayout="column" >Section description:
-                  <p>
-                    <mat-form-field appearance="outline">
-                      <mat-form-field class="example-full-width">
-                        <textarea matInput formControlName="section_desc" placeholder="Section description" rows="10" cols="50"></textarea>
-                      </mat-form-field>                    </mat-form-field>
-                  </p></div>
+                  <mat-label class="black font-size-12">
+                    Section title:
+                  </mat-label>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input formControlName="section_title" matInput placeholder="Section title" required>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" >
+                  <mat-label class="black font-size-12">
+                    Description:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Description" rows="7"
+                                        formControlName="section_desc"></textarea>
+                  </mat-form-field>
+                </div>
                 <div fxLayout="row" fxLayoutAlign="end end" >
-                  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createSection()">Add</button>
+                  <button  mat-raised-button type="submit" class="bg-pale-grey btn-medium black" (click)="createSection()">Add</button>
                 </div>
               </div>
             </form>
@@ -85,9 +87,16 @@
 
        </div>
     <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-      <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-        <button mat-raised-button type="submit" class="btn-small bg-primaryColor white"   >
-          Save
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+        <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
+      </div>
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end" [style]="{ minHeight: '139px'}">
+        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/certifDiploma']">
+          Next
         </button>
 
 

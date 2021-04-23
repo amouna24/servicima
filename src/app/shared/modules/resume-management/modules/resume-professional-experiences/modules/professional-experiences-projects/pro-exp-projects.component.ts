@@ -52,7 +52,9 @@ export class ProExpProjectsComponent implements OnInit {
   }
   ngOnInit(): void {
     this.createForm();
+/*
     this.getProjectInfo();
+*/
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;

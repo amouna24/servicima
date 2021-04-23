@@ -15,7 +15,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   arrayCertifDiplomaCount = 0;
   certifDiploma: IResumeCertificationDiplomaModel;
   certifDiplomaArray: IResumeCertificationDiplomaModel[] = [];
-  resume_code: string;
+  resume_code = '';
   get getCertifDiploma() {
     return this.certifDiplomaArray;
   }
@@ -27,7 +27,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+/*
     this.getCertifDiplomaInfo();
+*/
   }
   getCertifDiplomaInfo() {
     this.resumeService.getResume(
@@ -79,7 +81,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.certifDiploma.certif_diploma_code = Math.random().toString();
     if (this.sendCertifDiploma.valid) {
       console.log('ProExp input= ', this.certifDiploma);
+/*
       this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => console.log('Certification and diploma =', data));
+*/
       this.certifDiplomaArray.push(this.certifDiploma);
     } else { console.log('Form is not valid');
     }

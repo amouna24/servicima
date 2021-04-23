@@ -17,7 +17,7 @@ export class ResumeLanguageComponent implements OnInit {
   arrayLanguageCount = 0;
   language: IResumeLanguageModel;
   languageArray: IResumeLanguageModel[] = [];
-  resume_code: string;
+  resume_code = '';
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -30,7 +30,9 @@ export class ResumeLanguageComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
+/*
     this.getLanguageInfo();
+*/
     console.log('a ' + this.starCount);
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
@@ -44,8 +46,16 @@ export class ResumeLanguageComponent implements OnInit {
     return false;
   }
   showValidateIcon(index: number) {
-    const i = 2;
+    const i = 0;
     if (i >= index ) {
+      return 'star';
+
+    } else {
+      return 'star_border';
+    }
+  }
+  showIconDisabled(level: number, index: number) {
+    if (level >= index + 1) {
       return 'star';
     } else {
       return 'star_border';
@@ -77,12 +87,15 @@ export class ResumeLanguageComponent implements OnInit {
     this.language.resume_code = this.resume_code.toString();
     if (this.sendLanguage.valid) {
       console.log(this.language);
+/*
       this.resumeService.addLanguage(this.language).subscribe(data => console.log('Language=', data));
+*/
       this.languageArray.push(this.language);
     } else { console.log('Form is not valid');
     }
     this.arrayLanguageCount++;
     this.sendLanguage.reset();
+    this.rating = 0;
   }
   getLanguageInfo() {
     this.resumeService.getResume(

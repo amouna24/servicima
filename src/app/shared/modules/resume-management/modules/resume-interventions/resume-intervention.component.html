@@ -28,33 +28,32 @@
       <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
 
         <wid-scrollbar fxFlexFill >
-          <div fxLayout="column" fxFlexFill >
-          <div  *ngFor="let item of getIntervention let pointIndex=index">
-            <br>
-            <div   style="background-color: #e8f1f9;border-radius: 10px; width: 100%"  >
-              <div fxLayout="column" fxFlex>
-                <p>{{item.level_of_intervention_desc}}</p>
+          <div fxLayout="column" fxFlexFill fxLayoutGap="10px" >
+            <div  *ngFor="let item of getIntervention let pointIndex=index" class="p-l-65" >
+              <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
+                <div fxLayout="column" fxFlex="20"   class="p-l-20">
+                  <p>{{item.level_of_intervention_desc}}</p>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>
+                </div>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end" style="width: 90%" fxFlex>
-                <button mat-raised-button class="steel-two" style="width: 30%;border-radius: 5px">Edit</button>
-              </div>
-
             </div>
-
-          </div>
             <div>
+              <br>
             <form [formGroup]="sendIntervention">
               <div fxLayout="column" fxFlex="8"   ></div>
           <div fxLayout="column" fxFlex="80"  >
-            Level of intervention:
-              <p>
-                <mat-form-field appearance="outline">
-                  <mat-form-field class="example-full-width">
-                    <textarea matInput formControlName="level_of_intervention_desc"  rows="10" cols="20"></textarea>
-                  </mat-form-field>
-                </mat-form-field>
-              </p>
-            <div fxLayout="row" fxLayoutAlign="end end" >  <button type="submit" mat-raised-button type="submit" class="steel-two" style="width: 30%" (click)="createIntervention()">Add</button></div>
+            <mat-label class="black font-size-12">
+              Level of intervention:
+            </mat-label>
+            <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Level of intervention" rows="7"
+                                        formControlName="level_of_intervention_desc"></textarea>
+            </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="end end" >
+              <button  mat-raised-button type="submit" class="bg-pale-grey btn-medium black"  (click)="createIntervention()">Add</button>
+            </div>
           </div>
 
 
@@ -64,12 +63,17 @@
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="80" fxLayoutAlign="end end ">
-          <button mat-raised-button type="submit" class="btn-small bg-primaryColor white" [routerLink]="['']"   >
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="100" fxLayoutAlign="end end " [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/language']">
             Next
           </button>
-
-
         </div>
       </div>
 

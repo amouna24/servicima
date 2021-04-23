@@ -27,22 +27,17 @@
       <wid-scrollbar fxFlexFill>
 
       <div fxLayout="column" fxFlex="80" fxLayoutAlign=" center"  >
-          <div fxLayout="column" fxFlex="100" class="width-82" >
-            <div  *ngFor="let item of getProExp let pointIndex=index" fxLayout="row" fxFlex="15"   class="width-82">
-              <br>
-              <div class="bg-pale-grey border-radius-15 full-width">
-                <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="20"  >
-                  <p >{{item.position}}</p>
+          <div fxLayout="column" fxFlex="100" class="width-82" fxLayoutGap="10px">
+            <div  *ngFor="let item of getProExp let pointIndex=index" >
+              <div  fxLayout="row" class="bg-pale-grey border-radius-15 "   >
+                <div fxLayout="column" fxFlex="20"   class="p-l-20">
+                  <p>{{item.position}}</p>
                 </div>
-                <div fxLayout="column"  fxFlex="70" fxLayoutAlign="center none">
-                  <div fxLayout="row" fxLayoutAlign="end" class="p-r-20" >
-                    <button mat-raised-button class="steel-two btn-small bg-white"  (click)="routeToProject()">Add project</button>
-                  </div>
+                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject()">Add project</button>
                 </div>
               </div>
-              <br>
             </div>
-           <br>
           <form [formGroup]="sendProExp" class="full-height">
         <div fxLayout="row"    class="border-radius-10 pale-grey height-70" fxLayoutAlign=" center" style="border-style: solid">
           <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center" >
@@ -92,8 +87,6 @@
               </button></div>
             </div>
             <div fxLayout="row"    fxFlex="8" ></div>
-
-
     </div>
 
               </div>
@@ -103,12 +96,20 @@
 </div>
       </wid-scrollbar>
     </div>
-      <div fxLayout="row" fxFlex="26" fxLayoutAlign="end end" [style]="{ minHeight: '139px'}">
-        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}">
+    <div fxLayout="row" fxFlex="20" fxLayoutAlign="center ">
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign="end start" class="p-l-20" [style]="{ minHeight: '139px'}">
+        <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
+      </div>
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end " [style]="{ minHeight: '139px'}">
+        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/language']">
           Next
         </button>
       </div>
-
+    </div>
 
   </div>
 

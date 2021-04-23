@@ -9,11 +9,11 @@ import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfess
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
+import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
+import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import {IResumeProjectDetailsModel} from "@shared/models/resumeProjectDetails.model";
-import {IResumeProjectDetailsSectionModel} from "@shared/models/resumeProjectDetailsSection.model";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,6 @@ export class ResumeService {
 getResume(filter: string): Observable<IResumeModel[]> {
   return this.httpClient.get<IResumeModel[]>(`${environment.resumeApiUrl}/${filter}`);
 }
-
 /**************************************************************************
  * @description Add new Resume
  * @param IResumeModel: Resume Model

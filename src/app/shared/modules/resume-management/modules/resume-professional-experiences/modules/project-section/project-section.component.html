@@ -1,3 +1,16 @@
+<br>
+<div fxLayout="column" fxLayoutGap="10px">
+  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" fxFlex="90" class="p-l-65">
+    <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+      <div fxLayout="column" fxFlex="20" class="p-l-20">
+        <p>{{item.project_detail_title}}</p>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+        <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
+      </div>
+    </div>
+  </div>
+<div fxLayout="row">
 <form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
   <div fxLayout="row" fxFlex="50" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="30">
@@ -76,5 +89,5 @@
   </div>
 
 </form>
-
-
+</div>
+</div>

@@ -23,6 +23,9 @@ export class ProjectSectionComponent implements OnInit {
   select = 'desc';
   list = 'List';
   desc = 'desc';
+  get getProjectSection() {
+    return this.proDetailsArray ;
+  }
   get inputFields() {
     return this.sendProSectionDetails.get('Field') as FormArray;
   }
@@ -82,7 +85,9 @@ export class ProjectSectionComponent implements OnInit {
     this.ProDetails.project_details_code = this.project_details_code;
     this.ProDetails.project_code = Math.random().toString();
     if (this.sendProDetails.valid) {
+/*
       this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => console.log('Project details =', dataProDeta));
+*/
       this.proDetailsArray.push(this.ProDetails);
     } else { console.log('Form is not valid');
     }
