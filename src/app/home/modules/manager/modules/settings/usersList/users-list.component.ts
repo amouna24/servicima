@@ -5,11 +5,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { RefdataService } from '@core/services/refdata/refdata.service';
 
-import { IViewParam } from '@shared/models/view.model';
 import { IUserModel } from '@shared/models/user.model';
 @Component({
   selector: 'wid-users-list',
@@ -19,9 +16,10 @@ import { IUserModel } from '@shared/models/user.model';
 export class UsersListComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<IUserModel[]>([]);
   companyId: string;
+  emailAddress: string;
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
-
+  typeUser: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -29,50 +27,60 @@ export class UsersListComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private userService: UserService,
               private utilsService: UtilsService,
-              private modalService: ModalService,
-              private appInitializerService: AppInitializerService,
-              private refdataService: RefdataService, ) { }
+              private modalService: ModalService, ) {
+    this.typeUser = this.router.getCurrentNavigation().extras.state?.typeUser;
+  }
 
   /**
    * @description Loaded when component in init state
    */
   ngOnInit() {
+    this.isLoading.next(true);
+    this.getConnectedUser();
+    this.getAllUsers();
+  }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
     this.userService.connectedUser$
       .subscribe(
         (userInfo) => {
           if (userInfo) {
             this.companyId = userInfo['company'][0]['_id'];
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
           }
         });
-    this.isLoading.next(true);
-    this.getAllUsers().then(() => this.isLoading.next(false));
   }
+
   /**
    * @description : get all users
    */
- async getAllUsers() {
-    await this.getRefdata();
-    this.subscriptions.push(this.profileService.getAllUser(this.userService.emailAddress)
+  getAllUsers() {
+    this.subscriptions.push(this.profileService.getAllUser(this.emailAddress)
       .subscribe((res) => {
-      res.forEach( (data) => {
-        data['gender_id']  = this.utilsService.getViewValue(data['gender_id'], this.refData['GENDER']);
-       if (data['user_type']) {
-        data['user_type'] =  this.refData['PROFILE_TYPE'].find((type: IViewParam) =>
-          type.value ===  data['user_type']).viewValue;
-       }
-      });
-      this.ELEMENT_DATA.next(res);
+        const listUser = this.getUserWithType(res, this.typeUser);
+      this.ELEMENT_DATA.next(listUser);
+        this.isLoading.next(false);
     }));
   }
-  /**
-   * @description : get the refData from appInitializer service and mapping data
-   */
- async getRefdata() {
-    const list = [ 'PROF_TITLES', 'PROFILE_TYPE', 'GENDER', 'ROLE'];
-    this.refData = await this.refdataService.getRefData( this.companyId , this.userService.applicationId,
-     list);
-  }
 
+  /**
+   * @description : Filter user with type
+   * @param list: all list users
+   * @param type: type user(candidate, collaborator, staff)
+   */
+  getUserWithType(list: IUserModel[], type: string) {
+    switch (type) {
+      case 'candidate': return list.filter(listUser => listUser.user_type === 'CANDIDATE');
+      case 'staff': return list.filter(listUser => listUser.user_type === 'STAFF');
+      case 'collaborator': return list.filter(listUser => listUser.user_type === 'COLLABORATOR');
+      case '':
+      case undefined:
+      return list;
+    }
+  }
   /**
    * @description : show user
    * @param data: object
@@ -107,7 +115,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
+        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
              await this.getAllUsers();

@@ -74,8 +74,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
               ) {
     this.id = this.router.getCurrentNavigation().extras.state?.id;
     this.add = this.router.getCurrentNavigation().extras.state?.action;
-    console.log(this.add, 'action');
-    console.log(this.id, 'id');
   }
 
   /** list filtered by search keyword */
@@ -119,9 +117,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
  async checkComponentAction(connectedUser: IUserInfo) {
     this.avatar = null;
     this.photo = null;
-
-    console.log(this.id, 'iiiiiiiiiiiiiiiid');
-
     /***************** go to page Add user *****************
      *******************************************************/
     if (this.add) {

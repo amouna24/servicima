@@ -1,13 +1,112 @@
-<div class="page-container">
-  <wid-dynamic-data-table
-    [tableData]="ELEMENT_DATA"
-    [tableCode]="'TIMESHEET_SETTING'"
-    [isLoading]="isLoading"
-    [header]="{ title: 'Timesheet settings management',type:'dialog', addActionText: 'New Timesheet settings',
-        addActionDialog: { modalName: 'add', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '513px' }}"
-    [allowedActions]="{ update: true, delete: true, show: false }"
-    [title]="'Timesheet settings list'"
-    (rowActionData)="switchAction($event)"
-  >
-  </wid-dynamic-data-table>
+<div class="licence-container"
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Subscription Detail</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+
+  </div>
+  <div  [formGroup]="form" class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
+    <div fxFlex="100" class="full-height" fxLayout="column" fxLayoutAlign="start start"  fxLayoutGap="10px" >
+      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="100"
+           fxLayout="column" fxLayoutAlign="start start">
+        <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
+          <div fxLayout="row" >
+            <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
+              <div>Working hours per day </div>
+            </div>
+            <div fxLayout="column" fxFlex="5">
+              <mat-form-field appearance="outline" class="no-padding">
+                <input type="number" formControlName="workingHoursDay" class="font-size-12" autocomplete="off" matInput required placeholder="0.00"
+                       [ngStyle.xs]="{'font-size': '15px'}" />
+                <mat-error class="wid-error-messages">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+         <!-- <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxFlex="30">
+              Working days per week </div>
+            <div fxLayout="column" fxFlex="5">
+              <mat-form-field appearance="outline" class="no-padding">
+                <input formControlName="workingHoursWeek" class="font-size-12" autocomplete="off" matInput required placeholder="email@exp.com"
+                       [ngStyle.xs]="{'font-size': '15px'}" />
+                <mat-error class="wid-error-messages">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div> -->
+
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxFlex="30">
+              Sunday rate
+
+            </div>
+            <div fxLayout="column" fxFlex="5">
+              <mat-form-field appearance="outline" class="no-padding">
+                <input type="number" formControlName="sundayRate" class="font-size-12" autocomplete="off" matInput required placeholder="0.00"
+                       [ngStyle.xs]="{'font-size': '15px'}" />
+                <mat-error class="wid-error-messages">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxFlex="30">
+              Saturday rate
+            </div>
+            <div fxLayout="column" fxFlex="5">
+              <mat-form-field appearance="outline" class="no-padding">
+                <input type="number" formControlName="saturdayRate" class="font-size-12" autocomplete="off" matInput required placeholder="0.00"
+                       [ngStyle.xs]="{'font-size': '15px'}" />
+                <mat-error class="wid-error-messages">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxFlex="30">
+              Holiday rate
+            </div>
+            <div fxLayout="column" fxFlex="5">
+              <mat-form-field appearance="outline" class="no-padding">
+                <input type="number" formControlName="holidayRate" class="font-size-12" autocomplete="off" matInput required placeholder="0.00"
+                       [ngStyle.xs]="{'font-size': '15px'}" />
+                <mat-error class="wid-error-messages">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="10"style="justify-content: flex-end;
+    max-height: 40%;
+    width: 100%;
+    align-items: flex-end;">
+          <div fxLayout="row" fxLayoutGap="20px" >
+            <button  mat-button mat-raised-button class="btn-small bg-denim white" >
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <span class="font-size-14" (click)="updateTimesheetSetting()"> Save</span>
+              </div>
+            </button>
+          <button  mat-button mat-raised-button (click)="cancel()"  class="btn-small bg-pale-grey black-three" color="primary"
+          >
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+              <span class="font-size-14">Cancel</span>
+            </div>
+          </button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
 </div>

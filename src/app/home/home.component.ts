@@ -249,7 +249,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
-      'whiteRed': this.listColor[12].status
+      'whiteRed': this.listColor[12].status, 'setting': this.listColor[13].status
     };
   }
 
