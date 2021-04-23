@@ -17,7 +17,7 @@ export const sidenavRightMenu = [
     feature:  'SOURCING_CAND_FILE_ACCESS'  || 'SOURCING_ACCESS'  // change feature with correct name
   },
   {
-    state: '/settings/users',
+    state: '/settings',
     name: 'Settings',
     type: 'link',
     icon: 'wi_settings',

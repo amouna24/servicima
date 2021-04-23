@@ -96,3 +96,8 @@ $foreground: map-get($theme, foreground);
   @include angular-material-theme($app-theme);
 }
 
+// White red Theme
+.setting{
+  @import 'setting';
+  @include angular-material-theme($app-theme);
+}

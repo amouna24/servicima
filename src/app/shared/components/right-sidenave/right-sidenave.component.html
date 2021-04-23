@@ -22,15 +22,16 @@
     <div *ngIf="subMenu.length === 0; else subMenuContainer" fxLayout="column" >
       <ng-container *ngFor=" let menuItem of menu" >
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel" >
-            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Logout';" class="list-item" (click)="logout()" [@iconAnimation]="sidebarState"  >
+            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Logout'" class="list-item" (click)="logout()" [@iconAnimation]="sidebarState"  >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
         </span>
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
+
           <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
-            <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
+            <a mat-list-item *ngIf="menuItem.name !== 'Logout' && menuItem.name !== 'Themes'" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
                class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
@@ -44,8 +45,15 @@
 
           <ng-template #subMenuLabel>
             <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
+              <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Themes' && !hideTheme" (click)="toggleSubMenu(menuItem.children, menuItem.state)"  class="list-item" [@iconAnimation]="sidebarState"  >
+            <span>
+            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
+            </mat-icon>
+        </span>
+                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
+              </a>
             <div fxLayout="column" class="cursor-pointer">
-              <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
+              <mat-list-item *ngIf="menuItem.name !== 'Themes'" (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
                              [@iconAnimation]="sidebarState">
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
