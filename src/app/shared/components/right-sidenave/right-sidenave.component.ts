@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { AuthService } from '@widigital-group/auth-npm-front';
+
 import { ProfileService } from '@core/services/profile/profile.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -189,11 +190,11 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): any {
-    this.userService.emitClass({ 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
-      'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
-      'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
-      'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
-      'whiteRed': this.listColor[12].status, 'setting': this.listColor[13].status
+    this.userService.emitClass({  'blackGreen': this.listColor[0].status,
+      'blueBerry': this.listColor[1].status, 'blue': this.listColor[2].status,
+      'everGreen': this.listColor[3].status, 'greenBlue': this.listColor[4].status,
+      'mango': this.listColor[5].status, 'whiteRed': this.listColor[6].status,
+      'setting': this.listColor[7].status
     });
   }
 
@@ -220,12 +221,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    */
   displayImage(): void {
     switch (this.localStorageService.getItem(this.utilService.hashCode(this.email))) {
-      case 'whiteGreen':
-        this.userService.emitColor('assets/img/logo-title-dark.png');
-        break;
-      case 'whiteOrange':
-        this.userService.emitColor('assets/img/logo-title-dark.png');
-        break;
       case 'whiteRed':
         this.userService.emitColor('assets/img/logo-title-dark.png');
         break;

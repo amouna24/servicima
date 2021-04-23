@@ -10,5 +10,5 @@ export interface ICompanyTimesheetSettingModel {
   sunday_rate: number;
   saturday_rate: number;
   holiday_rate: number;
-  status: string;
+  overtime_per_day_rate: number;
 }
