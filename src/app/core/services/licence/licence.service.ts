@@ -40,9 +40,9 @@ export class LicenceService {
   }
 
   /**************************************************************************
-   * @param licence code
    * @description get licence by code
    * @return licence
+   * @param licenceCode
    *************************************************************************/
   getLicenceByCode(licenceCode: string): ILicenceModel {
     return this.getLicencesList().find(
@@ -55,7 +55,7 @@ export class LicenceService {
    * @return licence
    *************************************************************************/
   getLicencesFeatures(): Observable<ILicenceFeatureModel[]> {
-    return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl);
+    return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?display=true');
   }
   /*------------------------------------ COMPANY LICENCE --------------------------------------*/
   /**************************************************************************

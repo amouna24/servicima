@@ -31,7 +31,7 @@ export class UpgradeLicenceComponent implements OnInit {
     this.licenceService.getLicencesFeatures().subscribe((data) => {
       this.licencesFeatures = data.filter((res) => res.display);
     });
-    this.getAllFeatures();
+    await this.getAllFeatures();
   }
   /**
    * @param name licence code
