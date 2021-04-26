@@ -190,11 +190,17 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): any {
-    this.userService.emitClass({  'blackGreen': this.listColor[0].status,
-      'blueBerry': this.listColor[1].status, 'blue': this.listColor[2].status,
-      'everGreen': this.listColor[3].status, 'greenBlue': this.listColor[4].status,
-      'mango': this.listColor[5].status, 'whiteRed': this.listColor[6].status,
-      'setting': this.listColor[7].status
+    const listStatus = [this.listColor[0].status, this.listColor[1].status, this.listColor[2].status,
+      this.listColor[3].status, this.listColor[4].status, this.listColor[5].status,
+      this.listColor[6].status];
+    if (!Object.values(listStatus).includes(true)) {
+      this.listColor[0].status = true;
+    }
+    this.userService.emitClass({
+      'blue': this.listColor[0].status, 'blueBerry': this.listColor[1].status,
+      'everGreen': this.listColor[2].status, 'greenBlue': this.listColor[3].status,
+      'mango': this.listColor[4].status, 'whiteRed': this.listColor[5].status,
+      'setting': this.listColor[6].status
     });
   }
 
