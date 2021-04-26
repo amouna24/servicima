@@ -31,8 +31,8 @@
           <div fxLayout="column" fxFlexFill fxLayoutGap="10px" >
             <div  *ngFor="let item of getIntervention let pointIndex=index" class="p-l-65" >
               <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
-                <div fxLayout="column" fxFlex="20"   class="p-l-20">
-                  <p>{{item.level_of_intervention_desc}}</p>
+                <div fxLayout="column" fxFlex="60"   class="p-l-20">
+                  <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
                   <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>

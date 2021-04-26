@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
@@ -30,7 +30,10 @@ import { ProjectSectionComponent } from './modules/project-section/project-secti
     ProExpComponent,
     ProExpListComponent,
     ProExpProjectsComponent,
-  ]
+  ],
+  providers: [
+    DatePipe,
+  ],
 
 })
 export class ResumeProExpModule { }

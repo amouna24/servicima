@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
 import { UserService } from '@core/services/user/user.service';
+import {BehaviorSubject} from "rxjs";
+import {IViewParam} from "@shared/models/view.model";
+import {AppInitializerService} from "@core/services/app-initializer/app-initializer.service";
 
 @Component({
   selector: 'wid-resume-language',
@@ -17,11 +20,13 @@ export class ResumeLanguageComponent implements OnInit {
   arrayLanguageCount = 0;
   language: IResumeLanguageModel;
   languageArray: IResumeLanguageModel[] = [];
-  resume_code = '';
+  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
+    private appInitializerService: AppInitializerService,
   ) {
   }
   get getLanguage() {
@@ -30,9 +35,13 @@ export class ResumeLanguageComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-/*
+    /********************************** LANGUAGE **********************************/
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return  { value: obj.LanguageKey.language_code, viewValue: obj.language_desc };
+      }
+    ));
     this.getLanguageInfo();
-*/
     console.log('a ' + this.starCount);
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
@@ -87,9 +96,7 @@ export class ResumeLanguageComponent implements OnInit {
     this.language.resume_code = this.resume_code.toString();
     if (this.sendLanguage.valid) {
       console.log(this.language);
-/*
       this.resumeService.addLanguage(this.language).subscribe(data => console.log('Language=', data));
-*/
       this.languageArray.push(this.language);
     } else { console.log('Form is not valid');
     }

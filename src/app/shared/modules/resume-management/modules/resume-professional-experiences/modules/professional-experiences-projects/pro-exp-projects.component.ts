@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
@@ -18,30 +19,40 @@ export class ProExpProjectsComponent implements OnInit {
   showProject = false;
   ProjectArray: IResumeProjectModel[] = [];
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
-  project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P`;
+  project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
   showAddSection = false;
+  showForm = false;
+  sendProject_code = 'yow';
   get getProject() {
     return this.ProjectArray;
   }
   onShowProject() {
     this.showProject = !this.showProject;
+    this.showForm = !this.showForm;
   }
 
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private datepipe: DatePipe
   ) { }
   getProjectInfo() {
     console.log(this.professional_experience_code);
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
-      `?professional_experience_code=${this.professional_experience_code.toString()}`)
+      `?professional_experience_code=${this.professional_experience_code}`)
       .subscribe(
         (response) => {
           console.log('response=', response);
           this.ProjectArray = response;
+          if (this.ProjectArray.length !== 0) {
+            console.log('Project array on init= ', this.ProjectArray);
+            this.showProject = true;
+            this.showForm = false;
+            this.sendProject_code = this.ProjectArray[0].project_code;
+          }
         },
         (error) => {
           if (error.error.msg_code === '0004') {
@@ -51,10 +62,9 @@ export class ProExpProjectsComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    console.log('professional experience code=', this.professional_experience_code);
     this.createForm();
-/*
     this.getProjectInfo();
-*/
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -71,14 +81,24 @@ export class ProExpProjectsComponent implements OnInit {
     this.Project = this.sendProject.value;
     this.Project.professional_experience_code = this.professional_experience_code;
     this.Project.project_code = this.project_code;
+    this.Project.start_date = this.datepipe.transform(this.Project.start_date, 'yyyy/MM/dd');
+    this.Project.end_date = this.datepipe.transform(this.Project.end_date, 'yyyy/MM/dd');
     if (this.sendProject.valid) {
-/*
       this.resumeService.addProject(this.Project).subscribe(data => console.log('Project =', data));
-*/
       this.getProject.push(this.Project);
     } else { console.log('Form is not valid');
     }
     this.arrayProjectCount++;
     this.sendProject.reset();
+    this.showForm = false;
+  }
+  routeToProjectSection() {
+    this.router.navigate(['/candidate/resume/projects'],
+      { state: { id: this.ProjectArray[0].ResumeProjectKey.project_code}
+      });
+  }
+
+  onShowForm() {
+    this.showForm = true;
   }
 }

@@ -4,6 +4,7 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { UserService } from '@core/services/user/user.service';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'wid-pro-exp',
@@ -16,7 +17,7 @@ export class ProExpComponent implements OnInit {
   ProExp: IResumeProfessionalExperienceModel;
   proExpArray: IResumeProfessionalExperienceModel[] = [];
   resume_code: string;
-  professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE`;
+  professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
   get getProExp() {
     return this.proExpArray;
   }
@@ -25,13 +26,12 @@ export class ProExpComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private router: Router,
+    private datepipe: DatePipe
   ) { }
 
   ngOnInit(): void {
     this.createForm();
-/*
     this.getProExpInfo();
-*/
   }
   getProExpInfo() {
     this.resumeService.getResume(
@@ -61,9 +61,10 @@ export class ProExpComponent implements OnInit {
       );
 
   }
-  routeToProject() {
+  routeToProject(code: string) {
+    console.log('pro Exp Array=', this.proExpArray);
     this.router.navigate(['/candidate/resume/projects'],
-      { state: { id: this.professional_experience_code}
+      { state: { id: code}
       });
   }
 
@@ -83,11 +84,11 @@ export class ProExpComponent implements OnInit {
     this.ProExp = this.sendProExp.value;
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = this.professional_experience_code;
+    this.ProExp.start_date = this.datepipe.transform(this.ProExp.start_date, 'yyyy/MM/dd');
+    this.ProExp.end_date = this.datepipe.transform(this.ProExp.end_date, 'yyyy/MM/dd');
     if (this.sendProExp.valid) {
       console.log('ProExp input= ', this.ProExp);
-/*
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
-*/
      this.proExpArray.push(this.ProExp);
     } else { console.log('Form is not valid');
     }

@@ -15,7 +15,7 @@ export class ResumeTechSkillComponent implements OnInit {
   arrayTechSkillCount = 0;
   TechSkill: IResumeTechnicalSkillsModel;
   techSkillArray: IResumeTechnicalSkillsModel[] = [];
-  resume_code = '';
+  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-TECH`;
   technical_skill: string;
   get getTech() {
     return this.techSkillArray;
@@ -56,9 +56,7 @@ export class ResumeTechSkillComponent implements OnInit {
   }
 
   ngOnInit(): void {
-/*
     this.getTechnicalSkillsInfo();
-*/
     this.createForm();
   }
 
@@ -76,14 +74,12 @@ export class ResumeTechSkillComponent implements OnInit {
    */
   createTechnicalSkill() {
     this.TechSkill = this.sendTechSkill.value;
-    this.TechSkill.resume_code = this.resume_code.toString();
+    this.TechSkill.resume_code = this.resume_code;
     this.TechSkill.technical_skill_code = Math.random().toString();
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid) {
       console.log('technical skill input= ', this.TechSkill);
-/*
       this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => console.log('Technical skill =', data));
-*/
       this.getTech.push(this.TechSkill);
     } else { console.log('Form is not valid');
     }

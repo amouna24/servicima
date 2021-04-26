@@ -36,10 +36,10 @@
                 </mat-label>
                 <mat-form-field appearance="outline">
                   <mat-select   disableOptionCentering panelClass="panelColor"
-                             [placeholder]="item.resume_language_code"  disabled>
-                    <mat-option value="FR">French</mat-option>
-                    <mat-option value="EN">English</mat-option>
-                    <mat-option value="ESP">Spanish</mat-option>
+                             [value]="item.ResumeLanguageKey.resume_language_code" disabled>
+                    <ng-container *ngFor="let v of langList.getValue()">
+                      <mat-option *ngIf="v.value === item.ResumeLanguageKey.resume_language_code" [value]="v.value">{{v.viewValue}}</mat-option>
+                    </ng-container>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -69,9 +69,7 @@
                   <mat-form-field appearance="outline">
                     <mat-select disableOptionCentering panelClass="panelColor"
                                 placeholder="Language" formControlName="resume_language_code">
-                      <mat-option value="FR">French</mat-option>
-                      <mat-option value="EN">English</mat-option>
-                      <mat-option value="ESP">Spanish</mat-option>
+                      <mat-option *ngFor="let v of langList.getValue()" [value]="v.value">{{v.viewValue}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>

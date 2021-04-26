@@ -15,7 +15,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   Section: IResumeSectionModel;
   showSection = false;
   SectionArray: IResumeSectionModel[] = [];
-  resume_code: string;
+  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-SEC`;
   get getSection() {
     return this.SectionArray;
   }
@@ -42,6 +42,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
               (responseOne) => {
                 console.log('response', responseOne);
                 this.SectionArray = responseOne;
+                if (this.SectionArray.length !== 0) {
+                  console.log('section array on init= ', this.SectionArray);
+                  this.showSection = true;
+                }
               },
               (error) => {
                 if (error.error.msg_code === '0004') {
@@ -54,12 +58,14 @@ export class ResumeDynamicSectionComponent implements OnInit {
           }
         },
       );
+    console.log('section array =', this.SectionArray);
 
   }
   ngOnInit(): void {
     this.createForm();
     this.getDynamicSectionInfo();
-  }
+    console.log('length=', this.SectionArray.length);
+    }
   createForm() {
     this.sendSection = this.fb.group({
       section_title: '',

@@ -103,7 +103,7 @@ showHideYears() {
       application_id : this.localStorageService.getItem('userCredentials').application_id,
       email_address : this.localStorageService.getItem('userCredentials').email_address,
       company_email : this.company,
-      resume_code : Math.random(),
+      resume_code : `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: '',
       years_of_experience : null,
       actual_job : '',
@@ -118,15 +118,10 @@ showHideYears() {
    */
   createResume() {
 this.generalInfo = this.CreationForm.value;
-/*
-this.generalInfo.image = this.avatar;
-*/
+this.generalInfo.image = this.avatar.toString();
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
-/*
-      this.resumeService.addResume(this.CreationForm.value).subscribe(data => console.log('Resume =', data));
-*/
-
+      this.resumeService.addResume(this.generalInfo).subscribe(data => console.log('Resume =', data));
     } else { console.log('Form is not valid');
     }
   }

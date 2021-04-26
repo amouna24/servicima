@@ -29,12 +29,19 @@
       <div fxLayout="column" fxFlex="80" fxLayoutAlign=" center"  >
           <div fxLayout="column" fxFlex="100" class="width-82" fxLayoutGap="10px">
             <div  *ngFor="let item of getProExp let pointIndex=index" >
-              <div  fxLayout="row" class="bg-pale-grey border-radius-15 "   >
+              <div  fxLayout="row" class="bg-pale-grey border-radius-15 height-80"   >
                 <div fxLayout="column" fxFlex="20"   class="p-l-20">
-                  <p>{{item.position}}</p>
+                  <div fxLayout="row"  fxFlex="34" >
+                  <p class="font-normal font-size-15">{{item.position}}</p>
+                </div>
+                <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
+                  <p class="font-extra-light font-size-10 help-blue">
+                    {{item.customer}}   {{item.ResumeProfessionalExperienceKey.start_date}}-{{item.ResumeProfessionalExperienceKey.end_date}}</p>
+                </div>
+
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject()">Add project</button>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.ResumeProfessionalExperienceKey.professional_experience_code)">Add project</button>
                 </div>
               </div>
             </div>
@@ -105,7 +112,7 @@
         </button>
       </div>
       <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end " [style]="{ minHeight: '139px'}">
-        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/language']">
+        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
           Next
         </button>
       </div>

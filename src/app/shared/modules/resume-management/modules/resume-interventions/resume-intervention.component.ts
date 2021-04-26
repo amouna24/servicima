@@ -14,7 +14,7 @@ export class ResumeInterventionComponent implements OnInit {
   arrayInterventionCount = 0;
   Intervention: IResumeInterventionModel;
   interventionArray: IResumeInterventionModel[] = [];
-  resume_code = '';
+  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
 
   get getIntervention() {
     return this.interventionArray;
@@ -27,9 +27,7 @@ export class ResumeInterventionComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-/*
     this.getInterventionInfo();
-*/
   }
   getInterventionInfo() {
     this.resumeService.getResume(
@@ -57,7 +55,6 @@ export class ResumeInterventionComponent implements OnInit {
           }
         },
       );
-
   }
 
   /**
@@ -77,9 +74,7 @@ export class ResumeInterventionComponent implements OnInit {
     this.Intervention.intervention_code = Math.random().toString();
     if (this.sendIntervention.valid) {
       console.log('intervention=', this.Intervention);
-/*
       this.resumeService.addIntervention(this.Intervention).subscribe(data => console.log('Intervention=', data));
-*/
       this.getIntervention.push(this.Intervention);
     } else { console.log('Form is not valid');
     }

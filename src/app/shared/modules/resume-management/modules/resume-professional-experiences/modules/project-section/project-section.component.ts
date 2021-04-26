@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
@@ -17,12 +17,14 @@ export class ProjectSectionComponent implements OnInit {
   proDetailsArray: IResumeProjectDetailsModel[] = [];
   ProDetails: IResumeProjectDetailsModel;
   ProSectionDetails: IResumeProjectDetailsSectionModel[];
-  project_details_code: string;
+  project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D` ;
   showDesc = true;
   showSec = false;
   select = 'desc';
   list = 'List';
   desc = 'desc';
+  @Input() project_code = '';
+
   get getProjectSection() {
     return this.proDetailsArray ;
   }
@@ -36,6 +38,7 @@ export class ProjectSectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getProjectDetailsInfo();
     this.createFormProDetails();
     this.createFormSectionDetails();
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
@@ -49,6 +52,22 @@ export class ProjectSectionComponent implements OnInit {
       project_detail_desc: '',
         select: '',
       });
+  }
+  getProjectDetailsInfo() {
+    this.resumeService.getProjectDetails(
+      // tslint:disable-next-line:max-line-length
+      `?project_code=${this.project_code}`)
+      .subscribe(
+        (response) => {
+          console.log('response=', response);
+          this.proDetailsArray = response;
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+
   }
   /**
    * @description Create Form
@@ -65,7 +84,7 @@ export class ProjectSectionComponent implements OnInit {
   createProSectionDetails() {
     this.ProSectionDetails = this.sendProSectionDetails.controls.Field.value;
     this.ProSectionDetails[this.arrayProSectionDetailsCount].project_details_section_code = `WID-${Math.
-    floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
+    floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D-S`;
     this.ProSectionDetails[this.arrayProSectionDetailsCount].project_details_code = this.project_details_code;
     if (this.sendProSectionDetails.controls.Field.valid) {
       console.log('ProExp input= ', this.ProSectionDetails[this.arrayProSectionDetailsCount]);
@@ -83,11 +102,10 @@ export class ProjectSectionComponent implements OnInit {
   createProDetails() {
     this.ProDetails = this.sendProDetails.value;
     this.ProDetails.project_details_code = this.project_details_code;
-    this.ProDetails.project_code = Math.random().toString();
+    this.ProDetails.project_code = this.project_code;
     if (this.sendProDetails.valid) {
-/*
+      console.log('project details=', this.ProDetails);
       this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => console.log('Project details =', dataProDeta));
-*/
       this.proDetailsArray.push(this.ProDetails);
     } else { console.log('Form is not valid');
     }
