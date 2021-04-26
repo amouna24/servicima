@@ -10,10 +10,10 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { ICredentialsModel } from '@shared/models/credentials.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
+
 declare var paypal;
 @Component({
   selector: 'wid-buy-licence',
@@ -46,7 +46,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   saving: string;
   extraUser: number;
   licence: ILicenceModel;
-  credentials: ICredentialsModel;
+  credentials: any;
   companyLicence: ICompanyLicenceModel;
   usersNbr: number;
   constructor(private licenceService: LicenceService,
@@ -57,8 +57,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
               private authService: AuthService,
               private profileService: ProfileService,
               private router: Router,
-              private localStorageService: LocalStorageService,
-              private utilService: UtilsService) {
+              private localStorageService: LocalStorageService) {
   }
 
   /**
@@ -69,7 +68,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.credentials = this.localStorageService.getItem('userCredentials');
     await this.userInfo().then(
       () => {
-        this.companyLicence = this.initCompanyLicence();
+        this.initCompanyLicence();
       }
     );
     await this.getAllUsers();
@@ -100,7 +99,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    * @description : get all users
    */
   async getAllUsers() {
-    await this.profileService.getAllUser(this.credentials['email_address']).subscribe(
+    await this.profileService.getAllUser(this.emailAddress).subscribe(
       (data ) => {
         this.usersNbr = data.length;
         this.extraUser = data.length - this.licence.free_user_nbr;
@@ -137,7 +136,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   billingChange(event: MatRadioChange): void {
     this.billingPack = event.value;
-    this.companyLicence = this.initCompanyLicence();
+    this.initCompanyLicence();
     this.router.navigate([
       '/manager/settings/licences/buy-licence',
       this.licence.LicenceKey.licence_code,
@@ -169,50 +168,68 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    * @description setup paypal smart button
    */
   paypalInit(): void {
-    paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('year'), this.initCompanyLicence('year')))
-      .render(this.paypalYearElement.nativeElement);
-    paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('month'), this.initCompanyLicence('month')))
-      .render(this.paypalMonthElement.nativeElement);
+    this.initCompanyLicence('year').then(
+      () => {
+        paypal
+          .Buttons(this.paymentService.paypal(this.licence, this.total('year')))
+          .render(this.paypalYearElement.nativeElement);
+      }
+    );
+    this.initCompanyLicence('month').then(
+      () => {
+        paypal
+          .Buttons(this.paymentService.paypal(this.licence, this.total('month')))
+          .render(this.paypalMonthElement.nativeElement);
+      }
+    );
   }
-  /**
-   * @description back to previous route
-   */
-  backClicked() {
-    this.utilService.previousRoute();
-  }
-  initCompanyLicence(periodicity = this.billingPack): ICompanyLicenceModel {
-    // tslint:disable-next-line:prefer-const
-    let companyLicence: ICompanyLicenceModel;
-    companyLicence.CompanyLicenceKey.application_id = this.credentials.credentialsKey.application_id;
-    companyLicence.CompanyLicenceKey.email_adress = this.emailAddress;
-    companyLicence.CompanyLicenceKey.licence_code = this.licence.LicenceKey.licence_code;
-    companyLicence.CompanyLicenceKey.licence_type = 'STANDARD';
+  async initCompanyLicence(periodicity: string = this.billingPack): Promise<void> {
     const startDate = new Date();
     const endDate = periodicity === 'month' ?
       new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDay()) :
       new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDay());
-    companyLicence.licence_start_date = startDate.toString();
-    companyLicence.licence_end_date = endDate.toString();
-    companyLicence.bill_periodicity = periodicity === 'month' ? 'M' : 'Y';
-    return companyLicence;
+    this.companyLicence = {
+      CompanyLicenceKey : {
+        application_id : this.userService.applicationId,
+        email_adress : this.emailAddress,
+        licence_code : this.licence.LicenceKey.licence_code,
+        licence_type : 'STANDARD'
+      },
+      licence_start_date: startDate.toString(),
+      licence_end_date: endDate.toString(),
+      bill_periodicity: periodicity === 'month' ? 'M' : 'Y',
+      status: 'A'
+    };
   }
   /**
    * @description confirmation
    */
   confirm() {
     if (this.paymentService.detail.status === 'COMPLETED') {
-      this.router.navigate(
-        ['/manager/settings/licences/complete-update'],
-        { state: {
-          payment: this.paymentService.paymentMethode,
-            detail: this.paymentService.detail
+      this.addCompanyLicence().then(
+        () => {
+          this.router.navigate(
+            ['/manager/settings/licences/complete-update'],
+            { state: {
+                payment: this.paymentService.paymentMethode,
+                detail: this.paymentService.detail
+              }
+            });
         }
-        });
+      );
     }
   }
 
+  async addCompanyLicence(): Promise<void> {
+    await this.licenceService.addCompanyLicence(this.companyLicence).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
   /**
    * @description logout: remove fingerprint and local storage
    */

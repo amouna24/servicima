@@ -4,7 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { IUserModel } from '@shared/models/user.model';
 import { ICompanyModel } from '@shared/models/company.model';
-import { UtilsService } from '@core/services/utils/utils.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,7 +21,6 @@ export class CompleteUpgradeLicenceComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   detail: { [p: string]: any };
   constructor(private userService: UserService,
-              private utilService: UtilsService,
               private router: Router) {
     this.detail = this.router.getCurrentNavigation().extras.state;
   }
@@ -43,12 +41,6 @@ export class CompleteUpgradeLicenceComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.error(err);
     });
-  }
-  /**
-   * @description back to previous route
-   */
-  backClicked() {
-    this.utilService.previousRoute();
   }
 
   /**

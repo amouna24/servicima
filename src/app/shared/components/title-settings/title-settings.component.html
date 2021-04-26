@@ -1,0 +1,14 @@
+<div style="height:75px;"
+     fxLayout="row" fxLayoutAlign="space-between center"
+     class="bg-white border-radius-20 p-l-40 p-r-40">
+  <div fxLayout="column" fxFlex="56">
+    <h1 class="steel font-size-24 font-medium">{{title}}</h1>
+  </div>
+  <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+    <button *ngIf="backBtn" mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+      <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+      </mat-icon>
+      <span class="cool-grey">back</span>
+    </button>
+  </div>
+</div>

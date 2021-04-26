@@ -67,12 +67,6 @@ export class UpgradeLicenceComponent implements OnInit {
      });
   }
   /**
-   * @description back to previous route
-   */
-  backClicked() {
-    this.utilService.previousRoute();
-  }
-  /**
    * @param licence code
    * @description Display scss background color
    */

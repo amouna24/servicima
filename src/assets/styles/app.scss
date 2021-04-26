@@ -187,7 +187,10 @@ Paddings
     padding-left: 20px !important;
 }
 .p-l-30 {
-  padding-left: 20px;
+  padding-left: 30px;
+}
+.p-l-40 {
+  padding-left: 40px;
 }
 .p-l-65{
     padding-left: 65px;
@@ -226,7 +229,9 @@ Paddings
 .p-t-20 {
     padding-top: 20px;
 }
-
+.p-t-25 {
+  padding-top: 25px;
+}
 .p-t-30 {
     padding-top: 30px;
 }
@@ -246,7 +251,9 @@ Paddings
 .p-b-20 {
     padding-bottom: 20px;
 }
-
+.p-b-25 {
+  padding-bottom: 25px;
+}
 .p-b-30 {
     padding-bottom: 30px;
 }
@@ -684,9 +691,7 @@ html body {
 /*    licence container   */
 .licence-container  {
   @include get-page(servicima);
-  margin: 20px;
-  height: 87vh !important;
-  // width: 88vw;
+  height: 84vh !important;
 }
 /* ---------------------- */
 

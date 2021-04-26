@@ -1,18 +1,6 @@
 <div class="licence-container"
-     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
-    <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Buy Licence</h1>
-    </div>
-    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
-        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-        </mat-icon>
-        <span class="cool-grey">back</span>
-      </button>
-    </div>
-
-  </div>
+     fxLayout="column" fxLayoutGap="20px" fxFlex>
+  <wid-title-settings title="Buy Licence" [backBtn]="true" ></wid-title-settings>
   <div class="full-width" fxLayoutAlign="center start" fxFlex="3">
     <mat-button-toggle-group appearance="legacy" value="month" class="border-radius-10"
                              #paiement="matButtonToggleGroup">
@@ -25,7 +13,7 @@
     </mat-button-toggle-group>
   </div>
 
-  <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
+  <div fxLayout="column" fxLayoutAlign="start start" fxFlex="80">
     <div class="full-width" fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="40px" fxFlex="95">
       <div *ngFor="let licence of licences" fxLayout="column" fxLayoutAlign="start center"
            class="border-radius-15 item bg-white box-shadow m-t-5" fxFlex="30" fxFlexAlign="stretch">
