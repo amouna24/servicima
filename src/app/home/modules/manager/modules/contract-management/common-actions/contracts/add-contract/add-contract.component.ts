@@ -529,7 +529,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           );
         },
         (error) => {
-          console.log(error);
+          console.log('error', error);
         },
       );
   }
