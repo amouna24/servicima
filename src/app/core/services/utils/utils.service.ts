@@ -141,7 +141,7 @@ export class UtilsService {
   openSnackBar(message: string, action?: string, duration?: number) {
     this.matSnackBar.open(message, action, {
       duration,
-      horizontalPosition: 'end',
+      horizontalPosition: 'center',
       verticalPosition: 'bottom',
     });
   }
