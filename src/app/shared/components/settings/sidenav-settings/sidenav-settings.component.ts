@@ -97,11 +97,11 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): any {
-    this.userService.emitClass({ 'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
-      'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
-      'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
-      'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
-      'whiteRed': this.listColor[12].status, 'setting': this.listColor[13].status
+    this.userService.emitClass({  'blackGreen': this.listColor[0].status,
+      'blueBerry': this.listColor[1].status, 'blue': this.listColor[2].status,
+      'everGreen': this.listColor[3].status, 'greenBlue': this.listColor[4].status,
+      'mango': this.listColor[5].status, 'whiteRed': this.listColor[6].status,
+      'setting': this.listColor[7].status
     });
   }
 

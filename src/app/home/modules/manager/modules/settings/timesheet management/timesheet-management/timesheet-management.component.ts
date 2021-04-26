@@ -62,6 +62,7 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
       sundayRate: ['', [Validators.required]],
       saturdayRate: ['', [Validators.required]],
       holidayRate: ['', [Validators.required]],
+      overtimePerDayRate: ['', [Validators.required]],
     });
   }
 
@@ -84,6 +85,7 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
       sundayRate: this.companyTimesheetSetting.sunday_rate,
       saturdayRate: this.companyTimesheetSetting.saturday_rate,
       holidayRate: this.companyTimesheetSetting.holiday_rate,
+      overtimePerDayRate: this.companyTimesheetSetting.overtime_per_day_rate,
     });
   }
 
@@ -113,6 +115,7 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
       sunday_rate: this.form.value.sundayRate,
       saturday_rate: this.form.value.saturdayRate,
       holiday_rate: this.form.value.holidayRate,
+      overtime_per_day_rate: this.form.value.overtimePerDayRate,
     };
     const confirmation = {
       code: 'edit',
