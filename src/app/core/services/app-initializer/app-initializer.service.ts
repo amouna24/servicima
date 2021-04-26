@@ -33,7 +33,6 @@ export class AppInitializerService {
   countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
   licencesList: ILicenceModel[] = [];
-  companiesList: ICompanyModel[];
 
   constructor(
     private httpClient: HttpClient,

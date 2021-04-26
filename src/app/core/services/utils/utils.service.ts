@@ -28,7 +28,6 @@ export class UtilsService {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private matSnackBar: MatSnackBar,
-    private location: Location,
     private httpClient: HttpClient,
   ) {
 
@@ -131,13 +130,6 @@ export class UtilsService {
       }
     );
 
-  }
-  /**
-   * @description Back to previous route
-   * *
-   */
-  previousRoute() {
-    this.location.back();
   }
 
   /**

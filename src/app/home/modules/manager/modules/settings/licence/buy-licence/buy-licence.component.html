@@ -1,21 +1,9 @@
 <div class="licence-container"
      fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
-    <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Buy Licence</h1>
-    </div>
-    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
-        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-        </mat-icon>
-        <span class="cool-grey">back</span>
-      </button>
-    </div>
-
-  </div>
+  <wid-title-settings title="Buy Licence" [backBtn]="true" ></wid-title-settings>
   <div class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
     <div fxFlex="58" class="full-height" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
-      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="28"
+      <div class="full-width bg-white border-radius-20 p-10" fxFlex="28"
       fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
         <div fxFlex="20">
           <h2 class="steel font-normal font-size-17">Billing</h2>
@@ -180,7 +168,7 @@
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="end end" class="full-width">
-          <button mat-button (click)="confirm()" [disabled]="!paymentService.paidFor" class="btn-small bg-denim white" >Next</button>
+          <button mat-button (click)="confirm()"  class="btn-small bg-denim white" >Next</button>
           <button mat-button class="btn-small bg-white denim" >Cancel</button>
         </div>
       </div>

@@ -22,21 +22,8 @@ export class LicenceService {
    * @description Get all Licences types order by level
    * @return Selected licence
    *************************************************************************/
-  getLicencesList(): ILicenceModel[] {
-    return this.appInitializer.licencesList
-      .filter((res) => new Date(res.licence_start_date) <= new Date() &&
-        new Date(res.licence_end_date) >= new Date())
-      .sort(
-      (a, b) => {
-        if (a.level < b.level) {
-          return -1;
-        }
-        if (a.level > b.level) {
-          return 1;
-        }
-        return 0;
-      }
-    );
+  getLicencesList(): Observable<ILicenceModel[]> {
+    return this.httpClient.get<ILicenceModel[]>(environment.licenceApiUrl);
   }
 
   /**************************************************************************
@@ -44,10 +31,8 @@ export class LicenceService {
    * @return licence
    * @param licenceCode
    *************************************************************************/
-  getLicenceByCode(licenceCode: string): ILicenceModel {
-    return this.getLicencesList().find(
-      (res) => res.LicenceKey.licence_code === licenceCode
-    );
+  getLicenceByCode(licenceCode: string): Observable<ILicenceModel> {
+    return this.httpClient.get<ILicenceModel>(environment.licenceApiUrl + '?licence_code=' + licenceCode);
   }
   /*------------------------------------ LICENCE FEATURES --------------------------------------*/
   /**************************************************************************
@@ -57,12 +42,28 @@ export class LicenceService {
   getLicencesFeatures(): Observable<ILicenceFeatureModel[]> {
     return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?display=true');
   }
+  /*------------------------------------ LICENCE FEATURES --------------------------------------*/
+  /**************************************************************************
+   * @description get all licence
+   * @return licence
+   *************************************************************************/
+  getLicencesFeaturesByCode(licenceCode: string): Observable<ILicenceFeatureModel[]> {
+    return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?licence_code=' + licenceCode);
+  }
   /*------------------------------------ COMPANY LICENCE --------------------------------------*/
   /**************************************************************************
    * @description Add licence company
    * @return licence
    *************************************************************************/
-  addCompanyLicence(companyLicence: ICompanyLicenceModel): Observable<ICompanyLicenceModel> {
+  addCompanyLicence(companyLicence: any): Observable<ICompanyLicenceModel> {
     return this.httpClient.post<ICompanyLicenceModel>(environment.companyLicenceApiUrl , companyLicence);
+  }
+  /**************************************************************************
+   * @description Disable
+   * @return licence
+   *************************************************************************/
+  disableCompanyLicence(id: string): Observable<ICompanyLicenceModel> {
+    return this.httpClient.delete<ICompanyLicenceModel>(
+      environment.companyLicenceApiUrl + '/disable?_id=' + id );
   }
 }

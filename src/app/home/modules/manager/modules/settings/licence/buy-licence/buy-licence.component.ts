@@ -9,12 +9,11 @@ import { MatRadioChange } from '@angular/material/radio';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Subject } from 'rxjs';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { ICredentialsModel } from '@shared/models/credentials.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ProfileService } from '@core/services/profile/profile.service';
-import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
+
 declare var paypal;
+
 @Component({
   selector: 'wid-buy-licence',
   templateUrl: './buy-licence.component.html',
@@ -46,9 +45,11 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   saving: string;
   extraUser: number;
   licence: ILicenceModel;
-  credentials: ICredentialsModel;
-  companyLicence: ICompanyLicenceModel;
+  credentials: any;
+  companyLicence: any;
   usersNbr: number;
+  companyLicenceList: any[];
+
   constructor(private licenceService: LicenceService,
               private userService: UserService,
               private spinnerService: SpinnerService,
@@ -57,8 +58,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
               private authService: AuthService,
               private profileService: ProfileService,
               private router: Router,
-              private localStorageService: LocalStorageService,
-              private utilService: UtilsService) {
+              private localStorageService: LocalStorageService) {
   }
 
   /**
@@ -69,18 +69,21 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.credentials = this.localStorageService.getItem('userCredentials');
     await this.userInfo().then(
       () => {
-        this.companyLicence = this.initCompanyLicence();
+        this.initCompanyLicence();
+        console.log(this.companyLicenceList);
       }
     );
     await this.getAllUsers();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
   }
+
   /**
    * @description Loaded after component complete init state
    */
   ngAfterViewInit(): void {
     this.paypalInit();
   }
+
   /**
    * @description Get query params
    */
@@ -88,10 +91,14 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activatedRoute.paramMap.subscribe(
       params => {
         this.billingPack = params.get('pack');
-        this.licence = this.licenceService.getLicenceByCode(params.get('licence'));
+        this.licenceService.getLicenceByCode(params.get('licence')).subscribe(
+          (data) => {
+            this.licence = data;
+          }
+        );
       }
     );
-    if ((!this.licence) || (this.billingPack !== 'month' && this.billingPack !== 'year') ) {
+    if ((!this.licence) || (this.billingPack !== 'month' && this.billingPack !== 'year')) {
       await this.router.navigate(['/manager/settings/licences/upgrade-licence']);
     }
   }
@@ -100,8 +107,8 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    * @description : get all users
    */
   async getAllUsers() {
-    await this.profileService.getAllUser(this.credentials['email_address']).subscribe(
-      (data ) => {
+    await this.profileService.getAllUser(this.emailAddress).subscribe(
+      (data) => {
         this.usersNbr = data.length;
         this.extraUser = data.length - this.licence.free_user_nbr;
         this.extraUser = this.extraUser > 0 ? this.extraUser : 0;
@@ -118,6 +125,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
         this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
         this.name = `${userInfo['user'][0]['first_name']}  ${userInfo['user'][0]['last_name']}`;
         this.haveImage = userInfo['user'][0]['photo'];
+        this.companyLicenceList = userInfo['companylicence'];
       }
     });
     this.userService.avatar$.subscribe(
@@ -137,13 +145,14 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   billingChange(event: MatRadioChange): void {
     this.billingPack = event.value;
-    this.companyLicence = this.initCompanyLicence();
+    this.initCompanyLicence();
     this.router.navigate([
       '/manager/settings/licences/buy-licence',
       this.licence.LicenceKey.licence_code,
       event.value
     ]);
   }
+
   /**
    * @description Calculate total price
    */
@@ -156,60 +165,96 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return total;
   }
+
   /**
    * @description calculate saving percentage
    * @return saving percentage
    */
   savingPercentage(): number {
-    const month: number = + this.licence.pack_monthly_price * 12;
-    const year: number = + this.licence.pack_annual_price;
-    return  ((month - year) / month) * 100 ;
+    const month: number = +this.licence.pack_monthly_price * 12;
+    const year: number = +this.licence.pack_annual_price;
+    return ((month - year) / month) * 100;
   }
+
   /**
    * @description setup paypal smart button
    */
   paypalInit(): void {
-    paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('year'), this.initCompanyLicence('year')))
-      .render(this.paypalYearElement.nativeElement);
-    paypal
-      .Buttons(this.paymentService.paypal(this.licence, this.total('month'), this.initCompanyLicence('month')))
-      .render(this.paypalMonthElement.nativeElement);
+    this.initCompanyLicence('year').then(
+      () => {
+        paypal
+          .Buttons(this.paymentService.paypal(this.licence, this.total('year')))
+          .render(this.paypalYearElement.nativeElement);
+      }
+    );
+    this.initCompanyLicence('month').then(
+      () => {
+        paypal
+          .Buttons(this.paymentService.paypal(this.licence, this.total('month')))
+          .render(this.paypalMonthElement.nativeElement);
+      }
+    );
   }
-  /**
-   * @description back to previous route
-   */
-  backClicked() {
-    this.utilService.previousRoute();
-  }
-  initCompanyLicence(periodicity = this.billingPack): ICompanyLicenceModel {
-    // tslint:disable-next-line:prefer-const
-    let companyLicence: ICompanyLicenceModel;
-    companyLicence.CompanyLicenceKey.application_id = this.credentials.credentialsKey.application_id;
-    companyLicence.CompanyLicenceKey.email_adress = this.emailAddress;
-    companyLicence.CompanyLicenceKey.licence_code = this.licence.LicenceKey.licence_code;
-    companyLicence.CompanyLicenceKey.licence_type = 'STANDARD';
+
+  async initCompanyLicence(periodicity: string = this.billingPack): Promise<void> {
     const startDate = new Date();
     const endDate = periodicity === 'month' ?
       new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDay()) :
       new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDay());
-    companyLicence.licence_start_date = startDate.toString();
-    companyLicence.licence_end_date = endDate.toString();
-    companyLicence.bill_periodicity = periodicity === 'month' ? 'M' : 'Y';
-    return companyLicence;
+    this.companyLicence = {
+      application_id: this.userService.applicationId,
+      email_address: this.emailAddress,
+      licence_code: this.licence.LicenceKey.licence_code,
+      licence_type: 'STANDARD',
+      licence_start_date: startDate.toString(),
+      licence_end_date: endDate.toString(),
+      bill_periodicity: periodicity === 'month' ? 'M' : 'Y'
+    };
   }
+
   /**
    * @description confirmation
    */
   confirm() {
-    if (this.paymentService.detail.status === 'COMPLETED') {
-      this.router.navigate(
-        ['/manager/settings/licences/complete-update'],
-        { state: {
-          payment: this.paymentService.paymentMethode,
-            detail: this.paymentService.detail
+    if (true) {
+      this.disableAllCompanyLicence().then(
+        () => {
+          this.addCompanyLicence().then(
+            () => {
+              // this.router.navigate(
+              //   ['/manager/settings/licences/complete-update'],
+              //   {
+              //     state: {
+              //       payment: this.paymentService.paymentMethode,
+              //       detail: this.paymentService.detail
+              //     }
+              //   });
+            }
+          );
         }
-        });
+      );
+    }
+  }
+
+  async addCompanyLicence(): Promise<void> {
+    await this.licenceService.addCompanyLicence(this.companyLicence).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
+
+  async disableAllCompanyLicence(): Promise<void> {
+    for (const val of this.companyLicenceList) {
+      if (val.status === 'ACTIVE') {
+        await this.licenceService.disableCompanyLicence(val._id)
+          .subscribe(
+            res => console.log(res)
+          );
+      }
     }
   }
 
@@ -229,6 +274,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
         console.error(err);
       });
   }
+
   /**
    * @description Destroy All subscriptions declared with takeUntil operator
    */

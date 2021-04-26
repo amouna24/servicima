@@ -27,11 +27,44 @@ export class UpgradeLicenceComponent implements OnInit {
    * @description Loaded when component in init state
    */
   async ngOnInit(): Promise<void> {
-    this.licences = this.licenceService.getLicencesList();
-    this.licenceService.getLicencesFeatures().subscribe((data) => {
-      this.licencesFeatures = data.filter((res) => res.display);
+    this.getLicences().then(
+      () => {
+        this.getLicencesFeatures().then(
+          () => this.licencesFeatures = this.licencesFeatures.filter((res) => res.display)
+        );
+      }
+    );
+  }
+  /**
+   * @description Get licence Feature
+   */
+  async getLicencesFeatures(): Promise<void> {
+    await this.licenceService.getLicencesFeatures().subscribe((data) => {
+      this.licencesFeatures = data;
     });
-    await this.getAllFeatures();
+  }
+  /**
+   * @description Get licence list
+   */
+  async getLicences(): Promise<void> {
+    await this.licenceService.getLicencesList().subscribe(
+      (data) => {
+        this.licences = data.filter((res) =>
+          new Date(res.licence_start_date) <= new Date() &&
+          new Date(res.licence_end_date) >= new Date())
+          .sort(
+            (a, b) => {
+              if (a.level < b.level) {
+                return -1;
+              }
+              if (a.level > b.level) {
+                return 1;
+              }
+              return 0;
+            }
+          );
+      }
+    );
   }
   /**
    * @param name licence code
@@ -53,13 +86,6 @@ export class UpgradeLicenceComponent implements OnInit {
   /**
    * @description get All features
    */
-  async getAllFeatures(): Promise<void> {
-    await this.featureService.getAllFeatures(this.localStorageService.getItem('language').langCode).subscribe(
-      (data) => {
-        this.featureList = data;
-      }
-    );
-  }
   getFeatureDesc(licence: ILicenceFeatureModel): IFeatureModel {
    return this.featureList.find(
      (res) => {
@@ -67,17 +93,17 @@ export class UpgradeLicenceComponent implements OnInit {
      });
   }
   /**
-   * @description back to previous route
-   */
-  backClicked() {
-    this.utilService.previousRoute();
-  }
-  /**
    * @param licence code
    * @description Display scss background color
    */
   getLicenceFeatures(licence: ILicenceModel): ILicenceFeatureModel[] {
-      return this.licencesFeatures.filter((res) => res.LicenceFeaturesKey.licence_code === licence.LicenceKey.licence_code);
+    let licenceFeature: ILicenceFeatureModel[] ;
+      this.licenceService.getLicencesFeaturesByCode(licence.LicenceKey.licence_code).subscribe(
+        (data) => {
+          licenceFeature = data;
+        }
+      );
+      return licenceFeature;
   }
   /**
    * @param code licence code

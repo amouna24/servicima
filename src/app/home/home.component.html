@@ -16,13 +16,14 @@
     <wid-right-sidenave></wid-right-sidenave>
   </mat-sidenav>
 
-  <mat-sidenav-content [@mainContent]="displaySidenavSetting() ? 'setting' : sidebarState" class="full-screen-height" fxLayout="column">
+  <mat-sidenav-content [@mainContent]="displaySidenavSetting() ? 'setting' : sidebarState"
+                       class="full-screen-height"
+                       fxLayout="column">
+    <wid-header fxFlexOffset="1"></wid-header>
 
-    <wid-header fxFlex="5" fxFlexOffset="7px"></wid-header>
+    <wid-breadcrumb></wid-breadcrumb>
 
-    <wid-breadcrumb fxFlex="2"></wid-breadcrumb>
-
-    <div fxFlex="93">
+    <div fxFlex style="margin: 0 3% 0 3%">
         <router-outlet>
           <wid-splash></wid-splash>
 <!--          <wid-dynamic-component
