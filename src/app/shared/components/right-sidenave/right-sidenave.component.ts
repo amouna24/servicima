@@ -54,13 +54,14 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
   subMenu: IChildItem[] = [];
   parentMenu: string;
   profileUserType = userType.UT_USER;
-
+  firstClick: boolean;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
   listColor: ITheme[];
   email: string;
+  hideTheme: boolean;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -83,6 +84,9 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.subMenu = [];
   }
   ngOnInit(): void {
+    this.sidenavService.hideTheme$.subscribe((data) => {
+      this.hideTheme = data;
+    });
    this.getModuleName();
    this.getSelectedTheme();
    this.listColor = this.themeService.listColor;
@@ -133,6 +137,12 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.error(err);
     });
+    this.sidenavService.firstClick$.
+    subscribe((firstClick: boolean) => {
+      this.firstClick = firstClick;
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   /**
@@ -147,8 +157,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * @description toggle sidenav
    */
   toggleSideNav(): void {
+    this.firstClick = true;
     this.sidenavService.toggleRightSideNav();
     this.subMenu = [];
+    this.sidenavService.firstClick$.next(false);
   }
 
   /**
@@ -164,6 +176,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
         localStorage.removeItem('email_adress');
+        this.sidenavService.firstClick$.next(false);
         this.router.navigate(['/auth/login']);
       },
       (err) => {
@@ -180,7 +193,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
       'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
       'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
       'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
-      'whiteRed': this.listColor[12].status
+      'whiteRed': this.listColor[12].status, 'setting': this.listColor[13].status
     });
   }
 
@@ -229,5 +242,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
   }
-
+  closeMenu() {
+    if (this.firstClick) {
+      this.sidenavService.toggleRightSideNav();
+      this.subMenu = [];
+    }
+    }
 }

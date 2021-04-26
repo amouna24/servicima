@@ -3,22 +3,32 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+    data: {
+      breadcrumb: ''
+    },
+  },
+  {
     path: 'users',
     loadChildren: () => import('./usersList/users-list.module').then(m => m.UserListModule),
+    data: {
+      breadcrumb: 'users'
+    },
   },
 
   {
     path: 'licences',
     loadChildren: () => import('./licence/licence.module').then(m => m.LicenceModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'licences'
     },
   },
   {
     path: 'payment-methods',
     loadChildren: () => import('./payment/payment-methods-management/payment-methods.module').then(m => m.PaymentMethodsModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'payment-methods'
     },
   },
 
@@ -26,7 +36,7 @@ const routes: Routes = [
     path: 'timesheet-setting',
     loadChildren: () => import('./timesheet management/timesheet-management.module').then(m => m.TimesheetManagementModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'timesheet-setting'
     },
   },
 
@@ -34,23 +44,28 @@ const routes: Routes = [
     path: 'payment-info',
     loadChildren: () => import('./payment/payment-info/payment-info.module').then(m => m.PaymentInfoModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'payment-info'
     },
   },
 
   {
     path: 'home-company',
     loadChildren: () => import('./home-company/homeCompany.module').then(m => m.HomeCompanyModule),
-    data: {
-      breadcrumb: 'company'
-    },
   },
 
   {
     path: 'tax',
     loadChildren: () => import('./tax/tax.module').then(m => m.TaxModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'tax'
+    },
+  },
+
+  {
+    path: 'invoices',
+    loadChildren: () => import('./invoices/invoice.module').then(m => m.InvoiceModule),
+    data: {
+      breadcrumb: 'invoices'
     },
   },
 
@@ -58,7 +73,7 @@ const routes: Routes = [
     path: 'role',
     loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule),
     data: {
-      breadcrumb: 'settings'
+      breadcrumb: 'role'
     },
   },
 ];

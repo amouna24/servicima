@@ -11,9 +11,6 @@ const routes: Routes = [
   {
     path: '',
     component: LicenceManagementComponent,
-    data: {
-      breadcrumb: 'licence'
-    },
   },
 
   {

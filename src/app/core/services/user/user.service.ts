@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -15,7 +15,9 @@ import { LocalStorageService } from '../storage/local-storage.service';
 })
 export class UserService {
   userInfo: IUserInfo;
-  userCredentials: string;
+  applicationId: string;
+  emailAddress: string;
+  language;
   moduleName$ = new BehaviorSubject<string>(null);
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   redirected = false;
@@ -33,15 +35,25 @@ export class UserService {
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer,
   ) {
+    this.getDataFromLocalStorage();
   }
 
+  /**************************************************************************
+   * @description get data from local storage
+   *************************************************************************/
+  getDataFromLocalStorage(): void {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
+    this.emailAddress = userCredentials?.email_address;
+    this.language = this.localStorageService.getItem('language');
+  }
   /**************************************************************************
    * @description get user info
    *************************************************************************/
   getUserInfo(): void {
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
+    this.getDataFromLocalStorage();
     this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
-      `/getprofileinfos?application_id=${this.userCredentials['application_id']}&email_address=${this.userCredentials['email_address']}`)
+      `/getprofileinfos?application_id=${this.applicationId}&email_address=${this.emailAddress}`)
       .subscribe( (data) => {
         this.userInfo = data;
         this.userType = this.userInfo['user'][0].user_type;

@@ -66,10 +66,13 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   async ngOnInit(): Promise<void> {
     await this.getParam();
-    await this.userInfo();
     this.credentials = this.localStorageService.getItem('userCredentials');
+    await this.userInfo().then(
+      () => {
+        this.companyLicence = this.initCompanyLicence();
+      }
+    );
     await this.getAllUsers();
-    this.companyLicence = this.initCompanyLicence();
     this.saving = this.savingPercentage() > 0 ? this.savingPercentage().toFixed(1) : '';
   }
   /**

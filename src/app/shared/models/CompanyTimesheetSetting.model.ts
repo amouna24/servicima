@@ -3,7 +3,7 @@ import { ICompanyTimesheetSettingKey } from '@shared/models/companyTimesheetSett
 export interface ICompanyTimesheetSettingModel {
 
   /* Unique Key */
-  companyTimesheetSettingKey: ICompanyTimesheetSettingKey;
+  CompanyTimesheetSettingKey: ICompanyTimesheetSettingKey;
 
   /* Other fields */
   working_hour_day: number;

@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
+
 import { ModalService } from '@core/services/modal/modal.service';
 import { CompanyPaymentTermsService } from '@core/services/companyPaymentTerms/company-payment-terms.service';
+import { UserService } from '@core/services/user/user.service';
+
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { AddPaymentInfoCompanyComponent } from '../add-payment-info-company/add-payment-info-company.component';
 
@@ -16,12 +18,12 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
 
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
-  email: string;
+  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
-              private localStorageService: LocalStorageService,
+              private userService: UserService,
               private modalService: ModalService,
               private companyPaymentTermsService: CompanyPaymentTermsService, ) {
   }
@@ -33,13 +35,24 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addPaymentTerms', modalComponent: AddPaymentInfoCompanyComponent });
     this.isLoading.next(true);
+    this.getConnectedUser();
     this.getPaymentTerms();
+  }
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
   }
 
   getPaymentTerms() {
-    const cred = this.localStorageService.getItem('userCredentials');
-     this.email = cred['email_address'];
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.email).subscribe((data) => {
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
@@ -60,7 +73,6 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   /**
    * @description : change the status
    * @param id: string
-   * @param status: string
    */
   onChangeStatus(id: string) {
     const confirmation = {
@@ -71,7 +83,8 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.companyPaymentTermsService.paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.email).subscribe(
+        this.subscriptions.push( this.companyPaymentTermsService
+          .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           (res) => {
             if (res) {
               this.getPaymentTerms();

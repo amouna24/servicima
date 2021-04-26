@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
@@ -28,7 +27,6 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
 
   constructor(private utilsService: UtilsService,
               private userService: UserService,
-              private localStorageService: LocalStorageService,
               private assetsDataService: AssetsDataService,
               private appInitializerService: AppInitializerService,
               private modalService: ModalService,
@@ -37,7 +35,6 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private refdataService: RefdataService,
 ) { }
 
-  userCredentials: string;
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
@@ -70,7 +67,6 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
-    this.userCredentials = this.localStorageService.getItem('userCredentials');
     this.mapData();
     this.getRefData();
     this.getDetailsCompany();

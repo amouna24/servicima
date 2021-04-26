@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { IRefdataModel } from '@shared/models/refdata.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { AddPaymentMethodComponent } from '../add-payment-method/add-payment-method.component';
 
@@ -13,36 +13,48 @@ import { AddPaymentMethodComponent } from '../add-payment-method/add-payment-met
   templateUrl: './payment-methods-management.component.html',
   styleUrls: ['./payment-methods-management.component.scss']
 })
-export class PaymentMethodsManagementComponent implements OnInit {
+export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   refData: { } = { };
   ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
-  applicationId: string;
-  email: string;
+  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
-              private localStorageService: LocalStorageService,
-              private utilsService: UtilsService,
+              private userService: UserService,
               private modalService: ModalService,
               private refdataService: RefdataService, ) { }
 
   /**
    * @description Loaded when component in init state
    */
-  async ngOnInit() {
+   ngOnInit() {
     this.modalService.registerModals(
       { modalName: 'addPaymentTermsMethode', modalComponent: AddPaymentMethodComponent });
     this.isLoading.next(true);
-   await this.getPaymentMethode();
+    this.getConnectedUser();
+    this.getPaymentMethode().then(() => this.isLoading.next(false));
   }
 
  async getPaymentMethode() {
     const data = await this.getRefdata();
     this.ELEMENT_DATA.next(data['PAYMENT_MODE']);
-    this.isLoading.next(false);
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
+  }
+
   /**
    * @description : action
    * @param rowAction: object
@@ -61,11 +73,9 @@ export class PaymentMethodsManagementComponent implements OnInit {
    * @description : get the refData from appInitializer service and mapping data
    */
   async getRefdata() {
-    const cred = this.localStorageService.getItem('userCredentials');
-    this.applicationId = cred['application_id'];
-    this.email = cred['email_address'];
     const list = ['PAYMENT_MODE'];
-    this.refData =  await this.refdataService.getRefData( this.utilService.getCompanyId(this.email, this.applicationId) , this.applicationId,
+    this.refData =  await this.refdataService
+      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
       list, true);
     return this.refData;
   }
@@ -83,7 +93,7 @@ export class PaymentMethodsManagementComponent implements OnInit {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.email).subscribe(
+        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
              await this.getPaymentMethode();
@@ -96,9 +106,9 @@ export class PaymentMethodsManagementComponent implements OnInit {
     });
   }
   updatePaymentMethod(data) {
-    const language = this.localStorageService.getItem('language').langId;
+    const language = this.userService.language.langId;
     let listArray = [];
-    this.refdataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
+    this.subscriptions.push(this.refdataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
       data.RefDataKey.ref_data_code, data.RefDataKey.ref_type_id).subscribe((allList) => {
       listArray = allList;
       listArray = listArray.filter((list) => {
@@ -114,8 +124,13 @@ export class PaymentMethodsManagementComponent implements OnInit {
           }
       });
 
-    });
+    }));
 
   }
-
+  /**
+   * @description destroy
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
 }

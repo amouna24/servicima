@@ -32,7 +32,7 @@ export enum FieldsType {
   UPLOAD_FILE = 'uploadFile',
   DATE_PICKER = 'datePicker',
   DATA_TABLE = 'dataTable',
-  ADD_MORE = 'addMore'
+  ADD_MORE_OR_UPDATE = 'addMore'
 }
 
 export interface IColumnsDef {
@@ -49,6 +49,8 @@ export interface IFieldsObject {
   selectFieldList ?: BehaviorSubject<IViewParam[]>;
   searchControlName?: string;
   filteredList ?: ReplaySubject<IViewParam[]>;
+  canUpdate ?: BehaviorSubject<boolean>;
+  canAdd ?: BehaviorSubject<boolean>;
   imageInputs?: {
     avatar: BehaviorSubject<any>;
     haveImage: BehaviorSubject<any>;

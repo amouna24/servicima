@@ -16,6 +16,8 @@ import { PaymentMethodsManagementComponent } from './payment/payment-methods-man
 import { PaymentInfoComponent } from './payment/payment-info/payment-info-company-management/payment-info.component';
 import { RoleManagementComponent } from './role-management/role-management/role-management.component';
 import { TimesheetManagementComponent } from './timesheet management/timesheet-management/timesheet-management.component';
+import { InvoiceComponent } from './invoices/invoice-management/invoice.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { TimesheetManagementComponent } from './timesheet management/timesheet-m
     PaymentInfoComponent,
     RoleManagementComponent,
     TimesheetManagementComponent,
+    InvoiceComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,

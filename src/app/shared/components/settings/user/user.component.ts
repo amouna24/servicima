@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -49,7 +48,6 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private utilsService: UtilsService,
     private appInitializerService: AppInitializerService,
     private userService: UserService,
-    private localStorageService: LocalStorageService,
     private modalService: ModalService,
     private route: ActivatedRoute,
     private uploadService: UploadService,
@@ -58,6 +56,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private refdataService: RefdataService,
   ) {
+    this.id = this.router.getCurrentNavigation().extras.state?.id;
   }
 
   /**
@@ -71,7 +70,7 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   getConnectedUser(): void {
     this.isLoading = true;
-    this.applicationId = this.localStorageService.getItem('userCredentials')['application_id'];
+    this.applicationId = this.userService.applicationId;
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent });
     this.subscriptions.push(this.userService.connectedUser$.subscribe(async (data) => {
@@ -88,11 +87,6 @@ export class UserComponent implements OnInit, OnDestroy {
    * or he wants to update the profile of one user
    */
  async checkComponentAction(connectedUser: IUserInfo) {
-    /***************** go id from route *****************
-     *******************************************************/
-    this.route.queryParams.subscribe(params => {
-      this.id = params.id || null;
-    });
     /***************** administrator show another user *****************
      *******************************************************************/
     if (this.id) {

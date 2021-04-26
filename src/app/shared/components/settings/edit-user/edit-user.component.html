@@ -4,7 +4,7 @@
       <div fxFlex="7"  fxLayout="row" class="line-height-2">
         <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Add'" >{{ 'user.add' | translate | capitalizeFirstLetter}} </div>
         <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" *ngIf=" title === 'Update'" >{{ 'user.edit' | translate | capitalizeFirstLetter}} </div>
-        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel m-r-20">
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
           <button mat-raised-button class="btn-small bg-pale-grey" (click)="back()">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
             </mat-icon>
@@ -60,7 +60,7 @@
                 <div fxLayout="row" [ngStyle]="{'width': '80%'}" [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'" fxFlex="100" fxLayoutGap="25px" class="m-t-20"  >
                   <div  fxLayout="column" *ngFor=" let list of showList; let index = index"
                         [fxFlex]="showList.length ===3 ? 33 : 40" >
-                  <button  mat-button mat-raised-button class="btn-small white" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
+                  <button  mat-button mat-raised-button class="btn-small white overwrite-btn-small" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" >
                         <div fxLayout="column" fxFlex="10">
                           <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
@@ -220,7 +220,7 @@
             </div>
           </div>
           <div fxLayout="row">
-            <div fxLayout="column" fxFlex="50">
+            <div fxLayout="column">
               <div fxLayout="column" fxFlex="80" class="line-height-2">
                 <a (click)="onChangePassword()" class="topaz decoration"> {{ 'user.changepwd' | translate}}</a>
                 <a (click)="deactivateAccount()" class="topaz decoration"> {{ 'user.disactivate' | translate}}</a>
