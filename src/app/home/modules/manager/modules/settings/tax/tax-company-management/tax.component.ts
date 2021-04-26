@@ -16,6 +16,7 @@ import { AddTaxCompanyComponent } from '../add-tax-company/add-tax-company.compo
 export class TaxComponent implements OnInit , OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<ICompanyTaxModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
+  emailAddress: string;
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
               private userService: UserService,
@@ -29,18 +30,31 @@ export class TaxComponent implements OnInit , OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addTax', modalComponent: AddTaxCompanyComponent });
     this.isLoading.next(true);
+    this.getConnectedUser();
     this.getAllTax();
+  }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
   }
 
   /**
    * @description get all tax by company
    */
   getAllTax() {
-    const email = this.userService.emailAddress;
-    this.subscriptions.push(this.companyTaxService.getCompanyTax(email).subscribe((data) => {
+    this.subscriptions.push(this.companyTaxService.getCompanyTax(this.emailAddress).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
-    }));
+    }, error => console.error(error)));
   }
 
   /**

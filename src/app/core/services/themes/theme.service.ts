@@ -16,19 +16,13 @@ export class ThemeService {
    *************************************************************************/
   getTheme(): ITheme[] {
     this.listColor = [
-      { 'color': 'green', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'blackYellow', 'status': false, 'image': 'darkYellow.png' },
-      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
-      { 'color': 'cobalt', 'status': false , 'image': 'cobalt.png'},
-      { 'color': 'blue', 'status': false , 'image': 'blue.png'},
+      { 'color': 'Default', 'status': false , 'image': 'default.png'},
+      { 'color': 'blueBerry', 'status': false , 'image': 'Blueberry.png'},
       { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
       { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
-      { 'color': 'lighterPurple', 'status': false , 'image': 'lighterPurple.png'},
       { 'color': 'mango', 'status': false , 'image': 'mango.png'},
-      { 'color': 'whiteGreen', 'status': false , 'image': 'whiteGreen.png'},
-      { 'color': 'whiteOrange', 'status': false , 'image': 'whiteOrange.png'},
-      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'}
+      { 'color': 'whiteRed', 'status': false , 'image': 'whiteRed.png'},
+      { 'color': 'setting', 'status': false , 'image': 'whiteRed.png'}
     ];
     const cred = this.localStorageService.getItem('userCredentials');
     const email = cred['email_address'];
@@ -40,6 +34,7 @@ export class ThemeService {
       });
       return this.listColor;
     } else {
+      this.listColor[0].status = true;
       return this.listColor;
     }
   }

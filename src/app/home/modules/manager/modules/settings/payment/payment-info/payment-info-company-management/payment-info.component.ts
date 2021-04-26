@@ -18,6 +18,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
 
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
+  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -34,11 +35,24 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addPaymentTerms', modalComponent: AddPaymentInfoCompanyComponent });
     this.isLoading.next(true);
+    this.getConnectedUser();
     this.getPaymentTerms();
+  }
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
   }
 
   getPaymentTerms() {
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.userService.emailAddress).subscribe((data) => {
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
@@ -70,7 +84,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
         this.subscriptions.push( this.companyPaymentTermsService
-          .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
+          .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           (res) => {
             if (res) {
               this.getPaymentTerms();

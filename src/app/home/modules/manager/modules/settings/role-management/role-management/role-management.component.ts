@@ -17,14 +17,14 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
-  data: { };
+  emailAddress: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
               private modalService: ModalService,
               private userService: UserService,
-              private refdataService: RefdataService) { }
+              private refDataService: RefdataService) { }
 
   /**
    * @description Loaded when component in init state
@@ -33,9 +33,10 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
     this.modalService.registerModals(
       { modalName: 'addRole', modalComponent: AddRoleComponent });
     this.isLoading.next(true);
+    this.getConnectedUser();
     this.getRole().then((data) => {
       if (data) {
-        this.ELEMENT_DATA.next(this.data['ROLE']);
+        this.ELEMENT_DATA.next(data['ROLE']);
         this.isLoading.next(false);
       }
     });
@@ -45,8 +46,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
    * @description : get role
    */
  async getRole() {
-    this.data = await this.getRefdata();
-    return this.data;
+    return  await this.getRefdata();
   }
   /**
    * @description : action
@@ -54,8 +54,6 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
    */
   switchAction(rowAction: any) {
   switch (rowAction.actionType) {
-    /*   case ('show'): this.showUser(rowAction.data);
-         break;*/
        case ('update'): this.updateRole(rowAction.data);
          break;
        case('delete'): this.onChangeStatus(rowAction.data);
@@ -63,13 +61,25 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
+  }
+  /**
    * @description : update role
    * @param data: object to update
    */
   updateRole(data) {
     const language = this.userService.language.langId;
     let listArray = [];
-    this.subscriptions.push(this.refdataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
+    this.subscriptions.push(this.refDataService.getSpecificRefdata(data.RefDataKey.application_id, data.RefDataKey.company_id,
       data.RefDataKey.ref_data_code, data.RefDataKey.ref_type_id).subscribe((allList) => {
       listArray = allList.filter((list) => {
         if (list.RefDataKey.language_id !== language) {
@@ -83,7 +93,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
        await this.getRole();
         }
     });
-    }));
+    }, error => console.error(error)));
   }
 
   /**
@@ -91,8 +101,8 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
    */
   async getRefdata() {
     const list = ['ROLE'];
-    this.refData =  await this.refdataService
-      .getRefData( this.utilService.getCompanyId(this.userService.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+    this.refData =  await this.refDataService
+      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
       list, true);
     return this.refData;
   }
@@ -110,7 +120,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push(this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.userService.emailAddress).subscribe(
+        this.subscriptions.push(this.refDataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
               await this.getRole();

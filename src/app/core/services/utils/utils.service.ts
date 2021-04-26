@@ -44,9 +44,8 @@ export class UtilsService {
       .find(value => value.ApplicationKey.application_code === applicationCode)._id;
   }
   /**************************************************************************
-   * @description Get Application ID
-   * @param applicationCode the application code
-   * @return the ID of APPLICATION_CODE
+   * @description Get companies
+   * @return All companies
    *************************************************************************/
    getCompanies() {
     return this.httpClient

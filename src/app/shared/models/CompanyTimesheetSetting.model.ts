@@ -3,12 +3,12 @@ import { ICompanyTimesheetSettingKey } from '@shared/models/companyTimesheetSett
 export interface ICompanyTimesheetSettingModel {
 
   /* Unique Key */
-  companyTimesheetSettingKey: ICompanyTimesheetSettingKey;
+  CompanyTimesheetSettingKey: ICompanyTimesheetSettingKey;
 
   /* Other fields */
   working_hour_day: number;
   sunday_rate: number;
   saturday_rate: number;
   holiday_rate: number;
-  status: string;
+  overtime_per_day_rate: number;
 }

@@ -6,6 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { ITheme } from '@shared/models/theme.model';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { ThemeService } from '@core/services/themes/theme.service';
 
 @Component({
   selector: 'wid-sidenav-settings',
@@ -17,11 +21,16 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
   subMenu: IChildItem[];
   moduleName: string;
   destroy$: Subject<boolean> = new Subject<boolean>();
-
+  listColor: ITheme[];
+  email: string;
+  lastTheme: string;
   constructor(
     private sidenavService: SidenavService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService,
+    private utilService: UtilsService,
+    private themeService: ThemeService,
   ) {
   }
 
@@ -40,6 +49,9 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
         });
     // Get the current submenu
     this.menu.forEach( el => this.currentState(el.children));
+    this.getSelectedTheme();
+    this.listColor = this.themeService.listColor;
+    this.getTheme('setting');
   }
   /**
    * @description display the child menu
@@ -53,19 +65,59 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
    */
   currentState(subMenu: IChildItem[]): boolean {
     const currentState: string = this.router.url;
-    // tslint:disable-next-line:only-arrow-functions
-    const activeState = subMenu.some(function(m) {
+    const activeState = subMenu.some((m) => {
       return currentState.endsWith(m.state); });
     if (activeState) {
       this.subMenu = subMenu;
+    } else if (currentState.endsWith('settings')) {
+      this.subMenu = this.menu[0].children;
     }
     return activeState;
   }
+  /**
+   * @description Get theme
+   * @param color: color
+   */
+  getTheme(color): void {
+    this.listColor.map(element => {
+      this.lastTheme = this.localStorageService.getItem(this.utilService.hashCode(this.email));
+      if (element.color !== color) {
+        element.status = false;
+      } else if (element.color === color) {
+        element.status = true;
+      } else {
+        localStorage.removeItem(this.utilService.hashCode(this.email));
+      }
+    });
+    this.displayClass();
+  }
 
+  /**
+   * @description Display theme
+   * @return theme
+   */
+  displayClass(): any {
+    this.userService.emitClass({
+      'blueBerry': this.listColor[1].status, 'blue': this.listColor[0].status,
+      'everGreen': this.listColor[2].status, 'greenBlue': this.listColor[3].status,
+      'mango': this.listColor[4].status, 'whiteRed': this.listColor[5].status,
+      'setting': this.listColor[6].status
+    });
+  }
+
+  /**
+   * @description get selected theme
+   */
+  getSelectedTheme(): void {
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.email = cred['email_address'];
+    this.listColor = this.themeService.getTheme();
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
   ngOnDestroy(): void {
+    this.getTheme(this.lastTheme);
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();

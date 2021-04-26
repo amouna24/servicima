@@ -33,13 +33,11 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
               private companyTaxService: CompanyTaxService, ) {
   }
 
+  /**
+   * @description Loaded when component in init state
+   */
   ngOnInit(): void {
-    this.userService.connectedUser$.subscribe(
-      (userInfo) => {
-        if (userInfo) {
-          this.company = userInfo['company'];
-        }
-      });
+    this.getConnectedUser();
     this.initForm();
     if (this.data) {
       this.action = 'update';
@@ -47,6 +45,18 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
     } else {
       this.action = 'add';
     }
+  }
+
+  /**
+   * @description : get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$.subscribe(
+      (userInfo) => {
+        if (userInfo) {
+          this.company = userInfo['company'];
+        }
+      });
   }
 
   /**
@@ -61,6 +71,7 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
       inactiveDate: [''],
     });
   }
+
   /**
    * @description : set the value of the form if it was an update user
    */
@@ -74,6 +85,7 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
   });
     this.form.controls['startingDate'].disable();
   }
+
   /**
    * @description : action
    * param res: boolean
@@ -97,7 +109,7 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
           if (data) {
             this.dialogRef.close(true);
           }
-        }));
+        }, error => console.error(error)));
       } else {
       const taxCompany = {
         application_id: this.userService.applicationId,
@@ -116,9 +128,9 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
         if (response) {
           this.dialogRef.close(response);
         }
-      }));
+      }, error => console.error(error)));
       }
-    }));
+    }, error => console.error(error)));
     }
   }
   }
