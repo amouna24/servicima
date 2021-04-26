@@ -107,7 +107,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
-  backURL: string;
 
   /**************************************************************************
    * @description Menu Items List
@@ -485,7 +484,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     private uploadService: UploadService,
     private sanitizer: DomSanitizer,
     private modalServices: ModalService,
-    private refdataService: RefdataService,
+    private refDataService: RefdataService,
     private localStorageService: LocalStorageService
   ) {
     this.initContractForm();
@@ -507,11 +506,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           this.getContractorByID(params);
         }
       });
-    if (this.type === 'CLIENT') {
-      this.backURL = '/manager/contract-management/clients-contracts/clients-list';
-    } else if (this.type === 'SUPPLIER') {
-      this.backURL = '/manager/contract-management/suppliers-contracts/suppliers-list';
-    }
     this.contractorForm.get('ADDRESS').valueChanges.subscribe(selectedValue => {
       selectedValue.country_cd === 'FRA' ?
         this.dynamicForm.getValue()[7].fields[0] = {
@@ -529,8 +523,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           inputType: InputType.TEXT,
           formControlName: 'activity_sector',
         };
-      console.log(this.activitySectorField.getValue());
-      console.log(selectedValue.country_cd);
     });
   }
 
@@ -683,17 +675,17 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
     /********************************** REF DATA **********************************/
-    await this.refdataService.getRefData(
+    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE']
     );
     /******************************** ACTIVITY CODE *******************************/
-    this.statusList.next(this.refdataService.refData['CONTRACT_STATUS']);
-    this.legalList.next(this.refdataService.refData['LEGAL_FORM']);
-    this.genderList.next(this.refdataService.refData['GENDER']);
-    this.profileTitleList.next(this.refdataService.refData['PROF_TITLES']);
-    this.paymentModeList.next(this.refdataService.refData['PAYMENT_MODE']);
+    this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
+    this.legalList.next(this.refDataService.refData['LEGAL_FORM']);
+    this.genderList.next(this.refDataService.refData['GENDER']);
+    this.profileTitleList.next(this.refDataService.refData['PROF_TITLES']);
+    this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
   }
 
   /**************************************************************************
@@ -742,7 +734,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           this.updateForms(this.contractorInfo, this.contractorContactInfo[0]);
           this.contractorContactInfo.map(
             (contact) => {
-              contact.title_cd = this.refdataService.refData['PROF_TITLES'].find((type) =>
+              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
                 type.value === contact.title_cd).viewValue;
             }
           );
@@ -856,11 +848,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         );
       this.contractorContactInfo.forEach(
         (contact) => {
-          console.log('Contractor', Contractor);
           contact.application_id = Contractor.application_id;
           contact.email_address = Contractor.email_address;
           contact.contractor_code = Contractor.contractor_code;
-          contact.title_cd = this.refdataService.refData['PROF_TITLES'].find((type) =>
+          contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
                 type.viewValue === contact.title_cd).value;
           if (contact._id && contact?.updated) {
             this.contractorService.updateContractorContact(contact)
@@ -960,7 +951,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           contact.application_id = Contractor.application_id;
           contact.email_address = Contractor.email_address;
           contact.contractor_code = Contractor.contractor_code;
-          contact.title_cd = this.refdataService.refData['PROF_TITLES'].find((type) =>
+          contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
             type.viewValue === contact.title_cd).value;
           this.contractorService.addContractorContact(contact)
             .pipe(
@@ -1007,8 +998,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               this.contractorContactInfo[index].main_contact = this.contractorForm.controls.CONTACT['controls'].main_contact.value;
               this.contractorContactInfo[index].contact_email = this.contractorForm.controls.CONTACT['controls'].contact_email.value;
               this.contractorContactInfo[index].gender_cd = this.contractorForm.controls.CONTACT['controls'].gender_cd.value;
-              this.contractorContactInfo[index].title_cd = this.refdataService.refData['PROF_TITLES'].find((type) =>
-                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue,
+              this.contractorContactInfo[index].title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue;
               this.contractorContactInfo[index].phone_nbr = this.contractorForm.controls.CONTACT['controls'].phone_nbr.value;
               this.contractorContactInfo[index].cell_phone_nbr = this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value;
               this.contractorContactInfo[index].language_cd = this.contractorForm.controls.CONTACT['controls'].language_cd.value;
@@ -1035,13 +1026,14 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         );
         this.canUpdateAction.next(false);
         this.canAddAction.next(true);
+        this.contractorForm.controls.CONTACT['controls'].contact_email.enable();
       }
         break;
       case 'addMore': {
         if (
           !this.contractorForm.controls.CONTACT['controls'].contact_email.value &&
           this.contractorForm.controls.CONTACT['controls'].contact_email.value === '' ) {
-          this.utilsService.openSnackBar('Email Address Required', 'close', 1000);
+          this.utilsService.openSnackBar('Email Address Required', 'close');
         } else {
           this.contactList.next([]);
           this.contractorContactInfo.push(
@@ -1051,7 +1043,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               main_contact: this.contractorForm.controls.CONTACT['controls'].main_contact.value,
               contact_email: this.contractorForm.controls.CONTACT['controls'].contact_email.value,
               gender_cd: this.contractorForm.controls.CONTACT['controls'].gender_cd.value,
-              title_cd: this.contractorForm.controls.CONTACT['controls'].title_cd.value ? this.refdataService.refData['PROF_TITLES'].find((type) =>
+              title_cd: this.contractorForm.controls.CONTACT['controls'].title_cd.value ? this.refDataService.refData['PROF_TITLES'].find((type) =>
                 type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue : '',
               phone_nbr: this.contractorForm.controls.CONTACT['controls'].phone_nbr.value,
               cell_phone_nbr: this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value,
@@ -1076,7 +1068,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               },
             }
           );
-          this.utilsService.openSnackBar('Contact Added', 'close', 1000);
+          this.utilsService.openSnackBar('Contact Added', 'close');
         }
       }
       break;
@@ -1158,7 +1150,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     );
     this.contractorForm.controls.CONTACT['controls'].gender_cd.setValue(row.gender_cd);
     this.contractorForm.controls.CONTACT['controls'].title_cd.setValue(
-      this.refdataService.refData['PROF_TITLES'].find((type) =>
+      this.refDataService.refData['PROF_TITLES'].find((type) =>
       type.viewValue === row.title_cd).value);
     this.contractorForm.controls.CONTACT['controls'].phone_nbr.setValue(row.phone_nbr);
     this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.setValue(row.cell_phone_nbr);

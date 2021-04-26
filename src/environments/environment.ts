@@ -15,12 +15,13 @@ export const environment = {
   dataListsUrl: 'http://192.168.1.22:8006/admin/datalists/v1',
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
-  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8090/admin/loadauthstarterdata/v1',
+  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
+  contractTimesheetApiUrl: 'http://192.168.1.22:8091/servicima/contracttimesheet/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
@@ -33,7 +34,7 @@ export const environment = {
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
   companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
-  userGatewayApiUrl: 'http://192.168.1.22:8091/auth/v1',
+  userGatewayApiUrl: 'http://192.168.1.22:8101/auth/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

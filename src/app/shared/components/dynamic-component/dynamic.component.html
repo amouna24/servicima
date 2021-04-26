@@ -4,7 +4,7 @@
       <h1 class="steel font-size-24 font-medium">{{ title | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="{{ backURL | translate }}">
+      <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
         <span class="cool-grey">back</span>
@@ -98,7 +98,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -194,7 +194,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -290,7 +290,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -386,7 +386,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -483,7 +483,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -597,7 +597,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -720,7 +720,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -842,7 +842,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -938,7 +938,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1049,7 +1049,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1145,7 +1145,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1317,7 +1317,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1414,7 +1414,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1528,7 +1528,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1653,7 +1653,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">

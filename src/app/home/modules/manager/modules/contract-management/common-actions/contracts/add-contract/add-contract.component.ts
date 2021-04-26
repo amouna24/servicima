@@ -27,6 +27,9 @@ import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/mo
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ProfileService } from '@core/services/profile/profile.service';
+import { TimesheetSettingService } from '@core/services/timesheet-setting/timesheet-setting.service';
+import { ICompanyTimesheetSettingModel } from '@shared/models/CompanyTimesheetSetting.model';
+import { IContractorContact } from '@shared/models/contractorContact.model';
 
 @Component({
   selector: 'wid-add-contract',
@@ -53,6 +56,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
   contractorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   collaboratorList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   staffList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  contractorContacts: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  contractExtensionInfo = [];
+  extensionsList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
+  canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  canAddAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  companyTimesheet: ICompanyTimesheetSettingModel;
   /**************************************************************************
    * @description Declaring Form Group
    *************************************************************************/
@@ -71,13 +80,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
    *************************************************************************/
   userInfo: IUserInfo;
   contractInfo: IContract;
-  contractExtensionInfo: IContractExtension;
   companyEmail: string;
-
+  contractors: IContractor[] = [];
+  minDate: BehaviorSubject<any> = new BehaviorSubject<any>(0);
   /**************************************************************************
    * @description Dynamic Component
    *************************************************************************/
-  backURL: string;
   isLoading = new BehaviorSubject<boolean>(false);
   /**************************************************************************
    * @description Menu Items List
@@ -99,6 +107,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
           title: 'Rate',
           titleKey: 'RATE',
         },
+        {
+          title: 'TimeSheet',
+          titleKey: 'TIMESHEET',
+        }
       ]
     },
     {
@@ -142,7 +154,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           label: 'End date',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
-          formControlName: 'contract_end_date'
+          formControlName: 'contract_end_date',
+          minDate: this.minDate,
         },
       ],
     },
@@ -171,17 +184,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Company email',
+          label: 'Company signer',
           placeholder: 'exp@email.com',
           type: FieldsType.SELECT,
           selectFieldList: this.staffList,
           formControlName: 'signer_company_email',
         },
         {
-          label: 'Contractor email',
+          label: 'Contractor signer',
           placeholder: 'exp@email.com',
-          type: FieldsType.INPUT,
-          inputType: InputType.EMAIL,
+          type: FieldsType.SELECT,
+          selectFieldList: this.contractorContacts,
           formControlName: 'signer_contractor_email',
         },
       ],
@@ -238,6 +251,72 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ],
     },
     {
+      titleRef: 'TIMESHEET',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Working hour day',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'working_hour_day',
+        },
+        {
+          label: 'Holiday rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'holiday_rate',
+        },
+      ],
+    },
+    {
+      titleRef: 'TIMESHEET',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Saturday rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'saturday_rate',
+        },
+        {
+          label: 'Sunday rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'sunday_rate',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_EXTENSION',
+      fieldsLayout: FieldsAlignment.one_item_stretch,
+      fields: [
+        {
+          type: FieldsType.DATA_TABLE,
+          dataTable: {
+            displayedColumns: [
+              'rowItem',
+              'extension_start_date', 'extension_end_date',
+              'extension_rate', 'extension_currency_cd', 'extension_status',
+              'Actions'],
+            columns: [
+              { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
+              { name: 'Start Date', prop: 'extension_start_date', type: InputType.TEXT},
+              { name: 'End date', prop: 'extension_end_date', type: InputType.TEXT},
+              { name: 'Rate', prop: 'extension_rate', type: InputType.TEXT},
+              { name: 'Currency', prop: 'extension_currency_cd', type: InputType.TEXT},
+              { name: 'Status', prop: 'extension_status', type: InputType.TEXT},
+              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+            ],
+            dataSource: this.extensionsList
+          }
+        },
+      ],
+    },
+    {
       titleRef: 'CONTRACT_EXTENSION',
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
@@ -288,6 +367,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
       ],
     },
+    {
+      titleRef: 'CONTRACT_EXTENSION',
+      fieldsLayout: FieldsAlignment.one_item_at_right,
+      fields: [
+        {
+          type: FieldsType.ADD_MORE_OR_UPDATE,
+          canUpdate: this.canUpdateAction,
+          canAdd: this.canAddAction,
+        },
+      ],
+    },
   ]);
 
   /**************************************************************************
@@ -319,9 +409,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private route: ActivatedRoute,
-    private refdataService: RefdataService,
+    private refDataService: RefdataService,
     private localStorageService: LocalStorageService,
     private profileService: ProfileService,
+    private companyTimeSheetService: TimesheetSettingService,
   ) {
     this.contractForm = new FormGroup({ });
   }
@@ -346,11 +437,28 @@ export class AddContractComponent implements OnInit, OnDestroy {
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
-    if (this.type === 'CLIENT') {
-      this.backURL = '/manager/contract-management/clients-contracts/contracts-list';
-    } else if (this.type === 'SUPPLIER') {
-      this.backURL = '/manager/contract-management/suppliers-contracts/contracts-list';
-    }
+    this.contractForm.get('INFORMATION').valueChanges.subscribe(selectedValue => {
+      selectedValue.contractor_code !== '' ?
+        this.getContractorContact(selectedValue.contractor_code).then(
+          (data) => {
+            this.contractorContacts.next(data);
+            this.dynamicForm.getValue()[3].fields[1] = {
+              label: 'Contractor signer',
+              placeholder: 'exp@email.com',
+              type: FieldsType.SELECT,
+              selectFieldList: this.contractorContacts,
+              formControlName: 'signer_contractor_email',
+          };
+          }) :
+        this.dynamicForm.getValue()[3].fields[1] = {
+          label: 'Contractor signer',
+          placeholder: 'exp@email.com',
+          type: FieldsType.SELECT,
+          selectFieldList: this.contractorContacts,
+          formControlName: 'signer_contractor_email',
+        };
+      selectedValue.contract_start_date !== '' ? this.minDate.next(new Date(selectedValue.contract_start_date)) : this.minDate.next('');
+    });
   }
 
   /**************************************************************************
@@ -372,14 +480,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
     this.subscriptions.push(
-      this.userService.connectedUser$.subscribe((data) => {
+      await this.userService.connectedUser$.subscribe((data) => {
         if (!!data) {
           this.userInfo = data;
           this.companyEmail = data.user[0]['company_email'];
           this.getPaymentTerms();
+          this.getTimeSheetSettings();
         }
       }),
-      this.profileService.getAllUser(this.userService.emailAddress)
+      await this.profileService.getAllUser(this.companyEmail)
         .subscribe((res) => {
           this.collaboratorList.next(
             res.filter(value => value.user_type === 'COLLABORATOR').map(
@@ -397,12 +506,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
         })
     );
     /*---------------------------------------------------------------*/
-   await this.refdataService.getRefData(
+   await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
       ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
-    this.statusList.next(this.refdataService.refData['CONTRACT_STATUS']);
+    this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
     this.contractorService
       .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
       .pipe(
@@ -410,6 +519,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
+          this.contractors = res;
           this.contractorsList.next(
             res.map(
               (obj) => {
@@ -449,12 +559,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
         filterCurrencyControl: [''],
         paymentTermsControl: [''],
       }),
+      TIMESHEET: this.formBuilder.group({
+        working_hour_day: [contract === null ? '' : contract.working_hour_day],
+        holiday_rate: [contract === null ? '' : contract.holiday_rate],
+        saturday_rate: [contract === null ? '' : contract.saturday_rate],
+        sunday_rate: [contract === null ? '' : contract.sunday_rate],
+      }),
       CONTRACT_EXTENSION: this.formBuilder.group({
-        extension_start_date: [contractExtension === null ? '' : contractExtension.extension_start_date],
-        extension_end_date: [contractExtension === null ? '' : contractExtension.extension_end_date],
-        extension_status: [contractExtension === null ? '' : contractExtension.extension_status],
-        extension_rate: [contractExtension === null ? '' : contractExtension.extension_rate, Validators.required],
-        extension_currency_cd: [contractExtension === null ? '' : contractExtension.extension_currency_cd],
+        extension_code: [''],
+        extension_start_date: [''],
+        extension_end_date: [''],
+        extension_status: [''],
+        extension_rate: ['', Validators.required],
+        extension_currency_cd: [''],
       }),
     });
   }
@@ -473,8 +590,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this.contractInfo = res[0][0];
-          this.contractExtensionInfo = res[1][0];
-          this.initContractForm(this.contractInfo, this.contractExtensionInfo);
+          this.contractExtensionInfo = res[1];
+          this.initContractForm(this.contractInfo, this.contractExtensionInfo[0]);
+          this.contractExtensionInfo.map(
+            (extension) => {
+              extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                type.CURRENCY_CODE === extension.extension_currency_cd).CURRENCY_DESC;
+              extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                type.value === extension.extension_status).viewValue;
+            }
+          );
+          this.extensionsList.next(this.contractExtensionInfo.slice()
+          );
+          this.isLoading.next(false);
         },
         (error) => {
           console.log(error);
@@ -506,6 +634,66 @@ export class AddContractComponent implements OnInit, OnDestroy {
       );
   }
 
+  /**************************************************************************
+   * @description get Tax for specific company
+   *************************************************************************/
+  getContractorContact(contractor_code) {
+    return new Promise<IViewParam[]>(resolve => {
+      this.contractorService
+        .getContractorsContact(
+          `?application_id=${this.applicationId}&email_address=${this.companyEmail}&contractor_code=${contractor_code}&can_sign_contract=true`
+        )
+        .pipe(
+          takeUntil(
+            this.destroy$
+          )
+        )
+        .subscribe(
+          (Contacts) => {
+            resolve(
+              Contacts.map(
+                (obj) => {
+                  return { value: obj.contractorContactKey.contractor_code, viewValue: obj.main_contact};
+                }
+              )
+            );
+          },
+          (error) => {
+            resolve(error);
+            console.log(error);
+          }
+        );
+    });
+  }
+
+  /**************************************************************************
+   * @description get Tax for specific company
+   *************************************************************************/
+  getTimeSheetSettings() {
+    this.companyTimeSheetService.getCompanyTimesheetSetting(this.companyEmail)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (companyTimeSheet) => {
+          this.companyTimesheet = companyTimeSheet[0];
+          this.contractForm.patchValue(
+            {
+              TIMESHEET: {
+                working_hour_day: this.companyTimesheet.working_hour_day,
+                holiday_rate: this.companyTimesheet.holiday_rate,
+                saturday_rate: this.companyTimesheet.saturday_rate,
+                sunday_rate: this.companyTimesheet.sunday_rate
+              },
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
   /**
    * @description Create New Contract
    */
@@ -514,6 +702,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ...this.contractForm.controls.INFORMATION.value,
       ...this.contractForm.controls.SIGNER.value,
       ...this.contractForm.controls.RATE.value,
+      ...this.contractForm.controls.TIMESHEET.value,
       ...this.contractForm.controls.CONTRACT_EXTENSION.value,
     };
     Contract.application_id = this.canUpdate(this.contractId) ?
@@ -522,20 +711,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractInfo.contractKey.contract_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;
     Contract.email_address = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.email_address : this.userInfo.company[0].companyKey.email_address;
-    Contract.extension_code = this.canUpdate(this.contractId) ?
-      this.contractExtensionInfo.contractExtensionKey.extension_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;
+/*    Contract.extension_code = this.canUpdate(this.contractId) ?
+      this.contractExtensionInfo.contractExtensionKey.extension_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;*/
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
     Contract.attachments = this.canUpdate(this.contractId) ?
       this.contractInfo.attachments : await this.uploadFile(this.selectedFile.file);
-    console.log('new Contract', Contract);
     if (this.canUpdate(this.contractId)) {
-      forkJoin(
-        [
-          this.contractsService.updateContract(Contract),
-          this.contractsService.updateContractExtension(Contract),
-        ]
-      )
+
+      this.contractsService.updateContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
         )
@@ -554,13 +738,66 @@ export class AddContractComponent implements OnInit, OnDestroy {
             console.log(error);
           }
         );
+      this.contractExtensionInfo.forEach(
+        (extension) => {
+          extension.application_id = Contract.application_id;
+          extension.email_address = Contract.email_address;
+          extension.contract_code = Contract.contract_code;
+          extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+            type.CURRENCY_DESC === extension.extension_currency_cd).CURRENCY_CODE;
+          extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+            type.viewValue === extension.extension_status).value;
+          if (extension._id && extension?.updated) {
+            this.contractsService.updateContractExtension(extension)
+              .pipe(
+                takeUntil(this.destroy$)
+              )
+              .subscribe(
+                (response) => {
+                  console.log('response', response);
+                },
+                (error) => {
+                  console.log('error', error);
+                },
+                () => {
+                  if (this.type === 'CLIENT') {
+                    this.router.navigate(
+                      ['/manager/contract-management/clients-contracts/contracts-list']);
+                  } else if (this.type === 'SUPPLIER') {
+                    this.router.navigate(
+                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                  }
+                }
+              );
+          } else if (!extension?._id) {
+            this.contractsService.addContractExtension(extension)
+              .pipe(
+                takeUntil(
+                  this.destroy$
+                )
+              )
+              .subscribe(
+                (resp) => {
+                  console.log('resp', resp);
+                },
+                error => {
+                  console.log('error', error);
+                },
+                () => {
+                  if (this.type === 'CLIENT') {
+                    this.router.navigate(
+                      ['/manager/contract-management/clients-contracts/contracts-list']);
+                  } else if (this.type === 'SUPPLIER') {
+                    this.router.navigate(
+                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                  }
+                }
+              );
+          }
+        }
+      );
     } else {
-      forkJoin(
-        [
-          this.contractsService.addContract(Contract),
-          this.contractsService.addContractExtension(Contract),
-        ]
-      )
+      this.contractsService.addContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
         )
@@ -579,7 +816,157 @@ export class AddContractComponent implements OnInit, OnDestroy {
             console.log(error);
           }
         );
+      this.contractExtensionInfo.forEach(
+        (extension) => {
+          extension.application_id = Contract.application_id;
+          extension.email_address = Contract.email_address;
+          extension.contract_code = Contract.contract_code;
+          extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+            type.CURRENCY_DESC === extension.extension_currency_cd).CURRENCY_CODE;
+          extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+            type.viewValue === extension.extension_status).value;
+          this.contractorService.addContractorContact(extension)
+            .pipe(
+              takeUntil(
+                this.destroy$
+              )
+            )
+            .subscribe(
+              (res) => {
+              },
+              error => {
+                console.log('error', error);
+              },
+              () => {
+                if (this.type === 'CLIENT') {
+                  this.router.navigate(
+                    ['/manager/contract-management/clients-contracts/contracts-list']);
+                } else if (this.type === 'SUPPLIER') {
+                  this.router.navigate(
+                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                }
+              }
+            );
+        }
+      );
     }
+  }
+
+  /**************************************************************************
+   * @description Create/Update New/Old Contractor Contact
+   * @param result
+   * result.action: ['update', addMode]
+   *************************************************************************/
+  addContractExtension(result) {
+    switch (result.action) {
+      case 'update': {
+        this.contractExtensionInfo.forEach(
+          (element, index) => {
+            if ( (element.contractExtensionKey ? element.contractExtensionKey.extension_code  : element.extension_code  ) ===
+              this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value) {
+              this.contractExtensionInfo[index].extension_start_date =
+                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
+              this.contractExtensionInfo[index].extension_end_date =
+                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
+              this.contractExtensionInfo[index].extension_rate = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
+              this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value).viewValue;
+              this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value).CURRENCY_DESC;
+              this.contractExtensionInfo[index].updated = true;
+            }
+          }
+        );
+        this.contractForm.patchValue(
+          {
+            CONTRACT_EXTENSION: {
+              extension_code: '',
+              extension_start_date: '',
+              extension_end_date: '',
+              extension_rate: '',
+              extension_status: '',
+              extension_currency_cd: '',
+            },
+          }
+        );
+        this.canUpdateAction.next(false);
+        this.canAddAction.next(true);
+      }
+        break;
+      case 'addMore': {
+        if (
+          !this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value &&
+          this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value === '' ) {
+        } else {
+          this.extensionsList.next([]);
+          this.contractExtensionInfo.push(
+            {
+              extension_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-EXT`,
+              extension_start_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value,
+              extension_end_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value,
+              extension_rate: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value,
+              extension_currency_cd: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd?.value ?
+                this.appInitializerService.currenciesList.find((type) =>
+                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value).CURRENCY_DESC : '',
+              extension_status: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value ?
+                this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value).viewValue : '',
+            }
+          );
+          this.extensionsList.next(this.contractExtensionInfo.slice());
+          this.contractForm.patchValue(
+            {
+              CONTRACT_EXTENSION: {
+                extension_code: '',
+                extension_start_date: '',
+                extension_end_date: '',
+                extension_rate: '',
+                extension_status: '',
+                extension_currency_cd: '',
+              },
+            }
+          );
+          this.utilsService.openSnackBar('Extension Added', 'close');
+        }
+      }
+        break;
+    }
+  }
+
+  /**************************************************************************
+   * @description get selected Action From Dynamic Component
+   * @param rowAction Object { data, rowAction }
+   * data _id
+   * rowAction [show, update, delete]
+   *************************************************************************/
+  switchAction(rowAction: any) {
+    switch (rowAction.actionType) {
+      case ('show'): // this.showContact(rowAction.data);
+        break;
+      case ('update'): this.setContractExtension(rowAction.data);
+        break;
+      case('delete'):  // this.onStatusChange(rowAction.data);
+    }
+  }
+
+  /**************************************************************************
+   * @description get rowData
+   * update form with row details
+   *************************************************************************/
+  setContractExtension(row) {
+    this.canAddAction.next(false);
+    this.canUpdateAction.next(true);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.setValue(
+      row.contractExtensionKey?.extension_code ? row.contractExtensionKey?.extension_code : row.extension_code);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.setValue(row.extension_start_date);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.setValue(row.extension_end_date);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.setValue(row.extension_rate);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(
+      this.appInitializerService.currenciesList.find((type) =>
+        type.CURRENCY_DESC === row.extension_currency_cd).CURRENCY_CODE);
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.setValue(
+      this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+        type.viewValue === row.extension_status).value);
   }
 
   /**************************************************************************

@@ -51,6 +51,7 @@ export interface IFieldsObject {
   filteredList ?: ReplaySubject<IViewParam[]>;
   canUpdate ?: BehaviorSubject<boolean>;
   canAdd ?: BehaviorSubject<boolean>;
+  minDate ?: BehaviorSubject<any>;
   imageInputs?: {
     avatar: BehaviorSubject<any>;
     haveImage: BehaviorSubject<any>;

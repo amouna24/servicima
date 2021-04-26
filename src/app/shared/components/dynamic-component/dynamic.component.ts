@@ -5,6 +5,7 @@ import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
 import { FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { SheetService } from '@core/services/sheet/sheet.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'wid-dynamic-component',
@@ -21,7 +22,6 @@ export class DynamicComponent implements OnInit, OnDestroy {
   @Input() formData: FormGroup;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() title: string;
-  @Input() backURL: string;
   @Input() allowedTableActions: { update: boolean, delete: boolean, show: boolean };
   /**************************************************************************
    * @description Form Group
@@ -49,6 +49,7 @@ export class DynamicComponent implements OnInit, OnDestroy {
 
   constructor(
     private sheetService: SheetService,
+    private location: Location,
   ) {
   }
 
@@ -158,6 +159,22 @@ export class DynamicComponent implements OnInit, OnDestroy {
 
   identify(index, item) {
     return item._id;
+  }
+
+  /**************************************************************************
+   * @description  Prevent Saturday and Sunday from being selected.
+   *************************************************************************/
+  datePickerFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
+
+  /**************************************************************************
+   * @description back click
+   *************************************************************************/
+  backClicked() {
+    this.location.back();
   }
 
   /**************************************************************************
