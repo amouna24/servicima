@@ -16,9 +16,8 @@ export class ThemeService {
    *************************************************************************/
   getTheme(): ITheme[] {
     this.listColor = [
-      { 'color': 'blackGreen', 'status': false , 'image': 'evenGreen.png'},
-      { 'color': 'blueBerry', 'status': false , 'image': 'blueBerry.png'},
-      { 'color': 'Default', 'status': false , 'image': 'blue.png'},
+      { 'color': 'Default', 'status': false , 'image': 'default.png'},
+      { 'color': 'blueBerry', 'status': false , 'image': 'Blueberry.png'},
       { 'color': 'evenGreen', 'status': false , 'image': 'evenGreen.png'},
       { 'color': 'greenBlue', 'status': false , 'image': 'greenBlue.png'},
       { 'color': 'mango', 'status': false , 'image': 'mango.png'},
@@ -35,6 +34,7 @@ export class ThemeService {
       });
       return this.listColor;
     } else {
+      this.listColor[0].status = true;
       return this.listColor;
     }
   }
