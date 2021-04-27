@@ -30,8 +30,8 @@ export class DynamicComponent implements OnInit, OnDestroy {
   @Output() selectedFile = new EventEmitter<FormData>();
   @Output() selectedDoc = new EventEmitter<{ data: FormData, name: string }>();
   @Output() keyUpEventValue = new EventEmitter<string>();
-  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string }>();
-  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
+  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string, formGroupName: string }>();
+  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any, formGroupName: string }>();
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -180,12 +180,12 @@ export class DynamicComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Open Dialog Panel
    *************************************************************************/
-  feedDataTable(form: FormGroup, action) {
-    this.listOfObjects.emit({ form, action });
+  feedDataTable(form: FormGroup, action, formGroupName: string) {
+    this.listOfObjects.emit({ form, action, formGroupName });
   }
 
-  actionRowData(action: string, rowData: any) {
-    this.rowActionData.emit({ actionType: action, data: rowData});
+  actionRowData(action: string, rowData: any, formGroupName: string) {
+    this.rowActionData.emit({ actionType: action, data: rowData, formGroupName});
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
