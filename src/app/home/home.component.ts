@@ -9,6 +9,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
 import { FieldsAlignment, FieldsType, IDynamicForm, InputType } from '@shared/models/dynamic-component/form.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ThemeService } from '@core/services/themes/theme.service';
 
 import { Router } from '@angular/router';
 
@@ -196,7 +197,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private utilService: UtilsService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService,
   ) {
     this.d_c_Form = this.formBuilder.group({
         ADDRESS: this.formBuilder.group({
@@ -238,16 +240,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @return theme
    */
   displayClass(): void {
-    this.listColor = this.utilService.getTheme();
+    this.listColor = this.themeService.getTheme();
     this.userService.classSubject$.subscribe((col) => {
       this.classColor = col;
     });
     this.classColor = {
-      'green': this.listColor[0].status, 'blackYellow': this.listColor[1].status, 'blackGreen': this.listColor[2].status,
-      'blueBerry': this.listColor[3].status, 'cobalt': this.listColor[4].status, 'blue': this.listColor[5].status,
-      'everGreen': this.listColor[6].status, 'greenBlue': this.listColor[7].status, 'lighterPurple': this.listColor[8].status,
-      'mango': this.listColor[9].status, 'whiteGreen': this.listColor[10].status, 'whiteOrange': this.listColor[11].status,
-      'whiteRed': this.listColor[12].status
+      'blue': this.listColor[0].status, 'blueBerry': this.listColor[1].status,
+      'everGreen': this.listColor[2].status, 'greenBlue': this.listColor[3].status,
+      'mango': this.listColor[4].status, 'whiteRed': this.listColor[5].status,
+      'setting': this.listColor[6].status
     };
   }
 

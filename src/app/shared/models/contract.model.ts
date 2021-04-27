@@ -16,6 +16,10 @@ export interface IContract {
   signature_contractor_date?: Date;
   contract_rate: number;
   currency_cd?: string;
+  working_hour_day: string;
+  holiday_rate: string;
+  saturday_rate: string;
+  sunday_rate: string;
   payment_terms: string;
   attachments?: string;
 }

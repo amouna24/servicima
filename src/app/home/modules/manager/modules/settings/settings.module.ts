@@ -11,9 +11,13 @@ import { CompleteUpgradeLicenceComponent } from './licence/complete-upgrade-lice
 import { UpgradeLicenceComponent } from './licence/upgrade-licence/upgrade-licence.component';
 import { LicenceExpirationComponent } from './licence/licence-expiration/licence-expiration.component';
 import { LicenceManagementComponent } from './licence/licence-management/licence-management.component';
-import { PaymentMethodsManagementComponent } from './payment/payment-methods-management/payment-methods-management.component';
-import { PaymentInfoComponent } from './payment/payment-info/payment-info.component';
-import { RoleManagementComponent } from './role-management/role-management.component';
+// tslint:disable-next-line:max-line-length
+import { PaymentMethodsManagementComponent } from './payment/payment-methods-management/payment-methods-management/payment-methods-management.component';
+import { PaymentInfoComponent } from './payment/payment-info/payment-info-company-management/payment-info.component';
+import { RoleManagementComponent } from './role-management/role-management/role-management.component';
+import { TimesheetManagementComponent } from './timesheet management/timesheet-management/timesheet-management.component';
+import { InvoiceComponent } from './invoices/invoice-management/invoice.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,9 @@ import { RoleManagementComponent } from './role-management/role-management.compo
     PaymentMethodsManagementComponent,
     PaymentInfoComponent,
     RoleManagementComponent,
+    TimesheetManagementComponent,
+    InvoiceComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,

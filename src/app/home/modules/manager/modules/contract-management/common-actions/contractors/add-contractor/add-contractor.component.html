@@ -4,7 +4,7 @@
   [formData]="contractorForm"
   [isLoading]="isLoading"
   [title]="title"
-  [backURL]="backURL"
+  [allowedTableActions]="{ update: true, delete: true, show: false }"
   (dynamicFormGroup)="addNewContractor($event)"
   (selectedFile)="getFile($event)"
   (listOfObjects)="addContractorContact($event)"

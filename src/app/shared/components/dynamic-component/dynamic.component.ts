@@ -5,6 +5,7 @@ import { IDynamicForm } from '@shared/models/dynamic-component/form.model';
 import { FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { SheetService } from '@core/services/sheet/sheet.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'wid-dynamic-component',
@@ -17,11 +18,11 @@ export class DynamicComponent implements OnInit, OnDestroy {
    * @description Menu Items List
    *************************************************************************/
   @Input() menuItems: IDynamicMenu[];
-  @Input() dynamicForm: IDynamicForm[];
+  @Input() dynamicForm = new BehaviorSubject<IDynamicForm[]>([]);
   @Input() formData: FormGroup;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() title: string;
-  @Input() backURL: string;
+  @Input() allowedTableActions: { update: boolean, delete: boolean, show: boolean };
   /**************************************************************************
    * @description Form Group
    *************************************************************************/
@@ -29,8 +30,8 @@ export class DynamicComponent implements OnInit, OnDestroy {
   @Output() selectedFile = new EventEmitter<FormData>();
   @Output() selectedDoc = new EventEmitter<{ data: FormData, name: string }>();
   @Output() keyUpEventValue = new EventEmitter<string>();
-  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string }>();
-  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
+  @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string, formGroupName: string }>();
+  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any, formGroupName: string }>();
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -48,6 +49,7 @@ export class DynamicComponent implements OnInit, OnDestroy {
 
   constructor(
     private sheetService: SheetService,
+    private location: Location,
   ) {
   }
 
@@ -160,14 +162,30 @@ export class DynamicComponent implements OnInit, OnDestroy {
   }
 
   /**************************************************************************
-   * @description Open Dialog Panel
+   * @description  Prevent Saturday and Sunday from being selected.
    *************************************************************************/
-  feedDataTable(form: FormGroup, action) {
-    this.listOfObjects.emit({ form, action });
+  datePickerFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
+
+  /**************************************************************************
+   * @description back click
+   *************************************************************************/
+  backClicked() {
+    this.location.back();
   }
 
-  actionRowData(action: string, rowData: any) {
-    this.rowActionData.emit({ actionType: action, data: rowData});
+  /**************************************************************************
+   * @description Open Dialog Panel
+   *************************************************************************/
+  feedDataTable(form: FormGroup, action, formGroupName: string) {
+    this.listOfObjects.emit({ form, action, formGroupName });
+  }
+
+  actionRowData(action: string, rowData: any, formGroupName: string) {
+    this.rowActionData.emit({ actionType: action, data: rowData, formGroupName});
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator

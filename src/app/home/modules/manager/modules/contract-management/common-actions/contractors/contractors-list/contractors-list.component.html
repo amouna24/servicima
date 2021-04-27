@@ -4,6 +4,7 @@
   [tableCode]="'CONTRACTOR_S'"
   [isLoading]="isLoading"
   [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
+  [allowedActions]="{ update: true, delete: true, show: false }"
   (rowActionData)="switchAction($event)"
 >
 </wid-dynamic-data-table>

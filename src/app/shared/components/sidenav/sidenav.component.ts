@@ -48,6 +48,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   year: number;
   image: string;
   email: string;
+  hideTheme: boolean;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -68,6 +69,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.sidenavService.hideTheme$.subscribe((data) => this.hideTheme = data);
     const cred = this.localStorageService.getItem('userCredentials');
     this.email = cred[ 'email_address'];
     this.getModuleName();

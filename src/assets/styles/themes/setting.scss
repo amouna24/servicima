@@ -1,0 +1,57 @@
+// Define palettes
+$mango-primary: mat-palette((500: #405e84, contrast: ()));
+$mango-accent: mat-palette((500: #314e73, contrast: ()));
+$mango-warn: mat-palette((500: #314e73, contrast: ()));
+
+// Create the theme object (a Sass map containing all of the palettes).
+$app-theme: mat-light-theme($mango-primary, $mango-accent, $mango-warn);
+$themeColor: #405e84;
+$themeColorSidenav: #405e84;
+
+.bg-theme {
+  background-color: #405e84 !important;
+}
+
+/*******************
+   Right Sidenav
+*******************/
+.right-side-nav-container{
+  .icon{
+    fill: $themeColor !important;
+    background: rgba($themeColor, 0.1) !important;
+    color: $themeColor !important;
+  }
+  .notif-item {
+    background: rgba($themeColor, 0.2) !important;
+  }
+}
+/*******************
+   Sidenav
+*******************/
+wid-sidenav {
+  .icon {
+    stroke: $themeColorSidenav;
+    color: $themeColorSidenav;
+  }
+
+  span, .company-label, .servicima-color {
+    color: $themeColorSidenav;
+  }
+
+  .side-nav-container .active-list-item span {
+    color: #405e84 !important;
+  }
+
+  .side-nav-container .active-list-item .icon {
+    stroke: #405e84 !important;
+    color: #405e84 !important;
+  }
+
+  .sub-menu-child-item {
+    color: $themeColorSidenav !important;;
+  }
+
+  .active-sub-menu-child-item {
+    color: #405e84 !important;
+  }
+}

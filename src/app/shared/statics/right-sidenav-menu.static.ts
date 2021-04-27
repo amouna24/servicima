@@ -1,13 +1,13 @@
 
 export const sidenavRightMenu = [
-  {
+  /*{
     state: '/settings/home-company',
     name: 'Company Profile',
     type: 'link',
     icon: 'wi_company',
   //  feature: 'company-profile',
     feature: 'SOURCING_ACCESS' // change feature with correct name
-  },
+  },*/
   {
     state: '/user/profile',
     name: 'My Account',
@@ -17,7 +17,7 @@ export const sidenavRightMenu = [
     feature:  'SOURCING_CAND_FILE_ACCESS'  || 'SOURCING_ACCESS'  // change feature with correct name
   },
   {
-    state: '/settings/users',
+    state: '/settings',
     name: 'Settings',
     type: 'link',
     icon: 'wi_settings',

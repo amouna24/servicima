@@ -5,10 +5,11 @@
       [color]="'primary'"
       [mode]="(loading$ | async) ? 'indeterminate' : 'determinate'"
       [value]="100"
-      [diameter]="85"
+      [diameter]= "diameter ? diameter : 80"
       strokeWidth="2">
     </mat-progress-spinner>
-    <img [src]="haveImage ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="edit-img"
+    <img  [src]="haveImage ? avatar : 'assets/img/default.jpg'" [width]='width ?width:80'
+          [height]='height? height:80' class="edit-img"
          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
   </div>
 <!--  *ngIf="loading$ | async"-->

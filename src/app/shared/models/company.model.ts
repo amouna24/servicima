@@ -5,7 +5,7 @@ export interface ICompanyModel {
   companyKey: ICompanyId;
   address: string;
   legalForm: string;
-  name: string;
+  company_name: string;
   numberVAT: string;
   phoneContact: string;
   siret: string;

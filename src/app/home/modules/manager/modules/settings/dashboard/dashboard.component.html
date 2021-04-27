@@ -1,0 +1,169 @@
+<div  fxLayout="column" fxFlex="100" class="dynamic-component-container border-radius-20">
+  <div  fxLayout="row" fxFlex="45" fxLayoutAlign="space-around center" >
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <div fxLayout="column" fxFlex="100" >
+            <a class="white font-size-20" [routerLink]="['.' + '/users']"  >Users</a>
+            <a class="white font-size-10" [routerLink]="['.' + '/users/add-user']"  [state]="{ action: 'add' }" >Add new user</a>
+            <span class="white font-size-20 line-height-3">{{getCount('ALL')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <div fxLayout="column" fxFlex="100" >
+            <a class="white font-size-20" [routerLink]="['.' + '/users']" [state]="{ typeUser: 'collaborator' }">Collaborator</a>
+            <a class="white font-size-10" [routerLink]="['.' + '/users/add-user']"  [state]="{ action: 'add' }">Add new user</a>
+            <span class="white font-size-20 line-height-3">{{getCount('COLLABORATOR')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/users']"  [state]="{ typeUser: 'staff' }">Staff</a>
+            <a class="white font-size-10" [routerLink]="['.' + '/users/add-user']"  [state]="{ action: 'add' }">Add new user</a>
+            <span class="white font-size-20 line-height-3">{{getCount('STAFF')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/users']" [state]="{ typeUser: 'candidate' }">Candidate</a>
+            <a class="white font-size-10" [routerLink]="['.' + '/users/add-user']"  [state]="{ action: 'add' }">Add new candidate</a>
+            <span class="white font-size-20 line-height-3">{{getCount('CANDIDATE')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+
+  </div>
+  <div  fxLayout="row" fxFlex="45" fxLayoutAlign="space-around center" >
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/licences']">Licences</a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/payment-info']">Payment information</a>
+            <span class="white font-size-20 line-height-3">{{getCount('PAYMENT_INFO')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/payment-methods']">Payment methods</a>
+            <span class="white font-size-20 line-height-3">{{getCount('PAYMENT_MODE')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/role']">Roles</a>
+            <span class="white font-size-20 line-height-3">{{getCount('ROLE')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div  fxLayout="row" fxFlex="45" fxLayoutAlign="space-around center" >
+
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/timesheet-setting']">Timesheet settings</a>
+            <span class="white font-size-20 line-height-3">{{getCount('TIMESHEET_SETTING')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20" [routerLink]="['.' + '/tax']">Tax</a>
+            <span class="white font-size-20 line-height-3">{{getCount('TAX')}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <span class="white font-size-20">Invoices</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <a class="white font-size-20"  [routerLink]="['.' + '/home-company']">Company</a>
+            <a class="white font-size-10" [routerLink]="['.' + '/home-company/edit-company']">Edit company </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div  fxLayout="row" fxFlex="45" fxLayoutGap="1%" >
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20 m-l-5">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <span class="white font-size-20">Departments</span>
+            <span class="white font-size-20 line-height-3">0</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex.gt-sm="24" fxFlex.gt-xs="100" fxFlex="100" class="border-radius-20">
+      <mat-card class="bg-theme">
+        <mat-card-content>
+          <!-- column -->
+          <div fxLayout="column" fxFlex="100">
+            <span class="white font-size-20">Calendars</span>
+            <span class="white font-size-10">Add new calendar</span>
+            <span class="white font-size-20 line-height-3">0</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
