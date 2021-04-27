@@ -51,7 +51,9 @@ export class ProExpProjectsComponent implements OnInit {
             console.log('Project array on init= ', this.ProjectArray);
             this.showProject = true;
             this.showForm = false;
-            this.sendProject_code = this.ProjectArray[0].project_code;
+            for (let i = 0; i < response.length; i++) {
+              this.ProjectArray[i].project_code = this.ProjectArray[i].start_date;
+            }
           }
         },
         (error) => {
@@ -65,6 +67,7 @@ export class ProExpProjectsComponent implements OnInit {
     console.log('professional experience code=', this.professional_experience_code);
     this.createForm();
     this.getProjectInfo();
+    console.log('on init showForm', this.showForm);
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -100,5 +103,6 @@ export class ProExpProjectsComponent implements OnInit {
 
   onShowForm() {
     this.showForm = true;
+    console.log(this.showForm);
   }
 }

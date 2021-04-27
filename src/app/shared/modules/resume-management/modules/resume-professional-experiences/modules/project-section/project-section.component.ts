@@ -20,7 +20,7 @@ export class ProjectSectionComponent implements OnInit {
   project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D` ;
   showDesc = true;
   showSec = false;
-  select = 'desc';
+  select = '';
   list = 'List';
   desc = 'desc';
   @Input() project_code = '';
@@ -44,6 +44,7 @@ export class ProjectSectionComponent implements OnInit {
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
      this.select = selectedValue;
+      console.log('selected value = ', selectedValue);
     });
   }
   createFormProDetails() {

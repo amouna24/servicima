@@ -47,6 +47,11 @@ export class ProExpComponent implements OnInit {
               (responseProExp) => {
                 console.log('response', responseProExp);
                 this.proExpArray = responseProExp;
+                for (let i = 0; i < responseProExp.length; i++) {
+                  this.proExpArray[i].start_date = this.proExpArray[i].ResumeProfessionalExperienceKey.start_date;
+                  this.proExpArray[i].end_date = this.proExpArray[i].ResumeProfessionalExperienceKey.end_date;
+                  this.proExpArray[i].professional_experience_code = this.proExpArray[i].ResumeProfessionalExperienceKey.professional_experience_code;
+                }
               },
               (error) => {
                 if (error.error.msg_code === '0004') {

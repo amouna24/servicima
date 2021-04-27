@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
 import { UserService } from '@core/services/user/user.service';
-import {BehaviorSubject} from "rxjs";
-import {IViewParam} from "@shared/models/view.model";
-import {AppInitializerService} from "@core/services/app-initializer/app-initializer.service";
+import { BehaviorSubject } from 'rxjs';
+import { IViewParam } from '@shared/models/view.model';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 
 @Component({
   selector: 'wid-resume-language',

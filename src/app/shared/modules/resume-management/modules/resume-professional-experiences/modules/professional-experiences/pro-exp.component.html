@@ -36,12 +36,12 @@
                 </div>
                 <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
                   <p class="font-extra-light font-size-10 help-blue">
-                    {{item.customer}}   {{item.ResumeProfessionalExperienceKey.start_date}}-{{item.ResumeProfessionalExperienceKey.end_date}}</p>
+                    {{item.customer}}   {{item.start_date}}-{{item.end_date}}</p>
                 </div>
 
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.ResumeProfessionalExperienceKey.professional_experience_code)">Add project</button>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.professional_experience_code)">Add project</button>
                 </div>
               </div>
             </div>

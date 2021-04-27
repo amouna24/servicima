@@ -28,7 +28,7 @@
       </mat-label>
       <mat-form-field appearance="outline">
         <mat-select disableOptionCentering panelClass="panelColor"
-                    formControlName="select" (valueChange)="onSelect()" placeholder="Section type">
+                    formControlName="select" (valueChange)="onSelect()" [value]="desc" placeholder="Section type">
           <mat-option [value]="list">List</mat-option>
           <mat-option [value]="desc">Paragraph</mat-option>
         </mat-select>

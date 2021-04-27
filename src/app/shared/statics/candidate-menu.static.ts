@@ -94,6 +94,13 @@ export const candidateMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
+      {
+        state: 'done',
+        name: 'Preview',
+        icon: 'wi_res_certif',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
 
     ]
   },

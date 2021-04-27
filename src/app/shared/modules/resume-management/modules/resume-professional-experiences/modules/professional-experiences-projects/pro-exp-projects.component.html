@@ -22,8 +22,9 @@
       </div>
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
         <wid-scrollbar class="full-width full-height">
-          <div fxLayout="column" fxFlex="86" *ngIf="!showProject" fxLayoutAlign=" center">
-            <div fxLayout="row" fxFlex="60" class="width-80 border-radius-10 border_add_project" >
+         <div fxLayout="column" fxFlex="86"  fxLayoutAlign=" center">
+          <div fxLayout="row" fxFlex="86" *ngIf="!showProject" class="full-width" fxLayoutAlign="center">
+            <div fxLayout="column" fxFlex="80" class="height-80 border-radius-10 border_add_project" >
               <div fxLayout="column" fxFlexFill fxLayoutGap="30px" >
                 <div fxLayout="row" fxFlex="8"></div>
                 <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No Project available</span></div>
@@ -32,9 +33,9 @@
                 </button></div>
               </div></div>
           </div>
-          <div *ngFor="let item of getProject let pointIndex=index" fxFlexFill>
+          <div *ngFor="let item of getProject let pointIndex=index" fxLayout="row"  fxFlex="85" class="full-width">
           <div fxLayout="column" fxFlex="100" *ngIf="showProject" class="p-l-65 p-r-65" fxLayoutGap="10px" fxLayoutAlign=" center">
-            <div  fxLayout="row" fxFlex="15"   class="width-82">
+            <div  fxLayout="row" fxFlex="18"   class="width-82">
                 <div class="bg-pale-grey border-radius-15 full-width">
                 <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="60"  >
                     <div fxLayout="row"  fxFlex="34" >
@@ -55,20 +56,19 @@
                 </div>
               </div>
               </div>
-              <div fxLayout="row" class="width-82"  *ngIf="showAddSection">
+              <div class="width-82"  *ngIf="showAddSection">
                 <div class="border_add_section border-radius-15 full-width full-height">
-                <wid-project-section [project_code]="item.ResumeProjectKey.project_code" class="full-width"></wid-project-section>
+                <wid-project-section [project_code]="item.project_code" class="full-width"></wid-project-section>
                 </div>
               </div>
-            <div fxLayout="row" fxFlex="4"  class="width-80">
-              <div fxLayout="column"  fxFlexFill  >
-                <div fxLayout="row" fxFlexFill class="add_project" *ngIf="!showForm">
-                  <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)="onShowForm()" >+</button>
-                  <span class="font-size-12 steel"> Add project </span></div></div></div>
-
           </div>
             </div>
-          <form fxLayout="column" fxFlex="80"  fxLayoutAlign=" center"   [formGroup]="sendProject" class="full-height full-width" *ngIf="showForm">
+          <div fxLayout="row" fxFlex="4"  class="width-80">
+              <div fxLayout="column"  fxFlexFill  >
+                <div fxLayout="row" fxFlexFill class="add_project" *ngIf="!showForm && showProject">
+                  <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)="onShowForm()" >+</button>
+                  <span class="font-size-12 steel"> Add project </span></div></div></div>
+          <form fxLayout="row"  fxLayoutAlign=" center"   [formGroup]="sendProject" fxFlex="100" class="width-90" *ngIf="showForm">
             <div fxLayout="column" fxFlex="9"   ></div>
             <div fxLayout="row" fxFlex="82"class="border-radius-10 pale-grey height-70 width-80"  style="border-style: solid">
               <div fxLayout="column" fxFlex="95" fxLayoutAlign="center" class="p-l-65 " >
@@ -113,6 +113,7 @@
               </div>
             </div>
           </form>
+         </div>
         </wid-scrollbar>
       </div>
       </div>

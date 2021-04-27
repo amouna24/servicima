@@ -5,9 +5,7 @@ import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common'
-
-import { ProfileImageComponent } from '@shared/components/profile-image/profile-image.component';
+import { DatePipe } from '@angular/common';
 
 import { ResumeManagementRoutingModule } from './resume-management-routing.module';
 
