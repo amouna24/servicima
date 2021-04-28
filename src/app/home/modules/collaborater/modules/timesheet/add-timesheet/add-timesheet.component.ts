@@ -119,7 +119,8 @@ export class AddTimesheetComponent implements OnInit {
     });
   }*/
 
-  submitTimesheet(formDirective: FormGroupDirective) {
+  submitTimesheet() {
+    console.log('valid ?', this.creationForm.valid);
     if (this.creationForm.valid) {
       console.log(this.creationForm.value);
       this.timesheetService.addTimesheet(this.creationForm.value).subscribe(

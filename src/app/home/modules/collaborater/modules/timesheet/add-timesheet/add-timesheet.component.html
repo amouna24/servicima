@@ -1,25 +1,27 @@
-    <div fxLayout="column" fxFlex="100"  *ngIf="close">
-      <mat-accordion>
-        <Form [formGroup]="creationForm"  (submit)="submitTimesheet(formDirective)" #formDirective="ngForm">
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header [collapsedHeight]="'60px'" [expandedHeight]="'60px'" class="border-radius-top-15 bg-pale-grey-four" >
-              <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between center" class="help-blue">
-                <div fxLayout="column" fxLayoutAlign="space-around start" fxFlex="15">
+<div fxLayout="column" fxFlex="100"  *ngIf="close">
+  <mat-accordion>
+    <form [formGroup]="creationForm" >
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header [collapsedHeight]="'60px'" [expandedHeight]="'60px'" class="border-radius-top-15 bg-pale-grey-four" >
+          <div fxLayout="row" fxFlex="50" fxLayoutAlign="space-between center" class="help-blue">
+            <div fxLayout="column">
                   <div class="font-size-10">Week start on:</div>
                   <mat-form-field class="height-30">
-                    <mat-label class="font-size-10">Choose a date</mat-label>
-                    <input matInput [matDatepicker]="picker" [min]="minDate"  formControlName="start_date" required>
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="start_date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <button mat-button class="btn-timesheet border-cool-gray border-radius-5" (click)="closeClick()">
-                  <mat-icon svgIcon="wi-close-normal" class="cool-grey"></mat-icon>
-                </button>
-              </div>
-            </mat-expansion-panel-header>
-            <div fxLayout="column">
-              <div fxLayout="row" fxLayoutAlign="space-between center" >
+            <div fxLayout="column" fxLayoutAlign="center">
+              <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="closeClick()">
+                <mat-icon svgIcon="wi-close-normal"></mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <div fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="space-between center" >
                   <div fxLayout="column" fxFlex="23">
                     <div fxLayout="row">
                       <h1 class="font-size-12 font-normal">Category :</h1>
@@ -76,44 +78,36 @@
                     </div>
                   </div>
               </div>
-              <div fxLayout="row"  fxLayoutAlign="space-between center">
-               <div fxLayout="column" fxFlex="23">
-                    <div fxLayout="row" fxFlex="100">
-                      <div fxLayout="column" fxFlex="100" fxLayoutAlign="start">
-                        <mat-label class="black font-size-12">
-                          MON:
-                        </mat-label>
-                        <mat-form-field appearance="outline">
-                          <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
-                        </mat-form-field>
-                      </div>
-                      <div fxLayout="column" fxLayoutAlign="start">
-                        <mat-label class="black font-size-12">
-                          MON:
-                        </mat-label>
-                        <mat-form-field appearance="outline">
-                          <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" (input)="calculTotalWeekHours()">
-                        </mat-form-field>
-                      </div>
+          <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center" >
+                <div fxLayout="column" fxFlex="49">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxLayout="column" fxFlex="48" >
+                      <mat-label class="black font-size-12">MON:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex="48">
+                      <mat-label class="black font-size-12">TUE:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" (input)="calculTotalWeekHours()">
+                      </mat-form-field>
                     </div>
                   </div>
-                <div fxLayout="column" fxFlex="23">
-                  <div fxLayout="row" fxLayoutGap="10px">
-                    <div fxLayout="column" fxLayoutAlign="start">
-                      <mat-label class="black font-size-12">
-                        MON:
-                      </mat-label>
+                </div>
+                <div fxLayout="column" fxFlex="49">
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <div fxLayout="column" fxFlex="48" >
+                      <mat-label class="black font-size-12">WED:</mat-label>
                       <mat-form-field appearance="outline">
                         <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
                         <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" (input)="calculTotalWeekHours()">
                       </mat-form-field>
                     </div>
-                    <div fxLayout="column" fxLayoutAlign="start">
-                      <mat-label class="black font-size-12">
-                        MON:
-                      </mat-label>
+                    <div fxLayout="column" fxFlex="48">
+                      <mat-label class="black font-size-12">THU:</mat-label>
                       <mat-form-field appearance="outline">
                         <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
                         <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" (input)="calculTotalWeekHours()">
@@ -121,94 +115,63 @@
                     </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="23">
+              </div>
+          <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center" >
+                <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
-                    <div fxLayout="column" >
-                      <div fxLayout="row">
-                        <mat-label class="black font-size-12">
-                          MON:
-                        </mat-label>
-                      </div>
-                      <div fxLayout="row">
-                        <mat-form-field appearance="outline">
-                          <!--
-                                                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          -->
-                          <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" (input)="calculTotalWeekHours()">
-                        </mat-form-field>
-                      </div>
+                    <div fxLayout="column" fxFlex="48" >
+                      <mat-label class="black font-size-12">FRI:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" (input)="calculTotalWeekHours()">
+                      </mat-form-field>
                     </div>
-                    <div fxLayout="column" >
-                      <div fxLayout="row">
-                        <mat-label class="black font-size-12">
-                          MON:
-                        </mat-label>
-                      </div>
-                      <div fxLayout="row">
-                        <mat-form-field appearance="outline">
-                          <!--
-                                                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          -->
-                          <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" (input)="calculTotalWeekHours()">
-                        </mat-form-field>
-                      </div>
+                    <div fxLayout="column" fxFlex="48">
+                      <mat-label class="black font-size-12">SAT:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" (input)="calculTotalWeekHours()">
+                      </mat-form-field>
                     </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="23">
+                <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
-                    <div fxLayout="column" fxFlex="50">
-                      <div fxLayout="row">
-                        <mat-label class="black font-size-12">
-                          MON:
-                        </mat-label>
-                      </div>
-                      <div fxLayout="row">
-                        <mat-form-field appearance="outline">
-                          <!--
-                                                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          -->
-                          <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday" (input)="calculTotalWeekHours()">
-                        </mat-form-field>
-                      </div>
+                    <div fxLayout="column" fxFlex="48" >
+                      <mat-label class="black font-size-12">SUN:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday" (input)="calculTotalWeekHours()">
+                      </mat-form-field>
                     </div>
-                    <div fxLayout="column" fxFlex="50">
-                      <div fxLayout="row">
-                        <mat-label class="black font-size-12">
-                          Total:
-                        </mat-label>
-                      </div>
-                      <div fxLayout="row">
-                        <mat-form-field appearance="outline">
-                          <!--
-                                                    <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                          -->
-                          <input matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
-                        </mat-form-field>
-                      </div>
+                    <div fxLayout="column" fxFlex="48">
+                      <mat-label class="black font-size-12">Total:</mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                        <input matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
+                      </mat-form-field>
                     </div>
                   </div>
                 </div>
               </div>
-              <div fxLayout="row">
+          <div fxLayout="row">
                 <div fxLayout="column" fxFlex="70">
                   <div><button mat-button class="decoration red ">Delete timesheet</button></div>
                 </div>
                 <div fxLayout="column" fxFlex="30">
                   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
-                    <button mat-raised-button class="white btn-medium bg-cerulean-blue">
-                      <span class="font-size-11" type="submit">Submit</span>
+                    <button type="submit" mat-raised-button (click)="submitTimesheet()" class="white btn-medium bg-cerulean-blue">
+                      <span class="font-size-11" >Submit</span>
                     </button>
-                    <button mat-raised-button class="white btn-medium duck-egg-blue" >
+                    <button mat-raised-button  class="white btn-medium duck-egg-blue" >
                       <span class="font-size-11 cerulean-blue">Save</span>
                     </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </mat-expansion-panel>
-        </Form>
-
-      </mat-accordion>
-    </div>
+        </div>
+      </mat-expansion-panel>
+    </form>
+  </mat-accordion>
+</div>
 

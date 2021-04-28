@@ -31,7 +31,8 @@ export class TimesheetsListComponent implements OnInit {
   initialForm: FormGroup;
   totalWeek: any;
 
-  constructor(private timesheetService: TimesheetService, private fb: FormBuilder) { }
+  constructor(private timesheetService: TimesheetService,
+              private fb: FormBuilder) { }
 
   sortBy = [
     { value: 'Week start on-0', viewValue: 'Week start on'},
@@ -42,12 +43,20 @@ export class TimesheetsListComponent implements OnInit {
     this.getTimesheets();
     this.getAllProjects();
     this.getAllTasks();
+    this.filterOptions();
+    this.createForm();
+    // this.updateForm();
+  }
+
+  filterOptions() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(val => this.filter(val))
     );
-    this.createForm();
-    // this.updateForm();
+  }
+
+  filter(val: string): string[] {
+    return this.options.filter(option => option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
 
   createForm() {
@@ -76,7 +85,7 @@ export class TimesheetsListComponent implements OnInit {
   }
 
   updateForm() {
-    console.log('', this.timesheet);
+    console.log('this.timesheet', this.timesheet);
     this.initialForm.patchValue({
       application_id : this.timesheet._id,
       email_address : this.timesheet.TimeSheetKey.email_address,
@@ -108,6 +117,8 @@ export class TimesheetsListComponent implements OnInit {
         },
         error => console.log(error)
       );
+    } else {
+      console.log('error');
     }
   }
 
@@ -127,10 +138,6 @@ export class TimesheetsListComponent implements OnInit {
       },
       error => console.log(error)
     );
-  }
-
-  filter(val: string): string[] {
-    return this.options.filter(option => option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
 
   showHide() {
@@ -159,6 +166,7 @@ export class TimesheetsListComponent implements OnInit {
   editTimesheet(item, index, panel) {
     this.timesheet = item;
     this.openEditComponent.next({ opened: true, index});
+    this.updateForm();
     this.togglePanel(panel);
     console.log(this.timesheet);
   }

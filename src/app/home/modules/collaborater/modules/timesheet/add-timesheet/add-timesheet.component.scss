@@ -5,3 +5,15 @@
 .mat-expansion-panel-content{
   border: black !important;
 }
+
+.btn-timesheet{
+  min-width: 21px !important;
+  line-height: 0 !important;
+  height: 21px !important;
+  width: 21px !important;
+  padding: 0 !important;
+  mat-icon{
+    width: 10px;
+    height: 10px;
+  }
+}
