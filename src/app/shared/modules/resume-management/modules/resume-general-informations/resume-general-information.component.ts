@@ -135,9 +135,17 @@ export class ResumeGeneralInformationComponent implements OnInit {
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
       this.resumeService.addResume(this.generalInfo).subscribe(data => console.log('Resume =', data));
+      this.router.navigate(['/candidate/resume/professionalExperience']);
     } else {
       console.log('Form is not valid');
     }
+  }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
   }
 
 }

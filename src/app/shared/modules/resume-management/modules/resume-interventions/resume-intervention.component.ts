@@ -81,4 +81,11 @@ export class ResumeInterventionComponent implements OnInit {
     this.sendIntervention.reset();
     this.arrayInterventionCount++;
   }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
+  }
 }

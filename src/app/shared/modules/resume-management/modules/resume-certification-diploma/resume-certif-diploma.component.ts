@@ -86,4 +86,17 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.arrayCertifDiplomaCount++;
     this.sendCertifDiploma.reset();
   }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
+  }
+  testDate(form: FormGroup, start_date: string, end_date: string) {
+    const start = new Date(form[start_date]);
+    const end = new Date(form[end_date]);
+    console.log('start=', start_date, 'end=', end_date);
+    return start.getDate() > end.getDate();
+  }
 }

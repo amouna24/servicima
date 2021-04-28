@@ -1,18 +1,18 @@
 <br>
-<div fxLayout="column" fxLayoutGap="10px">
-  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" fxFlex="90" class="p-l-65">
-    <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
-      <div fxLayout="column" fxFlex="20" class="p-l-20">
+<div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" fxFlex="100" >
+    <div fxLayout="row" class="bg-pale-grey border-radius-15 ">
+      <div fxLayout="column" fxFlex="20" >
         <p>{{item.project_detail_title}}</p>
       </div>
-      <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+      <div fxLayout="column" fxLayoutAlign="center end" fxFlex>
         <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
       </div>
     </div>
   </div>
-<div fxLayout="row">
+<div fxLayout="row" fxFlexFill>
 <form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
-  <div fxLayout="row" fxFlex="50" fxLayoutAlign="space-around center">
+  <div fxLayout="row" fxFlex="20" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="30">
       <mat-label class="black font-size-12">
         Section title :
@@ -36,7 +36,7 @@
 
     </div>
   </div>
-  <div fxLayout="row" fxFlex="46" fxLayoutAlign="center center">
+  <div fxLayout="row" fxFlex="50" fxLayoutAlign="center center">
     <ng-template [ngIf]="showDesc">
       <div fxLayout="column" fxFlex="80">
         <mat-label class="black font-size-12">
@@ -58,7 +58,7 @@
         <div fxLayout="row" >
 
           <div fxLayout="column" fxFlex="56" fxLayoutAlign=" end"  >
-        <div fxLayout="row"  class="width-76">
+        <div fxLayout="row"  >
           <div fxLayout="column" fxFlex="100">
           <mat-label class="black font-size-12">
             Section Content :
@@ -69,7 +69,7 @@
           </div>
         </div>
         </div>
-          <div fxLayout="column" class="p-l-20 p-t-30">
+          <div fxLayout="column" >
             <button class="btn-small bg-cool-grey"  (click)="createProSectionDetails()">Add</button>
           </div>
         </div>
@@ -81,8 +81,8 @@
     </ng-template>
 
   </div>
-  <div fxLayout="row" fxFlex="30" fxLayoutAlign="end end">
-    <div fxLayout="column" fxFlex="10"  >
+  <div fxLayout="row" fxFlex="6" fxLayoutAlign="end end">
+    <div fxLayout="column" fxFlex="12"  >
     <button type="submit" mat-raised-button type="submit" class="bg-pale-grey btn-small"
             (click)="createProDetails()">Add
     </button></div>

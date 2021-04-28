@@ -52,13 +52,18 @@
                 </mat-label>
                 <mat-form-field appearance="outline">
                   <input   formControlName="position" matInput placeholder="Position" required>
+                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'position', 'required')">
+                    Please fill out this field</mat-error>
                 </mat-form-field>
                 </div>
               <div fxLayout="column"  fxFlex="35">
                 <mat-label class="black font-size-12">
                   Customer:                </mat-label>
                 <mat-form-field appearance="outline">
-                  <input   formControlName="customer" matInput placeholder="Customer" required>                </mat-form-field>
+                  <input   formControlName="customer" matInput placeholder="Customer" required>
+                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'customer', 'required')">
+                    Please fill out this field</mat-error>
+                </mat-form-field>
                </div>
             </div>
             <div fxLayout="row"  class="width-90"  fxFlex="40" fxLayoutAlign="space-around center">
@@ -68,6 +73,8 @@
                 </mat-label>
                 <mat-form-field appearance="outline">
                   <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date" required>
+                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'start_date', 'required')">
+                    Please Select a date</mat-error>
                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                 </mat-form-field>
@@ -77,7 +84,9 @@
                   End date:
                 </mat-label>
                 <mat-form-field appearance="outline">
-                  <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date">
+                  <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date" required>
+                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'end_date', 'required')">
+                    Please Select a date</mat-error>
                   <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                   <mat-datepicker #datepickerend color="primary"></mat-datepicker>
                 </mat-form-field>
@@ -89,7 +98,6 @@
                 Add
               </button></div>
             </div>
-            <div fxLayout="row"    fxFlex="8" ></div>
     </div>
 
               </div>
@@ -99,20 +107,20 @@
 </div>
       </wid-scrollbar>
     </div>
-    <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-      <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
-        <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
-          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-          </mat-icon>
-          <span class="cool-grey">back</span>
-        </button>
-      </div>
-      <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-        <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
-          Next
-        </button>
-      </div>
-    </div>
+         <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+           <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+             <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+               <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+               </mat-icon>
+               <span class="cool-grey">back</span>
+             </button>
+           </div>
+           <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+             <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
+               Save
+             </button>
+           </div>
+         </div>
        </div>
   </div>
 

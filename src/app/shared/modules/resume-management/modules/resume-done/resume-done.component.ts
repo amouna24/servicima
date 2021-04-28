@@ -11,6 +11,7 @@ import { ILanguageModel } from '@shared/models/language.model';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'wid-resume-done',
@@ -79,6 +80,13 @@ certifList: IResumeCertificationDiplomaModel[] = [];
 /*                    this.sectionList = data[6];
                     this.certifList = data[7];*/
                   }); });
+  }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
   }
 
 }

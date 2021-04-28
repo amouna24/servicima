@@ -87,4 +87,11 @@ export class ResumeTechSkillComponent implements OnInit {
     this.arrayTechSkillCount++;
 
   }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
+  }
 }

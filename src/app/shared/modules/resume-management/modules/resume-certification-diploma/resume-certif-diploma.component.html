@@ -1,7 +1,5 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
-  <div fxLayout="column" fxFlex="4"   ></div>
-  <div fxLayout="column" fxFlex="90"    >
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
       <div fxLayout="column" fxFlex="56">
         <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -17,15 +15,14 @@
     <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
-    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
-      <div fxLayout="column" fxFlex="86">
-        <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+    <div fxLayout="row" fxFlex="88" fxLayoutAlign="space-around">
+      <div fxLayout="column" fxFlexFill  >
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+        </div>
       </div>
-    </div>
-    <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around">
-
-      <div fxLayout="column" fxFlex="100"  >
-        <wid-scrollbar fxFlexFill>
+        <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
           <div fxLayout="column" fxLayoutGap="10px" >
             <div  *ngFor="let item of getCertifDiploma let pointIndex=index" class="p-l-65">
 
@@ -38,52 +35,63 @@
                 </div>
               </div>
             </div>
-            <form [formGroup]="sendCertifDiploma" class="full-height p-l-65">
-              <div fxLayout="row"  fxFlex="90"  class="border-radius-10 pale-grey width-90" fxLayoutAlign="space-arround center" style="border-style: solid">
-                <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center" >
-                  <div fxLayout="row" fxFlex="2"></div>
-                  <div fxLayout="row"    fxFlex="25"  fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxFlex="35" >
+            <form [formGroup]="sendCertifDiploma" class="full-height " style="justify-content: center">
+              <div fxLayout="row"  fxFlex="90"  class="border-radius-10 pale-grey " fxLayoutAlign="space-arround center" style="border-style: solid">
+                <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="center" >
+                  <div fxLayout="row"    fxFlex="21"  fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="32" >
                       <mat-label class="black font-size-12">
                         establishment:
                       </mat-label>
                       <mat-form-field appearance="outline">
                         <input   formControlName="establishment" matInput placeholder="Establishment" required>
+                        <mat-error class="red" *ngIf="isControlHasError(sendCertifDiploma,'establishment', 'required')">
+                          Please fill out this field</mat-error>
                       </mat-form-field>
                     </div>
-                    <div fxLayout="column"  fxFlex="35">
+                    <div fxLayout="column"  fxFlex="32">
                       <mat-label class="black font-size-12">
                         diploma:
                       </mat-label>
                       <mat-form-field appearance="outline">
                         <input   formControlName="diploma" matInput placeholder="Diploma" required>
+                        <mat-error class="red" *ngIf="isControlHasError(sendCertifDiploma,'diploma', 'required')">
+                          Please fill out this field</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="row"    fxFlex="25" fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxFlex="35">
+                  <div fxLayout="row"    fxFlex="24" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="32">
                       <mat-label class="black font-size-12">
                         Start Date:
                       </mat-label>
                       <mat-form-field appearance="outline">
-                        <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date">
+                        <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date" required>
+                        <mat-error class="red" *ngIf="isControlHasError(sendCertifDiploma,'start_date', 'required')">
+                          Please select a date</mat-error>
+                        <mat-error class="red" *ngIf="testDate(sendCertifDiploma,'start_date', 'end_date')">
+                          Please select a correct date</mat-error>
                         <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                         <mat-datepicker #datepicker color="primary"></mat-datepicker>
                       </mat-form-field>
                     </div>
-                    <div fxLayout="column" fxFlex="35">
+                    <div fxLayout="column" fxFlex="32">
                       <mat-label class="black font-size-12">
                         End date:
                       </mat-label>
                       <mat-form-field appearance="outline">
-                        <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date">
+                        <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date" required>
+                        <mat-error class="red" *ngIf="isControlHasError(sendCertifDiploma,'end_date', 'required')">
+                          Please select a date</mat-error>
+                        <mat-error class="red" *ngIf="testDate(sendCertifDiploma,'start_date', 'end_date')">
+                          Please select a correct date</mat-error>
                         <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                         <mat-datepicker #datepickerend color="primary"></mat-datepicker>
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="row"    fxFlex="40" fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxFlex="85">
+                  <div fxLayout="row"    fxFlex="43" fxLayoutAlign="space-around center">
+                    <div fxLayout="column" fxFlex="82">
                     <mat-label class="black font-size-12">
                       Description:
                     </mat-label>
@@ -93,37 +101,31 @@
                     </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="row"    fxFlex="10" >
-                    <div fxLayout="column" fxFlex="90" fxLayoutAlign="start end">
+                  <div fxLayout="row"    fxFlex="6" >
+                    <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end">
                       <button mat-raised-button type="submit" class="btn-small bg-pale-grey"   (click)="createCertifDiploma()" >
                         Add
                       </button></div>
                   </div>
-                  <div fxLayout="row"    fxFlex="8" ></div>
                 </div>
 
               </div>
             </form>
           </div>
         </wid-scrollbar>
-        <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-          <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+        <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+          <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
             <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
               <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
               </mat-icon>
               <span class="cool-grey">back</span>
             </button>
           </div>
-          <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end" [style]="{ minHeight: '139px'}">
-            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/done']">
+          <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
               Next
             </button>
           </div>
-
-        </div>
-      </div>
-
-
+        </div>     </div>
     </div>
   </div>
-</div>

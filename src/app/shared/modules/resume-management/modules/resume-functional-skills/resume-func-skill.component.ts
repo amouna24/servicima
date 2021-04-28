@@ -84,4 +84,11 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.arrayFuncSkillCount++;
 
   }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
+  }
 }

@@ -1,9 +1,4 @@
-
-  <div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
-
-    <div fxLayout="column" fxFlex="4"   ></div>
-
-    <div fxLayout="column" fxFlex="90"    >
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
@@ -20,13 +15,14 @@
       <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
         <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
       </div>
-      <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center" >
+    <div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">Language</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
-        <wid-scrollbar fxFlexFill >
+  <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width"  >
           <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
             <div  *ngFor="let item of getLanguage let pointIndex=index">
               <div fxLayout="row" fxLayoutAlign="space-around center" >
@@ -68,9 +64,11 @@
                   </mat-label>
                   <mat-form-field appearance="outline">
                     <mat-select disableOptionCentering panelClass="panelColor"
-                                placeholder="Language" formControlName="resume_language_code">
+                                placeholder="Language" formControlName="resume_language_code" required>
                       <mat-option *ngFor="let v of langList.getValue()" [value]="v.value">{{v.viewValue}}</mat-option>
                     </mat-select>
+                    <mat-error class="red" *ngIf="isControlHasError(sendLanguage,'resume_language_code', 'required')">
+                      Please select an item in the list</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="30">
@@ -80,10 +78,10 @@
                         {{showIcon(i)}}
                       </mat-icon>
                     </button>
-                    <mat-error *ngIf="starCount == null || starCount == 0">
-                      Star count is <strong>required</strong> and cannot be zero
-                    </mat-error>
                   </div>
+                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="rating == 0">
+                        Please select a level
+                  </mat-error>
 
 
                 </div>
@@ -96,21 +94,21 @@
           </form>
           </div>
         </wid-scrollbar>
-      </div>
-      <div fxLayout="row" fxFlex="9" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" start" class="p-l-20" [style]="{ minHeight: '139px'}">
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
             <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
             </mat-icon>
             <span class="cool-grey">back</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end ">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/dynamicSection']">
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
             Next
           </button>
         </div>
       </div>
+    </div>
 
 
     </div>

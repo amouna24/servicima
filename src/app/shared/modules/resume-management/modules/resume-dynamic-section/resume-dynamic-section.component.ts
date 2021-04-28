@@ -86,4 +86,11 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.arraySectionCount++;
     this.sendSection.reset();
   }
+  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
+    const control = form[controlName];
+    if (!control) {
+      return true;
+    }
+    return control.hasError(validationType) ;
+  }
 }
