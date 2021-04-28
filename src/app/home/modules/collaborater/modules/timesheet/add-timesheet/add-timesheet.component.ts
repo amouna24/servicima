@@ -4,6 +4,7 @@ import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
 import { ITimesheetTaskModel } from '@shared/models/timeshetTask.model';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'wid-add-timesheet',
@@ -11,22 +12,44 @@ import { ITimesheetModel } from '@shared/models/timesheet.model';
   styleUrls: ['./add-timesheet.component.scss']
 })
 export class AddTimesheetComponent implements OnInit {
-  @Input() object: ITimesheetModel[];
+  @Input() timesheet: ITimesheetModel;
   close = true;
   creationForm: FormGroup;
-  minDate = new Date(Date.now());
   listTimesheetProject: ITimesheetProjectModel[] = [];
   listTimesheetTask: ITimesheetTaskModel[] = [];
   totalWeek: any;
+  minDate = new Date(Date.now());
 
   constructor( private fb: FormBuilder,
-                private timesheetService: TimesheetService) { }
+                private timesheetService: TimesheetService) {
+    // moment().subtract(7, 'days');
+    // console.log('minDate', this.minDate);
+    // const date = moment(this.minDate).format('MMMM d, YYYY');
+    // console.log('d', date);
+  }
 
   ngOnInit(): void {
-    this.createForm();
+    console.log('yr');
+    // this.getTimesheet();
     this.getAllProjects();
     this.getAllTasks();
-    console.log(this.object);
+    // this.getTimesheet();
+    this.createForm();
+    // this.updateForm();
+    // console.log(this.minDate);
+    // console.log(this.timesheet);
+  }
+
+  getTimesheet() {
+    console.log('this', this.timesheet);
+    this.timesheetService.getTimesheet(this.timesheet._id).subscribe(
+      data => {
+        this.timesheet = data[0];
+        console.log('this', this.timesheet);
+        console.log(this.timesheet.comment);
+      },
+      error => console.log(error)
+    );
   }
 
   getAllProjects() {
@@ -71,6 +94,30 @@ export class AddTimesheetComponent implements OnInit {
       }
     );
   }
+
+/*  updateForm() {
+    console.log('time', this.timesheet);
+    this.creationForm.patchValue({
+        application_id : this.timesheet._id,
+        email_address : this.timesheet.TimeSheetKey.email_address,
+        company_email : this.timesheet.TimeSheetKey.company_email,
+        timesheet_week : this.timesheet.TimeSheetKey.timesheet_week,
+        task_code : this.timesheet.TimeSheetKey.task_code,
+        start_date : [this.timesheet.start_date, Validators.required],
+        end_date : this.timesheet.end_date,
+        timesheet_status : this.timesheet.timesheet_status,
+        comment : this.timesheet.comment,
+        monday : this.timesheet.monday,
+        tuesday : this.timesheet.tuesday,
+        wednesday : this.timesheet.wednesday,
+        thursday : this.timesheet.thursday,
+        friday : this.timesheet.friday,
+        saturday : this.timesheet.saturday,
+        sunday : this.timesheet.sunday,
+        total_week_hours : this.timesheet.total_week_hours,
+        customer_timesheet : this.timesheet.customer_timesheet
+    });
+  }*/
 
   submitTimesheet(formDirective: FormGroupDirective) {
     if (this.creationForm.valid) {

@@ -100,7 +100,7 @@ export const iconsList: IIcon[] = [
   },
   {
     name: 'wi-close-normal',
-    path: 'assets/icons/close.svg'
+    path: 'assets/icons/close.svg',
   },
   {
     name: 'wi-close',

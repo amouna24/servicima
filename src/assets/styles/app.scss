@@ -290,7 +290,10 @@ Paddings
   border-radius: 0 $border-radius-5 $border-radius-5 0;
 }
 .border-radius-buttom-15{
-  border-radius: 0 0 $border-radius-15 $border-radius-15 ;
+  border-radius: 0 0 $border-radius-15 $border-radius-15;
+}
+.border-radius-top-15{
+  border-radius: $border-radius-15 $border-radius-15 0 0;
 }
 /*******************
       Margin
@@ -583,6 +586,9 @@ html body {
 .bg-ocean-blue{
   background-color: $cerulean-blue !important;
 }
+.bg-pale-grey-four{
+  background-color: $pale-grey-four !important;
+}
 /*******************
        logo
 *******************/
@@ -618,6 +624,7 @@ html body {
 .height-50{
   height: 50px;
 }
+
 .mat-raised-button{
   box-shadow: none !important;
 }
@@ -754,7 +761,20 @@ wid-upload-sheet {
   border: solid 2px $pale-grey;
 }
 
-.border-cool-gray {
-  border: solid 3px $cool-grey !important;
+.border-pale-gray-four {
+  border: solid 1px $pale-grey-four;
 }
+
+.border-cool-gray {
+  border: solid 2px $cool-grey !important;
+}
+
+.max-with-48 {
+  max-width: 48%;
+}
+
+.height-30 {
+  height: 30px;
+}
+
 

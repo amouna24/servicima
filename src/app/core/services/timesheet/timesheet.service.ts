@@ -24,7 +24,7 @@ export class TimesheetService {
    * @returns All Timesheet Observable<ITimesheet[]>
    *************************************************************************/
   getTimesheet(filter: string): Observable<ITimesheetModel[]> {
-    return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}/${filter}`);
+    return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}?_id=${filter}`);
   }
 
   /**************************************************************************

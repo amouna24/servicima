@@ -4,9 +4,9 @@ export interface ITimesheetModel {
   /* ID */
   _id: string;
   TimeSheetKey: ITimesheetKeyModel;
-  start_date?: string;
-  end_date?: string;
-  timesheet_status?: string;
+  start_date: string;
+  end_date: string;
+  timesheet_status: string;
   comment?: string;
   monday?: string;
   tuesday?: string;

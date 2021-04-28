@@ -1,40 +1,11 @@
-<div  fxLayout="column" fxFlex="100" class="dynamic-component-container border-radius-20">
-
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
   <wid-timesheet-header></wid-timesheet-header>
-
-  <!--**************************** Filter + New button *************************-->
-  <div fxLayout="row" fxLayoutAlign="space-around center">
-      <div fxLayout="column" fxFlex="50" fxLayoutAlign="center start">
-        <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap="20px">
-          <h1 class="steel font-size-24 font-medium">
-            <mat-form-field appearance="outline">
-              <mat-icon matSuffix>mode_edit</mat-icon>
-              <input matInput placeholder="Search">
-            </mat-form-field>
-          </h1>
-          <h1 class="steel font-size-24 font-medium">
-            <mat-form-field appearance="outline">
-              <mat-label>Sort By</mat-label>
-              <mat-select>
-                <mat-option *ngFor="let item of sortBy" [value]="item.value">
-                  {{ item.viewValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </h1>
-        </div>
-      </div>
-      <div fxLayout="column">
-        <button mat-raised-button class="white btn-medium bg-topaz" (click)="showHide()">New</button>
-      </div>
-  </div>
-
   <!--**************************** Empty timesheet *************************-->
 <!--    <wid-empty-page-timesheet></wid-empty-page-timesheet>-->
 
   <!--**************************** List timesheet *************************-->
   <wid-scrollbar>
-    <wid-timesheets-list [bool]="new"></wid-timesheets-list>
+    <wid-timesheets-list ></wid-timesheets-list>
   </wid-scrollbar>
 
 </div>

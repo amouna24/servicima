@@ -1,128 +1,362 @@
-<div fxLayout="column" fxLayoutGap="20px" fxFlex="100" class="cool-grey" >
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="column" fxLayoutGap="20px" fxFlex="100" class="cool-grey" >
 
+    <!--****************filter + new-button**************-->
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="50" fxLayoutAlign="center start">
+        <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap="20px">
+          <h1 class="steel font-size-24 font-medium">
+            <mat-form-field appearance="outline">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+              <input type ="text" matInput placeholder="Search" [formControl]="myControl" [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </h1>
+          <h1 class="steel font-size-24 font-medium">
+            <mat-form-field appearance="outline">
+              <mat-label>Sort By</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let item of sortBy" [value]="item.value">
+                  {{ item.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </h1>
+        </div>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button class="white btn-small bg-topaz" (click)="showHide()">New</button>
+      </div>
+    </div>
 
+    <!--******************** list-timesheet ****************-->
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="90" fxLayoutGap="15px">
 
-  <!--******************** list-timesheet ****************-->
-  <div fxLayout="row" fxLayoutAlign="space-around center">
-    <div fxLayout="column" fxFlex="90" fxLayoutGap="15px">
+        <!--******************** add-timesheet ****************-->
+        <wid-add-timesheet *ngIf="show" [timesheet]="timesheet" ></wid-add-timesheet>
+        <!--****************************************************-->
+              <form [formGroup]="initialForm"  (submit)="submitTimesheet(formDirective)" #formDirective="ngForm">
+                <mat-accordion multi="false">
+                  <ng-container *ngFor="let item of listTimesheet; let index = index;">
+                    <mat-expansion-panel hideToggle  disabled #panel="matExpansionPanel" class="m-b-15">
+                      <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
+                        <ng-container *ngIf="index !== openEditComponent.getValue().index; else edit">
+                          <div fxLayout="row" fxFlex="50" fxLayoutAlign=" space-around center" class="help-blue">
+                            <div fxLayout="column" fxFlex="70">
+                              <div fxLayout="row" fxLayoutAlign="space-around center">
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                                  <h1 class="font-size-10 font-normal">Week start on:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">{{item.start_date}}</div>
+                                </div>
+                                <div fxLayout="column">
+                                  <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                                  <h1 class="font-size-10 font-normal">Categorie:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">categorie</div>
+                                </div>
+                                <div fxLayout="column">
+                                  <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                                  <h1 class="font-size-10 font-normal">State:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">{{item.timesheet_status}}</div>
+                                </div>
+                                <div fxLayout="column">
+                                  <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                                  <h1 class="font-size-10 font-normal">Project:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">project</div>
+                                </div>
+                                <div fxLayout="column">
+                                  <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
+                                  <h1 class="font-size-10 font-normal">Task:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">task</div>
+                                </div>
+                                <div fxLayout="column">
+                                  <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17" >
+                                  <h1 class="font-size-10 font-normal">Total:</h1>
+                                  <div class="font-size-12 font-normal steel m-b-15">{{item.total_week_hours}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="center" fxFlex="30">
+                              <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" >
+                                <button mat-button (click)="generatePdf()" class="btn-timesheet border-cool-gray border-radius-5">
+                                  <mat-icon svgIcon="wi-file-export" class="cool-grey"></mat-icon>
+                                </button>
 
-        <wid-add-timesheet *ngIf="bool" [object]="timesheet" ></wid-add-timesheet>
-          <mat-expansion-panel hideToggle *ngFor="let item of listTimesheet" [expanded]="panelOpenState">
-            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'" class="border-radius-15 duck-egg-blue">
-              <div fxLayout="row" fxFlex="50" fxLayoutAlign=" space-around center" class="help-blue">
-                <div fxLayout="column" fxFlex="70">
-                  <div fxLayout="row" fxLayoutAlign="space-around center">
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
-                      <h1 class="font-size-15 font-normal">Week start on:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">{{item.start_date}}</div>
-                    </div>
-                    <div fxLayout="column">
-                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-                    </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
-                      <h1 class="font-size-15 font-normal">Categorie:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">categorie</div>
-                    </div>
-                    <div fxLayout="column">
-                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-                    </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
-                      <h1 class="font-size-15 font-normal">State:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">{{item.timesheet_status}}</div>
-                    </div>
-                    <div fxLayout="column">
-                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-                    </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
-                      <h1 class="font-size-15 font-normal">Project:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">project</div>
-                    </div>
-                    <div fxLayout="column">
-                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-                    </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17">
-                      <h1 class="font-size-15 font-normal">Task:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">task</div>
-                    </div>
-                    <div fxLayout="column">
-                      <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-                    </div>
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="17" >
-                      <h1 class="font-size-15 font-normal">Total:</h1>
-                      <div class="font-size-17 font-normal steel m-b-15">{{item.total_week_hours}}</div>
-                    </div>
-                  </div>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="center" fxFlex="30">
-                  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" >
-                      <button mat-button class="btn-timesheet border-cool-gray border-radius-5">
-                        <mat-icon svgIcon="wi-file-export" class="cool-grey"></mat-icon>
-                      </button>
+                                <button mat-button (click)="editTimesheet(item, index, panel)" class="btn-timesheet border-cool-gray border-radius-5">
+                                  <mat-icon svgIcon="wi-marker" class="cool-grey"></mat-icon>
+                                </button>
 
-                      <button mat-button (click)="editTimesheet(item)" class="btn-timesheet border-cool-gray border-radius-5">
-                        <mat-icon svgIcon="wi-marker" class="cool-grey"></mat-icon>
-                      </button>
+                                <button mat-button (click)="togglePanel(panel)" class="btn-timesheet border-cool-gray border-radius-5">
+                                  <mat-icon svgIcon="wi-eye" class="cool-grey"></mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-template #edit>
+                          <div *ngIf="openEditComponent.getValue().index === index" fxLayout="row" fxFlex="50" fxLayoutAlign="space-between center" class="help-blue">
+                            <div fxLayout="column" fxFlex="15">
+                              <div class="font-size-12">Week start on:</div>
+                              <mat-form-field>
+                                <mat-label>Choose a date</mat-label>
+                                <input matInput [matDatepicker]="picker" pattern="\d{1,2}/\d{1,2}/\d{4}" formControlName="start_date" required>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                            <button mat-button class="btn-timesheet border-cool-gray border-radius-5" (click)="closeClick(panel)">
+                              <mat-icon svgIcon="wi-close-normal" class="cool-grey"></mat-icon>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </mat-expansion-panel-header>
 
-                      <button mat-button (click)="togglePanel()" class="btn-timesheet border-cool-gray border-radius-5">
-                        <mat-icon svgIcon="wi-eye" class="cool-grey"></mat-icon>
-                      </button>
-
-<!--                    <div fxLayout="column" fxFlex="10" class="border">-->
-<!--                      <button mat-button class="icon-btn-medium bg-pale-grey" mat-mini-fab>-->
-<!--                        <mat-icon class="icon material-icons-outlined" svgIcon="wi-marker"></mat-icon>-->
-<!--                      </button>-->
-<!--                    </div>-->
-<!--                    <div fxLayout="column" fxFlex="10" class="border">-->
-<!--                      <button mat-button class="icon-btn-medium bg-pale-grey" (click)="togglePanel(item)">-->
-<!--                        <mat-icon class="icon material-icons-outlined" svgIcon="wi-eye"></mat-icon>-->
-<!--                      </button>-->
-<!--                    </div>-->
-                  </div>
-                </div>
-              </div>
-            </mat-expansion-panel-header>
-            <div fxLayout="row" fxLayoutAlign="space-around center" class="help-blue bg-pale-grey border-radius-buttom-15 p-r-65 p-l-65">
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">MON</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.monday}}</div>
-              </div>
-              <div fxLayout="column">
-                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">TUE</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.tuesday}}</div>
-              </div>
-              <div fxLayout="column">
-                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">WED</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.wednesday}}</div>
-              </div>
-              <div fxLayout="column">
-                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">THU</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.thursday}}</div>
-              </div>
-              <div fxLayout="column">
-                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">FRI</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.start_date}}</div>
-              </div>
-              <div fxLayout="column">
-                <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="space-around center">
-                <h1 class="font-size-15 font-normal">SUN</h1>
-                <div class="font-size-17 font-normal steel m-b-15">{{item.sunday}}</div>
-              </div>
-            </div>
-          </mat-expansion-panel>
+                      <ng-container *ngIf="index !== openEditComponent.getValue().index else editTemplate">
+                        <div fxLayout="row" fxLayoutAlign="space-around center" class="help-blue bg-pale-grey border-radius-buttom-15 p-r-65 p-l-65">
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">MON</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.monday}}</div>
+                          </div>
+                          <div fxLayout="column">
+                            <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">TUE</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.tuesday}}</div>
+                          </div>
+                          <div fxLayout="column">
+                            <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">WED</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.wednesday}}</div>
+                          </div>
+                          <div fxLayout="column">
+                            <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">THU</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.thursday}}</div>
+                          </div>
+                          <div fxLayout="column">
+                            <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">FRI</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.start_date}}</div>
+                          </div>
+                          <div fxLayout="column">
+                            <mat-divider vertical class="height-50 m-t-15 m-b-15 black"></mat-divider>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <h1 class="font-size-10 font-normal">SUN</h1>
+                            <div class="font-size-12 font-normal steel m-b-15">{{item.sunday}}</div>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #editTemplate>
+                        <div *ngIf="openEditComponent.getValue().index === index">
+                          <div fxLayout="column" fxFlex="100">
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <div fxLayout="column" fxFlex="25">
+                                <div fxLayout="row">
+                                  <h1 class="font-size-12 font-normal">Category :</h1>
+                                </div>
+                                <div fxLayout="row">
+                                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                    <mat-label>Catégory</mat-label>
+                                    <mat-select>
+                                      <mat-option value="categorie">categorie
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex="25">
+                                <div fxLayout="row">
+                                  <h1 class="font-size-12 font-normal">Project :</h1>
+                                </div>
+                                <div fxLayout="row">
+                                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                    <mat-label>Project</mat-label>
+                                    <mat-select>
+                                      <mat-option *ngFor="let project of listTimesheetProject" [value]="project.project_desc">
+                                        {{ project.project_desc }}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex="25">
+                                <div fxLayout="row">
+                                  <h1 class="font-size-12 font-normal">Task :</h1>
+                                </div>
+                                <div fxLayout="row">
+                                  <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                    <mat-label>task</mat-label>
+                                    <mat-select>
+                                      <mat-option *ngFor="let task of listTimesheetTask" [value]="task.task_desc">
+                                        {{ task.task_desc }}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex="25">
+                                <div fxLayout="row">
+                                  <h1 class="font-size-12 font-normal">Comment :</h1>
+                                </div>
+                                <div fxLayout="row">
+                                  <mat-form-field hintLabel="Max 25 characters" appearance="outline" class="steel font-size-24 font-medium">
+                                    <input matInput #input maxlength="25" placeholder="comment" formControlName="comment">
+                                    <mat-hint align="end">{{input.value?.length || 0}}/25</mat-hint>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                  <div fxLayout="column" fxFlex>
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">MON :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="column" fxFlex>
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">TUE :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">WED :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">THU :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">FRI :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">SAT :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">SUN :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday" (input)="calculTotalWeekHours()">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div fxLayout="column" fxFlex="50">
+                                    <div fxLayout="row">
+                                      <h1 class="font-size-12 font-normal">Total :</h1>
+                                    </div>
+                                    <div fxLayout="row">
+                                      <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
+                                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                                        <input matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div fxLayout="row">
+                              <div fxLayout="column" fxFlex="70">
+                                <div><button mat-button class="decoration red ">Delete timesheet</button></div>
+                              </div>
+                              <div fxLayout="column" fxFlex="30">
+                                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+                                  <button mat-raised-button class="white btn-medium bg-cerulean-blue">
+                                    <span class="font-size-11" type="submit" (click)="submitTimesheet(formDirective)">Submit</span>
+                                  </button>
+                                  <button mat-raised-button class="white btn-medium duck-egg-blue" >
+                                    <span class="font-size-11 cerulean-blue">Save</span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </mat-expansion-panel>
+                  </ng-container>
+                </mat-accordion>
+              </form>
+      </div>
     </div>
 
   </div>
