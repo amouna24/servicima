@@ -24,7 +24,7 @@ export class TimesheetService {
    * @returns All Timesheet Observable<ITimesheet[]>
    *************************************************************************/
   getTimesheet(filter: string): Observable<ITimesheetModel[]> {
-    return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}?_id=${filter}`);
+    return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}${filter}`);
   }
 
   /**************************************************************************
@@ -41,6 +41,14 @@ export class TimesheetService {
    *************************************************************************/
   updateTimesheet(timesheet: ITimesheetModel): Observable<any> {
     return this.httpClient.put<ITimesheetModel>(`${environment.timesheetApiUrl}`, timesheet);
+  }
+
+  /**************************************************************************
+   * @description Delete Timesheet
+   * @param ID : of the timesheet
+   *************************************************************************/
+  deleteTimesheet(id: string): Observable<any> {
+    return this.httpClient.delete<ITimesheetModel>(`${environment.timesheetApiUrl}?_id=${id}`);
   }
 
   /*------------------------------------ TIMESHEET PROJECT --------------------------------------*/

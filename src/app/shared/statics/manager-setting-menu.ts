@@ -53,6 +53,13 @@ export const ManagerSettingMenu: IMenu[] = [
         type: 'link',
       },
       {
+        state: 'timesheet-setting',
+        name: 'timesheet Setting',
+        icon: 'assignment',
+        feature: 'SETTINGS_INVOICES_ACCESS', // à changer
+        type: 'link',
+      },
+      {
         state: 'payment-methods',
         name: 'Payment methods',
         icon: 'assignment',
@@ -75,6 +82,14 @@ export const ManagerSettingMenu: IMenu[] = [
     icon: 'wi-three-dots',
     feature: 'OTHER',
     children: [
+      {
+        state: 'home-company',
+        name: 'Company Profile',
+        type: 'link',
+        icon: 'wi_company',
+        //  feature: 'company-profile',
+        feature: 'SOURCING_ACCESS' // change feature with correct name
+      },
       {
         state: 'departments',
         name: 'Departments',

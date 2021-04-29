@@ -22,7 +22,9 @@ export class ProfileImageComponent implements OnInit {
   @Input() avatar: any;
   @Input() haveImage: any;
   @Input() modelObject: any;
-
+  @Input() diameter: any;
+  @Input() height: any;
+  @Input() width: any;
   @Output() newFile = new EventEmitter<FormData>();
 
   page = Math.random();

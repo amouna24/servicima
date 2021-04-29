@@ -13,7 +13,7 @@
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                 </div>
-            <div fxLayout="column" fxLayoutAlign="center">
+            <div fxLayout="column">
               <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="closeClick()">
                 <mat-icon svgIcon="wi-close-normal"></mat-icon>
               </button>
@@ -22,7 +22,7 @@
         </mat-expansion-panel-header>
         <div fxLayout="column">
           <div fxLayout="row" fxLayoutAlign="space-between center" >
-                  <div fxLayout="column" fxFlex="23">
+            <div fxLayout="column" fxFlex="23">
                     <div fxLayout="row">
                       <h1 class="font-size-12 font-normal">Category :</h1>
                     </div>
@@ -30,13 +30,14 @@
                       <mat-form-field appearance="outline" class="steel font-size-24 font-medium">
                         <mat-label>Catégory</mat-label>
                         <mat-select>
-                          <mat-option value="categorie">categorie
+                          <mat-option *ngFor="let category of categoryList" [value]="category.value">
+                            {{category.viewValue}}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="column" fxFlex="23">
+            <div fxLayout="column" fxFlex="23">
                     <div fxLayout="row">
                       <h1 class="font-size-12 font-normal">Project :</h1>
                     </div>
@@ -51,7 +52,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="column" fxFlex="23">
+            <div fxLayout="column" fxFlex="23">
                     <div fxLayout="row">
                       <h1 class="font-size-12 font-normal">Task :</h1>
                     </div>
@@ -66,7 +67,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="column" fxFlex="23">
+            <div fxLayout="column" fxFlex="23">
                     <div fxLayout="row">
                       <h1 class="font-size-12 font-normal">Comment :</h1>
                     </div>
@@ -77,9 +78,9 @@
                       </mat-form-field>
                     </div>
                   </div>
-              </div>
+          </div>
           <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center" >
-                <div fxLayout="column" fxFlex="49">
+            <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
                     <div fxLayout="column" fxFlex="48" >
                       <mat-label class="black font-size-12">MON:</mat-label>
@@ -97,7 +98,7 @@
                     </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="49">
+            <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
                     <div fxLayout="column" fxFlex="48" >
                       <mat-label class="black font-size-12">WED:</mat-label>
@@ -115,9 +116,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
+          </div>
           <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center" >
-                <div fxLayout="column" fxFlex="49">
+            <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
                     <div fxLayout="column" fxFlex="48" >
                       <mat-label class="black font-size-12">FRI:</mat-label>
@@ -135,7 +136,7 @@
                     </div>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="49">
+            <div fxLayout="column" fxFlex="49">
                   <div fxLayout="row" fxLayoutGap="20px">
                     <div fxLayout="column" fxFlex="48" >
                       <mat-label class="black font-size-12">SUN:</mat-label>
@@ -153,22 +154,22 @@
                     </div>
                   </div>
                 </div>
-              </div>
+          </div>
           <div fxLayout="row">
-                <div fxLayout="column" fxFlex="70">
+            <div fxLayout="column" fxFlex="70">
                   <div><button mat-button class="decoration red ">Delete timesheet</button></div>
                 </div>
-                <div fxLayout="column" fxFlex="30">
+            <div fxLayout="column" fxFlex="30">
                   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
-                    <button type="submit" mat-raised-button (click)="submitTimesheet()" class="white btn-medium bg-cerulean-blue">
+                    <button type="submit" mat-raised-button (click)="submitTimesheet('submit')" class="white btn-medium bg-cerulean-blue">
                       <span class="font-size-11" >Submit</span>
                     </button>
-                    <button mat-raised-button  class="white btn-medium duck-egg-blue" >
+                    <button type="submit" mat-raised-button (click)="submitTimesheet('save')" class="white btn-medium duck-egg-blue" >
                       <span class="font-size-11 cerulean-blue">Save</span>
                     </button>
                   </div>
                 </div>
-              </div>
+          </div>
         </div>
       </mat-expansion-panel>
     </form>

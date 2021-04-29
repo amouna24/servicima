@@ -15,6 +15,8 @@ import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
+import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
 
@@ -60,6 +62,7 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     RightSidenaveComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    ClickOutsideDirective,
     DisableControlDirective,
     CapitalizeFirstLetter,
     SpliceText,
@@ -93,7 +96,6 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     FormsModule,
     NgxDatatableModule,
     FormsModule,
-    NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
@@ -128,6 +130,7 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     ErrorComponent,
     SplashComponent,
     CapitalizeFirstLetter,
+    ClickOutsideDirective,
     SpliceText,
     DisableControlDirective,
     ModalComponent,

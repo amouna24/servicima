@@ -4,7 +4,7 @@
       <h1 class="steel font-size-24 font-medium">{{ title | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="{{ backURL | translate }}">
+      <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
         <span class="cool-grey">back</span>
@@ -60,7 +60,7 @@
 
               <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   FIRST ITEM'S CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
               <ng-container *ngFor="let chMI of mi.child">
-                <section id="{{chMI.titleKey}}" fxLayout="column" fxFlex="100"
+                <section id="{{chMI.titleKey}}" fxLayout="column"
                          (mouseenter)="setSelectedItem(chMI.titleKey)" formGroupName="{{ chMI.titleKey }}">
 
                   <!------------------------ TITLE  ------------------------->
@@ -68,12 +68,14 @@
                     <h1 class="steel font-size-18">{{ chMI.title }}</h1>
                   </div>
                   <!--------------------------------------------------------->
+
                   <wid-skeleton-loader
                     *ngIf="isLoading.getValue()"
                     height="25" width="250"
                   ></wid-skeleton-loader>
+
                   <ng-container *ngIf="!isLoading.getValue()">
-                    <div *ngFor="let ff of dynamicForm;"
+                    <div *ngFor="let ff of dynamicForm.getValue();"
                          fxLayout="row">
                       <!------------------ ONE ITEM CENTER LAYOUT ------------------->
                       <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_CENTER'">
@@ -98,7 +100,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -146,7 +148,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -189,12 +191,12 @@
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
-                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                            <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                               <mat-label class="black font-size-12">
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -203,7 +205,7 @@
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
-                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                            <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                               <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
                                 {{ sf.label }} :
                               </mat-label>
@@ -242,7 +244,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -290,7 +292,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -338,7 +340,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -386,7 +388,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -434,7 +436,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -483,7 +485,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -531,7 +533,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor" required
+                                  <mat-select disableOptionCentering panelClass="panelColor"
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -597,7 +599,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -645,7 +647,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor" required
+                                  <mat-select disableOptionCentering panelClass="panelColor"
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -720,7 +722,7 @@
                                   {{ sf.label }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -768,7 +770,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor" required
+                                  <mat-select disableOptionCentering panelClass="panelColor"
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -802,7 +804,7 @@
               </ng-container>
             </ng-container>
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   ITEM WITHOUT CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
-            <ng-template #childSection><!--fxFlex="100"-->
+            <ng-template #childSection>
               <section id="#{{mi.titleKey}}" fxLayout="column"  (mouseenter)="setSelectedItem(mi.titleKey)"
                        formGroupName="{{ mi.titleKey }}">
 
@@ -816,8 +818,9 @@
                   height="25"
                   width="250"
                 ></wid-skeleton-loader>
+
                 <ng-container *ngIf="!isLoading.getValue()">
-                  <div *ngFor="let ff of dynamicForm;"
+                  <div *ngFor="let ff of dynamicForm.getValue();"
                        fxLayout="row">
                     <!------------------ ONE ITEM CENTER LAYOUT ------------------->
                     <ng-container *ngIf="ff.fieldsLayout === 'ONE_ITEM_CENTER'">
@@ -842,7 +845,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -890,7 +893,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor" required
+                              <mat-select disableOptionCentering panelClass="panelColor"
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -933,12 +936,12 @@
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
-                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
+                          <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                             <mat-label class="black font-size-12">
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -947,7 +950,7 @@
                                 {{'register.invalidemail' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
-                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
+                          <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
                             <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
                               {{ sf.label }} :
                             </mat-label>
@@ -986,7 +989,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor" required
+                              <mat-select disableOptionCentering panelClass="panelColor"
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1020,12 +1023,12 @@
                             <div fxLayout="row" fxLayoutAlign="space-around start">
                               <button mat-icon-button mat-raised-button color="primary" type="button"
                                       (click)="feedDataTable(
-                                    formData.controls[mi.titleKey]['controls'], 'update')">
+                                    formData.controls[mi.titleKey]['controls'], 'update', mi.titleKey)" *ngIf="sf.canUpdate.getValue()">
                                 <mat-icon class="white">done</mat-icon>
                               </button>
                               <button mat-icon-button mat-raised-button color="accent" type="button"
                                       (click)="feedDataTable(
-                                    formData.controls[mi.titleKey]['controls'], 'addMore')">
+                                    formData.controls[mi.titleKey]['controls'], 'addMore', mi.titleKey)" *ngIf="sf.canAdd.getValue()">
                                 <mat-icon class="white">add</mat-icon>
                               </button>
                             </div>
@@ -1049,7 +1052,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1097,7 +1100,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor" required
+                              <mat-select disableOptionCentering panelClass="panelColor"
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1145,7 +1148,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1193,7 +1196,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor" required
+                              <mat-select disableOptionCentering panelClass="panelColor"
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1242,13 +1245,13 @@
                                           <div fxLayout="row"
                                                fxFlex
                                                fxLayoutAlign="center">
-                                            <button mat-icon-button (click)="actionRowData('update', row)">
+                                            <button mat-icon-button (click)="actionRowData('update', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.update">
                                               <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
                                             </button>
-                                            <button mat-icon-button (click)="actionRowData('delete', row)">
+                                            <button mat-icon-button (click)="actionRowData('delete', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.delete">
                                               <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
                                             </button>
-                                            <button mat-icon-button (click)="actionRowData('show', row)">
+                                            <button mat-icon-button (click)="actionRowData('show', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.show">
                                               <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
                                             </button>
 
@@ -1317,7 +1320,7 @@
                               {{ sf.label }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1365,7 +1368,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor" required
+                              <mat-select disableOptionCentering panelClass="panelColor"
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1414,7 +1417,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1462,7 +1465,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -1528,7 +1531,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1576,7 +1579,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -1653,7 +1656,7 @@
                                 {{ sf.label }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1701,7 +1704,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor" required
+                                <mat-select disableOptionCentering panelClass="panelColor"
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>

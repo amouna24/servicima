@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TaxComponent } from './tax.component';
+import { TaxComponent } from './tax-company-management/tax.component';
 
 const routes: Routes = [
   {
     path: '',
     component: TaxComponent,
-    data: {
-      breadcrumb: 'tax'
-    },
   },
 ];
 

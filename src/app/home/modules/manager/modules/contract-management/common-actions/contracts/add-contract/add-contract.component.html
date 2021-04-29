@@ -4,8 +4,10 @@
   [formData]="contractForm"
   [isLoading]="isLoading"
   [title]="title"
-  [backURL]="backURL"
   (dynamicFormGroup)="createNewContract($event)"
   (selectedDoc)="getFile($event)"
+  (listOfObjects)="addContractExtension($event)"
+  (rowActionData)="switchAction($event)"
+  [allowedTableActions]="{ update: true, delete: false, show: false }"
 >
 </wid-dynamic-component>

@@ -3,12 +3,15 @@ import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { startWith } from 'rxjs/operators';
+import { startWith, takeUntil } from 'rxjs/operators';
 import { map } from 'rxjs/internal/operators/map';
 import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
 import { ITimesheetTaskModel } from '@shared/models/timeshetTask.model';
+import { ModalService } from '@core/services/modal/modal.service';
+import { UserService } from '@core/services/user/user.service';
+import { IUserInfo } from '@shared/models/userInfo.model';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -30,9 +33,16 @@ export class TimesheetsListComponent implements OnInit {
   listTimesheetTask: ITimesheetTaskModel[] = [];
   initialForm: FormGroup;
   totalWeek: any;
+  subscriptionModal: Subscription;
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  companyEmail: string;
+  subscriptions: Subscription;
+  userInfo: IUserInfo;
 
   constructor(private timesheetService: TimesheetService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private modalServices: ModalService,
+              private userService: UserService) { }
 
   sortBy = [
     { value: 'Week start on-0', viewValue: 'Week start on'},
@@ -40,12 +50,25 @@ export class TimesheetsListComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.getUserInfo();
     this.getTimesheets();
     this.getAllProjects();
     this.getAllTasks();
     this.filterOptions();
     this.createForm();
     // this.updateForm();
+  }
+
+  getUserInfo() {
+    this.subscriptions = this.userService.connectedUser$.subscribe(
+      (data) => {
+        if (!!data) {
+          this.userInfo = data;
+          console.log('user info:', data);
+          this.companyEmail = data.user[0]['company_email'];
+          // console.log('company email', this.companyEmail);
+        }
+      });
   }
 
   filterOptions() {
@@ -62,14 +85,14 @@ export class TimesheetsListComponent implements OnInit {
   createForm() {
     this.initialForm = this.fb.group(
       {
-        application_id : Math.random().toString(),
-        email_address : 'wid-email-address',
-        company_email : 'wid-company-email',
+        application_id : this.userService.applicationId,
+        email_address : this.userService.emailAddress,
+        company_email :  this.companyEmail,
         timesheet_week : 'wid-timesheet-week',
-        task_code : 'wid-task-code',
+        task_code : Math.random().toString(),
         start_date : ['', Validators.required],
         end_date : 'wid-end-date',
-        timesheet_status : 'wid-timesheet-status',
+        timesheet_status : 'wid-status',
         comment : '',
         monday : '',
         tuesday : '',
@@ -150,13 +173,20 @@ export class TimesheetsListComponent implements OnInit {
   }
 
   getTimesheets() {
-    this.timesheetService.getTimesheet('').subscribe(
-      data => {
-        this.listTimesheet = data;
-        console.log(this.listTimesheet);
-      },
+    // tslint:disable-next-line:max-line-length
+    this.timesheetService.getTimesheet(`?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`).subscribe(
+      data => { this.listTimesheet = data;
+        this.refresh(this.listTimesheet); },
       error => console.log(error)
     );
+  }
+
+  refresh(data) {
+    // tslint:disable-next-line:no-shadowed-variable max-line-length
+    this.timesheetService.getTimesheet(`?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`).subscribe(data => {
+      this.listTimesheet = data;
+      console.log('timesheet of refresh', this.listTimesheet);
+    });
   }
 
   togglePanel(panel: any) {
@@ -191,4 +221,36 @@ export class TimesheetsListComponent implements OnInit {
     this.totalWeek = mondayValue + tuesdayValue + wednesdayValue + thursdayValue + fridayValue + saturdayValue + sundayValue;
   }
 
+  deleteTimesheet(timesheet) {
+    const confirmation = {
+      code: 'delete',
+      title: 'delete timesheet',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.timesheetService.deleteTimesheet(timesheet._id)
+              .pipe(
+                takeUntil(this.destroy$)
+              )
+              .subscribe(
+                (res1) => {
+                  // this.refresh(res1);
+                  this.timesheetService.getTimesheet(
+                    // tslint:disable-next-line:max-line-length
+                    `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`
+                  ).subscribe((data) => {
+                    this.refresh(data);
+                  });
+                }
+              );
+            this.subscriptionModal.unsubscribe();
+          }
+        }
+      );
+  }
 }

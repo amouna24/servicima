@@ -4,7 +4,13 @@ import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
 import { ITimesheetTaskModel } from '@shared/models/timeshetTask.model';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
-import * as moment from 'moment';
+import { UserService } from '@core/services/user/user.service';
+import { Subscription } from 'rxjs';
+import { IUserInfo } from '@shared/models/userInfo.model';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { IViewParam } from '@shared/models/view.model';
+// import * as moment from 'moment';
 
 @Component({
   selector: 'wid-add-timesheet',
@@ -13,43 +19,66 @@ import * as moment from 'moment';
 })
 export class AddTimesheetComponent implements OnInit {
   @Input() timesheet: ITimesheetModel;
+  // minDate = new Date(Date.now());
   close = true;
   creationForm: FormGroup;
   listTimesheetProject: ITimesheetProjectModel[] = [];
   listTimesheetTask: ITimesheetTaskModel[] = [];
   totalWeek: any;
-  minDate = new Date(Date.now());
+  userInfo: IUserInfo;
+  companyEmail: string;
+  refData: { } = { };
+  categoryList: IViewParam[];
+  subscriptions: Subscription;
 
   constructor( private fb: FormBuilder,
-                private timesheetService: TimesheetService) {
-    // moment().subtract(7, 'days');
-    // console.log('minDate', this.minDate);
-    // const date = moment(this.minDate).format('MMMM d, YYYY');
-    // console.log('d', date);
+               private timesheetService: TimesheetService,
+               private userService: UserService,
+               private refDataService: RefdataService,
+               private utilService: UtilsService ) {
+/*    moment().subtract(7, 'days');
+    console.log('minDate', this.minDate);
+    const date = moment(this.minDate).format('MMMM d, YYYY');
+    console.log('d', date);*/
   }
 
-  ngOnInit(): void {
-    console.log('yr');
-    // this.getTimesheet();
+  async ngOnInit() {
     this.getAllProjects();
     this.getAllTasks();
-    // this.getTimesheet();
+    this.getUserInfo();
     this.createForm();
+    await this.getRefDataCategory();
+    // this.getTimesheet();
     // this.updateForm();
     // console.log(this.minDate);
     // console.log(this.timesheet);
   }
 
-  getTimesheet() {
-    console.log('this', this.timesheet);
-    this.timesheetService.getTimesheet(this.timesheet._id).subscribe(
-      data => {
-        this.timesheet = data[0];
-        console.log('this', this.timesheet);
-        console.log(this.timesheet.comment);
-      },
-      error => console.log(error)
-    );
+  getUserInfo() {
+    this.subscriptions = this.userService.connectedUser$.subscribe(
+      (data) => {
+        if (!!data) {
+          this.userInfo = data;
+          console.log('user info:', data);
+          this.companyEmail = data.user[0]['company_email'];
+          // console.log('company email', this.companyEmail);
+        }
+    });
+  }
+
+  async getRefdata() {
+    const list = ['TIMESHEET_STATE', 'TIMESHEET_CATEGORY_TASK'];
+    this.refData =  await this.refDataService
+      .getRefData( this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId,
+        list, false);
+    return this.refData;
+  }
+
+  async getRefDataCategory() {
+    const data = await this.getRefdata();
+    console.log('getrefatatimesheet', data);
+    this.categoryList = data['TIMESHEET_CATEGORY_TASK'];
+    console.log('categoryList', this.categoryList);
   }
 
   getAllProjects() {
@@ -73,14 +102,14 @@ export class AddTimesheetComponent implements OnInit {
   createForm() {
     this.creationForm = this.fb.group(
       {
-        application_id : Math.random().toString(),
-        email_address : 'wid-email-address',
-        company_email : 'wid-company-email',
+        application_id : this.userService.applicationId,
+        email_address : this.userService.emailAddress,
+        company_email :  this.companyEmail,
         timesheet_week : 'wid-timesheet-week',
-        task_code : 'wid-task-code',
+        task_code : Math.random().toString(),
         start_date : ['', Validators.required],
         end_date : 'wid-end-date',
-        timesheet_status : 'wid-timesheet-status',
+        timesheet_status : '',
         comment : '',
         monday : '',
         tuesday : '',
@@ -95,34 +124,13 @@ export class AddTimesheetComponent implements OnInit {
     );
   }
 
-/*  updateForm() {
-    console.log('time', this.timesheet);
-    this.creationForm.patchValue({
-        application_id : this.timesheet._id,
-        email_address : this.timesheet.TimeSheetKey.email_address,
-        company_email : this.timesheet.TimeSheetKey.company_email,
-        timesheet_week : this.timesheet.TimeSheetKey.timesheet_week,
-        task_code : this.timesheet.TimeSheetKey.task_code,
-        start_date : [this.timesheet.start_date, Validators.required],
-        end_date : this.timesheet.end_date,
-        timesheet_status : this.timesheet.timesheet_status,
-        comment : this.timesheet.comment,
-        monday : this.timesheet.monday,
-        tuesday : this.timesheet.tuesday,
-        wednesday : this.timesheet.wednesday,
-        thursday : this.timesheet.thursday,
-        friday : this.timesheet.friday,
-        saturday : this.timesheet.saturday,
-        sunday : this.timesheet.sunday,
-        total_week_hours : this.timesheet.total_week_hours,
-        customer_timesheet : this.timesheet.customer_timesheet
-    });
-  }*/
-
-  submitTimesheet() {
-    console.log('valid ?', this.creationForm.valid);
+  submitTimesheet(value) {
     if (this.creationForm.valid) {
-      console.log(this.creationForm.value);
+      if (value === 'submit') {
+        this.creationForm.patchValue({ timesheet_status : 'Pending' });
+      } else if (value === 'save') {
+        this.creationForm.patchValue({ timesheet_status : 'Draft' });
+      }
       this.timesheetService.addTimesheet(this.creationForm.value).subscribe(
         data => {
           console.log(data);
@@ -130,10 +138,6 @@ export class AddTimesheetComponent implements OnInit {
         error => console.log(error)
       );
     }
-  }
-
-  saveTimesheet() {
-
   }
 
   deleteTimesheet() {
@@ -154,5 +158,21 @@ export class AddTimesheetComponent implements OnInit {
     const sundayValue = this.creationForm.value.sunday;
 
     this.totalWeek = mondayValue + tuesdayValue + wednesdayValue + thursdayValue + fridayValue + saturdayValue + sundayValue;
+    this.creationForm.controls['total_week_hours'].setValue(this.totalWeek);
   }
+
+  /*
+  getTimesheet() {
+    console.log('this', this.timesheet);
+    this.timesheetService.getTimesheet(this.timesheet._id).subscribe(
+      data => {
+        this.timesheet = data[0];
+        console.log('this', this.timesheet);
+        console.log(this.timesheet.comment);
+      },
+      error => console.log(error)
+    );
+  }
+*/
+
 }

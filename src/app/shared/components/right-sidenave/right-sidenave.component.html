@@ -1,6 +1,6 @@
-<div class="full-height sidenav-wrapper">
+<div class="full-height sidenav-wrapper" >
   <wid-scrollbar class="scrollbar">
-  <div fxLayout="column" fxFlex="100" fxLayoutAlign="start stretch" fxLayoutGap="15px">
+  <div fxLayout="column" fxFlex="100" [state]="sidebarState" (clickOutside)="closeMenu()" fxLayoutAlign="start stretch" fxLayoutGap="15px">
     <div  fxLayout="row" >
       <div fxFlex="15"  fxLayout="column" >
         <div fxLayoutAlign="center start" fxFlexOffset="10">
@@ -22,16 +22,17 @@
     <div *ngIf="subMenu.length === 0; else subMenuContainer" fxLayout="column" >
       <ng-container *ngFor=" let menuItem of menu" >
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel" >
-            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Logout';" class="list-item" (click)="logout()" [@iconAnimation]="sidebarState"  >
+            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Logout'" class="list-item m-l-10" (click)="logout()" [@iconAnimation]="sidebarState"  >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
         </span>
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
-        <!--  <ng-container *canBeDisplayed="{'feature':menuItem.feature}"> -->
-            <a mat-list-item *ngIf="menuItem.name !== 'Logout';" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
-               class="list-item" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
+
+          <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
+            <a mat-list-item *ngIf="menuItem.name !== 'Logout' && menuItem.name !== 'Themes'" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
+               class="list-item m-l-10" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
@@ -39,13 +40,20 @@
               <span class="font-light font-size-14"
                     [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
             </a>
-          <!-- </ng-container> -->
+           </ng-container>
           </ng-container>
 
           <ng-template #subMenuLabel>
             <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
+              <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Themes' && !hideTheme" (click)="toggleSubMenu(menuItem.children, menuItem.state)"  class="list-item m-l-10" [@iconAnimation]="sidebarState"  >
+            <span>
+            <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
+            </mat-icon>
+        </span>
+                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
+              </a>
             <div fxLayout="column" class="cursor-pointer">
-              <mat-list-item (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item"
+              <mat-list-item *ngIf="menuItem.name !== 'Themes'" (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item m-l-10"
                              [@iconAnimation]="sidebarState">
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
@@ -101,7 +109,7 @@
                 <span class="font-light font-size-19" [@labelAnimation]="sidebarState">{{parentMenu | titlecase}}
                   :</span>
                 <mat-list-item *ngFor="let list of listColor">
-                  <div [style.backgroundColor]="list.status ? '#f3f6f9': 'white' ">
+                  <div [style.backgroundColor]="list.status ? '#f3f6f9': 'white' " class="theme-checkbox" *ngIf="list.color !== 'setting'">
                     <mat-checkbox color="warn" [(ngModel)]=list.status (change)="getTheme(list.color)">
                       <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100" fxLayoutGap="15px">
                         <img src="assets/img/{{list.image}}" alt="image">
@@ -115,7 +123,7 @@
             <ng-container *ngIf=" subMenuItem.type === 'link' && parentMenu != 'themes' ;">
               <a mat-list-item routerLinkActive="active-list-item" fxLayout="column"
                  [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
-                 [routerLinkActiveOptions]="{exact: true}" class="list-item" [@iconAnimation]="sidebarState">
+                 [routerLinkActiveOptions]="{exact: true}" class="list-item m-l-10" [@iconAnimation]="sidebarState">
                 <span>
                 <mat-icon class="icon material-icons-outlined">
                   {{subMenuItem.icon}}

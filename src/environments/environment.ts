@@ -16,21 +16,25 @@ export const environment = {
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
+  featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
+  contractTimesheetApiUrl: 'http://192.168.1.22:8091/servicima/contracttimesheet/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
+  companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
 
   /************************* TIMESHEET + PROJECT + TASK + COMPANY-TIMESHEET-SETTING ******************************/
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  // timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
+
   timesheetProjectApiUrl: 'http://192.168.1.22:8081/servicima/timesheetproject/v1',
   timesheetTaskApiUrl: 'http://192.168.1.22:8082/servicima/timesheettask/v1',
-  companyTimesheetSettingApiUrl: 'http://192.168.1.22:8068/servicima/companytimesheetsetting/v1',
 
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',

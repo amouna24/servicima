@@ -4,7 +4,7 @@ import { IContract } from '@shared/models/contract.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ContractsService } from '@core/services/contracts/contracts.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IContractExtension } from '@shared/models/contractExtension.model';
@@ -47,6 +47,10 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   dataSource: MatTableDataSource<IContract>;
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
+  /**************************************************************************
+   * @description search Criteria
+   *************************************************************************/
+  searchCriteria: string;
 
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
@@ -54,6 +58,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private contractService: ContractsService,
     private router: Router,
+    private route: ActivatedRoute,
     private modalsServices: ModalService,
     private userService: UserService,
   ) {
@@ -67,7 +72,19 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getContracts();
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(params => {
+        if (!!params.contract_status) {
+          this.searchCriteria = params.contract_status;
+          this.getContracts();
+        } else {
+          this.searchCriteria = '';
+          this.getContracts();
+        }
+      });
     this.addNewContract();
     this.modalsServices.registerModals(
       { modalName: 'showExtension', modalComponent: ShowExtensionComponent });
@@ -79,7 +96,9 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   getContracts() {
     this.isLoading.next(true);
     this.contractService.getContracts(
-      `?contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      // tslint:disable-next-line:max-line-length
+      `?contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
+      )
       .pipe(
         takeUntil(
           this.destroy$

@@ -6,6 +6,10 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/clock.svg'
   },
   {
+    name: 'wi-external-link',
+    path: 'assets/icons/external-link.svg'
+  },
+  {
     name: 'wi-bag',
     path: 'assets/icons/bag.svg'
   },
