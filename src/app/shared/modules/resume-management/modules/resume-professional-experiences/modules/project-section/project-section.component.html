@@ -1,18 +1,21 @@
-<br>
-<div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" fxFlex="100" >
-    <div fxLayout="row" class="bg-pale-grey border-radius-15 ">
-      <div fxLayout="column" fxFlex="20" >
+<wid-scrollbar fxLayout="row" fxFlexFill>
+<div fxLayout="column" fxFlexFill >
+  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
+    <div fxLayout="column" fxFlex="82" >
+      <br>
+    <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
+      <div class="p-l-20" fxLayout="column" fxFlex="50" >
         <p>{{item.project_detail_title}}</p>
       </div>
-      <div fxLayout="column" fxLayoutAlign="center end" fxFlex>
+      <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
         <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
       </div>
     </div>
+    </div>
   </div>
-<div fxLayout="row" fxFlexFill>
+  <div fxLayout="row"   class="full-width" fxFlex="100">
 <form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
-  <div fxLayout="row" fxFlex="20" fxLayoutAlign="space-around center">
+  <div fxLayout="row" fxFlex="38"  fxLayoutAlign="space-around center" style="align-items: flex-end">
     <div fxLayout="column" fxFlex="30">
       <mat-label class="black font-size-12">
         Section title :
@@ -29,14 +32,14 @@
       <mat-form-field appearance="outline">
         <mat-select disableOptionCentering panelClass="panelColor"
                     formControlName="select" (valueChange)="onSelect()" [value]="desc" placeholder="Section type">
-          <mat-option [value]="list">List</mat-option>
-          <mat-option [value]="desc">Paragraph</mat-option>
+          <mat-option *ngFor="let v of secList" [value]="v.value">{{v.viewValue}}</mat-option>
+
         </mat-select>
       </mat-form-field>
 
     </div>
   </div>
-  <div fxLayout="row" fxFlex="50" fxLayoutAlign="center center">
+  <div fxLayout="row" fxFlex="28" fxLayoutAlign="center">
     <ng-template [ngIf]="showDesc">
       <div fxLayout="column" fxFlex="80">
         <mat-label class="black font-size-12">
@@ -49,7 +52,8 @@
       </div>
 
     </ng-template>
-    <ng-template [ngIf]="showSec">
+    <ng-template [ngIf]="showSec" fxLayout="column">
+      <div fxLayout="row" fxFlex="100">
     <form [formGroup]="sendProSectionDetails" fxFlexFill>
       <div formArrayName="Field" fxFlexFill>
         <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex" fxFlexFill>
@@ -58,8 +62,8 @@
         <div fxLayout="row" >
 
           <div fxLayout="column" fxFlex="56" fxLayoutAlign=" end"  >
-        <div fxLayout="row"  >
-          <div fxLayout="column" fxFlex="100">
+        <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
+          <div fxLayout="column" fxFlex="75">
           <mat-label class="black font-size-12">
             Section Content :
           </mat-label>
@@ -69,8 +73,8 @@
           </div>
         </div>
         </div>
-          <div fxLayout="column" >
-            <button class="btn-small bg-cool-grey"  (click)="createProSectionDetails()">Add</button>
+          <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
+            <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()">Add</button>
           </div>
         </div>
       </div>
@@ -78,10 +82,11 @@
         </div>
       </div>
       </form>
+      </div>
     </ng-template>
 
   </div>
-  <div fxLayout="row" fxFlex="6" fxLayoutAlign="end end">
+  <div fxLayout="row" fxFlex="28" fxLayoutAlign="end end">
     <div fxLayout="column" fxFlex="12"  >
     <button type="submit" mat-raised-button type="submit" class="bg-pale-grey btn-small"
             (click)="createProDetails()">Add
@@ -91,3 +96,4 @@
 </form>
 </div>
 </div>
+</wid-scrollbar>

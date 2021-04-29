@@ -40,7 +40,8 @@
                 </button></div></div>
           </div></div>
        </div>
-       <div fxLayout="row" fxFlexFill *ngIf="showSection" fxLayoutGap="10px" >
+       <div fxLayout="row" fxFlexFill *ngIf="showSection"  >
+         <div fxLayout="column" fxLayoutGap="10px" fxFlexFill>
           <div  *ngFor="let item of getSection let pointIndex=index" class="p-l-65">
             <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
               <div fxLayout="column" fxFlex="20"   class="p-l-20">
@@ -81,18 +82,19 @@
               </div>
             </form>
           </div>
+       </div>
         </div>
       </wid-scrollbar>
         <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
           <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-            <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+            <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/language">
               <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
               </mat-icon>
               <span class="cool-grey">back</span>
             </button>
           </div>
           <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
+            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/certifDiploma']">
               Next
             </button>
           </div>

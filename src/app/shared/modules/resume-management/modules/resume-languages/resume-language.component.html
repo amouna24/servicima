@@ -32,9 +32,9 @@
                 </mat-label>
                 <mat-form-field appearance="outline">
                   <mat-select   disableOptionCentering panelClass="panelColor"
-                             [value]="item.ResumeLanguageKey.resume_language_code" disabled>
-                    <ng-container *ngFor="let v of langList.getValue()">
-                      <mat-option *ngIf="v.value === item.ResumeLanguageKey.resume_language_code" [value]="v.value">{{v.viewValue}}</mat-option>
+                             [value]="item.resume_language_code" disabled>
+                    <ng-container *ngFor="let v of langList">
+                      <mat-option *ngIf="v.value === item.resume_language_code" [value]="v.value">{{v.viewValue}}</mat-option>
                     </ng-container>
                   </mat-select>
                 </mat-form-field>
@@ -65,7 +65,7 @@
                   <mat-form-field appearance="outline">
                     <mat-select disableOptionCentering panelClass="panelColor"
                                 placeholder="Language" formControlName="resume_language_code" required>
-                      <mat-option *ngFor="let v of langList.getValue()" [value]="v.value">{{v.viewValue}}</mat-option>
+                      <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
                     </mat-select>
                     <mat-error class="red" *ngIf="isControlHasError(sendLanguage,'resume_language_code', 'required')">
                       Please select an item in the list</mat-error>
@@ -96,14 +96,14 @@
         </wid-scrollbar>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/intervention">
             <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
             </mat-icon>
             <span class="cool-grey">back</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/dynamicSection']">
             Next
           </button>
         </div>

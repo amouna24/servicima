@@ -19,7 +19,8 @@ export class ProExpProjectsComponent implements OnInit {
   showProject = false;
   ProjectArray: IResumeProjectModel[] = [];
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
-  project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
+  customer = this.router.getCurrentNavigation().extras.state?.customer;
+  position = this.router.getCurrentNavigation().extras.state?.position;
   showAddSection = false;
   showForm = false;
   sendProject_code = 'yow';
@@ -83,7 +84,7 @@ export class ProExpProjectsComponent implements OnInit {
   createProject() {
     this.Project = this.sendProject.value;
     this.Project.professional_experience_code = this.professional_experience_code;
-    this.Project.project_code = this.project_code;
+    this.Project.project_code =`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
     this.Project.start_date = this.datepipe.transform(this.Project.start_date, 'yyyy/MM/dd');
     this.Project.end_date = this.datepipe.transform(this.Project.end_date, 'yyyy/MM/dd');
     if (this.sendProject.valid) {

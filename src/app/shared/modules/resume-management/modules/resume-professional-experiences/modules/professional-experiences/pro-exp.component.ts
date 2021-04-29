@@ -16,7 +16,7 @@ export class ProExpComponent implements OnInit {
   arrayProExpCount = 0;
   ProExp: IResumeProfessionalExperienceModel;
   proExpArray: IResumeProfessionalExperienceModel[] = [];
-  resume_code: string;
+  resume_code = '';
   professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
   get getProExp() {
     return this.proExpArray;
@@ -30,14 +30,14 @@ export class ProExpComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.createForm();
     this.getProExpInfo();
+    this.createForm();
   }
   getProExpInfo() {
-    this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
+      this.resumeService.getResume(
+        // tslint:disable-next-line:max-line-length
+        `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+        .subscribe(
         (response) => {
           this.resume_code = response[0].ResumeKey.resume_code.toString();
           console.log('resume code 1 =', this.resume_code);
@@ -66,10 +66,14 @@ export class ProExpComponent implements OnInit {
       );
 
   }
-  routeToProject(code: string) {
+  routeToProject(code: string, customer: string, position: string) {
     console.log('pro Exp Array=', this.proExpArray);
     this.router.navigate(['/candidate/resume/projects'],
-      { state: { id: code}
+      { state: {
+        id: code,
+        customer,
+        position
+      }
       });
   }
 

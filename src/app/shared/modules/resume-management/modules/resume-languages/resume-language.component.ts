@@ -6,6 +6,8 @@ import { UserService } from '@core/services/user/user.service';
 import { BehaviorSubject } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import {UtilsService} from "@core/services/utils/utils.service";
 
 @Component({
   selector: 'wid-resume-language',
@@ -20,27 +22,29 @@ export class ResumeLanguageComponent implements OnInit {
   arrayLanguageCount = 0;
   language: IResumeLanguageModel;
   languageArray: IResumeLanguageModel[] = [];
-  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  langList: IViewParam[];
   resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
+  refData: { } = { };
+  emailAddress: string;
+
   constructor(
+    private utilService: UtilsService,
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
     private appInitializerService: AppInitializerService,
+    private refdataService: RefdataService,
   ) {
   }
   get getLanguage() {
     return this.languageArray;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.getConnectedUser();
     this.createForm();
+    await this.getLanguageRefData();
     /********************************** LANGUAGE **********************************/
-    this.langList.next(this.appInitializerService.languageList.map(
-      (obj) => {
-        return  { value: obj.LanguageKey.language_code, viewValue: obj.language_desc };
-      }
-    ));
     this.getLanguageInfo();
     console.log('a ' + this.starCount);
     for (let index = 0; index < this.starCount; index++) {
@@ -48,6 +52,27 @@ export class ResumeLanguageComponent implements OnInit {
     }
 
     console.log(this.ratingArr);
+  }
+  async getLanguageRefData() {
+    const data = await this.getRefdata();
+    this.langList = data['LANGUAGE'];
+    console.log(this.langList);
+  }
+  async getRefdata() {
+    const list = ['LANGUAGE'];
+    this.refData =  await this.refdataService
+      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+        list, false);
+    return this.refData;
+  }
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
   }
   onClick(rating: number) {
     console.log(rating);
@@ -118,6 +143,9 @@ export class ResumeLanguageComponent implements OnInit {
               (responseOne) => {
                 console.log('response', responseOne);
                 this.languageArray = responseOne;
+                for (let i = 0; i < responseOne.length; i++) {
+                  this.languageArray[i].resume_language_code = this.languageArray[i].ResumeLanguageKey.resume_language_code;
+                }
               },
               (error) => {
                 if (error.error.msg_code === '0004') {

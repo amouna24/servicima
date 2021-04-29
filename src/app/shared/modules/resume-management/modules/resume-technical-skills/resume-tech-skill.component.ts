@@ -15,7 +15,7 @@ export class ResumeTechSkillComponent implements OnInit {
   arrayTechSkillCount = 0;
   TechSkill: IResumeTechnicalSkillsModel;
   techSkillArray: IResumeTechnicalSkillsModel[] = [];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-TECH`;
+  resume_code = ``;
   technical_skill: string;
   get getTech() {
     return this.techSkillArray;

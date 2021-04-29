@@ -4,6 +4,10 @@ import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectD
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { Router } from '@angular/router';
+import { IViewParam } from '@shared/models/view.model';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { UserService } from '@core/services/user/user.service';
 @Component({
   selector: 'wid-project-section',
   templateUrl: './project-section.component.html',
@@ -21,8 +25,12 @@ export class ProjectSectionComponent implements OnInit {
   showDesc = true;
   showSec = false;
   select = '';
-  list = 'List';
-  desc = 'desc';
+  list = '';
+  desc = '';
+  secList: IViewParam[];
+  refData: { } = { };
+  emailAddress: string;
+
   @Input() project_code = '';
 
   get getProjectSection() {
@@ -32,20 +40,46 @@ export class ProjectSectionComponent implements OnInit {
     return this.sendProSectionDetails.get('Field') as FormArray;
   }
   constructor(
+    private refdataService: RefdataService,
+    private utilService: UtilsService,
+    private userService: UserService,
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private router: Router,
   ) { }
 
-  ngOnInit(): void {
+ async ngOnInit() {
+    this.getConnectedUser();
     this.getProjectDetailsInfo();
     this.createFormProDetails();
     this.createFormSectionDetails();
+   await this.getSectionRefData();
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
      this.select = selectedValue;
       console.log('selected value = ', selectedValue);
     });
+  }
+  async getSectionRefData() {
+    const data = await this.getRefdata();
+    this.secList = data['SECTION_TYPE'];
+    console.log(this.secList);
+  }
+  async getRefdata() {
+    const list = ['SECTION_TYPE'];
+    this.refData =  await this.refdataService
+      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+        list, false);
+    return this.refData;
+  }
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
+        });
   }
   createFormProDetails() {
     this.sendProDetails = this.fb.group({
@@ -116,10 +150,10 @@ export class ProjectSectionComponent implements OnInit {
 
   onSelect() {
     console.log(this.select);
-    if (this.select === 'desc') {
+    if (this.select === 'PARAGRAPH') {
       this.showDesc = false;
       this.showSec = true;
-    } else {
+    } else if (this.select === 'LIST') {
       this.showDesc = true;
       this.showSec = false;
     }

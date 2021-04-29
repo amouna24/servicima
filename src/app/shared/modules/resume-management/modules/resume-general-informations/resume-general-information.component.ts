@@ -129,13 +129,12 @@ export class ResumeGeneralInformationComponent implements OnInit {
   /**
    * @description Create Resume
    */
-  createResume() {
+   createResume() {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.avatar.toString();
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
-      this.resumeService.addResume(this.generalInfo).subscribe(data => console.log('Resume =', data));
-      this.router.navigate(['/candidate/resume/professionalExperience']);
+      this.resumeService.addResume(this.generalInfo).subscribe(data => this.router.navigate(['/candidate/resume/professionalExperience']));
     } else {
       console.log('Form is not valid');
     }

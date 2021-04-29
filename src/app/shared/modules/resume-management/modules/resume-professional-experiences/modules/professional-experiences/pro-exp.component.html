@@ -24,9 +24,9 @@
     <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
       <wid-scrollbar fxFlexFill fxLayout="column">
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center"  >
-          <div fxLayout="column" fxFlex="85"  fxFlexAlign="center center" class="full-height" fxLayoutGap="10px">
+          <div fxLayout="column" fxFlex="85"  fxFlexAlign="center center" class="full-height">
             <div  *ngFor="let item of getProExp let pointIndex=index"  fxLayout="column">
-              <div  fxLayout="row" class="bg-pale-grey border-radius-15 "   >
+              <div  fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80"  >
                 <div fxLayout="column" fxFlex="20"   class="p-l-20">
                   <div fxLayout="row"  fxFlex="34" >
                   <p class="font-normal font-size-15">{{item.position}}</p>
@@ -38,7 +38,7 @@
 
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.professional_experience_code)">Add project</button>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.professional_experience_code,item.customer,item.position)">Add project</button>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@
            </div>
            <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
              <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
-               Save
+               Next
              </button>
            </div>
          </div>
