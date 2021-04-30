@@ -28,7 +28,15 @@ export class SpinnerService {
           event instanceof NavigationCancel ||
           event instanceof NavigationError
         ) {
-          this.isLoadingSubject.next(event.url === '/');
+          if (this.router.url === '/manager' ||
+            this.router.url === '/collaborator' ||
+            this.router.url === '/candidate' ||
+            this.router.url === '/') {
+            this.isLoadingSubject.next(true);
+          } else {
+            this.isLoadingSubject.next(false);
+          }
+
         }
       },
       () => {

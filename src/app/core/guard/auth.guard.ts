@@ -78,13 +78,17 @@ export class AuthGuard implements CanActivate {
               this.router.navigate(['/auth/complete-register'], { queryParams: { rg: this.fingerPrintService.registerCode}});
               this.resolveValue = true;
              } else if (this.emailAddress && this.applicationId) { /* User Active => Allow access to requested ressource */
-              this.userService.getUserInfo();
-              this.utilService.getCompanies();
-              this.userService.isLoadingAction$.subscribe(
-                (res) => {
-                  this.resolveValue = res;
-                }
-              );
+              if (! this.userService.userInfo || (this.userService.refresh && this.userService.userInfo))  {
+                this.userService.getUserInfo().then((data) => {
+                  if (data) {
+                    this.userService.redirectUser(data['user'][0].user_type);
+                    this.utilService.getCompanies();
+                    this.userService.getRoleFeature(data, data.userroles[0].userRolesKey.role_code);
+                    this.resolveValue = true;
+                  }
+
+                });
+           }
             } else {
               this.router.navigate(['/auth/login']);
               this.resolveValue = true;
