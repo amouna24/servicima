@@ -17,4 +17,11 @@ export class FeatureService {
     return this.httpClient
       .get<IFeatureModel[]>(`${environment.featuresApiUrl}`);
   }
+  /**
+   * @description Get all existing features
+   * @param language: language
+   */
+  getFeatureByCode(featureCode: string) {
+    return this.httpClient.get<IFeatureModel[]>(environment.featuresApiUrl + '?feature_code=' + featureCode);
+  }
 }

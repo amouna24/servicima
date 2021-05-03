@@ -88,19 +88,9 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
    * @description Get query params
    */
   async getParam(): Promise<void> {
-    this.activatedRoute.paramMap.subscribe(
-      params => {
-        this.billingPack = params.get('pack');
-        this.licenceService.getLicenceByCode(params.get('licence')).subscribe(
-          (data) => {
-            this.licence = data;
-          }
-        );
-      }
-    );
-    if ((!this.licence) || (this.billingPack !== 'month' && this.billingPack !== 'year')) {
-      await this.router.navigate(['/manager/settings/licences/upgrade-licence']);
-    }
+    this.billingPack = this.activatedRoute.snapshot.paramMap.get('pack');
+    await this.licenceService.getLicenceByCode(this.activatedRoute.snapshot.paramMap.get('licence'))
+      .subscribe((data) => this.licence = data[0]);
   }
 
   /**

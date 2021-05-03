@@ -16,7 +16,7 @@ export const environment = {
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
   licenceApiUrl: 'http://192.168.1.22:8009/admin/licences/v1',
-  licenceFeaturesApiUrl: 'http://192.168.1.22:8012/admin/licencefeatures/v1',
+  licenceFeaturesApiUrl: 'http://127.0.0.1:8012/admin/licencefeatures/v1',
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
 

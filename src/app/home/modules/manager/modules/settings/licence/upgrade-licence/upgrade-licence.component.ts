@@ -6,7 +6,6 @@ import { ILicenceFeatureModel } from '@shared/models/licenceFeature.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { FeatureService } from '@core/services/feature/feature.service';
 import { IFeatureModel } from '@shared/models/feature.model';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-upgrade-licence',
@@ -15,44 +14,38 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 })
 export class UpgradeLicenceComponent implements OnInit {
   licences: ILicenceModel[];
+  licence: ILicenceModel;
   licencesFeatures: ILicenceFeatureModel[];
-  featureList: IFeatureModel[];
   constructor( private licenceService: LicenceService,
-               private router: Router,
-               private utilService: UtilsService,
-               private localStorageService: LocalStorageService,
-               private featureService: FeatureService) { }
+               private featureService: FeatureService,
+               private router: Router) { }
 
   /**
    * @description Loaded when component in init state
    */
   async ngOnInit(): Promise<void> {
-    this.getLicences().then(
-      () => {
-        this.getLicencesFeatures().then(
-          () => this.licencesFeatures = this.licencesFeatures.filter((res) => res.display)
-        );
-      }
-    );
+    this.getLicences();
+    this.licence = this.licences[0];
+    this.getLicencesFeatures();
+
   }
   /**
    * @description Get licence Feature
    */
-  async getLicencesFeatures(): Promise<void> {
-    await this.licenceService.getLicencesFeatures().subscribe((data) => {
+  getLicencesFeatures() {
+    this.licenceService.getLicencesFeatures().subscribe((data) => {
       this.licencesFeatures = data;
+      console.log('licences feature', data);
     });
   }
   /**
    * @description Get licence list
    */
-  async getLicences(): Promise<void> {
-    await this.licenceService.getLicencesList().subscribe(
+  getLicences() {
+    this.licenceService.getLicencesList().subscribe(
       (data) => {
-        this.licences = data.filter((res) =>
-          new Date(res.licence_start_date) <= new Date() &&
-          new Date(res.licence_end_date) >= new Date())
-          .sort(
+        console.log('Licences', data);
+        this.licences = data.sort(
             (a, b) => {
               if (a.level < b.level) {
                 return -1;
@@ -86,24 +79,30 @@ export class UpgradeLicenceComponent implements OnInit {
   /**
    * @description get All features
    */
-  getFeatureDesc(licence: ILicenceFeatureModel): IFeatureModel {
-   return this.featureList.find(
-     (res) => {
-       return res.FeatureKey.feature_code === licence.LicenceFeaturesKey.feature_code;
-     });
+  getFeatureDesc(licence: ILicenceFeatureModel): string {
+    this.featureService.getFeatureByCode(licence.LicenceFeaturesKey.feature_code).subscribe(
+      (data) => {
+        console.log(data);
+      }
+    );
+    return licence.LicenceFeaturesKey.feature_code;
+  }
+  async getFeatureByCode(code: string): Promise<IFeatureModel> {
+    let feature: IFeatureModel;
+    await this.featureService.getFeatureByCode(code)
+      .subscribe(
+        (data) => { feature = data[0]; }
+      );
+    return feature;
   }
   /**
    * @param licence code
    * @description Display scss background color
    */
   getLicenceFeatures(licence: ILicenceModel): ILicenceFeatureModel[] {
-    let licenceFeature: ILicenceFeatureModel[] ;
-      this.licenceService.getLicencesFeaturesByCode(licence.LicenceKey.licence_code).subscribe(
-        (data) => {
-          licenceFeature = data;
-        }
-      );
-      return licenceFeature;
+    return this.licencesFeatures.filter(
+      (f) => f.LicenceFeaturesKey.licence_code === licence.LicenceKey.licence_code
+    );
   }
   /**
    * @param code licence code
