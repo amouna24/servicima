@@ -15,6 +15,10 @@ export class ResumeInterventionComponent implements OnInit {
   Intervention: IResumeInterventionModel;
   interventionArray: IResumeInterventionModel[] = [];
   resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
+  interventionUpdate: IResumeInterventionModel;
+  intervention_code = '';
+  button = 'Add';
+  indexUpdate = 0 ;
 
   get getIntervention() {
     return this.interventionArray;
@@ -26,8 +30,8 @@ export class ResumeInterventionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.createForm();
     this.getInterventionInfo();
+    this.createForm();
   }
   getInterventionInfo() {
     this.resumeService.getResume(
@@ -41,9 +45,15 @@ export class ResumeInterventionComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.interventionArray = responseOne;
-              },
+                if (responseOne['msg_code'] !== '0004') {
+                  console.log('response', responseOne);
+                  this.interventionArray = responseOne;
+                  this.interventionArray.forEach(
+                    (func) => {
+                      func.intervention_code = func.ResumeInterventionKey.intervention_code;
+                    }
+                  );
+                }},
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
@@ -68,7 +78,8 @@ export class ResumeInterventionComponent implements OnInit {
   /**
    * @description Create Technical skill
    */
-  createIntervention() {
+  createUpdateIntervention() {
+    if (this.button === 'Add') {
     this.Intervention = this.sendIntervention.value;
     this.Intervention.resume_code = this.resume_code;
     this.Intervention.intervention_code = Math.random().toString();
@@ -78,14 +89,33 @@ export class ResumeInterventionComponent implements OnInit {
       this.getIntervention.push(this.Intervention);
     } else { console.log('Form is not valid');
     }
+    this.arrayInterventionCount++; } else {
+      this.interventionUpdate = this.sendIntervention.value;
+      this.interventionUpdate.intervention_code = this.intervention_code;
+      this.interventionUpdate.resume_code = this.resume_code;
+      console.log(' intervention update =', this.interventionUpdate);
+      this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
+      this.interventionArray[this.indexUpdate] = this.interventionUpdate;
+      this.button = 'Add';
+    }
+
     this.sendIntervention.reset();
-    this.arrayInterventionCount++;
   }
+
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
       return true;
     }
     return control.hasError(validationType) ;
+  }
+
+  EditForm(level_of_intervention_desc: string, intervention_code: string, index: number) {
+    this.sendIntervention.patchValue({
+      level_of_intervention_desc,
+    });
+    this.intervention_code = intervention_code;
+    this.indexUpdate = index;
+    this.button = 'Save';
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IUserModel } from '@shared/models/user.model';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { userType } from '@shared/models/userProfileType.model';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ITheme } from '@shared/models/theme.model';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
@@ -17,6 +17,10 @@ import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
 import { takeUntil } from 'rxjs/operators';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeModel } from '@shared/models/resume.model';
+import { IViewParam } from '@shared/models/view.model';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { indicate } from '@core/services/utils/progress';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'wid-resume-general-information',
@@ -34,6 +38,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   firstname: string = this.userService.connectedUser$.getValue().user[0]['first_name'];
   lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
   company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
+  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -52,15 +57,17 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
     private localStorageService: LocalStorageService,
+    private appInitializerService: AppInitializerService,
   ) {
-  }
-
-  showHideYears() {
-    this.showYears = !this.showYears;
   }
 
   async ngOnInit() {
     this.initForm();
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
+      }
+    ));
     await this.getResume();
     this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
@@ -79,6 +86,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
         this.avatar = avatar;
       }
     );
+  }
+
+  showHideYears() {
+    this.showYears = !this.showYears;
   }
 
   /**
@@ -104,10 +115,11 @@ export class ResumeGeneralInformationComponent implements OnInit {
       init_name: generalInformation[0].init_name,
       actual_job: generalInformation[0].actual_job,
       years_of_experience: generalInformation[0].years_of_experience,
-      language_id: generalInformation[0].language_id,
+      language_id: generalInformation[0].ResumeKey.language_id,
     });
     this.showHideYears();
   }
+
   /**
    * @description Create Form
    */
@@ -129,7 +141,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   /**
    * @description Create Resume
    */
-   createResume() {
+  createResume() {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.avatar.toString();
     if (this.CreationForm.valid) {
@@ -139,12 +151,12 @@ export class ResumeGeneralInformationComponent implements OnInit {
       console.log('Form is not valid');
     }
   }
+
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
       return true;
     }
-    return control.hasError(validationType) ;
+    return control.hasError(validationType);
   }
-
 }

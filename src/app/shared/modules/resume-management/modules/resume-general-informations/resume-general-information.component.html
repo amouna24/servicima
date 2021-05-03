@@ -48,11 +48,11 @@
                         Language:
                       </mat-label>
                       <mat-form-field appearance="outline">
-                        <mat-select disableOptionCentering panelClass="panelColor"
-                                     placeholder="Language" formControlName="language_id" [value]="CreationForm.controls.language_id.value"  required>
-                          <mat-option value="FR">French</mat-option>
-                          <mat-option value="EN">English</mat-option>
-                          <mat-option value="ESP">Spanish</mat-option>
+                        <mat-select  formControlName="language_id" disableOptionCentering panelClass="panelColor"
+                                        placeholder="language" value="language_id">
+                          <ng-container *ngFor="let v of langList.getValue()">
+                            <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
+                          </ng-container>
                         </mat-select>
                         <mat-error class="red" *ngIf="isControlHasError(CreationForm,'language_id', 'required')">
                           Please select an item in the list</mat-error>

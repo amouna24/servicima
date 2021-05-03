@@ -5,103 +5,112 @@
 
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
-    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
-      <div fxLayout="column" fxFlex="56">
-        <h1 class="steel font-size-24 font-medium">Resume</h1>
-      </div>
-      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
-          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-          </mat-icon>
-          <span class="cool-grey">back</span>
-        </button>
-      </div>
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
     </div>
-    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
-      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
     </div>
-    <div fxLayout="row" fxFlex="88" >
-      <div fxLayout="column" fxFlexFill>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88">
+    <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">Custom Sections</h4>
         </div>
       </div>
-
       <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
         <div fxLayout="column" fxFlexFill>
-       <div fxLayout="row" fxFlex="52" style="justify-content: center" *ngIf="!showSection" >
-          <div fxLayout="column" fxFlex="80"  style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
-            <div fxLayout="row" fxFlexFill>
-              <div fxLayout="column" fxFlexFill fxLayoutGap="30px" style="justify-content: center">
-                <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No custom section available</span></div>
-                <div fxLayout="row" fxLayoutAlign="center"> <button mat-raised-button (click)="showCustomSection()" class="btn-large bg-primaryColor white"  >
-             Add section
-                </button></div></div>
-          </div></div>
-       </div>
-       <div fxLayout="row" fxFlexFill *ngIf="showSection"  >
-         <div fxLayout="column" fxLayoutGap="10px" fxFlexFill>
-          <div  *ngFor="let item of getSection let pointIndex=index" class="p-l-65">
-            <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
-              <div fxLayout="column" fxFlex="20"   class="p-l-20">
-                <p class="font-normal font-size-15">{{item.section_title}}</p>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>
+          <div fxLayout="row" fxFlex="52" style="justify-content: center" *ngIf="!showSection">
+            <div fxLayout="column" fxFlex="80" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+              <div fxLayout="row" fxFlexFill>
+                <div fxLayout="column" fxFlexFill fxLayoutGap="30px" style="justify-content: center">
+                  <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No custom section available</span>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="center">
+                    <button mat-raised-button (click)="showCustomSection()" class="btn-large bg-primaryColor white">
+                      Add section
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-            <form [formGroup]="sendSection" fxFlexFill>
-              <div fxLayout="column" fxFlex="8"   ></div>
-              <div fxLayout="column" fxFlex="80"  >
-                <div fxLayout="column">
-                  <mat-label class="black font-size-12">
-                    Section title:
-                  </mat-label>
-                  <mat-form-field appearance="outline" class="full-width">
-                    <input formControlName="section_title" matInput placeholder="Section title" required>
-                    <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_title', 'required')">
-                      Please fill out this field</mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="column" >
-                  <mat-label class="black font-size-12">
-                    Description:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="Description" rows="7"
-                                        formControlName="section_desc" required></textarea>
-                    <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_desc', 'required')">
-                      Please fill out this field</mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="end end" >
-                  <button  mat-raised-button type="submit" class="bg-pale-grey btn-medium black" (click)="createSection()">Add</button>
+          <div fxLayout="row" fxFlexFill *ngIf="showSection">
+            <div fxLayout="column" fxLayoutGap="10px" fxFlexFill>
+              <div *ngFor="let item of getSection let pointIndex=index" class="p-l-65">
+                <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+                  <div fxLayout="column" fxFlex="20" class="p-l-20">
+                    <p class="font-normal font-size-15">{{item.section_title}}</p>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
+                  </div>
                 </div>
               </div>
-            </form>
+              <form [formGroup]="sendSection" fxFlexFill>
+                <div fxLayout="column" fxFlex="8"></div>
+                <div fxLayout="column" fxFlex="80">
+                  <div fxLayout="column">
+                    <mat-label class="black font-size-12">
+                      Section title:
+                    </mat-label>
+                    <mat-form-field appearance="outline" class="full-width">
+                      <input formControlName="section_title" matInput placeholder="Section title" required>
+                      <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_title', 'required')">
+                        Please fill out this field
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="column">
+                    <mat-label class="black font-size-12">
+                      Description:
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Description" rows="7"
+                                        formControlName="section_desc" required></textarea>
+                      <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_desc', 'required')">
+                        Please fill out this field
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="end end">
+                    <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                            (click)="createSection()">Add
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-       </div>
         </div>
       </wid-scrollbar>
-        <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-          <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-            <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/language">
-              <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-              </mat-icon>
-              <span class="cool-grey">back</span>
-            </button>
-          </div>
-          <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-            <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/certifDiploma']">
-              Next
-            </button>
-          </div>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/language">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
         </div>
-       </div>
-
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/certifDiploma']">
+            Next
+          </button>
+        </div>
+      </div>
     </div>
+
+  </div>
 
 </div>
 

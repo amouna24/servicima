@@ -250,4 +250,8 @@ export const iconsList: IIcon[] = [
     name: 'wi_res_certif',
     path: 'assets/icons/certif.svg',
   },
+  {
+    name: 'wi_res_preview',
+    path: 'assets/icons/preview.svg',
+  },
 ];

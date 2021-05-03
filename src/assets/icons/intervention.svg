@@ -1,9 +1,10 @@
-<svg id="tabler-icon-chart-dots" xmlns="http://www.w3.org/2000/svg" width="28.009" height="28.009" viewBox="0 0 28.009 28.009">
-  <path id="Path_1269" data-name="Path 1269" d="M0,0H28.009V28.009H0Z" fill="none"/>
-  <path id="Path_1270" data-name="Path 1270" d="M3,3V24.006H24.006" transform="translate(0.501 0.501)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" opacity="0.4"/>
-  <circle id="Ellipse_92" data-name="Ellipse 92" cx="2.5" cy="2.5" r="2.5" transform="translate(8 8)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <circle id="Ellipse_93" data-name="Ellipse 93" cx="2.5" cy="2.5" r="2.5" transform="translate(20 6)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <circle id="Ellipse_94" data-name="Ellipse 94" cx="2.5" cy="2.5" r="2.5" transform="translate(14 15)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_81" data-name="Line 81" x2="2.684" y2="3.384" transform="translate(11.904 12.37)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1271" data-name="Path 1271" d="M15.1,14.068,18.368,8.7" transform="translate(2.522 1.453)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="21.499" height="21.006" viewBox="0 0 21.499 21.006">
+  <g id="tabler-icon-chart-dots" transform="translate(-3.501 -3.501)">
+    <path id="Path_1270" data-name="Path 1270" d="M3,3V24.006H24.006" transform="translate(0.501 0.501)" fill="none" opacity="0.4"/>
+    <circle id="Ellipse_92" data-name="Ellipse 92" cx="2.5" cy="2.5" r="2.5" transform="translate(8 8)" fill="none"/>
+    <circle id="Ellipse_93" data-name="Ellipse 93" cx="2.5" cy="2.5" r="2.5" transform="translate(20 6)" fill="none"/>
+    <circle id="Ellipse_94" data-name="Ellipse 94" cx="2.5" cy="2.5" r="2.5" transform="translate(14 15)" fill="none"/>
+    <line id="Line_81" data-name="Line 81" x2="2.684" y2="3.384" transform="translate(11.904 12.37)" fill="none"/>
+    <path id="Path_1271" data-name="Path 1271" d="M15.1,14.068,18.368,8.7" transform="translate(2.522 1.453)" fill="none"/>
+  </g>
 </svg>

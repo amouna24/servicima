@@ -46,17 +46,19 @@ export class ProExpProjectsComponent implements OnInit {
       `?professional_experience_code=${this.professional_experience_code}`)
       .subscribe(
         (response) => {
-          console.log('response=', response);
-          this.ProjectArray = response;
-          if (this.ProjectArray.length !== 0) {
-            console.log('Project array on init= ', this.ProjectArray);
-            this.showProject = true;
-            this.showForm = false;
-            for (let i = 0; i < response.length; i++) {
-              this.ProjectArray[i].project_code = this.ProjectArray[i].start_date;
+          if (response['msg_code'] !== '0004') {
+            console.log('response=', response);
+            this.ProjectArray = response;
+            if (this.ProjectArray.length !== 0) {
+              console.log('Project array on init= ', this.ProjectArray);
+              this.showProject = true;
+              this.showForm = false;
+              this.ProjectArray.forEach(
+                (project) => {
+                  project.project_code = project.ResumeProjectKey.project_code;
+                });
             }
-          }
-        },
+          } },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -66,8 +68,8 @@ export class ProExpProjectsComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log('professional experience code=', this.professional_experience_code);
-    this.createForm();
     this.getProjectInfo();
+    this.createForm();
     console.log('on init showForm', this.showForm);
   }
   showAddSectionEvent() {
@@ -84,7 +86,7 @@ export class ProExpProjectsComponent implements OnInit {
   createProject() {
     this.Project = this.sendProject.value;
     this.Project.professional_experience_code = this.professional_experience_code;
-    this.Project.project_code =`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
+    this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
     this.Project.start_date = this.datepipe.transform(this.Project.start_date, 'yyyy/MM/dd');
     this.Project.end_date = this.datepipe.transform(this.Project.end_date, 'yyyy/MM/dd');
     if (this.sendProject.valid) {

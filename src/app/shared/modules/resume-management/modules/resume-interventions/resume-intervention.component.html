@@ -1,72 +1,75 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
-        <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-size-24 font-medium">Resume</h1>
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Level of intervention</h4>
         </div>
-        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
-            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+      </div>
+      <wid-scrollbar fxFlex="80" class="full-width">
+        <div fxLayout="column" fxFlexFill style="align-items: center" fxLayoutGap="10px">
+          <div *ngFor="let item of getIntervention let pointIndex=index" class="p-l-65 full-width">
+            <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+              <div fxLayout="column" fxFlex="60" class="p-l-20">
+                <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item.level_of_intervention_desc,item.intervention_code,pointIndex)">Edit</button>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="sendIntervention" fxFlex="100" class="width-86" fxLayout="row">
+            <div fxLayout="column" fxFlex="90">
+              <mat-label class="black font-size-12">
+                Level of intervention:
+              </mat-label>
+              <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Level of intervention" rows="7"
+                                        formControlName="level_of_intervention_desc" required></textarea>
+                <mat-error class="red"
+                           *ngIf="isControlHasError(sendIntervention,'level_of_intervention_desc', 'required')">
+                  Please Fill out this field
+                </mat-error>
+              </mat-form-field>
+              <div fxLayout="row" fxLayoutAlign="end end">
+                <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                        (click)="createUpdateIntervention()">{{button}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </wid-scrollbar>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
             </mat-icon>
             <span class="cool-grey">back</span>
           </button>
         </div>
-      </div>
-      <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
-        <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
-      </div>
-      <div fxLayout="row" fxFlex="88" fxLayoutAlign="center" >
-        <div fxLayout="column" fxFlexFill>
-        <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
-          <div fxLayout="column" fxFlex="86">
-            <h4 class="steel font-size-18 font-small">Level of intervention</h4>
-          </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/language']">
+            Next
+          </button>
         </div>
-        <wid-scrollbar fxFlex="80" class="full-width" >
-          <div fxLayout="column" fxFlexFill style="align-items: center" fxLayoutGap="10px" >
-            <div  *ngFor="let item of getIntervention let pointIndex=index" class="p-l-65 full-width" >
-              <div  fxLayout="row" class="bg-pale-grey border-radius-15 width-90"   >
-                <div fxLayout="column" fxFlex="60"   class="p-l-20">
-                  <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  >Edit</button>
-                </div>
-              </div>
-            </div>
-            <form [formGroup]="sendIntervention" fxFlex="100" class="width-86" fxLayout="row">
-          <div fxLayout="column" fxFlex="90"  >
-            <mat-label class="black font-size-12">
-              Level of intervention:
-            </mat-label>
-            <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="Level of intervention" rows="7"
-                                        formControlName="level_of_intervention_desc" required></textarea>
-              <mat-error class="red" *ngIf="isControlHasError(sendIntervention,'level_of_intervention_desc', 'required')">
-                Please Fill out this field</mat-error>
-            </mat-form-field>
-            <div fxLayout="row" fxLayoutAlign="end end" >
-              <button  mat-raised-button type="submit" class="bg-pale-grey btn-medium black"  (click)="createIntervention()">Add</button>
-            </div>
-          </div>
-            </form>
-            </div>
-        </wid-scrollbar>
-          <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-            <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-              <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
-                <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-                </mat-icon>
-                <span class="cool-grey">back</span>
-              </button>
-            </div>
-            <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-              <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/language']">
-                Next
-              </button>
-            </div>
-          </div>
       </div>
-
-
     </div>
   </div>
+</div>

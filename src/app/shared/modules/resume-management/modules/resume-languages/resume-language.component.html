@@ -79,14 +79,14 @@
                       </mat-icon>
                     </button>
                   </div>
-                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="rating == 0">
+                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="showLevelError && rating == 0" >
                         Please select a level
                   </mat-error>
 
 
                 </div>
                 <div fxLayout="column" fxFlex="16"    >
-                  <button type="submit" mat-raised-button type="submit"  class="bg-pale-grey btn-medium black" (click)="createLanguage()">Add</button>
+                  <button type="submit" mat-raised-button type="button"  class="bg-pale-grey btn-medium black" (click)="createLanguage()">Add</button>
                 </div>
             </div>
 

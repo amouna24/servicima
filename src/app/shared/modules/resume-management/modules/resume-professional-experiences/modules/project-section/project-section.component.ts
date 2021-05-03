@@ -21,7 +21,7 @@ export class ProjectSectionComponent implements OnInit {
   proDetailsArray: IResumeProjectDetailsModel[] = [];
   ProDetails: IResumeProjectDetailsModel;
   ProSectionDetails: IResumeProjectDetailsSectionModel[];
-  project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D` ;
+  project_details_code = `` ;
   showDesc = true;
   showSec = false;
   select = '';
@@ -94,9 +94,10 @@ export class ProjectSectionComponent implements OnInit {
       `?project_code=${this.project_code}`)
       .subscribe(
         (response) => {
-          console.log('response=', response);
+          if (response['msg_code'] !== '0004') {
+            console.log('response=', response);
           this.proDetailsArray = response;
-        },
+       } },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -114,7 +115,7 @@ export class ProjectSectionComponent implements OnInit {
       })])});
   }
   /**
-   * @description Create Technical skill
+   * @description Create Custom section
    */
   createProSectionDetails() {
     this.ProSectionDetails = this.sendProSectionDetails.controls.Field.value;
@@ -146,8 +147,8 @@ export class ProjectSectionComponent implements OnInit {
     }
     this.arrayProDetailsCount++;
     this.sendProDetails.reset();
+    this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
   }
-
   onSelect() {
     console.log(this.select);
     if (this.select === 'PARAGRAPH') {

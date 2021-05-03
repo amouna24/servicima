@@ -19,15 +19,16 @@ export class ResumeDynamicSectionComponent implements OnInit {
   get getSection() {
     return this.SectionArray;
   }
-  showCustomSection() {
-    this.showSection = !this.showSection;
-  }
-
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
                ) { }
+  ngOnInit(): void {
+    this.getDynamicSectionInfo();
+    this.createForm();
+    console.log('length=', this.SectionArray.length);
+    }
   getDynamicSectionInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -40,13 +41,14 @@ export class ResumeDynamicSectionComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.SectionArray = responseOne;
-                if (this.SectionArray.length !== 0) {
-                  console.log('section array on init= ', this.SectionArray);
-                  this.showSection = true;
-                }
-              },
+                if (responseOne['msg_code'] !== '0004') {
+                  console.log('response', responseOne);
+                  this.SectionArray = responseOne;
+                  if (this.SectionArray.length !== 0) {
+                    console.log('section array on init= ', this.SectionArray);
+                    this.showSection = true;
+                  }
+                } },
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
@@ -61,18 +63,15 @@ export class ResumeDynamicSectionComponent implements OnInit {
     console.log('section array =', this.SectionArray);
 
   }
-  ngOnInit(): void {
-    this.createForm();
-    this.getDynamicSectionInfo();
-    console.log('length=', this.SectionArray.length);
-    }
+  showCustomSection() {
+    this.showSection = !this.showSection;
+  }
   createForm() {
     this.sendSection = this.fb.group({
       section_title: '',
       section_desc: '',
     });
   }
-
   createSection() {
     this.Section = this.sendSection.value;
     this.Section.resume_code = this.resume_code;

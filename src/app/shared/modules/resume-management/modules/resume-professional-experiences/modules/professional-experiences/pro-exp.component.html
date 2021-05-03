@@ -1,127 +1,148 @@
-  <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
-    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
-      <div fxLayout="column" fxFlex="56">
-        <h1 class="steel font-size-24 font-medium">Resume</h1>
-      </div>
-      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
-          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-          </mat-icon>
-          <span class="cool-grey">back</span>
-        </button>
-      </div>
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
     </div>
-    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
-      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
     </div>
-    <div fxLayout="row" fxFlex="88">
-       <div fxLayout="column" fxFlexFill>
-    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
-      <div fxLayout="column" fxFlex="86">
-        <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+        </div>
       </div>
-    </div>
-    <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
-      <wid-scrollbar fxFlexFill fxLayout="column">
-      <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center"  >
-          <div fxLayout="column" fxFlex="85"  fxFlexAlign="center center" class="full-height">
-            <div  *ngFor="let item of getProExp let pointIndex=index"  fxLayout="column">
-              <div  fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80"  >
-                <div fxLayout="column" fxFlex="20"   class="p-l-20">
-                  <div fxLayout="row"  fxFlex="34" >
-                  <p class="font-normal font-size-15">{{item.position}}</p>
+      <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
+        <wid-scrollbar fxFlexFill fxLayout="column">
+          <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
+            <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
+              <div *ngFor="let item of getProExp let pointIndex=index" fxLayout="column">
+                <div fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80">
+                  <div fxLayout="column" fxFlex="80" class="p-l-20">
+                    <div fxLayout="row" fxFlex="34">
+                      <p class="font-normal font-size-15">{{item.position}}</p>
+                    </div>
+                    <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
+                      <p class="font-extra-light font-size-10 help-blue">
+                        {{item.customer}}   {{item.start_date}}-{{item.end_date}}</p>
+                    </div>
+
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
+                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position)">Add
+                      project
+                    </button>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
+                            (click)="editForm(item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">Edit
+                    </button>
+                  </div>
                 </div>
-                <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
-                  <p class="font-extra-light font-size-10 help-blue">
-                    {{item.customer}}   {{item.start_date}}-{{item.end_date}}</p>
-                </div>
+              </div>
+              <form [formGroup]="sendProExp" class="full-height" fxLayout="column" fxFlex="60">
+                <div fxLayout="row" fxFlex="55" class="border-radius-15 pale-grey " fxLayoutAlign=" center"
+                     style="border-style: solid">
+                  <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center">
+                    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40" class="width-90">
+                      <div fxLayout="column" fxFlex="35">
+                        <mat-label class="black font-size-12">
+                          Position:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input formControlName="position" matInput placeholder="Position" required>
+                          <mat-error class="red" *ngIf="isControlHasError(sendProExp,'position', 'required')">
+                            Please fill out this field
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="35">
+                        <mat-label class="black font-size-12">
+                          Customer:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input formControlName="customer" matInput placeholder="Customer" required>
+                          <mat-error class="red" *ngIf="isControlHasError(sendProExp,'customer', 'required')">
+                            Please fill out this field
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row" class="width-90" fxFlex="40" fxLayoutAlign="space-around center">
+                      <div fxLayout="column" fxFlex="35">
+                        <mat-label class="black font-size-12">
+                          Start Date:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput [matDatepicker]="datepicker" [min]="minDate" [max]="maxDate" #date1
+                                 formControlName="start_date" placeholder="Start date" required>
+                          <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                          <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                          <mat-error class="red"
+                                     *ngIf="isControlHasError(sendProExp,'start_date', 'required')|| showDateError">
+                            Please Select a correct date
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="35">
+                        <mat-label class="black font-size-12">
+                          End date:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput [matDatepicker]="datepickerend" [min]="minDate" [max]="maxDate" #date2
+                                 formControlName="end_date" placeholder="End date" required>
+                          <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
+                          <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                          <mat-error class="red"
+                                     *ngIf="isControlHasError(sendProExp,'end_date', 'required') || showDateError">
+                            Please Select a correct date
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="20">
+                      <div fxLayout="column" fxFlex="92" fxLayoutAlign="space-arround end">
+                        <button mat-raised-button type="button" class="btn-small bg-pale-grey"
+                                (click)="createUpdateProExp(date1.value,date2.value)">
+                          {{button}}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="routeToProject(item.professional_experience_code,item.customer,item.position)">Add project</button>
-                </div>
-              </div>
+              </form>
             </div>
-          <form [formGroup]="sendProExp" class="full-height" fxLayout="column" fxFlex="60">
-        <div fxLayout="row"  fxFlex="55"  class="border-radius-15 pale-grey " fxLayoutAlign=" center" style="border-style: solid">
-          <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center" >
-            <div fxLayout="row"     fxLayoutAlign="space-around center" fxFlex="40" class="width-90">
-              <div fxLayout="column" fxFlex="35" >
-                <mat-label class="black font-size-12">
-                  Position:
-                </mat-label>
-                <mat-form-field appearance="outline">
-                  <input   formControlName="position" matInput placeholder="Position" required>
-                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'position', 'required')">
-                    Please fill out this field</mat-error>
-                </mat-form-field>
-                </div>
-              <div fxLayout="column"  fxFlex="35">
-                <mat-label class="black font-size-12">
-                  Customer:                </mat-label>
-                <mat-form-field appearance="outline">
-                  <input   formControlName="customer" matInput placeholder="Customer" required>
-                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'customer', 'required')">
-                    Please fill out this field</mat-error>
-                </mat-form-field>
-               </div>
-            </div>
-            <div fxLayout="row"  class="width-90"  fxFlex="40" fxLayoutAlign="space-around center">
-              <div fxLayout="column" fxFlex="35">
-                <mat-label class="black font-size-12">
-                  Start Date:
-                </mat-label>
-                <mat-form-field appearance="outline">
-                  <input  matInput [matDatepicker]="datepicker" formControlName="start_date"placeholder="Start date" required>
-                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'start_date', 'required')">
-                    Please Select a date</mat-error>
-                  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                  <mat-datepicker #datepicker color="primary"></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div fxLayout="column" fxFlex="35">
-                <mat-label class="black font-size-12">
-                  End date:
-                </mat-label>
-                <mat-form-field appearance="outline">
-                  <input  matInput [matDatepicker]="datepickerend" formControlName="end_date"placeholder="End date" required>
-                  <mat-error class="red" *ngIf="isControlHasError(sendProExp,'end_date', 'required')">
-                    Please Select a date</mat-error>
-                  <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
-                  <mat-datepicker #datepickerend color="primary"></mat-datepicker>
-                </mat-form-field>
-            </div>
+
           </div>
-            <div fxLayout="row"    fxFlex="20" >
-              <div fxLayout="column" fxFlex="92" fxLayoutAlign="space-arround end">
-              <button mat-raised-button type="submit" class="btn-small bg-pale-grey"   (click)="createProExp()" >
-                Add
-              </button></div>
-            </div>
+        </wid-scrollbar>
+      </div>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/technicalSkills']">
+            Next
+          </button>
+        </div>
+      </div>
     </div>
-
-              </div>
-          </form>
-          </div>
-
-</div>
-      </wid-scrollbar>
-    </div>
-         <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-           <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-             <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
-               <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-               </mat-icon>
-               <span class="cool-grey">back</span>
-             </button>
-           </div>
-           <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-             <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/technicalSkills']">
-               Next
-             </button>
-           </div>
-         </div>
-       </div>
   </div>
 
 

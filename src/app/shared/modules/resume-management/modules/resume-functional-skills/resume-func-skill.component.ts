@@ -14,8 +14,12 @@ export class ResumeFuncSkillComponent implements OnInit {
   sendFuncSkill: FormGroup;
   arrayFuncSkillCount = 0;
   FuncSkill: IResumeFunctionalSkillsModel;
+  FuncSkillUpdate: IResumeFunctionalSkillsModel;
   funcSkillArray: IResumeFunctionalSkillsModel[] = [];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
+  resume_code = '';
+  button = 'Add';
+  functional_skill_code = '';
+  indexUpdate = 0;
   get getFunc() {
     return this.funcSkillArray;
   }
@@ -26,8 +30,8 @@ export class ResumeFuncSkillComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.createForm();
     this.getFuncSkillsInfo();
+    this.createForm();
   }
   getFuncSkillsInfo() {
     this.resumeService.getResume(
@@ -41,9 +45,16 @@ export class ResumeFuncSkillComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.funcSkillArray = responseOne;
-              },
+                if (responseOne['msg_code'] !== '0004') {
+                  console.log('response', responseOne);
+                  this.funcSkillArray = responseOne;
+                  this.funcSkillArray.forEach(
+                    (func) => {
+                      func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
+                    }
+                  );
+                }
+                },
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
@@ -67,21 +78,30 @@ export class ResumeFuncSkillComponent implements OnInit {
       });
   }
   /**
-   * @description Create Technical skill
+   * @description Create Functional skill
    */
-  createFunctionalSkill() {
+  createUpdateFunctionalSkill() {
+    if (this.button === 'Add') {
     this.FuncSkill = this.sendFuncSkill.value;
     this.FuncSkill.resume_code = this.resume_code;
-    this.FuncSkill.functional_skills_code = Math.random().toString();
+    this.FuncSkill.functional_skills_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
     this.FuncSkill.index = this.arrayFuncSkillCount;
     console.log('model=', this.FuncSkill);
     if (this.sendFuncSkill.valid) {
       this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => console.log('functional skill =', data));
       this.getFunc.push(this.FuncSkill);
+      this.arrayFuncSkillCount++;
     } else { console.log('Form is not valid');
+    }} else {
+      this.FuncSkillUpdate = this.sendFuncSkill.value;
+      this.FuncSkillUpdate.functional_skills_code = this.functional_skill_code;
+      this.FuncSkillUpdate.resume_code = this.resume_code;
+      this.FuncSkillUpdate.index = this.indexUpdate;
+      this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
+      this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
+      this.button = 'Add';
     }
     this.sendFuncSkill.reset();
-    this.arrayFuncSkillCount++;
 
   }
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
@@ -90,5 +110,17 @@ export class ResumeFuncSkillComponent implements OnInit {
       return true;
     }
     return control.hasError(validationType) ;
+  }
+
+  editForm(functional_skills_code: string, skill: string , index: number) {
+    this.sendFuncSkill.patchValue({
+      skill,
+    });
+    this.functional_skill_code = functional_skills_code;
+    this.indexUpdate = index;
+    this.button = 'Save';
+/*
+*/
+    console.log('FuncSkill update', this.FuncSkillUpdate);
   }
 }

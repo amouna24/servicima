@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
-import {UtilsService} from "@core/services/utils/utils.service";
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-resume-language',
@@ -26,6 +26,7 @@ export class ResumeLanguageComponent implements OnInit {
   resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
   refData: { } = { };
   emailAddress: string;
+  showLevelError = false;
 
   constructor(
     private utilService: UtilsService,
@@ -124,6 +125,7 @@ export class ResumeLanguageComponent implements OnInit {
       this.resumeService.addLanguage(this.language).subscribe(data => console.log('Language=', data));
       this.languageArray.push(this.language);
     } else { console.log('Form is not valid');
+      this.showLevelError = true;
     }
     this.arrayLanguageCount++;
     this.sendLanguage.reset();
@@ -141,12 +143,15 @@ export class ResumeLanguageComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.languageArray = responseOne;
-                for (let i = 0; i < responseOne.length; i++) {
-                  this.languageArray[i].resume_language_code = this.languageArray[i].ResumeLanguageKey.resume_language_code;
-                }
-              },
+                if (responseOne['msg_code'] !== '0004') {
+
+                  console.log('response', responseOne);
+                  this.languageArray = responseOne;
+                  this.languageArray.forEach(
+                    (lang) => {
+                      lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
+                    });
+                }},
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }

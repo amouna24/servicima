@@ -1,15 +1,16 @@
-<svg id="tabler-icon-3d-cube-sphere" xmlns="http://www.w3.org/2000/svg" width="28.732" height="28.732" viewBox="0 0 28.732 28.732">
-  <path id="Path_1243" data-name="Path 1243" d="M0,0H28.732V28.732H0Z" transform="translate(0)" fill="none"/>
-  <path id="Path_1244" data-name="Path 1244" d="M6.394,18.31,4,16.993V14" transform="translate(0.789 2.761)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1245" data-name="Path 1245" d="M4,10.71V7.717L6.394,6.4" transform="translate(0.789 1.262)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1246" data-name="Path 1246" d="M10,4.317,12.394,3l2.394,1.317" transform="translate(1.972 0.592)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1247" data-name="Path 1247" d="M18,6.4l2.394,1.317V10.71" transform="translate(3.549 1.262)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1248" data-name="Path 1248" d="M20.394,14v2.993L18,18.31" transform="translate(3.549 2.761)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1249" data-name="Path 1249" d="M14.789,19.9l-2.394,1.317L10,19.9" transform="translate(1.972 3.924)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_73" data-name="Line 73" y1="1.317" x2="2.394" transform="translate(14.366 13.049)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_74" data-name="Line 74" y1="1.317" x2="2.394" transform="translate(21.549 8.979)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_75" data-name="Line 75" y2="2.993" transform="translate(14.366 14.366)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_76" data-name="Line 76" y2="2.993" transform="translate(14.366 22.148)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Path_1250" data-name="Path 1250" d="M12.394,12.217,10,10.9" transform="translate(1.972 2.149)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <line id="Line_77" data-name="Line 77" x1="2.394" y1="1.317" transform="translate(4.789 8.979)" fill="none" stroke="#f2f3f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="19.155" height="21.549" viewBox="0 0 19.155 21.549">
+  <g id="tabler-icon-3d-cube-sphere" transform="translate(-4.789 -3.592)">
+    <path id="Path_1244" data-name="Path 1244" d="M6.394,18.31,4,16.993V14" transform="translate(0.789 2.761)" fill="none"/>
+    <path id="Path_1245" data-name="Path 1245" d="M4,10.71V7.717L6.394,6.4" transform="translate(0.789 1.262)" fill="none"/>
+    <path id="Path_1246" data-name="Path 1246" d="M10,4.317,12.394,3l2.394,1.317" transform="translate(1.972 0.592)" fill="none"/>
+    <path id="Path_1247" data-name="Path 1247" d="M18,6.4l2.394,1.317V10.71" transform="translate(3.549 1.262)" fill="none"/>
+    <path id="Path_1248" data-name="Path 1248" d="M20.394,14v2.993L18,18.31" transform="translate(3.549 2.761)" fill="none"/>
+    <path id="Path_1249" data-name="Path 1249" d="M14.789,19.9l-2.394,1.317L10,19.9" transform="translate(1.972 3.924)" fill="none"/>
+    <line id="Line_73" data-name="Line 73" y1="1.317" x2="2.394" transform="translate(14.366 13.049)" fill="none"/>
+    <line id="Line_74" data-name="Line 74" y1="1.317" x2="2.394" transform="translate(21.549 8.979)" fill="none"/>
+    <line id="Line_75" data-name="Line 75" y2="2.993" transform="translate(14.366 14.366)" fill="none"/>
+    <line id="Line_76" data-name="Line 76" y2="2.993" transform="translate(14.366 22.148)" fill="none"/>
+    <path id="Path_1250" data-name="Path 1250" d="M12.394,12.217,10,10.9" transform="translate(1.972 2.149)" fill="none"/>
+    <line id="Line_77" data-name="Line 77" x1="2.394" y1="1.317" transform="translate(4.789 8.979)" fill="none"/>
+  </g>
 </svg>

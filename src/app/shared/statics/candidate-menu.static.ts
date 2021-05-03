@@ -97,7 +97,7 @@ export const candidateMenu: IMenu[] = [
       {
         state: 'done',
         name: 'Preview',
-        icon: 'wi_res_certif',
+        icon: 'wi_res_preview',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },

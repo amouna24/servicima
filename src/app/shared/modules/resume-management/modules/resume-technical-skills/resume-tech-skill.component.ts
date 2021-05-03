@@ -15,8 +15,11 @@ export class ResumeTechSkillComponent implements OnInit {
   arrayTechSkillCount = 0;
   TechSkill: IResumeTechnicalSkillsModel;
   techSkillArray: IResumeTechnicalSkillsModel[] = [];
+  techSkillUpdate: IResumeTechnicalSkillsModel;
   resume_code = ``;
-  technical_skill: string;
+  technical_skill_code = '';
+  indexUpdate = 0;
+  button = 'Add';
   get getTech() {
     return this.techSkillArray;
   }
@@ -26,6 +29,10 @@ export class ResumeTechSkillComponent implements OnInit {
     private userService: UserService,
   ) { }
 
+  ngOnInit(): void {
+    this.getTechnicalSkillsInfo();
+    this.createForm();
+  }
   getTechnicalSkillsInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -38,9 +45,15 @@ export class ResumeTechSkillComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.techSkillArray = responseOne;
-              },
+                if (responseOne['msg_code'] !== '0004') {
+                  console.log('response', responseOne);
+                  this.techSkillArray = responseOne;
+                  this.techSkillArray.forEach(
+                    (func) => {
+                      func.technical_skill_code = func.ResumeTechnicalSkillsKey.technical_skill_code;
+                    }
+                  );
+                }},
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
@@ -55,11 +68,6 @@ export class ResumeTechSkillComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.getTechnicalSkillsInfo();
-    this.createForm();
-  }
-
   /**
    * @description Create Form
    */
@@ -72,10 +80,11 @@ export class ResumeTechSkillComponent implements OnInit {
   /**
    * @description Create Technical skill
    */
-  createTechnicalSkill() {
+  createUpdateTechnicalSkill() {
+    if (this.button === 'Add') {
     this.TechSkill = this.sendTechSkill.value;
     this.TechSkill.resume_code = this.resume_code;
-    this.TechSkill.technical_skill_code = Math.random().toString();
+    this.TechSkill.technical_skill_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-TECH`;
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid) {
       console.log('technical skill input= ', this.TechSkill);
@@ -83,8 +92,16 @@ export class ResumeTechSkillComponent implements OnInit {
       this.getTech.push(this.TechSkill);
     } else { console.log('Form is not valid');
     }
+    this.arrayTechSkillCount++; } else {
+      this.techSkillUpdate = this.sendTechSkill.value;
+      this.techSkillUpdate.technical_skill_code = this.technical_skill_code;
+      this.techSkillUpdate.resume_code = this.resume_code;
+      this.techSkillUpdate.skill_index = this.indexUpdate.toString();
+      this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => console.log('Technical skill updated =', data));
+      this.techSkillArray[this.indexUpdate] = this.techSkillUpdate;
+      this.button = 'Add';
+    }
     this.sendTechSkill.reset();
-    this.arrayTechSkillCount++;
 
   }
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
@@ -93,5 +110,17 @@ export class ResumeTechSkillComponent implements OnInit {
       return true;
     }
     return control.hasError(validationType) ;
+  }
+
+  editForm(technologies: string, technical_skill_desc: string, technical_skill_code: string, pointIndex: number) {
+    this.sendTechSkill.patchValue({
+      technical_skill_desc,
+      technologies,
+    });
+    this.technical_skill_code = technical_skill_code;
+    this.indexUpdate = pointIndex;
+    this.button = 'Save';
+    /*
+    */
   }
 }

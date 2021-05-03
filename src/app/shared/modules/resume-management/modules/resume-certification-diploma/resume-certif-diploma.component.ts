@@ -4,6 +4,8 @@ import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertifica
 
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
+import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -16,19 +18,32 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   certifDiploma: IResumeCertificationDiplomaModel;
   certifDiplomaArray: IResumeCertificationDiplomaModel[] = [];
   resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
+  minDate: Date;
+  maxDate: Date;
+  showDateError = false;
+
   get getCertifDiploma() {
     return this.certifDiplomaArray;
   }
+
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
-  ) { }
+    private datepipe: DatePipe,
+  ) {
+  }
 
   ngOnInit(): void {
-    this.createForm();
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const currentDay = new Date().getDay();
+    this.minDate = new Date(currentYear - 20, 0, 1);
+    this.maxDate = new Date(currentYear, currentMonth, currentDay + 25);
     this.getCertifDiplomaInfo();
+    this.createForm();
   }
+
   getCertifDiplomaInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -41,8 +56,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
-                console.log('response', responseOne);
-                this.certifDiplomaArray = responseOne;
+                if (responseOne['msg_code'] !== '0004') {
+                  console.log('response', responseOne);
+                  this.certifDiplomaArray = responseOne;
+                }
               },
               (error) => {
                 if (error.error.msg_code === '0004') {
@@ -64,39 +81,53 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   createForm() {
     this.sendCertifDiploma = this.fb.group({
       establishment: '',
-      diploma : '',
+      diploma: '',
       start_date: '',
       end_date: '',
       certif_diploma_desc: '',
     });
   }
+
   /**
    * @description Create Technical skill
    */
-  createCertifDiploma() {
+  createCertifDiploma(dateStart, dateEnd) {
+    this.compareDate(dateStart, dateEnd);
+
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
     this.certifDiploma.certif_diploma_code = Math.random().toString();
-    if (this.sendCertifDiploma.valid) {
+    this.certifDiploma.start_date = this.datepipe.transform(this.certifDiploma.start_date, 'yyyy/MM/dd');
+    this.certifDiploma.end_date = this.datepipe.transform(this.certifDiploma.end_date, 'yyyy/MM/dd');
+    if (this.sendCertifDiploma.valid && this.showDateError === false) {
       console.log('ProExp input= ', this.certifDiploma);
       this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => console.log('Certification and diploma =', data));
       this.certifDiplomaArray.push(this.certifDiploma);
-    } else { console.log('Form is not valid');
+    } else {
+      console.log('Form is not valid');
+      this.showDateError = false;
+
     }
     this.arrayCertifDiplomaCount++;
     this.sendCertifDiploma.reset();
   }
+
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
       return true;
     }
-    return control.hasError(validationType) ;
+    return control.hasError(validationType);
   }
-  testDate(form: FormGroup, start_date: string, end_date: string) {
-    const start = new Date(form[start_date]);
-    const end = new Date(form[end_date]);
-    console.log('start=', start_date, 'end=', end_date);
-    return start.getDate() > end.getDate();
+
+  compareDate(date1, date2) {
+    console.log(date1, '-----', date2);
+    const dateStart = new Date(date1);
+    const dateEnd = new Date(date2);
+    if (dateStart.getTime() > dateEnd.getTime()) {
+      console.log('illogic date');
+      this.showDateError = true;
+    }
+
   }
 }

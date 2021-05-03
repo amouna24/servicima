@@ -203,7 +203,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    * @description Update Professional experience Status
    * @param proExp: updated  Professional experience Object
    *************************************************************************/
-  updateProExp(proExp: IResumeLanguageModel): Observable<any> {
+  updateProExp(proExp: IResumeProfessionalExperienceModel): Observable<any> {
     return this.httpClient.put<IResumeProfessionalExperienceModel>(`${environment.resumeProfessionalExperienceApiUrl}`, proExp);
   }
 
