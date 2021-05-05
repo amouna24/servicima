@@ -94,6 +94,13 @@ addTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
 updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   return this.httpClient.put<IResumeTechnicalSkillsModel>(`${environment.resumeTechnicalSkillsApiUrl}`, techSkill);
 }
+  /**************************************************************************
+   * @description Delete Technical skills Status
+   * @param id: Delete technical skills Object
+   *************************************************************************/
+  deleteTechnicalSkills(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeTechnicalSkillsModel>(`${environment.resumeTechnicalSkillsApiUrl}/?_id=${id}`);
+  }
 
 /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-FUNCTIONAL-SKILLS --------------------------------------*/
@@ -121,6 +128,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   updateFunctionalSkills(funcSkill: IResumeFunctionalSkillsModel): Observable<any> {
     return this.httpClient.put<IResumeFunctionalSkillsModel>(`${environment.resumeFunctionalSkillsApiUrl}`, funcSkill);
+  }
+  /**************************************************************************
+   * @description Delete Functional skills Status
+   * @param id: Delete functional skills Object
+   *************************************************************************/
+  deleteFunctionalSkills(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeFunctionalSkillsModel>(`${environment.resumeFunctionalSkillsApiUrl}/?_id=${id}`);
   }
 
   /*-------------------------------------------------------------------------------------*/
@@ -150,6 +164,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateIntervention(intervention: IResumeInterventionModel): Observable<any> {
     return this.httpClient.put<IResumeInterventionModel>(`${environment.resumeInterventionApiUrl}`, intervention);
   }
+  /**************************************************************************
+   * @description Delete Intervention Status
+   * @param id: Delete Intervention Object
+   *************************************************************************/
+  deleteIntervention(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeInterventionModel>(`${environment.resumeInterventionApiUrl}/?_id=${id}`);
+  }
 
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-LANGUAGE--------------------------------------*/
@@ -169,6 +190,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   addLanguage(language: IResumeLanguageModel): Observable<any> {
     return this.httpClient.post<IResumeLanguageModel>(`${environment.resumeLanguageApiUrl}`, language);
+  }
+  /**************************************************************************
+   * @description Delete Language Status
+   * @param id: Delete Language Object
+   *************************************************************************/
+  deleteLanguage(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeLanguageModel>(`${environment.resumeLanguageApiUrl}/?_id=${id}`);
   }
 
   /**************************************************************************
@@ -206,6 +234,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateProExp(proExp: IResumeProfessionalExperienceModel): Observable<any> {
     return this.httpClient.put<IResumeProfessionalExperienceModel>(`${environment.resumeProfessionalExperienceApiUrl}`, proExp);
   }
+  /**************************************************************************
+   * @description Delete Professional experience Status
+   * @param id: Delete Professional experience Object
+   *************************************************************************/
+  deleteProExp(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeProfessionalExperienceModel>(`${environment.resumeProfessionalExperienceApiUrl}/?_id=${id}`);
+  }
 
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-CUSTOM-SECTION--------------------------------------*/
@@ -232,6 +267,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateCustomSection(section: IResumeSectionModel): Observable<any> {
     return this.httpClient.put<IResumeSectionModel>(`${environment.resumeSectionApiUrl}`, section);
   }
+  /**************************************************************************
+   * @description Delete Custom section Status
+   * @param id: Delete Custom section Object
+   *************************************************************************/
+  deleteCustomSection(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeSectionModel>(`${environment.resumeSectionApiUrl}/?_id=${id}`);
+  }
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-CERTIF-DIPLOMA--------------------------------------*/
 
@@ -257,6 +299,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateCertifDiploma(certifDiploma: IResumeCertificationDiplomaModel): Observable<any> {
     return this.httpClient.put<IResumeCertificationDiplomaModel>(`${environment.resumeCertifDiplomaApiUrl}`, certifDiploma);
   }
+  /**************************************************************************
+   * @description Delete Certif diploma Status
+   * @param id: Delete Certif diploma Object
+   *************************************************************************/
+  deleteCertifDiploma(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeCertificationDiplomaModel>(`${environment.resumeCertifDiplomaApiUrl}/?_id=${id}`);
+  }
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-PROJECT--------------------------------------*/
 
@@ -270,7 +319,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   }
   /**************************************************************************
    * @description Add new Project
-   * @param project : Project model
+   * @param project : project model
    *************************************************************************/
   addProject(project: IResumeProjectModel): Observable<any> {
     return this.httpClient.post<IResumeProjectModel>(`${environment.resumeProjectApiUrl}`, project);
@@ -281,6 +330,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   updateProject(project: IResumeProjectModel): Observable<any> {
     return this.httpClient.put<IResumeProjectModel>(`${environment.resumeProjectApiUrl}`, project);
+  }
+  /**************************************************************************
+   * @description Delete Project Status
+   * @param id: Delete Project  Object
+   *************************************************************************/
+  deleteProject(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeProjectModel>(`${environment.resumeProjectApiUrl}/?_id=${id}`);
   }
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-PROJECT-DETAILS--------------------------------------*/
@@ -302,7 +358,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   }
   /**************************************************************************
    * @description Update Project Details Status
-   * @param project: updated  Project Details Object
+   * @param projectDet: updated  Project Details Object
    *************************************************************************/
   updateProjectDetails(projectDet: IResumeProjectDetailsModel): Observable<any> {
     return this.httpClient.put<IResumeProjectDetailsModel>(`${environment.resumeProjectDetailsApiUrl}`, projectDet);
@@ -320,7 +376,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   }
   /**************************************************************************
    * @description Add new Project Section Details Section
-   * @param projectDetSec : Project Section model
+   * @param projectDetSec : projectDetSec Section model
    *************************************************************************/
   addProjectDetailsSection(projectDetSec: IResumeProjectDetailsSectionModel): Observable<any> {
     return this.httpClient.post<IResumeProjectDetailsSectionModel>(`${environment.resumeProjectDetailsSectionApiUrl}`, projectDetSec);

@@ -53,6 +53,13 @@ export const candidateMenu: IMenu[] = [
         type: 'link',
       },
       {
+        state: 'certifDiploma',
+        name: 'Certifications and Diploma',
+        icon: 'wi_res_certif',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
         state: 'technicalSkills',
         name: 'Technical skills',
         icon: 'wi_res_technical_skills',
@@ -87,13 +94,7 @@ export const candidateMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
-      {
-        state: 'certifDiploma',
-        name: 'Certifications and Diploma',
-        icon: 'wi_res_certif',
-        feature: 'CONTRACT_ACCESS',
-        type: 'link',
-      },
+
       {
         state: 'done',
         name: 'Preview',

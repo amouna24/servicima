@@ -15,6 +15,7 @@ import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'wid-resume-done',
@@ -40,6 +41,7 @@ export class ResumeDoneComponent implements OnInit {
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
+    private datepipe: DatePipe,
   ) {
   }
 
@@ -131,20 +133,22 @@ export class ResumeDoneComponent implements OnInit {
   }
 
   getProjectInfo() {
-    this.proExpList.forEach(
+      this.proExpList.forEach(
       (proExpData) => {
         this.resumeService.getProject(
           `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
         ).subscribe(
           (responseProject) => {
-            console.log('project array', responseProject);
-            responseProject.forEach(
-              (responseProjectData) => {
-                this.projectList.push(responseProjectData);
-              }
-            );
-            this.getProjectDetailsInfo();
-          });
+            if (responseProject['msg_code'] !== '0004') {
+
+              console.log('project array', responseProject);
+              responseProject.forEach(
+                (responseProjectData) => {
+                  this.projectList.push(responseProjectData);
+                }
+              );
+              this.getProjectDetailsInfo();
+            }});
       }
     );
   }
@@ -321,8 +325,8 @@ export class ResumeDoneComponent implements OnInit {
             this.posY += 6;
             doc.setFillColor(255, 192, 203);
             doc.rect(20, this.posY - 4, 180, 8, 'F');
-            doc.text(proExpData.ResumeProfessionalExperienceKey.start_date + ' - ' +
-              proExpData.ResumeProfessionalExperienceKey.end_date + ':', 25, this.posY);
+            doc.text(this.datepipe.transform(proExpData.ResumeProfessionalExperienceKey.start_date, 'yyyy/MM/dd') + ' - ' +
+              this.datepipe.transform(proExpData.ResumeProfessionalExperienceKey.end_date, 'yyyy/MM/dd')  + ':', 25, this.posY);
             doc.setFontSize(8);
             doc.text(proExpData.position + ' at ' + proExpData.customer, 70, this.posY);
             console.log('project list', this.projectList);
@@ -335,7 +339,8 @@ export class ResumeDoneComponent implements OnInit {
                   this.posY += 15;
                   doc.setFillColor(255, 192, 203);
                   doc.rect(80, this.posY - 4, 100, 8, 'F');
-                  doc.text('Project:' + project.start_date + ' - ' + project.end_date + ':', 88, this.posY);
+                  doc.text('Project:' + this.datepipe.transform(project.start_date, 'yyyy/MM/dd') + ' - ' +
+                     this.datepipe.transform(project.end_date, 'yyyy/MM/dd') + ':', 88, this.posY);
                   doc.setFontSize(8);
                   doc.text(project.project_title, 145, this.posY);
                   this.projectDetailsList.forEach(
@@ -372,9 +377,9 @@ export class ResumeDoneComponent implements OnInit {
             );
           });
         doc.output('dataurlnewwindow');
-      } else {
-        console.log('Resume is empty');
       }
+      } else {
+      console.log('Resume is empty');
     }
   }
 }

@@ -51,8 +51,11 @@
                   <div fxLayout="column" fxFlex="20" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
+                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="70">
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.section_title,item.section_desc,item.section_code,pointIndex)">Edit</button>
+                  </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >Delete</button>
                   </div>
                 </div>
               </div>
@@ -60,7 +63,7 @@
                 <div fxLayout="column" fxFlex="8"></div>
                 <div fxLayout="column" fxFlex="80">
                   <div fxLayout="column">
-                    <mat-label class="black font-size-12">
+                    <mat-label class="black font-size-12 required">
                       Section title:
                     </mat-label>
                     <mat-form-field appearance="outline" class="full-width">
@@ -71,7 +74,7 @@
                     </mat-form-field>
                   </div>
                   <div fxLayout="column">
-                    <mat-label class="black font-size-12">
+                    <mat-label class="black font-size-12 required">
                       Description:
                     </mat-label>
                     <mat-form-field appearance="outline">
@@ -84,7 +87,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="end end">
                     <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                            (click)="createSection()">Add
+                         #add   (click)="createUpdateSection()" [disabled]="testRequired()">{{button}}
                     </button>
                   </div>
                 </div>
@@ -103,7 +106,7 @@
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/certifDiploma']">
+                  [routerLink]="['/candidate/resume/done']">
             Next
           </button>
         </div>

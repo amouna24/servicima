@@ -6,6 +6,9 @@ import { UserService } from '@core/services/user/user.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
@@ -24,6 +27,8 @@ export class ProExpComponent implements OnInit {
   button = 'Add';
   proExpUpdate: IResumeProfessionalExperienceModel;
   indexUpdate = 0;
+  _id = '';
+  subscriptionModal: Subscription;
 
   get getProExp() {
     return this.proExpArray;
@@ -34,7 +39,8 @@ export class ProExpComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private router: Router,
-    private datepipe: DatePipe,
+    public datepipe: DatePipe,
+    private modalServices: ModalService
   ) {
   }
 
@@ -86,14 +92,17 @@ export class ProExpComponent implements OnInit {
       );
 
   }
-  routeToProject(code: string, customer: string, position: string) {
+
+  routeToProject(code: string, customer: string, position: string, start_date: string, end_date: string) {
     console.log('pro Exp Array=', this.proExpArray);
     this.router.navigate(['/candidate/resume/projects'],
       {
         state: {
           id: code,
           customer,
-          position
+          position,
+          start_date,
+          end_date,
         }
       });
   }
@@ -114,12 +123,10 @@ export class ProExpComponent implements OnInit {
     this.ProExp = this.sendProExp.value;
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-    this.ProExp.start_date = this.datepipe.transform(this.ProExp.start_date, 'yyyy/MM/dd');
-    this.ProExp.end_date = this.datepipe.transform(this.ProExp.end_date, 'yyyy/MM/dd');
     if (this.sendProExp.valid && this.showDateError === false) {
       console.log('ProExp input= ', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
-      this.proExpArray.push(this.ProExp);
+      this.getProExpInfo();
     } else {
       console.log('Form is not valid');
       this.showDateError = false;
@@ -127,11 +134,10 @@ export class ProExpComponent implements OnInit {
     }
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;
-      this.proExpUpdate.start_date = this.datepipe.transform(this.proExpUpdate.start_date, 'yyyy/MM/dd');
-      this.proExpUpdate.end_date = this.datepipe.transform(this.proExpUpdate.end_date, 'yyyy/MM/dd');
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
       console.log('pro exp update = ', this.proExpUpdate);
+      this.proExpUpdate._id = this._id;
       this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
       this.button = 'Add';
@@ -156,16 +162,42 @@ export class ProExpComponent implements OnInit {
 
   }
 
-  editForm(professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
+  // tslint:disable-next-line:max-line-length
+  editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
     this.sendProExp.patchValue({
       start_date,
       end_date,
       position,
       customer,
     });
+    this._id = _id;
     this.button = 'Save';
     this.professional_experience_code = professional_experience_code;
     this.indexUpdate = index;
+
+  }
+  deleteProExp(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteProExp(_id).subscribe(data => console.log('Deleted'));
+            this.proExpArray.forEach((value, index) => {
+              if (index === pointIndex) { this.proExpArray.splice(index, 1); }
+            });
+            this.button = 'Add';
+            this.subscriptionModal.unsubscribe();
+          }
+        }
+      );
+
+  }
+  testRequired() {
+    return (this.sendProExp.invalid) ;
 
   }
 }

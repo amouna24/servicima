@@ -34,7 +34,7 @@
                   <mat-select   disableOptionCentering panelClass="panelColor"
                              [value]="item.resume_language_code" disabled>
                     <ng-container *ngFor="let v of langList">
-                      <mat-option *ngIf="v.value === item.resume_language_code" [value]="v.value">{{v.viewValue}}</mat-option>
+                      <mat-option  [value]="item.resume_language_code">{{item.resume_language_code | titlecase}} </mat-option>
                     </ng-container>
                   </mat-select>
                 </mat-form-field>
@@ -52,14 +52,16 @@
 
 
               </div>
-                <div fxLayout="column" fxFlex="16"    ></div>
+                <div fxLayout="column" fxFlex="16"    >
+                  <button  mat-raised-button type="button"  class="bg-error-red btn-medium black" (click)="deleteLanguage(item._id,pointIndex)">Delete</button>
+                </div>
 
                 </div>
             </div>
           <form [formGroup]="sendLanguage" class="full-width full-height" >
             <div fxLayout="row" fxLayoutAlign="space-around center" >
                 <div fxLayout="column" fxFlex="30"  >
-                  <mat-label class="black font-size-12">
+                  <mat-label class="black font-size-12 required">
                     Language:
                   </mat-label>
                   <mat-form-field appearance="outline">
@@ -86,7 +88,7 @@
 
                 </div>
                 <div fxLayout="column" fxFlex="16"    >
-                  <button type="submit" mat-raised-button type="button"  class="bg-pale-grey btn-medium black" (click)="createLanguage()">Add</button>
+                  <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="testRequired()" (click)="createLanguage()">Add</button>
                 </div>
             </div>
 

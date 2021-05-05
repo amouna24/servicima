@@ -6,6 +6,8 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
+import {Subscription} from "rxjs";
+import {ModalService} from "@core/services/modal/modal.service";
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -21,7 +23,12 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
   showDateError = false;
-
+  certif_diploma_code = '';
+  indexUpdate = 0;
+  button = 'Add';
+  certifDiplomaUpdate: IResumeCertificationDiplomaModel;
+  _id = '';
+  subscriptionModal: Subscription;
   get getCertifDiploma() {
     return this.certifDiplomaArray;
   }
@@ -30,7 +37,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
-    private datepipe: DatePipe,
+    private modalServices: ModalService,
   ) {
   }
 
@@ -59,6 +66,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
                 if (responseOne['msg_code'] !== '0004') {
                   console.log('response', responseOne);
                   this.certifDiplomaArray = responseOne;
+                  this.certifDiplomaArray.forEach(
+                    (func) => {
+                      func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
+                    }
+                  );
                 }
               },
               (error) => {
@@ -91,24 +103,32 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   /**
    * @description Create Technical skill
    */
-  createCertifDiploma(dateStart, dateEnd) {
+  createUpdateCertifDiploma(dateStart, dateEnd) {
+    if (this.button === 'Add') {
     this.compareDate(dateStart, dateEnd);
-
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
     this.certifDiploma.certif_diploma_code = Math.random().toString();
-    this.certifDiploma.start_date = this.datepipe.transform(this.certifDiploma.start_date, 'yyyy/MM/dd');
-    this.certifDiploma.end_date = this.datepipe.transform(this.certifDiploma.end_date, 'yyyy/MM/dd');
     if (this.sendCertifDiploma.valid && this.showDateError === false) {
       console.log('ProExp input= ', this.certifDiploma);
-      this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => console.log('Certification and diploma =', data));
-      this.certifDiplomaArray.push(this.certifDiploma);
+      this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data =>{
+        console.log('certif =', data);
+        this.getCertifDiplomaInfo();
+      });
     } else {
       console.log('Form is not valid');
       this.showDateError = false;
 
     }
-    this.arrayCertifDiplomaCount++;
+    this.arrayCertifDiplomaCount++; } else {
+      this.certifDiplomaUpdate = this.sendCertifDiploma.value;
+      this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
+      this.certifDiplomaUpdate.resume_code = this.resume_code;
+      this.certifDiplomaUpdate._id = this._id;
+      this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe(data => console.log('Certif updated =', data));
+      this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
+      this.button = 'Add';
+    }
     this.sendCertifDiploma.reset();
   }
 
@@ -129,5 +149,45 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.showDateError = true;
     }
 
+  }
+
+  // tslint:disable-next-line:max-line-length
+  editForm(_id: string, diploma: string, start_date: string, end_date: string, establishment: string, certif_diploma_desc: string, certif_diploma_code: string, pointIndex: number) {
+    this.sendCertifDiploma.patchValue({
+      diploma,
+      start_date,
+      end_date,
+      establishment,
+      certif_diploma_desc,
+    });
+    this.certif_diploma_code = certif_diploma_code;
+    this._id = _id;
+    this.indexUpdate = pointIndex;
+    this.button = 'Save';
+  }
+
+  deleteCertif(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteCertifDiploma(_id).subscribe(data => console.log('Deleted'));
+            this.certifDiplomaArray.forEach((value, index) => {
+              if (index === pointIndex) { this.certifDiplomaArray.splice(index, 1); }
+            });
+            this.button = 'Add';
+            this.subscriptionModal.unsubscribe();
+
+          }
+        }
+      );
+
+  }
+  testRequired() {
+    return (this.sendCertifDiploma.invalid) ;
   }
 }

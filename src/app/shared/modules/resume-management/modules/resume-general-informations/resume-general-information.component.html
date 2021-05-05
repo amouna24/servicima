@@ -25,17 +25,17 @@
                 <wid-scrollbar fxFlexFill >
                   <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
                     <div   fxLayout="column" fxFlex="18"  class="height-90" fxLayoutGap="10px" fxLayoutAlign=" start" >
-                      <div fxlayout="row"  >
-                        <mat-label class="black font-size-12">
+                      <div fxlayout="row"  class="full-width">
+                        <mat-label class="black font-size-12 required">
                           Name:
                         </mat-label>
-                        <mat-form-field appearance="outline" class="width-110">
+                        <mat-form-field appearance="outline" class="full-width">
                           <input    formControlName="init_name" matInput placeholder="Name" required>
                           <mat-error class="red" *ngIf="isControlHasError(CreationForm,'init_name', 'required')">
                             Please fill out this field</mat-error>
                         </mat-form-field></div>
-                      <div fxlayout="row" fxFlex >
-                        <mat-label class="black font-size-12">
+                      <div fxlayout="row" fxFlex class="full-width" >
+                        <mat-label class="black font-size-12 required">
                           Actual job:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -43,8 +43,8 @@
                           <mat-error class="red" *ngIf="isControlHasError(CreationForm,'actual_job', 'required')">
                             Please fill out this field</mat-error>
                         </mat-form-field></div>
-                      <div>
-                      <mat-label class="black font-size-12">
+                      <div class="full-width">
+                      <mat-label class="black font-size-12 required">
                         Language:
                       </mat-label>
                       <mat-form-field appearance="outline">
@@ -62,7 +62,7 @@
                         <section class="example-section">
                           <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox>
                         </section></div>
-                      <div fxLayout="row" fxFlex>
+                      <div fxLayout="row" fxFlex class="full-width">
                        <div *ngIf="showYears">
                          <mat-label class="black font-size-12">
                            Years of experience:
@@ -102,7 +102,7 @@
               </div>
               <div fxLayout="row" fxFlex="10" fxLayoutAlign="center " >
                 <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-                  <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" (click)="createResume()">
+                  <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="testRequired()">
                     Next
                   </button>
                 </div>

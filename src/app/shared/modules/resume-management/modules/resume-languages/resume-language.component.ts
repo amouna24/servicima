@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
 import { UserService } from '@core/services/user/user.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { ModalService } from '@core/services/modal/modal.service';
+import {toTitleCase} from "codelyzer/util/utils";
 
 @Component({
   selector: 'wid-resume-language',
@@ -15,6 +17,19 @@ import { UtilsService } from '@core/services/utils/utils.service';
   styleUrls: ['./resume-language.component.scss']
 })
 export class ResumeLanguageComponent implements OnInit {
+  constructor(
+    private utilService: UtilsService,
+    private fb: FormBuilder,
+    private resumeService: ResumeService,
+    private userService: UserService,
+    private appInitializerService: AppInitializerService,
+    private refdataService: RefdataService,
+    private modalServices: ModalService,
+  ) {
+  }
+  get getLanguage() {
+    return this.languageArray;
+  }
   sendLanguage: FormGroup;
   rating = 0;
   starCount = 5;
@@ -27,19 +42,8 @@ export class ResumeLanguageComponent implements OnInit {
   refData: { } = { };
   emailAddress: string;
   showLevelError = false;
-
-  constructor(
-    private utilService: UtilsService,
-    private fb: FormBuilder,
-    private resumeService: ResumeService,
-    private userService: UserService,
-    private appInitializerService: AppInitializerService,
-    private refdataService: RefdataService,
-  ) {
-  }
-  get getLanguage() {
-    return this.languageArray;
-  }
+  langList2: IViewParam[];
+  subscriptionModal: Subscription;
 
   async ngOnInit() {
     this.getConnectedUser();
@@ -51,7 +55,7 @@ export class ResumeLanguageComponent implements OnInit {
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
-
+    this.langList2 = this.langList;
     console.log(this.ratingArr);
   }
   async getLanguageRefData() {
@@ -122,8 +126,10 @@ export class ResumeLanguageComponent implements OnInit {
     this.language.resume_code = this.resume_code.toString();
     if (this.sendLanguage.valid) {
       console.log(this.language);
-      this.resumeService.addLanguage(this.language).subscribe(data => console.log('Language=', data));
-      this.languageArray.push(this.language);
+      this.resumeService.addLanguage(this.language).subscribe(data => {
+        console.log('Technical skill =', data);
+        this.getLanguageInfo();
+      });
     } else { console.log('Form is not valid');
       this.showLevelError = true;
     }
@@ -150,7 +156,12 @@ export class ResumeLanguageComponent implements OnInit {
                   this.languageArray.forEach(
                     (lang) => {
                       lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
+                      this.langList.forEach((value, index) => {
+                        if (value.value === lang.resume_language_code) { this.langList.splice(index, 1);
+                          console.log('index', index); }
+                      });
                     });
+                  console.log('langlist', this.langList);
                 }},
               (error) => {
                 if (error.error.msg_code === '0004') {
@@ -171,5 +182,30 @@ export class ResumeLanguageComponent implements OnInit {
       return true;
     }
     return control.hasError(validationType) ;
+  }
+
+ deleteLanguage(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteLanguage(_id).subscribe(data => console.log('Deleted'));
+
+            this.languageArray.forEach((lang, indexlang) => {
+              if (indexlang === pointIndex) { this.languageArray.splice(indexlang, 1);
+                this.langList.push({ value: lang.resume_language_code, viewValue: toTitleCase(lang.resume_language_code)});
+               }
+            });
+            this.subscriptionModal.unsubscribe();
+          }
+        }
+      );
+  }
+  testRequired() {
+    return (this.sendLanguage.invalid) ;
   }
 }

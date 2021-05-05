@@ -4,6 +4,8 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
+import {Subscription} from "rxjs";
+import {ModalService} from "@core/services/modal/modal.service";
 
 @Component({
   selector: 'wid-resume-tech-skill',
@@ -20,6 +22,8 @@ export class ResumeTechSkillComponent implements OnInit {
   technical_skill_code = '';
   indexUpdate = 0;
   button = 'Add';
+  _id = '';
+  subscriptionModal: Subscription;
   get getTech() {
     return this.techSkillArray;
   }
@@ -27,6 +31,7 @@ export class ResumeTechSkillComponent implements OnInit {
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
+    private modalServices: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -49,8 +54,8 @@ export class ResumeTechSkillComponent implements OnInit {
                   console.log('response', responseOne);
                   this.techSkillArray = responseOne;
                   this.techSkillArray.forEach(
-                    (func) => {
-                      func.technical_skill_code = func.ResumeTechnicalSkillsKey.technical_skill_code;
+                    (tech) => {
+                      tech.technical_skill_code = tech.ResumeTechnicalSkillsKey.technical_skill_code;
                     }
                   );
                 }},
@@ -88,8 +93,10 @@ export class ResumeTechSkillComponent implements OnInit {
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid) {
       console.log('technical skill input= ', this.TechSkill);
-      this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => console.log('Technical skill =', data));
-      this.getTech.push(this.TechSkill);
+      this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => {
+        console.log('Technical skill =', data);
+        this.getTechnicalSkillsInfo();
+      });
     } else { console.log('Form is not valid');
     }
     this.arrayTechSkillCount++; } else {
@@ -97,6 +104,7 @@ export class ResumeTechSkillComponent implements OnInit {
       this.techSkillUpdate.technical_skill_code = this.technical_skill_code;
       this.techSkillUpdate.resume_code = this.resume_code;
       this.techSkillUpdate.skill_index = this.indexUpdate.toString();
+      this.techSkillUpdate._id = this._id;
       this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => console.log('Technical skill updated =', data));
       this.techSkillArray[this.indexUpdate] = this.techSkillUpdate;
       this.button = 'Add';
@@ -112,15 +120,39 @@ export class ResumeTechSkillComponent implements OnInit {
     return control.hasError(validationType) ;
   }
 
-  editForm(technologies: string, technical_skill_desc: string, technical_skill_code: string, pointIndex: number) {
+  editForm(_id: string, technologies: string, technical_skill_desc: string, technical_skill_code: string, pointIndex: number) {
     this.sendTechSkill.patchValue({
       technical_skill_desc,
       technologies,
     });
     this.technical_skill_code = technical_skill_code;
+    this._id = _id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     /*
     */
+  }
+
+  deleteTechSkill(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteTechnicalSkills(_id).subscribe(data => console.log('Deleted'));
+            this.techSkillArray.forEach((value, index) => {
+              if (index === pointIndex) { this.techSkillArray.splice(index, 1); }
+            });
+            this.button = 'Add';
+          }
+        }
+      );
+
+  }
+  testRequired() {
+    return (this.sendTechSkill.invalid) ;
   }
 }

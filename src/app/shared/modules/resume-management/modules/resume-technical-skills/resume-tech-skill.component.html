@@ -29,8 +29,11 @@
               <div fxLayout="column" fxFlex="20" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
+              <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="70">
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.technologies,item.technical_skill_desc,item.technical_skill_code,pointIndex)">Edit</button>
+              </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item.technologies,item.technical_skill_desc,item.technical_skill_code,pointIndex)">Edit</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteTechSkill(item._id,pointIndex)" >Delete</button>
               </div>
             </div>
           </div>
@@ -39,7 +42,7 @@
               <div fxLayout="column" fxFlex="8"></div>
               <div fxLayout="column" fxFlex="80">
                 <div fxLayout="column">
-                  <mat-label class="black font-size-12">
+                  <mat-label class="black font-size-12 required">
                     Skill title:
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">
@@ -50,7 +53,7 @@
                   </mat-form-field>
                 </div>
                 <div fxLayout="column">
-                  <mat-label class="black font-size-12">
+                  <mat-label class="black font-size-12 required">
                     Technologies:
                   </mat-label>
                   <mat-form-field appearance="outline">
@@ -63,7 +66,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="end end">
                   <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                          (click)="createUpdateTechnicalSkill()">{{button}}
+                          (click)="createUpdateTechnicalSkill()" [disabled]="testRequired()">{{button}}
                   </button>
                 </div>
               </div>

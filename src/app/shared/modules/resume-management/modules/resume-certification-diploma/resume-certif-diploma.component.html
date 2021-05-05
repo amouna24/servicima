@@ -33,11 +33,14 @@
                     </div>
                     <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
                       <p class="font-extra-light font-size-10 help-blue">
-                        {{item.establishment}}   {{item.start_date}}-{{item.end_date}}</p>
+                        {{item.establishment}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
                     </div>
                   </div>
+                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="40">
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">Edit</button>
+                  </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5">Edit</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteCertif(item._id,pointIndex)" >Delete</button>
                   </div>
                 </div>
               </div>
@@ -47,7 +50,7 @@
                   <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="center">
                     <div fxLayout="row" fxFlex="21" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="32">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           establishment:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -59,7 +62,7 @@
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="32">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           diploma:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -72,7 +75,7 @@
                     </div>
                     <div fxLayout="row" fxFlex="24" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="32">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           Start Date:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -87,7 +90,7 @@
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="32">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           End date:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -116,8 +119,8 @@
                     <div fxLayout="row" fxFlex="6">
                       <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                (click)="createCertifDiploma(date1.value,date2.value)">
-                          Add
+                                (click)="createUpdateCertifDiploma(date1.value,date2.value)" [disabled]="testRequired()">
+                          {{button}}
                         </button>
                       </div>
                     </div>
@@ -138,7 +141,7 @@
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/done']">
+                  [routerLink]="['/candidate/resume/technicalSkills']">
             Next
           </button>
         </div>

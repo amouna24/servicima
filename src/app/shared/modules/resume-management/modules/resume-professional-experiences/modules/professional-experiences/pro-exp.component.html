@@ -33,20 +33,23 @@
                     </div>
                     <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
                       <p class="font-extra-light font-size-10 help-blue">
-                        {{item.customer}}   {{item.start_date}}-{{item.end_date}}</p>
+                        {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date: "longDate"}}</p>
                     </div>
 
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position)">Add
+                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position,item.start_date,item.end_date)">Add
                       project
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="editForm(item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">Edit
+                            (click)="editForm(item._id, item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">Edit
                     </button>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteProExp(item._id,pointIndex)" >Delete</button>
                   </div>
                 </div>
               </div>
@@ -56,7 +59,7 @@
                   <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center">
                     <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40" class="width-90">
                       <div fxLayout="column" fxFlex="35">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           Position:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -67,7 +70,7 @@
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="35">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           Customer:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -80,7 +83,7 @@
                     </div>
                     <div fxLayout="row" class="width-90" fxFlex="40" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="35">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           Start Date:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -95,7 +98,7 @@
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="35">
-                        <mat-label class="black font-size-12">
+                        <mat-label class="black font-size-12 required">
                           End date:
                         </mat-label>
                         <mat-form-field appearance="outline">
@@ -113,7 +116,7 @@
                     <div fxLayout="row" fxFlex="20">
                       <div fxLayout="column" fxFlex="92" fxLayoutAlign="space-arround end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                (click)="createUpdateProExp(date1.value,date2.value)">
+                                (click)="createUpdateProExp(date1.value,date2.value)" [disabled]="testRequired()">
                           {{button}}
                         </button>
                       </div>
@@ -137,7 +140,7 @@
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/technicalSkills']">
+                  [routerLink]="['/candidate/resume/certifDiploma']">
             Next
           </button>
         </div>

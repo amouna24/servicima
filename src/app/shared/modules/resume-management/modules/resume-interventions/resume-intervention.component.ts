@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
 import { UserService } from '@core/services/user/user.service';
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-resume-intervention',
@@ -19,6 +21,8 @@ export class ResumeInterventionComponent implements OnInit {
   intervention_code = '';
   button = 'Add';
   indexUpdate = 0 ;
+  _id = '';
+  subscriptionModal: Subscription;
 
   get getIntervention() {
     return this.interventionArray;
@@ -27,6 +31,7 @@ export class ResumeInterventionComponent implements OnInit {
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
+    private modalServices: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -85,14 +90,17 @@ export class ResumeInterventionComponent implements OnInit {
     this.Intervention.intervention_code = Math.random().toString();
     if (this.sendIntervention.valid) {
       console.log('intervention=', this.Intervention);
-      this.resumeService.addIntervention(this.Intervention).subscribe(data => console.log('Intervention=', data));
-      this.getIntervention.push(this.Intervention);
+      this.resumeService.addIntervention(this.Intervention).subscribe(data => {
+        console.log('Intervention =', data);
+        this.getInterventionInfo();
+      });
     } else { console.log('Form is not valid');
     }
     this.arrayInterventionCount++; } else {
       this.interventionUpdate = this.sendIntervention.value;
       this.interventionUpdate.intervention_code = this.intervention_code;
       this.interventionUpdate.resume_code = this.resume_code;
+      this.interventionUpdate._id = this._id;
       console.log(' intervention update =', this.interventionUpdate);
       this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
       this.interventionArray[this.indexUpdate] = this.interventionUpdate;
@@ -110,12 +118,37 @@ export class ResumeInterventionComponent implements OnInit {
     return control.hasError(validationType) ;
   }
 
-  EditForm(level_of_intervention_desc: string, intervention_code: string, index: number) {
+  EditForm(_id: string, level_of_intervention_desc: string, intervention_code: string, index: number) {
     this.sendIntervention.patchValue({
       level_of_intervention_desc,
     });
+    this._id = _id;
     this.intervention_code = intervention_code;
     this.indexUpdate = index;
     this.button = 'Save';
+  }
+
+  deleteIntervention(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteIntervention(_id).subscribe(data => console.log('Deleted'));
+            this.interventionArray.forEach((value, index) => {
+              if (index === pointIndex) { this.interventionArray.splice(index, 1); }
+            });
+            this.button = 'Add';
+            this.subscriptionModal.unsubscribe();
+          }
+        }
+      );
+
+  }
+  testRequired() {
+    return (this.sendIntervention.invalid) ;
   }
 }

@@ -152,11 +152,11 @@ export class ProjectSectionComponent implements OnInit {
   onSelect() {
     console.log(this.select);
     if (this.select === 'PARAGRAPH') {
-      this.showDesc = false;
-      this.showSec = true;
-    } else if (this.select === 'LIST') {
       this.showDesc = true;
       this.showSec = false;
+    } else if (this.select === 'LIST') {
+      this.showDesc = !this.showDesc;
+      this.showSec = !this.showSec;
     }
 
 }

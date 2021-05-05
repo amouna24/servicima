@@ -46,7 +46,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
   showYears = false;
-
+  update = false;
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -101,12 +101,13 @@ export class ResumeGeneralInformationComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (generalInfo) => {
-          if (!!generalInfo) {
+          if (generalInfo['msg_code'] !== '0004') {
+            if (!!generalInfo) {
             this.updateForm(generalInfo);
           }
           console.log('generalInfo', generalInfo);
-
-        }
+          this.update = true;
+        }}
       );
   }
 
@@ -116,6 +117,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       actual_job: generalInformation[0].actual_job,
       years_of_experience: generalInformation[0].years_of_experience,
       language_id: generalInformation[0].ResumeKey.language_id,
+      resume_code: generalInformation[0].ResumeKey.resume_code
     });
     this.showHideYears();
   }
@@ -141,14 +143,24 @@ export class ResumeGeneralInformationComponent implements OnInit {
   /**
    * @description Create Resume
    */
-  createResume() {
+  createUpdateResume() {
+    if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.avatar.toString();
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
-      this.resumeService.addResume(this.generalInfo).subscribe(data => this.router.navigate(['/candidate/resume/professionalExperience']));
-    } else {
+      this.resumeService.addResume(this.generalInfo).subscribe(data => {
+        console.log('form created', data);
+        this.router.navigate(['/candidate/resume/professionalExperience']);
+      });
+      } else {
       console.log('Form is not valid');
+    } } else {
+      this.generalInfo = this.CreationForm.value;
+      console.log('general info update =', this.generalInfo);
+      this.resumeService.updateResume(this.generalInfo).subscribe(data => {
+        this.router.navigate(['/candidate/resume/professionalExperience']);
+      console.log('form created', data); });
     }
   }
 
@@ -158,5 +170,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
       return true;
     }
     return control.hasError(validationType);
+  }
+  testRequired() {
+    return (this.CreationForm.controls.init_name.value === '') || (this.CreationForm.controls.language_id.value === '')
+      || (this.CreationForm.controls.actual_job.value === '') ;
   }
 }
