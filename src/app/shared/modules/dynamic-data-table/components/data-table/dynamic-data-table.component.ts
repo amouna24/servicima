@@ -84,48 +84,48 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         /*** ***********************       APP INITIALIZER        *********************** ***/
         if (dataS.language_id) {
           dataS['language_id'] = this.appInitializerService.languageList.find((type) =>
-            type._id === dataS['language_id']).language_desc;
+            type._id === dataS['language_id'])?.language_desc;
         }
         if (dataS.company_id) {
           dataS['company_id'] = this.utilService.companiesList.find((type) =>
-            type._id === dataS['company_id']).company_name;
+            type._id === dataS['company_id'])?.company_name;
         }
         if (dataS.language) {
           dataS['language'] = this.appInitializerService.languageList.find((type) =>
-            type.LanguageKey.language_code === dataS['language']).language_desc;
+            type.LanguageKey.language_code === dataS['language'])?.language_desc;
         }
         if (dataS.activity_sector) {
           dataS['activity_sector'] = this.appInitializerService.activityCodeList.find((type) =>
-            type.NAF === dataS['activity_sector']).ACTIVITE;
+            type.NAF === dataS['activity_sector'])?.ACTIVITE;
         }
         if (dataS.currency_cd) {
           dataS['currency_cd'] = this.appInitializerService.currenciesList.find((type) =>
-            type.CURRENCY_CODE === dataS['currency_cd']).CURRENCY_DESC;
+            type.CURRENCY_CODE === dataS['currency_cd'])?.CURRENCY_DESC;
         }
         /*** ***********************           REF DATA           *********************** ***/
         if (dataS.payment_cd) {
           dataS['payment_cd'] = this.refData['PAYMENT_MODE'].find((type) =>
-            type.value === dataS['payment_cd']).viewValue;
+            type.value === dataS['payment_cd'])?.viewValue;
         }
         if (dataS.gender_cd) {
           dataS['gender_cd'] = this.refData['GENDER'].find((type) =>
-            type.value === dataS['gender_cd']).viewValue;
+            type.value === dataS['gender_cd'])?.viewValue;
         }
         if (dataS.contract_status) {
           dataS['contract_status'] = this.refData['CONTRACT_STATUS'].find((type) =>
-            type.value === dataS['contract_status']).viewValue;
+            type.value === dataS['contract_status'])?.viewValue;
         }
         if (dataS.legal_form) {
           dataS['legal_form'] = this.refData['LEGAL_FORM'].find((type) =>
-            type.value === dataS['legal_form']).viewValue;
+            type.value === dataS['legal_form'])?.viewValue;
         }
         if (dataS.title_cd) {
           dataS['title_cd'] = this.refData['PROF_TITLES'].find((type) =>
-            type.value === dataS['title_cd']).viewValue;
+            type.value === dataS['title_cd'])?.viewValue;
         }
         if (dataS.user_type) {
           dataS['user_type'] = this.refData['PROFILE_TYPE'].find((type) =>
-            type.value === dataS['user_type']).viewValue;
+            type.value === dataS['user_type'])?.viewValue;
         }
       });
     });

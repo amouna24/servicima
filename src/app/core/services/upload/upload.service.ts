@@ -31,7 +31,13 @@ export class UploadService {
   }
 
   getFilesByName(idFile) {
-    return this.http.get(`${environment.uploadFileApiUrl}/` + idFile);
+    return this.http.get(`${environment.uploadFileApiUrl}/` + idFile)
+      .pipe(
+        catchError(error => throwError(error)),
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
   getImages() {
