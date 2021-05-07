@@ -179,6 +179,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         localStorage.removeItem('email_adress');
         this.sidenavService.firstClick$.next(false);
         this.router.navigate(['/auth/login']);
+        this.userService.refresh = true;
       },
       (err) => {
         console.error(err);
