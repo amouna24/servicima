@@ -12,7 +12,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { toTitleCase } from 'codelyzer/util/utils';
 import { IResumeLanguageKeyModel } from '@shared/models/resumeLanguageKey.model';
 import { MatIconRegistry } from '@angular/material/icon';
-import {DomSanitizer} from "@angular/platform-browser";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'wid-resume-language',

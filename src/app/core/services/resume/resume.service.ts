@@ -412,7 +412,11 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    *************************************************************************/
   getResumePdf(filter: any, theme: string): Observable<any> {
     console.log('person=', JSON.parse(JSON.stringify(filter)));
-    return this.httpClient.get<any>(`http://127.0.0.1:3000/generate/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`);
+    return this.httpClient.get<any>(`http://127.0.0.1:3000/generate/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`,
+      // @ts-ignore
+      { responseType: 'blob'}).subscribe(res => {
+      window.open(window.URL.createObjectURL(res));
+  });
   }
   /*----------------------------------------------------------------------------------------*/
 

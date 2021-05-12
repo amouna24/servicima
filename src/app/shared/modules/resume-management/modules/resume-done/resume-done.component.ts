@@ -37,6 +37,7 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsList: IResumeProjectDetailsModel[] = [];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
   posY = 0;
+
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
@@ -65,9 +66,9 @@ export class ResumeDoneComponent implements OnInit {
     if (this.interventionList.length > 0) {
       this.count += 13;
     }
-/*    if (this.certifList.length > 0) {
-      this.count += 13;
-    }*/
+    /*    if (this.certifList.length > 0) {
+          this.count += 13;
+        }*/
     if (this.languageList.length > 0) {
       this.count += 13;
     }
@@ -131,7 +132,7 @@ export class ResumeDoneComponent implements OnInit {
   }
 
   getProjectInfo() {
-      this.proExpList.forEach(
+    this.proExpList.forEach(
       (proExpData) => {
         this.resumeService.getProject(
           `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
@@ -146,7 +147,8 @@ export class ResumeDoneComponent implements OnInit {
                 }
               );
               this.getProjectDetailsInfo();
-            }});
+            }
+          });
       }
     );
   }
@@ -198,44 +200,46 @@ export class ResumeDoneComponent implements OnInit {
 
   getPdf() {
     this.certifList.forEach((cert) => {
-      cert.start_date =  this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');
-      cert.end_date =  this.datepipe.transform(cert.end_date, 'yyyy-MM-dd');
+      cert.start_date = this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');
+      cert.end_date = this.datepipe.transform(cert.end_date, 'yyyy-MM-dd');
     });
     this.proExpList.forEach((pro) => {
-      pro.ResumeProfessionalExperienceKey.start_date =  this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
-      pro.ResumeProfessionalExperienceKey.end_date =  this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+      pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
+      pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
     });
     this.projectList.forEach((proj) => {
-      proj.start_date =  this.datepipe.transform(proj.start_date, 'yyyy-MM-dd');
-      proj.end_date =  this.datepipe.transform(proj.end_date, 'yyyy-MM-dd');
+      proj.start_date = this.datepipe.transform(proj.start_date, 'yyyy-MM-dd');
+      proj.end_date = this.datepipe.transform(proj.end_date, 'yyyy-MM-dd');
     });
     console.log('certif=', this.certifList);
     console.log(this.languageList);
-        const data = {
-          person: {
-            name: this.generalInfoList[0].init_name,
-            role: this.generalInfoList[0].actual_job,
-            experience: this.generalInfoList[0].years_of_experience.toString(),
-            imageUrl: this.generalInfoList[0].image.toString(),
-            diplomas: this.certifList,
-            technicalSkills: this.techSkillList,
-            functionnalSkills: this.funcSkillList,
-            intervention: this.interventionList,
-            pro_exp: this.proExpList,
-            project: this.projectList,
-            project_details: this.projectDetailsList,
-            project_details_section: this.projectDetailsSectionList,
-            language: this.languageList,
-            section: this.sectionList,
-          }
-        };
-        this.resumeService.getResumePdf(data, 'green').subscribe((res) => {
-          console.log(res);
-        });
-
-    }
+    const data = {
+      person: {
+        name: this.generalInfoList[0].init_name,
+        role: this.generalInfoList[0].actual_job,
+        experience: this.generalInfoList[0].years_of_experience.toString(),
+        imageUrl: this.generalInfoList[0].image.toString(),
+        diplomas: this.certifList,
+        technicalSkills: this.techSkillList,
+        functionnalSkills: this.funcSkillList,
+        intervention: this.interventionList,
+        pro_exp: this.proExpList,
+        project: this.projectList,
+        project_details: this.projectDetailsList,
+        project_details_section: this.projectDetailsSectionList,
+        language: this.languageList,
+        section: this.sectionList,
+      }
+    };
+    this.resumeService.getResumePdf(data, 'green');
+/*
+      this.downLoadFile(res, 'application/ms-excel');
+*/
 
   }
+
+
+}
 /*project:  [{
   projectList: this.projectList,
   projectDetailsList: [{
