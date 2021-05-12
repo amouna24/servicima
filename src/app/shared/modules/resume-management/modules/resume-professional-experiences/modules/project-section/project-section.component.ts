@@ -124,9 +124,9 @@ export class ProjectSectionComponent implements OnInit {
     this.ProSectionDetails[this.arrayProSectionDetailsCount].project_details_code = this.project_details_code;
     if (this.sendProSectionDetails.controls.Field.valid) {
       console.log('ProExp input= ', this.ProSectionDetails[this.arrayProSectionDetailsCount]);
-      this.resumeService.
+/*      this.resumeService.
       addProjectDetailsSection(this.ProSectionDetails[this.arrayProSectionDetailsCount]).
-      subscribe(dataSection => console.log('Section details =', dataSection));
+      subscribe(dataSection => console.log('Section details =', dataSection));*/
       this.inputFields.push(this.fb.group({
         project_details_section_desc: '',
       }));
@@ -142,12 +142,23 @@ export class ProjectSectionComponent implements OnInit {
     if (this.sendProDetails.valid) {
       console.log('project details=', this.ProDetails);
       this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => console.log('Project details =', dataProDeta));
+      console.log(this.ProSectionDetails);
+      if (this.ProSectionDetails !== undefined) {
+      this.ProSectionDetails.forEach((sec) => {
+        this.resumeService.
+        addProjectDetailsSection(sec).
+        subscribe(dataSection => console.log('Section details =', dataSection));
+        }); }
+      this.sendProSectionDetails = this.fb.group({
+        Field: this.fb.array([this.fb.group({
+          project_details_section_desc: '',
+        })])});
       this.proDetailsArray.push(this.ProDetails);
+      this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
     } else { console.log('Form is not valid');
     }
     this.arrayProDetailsCount++;
     this.sendProDetails.reset();
-    this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
   }
   onSelect() {
     console.log(this.select);

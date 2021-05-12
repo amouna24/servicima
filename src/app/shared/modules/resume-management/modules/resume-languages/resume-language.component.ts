@@ -9,7 +9,10 @@ import { AppInitializerService } from '@core/services/app-initializer/app-initia
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import {toTitleCase} from "codelyzer/util/utils";
+import { toTitleCase } from 'codelyzer/util/utils';
+import { IResumeLanguageKeyModel } from '@shared/models/resumeLanguageKey.model';
+import { MatIconRegistry } from '@angular/material/icon';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'wid-resume-language',
@@ -25,6 +28,8 @@ export class ResumeLanguageComponent implements OnInit {
     private appInitializerService: AppInitializerService,
     private refdataService: RefdataService,
     private modalServices: ModalService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
   ) {
   }
   get getLanguage() {
@@ -32,18 +37,21 @@ export class ResumeLanguageComponent implements OnInit {
   }
   sendLanguage: FormGroup;
   rating = 0;
+  ratingEdit: number[] = [];
   starCount = 5;
   ratingArr = [];
   arrayLanguageCount = 0;
   language: IResumeLanguageModel;
+  languageUpdate: IResumeLanguageModel;
   languageArray: IResumeLanguageModel[] = [];
   langList: IViewParam[];
   resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
   refData: { } = { };
   emailAddress: string;
   showLevelError = false;
-  langList2: IViewParam[];
+  langListRes: IViewParam[] = [];
   subscriptionModal: Subscription;
+  icon_close = '../../assets/icons/close.svg';
 
   async ngOnInit() {
     this.getConnectedUser();
@@ -55,8 +63,11 @@ export class ResumeLanguageComponent implements OnInit {
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
-    this.langList2 = this.langList;
     console.log(this.ratingArr);
+    this.matIconRegistry.addSvgIcon(
+      'close',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/close.svg')
+    );
   }
   async getLanguageRefData() {
     const data = await this.getRefdata();
@@ -79,6 +90,7 @@ export class ResumeLanguageComponent implements OnInit {
           }
         });
   }
+
   onClick(rating: number) {
     console.log(rating);
     this.rating = rating;
@@ -124,10 +136,11 @@ export class ResumeLanguageComponent implements OnInit {
     this.language = this.sendLanguage.value;
     this.language.level = this.rating.toString();
     this.language.resume_code = this.resume_code.toString();
-    if (this.sendLanguage.valid) {
+    if (this.sendLanguage.valid && this.rating > 0) {
       console.log(this.language);
       this.resumeService.addLanguage(this.language).subscribe(data => {
         console.log('Technical skill =', data);
+        this.ratingEdit = [];
         this.getLanguageInfo();
       });
     } else { console.log('Form is not valid');
@@ -136,6 +149,19 @@ export class ResumeLanguageComponent implements OnInit {
     this.arrayLanguageCount++;
     this.sendLanguage.reset();
     this.rating = 0;
+  }
+
+  updateLanguage(rating: number, pointIndex: number, resume_language_code: string, _id: string, ResumeLanguageKey: IResumeLanguageKeyModel) {
+    this.ratingEdit[pointIndex] = rating;
+    this.languageUpdate = ({
+      _id,
+      ResumeLanguageKey,
+      resume_language_code,
+      level: rating.toString(),
+      resume_code: this.resume_code,
+    });
+    this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
+    return false;
   }
   getLanguageInfo() {
     this.resumeService.getResume(
@@ -155,9 +181,12 @@ export class ResumeLanguageComponent implements OnInit {
                   this.languageArray = responseOne;
                   this.languageArray.forEach(
                     (lang) => {
+                      this.ratingEdit.push(+lang.level);
                       lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
                       this.langList.forEach((value, index) => {
-                        if (value.value === lang.resume_language_code) { this.langList.splice(index, 1);
+                        if (value.value === lang.resume_language_code) {
+                          this.langListRes.push(value);
+                          this.langList.splice(index, 1);
                           console.log('index', index); }
                       });
                     });
@@ -194,11 +223,14 @@ export class ResumeLanguageComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteLanguage(_id).subscribe(data => console.log('Deleted'));
-
             this.languageArray.forEach((lang, indexlang) => {
               if (indexlang === pointIndex) { this.languageArray.splice(indexlang, 1);
-                this.langList.push({ value: lang.resume_language_code, viewValue: toTitleCase(lang.resume_language_code)});
-               }
+                console.log('lang List Res', this.langListRes);
+                   this.langListRes.forEach((value, index) => {
+                                  if (value.value === lang.resume_language_code) {
+                                    this.langList.push(value);
+                                    this.langListRes.splice(index, 1);
+                                    }}); }
             });
             this.subscriptionModal.unsubscribe();
           }
@@ -208,4 +240,5 @@ export class ResumeLanguageComponent implements OnInit {
   testRequired() {
     return (this.sendLanguage.invalid) ;
   }
+
 }

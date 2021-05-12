@@ -40,7 +40,7 @@
               </div>
             </div>
             <div *ngFor="let item of getProject let pointIndex=index" fxLayout="row" class="full-width p-b-10">
-              <mat-expansion-panel [hideToggle]="true" #panel fxLayout="column" fxFlex="100" class="full-height "
+              <mat-expansion-panel [hideToggle]="true" #panel fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0px !important;">
                   <mat-panel-title style="margin-right: 0px !important;">
@@ -66,7 +66,7 @@
                       </div>
                       <div fxLayout="column" fxFlex="14" class="p-r-20" fxLayoutAlign="center none">
                         <div fxLayout="row" fxLayoutAlign="end" >
-                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex);panel.toggle()" >Delete</button>
+                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_code);panel.toggle()" >Delete</button>
                         </div>
                       </div>
                     </div>

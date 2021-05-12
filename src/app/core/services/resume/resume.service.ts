@@ -363,6 +363,13 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateProjectDetails(projectDet: IResumeProjectDetailsModel): Observable<any> {
     return this.httpClient.put<IResumeProjectDetailsModel>(`${environment.resumeProjectDetailsApiUrl}`, projectDet);
   }
+  /**************************************************************************
+   * @description Delete Project Details Status
+   * @param id: Delete Project Details Object
+   *************************************************************************/
+  deleteProjectDetails(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeProjectDetailsModel>(`${environment.resumeProjectDetailsApiUrl}/?_id=${id}`);
+  }
   /*-------------------------------------------------------------------------------------*/
   /*------------------------------------ RESUME-PROJECT-DETAILS-Section--------------------------------------*/
 
@@ -388,6 +395,25 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   updateProjectDetailsSection(projectDetSec: IResumeProjectDetailsSectionModel): Observable<any> {
     return this.httpClient.put<IResumeProjectDetailsSectionModel>(`${environment.resumeProjectDetailsSectionApiUrl}`, projectDetSec);
   }
+  /**************************************************************************
+   * @description Delete Project Details Section Status
+   * @param id: Delete Project Details Section Object
+   *************************************************************************/
+  deleteProjectDetailsSection(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeProjectDetailsSectionModel>(`${environment.resumeProjectDetailsSectionApiUrl}/?_id=${id}`);
+  }
   /*-------------------------------------------------------------------------------------*/
+  /*------------------------------------ RESUME-EXPORT--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Project Details Section List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IProjectDetailsSection[]>
+   *************************************************************************/
+  getResumePdf(filter: any, theme: string): Observable<any> {
+    console.log('person=', JSON.parse(JSON.stringify(filter)));
+    return this.httpClient.get<any>(`http://127.0.0.1:3000/generate/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`);
+  }
+  /*----------------------------------------------------------------------------------------*/
 
 }

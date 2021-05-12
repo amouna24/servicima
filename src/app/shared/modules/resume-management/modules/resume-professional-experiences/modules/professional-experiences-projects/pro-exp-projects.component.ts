@@ -106,6 +106,7 @@ export class ProExpProjectsComponent implements OnInit {
         console.log('Technical skill =', data);
         this.getProjectInfo();
       });
+      this.showForm = false;
     } else { console.log('Form is not valid');
       this.showDateError = false;
     }
@@ -117,9 +118,9 @@ export class ProExpProjectsComponent implements OnInit {
       this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
       this.ProjectArray[this.indexUpdate] = this.projectUpdate;
       this.button = 'Add';
+      this.showForm = false;
     }
     this.sendProject.reset();
-    this.showForm = false;
   }
   routeToProjectSection() {
     this.router.navigate(['/candidate/resume/projects'],
@@ -145,7 +146,7 @@ export class ProExpProjectsComponent implements OnInit {
     this.showForm = true;
   }
 
-  deleteProject(_id: string, pointIndex: number) {
+  deleteProject(_id: string, pointIndex: number, project_code: string) {
     const confirmation = {
       code: 'delete',
       title: 'Are you sure ?',
@@ -155,14 +156,45 @@ export class ProExpProjectsComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteProject(_id).subscribe(data => console.log('Deleted'));
-            this.ProjectArray.forEach((value, index) => {
-              if (index === pointIndex) { this.ProjectArray.splice(index, 1); }
-            });
-            this.subscriptionModal.unsubscribe();
-          }
-        }
-      );
+            this.resumeService.getProjectDetails(
+              // tslint:disable-next-line:max-line-length
+              `?project_code=${project_code}`)
+              .subscribe(
+                (response) => {
+                  if (response['msg_code'] !== '0004') {
+                    console.log('response=', response);
+                    response.forEach((det) => {
+                      this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
+                      this.resumeService.getProjectDetailsSection(
+                        // tslint:disable-next-line:max-line-length
+                        `?project_details_code=${det.ResumeProjectDetailsKey.project_details_code}`)
+                        .subscribe(
+                          (responsedet) => {
+                            if (responsedet['msg_code'] !== '0004') {
+                              console.log('responsedet=', responsedet);
+                              responsedet.forEach((section) => {
+                                console.log('section', section);
+                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
+                              });
+                            }
+                          },
+                          (error) => {
+                            if (error.error.msg_code === '0004') {
+                            }
+                          },
+                        );
+                      this.ProjectArray.forEach((value, index) => {
+                        if (index === pointIndex) {
+                          this.ProjectArray.splice(index, 1);
+                        }
+                      });
+                      this.subscriptionModal.unsubscribe();
+                    });
+                  }
 
+                });
+          }
+        });
   }
   testRequired() {
     return (this.sendProject.invalid) ;

@@ -117,7 +117,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
       actual_job: generalInformation[0].actual_job,
       years_of_experience: generalInformation[0].years_of_experience,
       language_id: generalInformation[0].ResumeKey.language_id,
-      resume_code: generalInformation[0].ResumeKey.resume_code
+      resume_code: generalInformation[0].ResumeKey.resume_code,
+      image: this.haveImage,
     });
     this.showHideYears();
   }
@@ -134,7 +135,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       language_id: '',
       years_of_experience: null,
       actual_job: '',
-      image: this.avatar,
+      image: this.haveImage,
       init_name: '',
       status: 'A'
     });
@@ -146,7 +147,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   createUpdateResume() {
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
-    this.generalInfo.image = this.avatar.toString();
+    this.generalInfo.image = this.haveImage;
     if (this.CreationForm.valid) {
       console.log(this.CreationForm.value);
       this.resumeService.addResume(this.generalInfo).subscribe(data => {

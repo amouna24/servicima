@@ -4,8 +4,8 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
-import {Subscription} from "rxjs";
-import {ModalService} from "@core/services/modal/modal.service";
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-resume-tech-skill',

@@ -6,8 +6,8 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
-import {Subscription} from "rxjs";
-import {ModalService} from "@core/services/modal/modal.service";
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -19,7 +19,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   arrayCertifDiplomaCount = 0;
   certifDiploma: IResumeCertificationDiplomaModel;
   certifDiplomaArray: IResumeCertificationDiplomaModel[] = [];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
+  resume_code = '';
   minDate: Date;
   maxDate: Date;
   showDateError = false;
@@ -108,10 +108,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.compareDate(dateStart, dateEnd);
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
-    this.certifDiploma.certif_diploma_code = Math.random().toString();
+    this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
     if (this.sendCertifDiploma.valid && this.showDateError === false) {
       console.log('ProExp input= ', this.certifDiploma);
-      this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data =>{
+      this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
         console.log('certif =', data);
         this.getCertifDiplomaInfo();
       });

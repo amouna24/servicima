@@ -25,12 +25,21 @@
   <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width"  >
           <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
             <div  *ngFor="let item of getLanguage let pointIndex=index">
-              <div fxLayout="row" fxLayoutAlign="space-around center" >
-              <div fxLayout="column" fxFlex="30"  >
+
+              <div fxLayout="row"  >
+                <div fxLayout="column" fxFlex="7" class="button-pos">
+                  <div fxLayout="row" fxFlex="60" >
+                  <button  mat-raised-button type="button"  class="bg-pale-grey width-0" (click)="deleteLanguage(item._id,pointIndex)">
+<mat-icon svgIcon="close"></mat-icon>
+                  </button></div>
+                </div>
+                <div fxLayout="column" fxFlex="93">
+                  <div fxLayout="row" fxLayoutAlign=" center" fxFlexFill>
+              <div  fxFlex="47" fxLayout="column"  >
                 <mat-label class="black font-size-12">
                   Language:
                 </mat-label>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="width-69">
                   <mat-select   disableOptionCentering panelClass="panelColor"
                              [value]="item.resume_language_code" disabled>
                     <ng-container *ngFor="let v of langList">
@@ -41,21 +50,15 @@
               </div>
               <div fxLayout="column" fxLayoutAlign="20">
                 <div fxLayout="row" fxFlexFill>
-
-                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"   [matTooltip]="ratingId+1" matTooltipPosition="above">
+                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item.resume_language_code,item._id,item.ResumeLanguageKey)" [matTooltip]="ratingId+1" matTooltipPosition="above">
                     <mat-icon>
-                      {{showIconDisabled(+item.level,i)}}
+                      {{showIconDisabled(ratingEdit[pointIndex],i)}}
                     </mat-icon>
                   </button>
-
                 </div>
-
-
               </div>
-                <div fxLayout="column" fxFlex="16"    >
-                  <button  mat-raised-button type="button"  class="bg-error-red btn-medium black" (click)="deleteLanguage(item._id,pointIndex)">Delete</button>
                 </div>
-
+                </div>
                 </div>
             </div>
           <form [formGroup]="sendLanguage" class="full-width full-height" >

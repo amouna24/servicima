@@ -176,7 +176,8 @@ export class ProExpComponent implements OnInit {
     this.indexUpdate = index;
 
   }
-  deleteProExp(_id: string, pointIndex: number) {
+
+  deleteProExp(_id: string, pointIndex: number, professional_experience_code: string) {
     const confirmation = {
       code: 'delete',
       title: 'Are you sure ?',
@@ -186,15 +187,55 @@ export class ProExpComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteProExp(_id).subscribe(data => console.log('Deleted'));
-            this.proExpArray.forEach((value, index) => {
-              if (index === pointIndex) { this.proExpArray.splice(index, 1); }
-            });
-            this.button = 'Add';
-            this.subscriptionModal.unsubscribe();
-          }
-        }
-      );
+            this.resumeService.getProject(
+              // tslint:disable-next-line:max-line-length
+              `?professional_experience_code=${professional_experience_code}`)
+              .subscribe(
+                (response) => {
+                  if (response['msg_code'] !== '0004') {
+                    console.log('response=', response);
+                    response.forEach((project) => {
+                      this.resumeService.deleteProject(project._id).subscribe(data => console.log('Deleted'));
 
+                      this.resumeService.getProjectDetails(
+                        // tslint:disable-next-line:max-line-length
+                        `?project_code=${project.ResumeProjectKey.project_code}`)
+                        .subscribe(
+                          (responsedet) => {
+                            if (responsedet['msg_code'] !== '0004') {
+                              console.log('response=', responsedet);
+                              responsedet.forEach((det) => {
+                                this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
+                                this.resumeService.getProjectDetailsSection(
+                                  // tslint:disable-next-line:max-line-length
+                                  `?project_details_code=${det.ResumeProjectDetailsKey.project_details_code}`)
+                                  .subscribe(
+                                    (responsedetsec) => {
+                                      if (responsedetsec['msg_code'] !== '0004') {
+                                        console.log('responsedet=', responsedetsec);
+                                        responsedetsec.forEach((section) => {
+                                          console.log('section', section);
+                                          this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
+                                        });
+                                      }
+                                    });
+                              });
+                            }
+                          });
+
+                      this.proExpArray.forEach((value, index) => {
+                        if (index === pointIndex) {
+                          this.proExpArray.splice(index, 1);
+                        }
+                      });
+                      this.button = 'Add';
+                      this.subscriptionModal.unsubscribe();
+                    });
+                  }
+                });
+
+          }
+        });
   }
   testRequired() {
     return (this.sendProExp.invalid) ;
