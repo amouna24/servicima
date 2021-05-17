@@ -16,6 +16,8 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { DatePipe } from '@angular/common';
+import { saveAs } from 'file-saver';
+import { UploadService } from '@core/services/upload/upload.service';
 
 @Component({
   selector: 'wid-resume-done',
@@ -42,6 +44,7 @@ export class ResumeDoneComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private datepipe: DatePipe,
+    private uploadImage: UploadService,
   ) {
   }
 
@@ -66,9 +69,9 @@ export class ResumeDoneComponent implements OnInit {
     if (this.interventionList.length > 0) {
       this.count += 13;
     }
-    /*    if (this.certifList.length > 0) {
+        if (this.certifList.length > 0) {
           this.count += 13;
-        }*/
+        }
     if (this.languageList.length > 0) {
       this.count += 13;
     }
@@ -231,206 +234,54 @@ export class ResumeDoneComponent implements OnInit {
         section: this.sectionList,
       }
     };
-    this.resumeService.getResumePdf(data, 'green');
+    this.resumeService.getResumePdf(data, 'wid').subscribe(res => {
+      saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
+    });
 /*
       this.downLoadFile(res, 'application/ms-excel');
 */
 
   }
+  uploadPdf() {
+    this.certifList.forEach((cert) => {
+      cert.start_date = this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');
+      cert.end_date = this.datepipe.transform(cert.end_date, 'yyyy-MM-dd');
+    });
+    this.proExpList.forEach((pro) => {
+      pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
+      pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+    });
+    this.projectList.forEach((proj) => {
+      proj.start_date = this.datepipe.transform(proj.start_date, 'yyyy-MM-dd');
+      proj.end_date = this.datepipe.transform(proj.end_date, 'yyyy-MM-dd');
+    });
+    console.log('certif=', this.certifList);
+    console.log(this.languageList);
+    const data = {
+      person: {
+        name: this.generalInfoList[0].init_name,
+        role: this.generalInfoList[0].actual_job,
+        experience: this.generalInfoList[0].years_of_experience.toString(),
+        imageUrl: this.generalInfoList[0].image.toString(),
+        diplomas: this.certifList,
+        technicalSkills: this.techSkillList,
+        functionnalSkills: this.funcSkillList,
+        intervention: this.interventionList,
+        pro_exp: this.proExpList,
+        project: this.projectList,
+        project_details: this.projectDetailsList,
+        project_details_section: this.projectDetailsSectionList,
+        language: this.languageList,
+        section: this.sectionList,
+      }
+    };
+    this.resumeService.getResumePdf(data, 'wid').subscribe((res) => {
+      console.log('res=', res);
+      this.uploadImage.uploadImage(res).subscribe((resUp) => {
+        console.log('uploaded', resUp);
+      });
+    });
 
+  }
 
 }
-/*project:  [{
-  projectList: this.projectList,
-  projectDetailsList: [{
-    projectDetailsList:  this.projectDetailsList,
-    projectDetailsSectionList: this.projectDetailsSectionList
-  }],
-}],
-}],*/
-/*
-  public openPDF(): void {
-    if (this.count > 13) {
-      const doc = new jsPDF();
-      doc.setTextColor(0, 0, 70);
-      doc.setFont('calibri', 'bold');
-      this.posY += 30;
-      // @ts-ignore
-      doc.text(this.generalInfoList[0].init_name, 100, this.posY, null, null, 'center');
-      this.posY += 15;
-      // @ts-ignore
-      doc.text(this.generalInfoList[0].actual_job, 100, this.posY, null, null, 'center');
-      try {
-        doc.setTextColor(0, 0, 0);
-        doc.setFont('calibri');
-        doc.setFontSize(12);
-        this.posY += 7;
-        // @ts-ignore
-        doc.text(this.generalInfoList[0].years_of_experience.toString() + ' years of experiences', 100, this.posY, null, null, 'center');
-      } catch (e) {
-        console.log('error=', e);
-      }
-      if (this.certifList.length !== undefined) {
-        doc.setTextColor(173, 216, 230);
-        this.posY += 22;
-        doc.setFontSize(16);
-        doc.setFillColor(135, 206, 235);
-        doc.rect(20, this.posY - 6, 180, 8, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.text('Diplomas/Certifications', 70, this.posY);
-        this.certifList.forEach(
-          (certifData) => {
-            doc.setFont('courier');
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(8);
-            this.posY += 10;
-            doc.setFillColor(0, 0, 0);
-            doc.circle(23, this.posY - 1, 0.7, 'FD');
-            doc.text(certifData.start_date + ' - ' + certifData.end_date + ':', 25, this.posY);
-            doc.setFontSize(10);
-            doc.text(certifData.diploma + ' from ' + certifData.establishment, 70, this.posY);
-          }
-        );
-      }
-      if (this.techSkillList.length !== undefined) {
-        doc.setTextColor(173, 216, 230);
-        this.posY += 15;
-        doc.setFont('courier', 'bolditalic');
-        doc.setFontSize(16);
-        doc.setFillColor(135, 206, 235);
-        doc.rect(20, this.posY - 6, 180, 8, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.text('Technical Skills', 70, this.posY);
-        this.techSkillList.forEach(
-          (techData) => {
-            doc.setFont('courier');
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(8);
-            this.posY += 10;
-            doc.setFillColor(0, 0, 0);
-            doc.circle(23, this.posY - 1, 0.7, 'FD');
-            doc.text(techData.technical_skill_desc + ':', 25, this.posY);
-            doc.setFontSize(10);
-            doc.text(techData.technologies, 70, this.posY);
-          }
-        );
-      }
-      if (this.funcSkillList.length !== undefined) {
-        console.log(this.funcSkillList, 'length');
-        doc.setTextColor(173, 216, 230);
-        this.posY += 15;
-        doc.setFont('courier', 'bolditalic');
-        doc.setFontSize(16);
-        doc.setFillColor(135, 206, 235);
-        doc.rect(20, this.posY - 6, 180, 8, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.text('Functional Skills', 70, this.posY);
-        this.funcSkillList.forEach(
-          (funcData) => {
-            doc.setFont('courier');
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(8);
-            this.posY += 10;
-            doc.setFillColor(0, 0, 0);
-            doc.circle(23, this.posY - 1, 0.7, 'FD');
-            doc.text(funcData.skill, 25, this.posY);
-          }
-        );
-      }
-      if (this.interventionList.length !== undefined) {
-        doc.setTextColor(173, 216, 230);
-        this.posY += 15;
-        doc.setFont('courier', 'bolditalic');
-        doc.setFontSize(16);
-        doc.setFillColor(135, 206, 235);
-        doc.rect(20, this.posY - 6, 180, 8, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.text('Level of Intervention', 70, this.posY);
-        this.interventionList.forEach(
-          (interventionData) => {
-            doc.setFont('courier');
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(8);
-            this.posY += 10;
-            doc.setFillColor(0, 0, 0);
-            doc.circle(23, this.posY - 1, 0.7, 'FD');
-            doc.text(interventionData.level_of_intervention_desc, 25, this.posY);
-          }
-        );
-      }
-      if (this.proExpList.length !== undefined) {
-        doc.setTextColor(173, 216, 230);
-        this.posY += 15;
-        doc.setFont('courier', 'bolditalic');
-        doc.setFontSize(16);
-        doc.setFillColor(135, 206, 235);
-        doc.rect(20, this.posY - 6, 180, 8, 'F');
-        doc.setTextColor(255, 255, 255);
-
-        doc.text('Professional experience', 70, this.posY);
-        this.proExpList.forEach(
-          (proExpData) => {
-            doc.setFont('courier');
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(8);
-            this.posY += 6;
-            doc.setFillColor(255, 192, 203);
-            doc.rect(20, this.posY - 4, 180, 8, 'F');
-            doc.text(this.datepipe.transform(proExpData.ResumeProfessionalExperienceKey.start_date, 'yyyy/MM/dd') + ' - ' +
-              this.datepipe.transform(proExpData.ResumeProfessionalExperienceKey.end_date, 'yyyy/MM/dd')  + ':', 25, this.posY);
-            doc.setFontSize(8);
-            doc.text(proExpData.position + ' at ' + proExpData.customer, 70, this.posY);
-            console.log('project list', this.projectList);
-            this.projectList.forEach(
-              (project) => {
-                if (project.professional_experience_code === proExpData.professional_experience_code) {
-                  doc.setFont('courier');
-                  doc.setTextColor(0, 0, 0);
-                  doc.setFontSize(8);
-                  this.posY += 15;
-                  doc.setFillColor(255, 192, 203);
-                  doc.rect(80, this.posY - 4, 100, 8, 'F');
-                  doc.text('Project:' + this.datepipe.transform(project.start_date, 'yyyy/MM/dd') + ' - ' +
-                     this.datepipe.transform(project.end_date, 'yyyy/MM/dd') + ':', 88, this.posY);
-                  doc.setFontSize(8);
-                  doc.text(project.project_title, 145, this.posY);
-                  this.projectDetailsList.forEach(
-                    (projectDetails) => {
-                      if (projectDetails.project_code === project.project_code) {
-                        doc.setFont('courier');
-                        doc.setTextColor(0, 0, 0);
-                        doc.setFontSize(8);
-                        this.posY += 10;
-                        doc.setTextColor(0, 128, 0);
-                        doc.text(projectDetails.project_detail_title + ':', 100, this.posY);
-                        doc.setFontSize(8);
-                        if (projectDetails.project_detail_desc != null) {
-                          doc.setTextColor(0, 0, 0);
-                          doc.text(projectDetails.project_detail_desc, 140, this.posY);
-                        } else {
-                          this.projectDetailsSectionList.forEach(
-                            (projectDetailsSection) => {
-                              if (projectDetails.project_details_code === projectDetailsSection.project_details_code) {
-                                doc.setTextColor(0, 0, 0);
-                                doc.circle(138, this.posY - 1, 0.3, 'FD');
-                                doc.text(projectDetailsSection.project_details_section_desc, 140, this.posY);
-                                this.posY += 5;
-                              }
-                            });
-
-                        }
-
-                      }
-                    }
-                  );
-                }
-              }
-            );
-          });
-        doc.output('dataurlnewwindow');
-      }
-      } else {
-      console.log('Resume is empty');
-    }
-  }
-*/

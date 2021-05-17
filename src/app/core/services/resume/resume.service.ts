@@ -11,7 +11,8 @@ import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
@@ -410,14 +411,16 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
    * @param filter search query like [ ?id=123 ]
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
+
   getResumePdf(filter: any, theme: string): Observable<any> {
+
+    // tslint:disable-next-line:prefer-const
     console.log('person=', JSON.parse(JSON.stringify(filter)));
     return this.httpClient.get<any>(`http://127.0.0.1:3000/generate/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`,
       // @ts-ignore
-      { responseType: 'blob'}).subscribe(res => {
-      window.open(window.URL.createObjectURL(res));
-  });
+      { responseType: 'blob'});
   }
+
   /*----------------------------------------------------------------------------------------*/
 
 }
