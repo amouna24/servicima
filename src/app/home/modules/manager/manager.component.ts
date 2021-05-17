@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UserService } from '@core/services/user/user.service';
 import { mainContentAnimation } from '@shared/animations/animations';
 
 @Component({
@@ -11,7 +12,7 @@ import { mainContentAnimation } from '@shared/animations/animations';
 })
 export class ManagerComponent implements OnInit, OnDestroy {
 
-  constructor(
+  constructor( private userService: UserService
   ) {
   }
 
@@ -19,6 +20,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userService.refresh = true;
   }
 
 }
