@@ -544,7 +544,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
       );
   }
 
-  /* Init Contract Form*/
+  /**************************************************************************
+   * @description Init form with initial data
+   * empty if it's create contract + extension case
+   * patch Contract (Extension not included) value if it's update case
+   *************************************************************************/
   async initContractForm(contract: IContract) {
     this.contractForm = this.formBuilder.group({
       INFORMATION: this.formBuilder.group({
@@ -611,7 +615,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
                   type.CURRENCY_CODE === extension.extension_currency_cd)?.CURRENCY_DESC;
                 extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
                   type.value === extension.extension_status)?.viewValue;
-                extension.attachments = await this.getFileNameAsString(extension.attachments);
+                if (extension.attachments && extension.attachments !== '') {
+                  extension.attachments = await this.getFileNameAsString(extension.attachments);
+                }
               }
             );
           }
@@ -711,18 +717,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
       );
   }
 
-  /**
-   * @description Create New Contract
-   */
+  /**************************************************************************
+   * @description Create/Update Contract/ContractExtension
+   *************************************************************************/
   async createNewContract(data: FormGroup) {
     const Contract = {
       ...this.contractForm.controls.INFORMATION.value,
       ...this.contractForm.controls.SIGNER.value,
       ...this.contractForm.controls.RATE.value,
       ...this.contractForm.controls.TIMESHEET.value,
-/*
-      ...this.contractForm.controls.CONTRACT_EXTENSION.value,
-*/
     };
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
@@ -734,9 +737,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractExtensionInfo.contractExtensionKey.extension_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;*/
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
-    // const contractFileName = await this.getFileNameAsString(this.contractInfo.attachments);
-/*    Contract.attachments = this.canUpdate(this.contractId) ?
-      this.contractInfo.attachments : await this.uploadFile(this.selectedContractFile.file);*/
     if (this.canUpdate(this.contractId)) {
       if (this.selectedContractFile.name !== '') {
         Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
@@ -840,44 +840,45 @@ export class AddContractComponent implements OnInit, OnDestroy {
             console.log(error);
           }
         );
-      this.contractExtensionInfo.forEach(
-        (extension) => {
-          extension.application_id = Contract.application_id;
-          extension.email_address = Contract.email_address;
-          extension.contract_code = Contract.contract_code;
-          extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-            type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-          extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-            type.viewValue === extension.extension_status)?.value;
-          this.contractorService.addContractorContact(extension)
-            .pipe(
-              takeUntil(
-                this.destroy$
-              )
-            )
-            .subscribe(
-              (res) => {
-              },
-              error => {
-                console.log('error', error);
-              },
-              () => {
-                if (this.type === 'CLIENT') {
-                  this.router.navigate(
-                    ['/manager/contract-management/clients-contracts/contracts-list']);
-                } else if (this.type === 'SUPPLIER') {
-                  this.router.navigate(
-                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                }
-              }
-            );
+      for (const extension of this.contractExtensionInfo) {
+        extension.application_id = Contract.application_id;
+        extension.email_address = Contract.email_address;
+        extension.contract_code = Contract.contract_code;
+        extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+          type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+        extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+          type.viewValue === extension.extension_status)?.value;
+        if (this.selectedExtensionFile.name !== '') {
+          extension.attachments = await this.uploadFile(this.selectedExtensionFile.file);
         }
-      );
+        this.contractsService.addContractExtension(extension)
+          .pipe(
+            takeUntil(
+              this.destroy$
+            )
+          )
+          .subscribe(
+            (res) => {
+            },
+            error => {
+              console.log('error', error);
+            },
+            () => {
+              if (this.type === 'CLIENT') {
+                this.router.navigate(
+                  ['/manager/contract-management/clients-contracts/contracts-list']);
+              } else if (this.type === 'SUPPLIER') {
+                this.router.navigate(
+                  ['/manager/contract-management/suppliers-contracts/contracts-list']);
+              }
+            }
+          );
+      }
     }
   }
 
   /**************************************************************************
-   * @description Create/Update New/Old Contractor Contact
+   * @description ADD/Update Contract Extension to data table of DF
    * @param result
    * result.action: ['update', addMode]
    *************************************************************************/
@@ -1020,8 +1021,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   }
 
   /**************************************************************************
-   * @description : GET IMAGE FROM BACK AS BLOB
-   *  create Object from blob and convert to url
+   * @description : GET the name of document and update form field value
    *************************************************************************/
   async getFileNameAndUpdateForm(id, formGroupName) {
       await this.uploadService.getFilesByName(id).subscribe(
@@ -1041,8 +1041,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   }
 
   /**************************************************************************
-   * @description : GET IMAGE FROM BACK AS BLOB
-   *  create Object from blob and convert to url
+   * @description : GET the name of document and return it
    *************************************************************************/
   async getFileNameAsString(id) {
     return  this.uploadService.getFilesByName(id)
@@ -1052,6 +1051,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .toPromise();
   }
 
+  /**************************************************************************
+   * @description : detect change made by DF to files
+   *************************************************************************/
   getFile(obj) {
     obj.forEach(
       (doc) => {
@@ -1079,6 +1081,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
@@ -1086,5 +1089,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
+    // Unsubscribe from subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
