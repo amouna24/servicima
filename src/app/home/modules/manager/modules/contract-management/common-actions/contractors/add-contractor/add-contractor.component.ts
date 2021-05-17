@@ -574,7 +574,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateForms(contractor: IContractor, contractorContact: IContractorContact) {
+  updateForms(contractor: IContractor) {
     this.contractorForm.patchValue({
       PERSONAL_INFORMATION : {
         contractor_name: contractor.contractor_name,
@@ -727,19 +727,22 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       .subscribe(
         async (res) => {
           this.contractorInfo = res[0][0];
-          this.contractorContactInfo = res[1];
           this.haveImage.next(res[0][0]['photo']);
           const av = await this.uploadService.getImage(res[0][0]['photo']);
           this.avatar.next(av);
-          this.updateForms(this.contractorInfo, this.contractorContactInfo[0]);
-          this.contractorContactInfo.map(
-            (contact) => {
-              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.value === contact.title_cd).viewValue;
-            }
-          );
-          this.contactList.next(this.contractorContactInfo.slice()
-          );
+          if (res[1]['msg_code'] === '0004') {
+            this.contractorContactInfo = [];
+          } else {
+            this.contractorContactInfo = res[1];
+            this.contractorContactInfo.map(
+              (contact) => {
+                contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                  type.value === contact.title_cd)?.viewValue;
+              }
+            );
+          }
+          this.updateForms(this.contractorInfo);
+          this.contactList.next(this.contractorContactInfo.slice());
           this.isLoading.next(false);
 
         },
@@ -852,7 +855,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           contact.email_address = Contractor.email_address;
           contact.contractor_code = Contractor.contractor_code;
           contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.viewValue === contact.title_cd).value;
+                type.viewValue === contact.title_cd)?.value;
           if (contact._id && contact?.updated) {
             this.contractorService.updateContractorContact(contact)
               .pipe(
@@ -952,7 +955,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           contact.email_address = Contractor.email_address;
           contact.contractor_code = Contractor.contractor_code;
           contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-            type.viewValue === contact.title_cd).value;
+            type.viewValue === contact.title_cd)?.value;
           this.contractorService.addContractorContact(contact)
             .pipe(
               takeUntil(
@@ -999,7 +1002,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               this.contractorContactInfo[index].contact_email = this.contractorForm.controls.CONTACT['controls'].contact_email.value;
               this.contractorContactInfo[index].gender_cd = this.contractorForm.controls.CONTACT['controls'].gender_cd.value;
               this.contractorContactInfo[index].title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue;
+                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value)?.viewValue;
               this.contractorContactInfo[index].phone_nbr = this.contractorForm.controls.CONTACT['controls'].phone_nbr.value;
               this.contractorContactInfo[index].cell_phone_nbr = this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value;
               this.contractorContactInfo[index].language_cd = this.contractorForm.controls.CONTACT['controls'].language_cd.value;
@@ -1044,7 +1047,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               contact_email: this.contractorForm.controls.CONTACT['controls'].contact_email.value,
               gender_cd: this.contractorForm.controls.CONTACT['controls'].gender_cd.value,
               title_cd: this.contractorForm.controls.CONTACT['controls'].title_cd.value ? this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value).viewValue : '',
+                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value)?.viewValue : '',
               phone_nbr: this.contractorForm.controls.CONTACT['controls'].phone_nbr.value,
               cell_phone_nbr: this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value,
               language_cd: this.contractorForm.controls.CONTACT['controls'].language_cd.value,
@@ -1107,6 +1110,14 @@ export class AddContractorComponent implements OnInit, OnDestroy {
                 )
                 .subscribe(
                   (res1) => {
+                    this.contractorContactInfo.filter(
+                      (contact) => {
+                        return contact._id !== Contact._id;
+                      }
+                    );
+                    this.contactList.next(this.contractorContactInfo.slice());
+                    console.log('contractorContactInfo', this.contractorContactInfo);
+                    console.log('contactList', this.contactList);
                     this.contractorService.getContractorsContact(
                       `?contractor_code=${atob(this.contractorFilter.cc)}&email_address=${atob(this.contractorFilter.ea)}`
                     );
@@ -1151,7 +1162,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.contractorForm.controls.CONTACT['controls'].gender_cd.setValue(row.gender_cd);
     this.contractorForm.controls.CONTACT['controls'].title_cd.setValue(
       this.refDataService.refData['PROF_TITLES'].find((type) =>
-      type.viewValue === row.title_cd).value);
+      type.viewValue === row.title_cd)?.value);
     this.contractorForm.controls.CONTACT['controls'].phone_nbr.setValue(row.phone_nbr);
     this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.setValue(row.cell_phone_nbr);
     this.contractorForm.controls.CONTACT['controls'].language_cd.setValue(row.language_cd);
