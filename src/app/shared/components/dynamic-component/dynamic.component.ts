@@ -28,7 +28,7 @@ export class DynamicComponent implements OnInit, OnDestroy {
    *************************************************************************/
   @Output() dynamicFormGroup = new EventEmitter<FormGroup>();
   @Output() selectedFile = new EventEmitter<FormData>();
-  @Output() selectedDoc = new EventEmitter<{ data: FormData, name: string }>();
+  @Output() selectedDoc = new EventEmitter<any>();
   @Output() keyUpEventValue = new EventEmitter<string>();
   @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string, formGroupName: string }>();
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any, formGroupName: string }>();
@@ -42,9 +42,11 @@ export class DynamicComponent implements OnInit, OnDestroy {
    * @description Menu Items List
    *************************************************************************/
   selectedItem = new Subject<string>();
-  selectedDocName: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+/*
+  selectedDocName: BehaviorSubject<{ name: string, formGroupName: string }> = new BehaviorSubject<{ name: string, formGroupName: string }>(null);
+*/
   valueOfSelectedItem = '';
-
+  attachmentList = [];
   randomSubParent: any;
 
   constructor(
@@ -143,16 +145,20 @@ export class DynamicComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description Open Dialog Panel
    *************************************************************************/
-  openUploadSheet() {
+  openUploadSheet(formGroupName: string) {
     this.sheetService.displaySheet('uploadSheetComponent', null)
       .pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(
         (res) => {
-          this.selectedDoc.emit({ data: res.file, name: res.name});
-          this.selectedDocName.next(res.name);
-          console.log('res', res);
+          if (!!res) {
+            this.attachmentList.push({ data: res?.file, name: res.name, formGroupName});
+            this.selectedDoc.emit(this.attachmentList);
+          }
+/*
+          this.selectedDocName.next({ name: res.name, formGroupName});
+*/
         }
       );
   }
@@ -187,6 +193,11 @@ export class DynamicComponent implements OnInit, OnDestroy {
   actionRowData(action: string, rowData: any, formGroupName: string) {
     this.rowActionData.emit({ actionType: action, data: rowData, formGroupName});
   }
+
+  getPlaceholder(formControlName: string) {
+
+  }
+
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
