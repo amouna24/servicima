@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="ELEMENT_DATA"
+  [tableCode]="'TIMESHEET'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Timesheet management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New '}"
+  [title]="'Timesheet list'"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="{ update: false, delete: false, show: true }"
+>
+</wid-dynamic-data-table>

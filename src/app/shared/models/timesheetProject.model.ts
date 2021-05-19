@@ -9,4 +9,5 @@ export interface ITimesheetProjectModel {
   end_date?: string;
   project_status?: string;
   comment?: string;
+  category_code?: string;
 }

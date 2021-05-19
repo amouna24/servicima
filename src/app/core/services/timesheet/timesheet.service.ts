@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
-import { ITimesheetTaskModel } from '@shared/models/timeshetTask.model';
 
 import { Observable } from 'rxjs';
 
@@ -59,15 +58,5 @@ export class TimesheetService {
    *************************************************************************/
   getTimesheetProject(filter: string): Observable<ITimesheetProjectModel[]> {
     return this.httpClient.get<ITimesheetProjectModel[]>(`${environment.timesheetProjectApiUrl}/${filter}`);
-  }
-
-  /*------------------------------------ TIMESHEET TASK --------------------------------------*/
-  /**************************************************************************
-   * @description Get TimesheetTask List
-   * @param filter search query like [ ?id=123 ]
-   * @returns All Timesheet Observable<ITimesheetModel[]>
-   *************************************************************************/
-  getTimesheetTask(filter: string): Observable<ITimesheetTaskModel[]> {
-    return this.httpClient.get<ITimesheetTaskModel[]>(`${environment.timesheetTaskApiUrl}/${filter}`);
   }
 }

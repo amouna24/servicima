@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { Router } from '@angular/router';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
+import { IUserInfo } from '@shared/models/userInfo.model';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -48,6 +50,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     private modalsServices: ModalService,
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
+    private userService: UserService,
   ) {
   }
 
@@ -198,7 +201,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   async getRefData() {
   this.refData =  await this.refDataServices.getRefData(
       this.utilService.getCompanyId(
-        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
+        this.userService.connectedUser$.getValue().user[0]['company_email'], this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
     false

@@ -71,6 +71,8 @@
 	"general.required":"Required field",
 	"general.nodata":"No data found",
 	"general.next":"Next",
+  "general.min":"minimum value is 0",
+  "general.max":"maximum value is 24",
 	"contact.create":"Create your contact company",
 	"contact.invalidnbr":"Invalid phone",
 	"contact.email":"Contact email",

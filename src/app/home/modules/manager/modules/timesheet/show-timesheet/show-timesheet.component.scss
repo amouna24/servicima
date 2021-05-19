@@ -1,0 +1,84 @@
+.profile-image {
+  border-radius: 50%;
+  position: relative;
+  .edit-img {
+    max-width: 100%;
+    min-width: 100%;
+    position: absolute;
+    max-height: 100%;
+    min-height: 100%;
+    top: 1px;
+
+    clip-path: circle(45% at 50% 49%);
+  }
+  .show-img {
+    width: 130px;
+    height: 105px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  }
+  .btn-action {
+    background: white;
+    right: 5%;
+    top: 5%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+    }
+  }
+  .btn-cancel {
+    right: 5%;
+    bottom: 1%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+
+    }
+  }
+  .btn-validate {
+    right: 86%;
+    bottom: 0%;
+    height: 24px;
+    width: 24px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 50%;
+    position: absolute;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+
+    .material-icons {
+      color: #b5b5c3 !important;
+      font-size: 0.75rem !important;
+      vertical-align: middle;
+
+    }
+  }
+}

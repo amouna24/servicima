@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
+import { CollaboraterComponent } from './collaborater.component';
 
 const routes: Routes = [
   {
     path: '',
-    // component: CollaboraterComponent,
-    component: TimesheetComponent,
+    component: CollaboraterComponent,
+    // component: TimesheetComponent,
     children: [
       {
         path: 'annual-interviews',

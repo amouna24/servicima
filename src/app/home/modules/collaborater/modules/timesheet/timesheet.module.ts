@@ -9,6 +9,7 @@ import { TimesheetsListComponent } from './timesheets-list/timesheets-list.compo
 import { ContractManagementModule } from '../../../manager/modules/contract-management/contract-management.module';
 import { AddTimesheetComponent } from './add-timesheet/add-timesheet.component';
 import { EmptyPageTimesheetComponent } from './empty-page-timesheet/empty-page-timesheet.component';
+import { DynamicDataTableModule } from '../../../../../shared/modules/dynamic-data-table/dynamic-data-table.module';
 @NgModule({
   declarations: [TimesheetComponent, TimesheetsListComponent, AddTimesheetComponent, EmptyPageTimesheetComponent],
   imports: [
@@ -16,6 +17,7 @@ import { EmptyPageTimesheetComponent } from './empty-page-timesheet/empty-page-t
     TimesheetRoutingModule,
     SharedModule,
     ContractManagementModule,
+    DynamicDataTableModule,
   ]
 })
 export class TimesheetModule { }

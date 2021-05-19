@@ -33,7 +33,6 @@ export class ProfileService {
     return this.httpClient
       .get<IUserModel[]>(`${environment.userApiUrl}?company_email=${companyEmail}`);
   }
-
   /**
    * @description: http request put to update the information of user
    * @param user: user

@@ -1,0 +1,123 @@
+<div fxLayout="column" class="full-height" *ngIf="hide">
+    <div fxLayout="row" fxFlex="25" class="bg-pale-grey-four">
+      <div fxLayout="column" fxLayoutAlign="end"  class="full-height" fxFlex="33">
+        <div fxLayout="row" fxFlex="60" class="full-width">
+          <div fxLayout="column" fxFlex="100" fxLayoutAlign="center center">
+            <div fxLayout="row" class="font-size-15">{{timesheet.first_name}}</div>
+            <div fxLayout="row" class="font-size-15">{{timesheet.last_name}}</div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="end"  class="full-height" fxFlex="33">
+        <div fxLayout="row" fxFlex="60" class="full-width">
+          <div class="profile-image" fxLayout="column" fxFlex="100" fxLayoutAlign="center center">
+              <img [src]="this.avatar" width="150" height="170" class="show-img"
+                   alt="user" />
+          </div>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex="34">
+        <div fxLayout="row" fxFlex="60" class="full-width">
+          <div fxLayout="column" fxFlex="80" fxLayoutAlign="center center">
+            <div fxLayout="row" class="full-width" fxLayoutAlign="end">
+              <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="onCloseClick()">
+                <mat-icon svgIcon="wi-close-normal"></mat-icon>
+              </button>
+            </div>
+            <div fxLayout="row" class="full-width font-size-15" fxLayoutAlign="end">{{timesheet.user_position}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="20">
+      <div fxLayout="column" fxLayoutAlign="end" class="full-height" fxFlex="50">
+        <div fxLayout="row" fxFlex="50" class="full-width" fxLayoutAlign="end">
+          <div fxLayout="column" fxFlex="90" fxLayoutAlign="space-around start">
+            <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
+              <div class="font-size-12" fxFlex="50">Week start on:</div>
+              <div class="font-size-12 steel" fxFlex="50">{{ timesheet.start_date | date: 'longDate' }}</div>
+            </div>
+            <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
+              <div class="font-size-12" fxFlex="50">Project:</div>
+              <div class="font-size-12 steel" fxFlex="50">{{ timesheet.project_desc }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="end" class="full-height" fxFlex="50">
+        <div fxLayout="row" fxFlex="50" class="full-width" fxLayoutAlign="end">
+          <div fxLayout="column" fxFlex="90" fxLayoutAlign="space-around start">
+            <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
+              <div class="font-size-12" fxFlex="50">Category:</div>
+              <div class="font-size-12 steel" fxFlex="50">{{ timesheet.category }}</div>
+            </div>
+            <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
+              <div class="font-size-12" fxFlex="50">Comment:</div>
+              <div class="font-size-12 steel" fxFlex="50">{{timesheet.comment}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--
+    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="12">
+      <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="space-around start">
+        <div fxLayout="row" class="full-width">
+          <div class="font-size-12" fxFlex="50">Comment:</div>
+          <div class="font-size-12 steel" fxFlex="50">{{timesheet.comment}}</div>
+        </div>
+      </div>
+    </div>
+-->
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40">
+      <div fxLayout="column" class="full-height" fxFlex="90" fxLayoutAlign="space-around">
+        <div fxLayout="row" fxFlex="25" class="full-width" fxLayoutAlign="space-between start">
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">MON:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.monday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">TUE:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.tuesday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">WED:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.wednesday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">THU:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.thursday}}</div>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="25" class="full-width" fxLayoutAlign="space-between start">
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">FRI:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.friday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">SAT:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.saturday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">SUN:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.sunday}}</div>
+          </div>
+          <div fxLayout="column" fxFlex="22" fxLayoutAlign="space-around center" class="bg-pale-grey-four border-radius-10 full-height">
+            <div fxLayout="row" class="font-size-12">TOTAL:</div>
+            <div fxLayout="row" class="font-size-12 steel">{{timesheet.total_week_hours}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" fxFlex="15">
+      <button type="submit" mat-raised-button (click)="rejectTimesheet()" class="white btn-medium bg-error-red">
+        <span class="font-size-11" >Reject</span>
+      </button>
+      <button type="submit" mat-raised-button (click)="approveTimesheet()" class="white btn-medium duck-egg-blue" >
+        <span class="font-size-11 cerulean-blue">Approve</span>
+      </button>
+    </div>
+  </div>

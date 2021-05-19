@@ -1,6 +1,37 @@
 import { IMenu } from '../models/side-nav-menu/side-nav-menu.model';
 
 export const managerMenu: IMenu[] = [
+
+    {
+    state: 'timesheet',
+    name: 'timesheet',
+    type: 'sub',
+    icon: 'wi_timesheet',
+    feature: 'CONTRACT_ACCESS',
+    children: [
+      {
+        state: '',
+        name: 'Pending',
+        icon: '',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: '',
+        name: 'Rejected',
+        icon: '',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: '',
+        name: 'Approved',
+        icon: '',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+    ]
+  },
     {
         state: 'dashboard',
         name: 'dashboard',
