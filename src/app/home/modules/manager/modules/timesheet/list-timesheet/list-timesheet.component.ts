@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserModel } from '@shared/models/user.model';
@@ -13,6 +13,7 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
 import { ModalService } from '@core/services/modal/modal.service';
+import { takeUntil } from 'rxjs/operators';
 
 import { ShowTimesheetComponent } from '../show-timesheet/show-timesheet.component';
 import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.component';
@@ -22,7 +23,7 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
   templateUrl: './list-timesheet.component.html',
   styleUrls: ['./list-timesheet.component.scss']
 })
-export class ListTimesheetComponent implements OnInit {
+export class ListTimesheetComponent implements OnInit, OnDestroy {
 
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
@@ -37,6 +38,12 @@ export class ListTimesheetComponent implements OnInit {
   refData: { } = { };
   collaboratorArray: IUserModel[] = [];
   categoryList: IViewParam[];
+  searchCriteria: string;
+
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private location: Location,
@@ -48,9 +55,23 @@ export class ListTimesheetComponent implements OnInit {
     private refDataService: RefdataService,
     private utilService: UtilsService,
     private modalsServices: ModalService,
+    private route: ActivatedRoute,
   ) { }
 
   async ngOnInit() {
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(params => {
+        if (!!params.timesheet_status) {
+          this.searchCriteria = params.timesheet_status;
+          this.getAllTimesheet();
+        } else {
+          this.searchCriteria = '';
+          this.getAllTimesheet();
+        }
+      });
     this.modalsServices.registerModals(
       { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
     this.modalsServices.registerModals(
@@ -115,7 +136,7 @@ export class ListTimesheetComponent implements OnInit {
     this.categoryList = data['TIMESHEET_PROJECT_CATEGORY'];
     this.timesheetService
       // tslint:disable-next-line:max-line-length
-        .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.pending}&timesheet_status=${ this.rejected }&timesheet_status=${this.approved}&inclusive=true`)
+        .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`)
         .subscribe((res) => {
           res.map( (result) => {
             // tslint:disable-next-line:no-shadowed-variable
@@ -206,6 +227,15 @@ export class ListTimesheetComponent implements OnInit {
         break;
       case('delete'): this.onChangeStatus(rowAction.data);
     }
+  }
+
+  /**************************************************************************
+   * @description Destroy All subscriptions declared with takeUntil operator
+   *************************************************************************/
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 
 }

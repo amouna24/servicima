@@ -9,6 +9,8 @@ import {
   Router
 } from '@angular/router';
 
+import { UserService } from '../user/user.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +20,7 @@ export class SpinnerService {
 
   constructor(
     private router: Router,
+    private userService: UserService,
   ) {
     this.router.events.subscribe(
       (event) => {
@@ -28,7 +31,12 @@ export class SpinnerService {
           event instanceof NavigationCancel ||
           event instanceof NavigationError
         ) {
-          this.isLoadingSubject.next(event.url === '/');
+          if (this.userService.refresh === undefined && !router.url.startsWith('/auth')) {
+            this.isLoadingSubject.next(true);
+          } else {
+            this.isLoadingSubject.next(false);
+          }
+
         }
       },
       () => {

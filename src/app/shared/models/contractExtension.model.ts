@@ -9,4 +9,5 @@ export interface IContractExtension {
   extension_status?: string;
   extension_rate: string;
   extension_currency_cd?: string;
+  attachments?: string;
 }
