@@ -25,7 +25,7 @@ export class AddTimesheetComponent implements OnInit {
   close = true;
   initialForm: FormGroup;
   listTimesheetProject: ITimesheetProjectModel[] = [];
-  totalWeek = 0;
+  totalWeek: number;
   userInfo: IUserInfo;
   companyEmail: string;
   refData: { } = { };
@@ -49,7 +49,8 @@ export class AddTimesheetComponent implements OnInit {
                private utilService: UtilsService,
                private location: Location,
                private router: Router,
-               private modalServices: ModalService) {
+               private modalServices: ModalService,
+               ) {
   }
 
   async ngOnInit() {
@@ -164,12 +165,9 @@ export class AddTimesheetComponent implements OnInit {
       customer_timesheet: this.timesheet.customer_timesheet,
     });
     this.projectCode = this.timesheet.TimeSheetKey.project_code;
-    // console.log('this.projectCode', this.projectCode);
     this.timesheetService.getTimesheetProject(`?project_code=${this.projectCode}`).subscribe(
       data => {
-        // console.log(data);
         this.projectName = data[0].project_desc;
-        // console.log('projectName', this.projectName);
         this.initialForm.patchValue({ project_code : this.projectName });
         this.categoryViewValue = data[0].category_code;
       },
@@ -195,13 +193,17 @@ export class AddTimesheetComponent implements OnInit {
       this.initialForm.patchValue({ timesheet_week: this.initialForm.value.start_date});
       this.initialForm.patchValue({ project_code: this.projectCode});
       this.initialForm.patchValue({ end_date: moment(this.initialForm.value.start_date).add(7, 'day').format('LL')});
-      console.log('test', this.initialForm.value);
-      this.timesheetService.addTimesheet(this.initialForm.value).subscribe(
+
+      this.timesheetService
+          .addTimesheet(this.initialForm.value)
+          .subscribe(
         data => {
           console.log(data);
           this.router.navigate(['/collaborator/timesheet']);
         },
-        error => console.log(error)
+        error => {
+          console.log(error);
+        }
       );
     }
   }
@@ -218,7 +220,6 @@ export class AddTimesheetComponent implements OnInit {
       this.timesheet.saturday = this.initialForm.value.saturday;
       this.timesheet.sunday = this.initialForm.value.sunday;
       this.timesheet.total_week_hours = this.initialForm.value.total_week_hours;
-
       this.timesheetService.updateTimesheet(this.timesheet).subscribe(
         data => {
           console.log(data);
@@ -264,13 +265,14 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   calculTotalWeekHours() {
-    const mondayValue = this.initialForm?.value?.monday;
-    const tuesdayValue = this.initialForm?.value?.tuesday;
-    const wednesdayValue = this.initialForm?.value?.wednesday;
-    const thursdayValue = this.initialForm?.value?.thursday;
-    const fridayValue = this.initialForm?.value?.friday;
-    const saturdayValue = this.initialForm?.value?.saturday;
-    const sundayValue = this.initialForm?.value?.sunday;
+    this.totalWeek = 0;
+    const mondayValue = parseInt(this.initialForm?.value?.monday ? this.initialForm?.value?.monday : 0, 10);
+    const tuesdayValue = parseInt(this.initialForm?.value?.tuesday ? this.initialForm?.value?.tuesday : 0, 10);
+    const wednesdayValue = parseInt(this.initialForm?.value?.wednesday ? this.initialForm?.value?.wednesday : 0, 10);
+    const thursdayValue = parseInt(this.initialForm?.value?.thursday ? this.initialForm?.value?.thursday : 0, 10);
+    const fridayValue = parseInt(this.initialForm?.value?.friday ? this.initialForm?.value?.friday : 0, 10);
+    const saturdayValue = parseInt(this.initialForm?.value?.saturday ? this.initialForm?.value?.saturday : 0, 10);
+    const sundayValue = parseInt(this.initialForm?.value?.sunday ? this.initialForm?.value?.sunday : 0, 10);
 
     this.totalWeek =  mondayValue + tuesdayValue + wednesdayValue + thursdayValue + fridayValue + saturdayValue + sundayValue;
     this.initialForm.controls['total_week_hours'].setValue(this.totalWeek);
@@ -281,6 +283,10 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   resetClick() {
+    this.initialForm.get('start_date').setValue(null);
+    this.initialForm.get('project_code').setValue(null);
+    this.initialForm.get('comment').setValue(null);
+
     this.initialForm.get('monday').setValue(0);
     this.initialForm.get('tuesday').setValue(0);
     this.initialForm.get('wednesday').setValue(0);
@@ -288,15 +294,17 @@ export class AddTimesheetComponent implements OnInit {
     this.initialForm.get('friday').setValue(0);
     this.initialForm.get('saturday').setValue(0);
     this.initialForm.get('sunday').setValue(0);
+    this.initialForm.get('total_week_hours').setValue(0);
   }
 
   refresh(data) {
     this.timesheetService
-      // tslint:disable-next-line:max-line-length
-        .getTimesheet(`?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`)
+        .getTimesheet(
+          `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`
+        )
         .subscribe((items) => {
         this.listTimesheet = items;
-        console.log('timesheet of refresh', this.listTimesheet);
-      });
+        console.log('timesheet of refresh', this.listTimesheet); });
   }
+
 }

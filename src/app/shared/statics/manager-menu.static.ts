@@ -17,14 +17,14 @@ export const managerMenu: IMenu[] = [
         type: 'link',
       },
       {
-        state: '',
+        state: 'rejected',
         name: 'Rejected',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
       {
-        state: '',
+        state: 'approved',
         name: 'Approved',
         icon: '',
         feature: 'CONTRACT_ACCESS',

@@ -15,6 +15,7 @@ import { IViewParam } from '@shared/models/view.model';
 import { ModalService } from '@core/services/modal/modal.service';
 
 import { ShowTimesheetComponent } from '../show-timesheet/show-timesheet.component';
+import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.component';
 
 @Component({
   selector: 'wid-list-timesheet',
@@ -26,6 +27,8 @@ export class ListTimesheetComponent implements OnInit {
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   companyEmail: string;
+  title_id: string;
+  job_title: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
   pending = 'Pending';
@@ -50,10 +53,13 @@ export class ListTimesheetComponent implements OnInit {
   async ngOnInit() {
     this.modalsServices.registerModals(
       { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
+    this.modalsServices.registerModals(
+      { modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.isLoading.next(true);
     this.getUserInfo();
     this.getAllCollaborators();
     await this.getAllTimesheet();
+
   }
 
   /**
@@ -71,8 +77,13 @@ export class ListTimesheetComponent implements OnInit {
       (data) => {
         if (!!data) {
           this.userInfo = data;
-          // console.log('user info:', data);
+          console.log('user', this.userInfo);
           this.companyEmail = data.user[0]['company_email'];
+          this.title_id = data.user[0]['title_id'];
+          console.log('title id', this.title_id);
+          console.log('refData', this.refDataService.refData['PROF_TITLES']);
+          // this.job_title = this.utilService.getViewValue(this.title_id, this.refDataService.refData['PROF_TITLES']);
+          console.log('job', this.job_title);
         }
       });
   }
@@ -81,18 +92,19 @@ export class ListTimesheetComponent implements OnInit {
    * @description : get all collaborators
    */
   getAllCollaborators() {
-    this.profileService.getAllUser(this.companyEmail)
+    this.profileService
+        .getAllUser(this.companyEmail)
         .subscribe((res) => {
           this.collaboratorArray = res.filter(value => value.user_type === 'COLLABORATOR');
-          // console.log('getAllCollaborators', this.collaboratorArray);
         });
   }
 
   async getRefdata() {
-    const list = ['TIMESHEET_STATE', 'TIMESHEET_PROJECT_CATEGORY'];
+    const list = ['TIMESHEET_STATE', 'TIMESHEET_PROJECT_CATEGORY', 'PROF_TITLES'];
     this.refData =  await this.refDataService
       .getRefData( this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId, list, false);
     return this.refData;
+    console.log('refdata', this.refData);
   }
 
   /**
@@ -106,10 +118,8 @@ export class ListTimesheetComponent implements OnInit {
         .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.pending}&timesheet_status=${ this.rejected }&timesheet_status=${this.approved}&inclusive=true`)
         .subscribe((res) => {
           res.map( (result) => {
-            console.log('result', result);
             // tslint:disable-next-line:no-shadowed-variable
             this.collaboratorArray.forEach(async ( data) => {
-              console.log('photo', data.photo);
               result['profile'] = data.first_name + ' ' + data.last_name;
               result['first_name'] = data.first_name;
               result['last_name'] = data.last_name;
@@ -136,10 +146,29 @@ export class ListTimesheetComponent implements OnInit {
    * @param data: object
    */
   showUser(data: ITimesheetModel) {
-    // console.log('data', data);
-    this.modalsServices.displayModal('showTimesheet', data, '400px', '600px').subscribe((res) => {
-      console.log('tt', res);
-    });
+    this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
+      .subscribe(
+        (res) => {
+          if (res === 'reject') {
+            this.modalsServices.displayModal('rejectTimesheet', data, '600px', '350px')
+                .subscribe((result) => {
+                  if (result === 'reject') {
+                    this.getAllTimesheet();
+                  }
+                });
+
+          } else if (res === 'approve') {
+            this.modalsServices.displayModal('rejectTimesheet', { timesheet: data , value: 'Approved' }, '600px', '350px')
+                .subscribe((result) => {
+                  if (result === 'approve') {
+                    this.getAllTimesheet();
+                  }
+                });
+          }},
+    error => {
+          console.log(error);
+        }
+      );
   }
 
   /**

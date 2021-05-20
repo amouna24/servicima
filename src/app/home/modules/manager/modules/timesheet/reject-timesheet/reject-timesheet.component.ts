@@ -77,8 +77,8 @@ export class RejectTimesheetComponent implements OnInit {
 
     this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
       data => { console.log(data);
-        this.refresh(this.data);
-        this.onCloseClick(); },
+        this.dialogRef.close('reject');
+        },
       error => console.log(error)
     );
   }
@@ -110,14 +110,13 @@ export class RejectTimesheetComponent implements OnInit {
     this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
       data => {
         console.log(data);
-        this.onCloseClick();
-        this.refresh(this.data);
+        this.dialogRef.close('approve');
         },
       error => console.log(error)
     );
   }
 
-  refresh(data) {
+  refresh() {
     this.timesheetService
       // tslint:disable-next-line:max-line-length
       .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.pending}&timesheet_status=${ this.rejected }&timesheet_status=${this.approved}&inclusive=true`)

@@ -84,11 +84,10 @@ export class TimesheetsListComponent implements OnInit {
   showTimesheet(data: ITimesheetModel) { }
 
   /**
-   * @description : update user
+   * @description : update timesheet
    * @param data: object
    */
   updateTimesheet(data) {
-    console.log('updatedata', data);
     this.router.navigate(
       ['/collaborator/timesheet/add-timesheet'],
          { state: { data, buttonClicked: 'edit' }

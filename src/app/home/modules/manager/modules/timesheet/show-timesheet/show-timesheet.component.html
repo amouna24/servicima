@@ -1,4 +1,4 @@
-<div fxLayout="column" class="full-height" *ngIf="hide">
+<div fxLayout="column" class="full-height">
     <div fxLayout="row" fxFlex="25" class="bg-pale-grey-four">
       <div fxLayout="column" fxLayoutAlign="end"  class="full-height" fxFlex="33">
         <div fxLayout="row" fxFlex="60" class="full-width">
@@ -11,8 +11,7 @@
       <div fxLayout="column" fxLayoutAlign="end"  class="full-height" fxFlex="33">
         <div fxLayout="row" fxFlex="60" class="full-width">
           <div class="profile-image" fxLayout="column" fxFlex="100" fxLayoutAlign="center center">
-              <img [src]="this.avatar" width="150" height="170" class="show-img"
-                   alt="user" />
+              <img [src]="this.avatar" width="150" height="170" class="show-img" alt="user" />
           </div>
         </div>
       </div>
@@ -60,16 +59,6 @@
         </div>
       </div>
     </div>
-<!--
-    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="12">
-      <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="space-around start">
-        <div fxLayout="row" class="full-width">
-          <div class="font-size-12" fxFlex="50">Comment:</div>
-          <div class="font-size-12 steel" fxFlex="50">{{timesheet.comment}}</div>
-        </div>
-      </div>
-    </div>
--->
 
     <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40">
       <div fxLayout="column" class="full-height" fxFlex="90" fxLayoutAlign="space-around">
@@ -113,7 +102,7 @@
     </div>
 
     <div fxLayout="row" fxLayoutAlign="space-evenly center" fxFlex="15">
-      <button type="submit" mat-raised-button (click)="rejectTimesheet()" class="white btn-medium bg-error-red">
+      <button type="submit" mat-raised-button (click)="rejectTimesheet()"  class="white btn-medium bg-error-red">
         <span class="font-size-11" >Reject</span>
       </button>
       <button type="submit" mat-raised-button (click)="approveTimesheet()" class="white btn-medium duck-egg-blue" >
