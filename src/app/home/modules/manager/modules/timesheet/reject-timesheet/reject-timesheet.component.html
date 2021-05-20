@@ -1,5 +1,6 @@
 <ng-container *ngIf="openApproveComponent.getValue().value === 'Approved'; else rejected">
   <div fxLayout="column" class="full-height">
+    <!-- Close approve pop-up -->
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end">
       <div fxLayout="column" fxFlex="20" fxLayoutAlign="center center">
         <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="onCloseClick()">
@@ -7,12 +8,15 @@
         </button>
       </div>
     </div>
+
     <div fxLayout="row" fxFlex="10">
       <div fxLayout="column" fxLayoutAlign="center center" fxFlex="45" class="font-size-17 full-height steel">Approve timesheet</div>
     </div>
     <div fxLayout="row" fxLayoutAlign="center" fxFlex="50">
       <div fxLayout="column" fxLayoutAlign="center center" fxFlex="71" class="font-size-17 full-height">Are you sure you want to approve this timesheet !</div>
     </div>
+
+    <!--    Approve + Cancel buttons-->
     <div fxLayout="row" fxLayoutAlign="center" fxFlex="20">
       <div fxLayout="column" fxFlex="40">
         <div fxLayout="row" fxLayoutAlign="space-between" class="full-width">
@@ -27,9 +31,10 @@
     </div>
   </div>
 </ng-container>
+
 <ng-template #rejected>
   <div fxLayout="column" class="full-height">
-    <!-- Close button -->
+    <!-- Close reject pop-up -->
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="end">
       <div fxLayout="column" fxFlex="20" fxLayoutAlign="center center">
         <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="onCloseClick()">

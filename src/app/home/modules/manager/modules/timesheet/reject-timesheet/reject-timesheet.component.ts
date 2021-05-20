@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { Router } from '@angular/router';
 import { IUserInfo } from '@shared/models/userInfo.model';
 
@@ -17,13 +16,8 @@ export class RejectTimesheetComponent implements OnInit {
   timesheetToUpdate: any;
   approvedButton: string;
   companyEmail: string;
-  pending = 'Pending';
-  rejected = 'Rejected';
-  approved = 'Approved';
-  listTimesheet: ITimesheetModel[];
   subscriptions: Subscription;
   userInfo: IUserInfo;
-  ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   openApproveComponent = new BehaviorSubject<{ opened: boolean, value: string}>({ opened: false, value: this.approvedButton});
 
   constructor(
@@ -52,8 +46,17 @@ export class RejectTimesheetComponent implements OnInit {
       });
   }
 
+  /**
+   * @description : get comment value
+   */
+  getComment(event: any) {
+    this.commentManager = event.target.value;
+  }
+
+  /**
+   * @description : reject timesheet
+   */
   rejectTimesheet() {
-    // console.log('this.data.timesheet', this.data.timesheet);
     this.timesheetToUpdate = {
       application_id : this.data.TimeSheetKey.application_id,
       email_address : this.data.email_address,
@@ -83,8 +86,10 @@ export class RejectTimesheetComponent implements OnInit {
     );
   }
 
+  /**
+   * @description : approve timesheet
+   */
   approveTimesheet() {
-    // console.log('this.data.timesheet', this.data.timesheet);
     this.timesheetToUpdate = {
       application_id : this.data.timesheet.TimeSheetKey.application_id,
       email_address : this.data.timesheet.email_address,
@@ -106,7 +111,6 @@ export class RejectTimesheetComponent implements OnInit {
       customer_timesheet : this.data.timesheet.customer_timesheet
     };
 
-    // console.log('this.timesheetToUpdate', this.timesheetToUpdate);
     this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
       data => {
         console.log(data);
@@ -116,23 +120,11 @@ export class RejectTimesheetComponent implements OnInit {
     );
   }
 
-  refresh() {
-    this.timesheetService
-      // tslint:disable-next-line:max-line-length
-      .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.pending}&timesheet_status=${ this.rejected }&timesheet_status=${this.approved}&inclusive=true`)
-      .subscribe((items) => {
-        this.listTimesheet = items;
-        this.ELEMENT_DATA.next(items);
-        console.log(items, 'dh');
-      });
-  }
-
+  /**
+   * @description : close pop-up
+   */
   onCloseClick(): void {
-    this.dialogRef.close(this.listTimesheet);
+    this.dialogRef.close();
   }
 
-  getComment(event: any) {
-    this.commentManager = event.target.value;
-    // console.log(this.commentManager);
-  }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
@@ -24,7 +24,6 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
   styleUrls: ['./list-timesheet.component.scss']
 })
 export class ListTimesheetComponent implements OnInit, OnDestroy {
-
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   companyEmail: string;
@@ -39,6 +38,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   collaboratorArray: IUserModel[] = [];
   categoryList: IViewParam[];
   searchCriteria: string;
+  refdata: any;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -59,6 +59,15 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
+    this.getUserInfo();
+   this.refdata =  await this.getRefdata();
+    this.modalsServices.registerModals(
+      { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
+    this.modalsServices.registerModals(
+      { modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
+    this.isLoading.next(true);
+    this.getAllCollaborators();
+    await this.getAllTimesheet();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
@@ -72,15 +81,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
           this.getAllTimesheet();
         }
       });
-    this.modalsServices.registerModals(
-      { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
-    this.modalsServices.registerModals(
-      { modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
-    this.isLoading.next(true);
-    this.getUserInfo();
-    this.getAllCollaborators();
-    await this.getAllTimesheet();
-
   }
 
   /**
@@ -98,13 +98,12 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
       (data) => {
         if (!!data) {
           this.userInfo = data;
-          console.log('user', this.userInfo);
           this.companyEmail = data.user[0]['company_email'];
-          this.title_id = data.user[0]['title_id'];
+          /*this.title_id = data.user[0]['title_id'];
           console.log('title id', this.title_id);
           console.log('refData', this.refDataService.refData['PROF_TITLES']);
           // this.job_title = this.utilService.getViewValue(this.title_id, this.refDataService.refData['PROF_TITLES']);
-          console.log('job', this.job_title);
+          console.log('job', this.job_title);*/
         }
       });
   }
@@ -120,24 +119,29 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
         });
   }
 
+  /**
+   * @description : get ref data
+   */
   async getRefdata() {
     const list = ['TIMESHEET_STATE', 'TIMESHEET_PROJECT_CATEGORY', 'PROF_TITLES'];
     this.refData =  await this.refDataService
-      .getRefData( this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId, list, false);
-    return this.refData;
+        .getRefData(this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId, list, false);
+
     console.log('refdata', this.refData);
+    return this.refData;
   }
 
   /**
    * @description : get all timesheet
    */
   async getAllTimesheet() {
-    const data = await this.getRefdata();
-    this.categoryList = data['TIMESHEET_PROJECT_CATEGORY'];
+    this.categoryList = this.refdata['TIMESHEET_PROJECT_CATEGORY'];
     this.timesheetService
-      // tslint:disable-next-line:max-line-length
-        .getTimesheet(`?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`)
+        .getTimesheet(
+          `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`
+        )
         .subscribe((res) => {
+          if (res['msg_code'] !== '0004') {
           res.map( (result) => {
             // tslint:disable-next-line:no-shadowed-variable
             this.collaboratorArray.forEach(async ( data) => {
@@ -150,15 +154,17 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
                                    .subscribe(async (item) => {
                                      this.categoryList.forEach(
                                        (category) => {
-                                       if (category.value === item[0].category_code) {
-                                         result['category'] = category.viewValue;
-                                       } });
+                                         if (category.value === item[0].category_code) {
+                                           result['category'] = category.viewValue;
+                                         }
+                                       });
                                      result['project_desc'] =  item[0].project_desc;
                                    });
             });
           });
         this.ELEMENT_DATA.next(res);
         this.isLoading.next(false);
+          }
       });
   }
 
@@ -166,7 +172,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @description : show timesheet
    * @param data: object
    */
-  showUser(data: ITimesheetModel) {
+  showTimesheet(data: ITimesheetModel) {
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
       .subscribe(
         (res) => {
@@ -196,10 +202,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @description : update user
    * @param data: object
    */
-  updateUser(data) {
-    /*this.router.navigate(['/manager/settings/users/update-user'],
-      { state: { id: data._id }
-      });*/
+  updateTimesheet(data) {
   }
 
   /**
@@ -221,9 +224,9 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    */
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'): this.showUser(rowAction.data);
+      case ('show'): this.showTimesheet(rowAction.data);
         break;
-      case ('update'): this.updateUser(rowAction.data);
+      case ('update'): this.updateTimesheet(rowAction.data);
         break;
       case('delete'): this.onChangeStatus(rowAction.data);
     }

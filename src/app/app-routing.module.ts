@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthModule } from '@widigital-group/auth-npm-front';
-import { UserService } from '@core/services/user/user.service';
 
 // import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -39,7 +38,7 @@ const routes: Routes = [
 @NgModule({
     imports: [
       RouterModule.forRoot(routes),
-      AuthModule.forRoot(environment, UserService)
+      AuthModule.forRoot(environment)
     ],
     exports: [RouterModule]
 })
