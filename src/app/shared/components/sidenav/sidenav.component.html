@@ -46,6 +46,7 @@
                 <ng-container *ngIf=" subMenuItem.type === 'link'; else accordion">
                   <a mat-list-item routerLinkActive="active-list-item"
                      [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
+                     [queryParams]="subMenuItem?.queryParams"
                      [routerLinkActiveOptions]="{exact: true}" class="list-item" [@iconAnimation]="sidebarState">
                     <mat-icon class="icon material-icons-outlined" svgIcon="{{ subMenuItem.icon }}">
                     </mat-icon>
