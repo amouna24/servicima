@@ -31,16 +31,16 @@
                         </mat-label>
                         <mat-form-field appearance="outline" class="full-width">
                           <input    formControlName="init_name" matInput placeholder="Name" required>
-                          <mat-error class="red" *ngIf="isControlHasError(CreationForm,'init_name', 'required')">
+                          <mat-error class="red" *ngIf="CreationForm.invalid">
                             Please fill out this field</mat-error>
                         </mat-form-field></div>
-                      <div fxlayout="row" fxFlex class="full-width" >
+                      <div  class="full-width" >
                         <mat-label class="black font-size-12 required">
                           Actual job:
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input    formControlName="actual_job" matInput placeholder="Actual job" required>
-                          <mat-error class="red" *ngIf="isControlHasError(CreationForm,'actual_job', 'required')">
+                          <mat-error class="red" *ngIf="CreationForm.invalid">
                             Please fill out this field</mat-error>
                         </mat-form-field></div>
                       <div class="full-width">
@@ -54,7 +54,7 @@
                             <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
                           </ng-container>
                         </mat-select>
-                        <mat-error class="red" *ngIf="isControlHasError(CreationForm,'language_id', 'required')">
+                        <mat-error class="red" *ngIf="CreationForm.invalid">
                           Please select an item in the list</mat-error>
                       </mat-form-field>
                       </div>

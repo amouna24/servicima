@@ -51,8 +51,9 @@ export class ResumeLanguageComponent implements OnInit {
   showLevelError = false;
   langListRes: IViewParam[] = [];
   subscriptionModal: Subscription;
-  icon_close = '../../assets/icons/close.svg';
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   async ngOnInit() {
     this.getConnectedUser();
     this.createForm();
@@ -69,11 +70,17 @@ export class ResumeLanguageComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/close.svg')
     );
   }
+  /**************************************************************************
+   * @description set Language RefData in a language List
+   *************************************************************************/
   async getLanguageRefData() {
     const data = await this.getRefdata();
     this.langList = data['LANGUAGE'];
     console.log(this.langList);
   }
+  /**************************************************************************
+   * @description Get Languages from Ref Data
+   *************************************************************************/
   async getRefdata() {
     const list = ['LANGUAGE'];
     this.refData =  await this.refdataService
@@ -81,6 +88,9 @@ export class ResumeLanguageComponent implements OnInit {
         list, false);
     return this.refData;
   }
+  /**************************************************************************
+   * @description get Email address from Connected User
+   *************************************************************************/
   getConnectedUser() {
     this.userService.connectedUser$
       .subscribe(
@@ -100,11 +110,13 @@ export class ResumeLanguageComponent implements OnInit {
     const i = 0;
     if (i >= index ) {
       return 'star';
-
     } else {
       return 'star_border';
     }
   }
+  /**************************************************************************
+   * @description Select Level by clicking on the stars
+   *************************************************************************/
   showIconDisabled(level: number, index: number) {
     if (level >= index + 1) {
       return 'star';
@@ -112,7 +124,6 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
-
   showIcon(index: number) {
     if (this.rating >= index + 1) {
       return 'star';
@@ -120,9 +131,8 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
-
   /**
-   * @description Create Form
+   * @description initialize a Language Form
    */
   createForm() {
     this.sendLanguage = this.fb.group({
@@ -130,7 +140,7 @@ export class ResumeLanguageComponent implements OnInit {
         });
   }
   /**
-   * @description Create Language
+   * @description Create new Language
    */
   createLanguage() {
     this.language = this.sendLanguage.value;
@@ -150,7 +160,9 @@ export class ResumeLanguageComponent implements OnInit {
     this.sendLanguage.reset();
     this.rating = 0;
   }
-
+  /**************************************************************************
+   * @description  Update a language by clicking on the stars
+   *************************************************************************/
   updateLanguage(rating: number, pointIndex: number, resume_language_code: string, _id: string, ResumeLanguageKey: IResumeLanguageKeyModel) {
     this.ratingEdit[pointIndex] = rating;
     this.languageUpdate = ({
@@ -163,6 +175,9 @@ export class ResumeLanguageComponent implements OnInit {
     this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
     return false;
   }
+  /**************************************************************************
+   * @description Get Language Data from Resume Service
+   *************************************************************************/
   getLanguageInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -205,6 +220,9 @@ export class ResumeLanguageComponent implements OnInit {
       );
 
   }
+  /**************************************************************************
+   * @description Test the Controls of the Form with a validation type
+   *************************************************************************/
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
@@ -212,7 +230,9 @@ export class ResumeLanguageComponent implements OnInit {
     }
     return control.hasError(validationType) ;
   }
-
+  /**************************************************************************
+   * @description Delete Selected Languages
+   *************************************************************************/
  deleteLanguage(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
@@ -237,6 +257,9 @@ export class ResumeLanguageComponent implements OnInit {
         }
       );
   }
+  /**************************************************************************
+   * @description test if there is an empty field , enable button add if all fields are not empty
+   *************************************************************************/
   testRequired() {
     return (this.sendLanguage.invalid) ;
   }

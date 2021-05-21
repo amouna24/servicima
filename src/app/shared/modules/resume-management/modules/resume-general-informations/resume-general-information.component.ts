@@ -6,7 +6,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { ITheme } from '@shared/models/theme.model';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -28,7 +28,6 @@ import { map } from 'rxjs/internal/operators/map';
   styleUrls: ['./resume-general-information.component.scss']
 })
 export class ResumeGeneralInformationComponent implements OnInit {
-
   CreationForm: FormGroup;
   user: IUserModel;
   avatar: any;
@@ -39,14 +38,12 @@ export class ResumeGeneralInformationComponent implements OnInit {
   lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
   company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
   langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-
-  /**************************************************************************
-   * @description Variable used to destroy all subscriptions
-   *************************************************************************/
+  isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
   showYears = false;
   update = false;
+  private showNumberError = false ;
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -60,7 +57,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private appInitializerService: AppInitializerService,
   ) {
   }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   async ngOnInit() {
     this.initForm();
     this.langList.next(this.appInitializerService.languageList.map(
@@ -87,13 +86,15 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
     );
   }
-
+  /**************************************************************************
+   * @description : Show or Hide The input of Years of experience
+   *************************************************************************/
   showHideYears() {
     this.showYears = !this.showYears;
   }
 
   /**
-   *  @description Resume
+   *  @description Resume Resume Data from Resume Service
    */
   async getResume() {
     await this.resumeService.getResume(
@@ -104,13 +105,15 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (generalInfo['msg_code'] !== '0004') {
             if (!!generalInfo) {
             this.updateForm(generalInfo);
+            this.showYears = !this.showYears;
           }
-          console.log('generalInfo', generalInfo);
           this.update = true;
         }}
       );
   }
-
+  /**************************************************************************
+   * @description set Existing data in the Resume Data
+   *************************************************************************/
   updateForm(generalInformation) {
     this.CreationForm.patchValue({
       init_name: generalInformation[0].init_name,
@@ -122,9 +125,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
     });
     this.showHideYears();
   }
-
   /**
-   * @description Create Form
+   * @description Initialization of Resume Form
    */
   initForm() {
     this.CreationForm = this.fb.group({
@@ -132,39 +134,42 @@ export class ResumeGeneralInformationComponent implements OnInit {
       email_address: this.localStorageService.getItem('userCredentials').email_address,
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
-      language_id: '',
+      language_id: ['', Validators['required']],
       years_of_experience: null,
-      actual_job: '',
-      image: this.haveImage,
-      init_name: '',
+      actual_job: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      image: this.avatar,
+      init_name: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
       status: 'A'
     });
   }
-
   /**
-   * @description Create Resume
+   * @description Create Or Update Resume
    */
   createUpdateResume() {
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.haveImage;
-    if (this.CreationForm.valid) {
-      console.log(this.CreationForm.value);
+    this.testNumber(this.generalInfo.actual_job);
+    this.testNumber(this.generalInfo.init_name);
+    if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
-        console.log('form created', data);
         this.router.navigate(['/candidate/resume/professionalExperience']);
       });
       } else {
-      console.log('Form is not valid');
     } } else {
       this.generalInfo = this.CreationForm.value;
-      console.log('general info update =', this.generalInfo);
-      this.resumeService.updateResume(this.generalInfo).subscribe(data => {
+      this.testNumber(this.generalInfo.actual_job);
+      this.testNumber(this.generalInfo.init_name);
+      if (this.CreationForm.valid && !this.showNumberError) {
+        this.resumeService.updateResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);
-      console.log('form created', data); });
+       }); }
     }
+    this.showNumberError = false;
   }
-
+  /**************************************************************************
+   * @description Test the Controls of the Form with a validation type
+   *************************************************************************/
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
@@ -172,6 +177,17 @@ export class ResumeGeneralInformationComponent implements OnInit {
     }
     return control.hasError(validationType);
   }
+  /**************************************************************************
+   * @description test if a control has numbers only
+   *************************************************************************/
+  testNumber(pos: string) {
+    if (this.showNumberError === false) {
+      this.showNumberError = !isNaN(+pos);
+    }
+  }
+  /**************************************************************************
+   * @description test if there is an empty field , enable button add if all fields are not empty
+   *************************************************************************/
   testRequired() {
     return (this.CreationForm.controls.init_name.value === '') || (this.CreationForm.controls.language_id.value === '')
       || (this.CreationForm.controls.actual_job.value === '') ;

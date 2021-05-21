@@ -1,5 +1,5 @@
 import { Component , OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
@@ -34,6 +34,9 @@ export class ProExpProjectsComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
   showDateError = false;
+  showNumberError = false;
+  start_date: any;
+  end_date: any;
   get getProject() {
     return this.ProjectArray;
   }
@@ -60,6 +63,7 @@ export class ProExpProjectsComponent implements OnInit {
             console.log('response=', response);
             this.ProjectArray = response;
             if (this.ProjectArray.length !== 0) {
+              console.log('length', this.ProjectArray.length);
               console.log('Project array on init= ', this.ProjectArray);
               this.showProject = true;
               this.showForm = false;
@@ -83,25 +87,36 @@ export class ProExpProjectsComponent implements OnInit {
     this.getProjectInfo();
     this.createForm();
     console.log('on init showForm', this.showForm);
+    /*this.sendProject.get('start_date').valueChanges.subscribe(selectedValue => {
+      this.start_date = selectedValue.value;
+      console.log('start date= ', this.start_date.toString());
+  });
+    this.sendProject.get('end_date').valueChanges.subscribe(selectedValue => {
+      this.end_date = selectedValue.value;
+      console.log('end date', this.end_date);
+    });*/
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
   }
   createForm() {
     this.sendProject = this.fb.group({
-      project_title: '',
+      project_title: ['', Validators.pattern('[a-zA-Z ]*')],
       start_date: '',
-      end_date: '',
+      end_date: [''],
     });
   }
 
   createUpdateProject(dateStart, dateEnd) {
     if (this.button === 'Add') {
+      this.start_date = dateStart;
+      this.end_date = dateEnd;
       this.compareDate(dateStart, dateEnd);
     this.Project = this.sendProject.value;
     this.Project.professional_experience_code = this.professional_experience_code;
     this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
-    if (this.sendProject.valid && this.showDateError === false) {
+    this.testNumber(this.Project.project_title);
+    if (this.sendProject.valid && this.showDateError === false && !this.showNumberError) {
       this.resumeService.addProject(this.Project).subscribe(data => {
         console.log('Technical skill =', data);
         this.getProjectInfo();
@@ -111,16 +126,20 @@ export class ProExpProjectsComponent implements OnInit {
       this.showDateError = false;
     }
     this.arrayProjectCount++; } else {
+      this.compareDate(dateStart, dateEnd);
       this.projectUpdate = this.sendProject.value;
       this.projectUpdate.project_code = this.project_code;
       this.projectUpdate.professional_experience_code = this.professional_experience_code;
       this.projectUpdate._id = this._id;
-      this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
+      this.testNumber(this.projectUpdate.project_title);
+      if (this.sendProject.valid && this.showDateError === false && !this.showNumberError) {
+        this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
       this.ProjectArray[this.indexUpdate] = this.projectUpdate;
       this.button = 'Add';
-      this.showForm = false;
+        this.showForm = false; }
     }
     this.sendProject.reset();
+    this.showNumberError = false ;
   }
   routeToProjectSection() {
     this.router.navigate(['/candidate/resume/projects'],
@@ -183,31 +202,36 @@ export class ProExpProjectsComponent implements OnInit {
                             }
                           },
                         );
-                      this.ProjectArray.forEach((value, index) => {
-                        if (index === pointIndex) {
-                          this.ProjectArray.splice(index, 1);
-                        }
-                      });
-                      this.subscriptionModal.unsubscribe();
                     });
-                  }
 
+                  }
+                  this.ProjectArray.forEach((value, index) => {
+                    if (index === pointIndex) {
+                      this.ProjectArray.splice(index, 1);
+                    }
+                  });
+                  this.subscriptionModal.unsubscribe();
                 });
           }
         });
+  }
+  testNumber(pos: string) {
+    console.log('isNan=', !isNaN(+pos));
+    if (this.showNumberError === false) {
+      this.showNumberError = !isNaN(+pos);
+    }
+    console.log('position', this.showNumberError);
   }
   testRequired() {
     return (this.sendProject.invalid) ;
   }
   compareDate(date1, date2) {
-    console.log(date1 , '-----' , date2);
     const dateStart = new Date(date1);
     const dateEnd =  new Date(date2);
     if (dateStart.getTime() > dateEnd.getTime()) {
       console.log('illogic date');
       this.showDateError =  true;
-    }
-
+      return { 'compareDate': true};
+    } else { return null; }
   }
-
 }

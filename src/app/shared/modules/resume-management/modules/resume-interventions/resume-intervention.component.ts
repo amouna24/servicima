@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
 import { UserService } from '@core/services/user/user.service';
@@ -16,28 +16,30 @@ export class ResumeInterventionComponent implements OnInit {
   arrayInterventionCount = 0;
   Intervention: IResumeInterventionModel;
   interventionArray: IResumeInterventionModel[] = [];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
+  resume_code = '';
   interventionUpdate: IResumeInterventionModel;
   intervention_code = '';
   button = 'Add';
   indexUpdate = 0 ;
   _id = '';
   subscriptionModal: Subscription;
-
-  get getIntervention() {
-    return this.interventionArray;
-  }
+  private showNumberError = false;
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
   ) { }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   ngOnInit(): void {
     this.getInterventionInfo();
     this.createForm();
   }
+  /**************************************************************************
+   * @description Get Intervention Data from Resume Service
+   *************************************************************************/
   getInterventionInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -73,22 +75,22 @@ export class ResumeInterventionComponent implements OnInit {
   }
 
   /**
-   * @description Create Form
+   * @description Inisaliszation of the Intervention Form
    */
   createForm() {
     this.sendIntervention = this.fb.group({
-      level_of_intervention_desc : '',
+      level_of_intervention_desc : ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
     });
   }
   /**
-   * @description Create Technical skill
+   * @description Create or Update Level Of Intervention
    */
   createUpdateIntervention() {
     if (this.button === 'Add') {
     this.Intervention = this.sendIntervention.value;
     this.Intervention.resume_code = this.resume_code;
-    this.Intervention.intervention_code = Math.random().toString();
-    if (this.sendIntervention.valid) {
+    this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
+    if (this.sendIntervention.valid ) {
       console.log('intervention=', this.Intervention);
       this.resumeService.addIntervention(this.Intervention).subscribe(data => {
         console.log('Intervention =', data);
@@ -102,14 +104,19 @@ export class ResumeInterventionComponent implements OnInit {
       this.interventionUpdate.resume_code = this.resume_code;
       this.interventionUpdate._id = this._id;
       console.log(' intervention update =', this.interventionUpdate);
+      this.testNumber(this.Intervention.level_of_intervention_desc);
+      if (this.sendIntervention.valid && !this.showNumberError) {
       this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
       this.interventionArray[this.indexUpdate] = this.interventionUpdate;
-      this.button = 'Add';
+      this.button = 'Add'; }
     }
 
     this.sendIntervention.reset();
+    this.showNumberError = false;
   }
-
+  /**************************************************************************
+   * @description Test the Controls of the Form with a validation type
+   *************************************************************************/
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
@@ -117,7 +124,9 @@ export class ResumeInterventionComponent implements OnInit {
     }
     return control.hasError(validationType) ;
   }
-
+  /**************************************************************************
+   * @description Set data of a selected Custom section and set it in the current form
+   *************************************************************************/
   EditForm(_id: string, level_of_intervention_desc: string, intervention_code: string, index: number) {
     this.sendIntervention.patchValue({
       level_of_intervention_desc,
@@ -127,7 +136,9 @@ export class ResumeInterventionComponent implements OnInit {
     this.indexUpdate = index;
     this.button = 'Save';
   }
-
+  /**************************************************************************
+   * @description Delete the selected Custom section
+   *************************************************************************/
   deleteIntervention(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
@@ -146,8 +157,20 @@ export class ResumeInterventionComponent implements OnInit {
           }
         }
       );
-
   }
+  /**************************************************************************
+   * @description test if a control has numbers only
+   *************************************************************************/
+  testNumber(pos: string) {
+    console.log('isNan=', !isNaN(+pos));
+    if (this.showNumberError === false) {
+      this.showNumberError = !isNaN(+pos);
+    }
+    console.log('position', this.showNumberError);
+  }
+  /**************************************************************************
+   * @description test if there is an empty field , enable button add if all fields are not empty
+   *************************************************************************/
   testRequired() {
     return (this.sendIntervention.invalid) ;
   }

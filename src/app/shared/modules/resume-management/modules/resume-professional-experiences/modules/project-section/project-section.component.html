@@ -4,11 +4,22 @@
     <div fxLayout="column" fxFlex="82" >
       <br>
     <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
-      <div class="p-l-20" fxLayout="column" fxFlex="50" >
+      <div class="p-l-20" fxLayout="column" fxFlex="80" >
         <p>{{item.project_detail_title}}</p>
+      </div>
+      <div fxLayout="column" fxFlex="12" fxLayoutAlign="center none">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.ResumeProjectDetailsKey.project_code,item.project_detail_title,item.project_detail_desc,pointIndex,item._id,item.ResumeProjectDetailsKey.project_details_code); ">Edit</button>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex="16" class="p-r-20" fxLayoutAlign="center none">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_details_code);" >Delete</button>
+        </div>
       </div>
     </div>
     </div>
+
   </div>
   <div fxLayout="row"   class="full-width" fxFlex="100">
 <form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
@@ -19,7 +30,8 @@
       </mat-label>
       <mat-form-field appearance="outline">
         <input formControlName="project_detail_title" matInput placeholder="Section title" required>
-
+       <mat-error *ngIf="sendProDetails.invalid">
+       You should enter a correct title </mat-error>
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="30">
@@ -28,16 +40,18 @@
       </mat-label>
       <mat-form-field appearance="outline">
         <mat-select disableOptionCentering panelClass="panelColor"
-                    formControlName="select" (selectionChange)="onSelect()" [value]="desc" placeholder="Section type">
+                    formControlName="select" (selectionChange)="onSelect()" [value]="select" placeholder="Section type">
           <mat-option *ngFor="let v of secList" [value]="v.value">{{v.viewValue}}</mat-option>
-
         </mat-select>
+        <mat-error *ngIf="sendProDetails.invalid">
+          You should enter a correct date
+        </mat-error>
       </mat-form-field>
 
     </div>
   </div>
-  <div fxLayout="row" fxFlex="28" fxLayoutAlign="center">
-    <ng-template [ngIf]="showDesc" fxLayout="column">
+    <ng-template [ngIf]="showDesc" >
+      <div fxLayout="row" fxFlex="28" style="justify-content: center" class="full-width">
       <div fxLayout="column" fxFlex="80">
         <mat-label class="black font-size-12">
           Description :
@@ -47,46 +61,53 @@
                     formControlName="project_detail_desc"></textarea>
         </mat-form-field>
       </div>
-
+        </div>
     </ng-template>
-    <ng-template [ngIf]="showSec" fxLayout="column">
-      <div fxLayout="row" fxFlex="100">
-    <form [formGroup]="sendProSectionDetails" fxFlexFill>
-      <div formArrayName="Field" fxFlexFill>
-        <div *ngFor="let item of inputFields.controls; let pointIndex=index" [formGroupName]="pointIndex" fxFlexFill>
-          <div fxLayout="row" >
-      <div fxLayout="column" fxFlex="72"  >
-        <div fxLayout="row" >
-
-          <div fxLayout="column" fxFlex="56" fxLayoutAlign=" end"  >
+  <ng-template  fxLayout="row" fxFlex="28" fxLayoutAlign="start" [ngIf]="showSec" >
+      <div fxLayout="column" >
+        <div *ngFor="let item of inputFields; let pointIndex=index" fxLayout="row"   >
+          <div fxLayout="column" fxFlex="39" fxLayoutAlign=" end"  >
         <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
           <div fxLayout="column" fxFlex="75">
           <mat-label class="black font-size-12 required">
             Section Content :
           </mat-label>
       <mat-form-field appearance="outline">
-        <input formControlName="project_details_section_desc" matInput placeholder="Section content" required>
+        <input  matInput placeholder="Section content" [value]="item.project_details_section_desc" [readonly]="item.project_details_section_desc">
+        <mat-error *ngIf="sendProDetails.invalid">
+        You should enter a correct Text </mat-error>
       </mat-form-field>
           </div>
         </div>
          </div>
           <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
-            <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()">Add</button>
+            <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()" >Add</button>
           </div>
         </div>
-      </div>
-        </div>
-        </div>
-      </div>
-      </form>
-      </div>
+          <form  [formGroup]="sendProSectionDetails" fxLayout="row">
+          <div fxLayout="column" fxFlex="39" fxLayoutAlign=" end"  >
+            <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
+              <div fxLayout="column" fxFlex="75">
+                <mat-label class="black font-size-12 required">
+                  Section Content :
+                </mat-label>
+                <mat-form-field appearance="outline">
+                  <input formControlName="project_details_section_desc" matInput placeholder="Section content" >
+                  <mat-error *ngIf="sendProSectionDetails.invalid">
+                    You should enter a correct Text </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
+            <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()" >Add</button>
+          </div>
+          </form></div>
     </ng-template>
-
-  </div>
   <div fxLayout="row" fxFlex="28" fxLayoutAlign="end end">
     <div fxLayout="column" fxFlex="19"  >
     <button type="button" mat-raised-button class="bg-pale-grey btn-small"
-            (click)="createProDetails()">Add
+            (click)="createProDetails()">{{button}}
     </button></div>
   </div>
 

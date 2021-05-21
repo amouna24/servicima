@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 
 import { ResumeService } from '@core/services/resume/resume.service';
@@ -29,10 +29,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
   _id = '';
   subscriptionModal: Subscription;
-  get getCertifDiploma() {
-    return this.certifDiplomaArray;
-  }
-
+   showNumberError = false;
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -40,7 +37,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private modalServices: ModalService,
   ) {
   }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
@@ -50,7 +49,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.getCertifDiplomaInfo();
     this.createForm();
   }
-
+  /**************************************************************************
+   * @description Get all Certification and diploma Data from Resume Service
+   *************************************************************************/
   getCertifDiplomaInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -58,13 +59,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       .subscribe(
         (response) => {
           this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
           this.resumeService.getCertifDiploma(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
-                  console.log('response', responseOne);
                   this.certifDiplomaArray = responseOne;
                   this.certifDiplomaArray.forEach(
                     (func) => {
@@ -88,20 +87,20 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   }
 
   /**
-   * @description Create Form
+   * @description Initialization of Certification and diploma Form
    */
   createForm() {
     this.sendCertifDiploma = this.fb.group({
-      establishment: '',
-      diploma: '',
-      start_date: '',
-      end_date: '',
+      establishment: ['', Validators.pattern('(?!^\\d+$)^.+$')],
+      diploma: ['', Validators.pattern('(?!^\\d+$)^.+$')],
+      start_date: ['',  Validators.pattern('(?!^\\d+$)^.+$')],
+      end_date: ['', Validators.pattern('(?!^\\d+$)^.+$')],
       certif_diploma_desc: '',
     });
   }
 
   /**
-   * @description Create Technical skill
+   * @description Create or Update Certification/Diploma
    */
   createUpdateCertifDiploma(dateStart, dateEnd) {
     if (this.button === 'Add') {
@@ -109,29 +108,31 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
     this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
-    if (this.sendCertifDiploma.valid && this.showDateError === false) {
-      console.log('ProExp input= ', this.certifDiploma);
+      if (this.sendCertifDiploma.valid && this.showDateError === false ) {
       this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
-        console.log('certif =', data);
         this.getCertifDiplomaInfo();
       });
     } else {
-      console.log('Form is not valid');
       this.showDateError = false;
-
+      this.showNumberError = false;
     }
     this.arrayCertifDiplomaCount++; } else {
+      this.compareDate(dateStart, dateEnd);
       this.certifDiplomaUpdate = this.sendCertifDiploma.value;
       this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
       this.certifDiplomaUpdate.resume_code = this.resume_code;
       this.certifDiplomaUpdate._id = this._id;
-      this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe(data => console.log('Certif updated =', data));
+      if (this.sendCertifDiploma.valid && this.showDateError === false) {
+        this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate);
       this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
-      this.button = 'Add';
+      this.button = 'Add'; }
     }
     this.sendCertifDiploma.reset();
+    this.showNumberError = false;
   }
-
+  /**************************************************************************
+   * @description Test the Controls of the Form a validation type
+   *************************************************************************/
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
@@ -139,18 +140,19 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     }
     return control.hasError(validationType);
   }
-
+  /**************************************************************************
+   * @description Campare the start date with the end date and check if there are an illogic problem
+   *************************************************************************/
   compareDate(date1, date2) {
-    console.log(date1, '-----', date2);
     const dateStart = new Date(date1);
     const dateEnd = new Date(date2);
     if (dateStart.getTime() > dateEnd.getTime()) {
-      console.log('illogic date');
       this.showDateError = true;
     }
-
   }
-
+  /**************************************************************************
+   * @description Set data of a selected certification/Diploma and set it in the current form
+   *************************************************************************/
   // tslint:disable-next-line:max-line-length
   editForm(_id: string, diploma: string, start_date: string, end_date: string, establishment: string, certif_diploma_desc: string, certif_diploma_code: string, pointIndex: number) {
     this.sendCertifDiploma.patchValue({
@@ -165,7 +167,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.indexUpdate = pointIndex;
     this.button = 'Save';
   }
-
+  /**************************************************************************
+   * @description Delete the selected certif/Diploma
+   *************************************************************************/
   deleteCertif(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
@@ -175,7 +179,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteCertifDiploma(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteCertifDiploma(_id).subscribe(cert => console.log('deleted'));
             this.certifDiplomaArray.forEach((value, index) => {
               if (index === pointIndex) { this.certifDiplomaArray.splice(index, 1); }
             });
@@ -185,8 +189,19 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           }
         }
       );
-
   }
+  /**************************************************************************
+   * @description test if a control has numbers only
+   *************************************************************************/
+  testNumber(pos: string) {
+    if (pos !== null) {
+    if (this.showNumberError === false) {
+    this.showNumberError = !isNaN(+pos);
+    }}
+  }
+  /**************************************************************************
+   * @description test if there is an empty field , enable button add if all fields are not empty
+   *************************************************************************/
   testRequired() {
     return (this.sendCertifDiploma.invalid) ;
   }

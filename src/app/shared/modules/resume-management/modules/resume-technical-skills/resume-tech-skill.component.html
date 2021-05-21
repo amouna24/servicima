@@ -23,7 +23,7 @@
       </div>
       <wid-scrollbar fxLayout="row" fxFlex="80">
         <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-          <div *ngFor="let item of getTech let pointIndex=index" class="p-l-65">
+          <div *ngFor="let item of techSkillArray let pointIndex=index" class="p-l-65">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
               <br>
               <div fxLayout="column" fxFlex="20" class="p-l-20">
@@ -47,7 +47,7 @@
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">
                     <input formControlName="technical_skill_desc" matInput placeholder="Skill title" required>
-                    <mat-error class="red" *ngIf="isControlHasError(sendTechSkill,'technical_skill_desc', 'required')">
+                    <mat-error class="red" *ngIf="sendTechSkill.invalid">
                       Please Fill out this field
                     </mat-error>
                   </mat-form-field>
@@ -59,7 +59,7 @@
                   <mat-form-field appearance="outline">
                     <textarea matInput formControlName="technologies" placeholder="Skill description"
                               rows="7" required></textarea>
-                    <mat-error class="red" *ngIf="isControlHasError(sendTechSkill,'technologies', 'required')">
+                    <mat-error class="red" *ngIf="sendTechSkill.invalid">
                       Please Fill out this field
                     </mat-error>
                   </mat-form-field>

@@ -57,15 +57,15 @@
                 <div fxLayout="row" fxFlex="55" class="border-radius-15 pale-grey " fxLayoutAlign=" center"
                      style="border-style: solid">
                   <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center">
-                    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40" class="width-90">
+                    <div fxLayout="row" fxLayoutAlign="space-around end" fxFlex="40" class="width-90">
                       <div fxLayout="column" fxFlex="35">
                         <mat-label class="black font-size-12 required">
                           Position:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input formControlName="position" matInput placeholder="Position" required>
-                          <mat-error class="red" *ngIf="isControlHasError(sendProExp,'position', 'required')">
-                            Please fill out this field
+                          <input  formControlName="position" matInput placeholder="Position" required>
+                          <mat-error class="red" *ngIf="sendProExp.invalid">
+                            Please fill out this field with correct text
                           </mat-error>
                         </mat-form-field>
                       </div>
@@ -75,8 +75,8 @@
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input formControlName="customer" matInput placeholder="Customer" required>
-                          <mat-error class="red" *ngIf="isControlHasError(sendProExp,'customer', 'required')">
-                            Please fill out this field
+                          <mat-error class="red" *ngIf="this.sendProExp.invalid">
+                            Please fill out this field With correct text
                           </mat-error>
                         </mat-form-field>
                       </div>
@@ -92,7 +92,7 @@
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
                           <mat-error class="red"
-                                     *ngIf="isControlHasError(sendProExp,'start_date', 'required')|| showDateError">
+                                     *ngIf="this.sendProExp.invalid">
                             Please Select a correct date
                           </mat-error>
                         </mat-form-field>
@@ -106,8 +106,7 @@
                                  formControlName="end_date" placeholder="End date" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>
-                          <mat-error class="red"
-                                     *ngIf="isControlHasError(sendProExp,'end_date', 'required') || showDateError">
+                          <mat-error class="red" *ngIf="this.sendProExp.invalid">
                             Please Select a correct date
                           </mat-error>
                         </mat-form-field>

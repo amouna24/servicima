@@ -23,7 +23,7 @@
       </div>
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
         <wid-scrollbar fxFlex="87" class="full-height">
-          <div fxLayout="column" fxFlex="70" fxFlexAlign="10px">
+          <div fxLayout="column" fxFlex="82" fxFlexAlign="10px">
             <div fxLayout="row" *ngIf="!showProject" class="height-50" fxLayoutAlign="center">
               <div fxLayout="column" fxFlex="100" class="border-radius-10 border_add_project">
                 <div fxLayout="row">
@@ -42,8 +42,8 @@
             <div *ngFor="let item of getProject let pointIndex=index" fxLayout="row" class="full-width p-b-10">
               <mat-expansion-panel [hideToggle]="true" #panel fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
-                <mat-expansion-panel-header style="background-color: transparent; padding: 0px !important;">
-                  <mat-panel-title style="margin-right: 0px !important;">
+                <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
+                  <mat-panel-title style="margin-right: 0 !important;">
                     <div fxLayout="row" style="height: 80px" class="bg-pale-grey border-radius-15 full-width">
                       <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="50">
                         <div fxLayout="row" fxFlex="34">
@@ -72,7 +72,7 @@
                     </div>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div fxLayout="row" class=" border-radius-15 full-width" fxFlex="100">
+                <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
                   <wid-project-section [project_code]="item.project_code"
                                        class="full-width full-height"></wid-project-section>
                 </div>
@@ -91,7 +91,7 @@
               <div fxLayout="column" fxFlex="100">
                 <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey"
                      style="border-style: solid ; justify-content: center">
-                  <div fxLayout="column" fxFlex="95" fxLayoutAlign="center">
+                  <div fxLayout="column" fxFlex="95" fxLayoutGap="30px" class="p-t-20" fxLayoutAlign="center">
                     <div fxLayout="row" fxFlex="36">
                       <div fxLayout="column" fxFlex="80">
                         <mat-label class="black font-size-12 required">
@@ -99,10 +99,11 @@
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input formControlName="project_title" matInput placeholder="Project title" required>
+                          <mat-error *ngIf="sendProject.invalid">You should select a correct Project title</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
-                    <div fxLayout="row" fxFlex="34">
+                    <div fxLayout="row" fxFlex="25">
                       <div fxLayout="column" fxFlex="30">
                         <mat-label class="black font-size-12 required">
                           Start Date:
@@ -112,6 +113,9 @@
                                  placeholder="Start date">
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                          <mat-error *ngIf="sendProject.invalid" >
+                            You should enter a correct date
+                          </mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="50">
@@ -125,13 +129,16 @@
                                      placeholder="End date">
                               <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                               <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                              <mat-error *ngIf="sendProject.invalid">
+                                You should enter a correct date
+                              </mat-error>
                             </mat-form-field>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div fxLayout="row" fxFlex="30" fxLayoutAlign="end">
-                      <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-medium"
+                      <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-small"
                               style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="testRequired()">{{button}}
                       </button>
                     </div>
@@ -140,7 +147,7 @@
               </div>
             </form>
           </div>
-          <div fxLayout="column" fxFlex="25" >
+          <div fxLayout="column" fxFlex="18" >
 
           </div>
         </wid-scrollbar>

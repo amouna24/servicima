@@ -45,9 +45,17 @@
             </div>
           </div>
           <div fxLayout="row" fxFlexFill *ngIf="showSection">
-            <div fxLayout="column" fxLayoutGap="10px" fxFlexFill>
-              <div *ngFor="let item of getSection let pointIndex=index" class="p-l-65">
-                <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+            <div fxLayout="column"  fxFlexFill>
+              <div cdkDropListGroup>
+                <div class="example-container">
+                  <div
+                    cdkDropList
+                    [cdkDropListData]="getSection"
+                    class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+                    <div class="example-box" *ngFor="let item of getSection let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
+              <div  class="p-l-65">
+                <div fxLayout="row" fxLayoutGap="10px" class="bg-pale-grey border-radius-15 width-90">
                   <div fxLayout="column" fxFlex="20" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
@@ -56,6 +64,10 @@
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >Delete</button>
+                  </div>
+                </div>
+              </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -68,7 +80,7 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="full-width">
                       <input formControlName="section_title" matInput placeholder="Section title" required>
-                      <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_title', 'required')">
+                      <mat-error class="red" *ngIf="sendSection.invalid">
                         Please fill out this field
                       </mat-error>
                     </mat-form-field>
@@ -80,7 +92,7 @@
                     <mat-form-field appearance="outline">
                               <textarea matInput placeholder="Description" rows="7"
                                         formControlName="section_desc" required></textarea>
-                      <mat-error class="red" *ngIf="isControlHasError(sendSection,'section_desc', 'required')">
+                      <mat-error class="red" *ngIf="sendSection.invalid">
                         Please fill out this field
                       </mat-error>
                     </mat-form-field>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { UserService } from '@core/services/user/user.service';
@@ -29,6 +29,7 @@ export class ProExpComponent implements OnInit {
   indexUpdate = 0;
   _id = '';
   subscriptionModal: Subscription;
+  showPosError = false;
 
   get getProExp() {
     return this.proExpArray;
@@ -94,7 +95,6 @@ export class ProExpComponent implements OnInit {
   }
 
   routeToProject(code: string, customer: string, position: string, start_date: string, end_date: string) {
-    console.log('pro Exp Array=', this.proExpArray);
     this.router.navigate(['/candidate/resume/projects'],
       {
         state: {
@@ -111,36 +111,41 @@ export class ProExpComponent implements OnInit {
    */
   createForm() {
     this.sendProExp = this.fb.group({
-      position: '',
-      customer: '',
+      position: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      customer: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
       start_date: '',
       end_date: '',
     });
   }
+
   createUpdateProExp(dateStart, dateEnd) {
     if (this.button === 'Add') {
     this.compareDate(dateStart, dateEnd);
     this.ProExp = this.sendProExp.value;
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-    if (this.sendProExp.valid && this.showDateError === false) {
+      if (this.sendProExp.valid && this.showDateError === false ) {
       console.log('ProExp input= ', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
       this.getProExpInfo();
     } else {
       console.log('Form is not valid');
       this.showDateError = false;
+      this.showPosError = false;
 
     }
     this.arrayProExpCount++; } else {
+      this.compareDate(dateStart, dateEnd);
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
       console.log('pro exp update = ', this.proExpUpdate);
       this.proExpUpdate._id = this._id;
-      this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
+
+      if (this.sendProExp.valid && this.showDateError === false ) {
+        this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
-      this.button = 'Add';
+      this.button = 'Add'; }
     }
     this.sendProExp.reset();
   }
@@ -159,7 +164,6 @@ export class ProExpComponent implements OnInit {
       console.log('illogic date');
       this.showDateError =  true;
     }
-
   }
 
   // tslint:disable-next-line:max-line-length
@@ -222,23 +226,22 @@ export class ProExpComponent implements OnInit {
                               });
                             }
                           });
-
-                      this.proExpArray.forEach((value, index) => {
-                        if (index === pointIndex) {
-                          this.proExpArray.splice(index, 1);
-                        }
-                      });
-                      this.button = 'Add';
-                      this.subscriptionModal.unsubscribe();
                     });
                   }
+                  this.proExpArray.forEach((value, index) => {
+                    if (index === pointIndex) {
+                      this.proExpArray.splice(index, 1);
+                    }
+                  });
+                  this.button = 'Add';
+                  this.subscriptionModal.unsubscribe();
                 });
 
           }
         });
   }
+
   testRequired() {
     return (this.sendProExp.invalid) ;
-
   }
 }

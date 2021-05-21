@@ -23,7 +23,7 @@
       </div>
       <wid-scrollbar fxFlex="80" class="full-width">
         <div fxLayout="column" fxFlexFill style="align-items: center" fxLayoutGap="10px">
-          <div *ngFor="let item of getIntervention let pointIndex=index" class="p-l-65 full-width">
+          <div *ngFor="let item of interventionArray let pointIndex=index" class="p-l-65 full-width">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
               <div fxLayout="column" fxFlex="60" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
@@ -45,7 +45,7 @@
                               <textarea matInput placeholder="Level of intervention" rows="7"
                                         formControlName="level_of_intervention_desc" required></textarea>
                 <mat-error class="red"
-                           *ngIf="isControlHasError(sendIntervention,'level_of_intervention_desc', 'required')">
+                           *ngIf="sendIntervention.invalid">
                   Please Fill out this field
                 </mat-error>
               </mat-form-field>

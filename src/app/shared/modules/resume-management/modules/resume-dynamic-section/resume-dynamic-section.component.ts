@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { MatButton } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Editor } from 'ngx-editor';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
@@ -13,18 +15,7 @@ import { ModalService } from '@core/services/modal/modal.service';
   styleUrls: ['./resume-dynamic-section.component.scss']
 })
 export class ResumeDynamicSectionComponent implements OnInit {
-  sendSection: FormGroup;
-  arraySectionCount = 0;
-  Section: IResumeSectionModel;
-  showSection = false;
-  SectionArray: IResumeSectionModel[] = [];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-SEC`;
-  button = 'Add';
-  section_code = '';
-  indexUpdate = 0;
-  sectionUpdate: IResumeSectionModel;
-  _id = '';
-  subscriptionModal: Subscription;
+  private showNumberError = false;
   get getSection() {
     return this.SectionArray;
   }
@@ -34,11 +25,42 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private userService: UserService,
     private modalServices: ModalService,
                ) { }
+  sendSection: FormGroup;
+  arraySectionCount = 0;
+  Section: IResumeSectionModel;
+  showSection = false;
+  SectionArray: IResumeSectionModel[] = [];
+  resume_code = '';
+  button = 'Add';
+  section_code = '';
+  indexUpdate = 0;
+  sectionUpdate: IResumeSectionModel;
+  _id = '';
+  subscriptionModal: Subscription;
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   ngOnInit(): void {
     this.getDynamicSectionInfo();
     this.createForm();
     console.log('length=', this.SectionArray.length);
     }
+  /**************************************************************************
+   * @description Function that change the index between selected Section using cdkDropListGroup
+   *************************************************************************/
+  drop(event: CdkDragDrop<IResumeSectionModel[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+  /**************************************************************************
+   * @description Get Dynamic section Data from Resume Service
+   *************************************************************************/
   getDynamicSectionInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -78,20 +100,29 @@ export class ResumeDynamicSectionComponent implements OnInit {
     console.log('section array =', this.SectionArray);
 
   }
+  /**************************************************************************
+   * @description Show The Form of Custom Section
+   *************************************************************************/
   showCustomSection() {
     this.showSection = !this.showSection;
   }
+  /**
+   * @description Initialization of Custom Section Form
+   */
   createForm() {
     this.sendSection = this.fb.group({
-      section_title: '',
-      section_desc: '',
+      section_title: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      section_desc: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
     });
   }
+  /**************************************************************************
+   * @description Create or Update a Custom Section
+   *************************************************************************/
   createUpdateSection() {
     if (this.button === 'Add') {
     this.Section = this.sendSection.value;
     this.Section.resume_code = this.resume_code;
-    this.Section.section_code = Math.random().toString();
+    this.Section.section_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-SEC`;
     this.Section.index = this.arraySectionCount.toString();
     if (this.sendSection.valid) {
       this.resumeService.addCustomSection(this.Section).subscribe(data => {
@@ -106,12 +137,19 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.sectionUpdate.index = this.indexUpdate.toString();
       this.sectionUpdate.resume_code = this.resume_code;
       this.sectionUpdate._id = this._id;
+      this.testNumber(this.sectionUpdate.section_title);
+      this.testNumber(this.sectionUpdate.section_desc);
+      if  (this.sendSection.valid && !this.showNumberError) {
       this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => console.log('custom section updated =', data));
       this.SectionArray[this.indexUpdate] = this.sectionUpdate;
-      this.button = 'Add';
+        this.button = 'Add'; }
     }
     this.sendSection.reset();
+    this.showNumberError = false;
   }
+  /**************************************************************************
+   * @description Test the Controls of the Form with a validation type
+   *************************************************************************/
   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
     const control = form[controlName];
     if (!control) {
@@ -119,7 +157,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
     }
     return control.hasError(validationType) ;
   }
-
+  /**************************************************************************
+   * @description Set data of a selected Custom section and set it in the current form
+   *************************************************************************/
   editForm(_id: string, section_title: string, section_desc: string, section_code: string, pointIndex: number) {
       this.sendSection.patchValue({
         section_title,
@@ -132,7 +172,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
       /*
       */
     }
-
+  /**************************************************************************
+   * @description Delete the selected Custom section
+   *************************************************************************/
   deleteSection(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
@@ -151,8 +193,18 @@ export class ResumeDynamicSectionComponent implements OnInit {
           }
         }
       );
-
   }
+  /**************************************************************************
+   * @description test if a control has numbers only
+   *************************************************************************/
+  testNumber(pos: string) {
+    if (this.showNumberError === false) {
+      this.showNumberError = !isNaN(+pos);
+    }
+  }
+  /**************************************************************************
+   * @description test if there is an empty field , enable button add if all fields are not empty
+   *************************************************************************/
   testRequired() {
     return (this.sendSection.invalid) ;
   }
