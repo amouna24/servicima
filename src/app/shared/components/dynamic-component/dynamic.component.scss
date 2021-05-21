@@ -32,3 +32,11 @@ table {
   width: 43px;
   height: 43px;
 }
+
+.mat-list-base {
+  padding-top: 4px !important;
+}
+
+.mat-list-base .mat-list-item {
+  height: 35px !important;
+}
