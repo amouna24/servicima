@@ -4,27 +4,36 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HelperService } from '@core/services/helper/helper.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { IConfig } from '@shared/models/configDataTable.model';
 import * as _ from 'lodash';
 @Component({
   selector: 'wid-data-table-config',
   templateUrl: './data-table-config.component.html',
   styleUrls: ['./data-table-config.component.scss']
 })
+
 export class DataTableConfigComponent implements OnInit {
 
   displayedColumnsForm: FormGroup;
   canBeDisplayedColumnsForm: FormGroup;
-  canBeDisplayedColumns: any[];
-  displayedColumns: any[];
+  canBeDisplayedColumns: IConfig[];
+  displayedColumns: IConfig[];
   activeTheme = 'material';
-  themes = ['dark', 'material'];
-  columnsList = [];
+  themes: string[] = ['dark', 'material'];
+  columnsList: string[] = [];
 
   constructor(public dialogRef: MatDialogRef<DataTableConfigComponent>,
     private localStorageService: LocalStorageService,
     @Inject(MAT_DIALOG_DATA) public data: any, private helperService: HelperService) { }
 
   ngOnInit(): void {
+  this.getConfig();
+  }
+
+  /**************************************************************************
+   * @description get config
+   *************************************************************************/
+  getConfig() {
     this.displayedColumns = this.data.displayedColumns;
     this.columnsList = this.data.columnsList;
     this.canBeDisplayedColumns = this.helperService.difference(this.data.canBeDisplayedColumns, this.displayedColumns, 'prop');
@@ -36,6 +45,9 @@ export class DataTableConfigComponent implements OnInit {
     });
   }
 
+  /**************************************************************************
+   * @description add to display column
+   *************************************************************************/
   addToDisplayColumn() {
     const canBeDisplayedColumnsFormArray = this.canBeDisplayedColumnsForm.get('canBeDisplayedColumns') as FormArray;
     const canBeDisplayedColumns = canBeDisplayedColumnsFormArray.value;
@@ -45,6 +57,9 @@ export class DataTableConfigComponent implements OnInit {
     canBeDisplayedColumnsFormArray.clear();
   }
 
+  /**************************************************************************
+   * @description add to can be display column
+   *************************************************************************/
   addToCanBeDisplayColumn() {
     const displayedColumnsFormArray = this.displayedColumnsForm.get('displayedColumns') as FormArray;
     const displayedColumns = displayedColumnsFormArray.value;
@@ -54,6 +69,9 @@ export class DataTableConfigComponent implements OnInit {
     displayedColumnsFormArray.clear();
   }
 
+  /**************************************************************************
+   * @description check can be display column
+   *************************************************************************/
   checkCanBeDisplayedColumn(event) {
     const canBeDisplayedColumns = this.canBeDisplayedColumnsForm.get('canBeDisplayedColumns') as FormArray;
     if (event['checked']) {
@@ -64,6 +82,9 @@ export class DataTableConfigComponent implements OnInit {
     }
   }
 
+  /**************************************************************************
+   * @description check display column
+   *************************************************************************/
   checkDisplayedColumn(event) {
     const displayedColumns = this.displayedColumnsForm.get('displayedColumns') as FormArray;
     if (event['checked']) {
@@ -74,6 +95,9 @@ export class DataTableConfigComponent implements OnInit {
     }
   }
 
+  /**************************************************************************
+   * @description apply changes column
+   *************************************************************************/
   applyColumnsChanges() {
     this.data.actualColumns = [...this.displayedColumns];
     this.data.action = 'change';
@@ -83,6 +107,9 @@ export class DataTableConfigComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
 
+  /**************************************************************************
+   * @description reset columns
+   *************************************************************************/
   resetColumns() {
     this.displayedColumns = this.localStorageService.getItem(this.data.tableCode).actualColumn;
     this.canBeDisplayedColumns = this.helperService.difference(this.data.canBeDisplayedColumns, this.displayedColumns, 'prop');
@@ -91,48 +118,58 @@ export class DataTableConfigComponent implements OnInit {
     });
   }
 
+  /**************************************************************************
+   * @description customize table
+   *************************************************************************/
   customizeTable() {
     this.data.action = 'themeChange';
     this.data.activeTheme = this.activeTheme;
     this.dialogRef.close(this.data);
   }
 
+  /**************************************************************************
+   * @description change index for can be display column
+   *************************************************************************/
   onDropCanBeDisplayed(event: CdkDragDrop<string[]>) {
-    this.organiseColumn(event, this.canBeDisplayedColumns);
+    this.displayColumn(event, this.canBeDisplayedColumns);
     this.canBeDisplayedColumns = _.sortBy(this.canBeDisplayedColumns, 'index');
-
   }
 
+  /**************************************************************************
+   * @description change index for display column
+   *************************************************************************/
   onDropDisplayed(event: CdkDragDrop<string[]>) {
-    this.organiseColumn(event, this.displayedColumns);
+    this.displayColumn(event, this.displayedColumns);
     this.displayedColumns = _.sortBy(this.displayedColumns, 'index');
-
   }
 
-  permutation(indexp: number, column) {
-    const temp = column[indexp].index;
-    column[indexp].index = column[indexp + 1].index;
-    column[indexp + 1].index = temp;
-
+  /**************************************************************************
+   * @description permutation index for two column
+   *************************************************************************/
+  permutation(indexP: number, column: IConfig[]) {
+    const temp: number = column[indexP].index;
+    column[indexP].index = column[indexP + 1].index;
+    column[indexP + 1].index = temp;
   }
 
-  organiseColumn(event, column) {
-    let indexp = event.previousIndex;
+  /**************************************************************************
+   * @description display column with new index
+   *************************************************************************/
+  displayColumn(event: CdkDragDrop<string[]>, column: IConfig[]) {
+    let indexP: number = event.previousIndex;
     column = _.sortBy(column, 'index');
     if (event.currentIndex > event.previousIndex) {
-      while (indexp < event.currentIndex) {
-        this.permutation(indexp, column);
-        indexp++;
+      while (indexP < event.currentIndex) {
+        this.permutation(indexP, column);
+        indexP++;
         column = _.sortBy(column, 'index');
       }
     } else {
-      while (indexp > event.currentIndex) {
-        this.permutation(indexp - 1, column);
-        indexp--;
+      while (indexP > event.currentIndex) {
+        this.permutation(indexP - 1, column);
+        indexP--;
         column = _.sortBy(column, 'index');
       }
-
     }
   }
-
 }

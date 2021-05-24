@@ -2,13 +2,15 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { Router } from '@angular/router';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import * as _ from 'lodash';
+import { IConfig } from '@shared/models/configDataTable.model';
+import { IDataListModel  } from '@shared/models/dataList.model';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -31,14 +33,14 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  modalConfiguration: any;
-  displayedColumns = [];
-  canBeDisplayedColumns = [];
-  canBeFilteredColumns = [];
-  columns = [];
-  temp = [];
-  columnsList = [];
-  newConfig = [];
+  modalConfiguration: object[];
+  displayedColumns: IConfig[]  = [];
+  canBeDisplayedColumns: IConfig[] = [];
+  canBeFilteredColumns: IConfig[] = [];
+  columns: IConfig[] = [];
+  temp: object[] = [];
+  columnsList: string[] = [];
+  newConfig: IDataListModel[] =  [];
   dataSource: any;
   refData: { } = { };
   constructor(
@@ -116,7 +118,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   }
 
-    /**************************************************************************
+  /**************************************************************************
  * @description display table config
  *************************************************************************/
   displayTableConfig() {
@@ -139,8 +141,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
           const listTable = getConfigTableFromLocalStorage.modalConfiguration;
           Object.values(listTable)
-            .map((list) => {
-
+            .map((list: IDataListModel) => {
               if (this.columnsList.includes(list['dataListKey'].column_code)) {
                 list['displayed'] = 'Y';
                 list['colum_disp_index'] = res.newDisplayedColumns.find((result) => result.prop === list['dataListKey'].column_code ).index;
@@ -185,7 +186,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   }
 
   /**************************************************************************
-   * @description get refdata
+   * @description get refData
    *************************************************************************/
   async getRefData() {
   this.refData =  await this.refDataServices.getRefData(
@@ -206,7 +207,6 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     this.columnsList = getConfigTableFromLocalStorage.columnsList ? getConfigTableFromLocalStorage.columnsList : this.columnsList;
     const newModalConfig = getConfigTableFromLocalStorage.modalConfiguration
       ? getConfigTableFromLocalStorage.modalConfiguration : this.modalConfiguration;
-
     this.displayedColumns = this.dynamicDataTableService.getDefaultDisplayedColumns(newModalConfig);
     this.canBeDisplayedColumns = this.dynamicDataTableService.generateColumns(
       this.dynamicDataTableService.getCanBeDisplayedColumns(newModalConfig)
