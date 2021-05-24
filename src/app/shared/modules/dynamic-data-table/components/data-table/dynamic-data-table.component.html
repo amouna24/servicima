@@ -4,7 +4,7 @@
         <h1 class="steel font-size-24 font-medium" >{{ header.title }}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button [disableControl]="{'feature':'SOURCING_ACCESS'}" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="add(header.type)">
+        <button mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
           </mat-icon>
           &nbsp;
