@@ -20,8 +20,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   certifDiploma: IResumeCertificationDiplomaModel;
   certifDiplomaArray: IResumeCertificationDiplomaModel[] = [];
   resume_code = '';
-  minDate: Date;
-  maxDate: Date;
+  minStartDate: Date;
+  maxStartDate: Date;
+  minEndDate: Date;
+  maxEndDate: Date;
   showDateError = false;
   certif_diploma_code = '';
   indexUpdate = 0;
@@ -44,8 +46,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDay();
-    this.minDate = new Date(currentYear - 20, 0, 1);
-    this.maxDate = new Date(currentYear, currentMonth, currentDay + 25);
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 23 );
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDay + 23);
     this.getCertifDiplomaInfo();
     this.createForm();
   }
@@ -91,10 +95,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    */
   createForm() {
     this.sendCertifDiploma = this.fb.group({
-      establishment: ['', Validators.pattern('(?!^\\d+$)^.+$')],
-      diploma: ['', Validators.pattern('(?!^\\d+$)^.+$')],
-      start_date: ['',  Validators.pattern('(?!^\\d+$)^.+$')],
-      end_date: ['', Validators.pattern('(?!^\\d+$)^.+$')],
+      establishment: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      diploma: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      start_date: ['',  Validators.required],
+      end_date: ['', Validators.required],
       certif_diploma_desc: '',
     });
   }
@@ -104,7 +108,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    */
   createUpdateCertifDiploma(dateStart, dateEnd) {
     if (this.button === 'Add') {
-    this.compareDate(dateStart, dateEnd);
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
     this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
@@ -117,38 +120,17 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.showNumberError = false;
     }
     this.arrayCertifDiplomaCount++; } else {
-      this.compareDate(dateStart, dateEnd);
       this.certifDiplomaUpdate = this.sendCertifDiploma.value;
       this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
       this.certifDiplomaUpdate.resume_code = this.resume_code;
       this.certifDiplomaUpdate._id = this._id;
-      if (this.sendCertifDiploma.valid && this.showDateError === false) {
+      if (this.sendCertifDiploma.valid) {
         this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate);
       this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
       this.button = 'Add'; }
     }
     this.sendCertifDiploma.reset();
     this.showNumberError = false;
-  }
-  /**************************************************************************
-   * @description Test the Controls of the Form a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType);
-  }
-  /**************************************************************************
-   * @description Campare the start date with the end date and check if there are an illogic problem
-   *************************************************************************/
-  compareDate(date1, date2) {
-    const dateStart = new Date(date1);
-    const dateEnd = new Date(date2);
-    if (dateStart.getTime() > dateEnd.getTime()) {
-      this.showDateError = true;
-    }
   }
   /**************************************************************************
    * @description Set data of a selected certification/Diploma and set it in the current form
@@ -173,7 +155,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   deleteCertif(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Certification/Diploma ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -184,25 +166,20 @@ export class ResumeCertifDiplomaComponent implements OnInit {
               if (index === pointIndex) { this.certifDiplomaArray.splice(index, 1); }
             });
             this.button = 'Add';
-            this.subscriptionModal.unsubscribe();
 
           }
+          this.subscriptionModal.unsubscribe();
         }
       );
   }
-  /**************************************************************************
-   * @description test if a control has numbers only
-   *************************************************************************/
-  testNumber(pos: string) {
-    if (pos !== null) {
-    if (this.showNumberError === false) {
-    this.showNumberError = !isNaN(+pos);
-    }}
+  onChangeStartDate(date: string) {
+    console.log(date);
+    this.minEndDate = new Date(date);
+    console.log('min date after change', this.minEndDate);
   }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.sendCertifDiploma.invalid) ;
+  onChangeEndDate(date: string) {
+    console.log(date);
+    this.maxStartDate = new Date(date);
+    console.log('max date after change', this.maxStartDate);
   }
 }

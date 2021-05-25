@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
@@ -111,8 +111,8 @@ export class ResumeDynamicSectionComponent implements OnInit {
    */
   createForm() {
     this.sendSection = this.fb.group({
-      section_title: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
-      section_desc: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      section_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      section_desc: ['', [Validators.required]]
     });
   }
   /**************************************************************************
@@ -137,8 +137,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.sectionUpdate.index = this.indexUpdate.toString();
       this.sectionUpdate.resume_code = this.resume_code;
       this.sectionUpdate._id = this._id;
-      this.testNumber(this.sectionUpdate.section_title);
-      this.testNumber(this.sectionUpdate.section_desc);
       if  (this.sendSection.valid && !this.showNumberError) {
       this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => console.log('custom section updated =', data));
       this.SectionArray[this.indexUpdate] = this.sectionUpdate;
@@ -146,16 +144,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
     }
     this.sendSection.reset();
     this.showNumberError = false;
-  }
-  /**************************************************************************
-   * @description Test the Controls of the Form with a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType) ;
   }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
@@ -178,7 +166,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   deleteSection(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Section ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -189,23 +177,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
               if (index === pointIndex) { this.SectionArray.splice(index, 1); }
             });
             this.button = 'Add';
-            this.subscriptionModal.unsubscribe();
           }
+          this.subscriptionModal.unsubscribe();
         }
       );
   }
-  /**************************************************************************
-   * @description test if a control has numbers only
-   *************************************************************************/
-  testNumber(pos: string) {
-    if (this.showNumberError === false) {
-      this.showNumberError = !isNaN(+pos);
-    }
-  }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.sendSection.invalid) ;
-  }
+
 }

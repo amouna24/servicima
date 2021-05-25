@@ -151,6 +151,7 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Project Data from Resume Service
    *************************************************************************/
   getProjectInfo() {
+    console.log('get project info and length pro exp', this.proExpList.length);
     if (this.proExpList.length > 0) {
     this.proExpList.forEach(
       (proExpData) => {
@@ -158,15 +159,13 @@ export class ResumeDoneComponent implements OnInit {
           `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
         ).subscribe(
           (responseProject) => {
+            console.log('project array', proExpData.ResumeProfessionalExperienceKey.professional_experience_code);
             if (responseProject['msg_code'] !== '0004') {
-
-              console.log('project array', responseProject);
-              if (this.projectList.length > 0) {
                 responseProject.forEach(
                 (responseProjectData) => {
                   this.projectList.push(responseProjectData);
                 }
-              ); }
+              );
               this.getProjectDetailsInfo();
             }
           });
@@ -236,7 +235,7 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Cv Document in Docx format and the user chose if he want to save it in dataBase or just check it
    *************************************************************************/
   getDocument(action: string) {
-    console.log('section list = ', this.sectionList);
+    console.log('project = ', this.projectList);
     if ( this.certifList.length > 0) {
     this.certifList.forEach((cert) => {
       cert.start_date = this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');

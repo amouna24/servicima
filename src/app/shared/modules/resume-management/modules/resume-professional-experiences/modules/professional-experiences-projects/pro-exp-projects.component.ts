@@ -31,8 +31,10 @@ export class ProExpProjectsComponent implements OnInit {
   _id = '';
   projectUpdate: IResumeProjectModel;
   subscriptionModal: Subscription;
-  minDate: Date;
-  maxDate: Date;
+  minStartDate: Date;
+  maxStartDate: Date;
+  minEndDate: Date;
+  maxEndDate: Date;
   showDateError = false;
   showNumberError = false;
   start_date: any;
@@ -81,29 +83,26 @@ export class ProExpProjectsComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.minDate = this.start_date_pro_exp;
-    this.maxDate = this.end_date_pro_exp;
     console.log('professional experience code=', this.professional_experience_code);
     this.getProjectInfo();
     this.createForm();
     console.log('on init showForm', this.showForm);
-    /*this.sendProject.get('start_date').valueChanges.subscribe(selectedValue => {
-      this.start_date = selectedValue.value;
-      console.log('start date= ', this.start_date.toString());
-  });
-    this.sendProject.get('end_date').valueChanges.subscribe(selectedValue => {
-      this.end_date = selectedValue.value;
-      console.log('end date', this.end_date);
-    });*/
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const currentDay = new Date().getDay();
+    this.minEndDate = this.start_date_pro_exp;
+    this.maxEndDate =  this.end_date_pro_exp;
+    this.minStartDate = this.start_date_pro_exp;
+    this.maxStartDate = this.end_date_pro_exp;
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
   }
   createForm() {
     this.sendProject = this.fb.group({
-      project_title: ['', Validators.pattern('[a-zA-Z ]*')],
-      start_date: '',
-      end_date: [''],
+      project_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      start_date: ['', Validators.required],
+      end_date: ['', Validators.required],
     });
   }
 
@@ -111,12 +110,10 @@ export class ProExpProjectsComponent implements OnInit {
     if (this.button === 'Add') {
       this.start_date = dateStart;
       this.end_date = dateEnd;
-      this.compareDate(dateStart, dateEnd);
     this.Project = this.sendProject.value;
     this.Project.professional_experience_code = this.professional_experience_code;
     this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
-    this.testNumber(this.Project.project_title);
-    if (this.sendProject.valid && this.showDateError === false && !this.showNumberError) {
+    if (this.sendProject.valid ) {
       this.resumeService.addProject(this.Project).subscribe(data => {
         console.log('Technical skill =', data);
         this.getProjectInfo();
@@ -126,13 +123,11 @@ export class ProExpProjectsComponent implements OnInit {
       this.showDateError = false;
     }
     this.arrayProjectCount++; } else {
-      this.compareDate(dateStart, dateEnd);
       this.projectUpdate = this.sendProject.value;
       this.projectUpdate.project_code = this.project_code;
       this.projectUpdate.professional_experience_code = this.professional_experience_code;
       this.projectUpdate._id = this._id;
-      this.testNumber(this.projectUpdate.project_title);
-      if (this.sendProject.valid && this.showDateError === false && !this.showNumberError) {
+      if (this.sendProject.valid) {
         this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
       this.ProjectArray[this.indexUpdate] = this.projectUpdate;
       this.button = 'Add';
@@ -141,12 +136,6 @@ export class ProExpProjectsComponent implements OnInit {
     this.sendProject.reset();
     this.showNumberError = false ;
   }
-  routeToProjectSection() {
-    this.router.navigate(['/candidate/resume/projects'],
-      { state: { id: this.ProjectArray[0].ResumeProjectKey.project_code}
-      });
-  }
-
   onShowForm() {
     this.showForm = true;
     console.log(this.showForm);
@@ -168,7 +157,7 @@ export class ProExpProjectsComponent implements OnInit {
   deleteProject(_id: string, pointIndex: number, project_code: string) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Project ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -210,28 +199,15 @@ export class ProExpProjectsComponent implements OnInit {
                       this.ProjectArray.splice(index, 1);
                     }
                   });
-                  this.subscriptionModal.unsubscribe();
                 });
           }
+          this.subscriptionModal.unsubscribe();
         });
   }
-  testNumber(pos: string) {
-    console.log('isNan=', !isNaN(+pos));
-    if (this.showNumberError === false) {
-      this.showNumberError = !isNaN(+pos);
-    }
-    console.log('position', this.showNumberError);
+  onChangeStartDate(date: string) {
+    this.minEndDate = new Date(date);
   }
-  testRequired() {
-    return (this.sendProject.invalid) ;
-  }
-  compareDate(date1, date2) {
-    const dateStart = new Date(date1);
-    const dateEnd =  new Date(date2);
-    if (dateStart.getTime() > dateEnd.getTime()) {
-      console.log('illogic date');
-      this.showDateError =  true;
-      return { 'compareDate': true};
-    } else { return null; }
+  onChangeEndDate(date: string) {
+    this.maxStartDate = new Date(date);
   }
 }

@@ -48,13 +48,14 @@
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input formControlName="skill" matInput placeholder="Skill title" required>
-                  <mat-error class="red" *ngIf="sendFuncSkill.invalid">
-                    Please Fill out this field with a correct text
-                  </mat-error>
+                  <mat-error class="red" *ngIf="sendFuncSkill.controls.skill.errors?.required">
+                    {{ 'general.required' | translate }}</mat-error>
+                  <mat-error class="red" *ngIf="sendFuncSkill.controls.skill.errors?.pattern">
+                    Numbers not allowed</mat-error>
                 </mat-form-field>
                 <div fxLayout="row" fxLayoutAlign="end end">
                   <button type="button" mat-raised-button class="bg-pale-grey btn-medium black"
-                          (click)="createUpdateFunctionalSkill()" [disabled]="testRequired()">{{button}}
+                          (click)="createUpdateFunctionalSkill()" [disabled]="sendFuncSkill.invalid">{{button}}
                   </button>
                 </div>
               </div>
@@ -65,13 +66,11 @@
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey">back</span>
+            <span class="cool-grey">Previous</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/intervention']">
             Next
           </button>

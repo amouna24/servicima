@@ -30,18 +30,22 @@
                           Name:
                         </mat-label>
                         <mat-form-field appearance="outline" class="full-width">
-                          <input    formControlName="init_name" matInput placeholder="Name" required>
-                          <mat-error class="red" *ngIf="CreationForm.invalid">
-                            Please fill out this field</mat-error>
+                          <input    formControlName="init_name" matInput placeholder="Name" >
+                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.pattern">
+                            Numbers not allowed</mat-error>
                         </mat-form-field></div>
                       <div  class="full-width" >
                         <mat-label class="black font-size-12 required">
                           Actual job:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input    formControlName="actual_job" matInput placeholder="Actual job" required>
-                          <mat-error class="red" *ngIf="CreationForm.invalid">
-                            Please fill out this field</mat-error>
+                          <input    formControlName="actual_job" matInput placeholder="Actual job">
+                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.pattern">
+                            Numbers not allowed</mat-error>
                         </mat-form-field></div>
                       <div class="full-width">
                       <mat-label class="black font-size-12 required">
@@ -68,7 +72,9 @@
                            Years of experience:
                          </mat-label>
                          <mat-form-field appearance="outline" class="full-width">
-                           <input   matInput  formControlName="years_of_experience" type="number" placeholder="Years of experience" >
+                           <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder="Years of experience" >
+                           <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
+                             You should select a number between 0 and 31</mat-error>
                          </mat-form-field>
                        </div>
                   </div>
@@ -102,7 +108,7 @@
               </div>
               <div fxLayout="row" fxFlex="10" fxLayoutAlign="center " >
                 <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-                  <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="testRequired()">
+                  <button mat-raised-button type="submit" color="primary" class="white btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="CreationForm.invalid">
                     Next
                   </button>
                 </div>

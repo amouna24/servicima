@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { ResumeService } from '@core/services/resume/resume.service';
@@ -94,8 +94,8 @@ export class ProjectSectionComponent implements OnInit {
   }
   createFormProDetails() {
     this.sendProDetails = this.fb.group({
-      project_detail_title: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
-      project_detail_desc: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      project_detail_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      project_detail_desc: '',
         select: 'PARAGRAPH',
       });
   }
@@ -121,7 +121,7 @@ export class ProjectSectionComponent implements OnInit {
    */
   createFormSectionDetails() {
     this.sendProSectionDetails = this.fb.group({
-        project_details_section_desc: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+        project_details_section_desc: ['', [Validators.required]],
       });
   }
   /**
@@ -134,11 +134,7 @@ export class ProjectSectionComponent implements OnInit {
     this.ProSectionDetails.project_details_code = this.project_details_code;
     console.log(this.ProSectionDetails);
     if (this.sendProSectionDetails.valid) {
-      /*this.resumeService.
-      addProjectDetailsSection(this.ProSectionDetails).
-      subscribe(dataSection => console.log('Section details =', dataSection));*/
       this.proSectionArray.push(this.ProSectionDetails);
-
     } else { console.log('Form is not valid');
     }
     this.sendProSectionDetails.reset();
@@ -236,7 +232,7 @@ export class ProjectSectionComponent implements OnInit {
   deleteProject(_id: string, pointIndex: number, project_details_code) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Project Detail ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(

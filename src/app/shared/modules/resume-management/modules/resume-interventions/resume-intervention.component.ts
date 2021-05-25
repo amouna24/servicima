@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
 import { UserService } from '@core/services/user/user.service';
@@ -79,7 +79,7 @@ export class ResumeInterventionComponent implements OnInit {
    */
   createForm() {
     this.sendIntervention = this.fb.group({
-      level_of_intervention_desc : ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      level_of_intervention_desc : ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
     });
   }
   /**
@@ -104,7 +104,6 @@ export class ResumeInterventionComponent implements OnInit {
       this.interventionUpdate.resume_code = this.resume_code;
       this.interventionUpdate._id = this._id;
       console.log(' intervention update =', this.interventionUpdate);
-      this.testNumber(this.Intervention.level_of_intervention_desc);
       if (this.sendIntervention.valid && !this.showNumberError) {
       this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
       this.interventionArray[this.indexUpdate] = this.interventionUpdate;
@@ -113,16 +112,6 @@ export class ResumeInterventionComponent implements OnInit {
 
     this.sendIntervention.reset();
     this.showNumberError = false;
-  }
-  /**************************************************************************
-   * @description Test the Controls of the Form with a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType) ;
   }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
@@ -142,7 +131,7 @@ export class ResumeInterventionComponent implements OnInit {
   deleteIntervention(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Level o intervention ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -153,25 +142,10 @@ export class ResumeInterventionComponent implements OnInit {
               if (index === pointIndex) { this.interventionArray.splice(index, 1); }
             });
             this.button = 'Add';
-            this.subscriptionModal.unsubscribe();
           }
+          this.subscriptionModal.unsubscribe();
         }
       );
   }
-  /**************************************************************************
-   * @description test if a control has numbers only
-   *************************************************************************/
-  testNumber(pos: string) {
-    console.log('isNan=', !isNaN(+pos));
-    if (this.showNumberError === false) {
-      this.showNumberError = !isNaN(+pos);
-    }
-    console.log('position', this.showNumberError);
-  }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.sendIntervention.invalid) ;
-  }
+
 }

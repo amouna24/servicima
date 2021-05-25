@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { UserService } from '@core/services/user/user.service';
@@ -21,8 +21,10 @@ export class ProExpComponent implements OnInit {
   proExpArray: IResumeProfessionalExperienceModel[] = [];
   resume_code = '';
   professional_experience_code = '';
-  minDate: Date;
-  maxDate: Date;
+  minStartDate: Date;
+  maxStartDate: Date;
+  minEndDate: Date;
+  maxEndDate: Date;
   showDateError = false;
   button = 'Add';
   proExpUpdate: IResumeProfessionalExperienceModel;
@@ -50,11 +52,13 @@ export class ProExpComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDay();
-    this.minDate = new Date(currentYear - 20, 0, 1);
-    this.maxDate = new Date(currentYear, currentMonth, currentDay + 25);
-    console.log(this.maxDate);
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 25);
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 25);
     this.createForm();
   }
+
   getProExpInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -111,16 +115,15 @@ export class ProExpComponent implements OnInit {
    */
   createForm() {
     this.sendProExp = this.fb.group({
-      position: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
-      customer: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
-      start_date: '',
-      end_date: '',
+      position:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      customer: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      start_date:  ['', [Validators.required]],
+      end_date:  ['', [Validators.required]],
     });
   }
 
   createUpdateProExp(dateStart, dateEnd) {
     if (this.button === 'Add') {
-    this.compareDate(dateStart, dateEnd);
     this.ProExp = this.sendProExp.value;
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
@@ -135,7 +138,6 @@ export class ProExpComponent implements OnInit {
 
     }
     this.arrayProExpCount++; } else {
-      this.compareDate(dateStart, dateEnd);
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
@@ -156,15 +158,6 @@ export class ProExpComponent implements OnInit {
     }
     return control.hasError(validationType);
   }
-  compareDate(date1, date2) {
-    console.log(date1 , '-----' , date2);
-    const dateStart = new Date(date1);
-    const dateEnd =  new Date(date2);
-    if (dateStart.getTime() > dateEnd.getTime()) {
-      console.log('illogic date');
-      this.showDateError =  true;
-    }
-  }
 
   // tslint:disable-next-line:max-line-length
   editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
@@ -184,7 +177,7 @@ export class ProExpComponent implements OnInit {
   deleteProExp(_id: string, pointIndex: number, professional_experience_code: string) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'delete',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -234,14 +227,20 @@ export class ProExpComponent implements OnInit {
                     }
                   });
                   this.button = 'Add';
-                  this.subscriptionModal.unsubscribe();
                 });
 
           }
+          this.subscriptionModal.unsubscribe();
         });
   }
-
-  testRequired() {
-    return (this.sendProExp.invalid) ;
+  onChangeStartDate(date: string) {
+    console.log(date);
+    this.minEndDate = new Date(date);
+    console.log('min date after change', this.minEndDate);
+  }
+  onChangeEndDate(date: string) {
+    console.log(date);
+    this.maxStartDate = new Date(date);
+    console.log('max date after change', this.maxStartDate);
   }
 }

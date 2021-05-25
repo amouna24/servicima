@@ -6,7 +6,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { ITheme } from '@shared/models/theme.model';
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -135,10 +135,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: ['', Validators['required']],
-      years_of_experience: null,
-      actual_job: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      years_of_experience: [null, Validators.pattern('^(0?[1-9]|[12][0-9]|3[01])$')],
+      actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       image: this.avatar,
-      init_name: ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       status: 'A'
     });
   }
@@ -149,8 +149,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.haveImage;
-    this.testNumber(this.generalInfo.actual_job);
-    this.testNumber(this.generalInfo.init_name);
+    // this.testNumber(this.generalInfo.actual_job);
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);
@@ -158,38 +157,11 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
     } } else {
       this.generalInfo = this.CreationForm.value;
-      this.testNumber(this.generalInfo.actual_job);
-      this.testNumber(this.generalInfo.init_name);
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);
        }); }
     }
     this.showNumberError = false;
-  }
-  /**************************************************************************
-   * @description Test the Controls of the Form with a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType);
-  }
-  /**************************************************************************
-   * @description test if a control has numbers only
-   *************************************************************************/
-  testNumber(pos: string) {
-    if (this.showNumberError === false) {
-      this.showNumberError = !isNaN(+pos);
-    }
-  }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.CreationForm.controls.init_name.value === '') || (this.CreationForm.controls.language_id.value === '')
-      || (this.CreationForm.controls.actual_job.value === '') ;
   }
 }

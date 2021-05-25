@@ -55,10 +55,10 @@
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input formControlName="establishment" matInput placeholder="Establishment" required>
-                          <mat-error class="red"
-                                     *ngIf="sendCertifDiploma.invalid">
-                            Please fill out this field
-                          </mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.establishment.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.establishment.errors?.pattern">
+                            Numbers not allowed</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="32">
@@ -67,9 +67,10 @@
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input formControlName="diploma" matInput placeholder="Diploma" required>
-                          <mat-error class="red"*ngIf="sendCertifDiploma.invalid">
-                            Please fill out this field
-                          </mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.diploma.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.diploma.errors?.pattern">
+                            Numbers not allowed</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -79,14 +80,12 @@
                           Start Date:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minDate" [max]="maxDate" #date1
-                                 formControlName="start_date" placeholder="Start date" required>
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1
+                                 formControlName="start_date" placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
-                          <mat-error class="red"
-                                     *ngIf="sendCertifDiploma.invalid">
-                            Please select a correct date
-                          </mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.start_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="32">
@@ -94,14 +93,12 @@
                           End date:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend" [min]="minDate" [max]="maxDate" #date2
-                                 formControlName="end_date" placeholder="End date" required>
+                          <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2
+                                 formControlName="end_date" placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>
-                          <mat-error class="red"
-                                     *ngIf="sendCertifDiploma.invalid">
-                            Please select a correct date
-                          </mat-error>
+                          <mat-error class="red" *ngIf="sendCertifDiploma.controls.end_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -119,7 +116,7 @@
                     <div fxLayout="row" fxFlex="6">
                       <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                (click)="createUpdateCertifDiploma(date1.value,date2.value)" [disabled]="testRequired()">
+                                (click)="createUpdateCertifDiploma(date1.value,date2.value)" [disabled]="sendCertifDiploma.invalid">
                           {{button}}
                         </button>
                       </div>
@@ -133,14 +130,12 @@
       </div>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/dynamicSection">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey">back</span>
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/professionalExperience">
+            <span class="cool-grey">Previous</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/technicalSkills']">
             Next
           </button>

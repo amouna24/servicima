@@ -18,7 +18,6 @@ import { ResumeFuncSkillComponent } from './modules/resume-functional-skills/res
 import { ResumeCertifDiplomaComponent } from './modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from './modules/resume-done/resume-done.component';
 import { LanguageformComponent } from './modules/resume-languages/languageform/languageform.component';
-import {NgxEditorModule} from "ngx-editor";
 @NgModule({
   declarations: [
     ResumeGeneralInformationComponent,
@@ -39,7 +38,6 @@ import {NgxEditorModule} from "ngx-editor";
     ScrollbarModule,
     SharedModule,
     ReactiveFormsModule,
-    NgxEditorModule,
   ],
   exports: [
     ResumeGeneralInformationComponent,

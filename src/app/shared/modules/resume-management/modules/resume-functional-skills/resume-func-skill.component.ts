@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -83,7 +83,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   deleteFuncSkill(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Functionnal Skills ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -94,8 +94,8 @@ export class ResumeFuncSkillComponent implements OnInit {
               if (index === pointIndex) { this.funcSkillArray.splice(index, 1); }
             });
             this.button = 'Add';
-            this.subscriptionModal.unsubscribe();
           }
+          this.subscriptionModal.unsubscribe();
         }
       );
   }
@@ -105,7 +105,7 @@ export class ResumeFuncSkillComponent implements OnInit {
    */
   createForm() {
     this.sendFuncSkill = this.fb.group({
-      skill : ['', [Validators.pattern('(?!^\\d+$)^.+$')]],
+      skill :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       });
   }
   /**
@@ -131,7 +131,6 @@ this.arrayFuncSkillCount++;
       this.FuncSkillUpdate.resume_code = this.resume_code;
       this.FuncSkillUpdate.index = this.indexUpdate;
       this.FuncSkillUpdate._id = this._id;
-      this.testNumber(this.FuncSkillUpdate.skill);
       if (this.sendFuncSkill.valid && !this.showNumberError) {
       this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
       this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
@@ -139,16 +138,6 @@ this.arrayFuncSkillCount++;
     }
     this.sendFuncSkill.reset();
     this.showNumberError = false;
-  }
-  /**************************************************************************
-   * @description Test the Controls of the Form with a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType) ;
   }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
@@ -165,20 +154,6 @@ this.arrayFuncSkillCount++;
 */
     console.log('FuncSkill update', this.FuncSkillUpdate);
   }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.sendFuncSkill.invalid) ;
-  }
-  /**************************************************************************
-   * @description test if a control has numbers only
-   *************************************************************************/
-  testNumber(pos: string) {
-    console.log('isNan=', !isNaN(+pos));
-    if (this.showNumberError === false) {
-      this.showNumberError = !isNaN(+pos);
-    }
-    console.log('position', this.showNumberError);
-  }
+
+
 }

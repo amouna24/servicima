@@ -27,12 +27,12 @@
             <div  *ngFor="let item of getLanguage let pointIndex=index">
 
               <div fxLayout="row"  >
-                <div fxLayout="column" fxFlex="7" class="button-pos" fxFlexAlign="center">
-                  <div fxLayout="row" fxFlex="44" >
-                    <div fxLayout="column" fxFlex="30">
-                  <button  mat-raised-button type="button"  class="bg-pale-grey width-0" (click)="deleteLanguage(item._id,pointIndex)">
-<mat-icon  svgIcon="close"></mat-icon>
-                  </button></div></div>
+                <div fxLayout="column" fxFlex="7" >
+                  <div fxLayout="row" fxFlex="70" style="align-items: flex-end; justify-content: space-around">
+                  <button  mat-raised-button type="button"  class="bg-pale-grey p-10" (click)="deleteLanguage(item._id,pointIndex)">
+                    <mat-icon svgIcon="close"></mat-icon>
+                  </button>
+                  </div>
                 </div>
                 <div fxLayout="column" fxFlex="93">
                   <div fxLayout="row" fxLayoutAlign=" center" fxFlexFill>
@@ -73,8 +73,8 @@
                                 placeholder="Language" formControlName="resume_language_code" required>
                       <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
                     </mat-select>
-                    <mat-error class="red" *ngIf="isControlHasError(sendLanguage,'resume_language_code', 'required')">
-                      Please select an item in the list</mat-error>
+                    <mat-error class="red" *ngIf="sendLanguage.controls.resume_language_code.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="30">
@@ -92,7 +92,7 @@
 
                 </div>
                 <div fxLayout="column" fxFlex="16"    >
-                  <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="testRequired()" (click)="createLanguage()">Add</button>
+                  <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="sendLanguage.invalid" (click)="createLanguage()">Add</button>
                 </div>
             </div>
 
@@ -103,13 +103,11 @@
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/intervention">
-            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey">back</span>
+            <span class="cool-grey">Previous</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/dynamicSection']">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/dynamicSection']">
             Next
           </button>
         </div>

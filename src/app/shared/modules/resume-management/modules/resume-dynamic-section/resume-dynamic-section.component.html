@@ -36,7 +36,7 @@
                   <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No custom section available</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="center">
-                    <button mat-raised-button (click)="showCustomSection()" class="btn-large bg-primaryColor white">
+                    <button mat-raised-button (click)="showCustomSection()" color="primary" class="btn-large  white">
                       Add section
                     </button>
                   </div>
@@ -80,9 +80,10 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="full-width">
                       <input formControlName="section_title" matInput placeholder="Section title" required>
-                      <mat-error class="red" *ngIf="sendSection.invalid">
-                        Please fill out this field
-                      </mat-error>
+                      <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.required">
+                        {{ 'general.required' | translate }}</mat-error>
+                      <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.pattern">
+                        Numbers not allowed</mat-error>
                     </mat-form-field>
                   </div>
                   <div fxLayout="column">
@@ -92,14 +93,13 @@
                     <mat-form-field appearance="outline">
                               <textarea matInput placeholder="Description" rows="7"
                                         formControlName="section_desc" required></textarea>
-                      <mat-error class="red" *ngIf="sendSection.invalid">
-                        Please fill out this field
-                      </mat-error>
+                      <mat-error class="red" *ngIf="sendSection.controls.section_desc.errors?.required">
+                        {{ 'general.required' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="end end">
                     <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                         #add   (click)="createUpdateSection()" [disabled]="testRequired()">{{button}}
+                         #add   (click)="createUpdateSection()" [disabled]="sendSection.invalid">{{button}}
                     </button>
                   </div>
                 </div>
@@ -111,13 +111,11 @@
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/language">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey">back</span>
+            <span class="cool-grey">Previous</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/done']">
             Next
           </button>
@@ -128,7 +126,3 @@
   </div>
 
 </div>
-
-<!--
-</form>
--->

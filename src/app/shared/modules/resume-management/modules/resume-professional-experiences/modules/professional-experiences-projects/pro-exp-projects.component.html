@@ -31,7 +31,7 @@
                     <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>The experience has no project</span>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="center">
-                      <button mat-raised-button (click)="onShowProject()" class="btn-medium bg-primaryColor white">
+                      <button mat-raised-button (click)="onShowProject()" color="primary" class="btn-medium  white">
                         Add Project
                       </button>
                     </div>
@@ -44,7 +44,7 @@
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
                   <mat-panel-title style="margin-right: 0 !important;">
-                    <div fxLayout="row" style="height: 80px" class="bg-pale-grey border-radius-15 full-width">
+                    <div fxLayout="row" style="height: 80px" class="bg-pale-grey  full-width" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
                       <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="50">
                         <div fxLayout="row" fxFlex="34">
                           <p class="font-normal font-size-15">{{item.project_title}}</p>
@@ -99,7 +99,10 @@
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input formControlName="project_title" matInput placeholder="Project title" required>
-                          <mat-error *ngIf="sendProject.invalid">You should select a correct Project title</mat-error>
+                          <mat-error class="red" *ngIf="sendProject.controls.project_title.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="sendProject.controls.project_title.errors?.pattern">
+                            Numbers not allowed</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -109,13 +112,12 @@
                           Start Date:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minDate" [max]="maxDate" #date1 formControlName="start_date"
-                                 placeholder="Start date">
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1 formControlName="start_date"
+                                 placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
-                          <mat-error *ngIf="sendProject.invalid" >
-                            You should enter a correct date
-                          </mat-error>
+                          <mat-error class="red" *ngIf="sendProject.controls.start_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="50">
@@ -125,13 +127,12 @@
                               End date:
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepickerend" [min]="minDate" [max]="maxDate" #date2  formControlName="end_date"
-                                     placeholder="End date">
+                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2  formControlName="end_date"
+                                     placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
                               <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                               <mat-datepicker #datepickerend color="primary"></mat-datepicker>
-                              <mat-error *ngIf="sendProject.invalid">
-                                You should enter a correct date
-                              </mat-error>
+                              <mat-error class="red" *ngIf="sendProject.controls.end_date.errors?.required">
+                                {{ 'general.required' | translate }}</mat-error>
                             </mat-form-field>
                           </div>
                         </div>
@@ -139,7 +140,7 @@
                     </div>
                     <div fxLayout="row" fxFlex="30" fxLayoutAlign="end">
                       <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-small"
-                              style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="testRequired()">{{button}}
+                              style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="sendProject.invalid">{{button}}
                       </button>
                     </div>
                   </div>
@@ -161,9 +162,9 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/technicalSkills']">
-            Save
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/certifDiploma']">
+            Next
           </button>
         </div>
       </div>

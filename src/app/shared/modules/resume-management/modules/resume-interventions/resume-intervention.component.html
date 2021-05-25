@@ -44,14 +44,14 @@
               <mat-form-field appearance="outline">
                               <textarea matInput placeholder="Level of intervention" rows="7"
                                         formControlName="level_of_intervention_desc" required></textarea>
-                <mat-error class="red"
-                           *ngIf="sendIntervention.invalid">
-                  Please Fill out this field
-                </mat-error>
+                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.required">
+                  {{ 'general.required' | translate }}</mat-error>
+                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.pattern">
+                  Numbers not allowed</mat-error>
               </mat-form-field>
               <div fxLayout="row" fxLayoutAlign="end end">
                 <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                        (click)="createUpdateIntervention()" [disabled]="testRequired()">{{button}}
+                        (click)="createUpdateIntervention()" [disabled]="sendIntervention.invalid">{{button}}
                 </button>
               </div>
             </div>
@@ -61,13 +61,11 @@
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey">back</span>
+            <span class="cool-grey">Previous</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" class="white bg-primaryColor btn-medium" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/language']">
             Next
           </button>

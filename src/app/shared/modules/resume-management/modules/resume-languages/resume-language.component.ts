@@ -1,18 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup , FormArray } from '@angular/forms';
-import { ResumeService } from '@core/services/resume/resume.service';
-import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
-import { UserService } from '@core/services/user/user.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { IViewParam } from '@shared/models/view.model';
-import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { RefdataService } from '@core/services/refdata/refdata.service';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { ModalService } from '@core/services/modal/modal.service';
-import { toTitleCase } from 'codelyzer/util/utils';
-import { IResumeLanguageKeyModel } from '@shared/models/resumeLanguageKey.model';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ResumeService} from '@core/services/resume/resume.service';
+import {IResumeLanguageModel} from '@shared/models/resumeLanguage.model';
+import {UserService} from '@core/services/user/user.service';
+import {Subscription} from 'rxjs';
+import {IViewParam} from '@shared/models/view.model';
+import {AppInitializerService} from '@core/services/app-initializer/app-initializer.service';
+import {RefdataService} from '@core/services/refdata/refdata.service';
+import {UtilsService} from '@core/services/utils/utils.service';
+import {ModalService} from '@core/services/modal/modal.service';
+import {IResumeLanguageKeyModel} from '@shared/models/resumeLanguageKey.model';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'wid-resume-language',
@@ -136,7 +135,7 @@ export class ResumeLanguageComponent implements OnInit {
    */
   createForm() {
     this.sendLanguage = this.fb.group({
-          resume_language_code: '',
+          resume_language_code:  ['', [Validators.required]],
         });
   }
   /**
@@ -144,7 +143,7 @@ export class ResumeLanguageComponent implements OnInit {
    */
   createLanguage() {
     this.language = this.sendLanguage.value;
-    this.language.level = this.rating.toString();
+    this.language.level = this.translateLevel(this.rating.toString());
     this.language.resume_code = this.resume_code.toString();
     if (this.sendLanguage.valid && this.rating > 0) {
       console.log(this.language);
@@ -221,22 +220,12 @@ export class ResumeLanguageComponent implements OnInit {
 
   }
   /**************************************************************************
-   * @description Test the Controls of the Form with a validation type
-   *************************************************************************/
-  isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType) ;
-  }
-  /**************************************************************************
    * @description Delete Selected Languages
    *************************************************************************/
  deleteLanguage(_id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
+      title: 'Delete This Language?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -252,16 +241,19 @@ export class ResumeLanguageComponent implements OnInit {
                                     this.langListRes.splice(index, 1);
                                     }}); }
             });
-            this.subscriptionModal.unsubscribe();
           }
+          this.subscriptionModal.unsubscribe();
         }
       );
   }
-  /**************************************************************************
-   * @description test if there is an empty field , enable button add if all fields are not empty
-   *************************************************************************/
-  testRequired() {
-    return (this.sendLanguage.invalid) ;
+  translateLevel(level: string) {
+   switch (level) {
+     case '5': return 'Tres Bien';
+     case '4': return 'Bien';
+     case  '3': return 'Suffisant';
+     case '2': return 'mediocre';
+     case '1': return 'Mauvais';
+   }
   }
 
 }
