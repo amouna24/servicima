@@ -4,8 +4,6 @@ import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertifica
 
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
-import { MatDatepickerIntl } from '@angular/material/datepicker';
-import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 
@@ -172,11 +170,17 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         }
       );
   }
+  /**************************************************************************
+   * @description change the minimumn of the end Date DatePicker
+   *************************************************************************/
   onChangeStartDate(date: string) {
     console.log(date);
     this.minEndDate = new Date(date);
     console.log('min date after change', this.minEndDate);
   }
+  /**************************************************************************
+   * @description change the maximum of the Start Date DatePicker
+   *************************************************************************/
   onChangeEndDate(date: string) {
     console.log(date);
     this.maxStartDate = new Date(date);

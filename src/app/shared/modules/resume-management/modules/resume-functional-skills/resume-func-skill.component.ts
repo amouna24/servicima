@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-import { logger } from 'codelyzer/util/logger';
 import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
@@ -154,6 +153,4 @@ this.arrayFuncSkillCount++;
 */
     console.log('FuncSkill update', this.FuncSkillUpdate);
   }
-
-
 }

@@ -39,7 +39,6 @@ export const environment = {
   resumeSectionApiUrl: 'http://192.168.1.22:8071/servicima/resumesection/v1',
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
-
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',

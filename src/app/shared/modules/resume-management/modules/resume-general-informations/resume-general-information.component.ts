@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IUserModel } from '@shared/models/user.model';
-import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ITheme } from '@shared/models/theme.model';
+
 import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,15 +11,12 @@ import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
-import { UtilsService } from '@core/services/utils/utils.service';
-import { sidenavRightMenu } from '@shared/statics/right-sidenav-menu.static';
-import { takeUntil } from 'rxjs/operators';
+
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeModel } from '@shared/models/resume.model';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { indicate } from '@core/services/utils/progress';
-import { map } from 'rxjs/internal/operators/map';
+
 
 @Component({
   selector: 'wid-resume-general-information',
@@ -149,7 +145,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.haveImage;
-    // this.testNumber(this.generalInfo.actual_job);
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);

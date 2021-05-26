@@ -9,8 +9,7 @@ import { IResumeInterventionModel } from '@shared/models/resumeIntervention.mode
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
-import { FormGroup } from '@angular/forms';
-import { jsPDF } from 'jspdf';
+
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
@@ -18,7 +17,6 @@ import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfess
 import { DatePipe } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { UploadService } from '@core/services/upload/upload.service';
-import { takeUntil } from 'rxjs/operators';
 import { map } from 'rxjs/internal/operators/map';
 
 @Component({

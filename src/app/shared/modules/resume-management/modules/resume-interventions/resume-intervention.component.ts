@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeInterventionModel } from '@shared/models/resumeIntervention.model';
 import { UserService } from '@core/services/user/user.service';

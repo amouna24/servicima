@@ -3,11 +3,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
-import { MatButton } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Editor } from 'ngx-editor';
 
 @Component({
   selector: 'wid-resume-dynamic-section',

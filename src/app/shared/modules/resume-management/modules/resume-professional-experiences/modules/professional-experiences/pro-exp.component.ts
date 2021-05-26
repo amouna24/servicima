@@ -5,8 +5,6 @@ import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfess
 import { UserService } from '@core/services/user/user.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { MatDatepickerIntl } from '@angular/material/datepicker';
-import { takeUntil } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 @Component({
@@ -46,7 +44,9 @@ export class ProExpComponent implements OnInit {
     private modalServices: ModalService
   ) {
   }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   ngOnInit(): void {
     this.getProExpInfo();
     const currentYear = new Date().getFullYear();
@@ -58,7 +58,9 @@ export class ProExpComponent implements OnInit {
     this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 25);
     this.createForm();
   }
-
+  /**************************************************************************
+   * @description Get Professional Data from Resume Service
+   *************************************************************************/
   getProExpInfo() {
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -97,7 +99,9 @@ export class ProExpComponent implements OnInit {
       );
 
   }
-
+  /**************************************************************************
+   * @description Action that Route to Professional experience project component with passing parametrs in the state
+   *************************************************************************/
   routeToProject(code: string, customer: string, position: string, start_date: string, end_date: string) {
     this.router.navigate(['/candidate/resume/projects'],
       {
@@ -151,14 +155,6 @@ export class ProExpComponent implements OnInit {
     }
     this.sendProExp.reset();
   }
-   isControlHasError(form: FormGroup, controlName: string, validationType: string): boolean {
-    const control = form[controlName];
-    if (!control) {
-      return true;
-    }
-    return control.hasError(validationType);
-  }
-
   // tslint:disable-next-line:max-line-length
   editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
     this.sendProExp.patchValue({
