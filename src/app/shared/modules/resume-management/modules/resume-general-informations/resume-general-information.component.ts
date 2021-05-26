@@ -17,7 +17,6 @@ import { IResumeModel } from '@shared/models/resume.model';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 
-
 @Component({
   selector: 'wid-resume-general-information',
   templateUrl: './resume-general-information.component.html',
