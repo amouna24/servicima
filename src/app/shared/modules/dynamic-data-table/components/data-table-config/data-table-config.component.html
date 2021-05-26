@@ -17,10 +17,13 @@
           <div class="title"><span>Available</span></div>
           <div class="list-content">
             <form [formGroup]="canBeDisplayedColumnsForm">
-              <mat-checkbox *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
+              <div cdkDropList class="example-list" (cdkDropListDropped)="onDropCanBeDisplayed($event)"  style="display: flex;
+              flex-direction: column;">
+              <mat-checkbox cdkDrag *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
                             (change)="checkCanBeDisplayedColumn($event)">
                 <span>{{columns.name}}</span>
               </mat-checkbox>
+            </div>
             </form>
           </div>
         </div>
@@ -38,10 +41,13 @@
           <div class="title"><span>Displayed</span></div>
           <div class="list-content">
             <form [formGroup]="displayedColumnsForm">
-              <mat-checkbox *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
+              <div cdkDropList class="example-list" (cdkDropListDropped)="onDropDisplayed($event)" style="display: flex;
+              flex-direction: column;">
+              <mat-checkbox cdkDrag *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
                             (change)=checkDisplayedColumn($event)>
                 <span>{{columns.name}}</span>
               </mat-checkbox>
+            </div>
             </form>
           </div>
         </div>

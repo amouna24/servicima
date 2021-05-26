@@ -24,7 +24,7 @@
           <mat-list *ngFor="let mi of menuItems">
             <ng-container *ngIf="mi.child.length > 0; else ChildMI">
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
-                             [ngClass]="childSelected(mi.titleKey) ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             [ngClass]="childSelected(mi.titleKey) ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
                              (click)="scroll(mi.titleKey)"> {{ mi.title }} </mat-list-item>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
                              [ngClass]="childMI.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-14 m-l-20' : 'steel-two font-size-14 m-l-20'"
@@ -33,7 +33,7 @@
             </ng-container>
             <ng-template #ChildMI>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
-                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
                              (click)="scroll('#' + mi.titleKey)"> {{ mi.title }} </mat-list-item>
             </ng-template>
           </mat-list>
