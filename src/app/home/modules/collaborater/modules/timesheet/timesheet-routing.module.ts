@@ -12,13 +12,23 @@ const routes: Routes = [
       breadcrumb: 'Timesheet'
     },
   },
+
   {
     path: 'add-timesheet',
     component: AddTimesheetComponent,
     data: {
       breadcrumb: 'add-timesheet'
     },
-  }
+  },
+
+  {
+    path: 'add-timesheet-extra',
+    component: AddTimesheetComponent,
+    data: {
+      breadcrumb: 'add-timesheet-extra'
+    },
+  },
+
 ];
 
 @NgModule({

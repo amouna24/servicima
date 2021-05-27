@@ -12,7 +12,6 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
 import { takeUntil } from 'rxjs/operators';
-import { ITimesheetModel } from '@shared/models/timesheet.model';
 import * as moment from 'moment';
 
 @Component({
@@ -22,7 +21,6 @@ import * as moment from 'moment';
 })
 
 export class AddTimesheetComponent implements OnInit {
-  close = true;
   initialForm: FormGroup;
   listTimesheetProject: ITimesheetProjectModel[] = [];
   totalWeek: number;
@@ -30,7 +28,6 @@ export class AddTimesheetComponent implements OnInit {
   companyEmail: string;
   refData: { } = { };
   categoryList: IViewParam[];
-  subscriptions: Subscription;
   projectName: string;
   projectCode: string;
   startDate: string;
@@ -38,9 +35,15 @@ export class AddTimesheetComponent implements OnInit {
   categoryViewValue = '';
   timesheet = this.router.getCurrentNavigation().extras.state.data;
   buttonValue = this.router.getCurrentNavigation().extras.state.buttonClicked;
+  // typeTimesheet = this.router.getCurrentNavigation().extras.state.typeTimesheet;
+  typeTimesheet: string;
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
-  listTimesheet: ITimesheetModel[] = [];
-  private subscriptionModal: Subscription;
+  /** subscription */
+  subscriptionModal: Subscription;
+  subscriptions: Subscription;
 
   constructor( private fb: FormBuilder,
                private timesheetService: TimesheetService,
@@ -51,6 +54,7 @@ export class AddTimesheetComponent implements OnInit {
                private router: Router,
                private modalServices: ModalService,
                ) {
+    this.typeTimesheet = this.router.url;
   }
 
   async ngOnInit() {
@@ -58,22 +62,22 @@ export class AddTimesheetComponent implements OnInit {
     this.getUserInfo();
     this.createForm();
     await this.getRefDataCategory();
-    this.executeUpdateForm();
+    this.updateForm();
   }
 
+  /**
+   * @description : get project by name
+   */
   getProjectByName() {
     this.timesheetService
         .getTimesheetProject(`?project_desc=${this.projectName}`)
         .subscribe(
         res => {
-          // console.log('onProjectSelect', res);
-          // console.log('projectCode', res[0].TimesheetProjectKey.project_code);
           this.projectCode = res[0].TimesheetProjectKey.project_code;
           this.categoryCode = res[0].category_code;
           this.categoryList.forEach( (data) => {
             if (data.value === this.categoryCode) {
               this.categoryViewValue = data.viewValue;
-              // console.log('data', data.viewValue);
             }
           });
         },
@@ -81,12 +85,17 @@ export class AddTimesheetComponent implements OnInit {
       );
   }
 
-  onProjectSelect(prj) {
-    // console.log(prj.value);
-    this.projectName = prj.value;
+  /**
+   * @description : get value of selected project
+   */
+  onProjectSelect(project) {
+    this.projectName = project.value;
     this.getProjectByName();
   }
 
+  /**
+   * @description : get projects of collaborator
+   */
   getAllProjects() {
     this.timesheetService.getTimesheetProject('').subscribe(
       data => { this.listTimesheetProject = data; },
@@ -94,18 +103,21 @@ export class AddTimesheetComponent implements OnInit {
     );
   }
 
+  /**
+   * @description : get user info
+   */
   getUserInfo() {
     this.subscriptions = this.userService.connectedUser$.subscribe(
       (data) => {
         if (!!data) {
-          this.userInfo = data;
-          // console.log('user info:', data);
           this.companyEmail = data.user[0]['company_email'];
-          // console.log('company email', this.companyEmail);
         }
     });
   }
 
+  /**
+   * @description : get ref data
+   */
   async getRefdata() {
     const list = ['TIMESHEET_STATE', 'TIMESHEET_PROJECT_CATEGORY'];
     this.refData =  await this.refDataService
@@ -113,11 +125,17 @@ export class AddTimesheetComponent implements OnInit {
     return this.refData;
   }
 
+  /**
+   * @description : get ref data category
+   */
   async getRefDataCategory() {
     const data = await this.getRefdata();
     this.categoryList = data['TIMESHEET_PROJECT_CATEGORY'];
   }
 
+  /**
+   * @description : create form timesheet
+   */
   createForm() {
     this.initialForm = this.fb.group(
       {
@@ -138,68 +156,43 @@ export class AddTimesheetComponent implements OnInit {
         saturday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
         sunday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
         total_week_hours : [0],
+        type_timesheet : [''],
         customer_timesheet : 'wid-customer-timesheet'
       }
     );
   }
 
+  /**
+   * @description : update form timesheet
+   */
   updateForm() {
-    this.initialForm.patchValue({
-      application_id: this.timesheet.TimeSheetKey.application_id,
-      email_address: this.timesheet.TimeSheetKey.email_address,
-      company_email: this.timesheet.TimeSheetKey.company_email,
-      timesheet_week: this.timesheet.TimeSheetKey.timesheet_week,
-      project_code: '',
-      start_date: this.timesheet.start_date,
-      end_date: this.timesheet.end_date,
-      timesheet_status: this.timesheet.timesheet_status,
-      comment: this.timesheet.comment,
-      monday: this.timesheet.monday,
-      tuesday: this.timesheet.tuesday,
-      wednesday: this.timesheet.wednesday,
-      thursday: this.timesheet.thursday,
-      friday: this.timesheet.friday,
-      saturday: this.timesheet.saturday,
-      sunday: this.timesheet.sunday,
-      total_week_hours: this.timesheet.total_week_hours,
-      customer_timesheet: this.timesheet.customer_timesheet,
-    });
-    this.projectCode = this.timesheet.TimeSheetKey.project_code;
-    this.timesheetService.getTimesheetProject(`?project_code=${this.projectCode}`).subscribe(
-      data => {
-        this.projectName = data[0].project_desc;
-        this.initialForm.patchValue({ project_code : this.projectName });
-        this.categoryViewValue = data[0].category_code;
-      },
-      error => {
-          console.log(error);
-        }
-    );
-  }
-
-  executeUpdateForm() {
-    if (this.buttonValue === 'edit') {
-      this.updateForm();
-    }
-  }
-
-  submitTimesheet(value) {
-    if (this.initialForm.valid) {
-      if (value === 'submit') {
-        this.initialForm.patchValue({ timesheet_status : 'Pending' });
-      } else if (value === 'save') {
-        this.initialForm.patchValue({ timesheet_status : 'Draft' });
-      }
-      this.initialForm.patchValue({ timesheet_week: this.initialForm.value.start_date});
-      this.initialForm.patchValue({ project_code: this.projectCode});
-      this.initialForm.patchValue({ end_date: moment(this.initialForm.value.start_date).add(7, 'day').format('LL')});
-
-      this.timesheetService
-          .addTimesheet(this.initialForm.value)
-          .subscribe(
+    if ( this.buttonValue === 'edit' ) {
+      this.initialForm.patchValue({
+        application_id: this.timesheet.TimeSheetKey.application_id,
+        email_address: this.timesheet.TimeSheetKey.email_address,
+        company_email: this.timesheet.TimeSheetKey.company_email,
+        timesheet_week: this.timesheet.TimeSheetKey.timesheet_week,
+        project_code: '',
+        start_date: this.timesheet.start_date,
+        end_date: this.timesheet.end_date,
+        timesheet_status: this.timesheet.timesheet_status,
+        comment: this.timesheet.comment,
+        monday: this.timesheet.monday,
+        tuesday: this.timesheet.tuesday,
+        wednesday: this.timesheet.wednesday,
+        thursday: this.timesheet.thursday,
+        friday: this.timesheet.friday,
+        saturday: this.timesheet.saturday,
+        sunday: this.timesheet.sunday,
+        total_week_hours: this.timesheet.total_week_hours,
+        customer_timesheet: this.timesheet.customer_timesheet,
+      });
+      this.projectCode = this.timesheet.TimeSheetKey.project_code;
+      this.timesheetService.getTimesheetProject(`?project_code=${this.projectCode}`).subscribe(
         data => {
-          console.log(data);
-          this.router.navigate(['/collaborator/timesheet']);
+          this.projectName = data[0].project_desc;
+          this.initialForm.patchValue({ project_code : this.projectName });
+          this.categoryViewValue = data[0].category_code;
         },
         error => {
           console.log(error);
@@ -208,6 +201,77 @@ export class AddTimesheetComponent implements OnInit {
     }
   }
 
+  /**
+   * @description : submit timesheet
+   * @param value: 'submit' or 'save'
+   */
+  submitTimesheet(value) {
+    if (this.initialForm.valid) {
+      if (this.typeTimesheet === '/collaborator/timesheet/add-timesheet-extra') {
+        // TIMESHEET_EXTRA
+        if (value === 'submit') {
+          this.initialForm.patchValue({ timesheet_status : 'Pending' });
+        } else if (value === 'save') {
+          this.initialForm.patchValue({ timesheet_status : 'Draft' });
+        }
+        this.initialForm.patchValue({ type_timesheet : 'TIMESHEET_EXTRA' });
+
+      } else {
+        // TIMESHEET
+        if (value === 'submit') {
+          this.initialForm.patchValue({ timesheet_status : 'Pending' });
+        } else if (value === 'save') {
+          this.initialForm.patchValue({ timesheet_status : 'Draft' });
+        }
+        this.initialForm.patchValue({ type_timesheet : 'TIMESHEET' });
+      }
+
+      this.initialForm.patchValue({ timesheet_week: this.initialForm.value.start_date});
+      this.initialForm.patchValue({ project_code: this.projectCode});
+      this.initialForm.patchValue({ end_date: moment(this.initialForm.value.start_date).add(7, 'day').format('LL')});
+
+      const confirmation = {
+        code: 'add',
+        title: 'submit timesheet',
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .pipe( takeUntil( this.destroy$) )
+        .subscribe( (res) => {
+          // console.log('destroy', this.destroy$);
+          // ADD_TIMESHEET
+          if (res === true) {
+            this.timesheetService.addTimesheet(this.initialForm.value).pipe(
+              takeUntil(this.destroy$)
+            ).subscribe(
+              (data) => {
+                console.log(data);
+                this.router.navigate(['/collaborator/timesheet']);
+              },
+
+              // ERROR
+              (error) => {
+                console.log('error', error);
+                /*if (error.error.msg_code === '0001') {
+                  const dataExist = {
+                    code: 'message',
+                    title: 'Timesheet already exist',
+                  };
+                  this.subscriptionModal = this.modalServices.displayConfirmationModal(dataExist, '560px', '320px')
+                    .pipe( takeUntil(this.destroy$) )
+                    .subscribe(( res1) => {
+                      // console.log('res1', res1);
+                    });
+                }*/
+              }
+            );
+          }
+        });
+    }
+  }
+
+  /**
+   * @description : update timesheet
+   */
   editTimesheet() {
     if (this.initialForm.valid) {
       this.timesheet.application_id = this.timesheet.TimeSheetKey.application_id;
@@ -220,21 +284,39 @@ export class AddTimesheetComponent implements OnInit {
       this.timesheet.saturday = this.initialForm.value.saturday;
       this.timesheet.sunday = this.initialForm.value.sunday;
       this.timesheet.total_week_hours = this.initialForm.value.total_week_hours;
-      this.timesheetService.updateTimesheet(this.timesheet).subscribe(
-        data => {
-          console.log(data);
-          this.router.navigate(['/collaborator/timesheet']);
-          },
-        error => console.log(error)
-      );
+
+      const confirmation = {
+        code: 'edit',
+        title: 'edit your timesheet',
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '528px', '300px')
+        .pipe(
+          takeUntil( this.destroy$) )
+        .subscribe( (res) => {
+          if (res === true) {
+            this.timesheetService.updateTimesheet(this.timesheet).pipe(
+              takeUntil(this.destroy$)
+            ).subscribe(
+              (data) => {
+                console.log(data);
+                this.router.navigate(['/collaborator/timesheet']);
+              },
+              error => console.log(error)
+            );
+          }
+        });
     }
   }
 
+  /**
+   * @description : delete timesheet
+   */
   deleteTimesheet() {
     const confirmation = {
       code: 'delete',
       title: 'delete timesheet',
     };
+
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .pipe(
         takeUntil(this.destroy$)
@@ -242,20 +324,14 @@ export class AddTimesheetComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
-            // console.log(this.timesheet._id);
             this.timesheetService.deleteTimesheet(this.timesheet._id)
               .pipe(
                 takeUntil(this.destroy$)
               )
               .subscribe(
-                (res1) => {
-                  this.timesheetService.getTimesheet(
-                    // tslint:disable-next-line:max-line-length
-                    `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`
-                  ).subscribe((data) => {
-                    this.router.navigate(['/collaborator/timesheet']);
-                    this.refresh(data);
-                  });
+                (data) => {
+                  console.log(data, 'data');
+                  this.router.navigate(['/collaborator/timesheet']);
                 }
               );
             this.subscriptionModal.unsubscribe();
@@ -264,6 +340,9 @@ export class AddTimesheetComponent implements OnInit {
       );
   }
 
+  /**
+   * @description : calcul total hours of the week
+   */
   calculTotalWeekHours() {
     this.totalWeek = 0;
     const mondayValue = parseInt(this.initialForm?.value?.monday ? this.initialForm?.value?.monday : 0, 10);
@@ -278,14 +357,21 @@ export class AddTimesheetComponent implements OnInit {
     this.initialForm.controls['total_week_hours'].setValue(this.totalWeek);
   }
 
+  /**
+   * @description back click
+   */
   backClicked() {
     this.location.back();
   }
 
-  resetClick() {
+  /**
+   * @description: clear form
+   */
+  resetClick(): void {
     this.initialForm.get('start_date').setValue(null);
     this.initialForm.get('project_code').setValue(null);
     this.initialForm.get('comment').setValue(null);
+    this.categoryViewValue = '';
 
     this.initialForm.get('monday').setValue(0);
     this.initialForm.get('tuesday').setValue(0);
@@ -295,16 +381,6 @@ export class AddTimesheetComponent implements OnInit {
     this.initialForm.get('saturday').setValue(0);
     this.initialForm.get('sunday').setValue(0);
     this.initialForm.get('total_week_hours').setValue(0);
-  }
-
-  refresh(data) {
-    this.timesheetService
-        .getTimesheet(
-          `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`
-        )
-        .subscribe((items) => {
-        this.listTimesheet = items;
-        console.log('timesheet of refresh', this.listTimesheet); });
   }
 
 }

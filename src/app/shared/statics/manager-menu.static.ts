@@ -35,6 +35,7 @@ export const managerMenu: IMenu[] = [
       },
     ]
   },
+
     {
         state: 'dashboard',
         name: 'dashboard',

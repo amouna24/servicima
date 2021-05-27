@@ -18,12 +18,12 @@
 
     <!--    Approve + Cancel buttons-->
     <div fxLayout="row" fxLayoutAlign="center" fxFlex="20">
-      <div fxLayout="column" fxFlex="40">
+      <div fxLayout="column" fxFlex="60">
         <div fxLayout="row" fxLayoutAlign="space-between" class="full-width">
-          <button type="submit" mat-raised-button (click)="approveTimesheet()" class="white btn-small bg-topaz">
+          <button type="submit" mat-raised-button (click)="approveTimesheet()" class="white btn-medium bg-topaz">
             <span class="font-size-11" >Approve</span>
           </button>
-          <button type="submit" mat-raised-button (click)="onCloseClick()" class="white btn-small duck-egg-blue" >
+          <button type="submit" mat-raised-button (click)="onCloseClick()" class="white btn-medium duck-egg-blue" >
             <span class="font-size-11 cerulean-blue">Cancel</span>
           </button>
         </div>
@@ -68,12 +68,12 @@
 
     <!--    Reject + Cancel buttons-->
     <div fxLayout="row" fxLayoutAlign="center" fxFlex="20">
-      <div fxLayout="column" fxFlex="40">
+      <div fxLayout="column" fxFlex="60">
         <div fxLayout="row" fxLayoutAlign="space-between" class="full-width">
-          <button type="submit" mat-raised-button (click)="rejectTimesheet()" class="white btn-small bg-error-red">
+          <button type="submit" mat-raised-button (click)="rejectTimesheet()" class="white btn-medium bg-error-red">
             <span class="font-size-11" >Reject</span>
           </button>
-          <button type="submit" mat-raised-button (click)="onCloseClick()" class="white btn-small duck-egg-blue" >
+          <button type="submit" mat-raised-button (click)="onCloseClick()" class="white btn-medium duck-egg-blue" >
             <span class="font-size-11 cerulean-blue">Cancel</span>
           </button>
         </div>

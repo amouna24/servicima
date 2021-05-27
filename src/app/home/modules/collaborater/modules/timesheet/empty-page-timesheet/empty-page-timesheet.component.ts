@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'wid-empty-page-timesheet',
@@ -7,13 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmptyPageTimesheetComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dialogRef: MatDialogRef<EmptyPageTimesheetComponent>
+  ) { }
 
   ngOnInit(): void {
   }
 
-  addTimesheet() {
-
+  /**
+   * @description : close pop-up
+   */
+  onCloseClick(): void {
+    this.dialogRef.close();
   }
 
 }

@@ -28,7 +28,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   isLoading = new BehaviorSubject<boolean>(false);
   companyEmail: string;
   title_id: string;
-  job_title: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
   pending = 'Pending';
@@ -37,8 +36,10 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   refData: { } = { };
   collaboratorArray: IUserModel[] = [];
   categoryList: IViewParam[];
+  profTitleList: IViewParam[];
   searchCriteria: string;
   refdata: any;
+  categoryCode: string;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -60,19 +61,20 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.getUserInfo();
-   this.refdata =  await this.getRefdata();
+    this.getAllCollaborators();
+    this.refdata =  await this.getRefdata();
     this.modalsServices.registerModals(
       { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
     this.modalsServices.registerModals(
       { modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.isLoading.next(true);
-    this.getAllCollaborators();
     await this.getAllTimesheet();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(params => {
+        console.log('params', params);
         if (!!params.timesheet_status) {
           this.searchCriteria = params.timesheet_status;
           this.getAllTimesheet();
@@ -99,11 +101,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
         if (!!data) {
           this.userInfo = data;
           this.companyEmail = data.user[0]['company_email'];
-          /*this.title_id = data.user[0]['title_id'];
-          console.log('title id', this.title_id);
-          console.log('refData', this.refDataService.refData['PROF_TITLES']);
-          // this.job_title = this.utilService.getViewValue(this.title_id, this.refDataService.refData['PROF_TITLES']);
-          console.log('job', this.job_title);*/
         }
       });
   }
@@ -127,7 +124,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.refData =  await this.refDataService
         .getRefData(this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId, list, false);
 
-    console.log('refdata', this.refData);
     return this.refData;
   }
 
@@ -136,36 +132,41 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    */
   async getAllTimesheet() {
     this.categoryList = this.refdata['TIMESHEET_PROJECT_CATEGORY'];
+    this.profTitleList = this.refdata['PROF_TITLES'];
+
     this.timesheetService
         .getTimesheet(
-          `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`
-        )
+          `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`)
         .subscribe((res) => {
-          if (res['msg_code'] !== '0004') {
           res.map( (result) => {
-            // tslint:disable-next-line:no-shadowed-variable
-            this.collaboratorArray.forEach(async ( data) => {
-              result['profile'] = data.first_name + ' ' + data.last_name;
-              result['first_name'] = data.first_name;
-              result['last_name'] = data.last_name;
-              result['user_position'] = data.user_type;
-              result['photo'] = data.photo;
-              this.timesheetService.getTimesheetProject(`?project_code=${result.TimeSheetKey.project_code}`)
-                                   .subscribe(async (item) => {
-                                     this.categoryList.forEach(
-                                       (category) => {
-                                         if (category.value === item[0].category_code) {
-                                           result['category'] = category.viewValue;
-                                         }
-                                       });
-                                     result['project_desc'] =  item[0].project_desc;
-                                   });
+            this.collaboratorArray.forEach( (collaborator) => {
+              if ( result.TimeSheetKey.email_address === collaborator.userKey.email_address ) {
+                this.title_id = collaborator.title_id;
+                this.profTitleList.forEach((profTitle) => {
+                  if (profTitle.value === this.title_id) {
+                    result['user_position'] = profTitle.viewValue;
+                  }
+                });
+                result['first_name'] = collaborator.first_name;
+                result['last_name'] = collaborator.last_name;
+                result['profile'] = collaborator.first_name + ' ' + collaborator.last_name;
+                result['photo'] = collaborator.photo;
+                this.timesheetService.getTimesheetProject(`?project_code=${result.TimeSheetKey.project_code}`)
+                    .subscribe((timesheetProject) => {
+                      result['project_desc'] = timesheetProject[0].project_desc;
+                      this.categoryCode = timesheetProject[0].category_code;
+                      this.categoryList.forEach((category) => {
+                        if (category.value === this.categoryCode) {
+                          result['category'] = category.viewValue;
+                        }
+                      });
+                    });
+              }
             });
           });
-        this.ELEMENT_DATA.next(res);
-        this.isLoading.next(false);
-          }
-      });
+          this.ELEMENT_DATA.next(res);
+          this.isLoading.next(false);
+        });
   }
 
   /**
@@ -174,15 +175,15 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    */
   showTimesheet(data: ITimesheetModel) {
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
-      .subscribe(
-        (res) => {
-          if (res === 'reject') {
-            this.modalsServices.displayModal('rejectTimesheet', data, '600px', '350px')
-                .subscribe((result) => {
-                  if (result === 'reject') {
-                    this.getAllTimesheet();
-                  }
-                });
+        .subscribe(
+          (res) => {
+            if (res === 'reject') {
+              this.modalsServices.displayModal('rejectTimesheet', data, '600px', '350px')
+                  .subscribe((result) => {
+                    if (result === 'reject') {
+                      this.getAllTimesheet();
+                    }
+                  });
 
           } else if (res === 'approve') {
             this.modalsServices.displayModal('rejectTimesheet', { timesheet: data , value: 'Approved' }, '600px', '350px')

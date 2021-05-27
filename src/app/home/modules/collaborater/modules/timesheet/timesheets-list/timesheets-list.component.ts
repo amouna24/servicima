@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-timesheets-list',
@@ -25,12 +26,24 @@ export class TimesheetsListComponent implements OnInit {
   userInfo: IUserInfo;
   redirectUrl: string;
   addButtonLabel: string;
+  flag: boolean;
+  typeTimesheet: string;
+  timesheetExtra: string;
+  subscriptionModal: Subject<boolean>;
+
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private timesheetService: TimesheetService,
               private fb: FormBuilder,
-              private modalServices: ModalService,
+              private modalService: ModalService,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private modalsServices: ModalService,
+              private route: ActivatedRoute,
+              ) {
   }
 
   /**
@@ -40,7 +53,24 @@ export class TimesheetsListComponent implements OnInit {
     this.getUserInfo();
     this.isLoading.next(true);
     this.getAllTimesheet();
-    this.addNewTimesheet();
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(params => {
+        console.log('params', params);
+        if (!!params.type_timesheet) {
+          this.typeTimesheet = params.type_timesheet;
+          this.timesheetExtra = 'TIMESHEET_EXTRA';
+          this.addNewTimesheet();
+          this.getAllTimesheet();
+        } else {
+          this.typeTimesheet = '';
+          this.timesheetExtra = 'TIMESHEET';
+          this.addNewTimesheet();
+          this.getAllTimesheet();
+        }
+      });
   }
 
   /**
@@ -60,21 +90,39 @@ export class TimesheetsListComponent implements OnInit {
    * @description : get all timesheet of collaborator
    */
   getAllTimesheet() {
-    this.timesheetService
+    if (this.typeTimesheet === 'extra') {
+      this.timesheetService
         .getTimesheet(
-        `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}`)
+          // tslint:disable-next-line:max-line-length
+          `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}&type_timesheet=${this.timesheetExtra}`)
         .subscribe((res) => {
           this.ELEMENT_DATA.next(res);
           this.isLoading.next(false);
         });
+    } else if (this.typeTimesheet === '') {
+      this.timesheetService
+        .getTimesheet(
+          // tslint:disable-next-line:max-line-length
+          `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}&type_timesheet=${this.timesheetExtra}`)
+        .subscribe((res) => {
+          this.ELEMENT_DATA.next(res);
+          this.isLoading.next(false);
+        });
+    }
   }
 
   /**
    * @description Navigate to ADD NEW TIMESHEET Component
    */
   addNewTimesheet() {
+    if ( this.typeTimesheet === 'extra' ) {
+      this.redirectUrl = '/collaborator/timesheet/add-timesheet-extra';
+      this.addButtonLabel = 'New';
+    } else {
+      // console.log(this.typeTimesheet);
       this.redirectUrl = '/collaborator/timesheet/add-timesheet';
       this.addButtonLabel = 'New';
+    }
   }
 
   /**
@@ -92,6 +140,7 @@ export class TimesheetsListComponent implements OnInit {
       ['/collaborator/timesheet/add-timesheet'],
          { state: { data, buttonClicked: 'edit' }
       });
+    console.log('dataUpdate', data);
   }
 
   /**
@@ -129,7 +178,16 @@ export class TimesheetsListComponent implements OnInit {
     switch (rowAction.actionType) {
       case ('show'): this.showTimesheet(rowAction.data);
         break;
-      case ('update'): this.updateTimesheet(rowAction.data);
+      case ('update'):
+        if (rowAction.data.timesheet_status === 'Pending') {
+          const confirmation = {
+            code: 'message',
+            title: 'already submitted to the manager',
+          };
+          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '320px');
+          break;
+        }
+        this.updateTimesheet(rowAction.data);
         break;
       case('delete'): this.onChangeStatus(rowAction.data);
     }

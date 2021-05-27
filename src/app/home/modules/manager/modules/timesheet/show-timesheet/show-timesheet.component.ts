@@ -23,6 +23,8 @@ export class ShowTimesheetComponent implements OnInit {
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   subscriptions: Subscription;
   userInfo: IUserInfo;
+  rejected: boolean;
+  approved: boolean;
 
   constructor( public dialogRef: MatDialogRef<ShowTimesheetComponent>,
                private dialog: MatDialog,
@@ -32,10 +34,21 @@ export class ShowTimesheetComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.modalsServices
-        .registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
+    this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.timesheet = this.data;
     this.avatar = await this.uploadService.getImage(this.timesheet.photo);
+    this.statusButton();
+  }
+
+  /**
+   * @description : disable button
+   */
+  statusButton() {
+    if (this.timesheet.timesheet_status === 'Rejected') {
+      return this.rejected = true;
+    } else if (this.timesheet.timesheet_status === 'Approved') {
+      return this.approved = true;
+    }
   }
 
   onCloseClick(): void {

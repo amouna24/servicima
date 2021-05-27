@@ -1,4 +1,5 @@
 <div fxLayout="column" class="full-height">
+    <!--header-->
     <div fxLayout="row" fxFlex="25" class="bg-pale-grey-four">
       <div fxLayout="column" fxLayoutAlign="end"  class="full-height" fxFlex="33">
         <div fxLayout="row" fxFlex="60" class="full-width">
@@ -29,6 +30,7 @@
       </div>
     </div>
 
+    <!--body-->
     <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="20">
       <div fxLayout="column" fxLayoutAlign="end" class="full-height" fxFlex="50">
         <div fxLayout="row" fxFlex="50" class="full-width" fxLayoutAlign="end">
@@ -59,7 +61,6 @@
         </div>
       </div>
     </div>
-
     <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40">
       <div fxLayout="column" class="full-height" fxFlex="90" fxLayoutAlign="space-around">
         <div fxLayout="row" fxFlex="25" class="full-width" fxLayoutAlign="space-between start">
@@ -101,11 +102,12 @@
       </div>
     </div>
 
+    <!--footer-->
     <div fxLayout="row" fxLayoutAlign="space-evenly center" fxFlex="15">
-      <button type="submit" mat-raised-button (click)="rejectTimesheet()"  class="white btn-medium bg-error-red">
+      <button type="submit" mat-raised-button (click)="rejectTimesheet()" [disabled]="rejected" class="white btn-medium bg-error-red">
         <span class="font-size-11" >Reject</span>
       </button>
-      <button type="submit" mat-raised-button (click)="approveTimesheet()" class="white btn-medium duck-egg-blue" >
+      <button type="submit" mat-raised-button (click)="approveTimesheet()" [disabled]="approved" class="white btn-medium duck-egg-blue" >
         <span class="font-size-11 cerulean-blue">Approve</span>
       </button>
     </div>

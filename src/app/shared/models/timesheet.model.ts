@@ -16,5 +16,6 @@ export interface ITimesheetModel {
   saturday?: string;
   sunday?: string;
   total_week_hours?: string;
+  type_timesheet?: string;
   customer_timesheet?: string;
 }

@@ -35,7 +35,6 @@ const routes: Routes = [
         path: 'timesheet',
         loadChildren: () => import('./modules/timesheet/timesheet.module').then(m => m.TimesheetModule)
       },
-
       {
         path: 'training',
         loadChildren: () => import('./modules/training/training.module').then(m => m.TrainingModule)
