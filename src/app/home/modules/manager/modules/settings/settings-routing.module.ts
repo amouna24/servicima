@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dash',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
     data: {
       breadcrumb: ''
@@ -74,6 +74,13 @@ const routes: Routes = [
     loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule),
     data: {
       breadcrumb: 'role'
+    },
+  },
+  {
+    path: '',
+    loadChildren: () => import('./test-management/test-management.module').then(m => m.TestManagementModule),
+    data: {
+      breadcrumb: 'Test'
     },
   },
 ];

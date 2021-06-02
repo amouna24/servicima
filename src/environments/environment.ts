@@ -15,7 +15,7 @@ export const environment = {
   dataListsUrl: 'http://192.168.1.22:8006/admin/datalists/v1',
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
-  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
+  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8200/admin/loadauthstarterdata/v1',
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
@@ -28,13 +28,21 @@ export const environment = {
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
+  testChoicesApiUrl: 'http://192.168.1.22:8097/servicima/testchoices/v1',
+  testQuestionApiUrl: 'http://192.168.1.22:8098/servicima/testquestion/v1',
+  testQuestionBlocApiUrl: 'http://192.168.1.22:8099/servicima/testquestionbloc/v1',
+  testTechnologiesApiUrl: 'http://192.168.1.22:8100/servicima/testtechnology/v1',
+  testSkillsApiUrl: 'http://192.168.1.22:8102/servicima/testskills/v1',
+  testTechnologySkillsApiUrl: 'http://192.168.1.22:8101/servicima/testtechnologyskill/v1',
+  testLevelApiUrl: 'http://192.168.1.22:8103/servicima/testlevel/v1',
+
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
   companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
-  userGatewayApiUrl: 'http://192.168.1.22:8101/auth/v1',
+  userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

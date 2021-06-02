@@ -1,0 +1,76 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { ITestChoicesModel } from '@shared/models/testChoices.model';
+import { TestService } from '@core/services/test/test.service';
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'wid-question-details',
+  templateUrl: './question-details.component.html',
+  styleUrls: ['./question-details.component.scss']
+})
+export class QuestionDetailsComponent implements OnInit {
+  test_question_title = '';
+  test_level_code = '';
+  test_question_code = '';
+  mark = '';
+  duration = '';
+  question_type = '';
+  test_question_desc = '';
+  technology = '';
+  id = '';
+  AnswerDetails: ITestChoicesModel[] = [];
+  subscriptionModal: Subscription;
+  closeDialog: boolean;
+
+  constructor(
+    private dialogRef: MatDialogRef<QuestionDetailsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private testService: TestService,
+    private modalServices: ModalService,
+    private router: Router,
+  ) { }
+
+  ngOnInit(): void {
+    this.initQuestionValues();
+    this.getAnswers();
+  }
+initQuestionValues() {
+  this.test_question_title = this.data.test_question_desc;
+  this.test_level_code = this.data.test_level_code;
+  this.test_question_code = this.data.test_question_code;
+  this.mark = this.data.mark;
+  this.duration = this.data.duration;
+  this.question_type = this.data.question_type;
+  this.test_question_desc = this.data.test_question_desc;
+  this.technology = this.data.technology;
+  this.id = this.data.id;
+}
+getAnswers() {
+    this.testService.getChoices(`?test_question_code=${this.data.test_question_code}`)
+      .subscribe((value) => {
+        this.AnswerDetails = value;
+      });
+}
+deleteQuestions() {
+  const confirmation = {
+    code: 'delete',
+    title: 'Delete This Question ?',
+  };
+  this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+    .subscribe(
+      (res) => {
+        if (res === true) {
+          this.testService.deleteQuestion(this.id).subscribe(dataBloc => {
+            console.log('Deleted');
+            this.dialogRef.close();
+            this.closeDialog = true;
+          });
+        }
+        this.subscriptionModal.unsubscribe();
+      }
+    );
+}
+}

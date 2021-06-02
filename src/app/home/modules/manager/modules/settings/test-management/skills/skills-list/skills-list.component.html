@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="tableData"
+  [tableCode]="'TEST_SKILLS'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Skills List', addActionURL: '/manager/settings/skills/add', addActionText: 'Add'}"
+  [title]="'Skills list'"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="{ update: true, delete: true, show: true }"
+>
+</wid-dynamic-data-table>

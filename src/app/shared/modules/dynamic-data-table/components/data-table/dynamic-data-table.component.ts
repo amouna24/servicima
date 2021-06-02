@@ -62,6 +62,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   }
 
    getDataSource() {
+     console.log('tablle data=', this.tableData.getValue());
     this.tableData.subscribe((res) => {
       let keys: string;
       this.tableData.getValue().map((data) => {
