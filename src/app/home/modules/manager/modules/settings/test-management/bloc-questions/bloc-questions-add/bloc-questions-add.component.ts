@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
-import {ITestQuestionBlocModel} from "@shared/models/testQuestionBloc.model";
-import {Router} from "@angular/router";
+import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-bloc-questions-add',
@@ -58,8 +58,8 @@ export class BlocQuestionsAddComponent implements OnInit {
   createForm() {
     this.sendAddTestBloc = this.fb.group({
       test_question_bloc_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      test_technology_code: '',
-      question_nbr: '',
+      test_technology_code: ['', [Validators.required]],
+      question_nbr: ['', [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       test_question_bloc_desc: '',
     });
   }

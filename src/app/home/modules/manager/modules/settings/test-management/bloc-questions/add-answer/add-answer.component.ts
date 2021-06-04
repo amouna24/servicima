@@ -34,7 +34,7 @@ export class AddAnswerComponent implements OnInit {
   createForm() {
     this.sendAddAnswer = this.fb.group({
       choice_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      correct_choice: '',
+      correct_choice: ['', [Validators.required]],
     });
   }
   createQuestionList() {
@@ -63,4 +63,5 @@ export class AddAnswerComponent implements OnInit {
     });
     this.router.navigate(['/manager/settings/bloc-question/']);
   }
+
 }

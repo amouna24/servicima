@@ -31,10 +31,10 @@ export class AddQuestionComponent implements OnInit {
   createForm() {
     this.sendAddQuestion = this.fb.group({
       test_question_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      mark: '',
-      duration: '',
-      question_type: '',
-      test_level_code: '',
+      mark: ['', [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
+      duration: ['', [Validators.required]],
+      question_type: ['', [Validators.required]],
+      test_level_code: ['', [Validators.required]],
       test_question_desc: '',
     });
   }

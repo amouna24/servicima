@@ -36,22 +36,24 @@
                 </mat-form-field>
                   </div>
                 </div>
-                <div fxLayout="row" fxFlex="10"  >
+                <div fxLayout="row" fxFlex="13"  >
                   <div fxLayout="column" fxFlex="61">
                   <mat-label class="black font-size-12 required">
                     Level:
                   </mat-label>
                     <mat-radio-group formControlName="test_level_code" style="min-height: 60%" aria-label="Select an option" >
-                      <mat-radio-button fxLayout="row" fxFlex="40" class="full-width" value="junior">Junior</mat-radio-button>
-                      <mat-radio-button fxLayout="row" fxFlex="40" value="senior">Senior</mat-radio-button>
-                      <mat-radio-button fxLayout="row" fxFlex="20" value="expert">Expert</mat-radio-button>
+                      <mat-radio-button fxLayout="row" fxFlex="40" class="full-width font-normal font-size-12 black" value="junior">Junior</mat-radio-button>
+                      <mat-radio-button fxLayout="row" fxFlex="40" class="font-normal font-size-12 black" value="senior">Senior</mat-radio-button>
+                      <mat-radio-button fxLayout="row" fxFlex="20" class="font-normal font-size-12 black" value="expert">Expert</mat-radio-button>
                     </mat-radio-group>
+                    <mat-error class="red" *ngIf="sendAddTestSkill.controls.test_level_code.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
                   </div>
                 </div>
-                <div fxLayout="row"  fxFlex="50" class="config-wrapper"  >
+                <div fxLayout="row"  fxFlex="60" class="config-wrapper"  >
                   <div fxLayout="column" fxFlex="61">
 
-                  <mat-label class="black font-size-12 required">
+                  <mat-label class="black font-size-12 ">
                     Technology:
                   </mat-label>
                     <div fxLayout="row" fxFlex="100">
@@ -101,13 +103,13 @@
         </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="83" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
+        <div fxLayout="column" fxFlex="75" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/manager/settings/skills/">
             <span class="cool-grey">Cancel</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="12" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+        <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddTestSkill.invalid" [style]="{marginRight: '4%'}"
                   (click)="createSkill()">
             Save
           </button>

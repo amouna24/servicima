@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {TestService} from "@core/services/test/test.service";
-import {Router} from "@angular/router";
-import {ITestQuestionBlocModel} from "@shared/models/testQuestionBloc.model";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TestService } from '@core/services/test/test.service';
+import { Router } from '@angular/router';
+import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
 
 @Component({
   selector: 'wid-edit-bloc',
@@ -53,8 +53,8 @@ export class EditBlocComponent implements OnInit {
   createForm() {
     this.sendUpdateBloc = this.fb.group({
       test_question_bloc_title :  [this.test_question_bloc_title, [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      test_technology_code: this.test_technology_code,
-      question_nbr: this.question_nbr,
+      test_technology_code: [this.test_technology_code, [Validators.required]],
+      question_nbr: [this.question_nbr, [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       test_question_bloc_desc: this.test_question_bloc_desc,
     });
   }

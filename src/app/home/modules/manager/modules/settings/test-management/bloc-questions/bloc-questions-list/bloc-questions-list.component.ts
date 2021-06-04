@@ -141,6 +141,7 @@ export class BlocQuestionsListComponent implements OnInit {
               this.getTableData();
             });
           }
+          this.isLoading.next(true);
           this.subscriptionModal.unsubscribe();
         }
       );

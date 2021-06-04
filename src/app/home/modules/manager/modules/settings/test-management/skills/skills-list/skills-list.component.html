@@ -5,6 +5,6 @@
   [header]="{ title: 'Skills List', addActionURL: '/manager/settings/skills/add', addActionText: 'Add'}"
   [title]="'Skills list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="{ update: true, delete: true, show: true }"
+  [allowedActions]="{ update: true, delete: true, show: false }"
 >
 </wid-dynamic-data-table>

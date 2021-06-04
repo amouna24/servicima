@@ -61,7 +61,7 @@ export class EditSkillComponent implements OnInit {
   createForm() {
     this.sendUpdateTestSkill = this.fb.group({
       skill_title :  [ this.skill_title, [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      test_level_code: this.test_level_code,
+      test_level_code: [this.test_level_code, Validators.required]
     });
   }
 

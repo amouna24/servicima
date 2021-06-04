@@ -11,7 +11,6 @@ import { ITestSkillsModel } from '@shared/models/testSkills.model';
 import { ITestTechnologySkillsModel } from '@shared/models/testTechnologySkills.model';
 
 import { environment } from '../../../../environments/environment';
-import {IRefdataModel} from "@shared/models/refdata.model";
 
 @Injectable({
   providedIn: 'root'

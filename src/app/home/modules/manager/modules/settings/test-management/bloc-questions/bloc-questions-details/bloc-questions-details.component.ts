@@ -68,10 +68,10 @@ export class BlocQuestionsDetailsComponent implements OnInit {
   }
 
   // tslint:disable-next-line:max-line-length
-  ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string, mark: string, duration: string, question_type: string, test_question_desc: string, _id: string) {
+  ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string, mark: string, duration: string, question_type: string, test_question_desc: string, _id: string, test_question_bloc_code: string, code_level: string) {
     this.dialog.open(QuestionDetailsComponent, {
-      height: '75vh',
-      width: '60vh',
+      height: '90vh',
+      width: '85vh',
       data: {
         test_question_title,
         test_level_code,
@@ -80,12 +80,19 @@ export class BlocQuestionsDetailsComponent implements OnInit {
         duration,
         question_type,
         test_question_desc,
+        test_question_bloc_code,
         technology: this.test_bloc_technology,
         id: _id,
+        code_level,
       }
     }).afterClosed().subscribe(() => {
       this.getLevelAll();
       this.getQuestionsInfo();
+      if (this.questionsList.length === 1) {
+        this.questionsList.splice(0, 1);
+        this.showQuestionList = false;
+      }
+      console.log('question list', this.questionsList);
       console.log('after closed');
     });
   }

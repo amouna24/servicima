@@ -20,39 +20,39 @@
       </div>
       <wid-scrollbar fxFlex="80" class="full-width" fxLayout="row">
         <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-          <form [formGroup]="sendAddQuestion" fxLayout="row" fxFlex="100" style="justify-content: space-around">
+          <form [formGroup]="sendUpdateQuestion" fxLayout="row" fxFlex="100" style="justify-content: space-around">
             <div fxLayout="column" fxFlex="82" >
               <div fxLayout="row"  class="full-width">
                 <div fxLayout="column" fxFlex="60">
                   <div fxLayout="row" >
                     <div fxLayout="column" fxFlexFill>
-                  <mat-label class="black font-size-12 required">
-                    Question title:
-                  </mat-label>
-                  <mat-form-field appearance="outline" class="full-width">
-                    <input formControlName="test_question_title" matInput placeholder="Bloc title" required>
-                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.required">
-                      {{ 'general.required' | translate }}</mat-error>
-                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.pattern">
-                      Numbers not allowed</mat-error>
-                  </mat-form-field>
+                      <mat-label class="black font-size-12 required">
+                        Question title:
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <input formControlName="test_question_title" matInput placeholder="Bloc title" required>
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.test_question_title.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.test_question_title.errors?.pattern">
+                          Numbers not allowed</mat-error>
+                      </mat-form-field>
                     </div>
-                    </div>
+                  </div>
                   <div fxLayout="row" fxFlex="20" fxLayoutGap="15px">
                     <div fxLayout="column" fxFlex>
-                  <mat-label class="black font-size-12 required">
-                    Level:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
-                    <mat-select  formControlName="test_level_code" disableOptionCentering panelClass="panelColor"
-                                 placeholder="Level" >
-                      <ng-container *ngFor="let v of LevelList">
-                        <mat-option [value]="v.TestLevelKey.test_level_code">{{v.test_level_title}}</mat-option>
-                      </ng-container>
-                    </mat-select>
-                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_level_code.errors?.required">
-                      Please select an item in the list</mat-error>
-                  </mat-form-field>
+                      <mat-label class="black font-size-12 required">
+                        Level:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-select  formControlName="test_level_code" disableOptionCentering panelClass="panelColor"
+                                     placeholder="Level" >
+                          <ng-container *ngFor="let v of LevelList">
+                            <mat-option [value]="v.TestLevelKey.test_level_code">{{v.test_level_title}}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.test_level_code.errors?.required">
+                          Please select an item in the list</mat-error>
+                      </mat-form-field>
                     </div>
                     <div fxLayout="column" fxFlex>
                       <mat-label class="black font-size-12">
@@ -60,9 +60,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="full-width">
                         <input   matInput  formControlName="mark" type="number" placeholder="Mark" >
-                        <mat-error class="red" *ngIf="sendAddQuestion.controls.mark.errors?.required">
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.mark.errors?.required">
                           {{ 'general.required' | translate }}</mat-error>
-                        <mat-error class="red" *ngIf="sendAddQuestion.controls.mark.errors?.pattern">
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.mark.errors?.pattern">
                           Select a number between 1 and 100</mat-error>
                       </mat-form-field>
 
@@ -80,7 +80,7 @@
                           <mat-option [value]="'single'" >Single Answer</mat-option>
 
                         </mat-select>
-                        <mat-error class="red" *ngIf="sendAddQuestion.controls.question_type.errors?.required">
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.question_type.errors?.required">
                           Please select an item in the list</mat-error>
                       </mat-form-field>
                     </div>
@@ -90,23 +90,23 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="full-width">
                         <input formControlName="duration" matInput placeholder="Bloc title"  type="time" required>
-                        <mat-error class="red" *ngIf="sendAddQuestion.controls.duration.errors?.required">
+                        <mat-error class="red" *ngIf="sendUpdateQuestion.controls.duration.errors?.required">
                           {{ 'general.required' | translate }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
                   <div fxLayout="row" fxFlex="30">
                     <div fxLayout="column" fxFlexFill>
-                  <mat-label class="black font-size-12 required">
-                    Description:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
+                      <mat-label class="black font-size-12 required">
+                        Description:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
                               <textarea matInput placeholder="Description" rows="7"
                                         formControlName="test_question_desc" ></textarea>
-                  </mat-form-field>
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </form>
@@ -119,8 +119,8 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="12" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddQuestion.invalid" [style]="{marginRight: '4%'}"
-                  (click)="createQuestion()">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendUpdateQuestion.invalid" [style]="{marginRight: '4%'}"
+                  (click)="UpdateQuestion()">
             Next
           </button>
         </div>

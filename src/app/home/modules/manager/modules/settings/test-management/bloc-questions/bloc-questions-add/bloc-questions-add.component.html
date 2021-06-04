@@ -52,13 +52,19 @@
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">
                     <input   matInput  formControlName="question_nbr" type="number"  placeholder="Questions total Number" >
+                    <mat-error class="red" *ngIf="sendAddTestBloc.controls.question_nbr.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                    <mat-error class="red" *ngIf="sendAddTestBloc.controls.question_nbr.errors?.pattern">
+                      Select a number between 1 and 100</mat-error>
+
                   </mat-form-field>
-                  <mat-label class="black font-size-12 required">
+
+                  <mat-label class="black font-size-12 ">
                     Description:
                   </mat-label>
                   <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="Description" rows="7"
-                                        formControlName="test_question_bloc_desc" required></textarea>
+                              <textarea matInput placeholder="Description" rows="4"
+                                        formControlName="test_question_bloc_desc" ></textarea>
                   </mat-form-field>
 
                 </div>
@@ -69,13 +75,13 @@
         </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="83" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+        <div fxLayout="column" fxFlex="75" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
             <span class="cool-grey">Cancel</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="12" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+        <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddTestBloc.invalid" [style]="{marginRight: '4%'}"
                   (click)="createBlocQuestion()">
             Save
           </button>

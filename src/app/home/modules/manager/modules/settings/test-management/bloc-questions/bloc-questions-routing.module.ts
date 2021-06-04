@@ -7,6 +7,7 @@ import { BlocQuestionsDetailsComponent } from './bloc-questions-details/bloc-que
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { AddAnswerComponent } from './add-answer/add-answer.component';
 import { EditBlocComponent } from './edit-bloc/edit-bloc.component';
+import { EditQuestionComponent } from './edit-question/edit-question.component';
 
 const routes: Routes = [
   { path: '', component: BlocQuestionsListComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'add-question', component: AddQuestionComponent},
   { path: 'add-answer', component: AddAnswerComponent},
   { path: 'edit', component: EditBlocComponent},
+  { path: 'edit-question', component: EditQuestionComponent},
 
 ];
 

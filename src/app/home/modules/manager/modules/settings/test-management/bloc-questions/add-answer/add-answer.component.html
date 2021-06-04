@@ -86,7 +86,7 @@
             </mat-form-field>
           </div>
           <div fxLayout="column" class="p-l-10 p-t-10">
-            <button class="btn-small bg-cool-grey" style="border: none" (click)="createAnswer()"  [disabled]="sendAddAnswer.invalid">Add</button>
+            <button mat-raised-button color="primary" class="btn-small "  style="border: none" (click)="createAnswer()"  [disabled]="sendAddAnswer.invalid">Add</button>
           </div>
         </form></div>
 
@@ -96,13 +96,13 @@
 </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="83" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+        <div fxLayout="column" fxFlex="75" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
             <span class="cool-grey">Cancel</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="12" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+        <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="AnswerList.length < 2" [style]="{marginRight: '4%'}"
                  (click)="saveAnswers()" >
             Save
           </button>

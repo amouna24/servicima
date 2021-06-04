@@ -106,13 +106,13 @@
     </div>
   </div>
   <div fxLayout="row" fxFlex="10" style="justify-content: flex-end">
-    <div fxLayout="column" fxFlex="21">
-      <button mat-raised-button type="submit" style="background-color: #fc0f3b" class="white  btn-small " (click)="deleteQuestions()"   [style]="{marginRight: '4%'}">
+    <div fxLayout="column" style="align-items: center" fxFlex="23">
+      <button mat-raised-button type="submit"  style="background-color: #fc0f3b;align-items: center" class="white  btn-small " (click)="deleteQuestions()"   [style]="{marginRight: '4%'}">
         Delete
       </button>
     </div>
-    <div fxLayout="column" fxFlex="21">
-      <button mat-raised-button type="submit" style="background-color: #f3f6f9" class="black  btn-small " [style]="{marginRight: '4%'}">
+    <div fxLayout="column" style="align-items: center" fxFlex="21">
+      <button mat-raised-button type="submit" style="background-color: #f3f6f9;" class="black  btn-small " (click)="routeToQuestion()" mat-dialog-close [style]="{marginRight: '4%'}">
         Edit
       </button>
 

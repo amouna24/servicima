@@ -56,7 +56,7 @@ export class AddSkillsComponent implements OnInit {
   createForm() {
     this.sendAddTestSkill = this.fb.group({
       skill_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      test_level_code: '',
+      test_level_code: ['junior', Validators.required],
     });
   }
   getTechnologiesInfo() {
