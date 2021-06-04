@@ -11,6 +11,10 @@ import { ShowModalComponent } from './common-actions/contractors/show-modal/show
 import { ContractsListComponent } from './common-actions/contracts/contracts-list/contracts-list.component';
 import { AddContractComponent } from './common-actions/contracts/add-contract/add-contract.component';
 import { ShowExtensionComponent } from './common-actions/contracts/show-extension/show-extension.component';
+import { AddProjectComponent } from './common-actions/projects/add-project/add-project.component';
+import { ProjectsListComponent } from './common-actions/projects/projects-list/projects-list.component';
+import { CollaboratorsListComponent } from './common-actions/collaborators/collaborators-list/collaborators-list.component';
+import { AffectCollaboratorComponent } from './common-actions/collaborators/affect-collaborator/affect-collaborator.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { ShowExtensionComponent } from './common-actions/contracts/show-extensio
     ContractsListComponent,
     AddContractComponent,
     ShowExtensionComponent,
+    AddProjectComponent,
+    ProjectsListComponent,
+    CollaboratorsListComponent,
+    AffectCollaboratorComponent,
   ],
     imports: [
         CommonModule,

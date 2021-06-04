@@ -726,9 +726,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         async (res) => {
-          this.contractorInfo = res[0][0];
-          this.haveImage.next(res[0][0]['photo']);
-          const av = await this.uploadService.getImage(res[0][0]['photo']);
+          this.contractorInfo = res[0]['results'][0];
+          this.haveImage.next(res[0]['results'][0]['photo']);
+          const av = await this.uploadService.getImage(res[0]['results'][0]['photo']);
           this.avatar.next(av);
           if (res[1]['msg_code'] === '0004') {
             this.contractorContactInfo = [];

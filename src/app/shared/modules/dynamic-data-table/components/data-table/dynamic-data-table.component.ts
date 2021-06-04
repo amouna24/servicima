@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { Router } from '@angular/router';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -18,12 +19,29 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
-  @Input() header: { title: string, addActionURL: string, addActionText: string, type: string,
-    addActionDialog: { modalName: string, modalComponent: string, data: object, width: string, height: string } };
+  @Input() header: {  title: string, addActionURL?: string, addActionText?: string,
+                      type?: string,
+                      addActionDialog?:
+                        { modalName: string, modalComponent: string, data: object, width: string, height: string }
+                   };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
 
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
+  @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
+
+  /**************************************************************************
+   * @description Paginations
+   *************************************************************************/
+  itemsPerPage = [5, 10, 25, 100];
+  itemsPerPageControl = new FormControl(5);
+  totalItems: number;
+  countedItems = 0;
+  totalCountedItems = null;
+  offset: number;
+  limit: number;
+  nbrPages: number[];
+  currentPage = 1;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -54,13 +72,30 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.getRefData();
     await this.getDataSource();
-    this.getDataList();
+    await this.getDataList();
+    this.itemsPerPageControl.valueChanges
+      .subscribe(
+        (value) => {
+          this.pagination.emit({ limit: value, offset: 0});
+        },
+      );
   }
 
    getDataSource() {
     this.tableData.subscribe((res) => {
+      this.totalItems = res['total'];
+      this.countedItems = res['count'];
+      this.offset = Number(res['offset']) + 1;
+      this.limit = Number(res['limit']);
+      this.totalCountedItems = res['count'] === this.itemsPerPageControl.value ?
+        this.currentPage * this.itemsPerPageControl.value :
+        (this.currentPage - 1) * this.itemsPerPageControl.value + res['count'];
+      console.log('res', res); // to be deleted
+      this.nbrPages = Array(Math.ceil(Number(res['total']) / this.itemsPerPageControl.value))
+        .fill(null)
+        .map((x, i) => i + 1);
       let keys;
-      this.tableData.getValue().map((data) => {
+      res['results'].map((data) => {
         const keyAndValueList = Object.entries(data);
         keyAndValueList.map((keyAndValue) => {
           keys = keyAndValue[0];
@@ -68,7 +103,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
             if (typeof (value) === 'object' && value) {
               // tslint:disable-next-line:prefer-for-of
               for (let i = 0; i < Object.keys(value).length; i++) {
-                this.tableData.getValue().map((elm) => {
+                res['results'].map((elm) => {
                   elm[Object.keys(value)[i]] = elm[keys][Object.keys(value)[i]];
                 });
               }
@@ -76,7 +111,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           });
         });
       });
-      this.dataSource = res;
+      this.dataSource = res['results'];
       this.dataSource.map((dataS) => {
         if (dataS.application_id) {
           dataS['application_id'] = this.utilService.getApplicationName(dataS.application_id);
@@ -132,7 +167,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   }
 
   getDataList() {
-    this.temp = [...this.tableData.getValue()];
+    this.temp = [...this.tableData?.getValue()['results']];
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent });
     this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
@@ -203,6 +238,42 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
     false
     );
+  }
+
+  /**************************************************************************
+   * @description Get next, previous or specific page
+   * @params type : next / previous / specific
+   * @params pageNumber : number of specific page
+   *************************************************************************/
+  getItemsPerPage(type: string, pageNumber?: number) {
+    switch (type) {
+      case 'first-page' : {
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0 });
+        this.currentPage = this.nbrPages[0];
+      }
+      break;
+      case 'previous-page' : {
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 - this.itemsPerPageControl.value });
+        this.currentPage -= 1;
+
+      }
+      break;
+      case 'specific-page' : {
+        this.currentPage = pageNumber;
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.itemsPerPageControl.value * (pageNumber - 1) });
+      }
+      break;
+      case 'next-page' : {
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 + this.itemsPerPageControl.value });
+        this.currentPage += 1;
+      }
+      break;
+      case 'last-page' : {
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: (this.itemsPerPageControl.value * (this.nbrPages.length - 1))});
+        this.currentPage = this.nbrPages[this.nbrPages.length - 1];
+      }
+      break;
+    }
   }
 
   /**************************************************************************
