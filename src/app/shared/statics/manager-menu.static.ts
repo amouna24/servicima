@@ -73,7 +73,7 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
-                name: 'Contracts in progress',
+                name: 'In progress',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
@@ -81,7 +81,7 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
-                name: 'Expired contracts ',
+                name: 'Expired',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
@@ -89,15 +89,15 @@ export const managerMenu: IMenu[] = [
 
               },
               {
-                state: 'contracts-list',
-                name: 'Export ',
-                icon: 'wi_upload',
+                state: 'projects-list',
+                name: 'Projects ',
+                icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
               },
               {
-                state: 'contracts-list',
-                name: 'Settings ',
+                state: 'collaborators-list',
+                name: 'Collaborators ',
                 icon: 'wi_settings',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
