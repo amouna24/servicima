@@ -67,23 +67,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
     ));
     await this.getResume();
-    this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.user = data['user'][0];
-        this.haveImage = data['user'][0]['photo'];
-        if (!this.haveImage) {
-          this.userService.haveImage$.subscribe((res) => {
-              this.haveImage = res;
-            }
-          );
-        }
-      }
-    });
-    this.userService.avatar$.subscribe(
-      avatar => {
-        this.avatar = avatar;
-      }
-    );
+
   }
   getFile(obj: FormData) {
     this.photo = obj;
@@ -103,14 +87,38 @@ export class ResumeGeneralInformationComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
-        (generalInfo) => {
+        async (generalInfo) => {
           if (generalInfo['msg_code'] !== '0004') {
             if (!!generalInfo) {
-            this.updateForm(generalInfo);
-            this.showYears = !this.showYears;
+              if (generalInfo[0].image !== undefined) {
+              this.haveImage = generalInfo[0].image;
+              this.avatar = await this.uploadService.getImage(generalInfo[0].image); }
+              this.updateForm(generalInfo);
+              this.showYears = !this.showYears;
+            } else {
+
+            }
+            this.update = true;
+          } else {
+            this.userService.connectedUser$.subscribe((data) => {
+              if (!!data) {
+                this.user = data['user'][0];
+                this.haveImage = data['user'][0]['photo'];
+                if (!this.haveImage) {
+                  this.userService.haveImage$.subscribe((res) => {
+                      this.haveImage = res;
+                    }
+                  );
+                }
+              }
+            });
+            this.userService.avatar$.subscribe(
+              avatar => {
+                this.avatar = avatar;
+              }
+            );
           }
-          this.update = true;
-        }}
+        }
       );
   }
   /**************************************************************************
@@ -159,7 +167,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     }
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
-    this.generalInfo.image = this.haveImage;
+    this.generalInfo.image = filename;
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);
@@ -167,6 +175,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
     } } else {
       this.generalInfo = this.CreationForm.value;
+      this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
         this.router.navigate(['/candidate/resume/professionalExperience']);
