@@ -158,6 +158,7 @@ export class AddSkillsComponent implements OnInit {
     }
   }
   createSkill() {
+    console.log('length', this.displayedColumns.length);
     this.testSkill = this.sendAddTestSkill.value;
     this.testSkill.test_skill_code =  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SKILL`;
     this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
@@ -183,4 +184,7 @@ export class AddSkillsComponent implements OnInit {
       });
     }
   }
+  testButton() {
+    return this.sendAddTestSkill.invalid || this.displayedColumns.length <= 0;
+}
 }

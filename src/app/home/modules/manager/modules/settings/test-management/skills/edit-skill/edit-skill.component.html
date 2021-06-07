@@ -107,7 +107,7 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="20"  fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendUpdateTestSkill.invalid" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="testButton()" [style]="{marginRight: '4%'}"
                   (click)="updateSkill()">
             Save
           </button>

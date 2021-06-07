@@ -254,5 +254,9 @@ export class EditSkillComponent implements OnInit {
       console.log('no valid');
     }
   }
+  testButton() {
+    return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;
+  }
+
 
 }
