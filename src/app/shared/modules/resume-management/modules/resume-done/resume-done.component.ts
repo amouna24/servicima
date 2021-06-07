@@ -295,5 +295,4 @@ export class ResumeDoneComponent implements OnInit {
       this.getDocument('preview', result); }
     });
   }
-
 }
