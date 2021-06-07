@@ -6,6 +6,7 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -35,6 +36,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
+    private router: Router
   ) {
   }
   /**************************************************************************
@@ -60,26 +62,29 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getCertifDiploma(
-            `?resume_code=${this.resume_code}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.certifDiplomaArray = responseOne;
-                  this.certifDiplomaArray.forEach(
-                    (func) => {
-                      func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
-                    }
-                  );
-                }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        },
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getCertifDiploma(
+              `?resume_code=${this.resume_code}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.certifDiplomaArray = responseOne;
+                    this.certifDiplomaArray.forEach(
+                      (func) => {
+                        func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -123,7 +128,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.certifDiplomaUpdate.resume_code = this.resume_code;
       this.certifDiplomaUpdate._id = this._id;
       if (this.sendCertifDiploma.valid) {
-        this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate);
+        this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe((data) => {
+          console.log('certif updated', data);
+        });
       this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
       this.button = 'Add'; }
     }
@@ -174,16 +181,12 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    * @description change the minimumn of the end Date DatePicker
    *************************************************************************/
   onChangeStartDate(date: string) {
-    console.log(date);
     this.minEndDate = new Date(date);
-    console.log('min date after change', this.minEndDate);
   }
   /**************************************************************************
    * @description change the maximum of the Start Date DatePicker
    *************************************************************************/
   onChangeEndDate(date: string) {
-    console.log(date);
     this.maxStartDate = new Date(date);
-    console.log('max date after change', this.maxStartDate);
   }
 }

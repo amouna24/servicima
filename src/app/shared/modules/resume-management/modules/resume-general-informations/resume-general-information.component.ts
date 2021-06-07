@@ -16,6 +16,8 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeModel } from '@shared/models/resume.model';
 import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { map } from 'rxjs/internal/operators/map';
+import { UploadService } from '@core/services/upload/upload.service';
 
 @Component({
   selector: 'wid-resume-general-information',
@@ -38,6 +40,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   email: string;
   showYears = false;
   update = false;
+  photo: FormData;
   private showNumberError = false ;
   constructor(
     private fb: FormBuilder,
@@ -50,6 +53,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private profileService: ProfileService,
     private localStorageService: LocalStorageService,
     private appInitializerService: AppInitializerService,
+    private uploadService: UploadService,
   ) {
   }
   /**************************************************************************
@@ -80,6 +84,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
         this.avatar = avatar;
       }
     );
+  }
+  getFile(obj: FormData) {
+    this.photo = obj;
   }
   /**************************************************************************
    * @description : Show or Hide The input of Years of experience
@@ -140,7 +147,16 @@ export class ResumeGeneralInformationComponent implements OnInit {
   /**
    * @description Create Or Update Resume
    */
-  createUpdateResume() {
+ async createUpdateResume() {
+    let filename = null;
+    if (this.photo) {
+      filename = await this.uploadService.uploadImage(this.photo)
+        .pipe(
+          map(
+            response => response.file.filename
+          ))
+        .toPromise();
+    }
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
     this.generalInfo.image = this.haveImage;

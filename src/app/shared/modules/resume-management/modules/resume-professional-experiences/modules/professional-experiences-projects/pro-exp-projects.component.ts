@@ -55,18 +55,14 @@ export class ProExpProjectsComponent implements OnInit {
     private modalServices: ModalService,
   ) { }
   getProjectInfo() {
-    console.log(this.professional_experience_code);
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
       `?professional_experience_code=${this.professional_experience_code}`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            console.log('response=', response);
             this.ProjectArray = response;
             if (this.ProjectArray.length !== 0) {
-              console.log('length', this.ProjectArray.length);
-              console.log('Project array on init= ', this.ProjectArray);
               this.showProject = true;
               this.showForm = false;
               this.ProjectArray.forEach(
@@ -83,10 +79,8 @@ export class ProExpProjectsComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    console.log('professional experience code=', this.professional_experience_code);
     this.getProjectInfo();
     this.createForm();
-    console.log('on init showForm', this.showForm);
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDay();
@@ -115,7 +109,6 @@ export class ProExpProjectsComponent implements OnInit {
     this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
     if (this.sendProject.valid ) {
       this.resumeService.addProject(this.Project).subscribe(data => {
-        console.log('Technical skill =', data);
         this.getProjectInfo();
       });
       this.showForm = false;
@@ -138,7 +131,6 @@ export class ProExpProjectsComponent implements OnInit {
   }
   onShowForm() {
     this.showForm = true;
-    console.log(this.showForm);
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
@@ -170,7 +162,6 @@ export class ProExpProjectsComponent implements OnInit {
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
-                    console.log('response=', response);
                     response.forEach((det) => {
                       this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
                       this.resumeService.getProjectDetailsSection(
@@ -179,9 +170,7 @@ export class ProExpProjectsComponent implements OnInit {
                         .subscribe(
                           (responsedet) => {
                             if (responsedet['msg_code'] !== '0004') {
-                              console.log('responsedet=', responsedet);
                               responsedet.forEach((section) => {
-                                console.log('section', section);
                                 this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
                               });
                             }

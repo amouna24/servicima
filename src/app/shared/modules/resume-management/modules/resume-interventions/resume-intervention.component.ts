@@ -5,6 +5,7 @@ import { IResumeInterventionModel } from '@shared/models/resumeIntervention.mode
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-intervention',
@@ -29,6 +30,7 @@ export class ResumeInterventionComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
+    private router: Router,
   ) { }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -46,14 +48,13 @@ export class ResumeInterventionComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getIntervention(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
-                  console.log('response', responseOne);
                   this.interventionArray = responseOne;
                   this.interventionArray.forEach(
                     (func) => {
@@ -66,7 +67,9 @@ export class ResumeInterventionComponent implements OnInit {
                 }
               },
             );
-        },
+        } else {
+      this.router.navigate(['/candidate/resume/']);
+    }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -91,9 +94,7 @@ export class ResumeInterventionComponent implements OnInit {
     this.Intervention.resume_code = this.resume_code;
     this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
     if (this.sendIntervention.valid ) {
-      console.log('intervention=', this.Intervention);
       this.resumeService.addIntervention(this.Intervention).subscribe(data => {
-        console.log('Intervention =', data);
         this.getInterventionInfo();
       });
     } else { console.log('Form is not valid');
@@ -103,7 +104,6 @@ export class ResumeInterventionComponent implements OnInit {
       this.interventionUpdate.intervention_code = this.intervention_code;
       this.interventionUpdate.resume_code = this.resume_code;
       this.interventionUpdate._id = this._id;
-      console.log(' intervention update =', this.interventionUpdate);
       if (this.sendIntervention.valid && !this.showNumberError) {
       this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
       this.interventionArray[this.indexUpdate] = this.interventionUpdate;

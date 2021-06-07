@@ -415,7 +415,7 @@ updateTechnicalSkills(techSkill: IResumeTechnicalSkillsModel): Observable<any> {
   getResumePdf(filter: any, theme: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
     console.log('person=', JSON.parse(JSON.stringify(filter)));
-    return this.httpClient.get<any>(`http://127.0.0.1:8094/generate/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`,
+    return this.httpClient.get<any>(`${environment.docxTemplateApiUrl}/?data=${JSON.stringify(filter)}&type=resume&theme=${theme}`,
       // @ts-ignore
       { responseType: 'blob'});
   }

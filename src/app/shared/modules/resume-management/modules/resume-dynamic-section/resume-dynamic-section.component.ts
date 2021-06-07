@@ -6,6 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
@@ -22,6 +23,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
+    private router: Router,
                ) { }
   sendSection: FormGroup;
   arraySectionCount = 0;
@@ -41,7 +43,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
   ngOnInit(): void {
     this.getDynamicSectionInfo();
     this.createForm();
-    console.log('length=', this.SectionArray.length);
     }
   /**************************************************************************
    * @description Function that change the index between selected Section using cdkDropListGroup
@@ -65,14 +66,13 @@ export class ResumeDynamicSectionComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getCustomSection(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
-                  console.log('response', responseOne);
                   this.SectionArray = responseOne;
                   this.SectionArray.forEach(
                     (sec) => {
@@ -80,22 +80,23 @@ export class ResumeDynamicSectionComponent implements OnInit {
                     }
                   );
                   if (this.SectionArray.length !== 0) {
-                    console.log('section array on init= ', this.SectionArray);
                     this.showSection = true;
                   }
-                } },
+                } }
+              ,
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
               },
             );
-        },
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
         },
       );
-    console.log('section array =', this.SectionArray);
 
   }
   /**************************************************************************
@@ -124,10 +125,8 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.Section.index = this.arraySectionCount.toString();
     if (this.sendSection.valid) {
       this.resumeService.addCustomSection(this.Section).subscribe(data => {
-        console.log('Technical skill =', data);
         this.getDynamicSectionInfo();
       });
-    } else { console.log('Form is not valid');
     }
     this.arraySectionCount++; } else {
       this.sectionUpdate = this.sendSection.value;

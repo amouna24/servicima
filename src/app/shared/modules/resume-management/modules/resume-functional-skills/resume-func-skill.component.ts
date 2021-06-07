@@ -5,6 +5,7 @@ import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSki
 import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -29,6 +30,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
+    private router: Router,
   ) { }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -46,14 +48,13 @@ export class ResumeFuncSkillComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getFunctionalSkills(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
-                  console.log('response', responseOne);
                   this.funcSkillArray = responseOne;
                   this.arrayFuncSkillCount = responseOne.length;
                   this.funcSkillArray.forEach(
@@ -67,8 +68,9 @@ export class ResumeFuncSkillComponent implements OnInit {
                 if (error.error.msg_code === '0004') {
                 }
               },
-            );
-        },
+            ); } else {
+            this.router.navigate(['/candidate/resume/']);
+          }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -116,10 +118,8 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.FuncSkill.resume_code = this.resume_code;
     this.FuncSkill.functional_skills_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
     this.FuncSkill.index = this.arrayFuncSkillCount;
-    console.log('model=', this.FuncSkill);
     if (this.sendFuncSkill.valid ) {
      await this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => {
-        console.log('functional skill =', data);
        this.getFuncSkillsInfo();
      });
 this.arrayFuncSkillCount++;
@@ -151,6 +151,5 @@ this.arrayFuncSkillCount++;
     this.button = 'Save';
 /*
 */
-    console.log('FuncSkill update', this.FuncSkillUpdate);
   }
 }

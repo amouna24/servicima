@@ -15,7 +15,7 @@ export const environment = {
   dataListsUrl: 'http://192.168.1.22:8006/admin/datalists/v1',
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
-  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8100/admin/loadauthstarterdata/v1',
+  loadAuthStarterDataApiUrl: 'http://192.168.1.22:8200/admin/loadauthstarterdata/v1',
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
@@ -39,13 +39,14 @@ export const environment = {
   resumeSectionApiUrl: 'http://192.168.1.22:8071/servicima/resumesection/v1',
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
+  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
   companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
-  userGatewayApiUrl: 'http://192.168.1.22:8101/auth/v1',
+  userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

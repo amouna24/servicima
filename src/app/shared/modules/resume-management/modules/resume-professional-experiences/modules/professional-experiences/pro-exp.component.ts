@@ -67,15 +67,14 @@ export class ProExpComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getProExp(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseProExp) => {
                 if (responseProExp['msg_code'] !== '0004') {
                   // data found
-                  console.log('response', responseProExp);
                   this.proExpArray = responseProExp;
                   this.proExpArray.forEach(
                     (exp) => {
@@ -91,7 +90,9 @@ export class ProExpComponent implements OnInit {
                 }
               },
             );
-        },
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -132,11 +133,9 @@ export class ProExpComponent implements OnInit {
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
       if (this.sendProExp.valid && this.showDateError === false ) {
-      console.log('ProExp input= ', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
       this.getProExpInfo();
     } else {
-      console.log('Form is not valid');
       this.showDateError = false;
       this.showPosError = false;
 
@@ -145,7 +144,6 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
-      console.log('pro exp update = ', this.proExpUpdate);
       this.proExpUpdate._id = this._id;
 
       if (this.sendProExp.valid && this.showDateError === false ) {
@@ -186,7 +184,6 @@ export class ProExpComponent implements OnInit {
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
-                    console.log('response=', response);
                     response.forEach((project) => {
                       this.resumeService.deleteProject(project._id).subscribe(data => console.log('Deleted'));
 
@@ -196,7 +193,6 @@ export class ProExpComponent implements OnInit {
                         .subscribe(
                           (responsedet) => {
                             if (responsedet['msg_code'] !== '0004') {
-                              console.log('response=', responsedet);
                               responsedet.forEach((det) => {
                                 this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
                                 this.resumeService.getProjectDetailsSection(
@@ -205,9 +201,7 @@ export class ProExpComponent implements OnInit {
                                   .subscribe(
                                     (responsedetsec) => {
                                       if (responsedetsec['msg_code'] !== '0004') {
-                                        console.log('responsedet=', responsedetsec);
                                         responsedetsec.forEach((section) => {
-                                          console.log('section', section);
                                           this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
                                         });
                                       }
@@ -230,13 +224,9 @@ export class ProExpComponent implements OnInit {
         });
   }
   onChangeStartDate(date: string) {
-    console.log(date);
     this.minEndDate = new Date(date);
-    console.log('min date after change', this.minEndDate);
   }
   onChangeEndDate(date: string) {
-    console.log(date);
     this.maxStartDate = new Date(date);
-    console.log('max date after change', this.maxStartDate);
   }
 }

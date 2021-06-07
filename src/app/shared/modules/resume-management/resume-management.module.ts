@@ -17,7 +17,7 @@ import { ResumeDynamicSectionComponent } from './modules/resume-dynamic-section/
 import { ResumeFuncSkillComponent } from './modules/resume-functional-skills/resume-func-skill.component';
 import { ResumeCertifDiplomaComponent } from './modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from './modules/resume-done/resume-done.component';
-import { LanguageformComponent } from './modules/resume-languages/languageform/languageform.component';
+import { ResumeThemeComponent } from './modules/resume-theme/resume-theme.component';
 @NgModule({
   declarations: [
     ResumeGeneralInformationComponent,
@@ -28,7 +28,7 @@ import { LanguageformComponent } from './modules/resume-languages/languageform/l
     ResumeFuncSkillComponent,
     ResumeCertifDiplomaComponent,
     ResumeDoneComponent,
-    LanguageformComponent,
+    ResumeThemeComponent,
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-tech-skill',
@@ -31,6 +32,7 @@ export class ResumeTechSkillComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
+    private router: Router,
   ) { }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -48,15 +50,15 @@ export class ResumeTechSkillComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
-          console.log('resume code 1 =', this.resume_code);
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getTechnicalSkills(
             `?resume_code=${this.resume_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
-                  console.log('response', responseOne);
                   this.techSkillArray = responseOne;
+                  this.arrayTechSkillCount = responseOne.length;
                   this.techSkillArray.forEach(
                     (tech) => {
                       tech.technical_skill_code = tech.ResumeTechnicalSkillsKey.technical_skill_code;
@@ -68,7 +70,9 @@ export class ResumeTechSkillComponent implements OnInit {
                 }
               },
             );
-        },
+        } else {
+      this.router.navigate(['/candidate/resume/']);
+    }},
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -96,9 +100,7 @@ export class ResumeTechSkillComponent implements OnInit {
     this.TechSkill.technical_skill_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-TECH`;
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid ) {
-      console.log('technical skill input= ', this.TechSkill);
       this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => {
-        console.log('Technical skill =', data);
         this.getTechnicalSkillsInfo();
       });
     } else { console.log('Form is not valid');
@@ -150,6 +152,7 @@ export class ResumeTechSkillComponent implements OnInit {
             });
             this.button = 'Add';
           }
+          this.arrayTechSkillCount--;
           this.subscriptionModal.unsubscribe();
         }
   );

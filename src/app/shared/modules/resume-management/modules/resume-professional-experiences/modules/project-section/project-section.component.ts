@@ -68,13 +68,11 @@ export class ProjectSectionComponent implements OnInit {
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
      this.select = selectedValue;
-      console.log('selected value = ', selectedValue);
     });
   }
   async getSectionRefData() {
     const data = await this.getRefdata();
     this.secList = data['SECTION_TYPE'];
-    console.log(this.secList);
   }
   async getRefdata() {
     const list = ['SECTION_TYPE'];
@@ -106,7 +104,6 @@ export class ProjectSectionComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            console.log('response=', response);
           this.proDetailsArray = response;
        } },
         (error) => {
@@ -132,7 +129,6 @@ export class ProjectSectionComponent implements OnInit {
     this.ProSectionDetails.project_details_section_code = `WID-${Math.
     floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D-S`;
     this.ProSectionDetails.project_details_code = this.project_details_code;
-    console.log(this.ProSectionDetails);
     if (this.sendProSectionDetails.valid) {
       this.proSectionArray.push(this.ProSectionDetails);
     } else { console.log('Form is not valid');
@@ -147,9 +143,7 @@ export class ProjectSectionComponent implements OnInit {
     this.ProDetails.project_details_code = this.project_details_code;
     this.ProDetails.project_code = this.project_code;
     if (this.sendProDetails.valid) {
-      console.log('project details=', this.ProDetails);
       this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
-      console.log(this.ProSectionDetails);
       if (this.ProSectionDetails !== undefined) {
       this.proSectionArray.forEach((sec) => {
         this.resumeService.
@@ -163,7 +157,6 @@ export class ProjectSectionComponent implements OnInit {
       this.proDetailUpdate.project_code = this.project_code;
       this.proDetailUpdate.project_details_code = this.project_details_code;
       this.proDetailUpdate._id = this._id;
-      console.log('pro Detail Update =', this.proDetailUpdate);
       this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(data => this.getProjectDetailsInfo());
       this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
       this.button = 'Add';
@@ -174,13 +167,11 @@ export class ProjectSectionComponent implements OnInit {
     this.createFormProDetails();
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
       this.select = selectedValue;
-      console.log('selected value = ', selectedValue);
     });
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.proSectionArray = [];
   }
   onSelect() {
-    console.log(this.select);
     if (this.select === 'PARAGRAPH') {
       this.showDesc = true;
       this.showSec = false;
@@ -204,7 +195,6 @@ export class ProjectSectionComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response['msg_code'] !== '0004') {
-              console.log('response=', response);
               this.proSectionArray = response;
             } },
           (error) => {
@@ -239,13 +229,10 @@ export class ProjectSectionComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteProjectDetails(_id).subscribe((pro) => {
-                console.log('deleted');
                 this.resumeService.getProjectDetailsSection(`?project_code=${project_details_code}`).subscribe((resp) => {
                   if (resp.length !== undefined) {
-                    console.log('resp length', resp.length);
                   resp.forEach(sec => {
                     this.resumeService.deleteProjectDetailsSection(sec._id).subscribe(secc => {
-                      console.log('section details deleted');
                     });
                   }); }
                 });
@@ -260,7 +247,6 @@ export class ProjectSectionComponent implements OnInit {
               this.createFormProDetails();
               this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
                 this.select = selectedValue;
-                console.log('selected value = ', selectedValue);
               });
               this.proSectionArray = [];
               }

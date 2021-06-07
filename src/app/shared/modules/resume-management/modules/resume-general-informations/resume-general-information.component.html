@@ -80,7 +80,7 @@
                   </div>
                     </div>
                     <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" class="height-80">
-                      <div fxLayout="row"  fxFlex="40" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
+                      <div fxLayout="row"  fxFlex="55" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
                           <div  fxLayout="column" class="profile-image">
                             <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
                                                [haveImage]="haveImage"
@@ -91,6 +91,7 @@
                                                [diameter]="140"
                                                height="147"
                                                width="122"
+                                               (newFile)="getFile($event)"
                             ></wid-profile-image>
                           </div>
                           <div fxLayout="column" fxLayoutAlign="start" fxFlex="75">
@@ -106,7 +107,7 @@
                   </div>
                 </wid-scrollbar>
               </div>
-              <div fxLayout="row" fxFlex="10" fxLayoutAlign="center " >
+              <div fxLayout="row" fxFlex="14" fxLayoutAlign="center " >
                 <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
                   <button mat-raised-button type="submit" color="primary" class="white btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="CreationForm.invalid">
                     Next
