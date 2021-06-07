@@ -46,7 +46,7 @@ export class SkillsListComponent implements OnInit {
     this.testService.getSkills(`?application_id=5eac544a92809d7cd5dae21f`)
       .subscribe(
         (response) => {
-          console.log('aaaaaa', response);
+          console.log('response', response);
           this.tableData.next(response.map(
             async (value) => {
               return {
@@ -71,13 +71,12 @@ export class SkillsListComponent implements OnInit {
    const techList = [];
      this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}`)
       .subscribe(resTechSkill => {
+        console.log('resTechSkill', resTechSkill);
         resTechSkill.forEach( async TechSkill => {
-          console.log('tech skill', TechSkill);
           await this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}`)
             .subscribe(resTech => {
-              console.log('get technologies', resTech);
+              console.log('resTech', resTech);
               resTech.forEach(async Tech => {
-                console.log('get technologies', Tech);
                techList.push(Tech.technology_title);
               });
             });
@@ -102,7 +101,6 @@ export class SkillsListComponent implements OnInit {
       title: 'Delete This Skills ?',
       status: id['_id']
     };
-    console.log('_id=', id);
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {

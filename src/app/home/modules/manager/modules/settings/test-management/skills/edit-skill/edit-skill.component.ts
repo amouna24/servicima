@@ -214,6 +214,7 @@ export class EditSkillComponent implements OnInit {
         return true;
   }
   async addTech() {
+    console.log('displayed columns', this.displayedColumns);
     await this.displayedColumns.forEach(res => {
       console.log(res);
       this.skillTech = {
@@ -239,6 +240,7 @@ export class EditSkillComponent implements OnInit {
       this.testService.updateSkills(this.testSkill).subscribe( async data => {
         this.deleteTechno().then(
           (dataB) => {
+            console.log(dataB);
             console.log('add now');
             if (dataB) {
               this.addTech();

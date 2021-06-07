@@ -162,7 +162,8 @@ export class AddSkillsComponent implements OnInit {
     this.testSkill.test_skill_code =  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SKILL`;
     this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
     console.log('testSkill=', this.testSkill);
-    if (this.sendAddTestSkill.valid) {
+    console.log('LENGTH DISPLAYED', this.displayedColumns.length);
+    if (this.sendAddTestSkill.valid && this.displayedColumns.length > 0) {
       this.testService.addSkills(this.testSkill).subscribe(data => {
         console.log('skill created=', data);
         console.log('displayed columns', this.displayedColumns);
