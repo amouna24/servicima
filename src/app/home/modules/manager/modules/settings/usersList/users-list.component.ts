@@ -23,6 +23,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
+
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
+
   constructor(private router: Router,
               private profileService: ProfileService,
               private userService: UserService,
@@ -37,7 +43,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading.next(true);
     this.getConnectedUser();
-    this.getAllUsers();
+    this.getAllUsers(this.nbtItems.getValue(), 0);
   }
 
   /**
@@ -57,11 +63,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * @description : get all users
    */
-  getAllUsers() {
-    this.subscriptions.push(this.profileService.getAllUser(this.emailAddress)
-      .subscribe((res) => {
-        const listUser = this.getUserWithType(res, this.typeUser);
-      this.ELEMENT_DATA.next(listUser);
+  getAllUsers(limit, offset) {
+    this.subscriptions.push(
+      this.profileService.getAllUser(this.emailAddress, limit, offset)
+        .subscribe((res) => {
+          res['results'] = this.getUserWithType(res['results'], this.typeUser);
+        this.ELEMENT_DATA.next(res);
         this.isLoading.next(false);
     }));
   }
@@ -104,7 +111,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * @description : change the status of the user
    * @param id: string
-   * @param status: string
+   * @params status: string
    */
   onChangeStatus(id: string) {
     const confirmation = {
@@ -118,7 +125,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
         this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
-             await this.getAllUsers();
+             await this.getAllUsers(this.nbtItems.getValue(), 0);
             }
           },
           (err) => console.error(err),
@@ -141,6 +148,16 @@ export class UsersListComponent implements OnInit, OnDestroy {
       case('delete'): this.onChangeStatus(rowAction.data);
     }
   }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getAllUsers(params.limit, params.offset);
+  }
+
   /**
    * @description destroy
    */
