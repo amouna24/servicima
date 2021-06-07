@@ -53,7 +53,8 @@
 
     <wid-scrollbar class="dynamic-data-table-content" style="width: 100%">
 
-        <div *ngIf="dataSource?.length === 0" fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
+      <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}">
             <div  fxFlex="15" fxLayout="row">
               <span class="cool-grey font-size-18">No Data Found</span>
@@ -65,8 +66,10 @@
             </div>
           </div>
         </div>
+      </ng-container>
 
-        <table cdk-table *ngIf="isLoading.getValue() === false && dataSource?.length > 0" [style]="{'width': '100%'}" [dataSource]="dataSource" [trackBy]="identify" >
+      <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
+        <table cdk-table [style]="{'width': '100%'}" [dataSource]="dataSource" [trackBy]="identify" >
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -146,13 +149,18 @@
           <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
         </table>
+      </ng-container>
 
-          <div  *ngIf="isLoading.getValue();" fxLayoutAlign="center center">
-            <mat-progress-spinner
-              color="primary"
-              mode="indeterminate">
-            </mat-progress-spinner>
-          </div>
+
+      <ng-container *ngIf="isLoading.getValue();" >
+        <div  fxLayoutAlign="center center">
+          <mat-progress-spinner
+            color="primary"
+            mode="indeterminate">
+          </mat-progress-spinner>
+        </div>
+      </ng-container>
+
 
     </wid-scrollbar>
 

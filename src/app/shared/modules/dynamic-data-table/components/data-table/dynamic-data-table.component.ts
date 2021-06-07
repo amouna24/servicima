@@ -87,19 +87,20 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
    getDataSource() {
     this.tableData.subscribe((res) => {
-      this.totalItems = res['total'];
-      this.countedItems = res['count'];
-      this.offset = Number(res['offset']) + 1;
-      this.limit = Number(res['limit']);
-      this.totalCountedItems = res['count'] === this.itemsPerPageControl.value ?
+      this.totalItems = res?.total ? res.total : null;
+      this.countedItems = res?.count ? res.total : null;
+      this.offset = res?.offset ? Number(res?.offset) + 1 : null;
+      this.limit = res?.limit ? Number(res?.limit) : null;
+      this.totalCountedItems = res?.count ? res?.count === this.itemsPerPageControl.value ?
         this.currentPage * this.itemsPerPageControl.value :
-        (this.currentPage - 1) * this.itemsPerPageControl.value + res['count'];
+        (this.currentPage - 1) * this.itemsPerPageControl.value + res['count'] : null;
       console.log('res', res); // to be deleted
-      this.nbrPages = Array(Math.ceil(Number(res['total']) / this.itemsPerPageControl.value))
+      this.nbrPages = res?.total ? Array(Math.ceil(Number(res['total']) / this.itemsPerPageControl.value))
         .fill(null)
-        .map((x, i) => i + 1);
+        .map((x, i) => i + 1) : null;
       let keys: string;
-      res['results'].map((data) => {
+      const dataList = res?.results ? res?.results : res;
+      dataList.map((data) => {
         const keyAndValueList = Object.entries(data);
         keyAndValueList.map((keyAndValue) => {
           keys = keyAndValue[0];
@@ -107,7 +108,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
             if (typeof (value) === 'object' && value) {
               // tslint:disable-next-line:prefer-for-of
               for (let i = 0; i < Object.keys(value).length; i++) {
-                res['results'].map((elm) => {
+                dataList.map((elm) => {
                   elm[Object.keys(value)[i]] = elm[keys][Object.keys(value)[i]];
                 });
               }
@@ -115,7 +116,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           });
         });
       });
-      this.dataSource = res['results'];
+      this.dataSource = dataList;
      this.convertData();
     });
   }
@@ -124,7 +125,8 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
  * @description get data list
  *************************************************************************/
   getDataList() {
-    this.temp = [...this.tableData?.getValue()['results']];
+    this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
+                                            [...this.tableData?.getValue()];
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent });
       if (this.localStorageService.getItem(this.tableCode)) {
