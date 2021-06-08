@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ITestLevelModel } from '@shared/models/testLevel.model';
 
 import { QuestionDetailsComponent } from '../question-details/question-details.component';
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-bloc-questions-details',
@@ -22,10 +24,14 @@ export class BlocQuestionsDetailsComponent implements OnInit {
   questionsList: ITestQuestionModel[] = [];
   levelList: ITestLevelModel[] = [];
   showQuestionList = false;
+  subscriptionModal: Subscription;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private testService: TestService,
+    private modalServices: ModalService,
+
   ) { }
   ngOnInit(): void {
     this.getLevelAll();
@@ -85,15 +91,33 @@ export class BlocQuestionsDetailsComponent implements OnInit {
         id: _id,
         code_level,
       }
-    }).afterClosed().subscribe(() => {
-      this.getLevelAll();
-      this.getQuestionsInfo();
-      if (this.questionsList.length === 1) {
-        this.questionsList.splice(0, 1);
-        this.showQuestionList = false;
-      }
-      console.log('question list', this.questionsList);
-      console.log('after closed');
-    });
+    }).afterClosed().subscribe((id) => {
+      console.log('id=', id);
+      if (id !== undefined) {
+        const confirmation = {
+        code: 'delete',
+        title: 'Delete This Question ?',
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              console.log(id);
+              this.testService.deleteQuestion(id).subscribe(dataBloc => {
+                this.getLevelAll();
+                this.getQuestionsInfo();
+                if (this.questionsList.length === 1) {
+                  this.questionsList.splice(0, 1);
+                  this.showQuestionList = false;
+                }
+                console.log('Deleted');
+              });
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    } });
+    console.log('question list', this.questionsList);
+    console.log('after closed');
   }
 }

@@ -107,7 +107,7 @@
   </div>
   <div fxLayout="row" fxFlex="10" style="justify-content: flex-end">
     <div fxLayout="column" style="align-items: center" fxFlex="23">
-      <button mat-raised-button type="submit"  style="background-color: #fc0f3b;align-items: center" class="white  btn-small " (click)="deleteQuestions()"   [style]="{marginRight: '4%'}">
+      <button mat-raised-button type="submit"  style="background-color: #fc0f3b;align-items: center" class="white  btn-small "  mat-dialog-close="{{id}}"   [style]="{marginRight: '4%'}">
         Delete
       </button>
     </div>

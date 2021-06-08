@@ -58,7 +58,7 @@ getAnswers() {
         this.AnswerDetails = value;
       });
 }
-deleteQuestions() {
+/*deleteQuestions() {
   const confirmation = {
     code: 'delete',
     title: 'Delete This Question ?',
@@ -69,14 +69,14 @@ deleteQuestions() {
         if (res === true) {
           this.testService.deleteQuestion(this.id).subscribe(dataBloc => {
             console.log('Deleted');
-            this.dialogRef.close();
+            this.router.navigate(['/manager/settings/bloc-question/details']);
             this.closeDialog = true;
           });
         }
         this.subscriptionModal.unsubscribe();
       }
     );
-}
+}*/
   routeToQuestion() {
     this.router.navigate(['/manager/settings/bloc-question/edit-question'],
       { state: {
