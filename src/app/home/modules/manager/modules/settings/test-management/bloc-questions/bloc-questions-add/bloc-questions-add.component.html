@@ -4,7 +4,7 @@
       <h1 class="steel font-size-24 font-medium">Resume</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/manager/settings/bloc-question/">
         <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
         </mat-icon>
         <span class="cool-grey">back</span>
@@ -47,7 +47,7 @@
                     <mat-error class="red" *ngIf="sendAddTestBloc.controls.test_technology_code.errors?.required">
                       Please select an item in the list</mat-error>
                   </mat-form-field>
-                  <mat-label class="black font-size-12">
+                  <mat-label class="black font-size-12 required">
                     Questions total Numbers:
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">
