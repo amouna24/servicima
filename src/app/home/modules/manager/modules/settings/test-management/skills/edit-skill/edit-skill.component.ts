@@ -11,7 +11,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { HelperService } from '@core/services/helper/helper.service';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
-import { log } from 'util';
 
 @Component({
   selector: 'wid-edit-skill',
@@ -32,7 +31,7 @@ export class EditSkillComponent implements OnInit {
   _id = this.router.getCurrentNavigation().extras.state?.id;
   test_skill_code = this.router.getCurrentNavigation().extras.state?.test_skill_code;
   technology  = this.router.getCurrentNavigation().extras.state?.technology;
-  private addPermission = false;
+  private canDelete = false;
   constructor(
     private fb: FormBuilder,
     private dynamicDataTableService: DynamicDataTableService,
@@ -44,7 +43,6 @@ export class EditSkillComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.skill_title, '-----------' , this.technology);
     this.createForm();
     this.getTechnologiesInfo();
     this.getDisplayedColumns();
@@ -71,10 +69,8 @@ export class EditSkillComponent implements OnInit {
         (response) => {
           response.forEach(res => {
             let i = 0;
-            console.log('res = ', res.TestTechnologyKey.test_technology_code);
             this.technology.forEach(resDis => {
                 if (resDis === res.technology_title) {
-                  console.log('resDis', resDis, '--- tech title', res.technology_title);
                   i = 1;
                 }
               }
@@ -95,17 +91,14 @@ export class EditSkillComponent implements OnInit {
           }
         },
       );
-    console.log('can be displayed =', this.canBeDisplayedColumns);
   }
   getDisplayedColumns() {
     this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
       .subscribe(
         (response) => {
           response.forEach(res => {
-            console.log('res = ', res.TestTechnologyKey.test_technology_code);
             this.technology.forEach(resDis => {
                 if (resDis === res.technology_title) {
-                  console.log('resDis', resDis, '--- tech title', res.technology_title);
                   this.displayedColumns.push(
                     {
                       prop: res.TestTechnologyKey.test_technology_code,
@@ -203,60 +196,71 @@ export class EditSkillComponent implements OnInit {
       displayedColumns.removeAt(i);
     }
   }
-  async deleteTechno(): Promise<boolean> {
-    await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}`).toPromise().then(dataTechSkill => {
-      dataTechSkill.forEach(  resTech => {
-        this.testService.deleteTechnologySkills(resTech._id).toPromise().then(det => {
-          console.log('old tech deleted');
-        });
-      });
-    });
-        return true;
+  /**************************************************************************
+   * @description check display column
+   *************************************************************************/
+  deleteTechno(): Promise<boolean> {
+    let deletedItems ;
+    return new Promise<boolean>(
+      async (resolve) => {
+        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}`)
+          .toPromise()
+          .then(
+            dataTechSkill => {
+              deletedItems = dataTechSkill.length;
+              dataTechSkill.forEach((resTech) => {
+                this.testService.deleteTechnologySkills(resTech._id).subscribe((data) => {
+                  console.log('deleted', data);
+                  deletedItems--;
+                  if (deletedItems === 0) {
+                    resolve(true);
+                  }
+
+                });
+
+                  });
+            });
+      }
+    );
+
   }
+
+  /**************************************************************************
+   * @description check display column
+   *************************************************************************/
   async addTech() {
     console.log('displayed columns', this.displayedColumns);
     await this.displayedColumns.forEach(res => {
-      console.log(res);
       this.skillTech = {
         application_id: '5eac544a92809d7cd5dae21f',
         test_skill_code: this.test_skill_code,
         test_technology_code: res.prop,
       };
-      console.log('skill tech before added', this.skillTech);
       this.testService.addTechnologySkills(this.skillTech).subscribe(dataSkillTech => {
-        console.log('skill tech added', dataSkillTech);
       });
     });
   }
   updateSkill() {
-    console.log('display', this.displayedColumns);
-    console.log('available', this.canBeDisplayedColumns);
     this.testSkill = this.sendUpdateTestSkill.value;
     this.testSkill.test_skill_code =  this.test_skill_code;
     this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
     this.testSkill._id = this._id;
-    console.log('testSkill=', this.testSkill);
-    if (this.sendUpdateTestSkill.valid) {
       this.testService.updateSkills(this.testSkill).subscribe( async data => {
-        this.deleteTechno().then(
-          (dataB) => {
-            console.log(dataB);
-            console.log('add now');
-            if (dataB) {
-              this.addTech();
-            }
-
-          }
-        );
+        console.log(data);
       });
-      this.router.navigate(['/manager/settings/skills/']);
-    } else {
-      console.log('no valid');
-    }
+      this.deleteTechno().then(
+        (dataB) => {
+          console.log('dataB', dataB);
+          if (dataB) {
+            this.addTech();
+          }
+          this.router.navigate(['/manager/settings/skills/']);
+        }
+      );
+
   }
+
   testButton() {
     return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;
   }
-
-
 }

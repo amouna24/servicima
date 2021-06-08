@@ -43,41 +43,46 @@ export class BlocQuestionsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading.next(true);
-    this.getTableData();
-  }
+    this.getTableData().then((data) => {
+      this.tableData.next(data);
+    });  }
 
   getTableData() {
-    this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
-      .subscribe(
-        (response) => {
-          response.map(async res => {
-            this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
-              (code) => {
-                this.blocData.push({
-                  test_bloc_title: res.test_question_bloc_title,
-                  test_bloc_technology: code,
-                  test_bloc_total_number: res.question_nbr,
-                  test_question_bloc_desc: res.test_question_bloc_desc,
-                  _id: res._id,
-                  test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
-                  technology_code: res.TestQuestionBlocKey.test_technology_code,
-                });
-                this.tableData.next(this.blocData);
+    this.blocData = [];
+    this.isLoading.next(true);
+    return  new Promise<any>(resolve => {
+      this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
+        .subscribe(
+          (response) => {
+            response.map(async res => {
+              this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
+                (code) => {
+                  this.blocData.push({
+                    test_bloc_title: res.test_question_bloc_title,
+                    test_bloc_technology: code,
+                    test_bloc_total_number: res.question_nbr,
+                    test_question_bloc_desc: res.test_question_bloc_desc,
+                    _id: res._id,
+                    test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
+                    technology_code: res.TestQuestionBlocKey.test_technology_code,
+                  });
+                  if (response.length === this.blocData.length) {
+                    this.isLoading.next(false);
+                    resolve(this.blocData);
+                  }
+                }
+              );
 
-                this.isLoading.next(false);
-              }
-            );
-
-          });
-        },
-        (error) => {
-          if (error.error.msg_code === '0004') {
-            console.log('empty table');
-          }
-        },
-      );
-    console.log('data table=', this.tableData);
+            });
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+              console.log('empty table');
+            }
+          },
+        );
+      console.log('data table=', this.tableData);
+    });
   }
 
   async getTechTitle(tech_code): Promise<string> {
@@ -138,10 +143,12 @@ export class BlocQuestionsListComponent implements OnInit {
           if (res === true) {
             this.testService.deleteQuestionBloc(data['_id']).subscribe(dataBloc => {
               console.log('Deleted');
-              this.getTableData();
+              this.getTableData().then((dataTable) => {
+                this.tableData.next(dataTable);
+              });
+
             });
           }
-          this.isLoading.next(true);
           this.subscriptionModal.unsubscribe();
         }
       );
