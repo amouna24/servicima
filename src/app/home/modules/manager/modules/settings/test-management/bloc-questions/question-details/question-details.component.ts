@@ -20,7 +20,7 @@ export class QuestionDetailsComponent implements OnInit {
   question_type = '';
   test_question_desc = '';
   technology = '';
-  id = '';
+  id: string;
   test_question_bloc_code = '';
   AnswerDetails: ITestChoicesModel[] = [];
   subscriptionModal: Subscription;

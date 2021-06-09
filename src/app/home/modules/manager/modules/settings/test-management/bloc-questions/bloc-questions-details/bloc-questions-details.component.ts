@@ -4,10 +4,10 @@ import { ITestQuestionModel } from '@shared/models/testQuestion.model';
 import { TestService } from '@core/services/test/test.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ITestLevelModel } from '@shared/models/testLevel.model';
+import { ModalService } from '@core/services/modal/modal.service';
+import { Subscription } from 'rxjs';
 
 import { QuestionDetailsComponent } from '../question-details/question-details.component';
-import { Subscription } from 'rxjs';
-import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-bloc-questions-details',
@@ -93,7 +93,7 @@ export class BlocQuestionsDetailsComponent implements OnInit {
       }
     }).afterClosed().subscribe((id) => {
       console.log('id=', id);
-      if (id !== undefined) {
+      if ((id !== undefined) && (id !== 'false')) {
         const confirmation = {
         code: 'delete',
         title: 'Delete This Question ?',
