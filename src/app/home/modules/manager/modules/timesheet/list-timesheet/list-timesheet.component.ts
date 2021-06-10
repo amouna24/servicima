@@ -63,10 +63,8 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.getUserInfo();
     this.getAllCollaborators();
     this.refdata =  await this.getRefdata();
-    this.modalsServices.registerModals(
-      { modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
-    this.modalsServices.registerModals(
-      { modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
+    this.modalsServices.registerModals({ modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
+    this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.isLoading.next(true);
     await this.getAllTimesheet();
     this.route.queryParams
@@ -113,6 +111,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
         .getAllUser(this.companyEmail)
         .subscribe((res) => {
           this.collaboratorArray = res.filter(value => value.user_type === 'COLLABORATOR');
+          console.log('collaboratorArray', this.collaboratorArray);
         });
   }
 
@@ -133,13 +132,15 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   async getAllTimesheet() {
     this.categoryList = this.refdata['TIMESHEET_PROJECT_CATEGORY'];
     this.profTitleList = this.refdata['PROF_TITLES'];
-
     this.timesheetService
         .getTimesheet(
           `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`)
         .subscribe((res) => {
+          // console.log(res, 'res');
           res.map( (result) => {
+            // console.log(result, 'result');
             this.collaboratorArray.forEach( (collaborator) => {
+             // console.log(collaborator, 'collaborator');
               if ( result.TimeSheetKey.email_address === collaborator.userKey.email_address ) {
                 this.title_id = collaborator.title_id;
                 this.profTitleList.forEach((profTitle) => {

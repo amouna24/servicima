@@ -37,6 +37,7 @@ export class AddTimesheetComponent implements OnInit {
   buttonValue = this.router.getCurrentNavigation().extras.state.buttonClicked;
   // typeTimesheet = this.router.getCurrentNavigation().extras.state.typeTimesheet;
   typeTimesheet: string;
+  date: Date;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -230,6 +231,14 @@ export class AddTimesheetComponent implements OnInit {
       this.initialForm.patchValue({ project_code: this.projectCode});
       this.initialForm.patchValue({ end_date: moment(this.initialForm.value.start_date).add(7, 'day').format('LL')});
 
+     /* const endDate = this.initialForm.value.start_date;
+      const date = endDate.setDate(endDate.getDate() + 7);
+
+      /!* this.initialForm.patchValue({ end_date: endDate});*!/
+      console.log('date', date);*/
+
+      console.log(this.initialForm.value, 'value');
+
       const confirmation = {
         code: 'add',
         title: 'submit timesheet',
@@ -240,6 +249,7 @@ export class AddTimesheetComponent implements OnInit {
           // console.log('destroy', this.destroy$);
           // ADD_TIMESHEET
           if (res === true) {
+            console.log('tt', this.initialForm.value);
             this.timesheetService.addTimesheet(this.initialForm.value).pipe(
               takeUntil(this.destroy$)
             ).subscribe(

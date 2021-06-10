@@ -36,6 +36,7 @@ export class ShowTimesheetComponent implements OnInit {
   async ngOnInit() {
     this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.timesheet = this.data;
+    console.log('timesheet', this.timesheet);
     this.avatar = await this.uploadService.getImage(this.timesheet.photo);
     this.statusButton();
   }

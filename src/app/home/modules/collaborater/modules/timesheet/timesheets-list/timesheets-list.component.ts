@@ -176,7 +176,8 @@ export class TimesheetsListComponent implements OnInit {
    */
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'): this.showTimesheet(rowAction.data);
+      case ('show'):
+        this.showTimesheet(rowAction.data);
         break;
       case ('update'):
         if (rowAction.data.timesheet_status === 'Pending') {
