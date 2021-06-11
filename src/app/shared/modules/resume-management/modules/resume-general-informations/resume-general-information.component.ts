@@ -35,6 +35,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
   company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
   langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  company_name: string;
   isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
@@ -60,6 +61,15 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            console.log('info', userInfo);
+            this.company_name = userInfo['company'][0]['company_name'];
+          }
+        });
+    console.log('user =', this.userService.connectedUser$.getValue());
     this.initForm();
     this.langList.next(this.appInitializerService.languageList.map(
       (obj) => {
@@ -147,7 +157,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       language_id: ['', Validators['required']],
       years_of_experience: [null, Validators.pattern('^(0?[1-9]|[12][0-9]|3[01])$')],
       actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      image: this.avatar,
+      image: this.haveImage,
       init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       status: 'A'
     });

@@ -95,6 +95,7 @@ export class ResumeInterventionComponent implements OnInit {
     this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
     if (this.sendIntervention.valid ) {
       this.resumeService.addIntervention(this.Intervention).subscribe(data => {
+        console.log('added');
         this.getInterventionInfo();
       });
     } else { console.log('Form is not valid');
@@ -147,5 +148,4 @@ export class ResumeInterventionComponent implements OnInit {
         }
       );
   }
-
 }
