@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   getAllUsers() {
     this.profileService.getAllUser(this.emailAddress)
       .subscribe((res) => {
-        this.listUsers = res;
+        this.listUsers = res['results'];
       }, error => console.error(error));
   }
 

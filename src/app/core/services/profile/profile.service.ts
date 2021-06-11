@@ -27,11 +27,11 @@ export class ProfileService {
 
   /**
    * @description: http request get to get all users registered in the same company
-   * @param company_email: string
+   * @params company_email, limit, offset
    */
-  getAllUser(companyEmail: string): Observable<IUserModel[]> {
+  getAllUser(companyEmail: string, limit?, offset?): Observable<IUserModel[]> {
     return this.httpClient
-      .get<IUserModel[]>(`${environment.userApiUrl}?company_email=${companyEmail}`);
+      .get<IUserModel[]>(`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}`);
   }
   /**
    * @description: http request put to update the information of user

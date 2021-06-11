@@ -229,16 +229,12 @@ export class AddTimesheetComponent implements OnInit {
 
       this.initialForm.patchValue({ timesheet_week: this.initialForm.value.start_date});
       this.initialForm.patchValue({ project_code: this.projectCode});
-      this.initialForm.patchValue({ end_date: moment(this.initialForm.value.start_date).add(7, 'day').format('LL')});
 
-     /* const endDate = this.initialForm.value.start_date;
+      const endDate = new Date(this.initialForm.value.start_date);
       const date = endDate.setDate(endDate.getDate() + 7);
-
-      /!* this.initialForm.patchValue({ end_date: endDate});*!/
-      console.log('date', date);*/
+      this.initialForm.patchValue({ end_date: endDate});
 
       console.log(this.initialForm.value, 'value');
-
       const confirmation = {
         code: 'add',
         title: 'submit timesheet',

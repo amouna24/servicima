@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { IContract } from '@shared/models/contract.model';
 import { Observable } from 'rxjs';
 import { IContractExtension } from '@shared/models/contractExtension.model';
+import { IContractProject } from '@shared/models/contractProject.model';
 
 import { environment } from '../../../../environments/environment';
 
@@ -100,6 +101,51 @@ export class ContractsService {
    *************************************************************************/
   disableContractExtension(ID: string): Observable<any> {
     return this.httpClient.delete<IContractExtension>(`${environment.contractExtensionApiUrl}/disable?_id=${ID}`);
+  }
+
+  /*------------------------------------------------------------------------*/
+
+  /*------------------------------CONTRACT PROJECT -----------------------------------*/
+
+  /**************************************************************************
+   * @description Get Contract Project List
+   * @param filter: search query like [ ?id=123 ]
+   * @returns All ContractProject Observable<IContractProject[]>
+   *************************************************************************/
+  getContractProject(filter: string): Observable<IContractProject[]> {
+    return this.httpClient.get<IContractProject[]>(`${environment.contractProjectApiUrl}/${filter}` );
+  }
+
+  /**************************************************************************
+   * @description Add new ContractProject
+   * @param contractProject Model
+   *************************************************************************/
+  addContractProject(contractProject: IContractProject): Observable<any> {
+    return this.httpClient.post<IContractProject>(`${environment.contractProjectApiUrl}`, contractProject);
+  }
+
+  /**************************************************************************
+   * @description Update ContractProject
+   * @param contractProject: updated ContractProject Object
+   *************************************************************************/
+  updateContractProject(contractProject: IContractProject): Observable<any> {
+    return this.httpClient.put<IContractProject>(`${environment.contractProjectApiUrl}`, contractProject);
+  }
+
+  /**************************************************************************
+   * @description Enable ContractProject Status
+   * @param ID : of the ContractProject
+   *************************************************************************/
+  enableContractProject(ID: string): Observable<any> {
+    return this.httpClient.put<IContractProject>(`${environment.contractProjectApiUrl}/enable?_id=${ID}`, null);
+  }
+
+  /**************************************************************************
+   * @description Disable ContractProject Status
+   * @param ID : of ContractProject
+   *************************************************************************/
+  disableContractProject(ID: string): Observable<any> {
+    return this.httpClient.delete<IContractProject>(`${environment.contractProjectApiUrl}/disable?_id=${ID}`);
   }
 
   /*------------------------------------------------------------------------*/

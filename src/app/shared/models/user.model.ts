@@ -1,6 +1,7 @@
 import { IPhotoModel } from './photo.model';
 import { IUserKeyModel } from './userKey.model';
 export interface IUserModel {
+  _id: string;
   userKey: IUserKeyModel;
   status: string;
   company_email: string;

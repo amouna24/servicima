@@ -12,9 +12,7 @@ import { BehaviorSubject, forkJoin, ReplaySubject, Subject, Subscription } from 
 import { IViewParam } from '@shared/models/view.model';
 import { IContractor } from '@shared/models/contractor.model';
 import { takeUntil } from 'rxjs/operators';
-import { ICompanyPaymentTermsModel } from '@shared/models/companyPaymentTerms.model';
 import { IContract } from '@shared/models/contract.model';
-import { IContractExtension } from '@shared/models/contractExtension.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { CompanyPaymentTermsService } from '@core/services/companyPaymentTerms/company-payment-terms.service';
 import { SheetService } from '@core/services/sheet/sheet.service';
@@ -29,7 +27,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { ProfileService } from '@core/services/profile/profile.service';
 import { TimesheetSettingService } from '@core/services/timesheet-setting/timesheet-setting.service';
 import { ICompanyTimesheetSettingModel } from '@shared/models/CompanyTimesheetSetting.model';
-import { IContractorContact } from '@shared/models/contractorContact.model';
 
 @Component({
   selector: 'wid-add-contract',
@@ -402,7 +399,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
 
   avatar: any;
   selectedContractFile = { file: FormData, name: ''};
-  selectedExtensionFile = { file: FormData, name: ''};
+  selectedExtensionFile = [];
 
   constructor(
     private contractsService: ContractsService,
@@ -604,7 +601,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.contractInfo = res[0][0];
+          this.contractInfo = res[0]['results'][0];
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
@@ -672,7 +669,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (Contacts) => {
-            console.log('Contacts', Contacts);
             resolve(
               Contacts.map(
                 (obj) => {
@@ -721,6 +717,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Create/Update Contract/ContractExtension
    *************************************************************************/
   async createNewContract(data: FormGroup) {
+    let itemsFetched = 0;
     const Contract = {
       ...this.contractForm.controls.INFORMATION.value,
       ...this.contractForm.controls.SIGNER.value,
@@ -749,7 +746,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (res) => {
-            console.log('updated successfully', res);
+            this.utilsService.openSnackBar('Contract Updated !', '', 2000);
           },
           (error) => {
             console.log(error);
@@ -763,8 +760,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
         extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
           type.viewValue === extension.extension_status)?.value;
-        if (this.selectedExtensionFile.name !== '') {
-          extension.attachments = await this.uploadFile(this.selectedExtensionFile.file);
+
+        if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
+          extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
         }
         if (extension._id && extension?.updated) {
           extension.extension_code = extension.contractExtensionKey.extension_code;
@@ -774,19 +772,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                console.log('response', response);
+                this.utilsService.openSnackBar('Extension Updated !', '', 2000);
               },
               (error) => {
                 console.log('error', error);
               },
               () => {
-                if (this.type === 'CLIENT') {
-                  this.router.navigate(
-                    ['/manager/contract-management/clients-contracts/contracts-list']);
-                } else if (this.type === 'SUPPLIER') {
-                  this.router.navigate(
-                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                }
+                itemsFetched += 1;
               }
             );
         } else if (!extension?._id) {
@@ -798,23 +790,27 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (resp) => {
-                console.log('resp', resp);
+                this.utilsService.openSnackBar('Extension Added !', '', 2000);
               },
               error => {
                 console.log('error', error);
               },
               () => {
-                if (this.type === 'CLIENT') {
-                  this.router.navigate(
-                    ['/manager/contract-management/clients-contracts/contracts-list']);
-                } else if (this.type === 'SUPPLIER') {
-                  this.router.navigate(
-                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                itemsFetched += 1;
+                if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                  if (this.type === 'CLIENT') {
+                    this.router.navigate(
+                      ['/manager/contract-management/clients-contracts/contracts-list']);
+                  } else if (this.type === 'SUPPLIER') {
+                    this.router.navigate(
+                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                  }
                 }
               }
             );
         }
       }
+
     } else {
       if (this.selectedContractFile.name !== '') {
         Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
@@ -827,17 +823,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (response) => {
-            console.log('added successfully', response);
-            if (this.type === 'CLIENT') {
-              this.router.navigate(
-                ['/manager/contract-management/clients-contracts/contracts-list']);
-            } else if (this.type === 'SUPPLIER') {
-              this.router.navigate(
-                ['/manager/contract-management/suppliers-contracts/contracts-list']);
-            }
+            this.utilsService.openSnackBar('Contract Created !', '', 2000);
           },
           (error) => {
             console.log(error);
+          },
+          () => {
+            itemsFetched += 1;
           }
         );
       for (const extension of this.contractExtensionInfo) {
@@ -848,8 +840,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
         extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
           type.viewValue === extension.extension_status)?.value;
-        if (this.selectedExtensionFile.name !== '') {
-          extension.attachments = await this.uploadFile(this.selectedExtensionFile.file);
+        if (extension.selectedExtensionFile.name !== '') {
+          extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
         }
         this.contractsService.addContractExtension(extension)
           .pipe(
@@ -859,17 +851,22 @@ export class AddContractComponent implements OnInit, OnDestroy {
           )
           .subscribe(
             (res) => {
+              this.utilsService.openSnackBar('Extension Created !', '', 2000);
+
             },
             error => {
               console.log('error', error);
             },
             () => {
-              if (this.type === 'CLIENT') {
-                this.router.navigate(
-                  ['/manager/contract-management/clients-contracts/contracts-list']);
-              } else if (this.type === 'SUPPLIER') {
-                this.router.navigate(
-                  ['/manager/contract-management/suppliers-contracts/contracts-list']);
+              itemsFetched += 1;
+              if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                if (this.type === 'CLIENT') {
+                  this.router.navigate(
+                    ['/manager/contract-management/clients-contracts/contracts-list']);
+                } else if (this.type === 'SUPPLIER') {
+                  this.router.navigate(
+                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                }
               }
             }
           );
@@ -899,6 +896,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
               this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
                 type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
               this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
+              this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
+
               this.contractExtensionInfo[index].updated = true;
             }
           }
@@ -939,7 +938,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
                 type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value)?.viewValue : '',
               attachments: this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value,
-
+              selectedExtensionFile: this.selectedExtensionFile.pop(),
             }
           );
           this.extensionsList.next(this.contractExtensionInfo.slice());
@@ -956,7 +955,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               },
             }
           );
-          this.utilsService.openSnackBar('Extension Added', 'close');
+          this.utilsService.openSnackBar('Extension Added', '', 2000);
         }
       }
         break;
@@ -970,13 +969,16 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * rowAction [show, update, delete]
    *************************************************************************/
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('show'): // this.showContact(rowAction.data);
-        break;
-      case ('update'): this.setContractExtension(rowAction.data);
-        break;
-      case('delete'):  // this.onStatusChange(rowAction.data);
+    if (rowAction.formGroupName === 'CONTRACT_EXTENSION') {
+      switch (rowAction.actionType) {
+        case ('show'): // this.showContact(rowAction.data);
+          break;
+        case ('update'): this.setContractExtension(rowAction.data);
+          break;
+        case('delete'):  // this.onStatusChange(rowAction.data);
+      }
     }
+
   }
 
   /**************************************************************************
@@ -1012,7 +1014,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Upload Image to Server  with async to promise
    *************************************************************************/
   async uploadFile(formData) {
-    return this.uploadService.uploadImage(formData)
+    return await this.uploadService.uploadImage(formData)
       .pipe(
         takeUntil(this.destroy$),
         map(response => response.file.filename)
@@ -1068,8 +1070,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             }
           );
         } else if (doc.formGroupName === 'CONTRACT_EXTENSION') {
-          this.selectedExtensionFile.file = doc.data;
-          this.selectedExtensionFile.name = doc.name;
+          this.selectedExtensionFile.push({ file: doc.data, name: doc.name});
           this.contractForm.patchValue(
             {
               CONTRACT_EXTENSION: {

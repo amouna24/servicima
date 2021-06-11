@@ -110,7 +110,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.profileService
         .getAllUser(this.companyEmail)
         .subscribe((res) => {
-          this.collaboratorArray = res.filter(value => value.user_type === 'COLLABORATOR');
+          this.collaboratorArray = res['results'].filter(value => value.user_type === 'COLLABORATOR');
           console.log('collaboratorArray', this.collaboratorArray);
         });
   }
