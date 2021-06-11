@@ -172,6 +172,7 @@ export class ProExpComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'delete',
+      description: 'Are you sure ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(

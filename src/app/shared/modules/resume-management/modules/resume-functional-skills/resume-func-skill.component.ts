@@ -85,6 +85,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'Delete This Functionnal Skills ?',
+      description: 'Are you sure ?',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(

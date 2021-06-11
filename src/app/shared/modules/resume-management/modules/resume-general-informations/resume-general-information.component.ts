@@ -99,12 +99,30 @@ export class ResumeGeneralInformationComponent implements OnInit {
       .subscribe(
         async (generalInfo) => {
           if (generalInfo['msg_code'] !== '0004') {
+            console.log('general info', generalInfo[0]);
             if (!!generalInfo) {
-              if (generalInfo[0].image !== undefined) {
+              if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
               this.haveImage = generalInfo[0].image;
-              this.avatar = await this.uploadService.getImage(generalInfo[0].image); }
+              this.avatar = await this.uploadService.getImage(generalInfo[0].image); } else {
+                this.userService.connectedUser$.subscribe((data) => {
+                  if (!!data) {
+                    this.user = data['user'][0];
+                    this.haveImage = data['user'][0]['photo'];
+                    if (!this.haveImage) {
+                      this.userService.haveImage$.subscribe((res) => {
+                          this.haveImage = res;
+                        }
+                      );
+                    }
+                  }
+                });
+                this.userService.avatar$.subscribe(
+                  avatar => {
+                    this.avatar = avatar;
+                  }
+                );
+              }
               this.updateForm(generalInfo);
-              this.showYears = !this.showYears;
             } else {
 
             }
@@ -141,9 +159,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
       years_of_experience: generalInformation[0].years_of_experience,
       language_id: generalInformation[0].ResumeKey.language_id,
       resume_code: generalInformation[0].ResumeKey.resume_code,
-      image: this.haveImage,
+      image: this.avatar,
     });
-    this.showHideYears();
+    if (this.CreationForm.controls.years_of_experience.value !== null) {
+    this.showHideYears(); }
   }
   /**
    * @description Initialization of Resume Form
@@ -155,9 +174,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: ['', Validators['required']],
-      years_of_experience: [null, Validators.pattern('^(0?[1-9]|[12][0-9]|3[01])$')],
+      years_of_experience: [null, Validators.pattern('^(0?[0-9]|[12][0-9]|3[01])$')],
       actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      image: this.haveImage,
+      image: this.avatar,
       init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       status: 'A'
     });
@@ -177,6 +196,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
     }
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
+    if (this.generalInfo.years_of_experience === null) {
+      this.generalInfo.years_of_experience = 0;
+    }
     this.generalInfo.image = filename;
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {

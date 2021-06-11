@@ -64,7 +64,7 @@
                       </div>
                       <div fxLayout="row" fxFlex="10">
                         <section class="example-section">
-                          <mat-checkbox class="check" (change)="showHideYears()" >Set years of experience manually</mat-checkbox>
+                          <mat-checkbox class="check" (change)="showHideYears()" [checked]="showYears" >Set years of experience manually</mat-checkbox>
                         </section></div>
                       <div fxLayout="row" fxFlex class="full-width">
                        <div *ngIf="showYears">
