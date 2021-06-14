@@ -42,6 +42,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
   showYears = false;
   update = false;
   photo: FormData;
+  resume_code = '';
+  years = 0;
   private showNumberError = false ;
   constructor(
     private fb: FormBuilder,
@@ -152,7 +154,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   /**************************************************************************
    * @description set Existing data in the Resume Data
    *************************************************************************/
-  updateForm(generalInformation) {
+  async updateForm(generalInformation) {
     this.CreationForm.patchValue({
       init_name: generalInformation[0].init_name,
       actual_job: generalInformation[0].actual_job,
@@ -161,9 +163,39 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_code: generalInformation[0].ResumeKey.resume_code,
       image: this.avatar,
     });
-    if (this.CreationForm.controls.years_of_experience.value !== null) {
-    this.showHideYears(); }
-  }
+      console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
+      if (this.CreationForm.controls.years_of_experience.value !== null) {
+      this.showHideYears();
+    } else {
+        await this.resumeService.getResume(
+          // tslint:disable-next-line:max-line-length
+          `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+          .subscribe(
+            (response) => {
+              if (response['msg_code'] !== '0004') {
+                this.resume_code = response[0].ResumeKey.resume_code.toString();
+                this.resumeService.getProExp(
+                  `?resume_code=${this.resume_code}`)
+                  .subscribe(
+                    (responseProExp) => {
+                      if (responseProExp['msg_code'] !== '0004') {
+                        responseProExp.forEach((proExp) => {
+                          console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
+                          const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
+                            new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
+                          console.log('difference=', difference);
+                          this.years = difference + this.years;
+                        });
+                        console.log('years auto = ', this.years);
+                        this.CreationForm.patchValue({
+                          years_of_experience: this.years,
+                      });
+                        this.showHideYears();
+                    }});
+              }
+            });
+      }
+      }
   /**
    * @description Initialization of Resume Form
    */
@@ -196,9 +228,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     }
     if (this.update === false) {
     this.generalInfo = this.CreationForm.value;
-    if (this.generalInfo.years_of_experience === null) {
-      this.generalInfo.years_of_experience = 0;
-    }
     this.generalInfo.image = filename;
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
