@@ -36,16 +36,16 @@
                         {{item.establishment}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
                     </div>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="40">
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">Edit</button>
+                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="31">
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">Edit</button>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteCertif(item._id,pointIndex)" >Delete</button>
+                  <div fxLayout="column" style="align-items: center" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteCertif(item._id,pointIndex)" >Delete</button>
                   </div>
                 </div>
               </div>
               <form [formGroup]="sendCertifDiploma" style="justify-content: center">
-                <div fxLayout="row" fxFlex="90" class="border-radius-10 pale-grey " fxLayoutAlign="space-arround center"
+                <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey " fxLayoutAlign="space-arround center"
                      style="border-style: solid">
                   <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="center">
                     <div fxLayout="row" fxFlex="21" fxLayoutAlign="space-around center">

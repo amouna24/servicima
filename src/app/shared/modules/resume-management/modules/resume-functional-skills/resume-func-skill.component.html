@@ -28,10 +28,10 @@
               <div fxLayout="column" fxFlex="20" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.skill}}</p>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end"   fxFlex="70">
+              <div fxLayout="column" fxLayoutAlign="center end"   fxFlex="60">
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.functional_skills_code,item.skill,pointIndex)">Edit</button>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+              <div fxLayout="column" fxLayoutAlign="center center" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteFuncSkill(item._id,pointIndex)" >Delete</button>
               </div>
 

@@ -29,11 +29,11 @@
               <div fxLayout="column" fxFlex="20" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="70">
+              <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="60">
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.technologies,item.technical_skill_desc,item.technical_skill_code,pointIndex)">Edit</button>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteTechSkill(item._id,pointIndex)" >Delete</button>
+              <div fxLayout="column" fxLayoutAlign="center center" class="p-r-20" fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteTechSkill(item._id,pointIndex)" >Delete</button>
               </div>
             </div>
           </div>

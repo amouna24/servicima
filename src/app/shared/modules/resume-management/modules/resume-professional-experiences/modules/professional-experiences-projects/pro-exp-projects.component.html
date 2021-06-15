@@ -54,17 +54,17 @@
                             {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="33" fxLayoutAlign="center none">
+                      <div fxLayout="column" fxFlex="21" fxLayoutAlign="center center">
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" >Add section</button>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="12" fxLayoutAlign="center none">
+                      <div fxLayout="column" fxFlex="14" fxLayoutAlign="center none">
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.project_code,item.project_title,item.end_date,item.start_date,pointIndex,item._id); panel.toggle()">Edit</button>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="14" class="p-r-20" fxLayoutAlign="center none">
+                      <div fxLayout="column" fxFlex="21" class="p-r-20" fxLayoutAlign="center none">
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_code);panel.toggle()" >Delete</button>
                         </div>
