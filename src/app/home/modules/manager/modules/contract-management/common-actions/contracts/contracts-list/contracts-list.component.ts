@@ -42,9 +42,11 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   redirectUrl: string;
   addButtonLabel: string;
 
-  displayedColumns: string[] = ['contract_code', 'contractor_code', 'collaborator_email',
-    'contract_status', 'show', 'Actions'];
-  dataSource: MatTableDataSource<IContract>;
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
+
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   /**************************************************************************
@@ -78,10 +80,10 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(params => {
         if (!!params.contract_status) {
           this.searchCriteria = params.contract_status;
-          this.getContracts();
+          this.getContracts(this.nbtItems.getValue(), 0);
         } else {
           this.searchCriteria = '';
-          this.getContracts();
+          this.getContracts(this.nbtItems.getValue(), 0);
         }
       });
     this.addNewContract();
@@ -92,11 +94,11 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * @description Get Contracts List
    */
-  getContracts() {
+  getContracts(limit, offset) {
     this.isLoading.next(true);
     this.contractService.getContracts(
       // tslint:disable-next-line:max-line-length
-      `?contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
+      `?beginning=${offset}&number=${limit}&contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
       )
       .pipe(
         takeUntil(
@@ -106,13 +108,10 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
       (response) => {
         this.ELEMENT_DATA.next(response);
-        this.isLoading.next(false);
+        response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
       },
       (error) => {
         this.isLoading.next(true);
-        if (error.error.msg_code === '0004') {
-          this.ELEMENT_DATA.next([]);
-        }
       },
     );
   }
@@ -197,6 +196,16 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       case('delete'): console.log('EDIT ME');
     }
   }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getContracts(params.limit, params.offset);
+  }
+
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/

@@ -431,7 +431,7 @@ html body {
     font-size: 9px;
 }
 .font-size-10 {
-   font-size: 10px;
+   font-size: 10px !important;
 }
 .font-size-11 {
   font-size: 11px;
@@ -647,8 +647,8 @@ html body {
 .dynamic-component-container  {
   @include get-page(servicima);
   background-color: $white;
-  margin: 20px;
-  height: 87vh !important;
+  margin: 0 25px 0 25px;
+  height: 84vh !important;
   // width: 88vw;
 }
 
@@ -760,3 +760,21 @@ wid-upload-sheet {
   min-height: 100% !important;
 }
 /******************/
+
+.data-table-pagination {
+  .mat-form-field-no-padding .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+
+  .next-previous-page {
+    border-radius: 3px;
+    padding: 0 0 !important;
+    min-width: 20px !important;
+    height: 20px;
+  }
+  .next-previous-page:disabled {
+    border: 0;
+    opacity: 0.5;
+  }
+}
+

@@ -49,33 +49,42 @@
       </div>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="71" fxLayoutAlign="space-around">
+  <div fxLayout="row" fxFlex="64" fxLayoutAlign="space-around">
 
     <wid-scrollbar class="dynamic-data-table-content" style="width: 100%">
 
-      <mat-card *ngIf="isLoading.getValue()" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
-        <mat-progress-spinner
-          color="primary"
-          mode="indeterminate">
-        </mat-progress-spinner>
-      </mat-card>
+      <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
+          <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}">
+            <div  fxFlex="15" fxLayout="row">
+              <span class="cool-grey font-size-18">No Data Found</span>
+            </div>
+            <div  fxFlex="15" fxLayout="row">
+              <button mat-raised-button  class="btn-medium bg-cerulean-blue">
+                <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
-      <table cdk-table *ngIf="isLoading.getValue() === false" [style]="{'width': '100%'}" [dataSource]="dataSource" [trackBy]="identify" >
+      <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
+        <table cdk-table [style]="{'width': '100%'}" [dataSource]="dataSource" [trackBy]="identify" >
 
-        <ng-container *ngFor="let col of columns;" >
+          <ng-container *ngFor="let col of columns;" >
 
             <ng-container [ngSwitch]="col.type">
 
               <ng-container *ngSwitchCase="'rowItem'">
 
                 <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
-                    <th cdk-header-cell
+                  <th cdk-header-cell
                       *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                    </th>
-                    <td cdk-cell
+                  </th>
+                  <td cdk-cell
                       *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
-                      <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
-                    </td>
+                    <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
+                  </td>
 
                 </ng-container>
 
@@ -85,26 +94,26 @@
 
                 <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
 
-                    <th cdk-header-cell
+                  <th cdk-header-cell
                       *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                    </th>
-                    <td cdk-cell
+                  </th>
+                  <td cdk-cell
                       *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
-                      <div fxLayout="row"
-                           fxFlex
-                           fxLayoutAlign="center">
-                        <button mat-icon-button (click)="actionRowData('update', row)" *ngIf="allowedActions.update">
-                          <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="actionRowData('delete', row)" *ngIf="allowedActions.delete">
-                          <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="actionRowData('show', row)" *ngIf="allowedActions.show">
-                          <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
-                        </button>
+                    <div fxLayout="row"
+                         fxFlex
+                         fxLayoutAlign="center">
+                      <button mat-icon-button (click)="actionRowData('update', row)" *ngIf="allowedActions.update">
+                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="actionRowData('delete', row)" *ngIf="allowedActions.delete">
+                        <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="actionRowData('show', row)" *ngIf="allowedActions.show">
+                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
+                      </button>
 
-                      </div>
-                    </td>
+                    </div>
+                  </td>
 
                 </ng-container>
 
@@ -114,17 +123,17 @@
 
                 <ng-container cdkColumnDef="{{ col.prop }}">
                   <th cdk-header-cell
-                    *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                      *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
                   </th>
                   <ng-container [ngSwitch]="col.type">
                     <ng-container *ngSwitchCase="'date'">
                       <td cdk-cell
-                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell
-                        *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
                       </td>
                     </ng-container>
                   </ng-container>
@@ -134,16 +143,106 @@
 
             </ng-container>
 
-        </ng-container>
+          </ng-container>
 
-        <tr cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></tr>
-        <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
+          <tr cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></tr>
+          <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
-      </table>
+        </table>
+      </ng-container>
 
+
+      <ng-container *ngIf="isLoading.getValue();" >
+        <div  fxLayoutAlign="center center">
+          <mat-progress-spinner
+            color="primary"
+            mode="indeterminate">
+          </mat-progress-spinner>
+        </div>
+      </ng-container>
 
 
     </wid-scrollbar>
 
+  </div>
+  <div class="data-table-pagination" fxLayout="row" fxFlex="7" fxLayoutAlign="space-between">
+    <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <span fxLayoutAlign="center center" class="black-three font-size-12">
+          {{ offset }} - {{ totalCountedItems || countedItems }} of {{ totalItems }}
+        </span>
+
+        <button
+          mat-stroked-button
+          fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+          [disabled] = "offset <= limit"
+          (click)="getItemsPerPage('first-page')"
+        >
+          <span class="material-icons-outlined font-size-16">first_page</span>
+        </button>
+        <button
+          mat-stroked-button
+          fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+          [disabled] = "offset <= limit"
+          (click)="getItemsPerPage('previous-page')"
+        >
+          <span class="material-icons-outlined font-size-16">navigate_before</span>
+        </button>
+
+        <ng-container *ngFor="let pageNumber of nbrPages">
+          <button
+            mat-stroked-button
+            fxLayoutAlign="center center" class="next-previous-page font-size-12"
+            [ngClass] = "pageNumber === currentPage ? 'bg-topaz white'
+                                                  : 'bg-white-two black-three'"
+            (click)="getItemsPerPage('specific-page', pageNumber)"
+          >
+            <span>{{ pageNumber }}</span>
+          </button>
+        </ng-container>
+
+        <button
+          mat-stroked-button
+          fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+          [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+          (click)="getItemsPerPage('next-page')"
+        >
+
+          <span class="material-icons-outlined font-size-16">navigate_next</span>
+        </button>
+        <button
+          mat-stroked-button
+          fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+          [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+          (click)="getItemsPerPage('last-page')"
+        >
+          <span class="material-icons-outlined font-size-16">last_page</span>
+        </button>
+
+      </div>
+
+    </div>
+    <div fxLayout="column" fxFlex="20">
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
+        <div fxLayout="column" fxFlex="100px" fxLayoutAlign="center center">
+          <mat-label class="black font-size-10" >
+            Items per page:
+          </mat-label>
+        </div>
+        <div fxLayout="column" fxFlex="50px" fxLayoutAlign="center center">
+          <mat-form-field class="mat-form-field-no-padding font-size-10" appearance="outline">
+            <mat-select disableOptionCentering [formControl]="itemsPerPageControl">
+              <mat-option *ngFor="let v of itemsPerPage" [value]="v">
+                {{v}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+
+    </div>
   </div>
 </div>

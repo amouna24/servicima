@@ -1,12 +1,11 @@
-<!-- DYNAMIC DATA TABLE -->
+<!--
 <wid-dynamic-data-table
   [tableData]="ELEMENT_DATA"
-  [tableCode]="'CONTRACTOR_S'"
+  [tableCode]="'CONTRACT'"
   [isLoading]="isLoading"
   [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
-  [allowedActions]="{ update: true, delete: true, show: false }"
   (rowActionData)="switchAction($event)"
-  (pagination)="loadMoreItems($event)"
+  [allowedActions]="{update: true, delete: true, show: true}"
 >
 </wid-dynamic-data-table>
-<!--         END        -->
+-->

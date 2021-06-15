@@ -601,7 +601,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.contractInfo = res[0][0];
+          this.contractInfo = res[0]['results'][0];
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
