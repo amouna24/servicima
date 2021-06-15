@@ -41,7 +41,11 @@ export class SkillsListComponent implements OnInit {
       this.testService.getSkills(`?application_id=5eac544a92809d7cd5dae21f`)
         .subscribe(
           (response) => {
-            response.map(
+            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            if (response['msg_code'] === '0004') {
+              resolve(response['results']);
+            } else {
+            response['results'].map(
               async (value) => {
                 let object: object;
                 object = {
@@ -53,17 +57,18 @@ export class SkillsListComponent implements OnInit {
                   test_skill_code: value.TestSkillsKey.test_skill_code,
                 };
                 tableRes.push(object);
-                if (response.length === tableRes.length) {
-                  this.isLoading.next(false);
-                  resolve(tableRes);
+
+                if (response['results'].length === tableRes.length) {
+                  response['results'] = tableRes;
+                  resolve(response['results']);
                 }
               }
             );
+            }
           },
           (error) => {
-            if (error.error.msg_code === '0004') {
-              console.log('empty table');
-            }
+            console.log('error', error);
+
           },
         );
     });
@@ -101,7 +106,8 @@ export class SkillsListComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'Delete This Skills ?',
-      status: id['_id']
+      status: id['_id'],
+      description: 'Are you sure ? '
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
@@ -110,6 +116,7 @@ export class SkillsListComponent implements OnInit {
             this.testService.deleteSkills(id['_id']).subscribe(() => {
               console.log('Deleted');
               this.getTableData().then((data) => {
+                console.log('data', data);
                 this.tableData.next(data);
               });
             });

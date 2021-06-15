@@ -54,7 +54,11 @@ export class BlocQuestionsListComponent implements OnInit {
       this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
         .subscribe(
           (response) => {
-            response.map(async res => {
+            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            if (response['msg_code'] === '0004') {
+              resolve(response['results']);
+            } else {
+            response['results'].map(async res => {
               this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
                 (code) => {
                   this.blocData.push({
@@ -66,14 +70,14 @@ export class BlocQuestionsListComponent implements OnInit {
                     test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
                     technology_code: res.TestQuestionBlocKey.test_technology_code,
                   });
-                  if (response.length === this.blocData.length) {
-                    this.isLoading.next(false);
-                    resolve(this.blocData);
+                  if (response['results'].length === this.blocData.length) {
+                    response['results'] = this.blocData;
+                    resolve(response['results']);
                   }
                 }
               );
 
-            });
+            }); }
           },
           (error) => {
             if (error.error.msg_code === '0004') {
