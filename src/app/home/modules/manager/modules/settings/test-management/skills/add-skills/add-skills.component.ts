@@ -9,7 +9,6 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { HelperService } from '@core/services/helper/helper.service';
-import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
 import { ITestTechnologySkillsModel } from '@shared/models/testTechnologySkills.model';
