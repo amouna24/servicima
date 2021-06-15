@@ -13,6 +13,20 @@ import { ModalService } from '@core/services/modal/modal.service';
   styleUrls: ['./pro-exp.component.scss']
 })
 export class ProExpComponent implements OnInit {
+
+  get getProExp() {
+    return this.proExpArray;
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private resumeService: ResumeService,
+    private userService: UserService,
+    private router: Router,
+    public datepipe: DatePipe,
+    private modalServices: ModalService
+  ) {
+  }
   sendProExp: FormGroup;
   arrayProExpCount = 0;
   ProExp: IResumeProfessionalExperienceModel;
@@ -30,20 +44,8 @@ export class ProExpComponent implements OnInit {
   _id = '';
   subscriptionModal: Subscription;
   showPosError = false;
-
-  get getProExp() {
-    return this.proExpArray;
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private resumeService: ResumeService,
-    private userService: UserService,
-    private router: Router,
-    public datepipe: DatePipe,
-    private modalServices: ModalService
-  ) {
-  }
+  // tslint:disable-next-line:max-line-length
+  disableDate = false;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -149,11 +151,12 @@ export class ProExpComponent implements OnInit {
       if (this.sendProExp.valid && this.showDateError === false ) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
-      this.button = 'Add'; }
+      this.button = 'Add';
+      this.disableDate = false;
+      }
     }
     this.sendProExp.reset();
   }
-  // tslint:disable-next-line:max-line-length
   editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
     this.sendProExp.patchValue({
       start_date,
@@ -161,6 +164,7 @@ export class ProExpComponent implements OnInit {
       position,
       customer,
     });
+    this.disableDate = true;
     this._id = _id;
     this.button = 'Save';
     this.professional_experience_code = professional_experience_code;
