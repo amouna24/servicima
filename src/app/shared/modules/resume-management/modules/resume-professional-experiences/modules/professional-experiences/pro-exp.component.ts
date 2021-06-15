@@ -157,6 +157,7 @@ export class ProExpComponent implements OnInit {
     }
     this.sendProExp.reset();
   }
+  // tslint:disable-next-line:max-line-length
   editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
     this.sendProExp.patchValue({
       start_date,
