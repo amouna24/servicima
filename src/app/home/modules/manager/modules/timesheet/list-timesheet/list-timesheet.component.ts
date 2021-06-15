@@ -30,9 +30,9 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   title_id: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
-  pending = 'Pending';
-  rejected = 'Rejected';
-  approved = 'Approved';
+  // pending = 'Pending';
+  // rejected = 'Rejected';
+  // approved = 'Approved';
   refData: { } = { };
   collaboratorArray: IUserModel[] = [];
   categoryList: IViewParam[];
@@ -66,13 +66,12 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.modalsServices.registerModals({ modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
     this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.isLoading.next(true);
-    await this.getAllTimesheet();
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(params => {
-        console.log('params', params);
+        // console.log('params', params);
         if (!!params.timesheet_status) {
           this.searchCriteria = params.timesheet_status;
           this.getAllTimesheet();
@@ -111,7 +110,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
         .getAllUser(this.companyEmail)
         .subscribe((res) => {
           this.collaboratorArray = res['results'].filter(value => value.user_type === 'COLLABORATOR');
-          console.log('collaboratorArray', this.collaboratorArray);
+          // console.log('collaboratorArray', this.collaboratorArray);
         });
   }
 
@@ -175,6 +174,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @param data: object
    */
   showTimesheet(data: ITimesheetModel) {
+    console.log(data, 'daaaaaaaaaaaaaaaaaaaaa show');
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
         .subscribe(
           (res) => {

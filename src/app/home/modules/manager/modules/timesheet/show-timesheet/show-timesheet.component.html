@@ -40,8 +40,8 @@
               <div class="font-size-12 steel" fxFlex="50">{{ timesheet.start_date | date: 'longDate' }}</div>
             </div>
             <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
-              <div class="font-size-12" fxFlex="50">Project:</div>
-              <div class="font-size-12 steel" fxFlex="50">{{ timesheet.project_desc }}</div>
+              <div class="font-size-12" fxFlex="30">Project:</div>
+              <div class="font-size-12 steel" fxFlex="70">{{ timesheet.project_desc }}</div>
             </div>
           </div>
         </div>
@@ -50,16 +50,17 @@
         <div fxLayout="row" fxFlex="50" class="full-width" fxLayoutAlign="end">
           <div fxLayout="column" fxFlex="90" fxLayoutAlign="space-around start">
             <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
-              <div class="font-size-12" fxFlex="50">Category:</div>
-              <div class="font-size-12 steel" fxFlex="50">{{ timesheet.category }}</div>
+              <div class="font-size-12" fxFlex="40">Category:</div>
+              <div class="font-size-12 steel" fxFlex="60">{{ timesheet.category }}</div>
             </div>
             <div fxLayout="row" class="full-width" fxLayoutAlign="space-between center">
-              <div class="font-size-12" fxFlex="50">Comment:</div>
-              <div class="font-size-12 steel" fxFlex="50">{{timesheet.comment}}</div>
+              <div class="font-size-12" fxFlex="40">Comment:</div>
+              <div class="font-size-12 steel" fxFlex="60">{{timesheet.comment}}</div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
     <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="40">
       <div fxLayout="column" class="full-height" fxFlex="90" fxLayoutAlign="space-around">

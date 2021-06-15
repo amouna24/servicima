@@ -31,7 +31,8 @@ export const environment = {
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
 
   /************************* TIMESHEET + PROJECT + TASK + COMPANY-TIMESHEET-SETTING ******************************/
-  timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  // timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
   timesheetProjectApiUrl: 'http://192.168.1.22:8081/servicima/timesheetproject/v1',
 
   /************************* AUTHENTICATION ******************************/

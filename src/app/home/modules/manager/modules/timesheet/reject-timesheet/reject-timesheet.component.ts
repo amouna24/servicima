@@ -25,10 +25,11 @@ export class RejectTimesheetComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private timesheetService: TimesheetService,
     private userService: UserService,
-    private router: Router
+    // private router: Router
   ) { }
 
   ngOnInit(): void {
+    // console.log(this.data, 'daaataaa');
     this.openApproveComponent.next({ opened: false, value: this.data.value});
     this.getUserInfo();
   }
@@ -57,6 +58,7 @@ export class RejectTimesheetComponent implements OnInit {
    * @description : reject timesheet
    */
   rejectTimesheet() {
+    console.log(this.data, 'rejected');
     this.timesheetToUpdate = {
       application_id : this.data.TimeSheetKey.application_id,
       email_address : this.data.email_address,
@@ -74,6 +76,7 @@ export class RejectTimesheetComponent implements OnInit {
       friday : this.data.friday,
       saturday : this.data.saturday,
       sunday : this.data.sunday,
+      type_timesheet: this.data.type_timesheet,
       total_week_hours : this.data.total_week_hours,
       customer_timesheet : this.data.customer_timesheet
     };
@@ -90,6 +93,7 @@ export class RejectTimesheetComponent implements OnInit {
    * @description : approve timesheet
    */
   approveTimesheet() {
+    console.log(this.data, 'approuved');
     this.timesheetToUpdate = {
       application_id : this.data.timesheet.TimeSheetKey.application_id,
       email_address : this.data.timesheet.email_address,
@@ -107,6 +111,7 @@ export class RejectTimesheetComponent implements OnInit {
       friday : this.data.timesheet.friday,
       saturday : this.data.timesheet.saturday,
       sunday : this.data.timesheet.sunday,
+      type_timesheet: this.data.timesheet.type_timesheet,
       total_week_hours : this.data.timesheet.total_week_hours,
       customer_timesheet : this.data.timesheet.customer_timesheet
     };

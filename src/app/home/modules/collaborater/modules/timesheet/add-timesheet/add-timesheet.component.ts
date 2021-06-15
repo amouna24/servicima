@@ -12,7 +12,6 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
 import { takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
 
 @Component({
   selector: 'wid-add-timesheet',
@@ -26,6 +25,8 @@ export class AddTimesheetComponent implements OnInit {
   totalWeek: number;
   userInfo: IUserInfo;
   companyEmail: string;
+  companyId: string;
+  languageId: string;
   refData: { } = { };
   categoryList: IViewParam[];
   projectName: string;
@@ -112,6 +113,9 @@ export class AddTimesheetComponent implements OnInit {
       (data) => {
         if (!!data) {
           this.companyEmail = data.user[0]['company_email'];
+          // console.log('companyId', data.company[0]);
+          // this.companyId = data.company[0]['company_id'];
+          this.languageId = data.user[0].language_id;
         }
     });
   }
@@ -158,7 +162,10 @@ export class AddTimesheetComponent implements OnInit {
         sunday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
         total_week_hours : [0],
         type_timesheet : [''],
-        customer_timesheet : 'wid-customer-timesheet'
+        customer_timesheet : 'wid-customer-timesheet',
+        collaborator_email: this.userService.emailAddress,
+        language_id: this.languageId,
+        company_id: this.utilService.getCompanyId('ALL', this.utilService.getApplicationID('ALL')),
       }
     );
   }
@@ -234,18 +241,19 @@ export class AddTimesheetComponent implements OnInit {
       const date = endDate.setDate(endDate.getDate() + 7);
       this.initialForm.patchValue({ end_date: endDate});
 
-      console.log(this.initialForm.value, 'value');
+      // console.log(this.initialForm.value, 'value');
       const confirmation = {
         code: 'add',
-        title: 'submit timesheet',
+        title: `${value} timesheet`,
+        description: `Are you sure you want to ${value} your timesheet?`,
       };
       this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
         .pipe( takeUntil( this.destroy$) )
         .subscribe( (res) => {
           // console.log('destroy', this.destroy$);
           // ADD_TIMESHEET
-          if (res === true) {
-            console.log('tt', this.initialForm.value);
+          if ( res === true ) {
+            // console.log('this.initialForm.value', this.initialForm.value);
             this.timesheetService.addTimesheet(this.initialForm.value).pipe(
               takeUntil(this.destroy$)
             ).subscribe(
@@ -257,20 +265,10 @@ export class AddTimesheetComponent implements OnInit {
               // ERROR
               (error) => {
                 console.log('error', error);
-                /*if (error.error.msg_code === '0001') {
-                  const dataExist = {
-                    code: 'message',
-                    title: 'Timesheet already exist',
-                  };
-                  this.subscriptionModal = this.modalServices.displayConfirmationModal(dataExist, '560px', '320px')
-                    .pipe( takeUntil(this.destroy$) )
-                    .subscribe(( res1) => {
-                      // console.log('res1', res1);
-                    });
-                }*/
               }
             );
           }
+          this.subscriptionModal.unsubscribe();
         });
     }
   }
@@ -294,10 +292,10 @@ export class AddTimesheetComponent implements OnInit {
       const confirmation = {
         code: 'edit',
         title: 'edit your timesheet',
+        description: 'Are you sure you want to edit your timesheet?'
       };
       this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '528px', '300px')
-        .pipe(
-          takeUntil( this.destroy$) )
+        .pipe( takeUntil( this.destroy$) )
         .subscribe( (res) => {
           if (res === true) {
             this.timesheetService.updateTimesheet(this.timesheet).pipe(
@@ -310,6 +308,7 @@ export class AddTimesheetComponent implements OnInit {
               error => console.log(error)
             );
           }
+          this.subscriptionModal.unsubscribe();
         });
     }
   }
@@ -321,6 +320,8 @@ export class AddTimesheetComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'delete timesheet',
+      description: `Are you sure you want to delete your timesheet?`,
+
     };
 
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')

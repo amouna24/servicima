@@ -64,6 +64,4 @@ export class ShowTimesheetComponent implements OnInit {
     this.dialogRef.close('approve');
   }
 
-  getFile() {
-  }
 }

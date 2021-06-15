@@ -41,7 +41,6 @@ export class TimesheetsListComponent implements OnInit {
               private modalService: ModalService,
               private userService: UserService,
               private router: Router,
-              private modalsServices: ModalService,
               private route: ActivatedRoute,
               ) {
   }
@@ -58,7 +57,7 @@ export class TimesheetsListComponent implements OnInit {
         takeUntil(this.destroy$)
       )
       .subscribe(params => {
-        console.log('params', params);
+        // console.log('params', params);
         if (!!params.type_timesheet) {
           this.typeTimesheet = params.type_timesheet;
           this.timesheetExtra = 'TIMESHEET_EXTRA';
@@ -96,6 +95,7 @@ export class TimesheetsListComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}&type_timesheet=${this.timesheetExtra}`)
         .subscribe((res) => {
+          // console.log('res extra', res);
           this.ELEMENT_DATA.next(res);
           this.isLoading.next(false);
         });
@@ -105,6 +105,7 @@ export class TimesheetsListComponent implements OnInit {
           // tslint:disable-next-line:max-line-length
           `?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}&type_timesheet=${this.timesheetExtra}`)
         .subscribe((res) => {
+          // console.log('res timesheet', res);
           this.ELEMENT_DATA.next(res);
           this.isLoading.next(false);
         });
@@ -140,7 +141,7 @@ export class TimesheetsListComponent implements OnInit {
       ['/collaborator/timesheet/add-timesheet'],
          { state: { data, buttonClicked: 'edit' }
       });
-    console.log('dataUpdate', data);
+    // console.log('dataUpdate', data);
   }
 
   /**
@@ -184,8 +185,9 @@ export class TimesheetsListComponent implements OnInit {
           const confirmation = {
             code: 'message',
             title: 'already submitted to the manager',
+            description: 'Your timesheet is already submitted to the manager !'
           };
-          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '320px');
+          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
           break;
         }
         this.updateTimesheet(rowAction.data);

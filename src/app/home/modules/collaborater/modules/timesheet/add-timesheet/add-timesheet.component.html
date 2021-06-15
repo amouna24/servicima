@@ -35,7 +35,7 @@
                   <div fxLayout="column" fxFlex="80">
                     <label class="font-size-12 required"> Week start on :</label>
                     <mat-form-field appearance="outline">
-                      <input matInput [matDatepicker]="datepicker" formControlName="start_date">
+                      <input matInput [matDatepicker]="datepicker" formControlName="start_date" placeholder="MM/DD/YYYY">
                       <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                       <mat-datepicker #datepicker color="primary"></mat-datepicker>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
