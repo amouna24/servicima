@@ -174,7 +174,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @param data: object
    */
   showTimesheet(data: ITimesheetModel) {
-    console.log(data, 'daaaaaaaaaaaaaaaaaaaaa show');
+    // console.log(data, 'show');
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
         .subscribe(
           (res) => {

@@ -36,6 +36,7 @@ export class AddTimesheetComponent implements OnInit {
   categoryViewValue = '';
   timesheet = this.router.getCurrentNavigation().extras.state.data;
   buttonValue = this.router.getCurrentNavigation().extras.state.buttonClicked;
+  statusTimesheet = this.router.getCurrentNavigation().extras.state.statusTimesheet;
   // typeTimesheet = this.router.getCurrentNavigation().extras.state.typeTimesheet;
   typeTimesheet: string;
   date: Date;
@@ -57,6 +58,7 @@ export class AddTimesheetComponent implements OnInit {
                private modalServices: ModalService,
                ) {
     this.typeTimesheet = this.router.url;
+    console.log('statusTimesheet', this.statusTimesheet);
   }
 
   async ngOnInit() {
@@ -153,13 +155,13 @@ export class AddTimesheetComponent implements OnInit {
         end_date : [''],
         timesheet_status : [''],
         comment : [''],
-        monday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
-        tuesday : [0, [Validators.min(0), Validators.max(24), Validators.required ] ],
-        wednesday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
-        thursday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
-        friday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
-        saturday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
-        sunday : [0, [Validators.min(0), Validators.max(24), Validators.required] ],
+        monday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
+        tuesday : [0, [Validators.min(0), Validators.max(8), Validators.required ] ],
+        wednesday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
+        thursday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
+        friday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
+        saturday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
+        sunday : [0, [Validators.min(0), Validators.max(8), Validators.required] ],
         total_week_hours : [0],
         type_timesheet : [''],
         customer_timesheet : 'wid-customer-timesheet',

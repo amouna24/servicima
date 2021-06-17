@@ -89,7 +89,7 @@
                         minimum value is 0
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.max">
-                        maximum value is 24
+                        maximum value is 8
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.required">
                         Required field
@@ -107,7 +107,7 @@
                         minimum value is 0
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.max">
-                        maximum value is 24
+                        maximum value is 8
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.required">
                         Required field
@@ -125,7 +125,7 @@
                         minimum value is 0
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.max">
-                        maximum value is 24
+                        maximum value is 8
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.required">
                         Required field
@@ -144,7 +144,7 @@
                         minimum value is 0
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.max">
-                        maximum value is 24
+                        maximum value is 8
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.required">
                         Required field
@@ -163,7 +163,7 @@
                         minimum value is 0
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.max">
-                        maximum value is 24
+                        maximum value is 8
                       </mat-error>
                       <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.required">
                         Required field
@@ -184,7 +184,7 @@
                           minimum value is 0
                         </mat-error>
                         <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.max">
-                          maximum value is 24
+                          maximum value is 8
                         </mat-error>
                         <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.required">
                           Required field
@@ -197,12 +197,12 @@
                       <label class="font-size-12 required"> Sunday : </label>
                       <mat-form-field appearance="outline">
                         <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday" (input)="calculTotalWeekHours()">
+                        <input matInput placeholder="00h 00m" type="number" formControlName="sunday" (input)="calculTotalWeekHours()">
                         <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.min">
                           minimum value is 0
                         </mat-error>
                         <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.max">
-                          maximum value is 24
+                          maximum value is 8
                         </mat-error>
                         <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.required">
                           Required field

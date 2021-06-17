@@ -137,10 +137,11 @@ export class TimesheetsListComponent implements OnInit {
    * @param data: object
    */
   updateTimesheet(data) {
-    this.router.navigate(
-      ['/collaborator/timesheet/add-timesheet'],
-         { state: { data, buttonClicked: 'edit' }
-      });
+    console.log('data', data);
+      this.router.navigate(
+        ['/collaborator/timesheet/add-timesheet'],
+        { state: { data, buttonClicked: 'edit' }
+        });
     // console.log('dataUpdate', data);
   }
 
@@ -186,6 +187,14 @@ export class TimesheetsListComponent implements OnInit {
             code: 'message',
             title: 'already submitted to the manager',
             description: 'Your timesheet is already submitted to the manager !'
+          };
+          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
+          break;
+        } else if (rowAction.data.timesheet_status === 'Approved') {
+          const confirmation = {
+            code: 'message',
+            title: 'Approved Timesheet',
+            description: 'Your timesheet is already approved by the manager !'
           };
           this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
           break;
