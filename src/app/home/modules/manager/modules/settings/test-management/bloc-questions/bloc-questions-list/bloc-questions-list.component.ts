@@ -138,7 +138,8 @@ export class BlocQuestionsListComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'Delete This Bloc ?',
-      status: data['_id']
+      status: data['_id'],
+      description: 'Are you sure to delete this Bloc?',
     };
     console.log('_id=', data);
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
