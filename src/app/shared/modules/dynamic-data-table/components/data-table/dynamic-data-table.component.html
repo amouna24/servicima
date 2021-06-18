@@ -128,7 +128,7 @@
                   <ng-container [ngSwitch]="col.type">
                     <ng-container *ngSwitchCase="'date'">
                       <td cdk-cell
-                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'dd_MM_yyyy' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
