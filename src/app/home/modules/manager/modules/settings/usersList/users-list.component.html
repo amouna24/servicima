@@ -2,9 +2,10 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'USERS-LIST'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User',type: 'page'}"
+  [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User'}"
   [title]="'Users list'"
   (rowActionData)="switchAction($event)"
   [allowedActions]="{ update: true, delete: true, show: true }"
+  (pagination)="loadMoreItems($event)"
 >
 </wid-dynamic-data-table>

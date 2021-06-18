@@ -14,8 +14,7 @@ import { IFeatureModel } from '@shared/models/feature.model';
 })
 export class UpgradeLicenceComponent implements OnInit {
   licences: ILicenceModel[];
-  licence: ILicenceModel;
-  licencesFeatures: ILicenceFeatureModel[];
+  features: [{ feature: [{ code, desc}]}];
   constructor( private licenceService: LicenceService,
                private featureService: FeatureService,
                private router: Router) { }
@@ -24,28 +23,15 @@ export class UpgradeLicenceComponent implements OnInit {
    * @description Loaded when component in init state
    */
   async ngOnInit(): Promise<void> {
-    this.getLicences();
-    this.licence = this.licences[0];
-    this.getLicencesFeatures();
-
-  }
-  /**
-   * @description Get licence Feature
-   */
-  getLicencesFeatures() {
-    this.licenceService.getLicencesFeatures().subscribe((data) => {
-      this.licencesFeatures = data;
-      console.log('licences feature', data);
-    });
+     await this.getLicences();
   }
   /**
    * @description Get licence list
    */
-  getLicences() {
-    this.licenceService.getLicencesList().subscribe(
-      (data) => {
-        console.log('Licences', data);
-        this.licences = data.sort(
+  getLicences(): void {
+    this.licenceService.getLicencesList().toPromise().then(
+      async (data) => {
+        this.licences = await data.sort(
             (a, b) => {
               if (a.level < b.level) {
                 return -1;
@@ -59,6 +45,7 @@ export class UpgradeLicenceComponent implements OnInit {
       }
     );
   }
+
   /**
    * @param name licence code
    * @description Display scss background color
@@ -77,7 +64,18 @@ export class UpgradeLicenceComponent implements OnInit {
     }
   }
   /**
-   * @description get All features
+   * get licence feature
+   */
+  licenceFeatures(licennce: ILicenceModel): void {
+   this.licenceService.getLicencesFeaturesByCode(licennce.LicenceKey.licence_code).toPromise().then(
+    (data) => {
+      console.log(data);
+         }
+       );
+
+  }
+  /**
+   * @description get fearure desc
    */
   getFeatureDesc(licence: ILicenceFeatureModel): string {
     this.featureService.getFeatureByCode(licence.LicenceFeaturesKey.feature_code).subscribe(
@@ -86,23 +84,6 @@ export class UpgradeLicenceComponent implements OnInit {
       }
     );
     return licence.LicenceFeaturesKey.feature_code;
-  }
-  async getFeatureByCode(code: string): Promise<IFeatureModel> {
-    let feature: IFeatureModel;
-    await this.featureService.getFeatureByCode(code)
-      .subscribe(
-        (data) => { feature = data[0]; }
-      );
-    return feature;
-  }
-  /**
-   * @param licence code
-   * @description Display scss background color
-   */
-  getLicenceFeatures(licence: ILicenceModel): ILicenceFeatureModel[] {
-    return this.licencesFeatures.filter(
-      (f) => f.LicenceFeaturesKey.licence_code === licence.LicenceKey.licence_code
-    );
   }
   /**
    * @param code licence code

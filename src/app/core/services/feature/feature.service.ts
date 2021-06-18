@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { IFeatureModel } from '@shared/models/feature.model';
 import { HttpClient } from '@angular/common/http';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class FeatureService {
-
-  constructor(private httpClient: HttpClient, ) { }
+  constructor(private httpClient: HttpClient) { }
   /**
    * @description Get all existing features
    * @param language: language

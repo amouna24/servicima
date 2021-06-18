@@ -24,7 +24,7 @@
           <mat-list *ngFor="let mi of menuItems">
             <ng-container *ngIf="mi.child.length > 0; else ChildMI">
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
-                             [ngClass]="childSelected(mi.titleKey) ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             [ngClass]="childSelected(mi.titleKey) ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
                              (click)="scroll(mi.titleKey)"> {{ mi.title }} </mat-list-item>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
                              [ngClass]="childMI.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-14 m-l-20' : 'steel-two font-size-14 m-l-20'"
@@ -33,7 +33,7 @@
             </ng-container>
             <ng-template #ChildMI>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
-                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-18' : 'steel font-size-18'"
+                             [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
                              (click)="scroll('#' + mi.titleKey)"> {{ mi.title }} </mat-list-item>
             </ng-template>
           </mat-list>
@@ -116,13 +116,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -212,13 +212,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -308,13 +308,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -404,13 +404,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -501,13 +501,13 @@
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                     <span class="white">Browse</span>
                                   </button>
                                 </div>
@@ -615,13 +615,13 @@
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                     <span class="white">Browse</span>
                                   </button>
                                 </div>
@@ -738,13 +738,13 @@
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
                                     <span class="white">Browse</span>
                                   </button>
                                 </div>
@@ -861,13 +861,13 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                 <span class="white">Browse</span>
                               </button>
                             </div>
@@ -957,13 +957,13 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                 <span class="white">Browse</span>
                               </button>
                             </div>
@@ -1068,13 +1068,13 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                 <span class="white">Browse</span>
                               </button>
                             </div>
@@ -1164,13 +1164,13 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                 <span class="white">Browse</span>
                               </button>
                             </div>
@@ -1270,7 +1270,7 @@
                                         <ng-container [ngSwitch]="col.type">
                                           <ng-container *ngSwitchCase="'date'">
                                             <td cdk-cell
-                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'shortDate' }}
                                             </td>
                                           </ng-container>
                                           <ng-container *ngSwitchDefault>
@@ -1336,13 +1336,13 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                 <span class="white">Browse</span>
                               </button>
                             </div>
@@ -1433,13 +1433,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -1547,13 +1547,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>
@@ -1672,13 +1672,13 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ selectedDocName.getValue() ? selectedDocName.getValue() : sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet()">
+                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
                                   <span class="white">Browse</span>
                                 </button>
                               </div>

@@ -7,8 +7,15 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { ICompanyModel } from '@shared/models/company.model';
+import { IActivity } from '@shared/models/activity.model';
+import { IApplicationModel } from '@shared/models/application.model';
+import { ILanguageModel } from '@shared/models/language.model';
+import { ILicenceModel } from '@shared/models/licence.model';
+import { ICountry } from '@shared/models/countries.model';
 
 import { LocalStorageService } from '../storage/local-storage.service';
+import { AppInitializerService } from '../app-initializer/app-initializer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +23,15 @@ import { LocalStorageService } from '../storage/local-storage.service';
 export class UserService {
   userInfo: IUserInfo;
   applicationId: string;
+  refresh: boolean;
   emailAddress: string;
-  language;
+  language: any;
+  companyList: ICompanyModel[];
+  activityCodeList: IActivity[];
+  countriesList: ICountry[];
+  applicationList: IApplicationModel[];
+  languageList: ILanguageModel[];
+  licenceList: ILicenceModel[];
   moduleName$ = new BehaviorSubject<string>(null);
   connectedUser$ = new BehaviorSubject<IUserInfo>(null);
   redirected = false;
@@ -34,8 +48,22 @@ export class UserService {
     private router: Router,
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer,
+    private appInitializerService: AppInitializerService,
   ) {
     this.getDataFromLocalStorage();
+    this.setupData();
+  }
+
+  /**************************************************************************
+   * @description Setup data
+   *************************************************************************/
+  setupData(): void {
+    this.companyList = this.appInitializerService.companyList;
+    this.countriesList = this.appInitializerService.countriesList;
+    this.activityCodeList = this.appInitializerService.activityCodeList;
+    this.languageList = this.appInitializerService.languageList;
+    this.applicationList = this.appInitializerService.applicationList;
+    this.licenceList = this.appInitializerService.licencesList;
   }
 
   /**************************************************************************
@@ -47,30 +75,22 @@ export class UserService {
     this.emailAddress = userCredentials?.email_address;
     this.language = this.localStorageService.getItem('language');
   }
+
   /**************************************************************************
    * @description get user info
    *************************************************************************/
-  getUserInfo(): void {
+   getUserInfo() {
     this.getDataFromLocalStorage();
-    this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
-      `/getprofileinfos?application_id=${this.applicationId}&email_address=${this.emailAddress}`)
-      .subscribe( (data) => {
-        this.userInfo = data;
-        this.userType = this.userInfo['user'][0].user_type;
-        this.connectedUser$.next(data);
-        this.getImage(data['user'][0].photo);
-        const roleCode = data.userroles[0].userRolesKey.role_code;
-        this.getCompanyRoleFeatures(roleCode, this.userInfo['company'][0]['companyKey']['email_address'])
-          .subscribe((list) => {
-            this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
-            if (this.companyRolesFeatures.length > 1) {
-              this.companyRolesFeatures.splice(0, this.companyRolesFeatures.length - 1);
-            }
-            this.licenceFeature =  data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
-            this.redirectUser(this.userType);
-            this.isLoadingSubject.next(true);
-          });
-      });
+    return new Promise<any>(resolve =>
+       this.httpClient.get<IUserInfo>(`${environment.userGatewayApiUrl}` +
+        `/getprofileinfos?application_id=${this.applicationId}&email_address=${this.emailAddress}`)
+        .subscribe( (data) => {
+          this.userInfo = data;
+          this.userType = this.userInfo['user'][0].user_type;
+          this.connectedUser$.next(data);
+          this.getImage(data['user'][0].photo);
+          resolve(this.userInfo);
+        }));
   }
   /**************************************************************************
    * @description Redirect User to specific route and set SideNav items
@@ -154,4 +174,21 @@ export class UserService {
   getCompanyRoleFeatures(role: string, email: string) {
     return this.httpClient.get(`${environment.companyRoleFeaturesApiUrl}?role_code=${role}&email_address=${email}`);
   }
+
+    /**************************************************************************
+   * @description get role features
+   * @param data: IUserInfo
+   * @param roleCode: string
+   *************************************************************************/
+     getRoleFeature(data: IUserInfo, roleCode: string): void {
+      this.getCompanyRoleFeatures(roleCode, this.userInfo['company'][0]['companyKey']['email_address'])
+        .subscribe((list) => {
+          this.companyRolesFeatures.push(( list as []).map(element => element['companyRoleFeaturesKey']['feature_code']));
+          if (this.companyRolesFeatures.length > 1) {
+            this.companyRolesFeatures.splice(0, this.companyRolesFeatures.length - 1);
+          }
+          this.licenceFeature =  data['licencefeatures'].map(element => element['LicenceFeaturesKey']['feature_code']);
+           this.isLoadingSubject.next(true);
+        });
+    }
 }

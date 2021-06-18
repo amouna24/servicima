@@ -39,16 +39,9 @@ export class LicenceService {
    * @description get all licence
    * @return licence
    *************************************************************************/
-  getLicencesFeatures(): Observable<ILicenceFeatureModel[]> {
-    return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?display=' + true);
-  }
-  /*------------------------------------ LICENCE FEATURES --------------------------------------*/
-  /**************************************************************************
-   * @description get all licence
-   * @return licence
-   *************************************************************************/
   getLicencesFeaturesByCode(licenceCode: string): Observable<ILicenceFeatureModel[]> {
-    return  this.httpClient.get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?licence_code=' + licenceCode + '&display=' + true);
+    return  this.httpClient
+      .get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?licence_code=' + licenceCode + '&display=' + true );
   }
   /*------------------------------------ COMPANY LICENCE --------------------------------------*/
   /**************************************************************************

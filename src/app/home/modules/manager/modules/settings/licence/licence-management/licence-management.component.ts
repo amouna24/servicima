@@ -25,10 +25,10 @@ export class LicenceManagementComponent implements OnInit {
    */
   ngOnInit(): void {
   this.userService.connectedUser$.subscribe((data) => {
-    this.companyEmail = data.user[0].company_email;
-    this.startDate = data['companylicence'][0].licence_start_date;
-    this.typeLicence = data['companylicence'][0].companyLicenceKey.licence_code;
-    this.periodicity = this.getPeriodicity(data['companylicence'][0].bill_periodicity);
+    this.companyEmail = data?.user[0]?.company_email;
+    this.startDate = data['companylicence'][0]?.licence_start_date;
+    this.typeLicence = data['companylicence'][0]?.companyLicenceKey.licence_code;
+    this.periodicity = this.getPeriodicity(data['companylicence'][0]?.bill_periodicity);
     this.initForm();
   });
   }

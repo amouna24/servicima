@@ -130,10 +130,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.title = 'Update';
       this.showCompany = true;
       this.subscriptions.push(this.profileService.getUserById(this.id).subscribe(async user => {
-        this.userInfo = user[0];
-        this.haveImage = user[0]['photo'];
-        this.avatar = await this.uploadService.getImage(user[0]['photo']);
-        this.emailAddress = user[0]['userKey'].email_address;
+        this.userInfo = user['results'][0];
+        this.haveImage = user['results'][0]['photo'];
+        this.avatar = await this.uploadService.getImage(user['results'][0]['photo']);
+        this.emailAddress = user['results'][0]['userKey'].email_address;
         this.userService.getUserRole(this.applicationId, this.emailAddress).subscribe(
           (data) => {
             this.idRole = data[0]['_id'];
@@ -308,6 +308,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       const add = {
         code: 'add',
         title: 'add your account',
+        description: 'Are you sure you want to add your account?'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(add, '528px', '300px').subscribe((value) => {
         if (value) {
@@ -347,6 +348,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       const confirmation = {
         code: 'edit',
         title: 'edit your account',
+        description: 'Are you sure you want to add your account?'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
         if (value) {

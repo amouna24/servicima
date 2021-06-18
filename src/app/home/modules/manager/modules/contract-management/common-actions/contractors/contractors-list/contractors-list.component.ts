@@ -36,6 +36,11 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   addButtonLabel: string;
 
   /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
+
+  /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -53,11 +58,8 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     'contact_email', 'creation_date', 'status', 'show', 'Actions'];
   dataSource: MatTableDataSource<IContractor>;
   ELEMENT_DATA = new BehaviorSubject<any>([]);
-  isLoading = new BehaviorSubject<boolean>(false);
-  /*********** Contract Data Table ***********/
-  contractorsList: IContractor[] = [];
-  companyTaxList: ICompanyTaxModel[] = [];
-  /*******************************************/
+  isLoading = new BehaviorSubject<boolean>(true);
+
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
 
@@ -98,7 +100,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       this.userService.connectedUser$.subscribe((data) => {
       if (!!data) {
         this.userInfo = data;
-        this.getContractors();
+        this.getContractors(this.nbtItems.getValue(), 0);
       }
     })
     );
@@ -134,24 +136,21 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * if response set the data to the DataTableSource
    * else return empty Table
    *************************************************************************/
-  getContractors() {
+  getContractors(limit, offset) {
     this.isLoading.next(true);
     this.contractorService.getContractors(
-      `?contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
+      // tslint:disable-next-line:max-line-length
+      `?beginning=${offset}&number=${limit}&contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
     ).pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(
       (response) => {
-        console.log('contractors List', response);
-        this.contractorsList = response;
-        this.ELEMENT_DATA.next(this.contractorsList);
-        this.isLoading.next(false);
+        this.ELEMENT_DATA.next(response);
+        response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
       },
       (error) => {
-        if (error.error.msg_code === '0004') {
-          this.ELEMENT_DATA.next([]);
-        }
+        this.isLoading.next(true);
       },
     );
   }
@@ -186,24 +185,24 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           if (res === true) {
-            if (Contractor.status === 'A') {
+            if (Contractor.status === 'ACTIVE') {
               this.contractorService.disableContractor(Contractor._id)
                 .pipe(
                   takeUntil(this.destroy$)
                 )
                 .subscribe(
                 (res1) => {
-                  this.getContractors();
+                  this.getContractors(this.nbtItems.getValue(), 0);
                 }
               );
-            } else if (Contractor.status === 'D') {
+            } else if (Contractor.status === 'DISABLED') {
               this.contractorService.enableContractor(Contractor._id)
                 .pipe(
                   takeUntil(this.destroy$)
                 )
                 .subscribe(
                 (res1) => {
-                  this.getContractors();
+                  this.getContractors(this.nbtItems.getValue(), 0);
                 }
               );
             }
@@ -279,6 +278,15 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       break;
       case('delete'): this.onStatusChange(rowAction.data);
     }
+  }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getContractors(params.limit, params.offset);
   }
 
   /**************************************************************************
