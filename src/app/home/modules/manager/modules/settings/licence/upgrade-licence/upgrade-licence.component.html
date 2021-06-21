@@ -1,8 +1,8 @@
 <div class="licence-container"
-     fxLayout="column" fxLayoutGap="20px" fxFlex>
-  <wid-title-settings title="Buy Licence" [backBtn]="true" ></wid-title-settings>
+     fxLayout="column" fxLayoutGap.lg="20px" fxLayoutGap.gt-lg="20px" fxFlex>
+  <wid-title-settings title="Buy Licence" [backBtn]="true"></wid-title-settings>
   <div class="full-width" fxLayoutAlign="center start" fxFlex="3">
-    <mat-button-toggle-group appearance="legacy" value="month" class="border-radius-10"
+    <mat-button-toggle-group appearance="legacy" value="month" class="border-radius-10" ngClass.lt-lg="m-b-15"
                              #paiement="matButtonToggleGroup">
       <mat-button-toggle fxFlex value="year" class="font-size-10 font-normal bg-white denim">
         Annual
