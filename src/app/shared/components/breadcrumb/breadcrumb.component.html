@@ -1,11 +1,12 @@
-<ol class="breadcrumb">
-  <li *ngFor="let breadcrumb of breadcrumbs">
+
+  <div fxFlexOffset="5" fxLayout="row" fxLayoutAlign="start center" fxFlex="93"
+  class="p-t-20 p-b-20">
+    <li *ngFor="let breadcrumb of breadcrumbs">
     <span class="font-size-12 font-semi-bold steel"
           [routerLink]="breadcrumb.url"
           routerLinkActive="router-link-active"
           [routerLinkActiveOptions]="{ exact: true }">
       {{ breadcrumb.label }}
     </span>
-  </li>
-</ol>
-<br>
+    </li>
+  </div>

@@ -213,4 +213,8 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/drive.svg',
   },
   /* ------------------ */
+  {
+    name: 'wi_print',
+    path: 'assets/icons/printer.svg',
+  }
 ];

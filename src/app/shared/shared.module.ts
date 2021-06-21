@@ -42,6 +42,7 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
+import { TitleSettingsComponent } from './components/title-settings/title-settings.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { ErrorComponent } from './components/error/error.component';
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
+    TitleSettingsComponent,
 
   ],
   imports: [
@@ -94,40 +96,41 @@ import { ErrorComponent } from './components/error/error.component';
     MatBottomSheetModule,
     ScrollbarModule,
   ],
-  exports: [
-    MaterialModule,
-    CommonModule,
-    FlexLayoutModule,
-    ReactiveFormsModule,
-    HeaderComponent,
-    SidenavComponent,
-    UserComponent,
-    ChangePwdComponent,
-    HomeCompanyComponent,
-    TranslateModule,
-    NgxDatatableModule,
-    FlexLayoutModule,
-    FormsModule,
-    SkeletonLoaderComponent,
-    BreadcrumbComponent,
-    NgxMatSelectSearchModule,
-    MatIconModule,
-    MatBottomSheetModule,
-    StepperComponent,
-    AlertComponent,
-    RightSidenaveComponent,
-    ScrollbarModule,
-    SidenavSettingsComponent,
-    ScrollbarModule,
-    DynamicComponent,
-    EditCompanyHomeComponent,
-    ErrorComponent,
-    SplashComponent,
-    CapitalizeFirstLetter,
-    ClickOutsideDirective,
-    SpliceText,
-    DisableControlDirective,
-    ModalComponent,
-  ]
+    exports: [
+        MaterialModule,
+        CommonModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        HeaderComponent,
+        SidenavComponent,
+        UserComponent,
+        ChangePwdComponent,
+        HomeCompanyComponent,
+        TranslateModule,
+        NgxDatatableModule,
+        FlexLayoutModule,
+        FormsModule,
+        SkeletonLoaderComponent,
+        BreadcrumbComponent,
+        NgxMatSelectSearchModule,
+        MatIconModule,
+        MatBottomSheetModule,
+        StepperComponent,
+        AlertComponent,
+        RightSidenaveComponent,
+        ScrollbarModule,
+        SidenavSettingsComponent,
+        ScrollbarModule,
+        DynamicComponent,
+        EditCompanyHomeComponent,
+        ErrorComponent,
+        SplashComponent,
+        CapitalizeFirstLetter,
+        ClickOutsideDirective,
+        SpliceText,
+        DisableControlDirective,
+        ModalComponent,
+        TitleSettingsComponent,
+    ]
 })
 export class SharedModule { }
