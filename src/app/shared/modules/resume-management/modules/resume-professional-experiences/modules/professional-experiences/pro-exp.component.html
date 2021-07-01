@@ -18,7 +18,7 @@
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
-          <h4 class="steel font-size-18 font-small">Professional experiences</h4>
+          <h4 class="steel font-size-18 font-small"> {{ 'resume-pro-exp' | translate }}</h4>
         </div>
       </div>
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
@@ -35,21 +35,19 @@
                       <p class="font-extra-light font-size-10 help-blue">
                         {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date: "longDate"}}</p>
                     </div>
-
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position,item.start_date,item.end_date)">Add
-                      project
+                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position,item.start_date,item.end_date)">{{ 'resume-project-list' | translate }}
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="editForm(item._id, item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">Edit
+                            (click)="editForm(item._id, item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">{{ 'resume-edit' | translate }}
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteProExp(item._id,pointIndex,item.professional_experience_code)" >Delete</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteProExp(item._id,pointIndex,item.professional_experience_code)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
@@ -60,37 +58,37 @@
                     <div fxLayout="row" fxLayoutAlign="space-around end" fxFlex="40" class="width-90">
                       <div fxLayout="column" fxFlex="35">
                         <mat-label class="black font-size-12 required">
-                          Position:
+                          {{ 'resume-position' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input  formControlName="position" matInput placeholder="Position" required>
+                          <input  formControlName="position" matInput placeholder="{{ 'resume-position' | translate }}" required>
                           <mat-error class="red" *ngIf="sendProExp.controls.position.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                           <mat-error class="red" *ngIf="sendProExp.controls.position.errors?.pattern">
-                            Numbers not allowed</mat-error>
+                            {{ 'resume-numbers' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="35">
                         <mat-label class="black font-size-12 required">
-                          Customer:
+                          {{ 'resume-customer' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input formControlName="customer" matInput placeholder="Customer" required>
+                          <input formControlName="customer" matInput placeholder=" {{ 'resume-customer' | translate }}" required>
                           <mat-error class="red" *ngIf="sendProExp.controls.customer.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                           <mat-error class="red" *ngIf="sendProExp.controls.customer.errors?.pattern">
-                            Numbers not allowed</mat-error>
+                            {{ 'resume-numbers' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
                     <div fxLayout="row" class="width-90" fxFlex="40" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="35">
                         <mat-label class="black font-size-12 required">
-                          Start Date:
+                          {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1
-                                 formControlName="start_date" placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" [disabled]="disableDate" required>
+                                 formControlName="start_date" placeholder="{{ 'resume-start-date' | translate }}" (dateChange)="onChangeStartDate(date1.value)" [disabled]="disableDate" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary" ></mat-datepicker>
                           <mat-error class="red" *ngIf="sendProExp.controls.start_date.errors?.required">
@@ -99,11 +97,11 @@
                       </div>
                       <div fxLayout="column" fxFlex="35">
                         <mat-label class="black font-size-12 required">
-                          End date:
+                          {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2
-                                 formControlName="end_date" placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" [disabled]="disableDate" required>
+                                 formControlName="end_date" placeholder=" {{ 'resume-end-date' | translate }}" (dateChange)="onChangeEndDate(date2.value)" [disabled]="disableDate" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>
                           <mat-error class="red" *ngIf="sendProExp.controls.end_date.errors?.required">
@@ -115,7 +113,13 @@
                       <div fxLayout="column" fxFlex="92" fxLayoutAlign="space-arround end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
                                 (click)="createUpdateProExp(date1.value,date2.value)" [disabled]="sendProExp.invalid">
-                          {{button}}
+                          <div *ngIf="button === 'Add';then add else save"></div>
+                          <ng-template #add>
+                            {{ 'resume-add' | translate }}
+                          </ng-template>
+                          <ng-template #save>
+                            {{ 'resume-save' | translate }}
+                          </ng-template>
                         </button>
                       </div>
                     </div>
@@ -124,20 +128,19 @@
                 </div>
               </form>
             </div>
-
           </div>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
-            <span class="cool-grey">Previous</span>
+            <span class="cool-grey"> {{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/certifDiploma']">
-            Next
+            {{ 'resume-next' | translate }}
           </button>
         </div>
       </div>

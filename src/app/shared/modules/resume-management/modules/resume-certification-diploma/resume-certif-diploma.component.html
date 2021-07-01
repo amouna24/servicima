@@ -18,7 +18,7 @@
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
-          <h4 class="steel font-size-18 font-small">Certification and Diploma</h4>
+          <h4 class="steel font-size-18 font-small">{{ 'resume-certif-diploma' | translate }}</h4>
         </div>
       </div>
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
@@ -37,10 +37,10 @@
                     </div>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="31">
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">Edit</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" style="align-items: center" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteCertif(item._id,pointIndex)" >Delete</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
@@ -51,37 +51,37 @@
                     <div fxLayout="row" fxFlex="21" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="32">
                         <mat-label class="black font-size-12 required">
-                          establishment:
+                          {{ 'resume-establishment' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input formControlName="establishment" matInput placeholder="Establishment" required>
+                          <input formControlName="establishment" matInput placeholder="{{ 'resume-establishment' | translate }}" required>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.establishment.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.establishment.errors?.pattern">
-                            Numbers not allowed</mat-error>
+                            {{ 'resume-numbers' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxLayout="column" fxFlex="32">
                         <mat-label class="black font-size-12 required">
-                          diploma:
+                          {{ 'resume-diploma' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input formControlName="diploma" matInput placeholder="Diploma" required>
+                          <input formControlName="diploma" matInput placeholder="{{ 'resume-diploma' | translate }}" required>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.diploma.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.diploma.errors?.pattern">
-                            Numbers not allowed</mat-error>
+                            {{ 'resume-numbers' | translate }}</mat-error>
                         </mat-form-field>
                       </div>
                     </div>
                     <div fxLayout="row" fxFlex="24" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="32">
                         <mat-label class="black font-size-12 required">
-                          Start Date:
+                          {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1
-                                 formControlName="start_date" placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
+                                 formControlName="start_date" placeholder="{{ 'resume-start-date' | translate }}" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.start_date.errors?.required">
@@ -90,11 +90,11 @@
                       </div>
                       <div fxLayout="column" fxFlex="32">
                         <mat-label class="black font-size-12 required">
-                          End date:
+                          {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
                           <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2
-                                 formControlName="end_date" placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
+                                 formControlName="end_date" placeholder="{{ 'resume-end-date' | translate }}" (dateChange)="onChangeEndDate(date2.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>
                           <mat-error class="red" *ngIf="sendCertifDiploma.controls.end_date.errors?.required">
@@ -105,10 +105,10 @@
                     <div fxLayout="row" fxFlex="38" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="82">
                         <mat-label class="black font-size-12">
-                          Description:
+                          {{ 'resume-desc' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="Description" rows="7"
+                              <textarea matInput placeholder="{{ 'resume-desc' | translate }}" rows="7"
                                         formControlName="certif_diploma_desc"></textarea>
                         </mat-form-field>
                       </div>
@@ -131,13 +131,13 @@
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/professionalExperience">
-            <span class="cool-grey">Previous</span>
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/technicalSkills']">
-            Next
+            {{ 'resume-next' | translate }}
           </button>
         </div>
       </div>

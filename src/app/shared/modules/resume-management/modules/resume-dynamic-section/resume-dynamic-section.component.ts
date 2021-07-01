@@ -111,7 +111,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   createForm() {
     this.sendSection = this.fb.group({
       section_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      section_desc: ['', [Validators.required]]
+      section_desc: '',
     });
   }
   /**************************************************************************
