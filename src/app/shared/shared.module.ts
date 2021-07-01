@@ -57,6 +57,7 @@ import { TitleSettingsComponent } from './components/title-settings/title-settin
     BreadcrumbComponent,
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
+    TitleSettingsComponent,
     StepperComponent,
     RightSidenaveComponent,
     /* Directives */
@@ -131,6 +132,7 @@ import { TitleSettingsComponent } from './components/title-settings/title-settin
     DisableControlDirective,
     ModalComponent,
     ProfileImageComponent,
+    TitleSettingsComponent,
   ]
 })
 export class SharedModule { }
