@@ -254,4 +254,8 @@ export const iconsList: IIcon[] = [
     name: 'wi_res_preview',
     path: 'assets/icons/preview.svg',
   },
+  {
+    name: 'wi_print',
+    path: 'assets/icons/printer.svg',
+  }
 ];

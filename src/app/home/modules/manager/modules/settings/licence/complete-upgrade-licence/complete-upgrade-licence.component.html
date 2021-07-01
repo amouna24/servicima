@@ -1,46 +1,60 @@
-<h1 class="title"> Merci d'avoir effectué la mise à niveau</h1>
-<div class="container-title">
-    <div>votre commaned est terminée</div>
-    <div>vous etes maintenat pret a utiliser Servicima for personal</div>
-</div>
-<div class="container-button">
-    <button mat-button class="button-back">Retour</button>
-</div>
-<div class="container-body">
-    <div fxLayout="row" class="content">
-        <div class="details">
-            <h1> Détails de la commande</h1>
-            <div> Forfait selectionné</div>
-            <div>Particuliers</div>
-            <div>avec 1 utilisateurs(s), facturés mensuel avec renouvellement automatique</div>
-            <div fxLayout="row">
-                <div>Total:</div>
-                <div>14,00 euro</div>
-            </div>
-            <div>Payé avec: Visa se terminant par 1411</div>
-            <div>date d'achat: 5/14/2020 11:09 PM</div>
-            <div fxLayout="row" fxLayoutGap="10px">
-                <mat-icon class="material-icons icon-print">
-                    print
-                </mat-icon>
-                <div>
-                    imprimer la confirmation ed votre achat</div>
-            </div>
-        </div>
-        <div class="information-compte">
-            <h1> Information du compte</h1>
-            <div fxLayout="row">
-                <div>Nom: </div>
-                <div> {{name}}</div>
-            </div>
-            <div fxLayout="row">
-                <div>Addresse: </div>
-                <div> {{address}}</div>
-            </div>
-            <div fxLayout="row">
-                <div>Address e-email: </div>
-                <div>{{email}}</div>
-            </div>
-        </div>
+<div class="dynamic-component-container full-height"
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Buy Licence</h1>
     </div>
+    <wid-title-settings title="Buy Licence" [backBtn]="true" ></wid-title-settings>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="40px" class="full-width bg-white border-radius-20" fxFlex>
+    <div fxLayout="column" fxLayoutAlign="center center" fxFlex="35" fxLayoutGap="10px">
+      <h2 class="denim font-semi-bold">Thank you for upgrading</h2>
+      <h5 class="font-light brownish-grey m-t-5">Your order is complete</h5>
+      <button mat-button class="btn-large bg-cerulean-blue white m-t-25" routerLink="/">Back To Home</button>
+    </div>
+    <div fxLayout="column" class="full-width" fxFlex>
+      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px" fxFlex="95"
+           class="full-width">
+        <div class="bg-pale-grey border-radius-20 p-l-20 full-height"
+             fxLayout="column" fxFlex="40">
+          <h5 class="black" fxFlexAlign="start start">Order details :</h5>
+          <div fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlexAlign="start center">
+          <p class="black-three">Selected package</p>
+          <h5 class="denim font-size-18 m-0">{{detail.detail.licence}}</h5>
+          <p class="black font-size-12 font-normal m-t-10">Total : {{detail.detail.total}}</p>
+          <p class="black font-size-12 font-light">Payment method : {{detail.payment}}</p>
+          <p class="black font-size-12 font-light">Purchase date : {{detail.detail.create_time | date:'short' }}</p>
+          </div>
+          <div fxFlex="20" fxLayout="column" fxLayoutAlign="center start" >
+            <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+              <mat-icon svgIcon="wi_print"></mat-icon>
+              <p class="denim font-size-12 font-light m-0 underlined">
+                Print your purchase confirmation
+              </p>
+            </a>
+          </div>
+
+        </div>
+        <div class="bg-pale-grey border-radius-20 p-l-20 full-height"
+             fxLayout="column" fxFlex="40">
+          <h5 class="black" fxFlexAlign="start start">Account informations :</h5>
+          <div fxFlex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px" fxFlexAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="start start">
+              <p class="black-three m-b-5">Full Name :</p>
+              <h5 class="black font-size-18 m-0">{{name}}</h5>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+              <p class="black font-size-12 font-light">Adresse :</p>
+              <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+                <p class="black font-size-12 font-light m-b-0">{{address}}</p>
+              </div>
+            </div>
+            <p class="black font-size-12 font-light">Email :{{email}}</p>
+          </div>
+
+    </div>
+
+    </div>
+  </div>
+</div>
 </div>

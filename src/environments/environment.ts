@@ -16,6 +16,8 @@ export const environment = {
   taxApiUrl: 'http://192.168.1.22:8007/admin/taxes/v1',
   paymentTermsApiUrl: 'http://192.168.1.22:8008/admin/paymentterms/v1',
   loadAuthStarterDataApiUrl: 'http://192.168.1.22:8200/admin/loadauthstarterdata/v1',
+  licenceApiUrl: 'http://192.168.1.22:8009/admin/licences/v1',
+  licenceFeaturesApiUrl: 'http://192.168.1.22:8012/admin/licencefeatures/v1',
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
@@ -44,7 +46,7 @@ export const environment = {
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
-  companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
+  companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
   redirectionHomeUrl: '/',
