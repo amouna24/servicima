@@ -42,6 +42,8 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
+import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { TitleSettingsComponent } from './components/title-settings/title-settings.component';
 
 @NgModule({
   declarations: [
@@ -128,6 +130,43 @@ import { ErrorComponent } from './components/error/error.component';
     SpliceText,
     DisableControlDirective,
     ModalComponent,
-  ]
+    ProfileImageComponent,
+  ],
+    exports: [
+        MaterialModule,
+        CommonModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        HeaderComponent,
+        SidenavComponent,
+        UserComponent,
+        ChangePwdComponent,
+        HomeCompanyComponent,
+        TranslateModule,
+        NgxDatatableModule,
+        FlexLayoutModule,
+        FormsModule,
+        SkeletonLoaderComponent,
+        BreadcrumbComponent,
+        NgxMatSelectSearchModule,
+        MatIconModule,
+        MatBottomSheetModule,
+        StepperComponent,
+        AlertComponent,
+        RightSidenaveComponent,
+        ScrollbarModule,
+        SidenavSettingsComponent,
+        ScrollbarModule,
+        DynamicComponent,
+        EditCompanyHomeComponent,
+        ErrorComponent,
+        SplashComponent,
+        CapitalizeFirstLetter,
+        ClickOutsideDirective,
+        SpliceText,
+        DisableControlDirective,
+        ModalComponent,
+        TitleSettingsComponent,
+    ]
 })
 export class SharedModule { }
