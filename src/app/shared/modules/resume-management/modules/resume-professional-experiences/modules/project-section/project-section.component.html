@@ -1,0 +1,110 @@
+<wid-scrollbar fxLayout="row" fxFlexFill>
+<div fxLayout="column" fxFlexFill >
+  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
+    <div fxLayout="column" fxFlex="82" >
+      <br>
+    <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
+      <div class="p-l-20" fxLayout="column" fxFlex="80" >
+        <p>{{item.project_detail_title}}</p>
+      </div>
+      <div fxLayout="column" fxFlex="12" fxLayoutAlign="center none">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.ResumeProjectDetailsKey.project_code,item.project_detail_title,item.project_detail_desc,pointIndex,item._id,item.ResumeProjectDetailsKey.project_details_code); ">Edit</button>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex="16" class="p-r-20" fxLayoutAlign="center none">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_details_code);" >Delete</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+  <div fxLayout="row"   class="full-width" fxFlex="100">
+<form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
+  <div fxLayout="row" fxFlex="38"  fxLayoutAlign="space-around center" style="align-items: flex-end">
+    <div fxLayout="column" fxFlex="30">
+      <mat-label class="black font-size-12 required">
+        Section title :
+      </mat-label>
+      <mat-form-field appearance="outline">
+        <input formControlName="project_detail_title" matInput placeholder="Section title" required>
+        <mat-error class="red" *ngIf="sendProDetails.controls.project_detail_title.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="30">
+      <mat-label class="black font-size-12 required">
+        Section type :
+      </mat-label>
+      <mat-form-field appearance="outline">
+        <mat-select disableOptionCentering panelClass="panelColor"
+                    formControlName="select" (selectionChange)="onSelect()" [value]="select" placeholder="Section type">
+          <mat-option *ngFor="let v of secList" [value]="v.value">{{v.viewValue}}</mat-option>
+        </mat-select>
+        <mat-error class="red" *ngIf="sendProDetails.controls.select.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+    <ng-template [ngIf]="showDesc" >
+      <div fxLayout="row" fxFlex="28" style="justify-content: center" class="full-width">
+      <div fxLayout="column" fxFlex="80">
+        <mat-label class="black font-size-12">
+          Description :
+        </mat-label>
+        <mat-form-field appearance="outline">
+          <textarea matInput placeholder="description" rows="7"
+                    formControlName="project_detail_desc"></textarea>
+          <mat-error class="red" *ngIf="sendProDetails.controls.project_detail_desc.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+        </div>
+    </ng-template>
+  <ng-template  fxLayout="row" fxFlex="28" fxLayoutAlign="start" [ngIf]="showSec" >
+      <div fxLayout="column" >
+        <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 23%">
+          Section Content :
+        </mat-label>
+        <div *ngFor="let item of inputFields; let pointIndex=index" fxLayout="row"   >
+          <div fxLayout="column" fxFlex="47" fxLayoutAlign=" end"  >
+        <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
+          <div fxLayout="column" fxFlex="79">
+      <mat-form-field appearance="outline">
+        <input  matInput placeholder="Title" [value]="item.project_details_section_desc" [readonly]="item.project_details_section_desc">
+      </mat-form-field>
+          </div>
+        </div>
+         </div>
+        </div>
+          <form  [formGroup]="sendProSectionDetails" fxLayout="row">
+          <div fxLayout="column" fxFlex="47" fxLayoutAlign=" end"  >
+            <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
+              <div fxLayout="column" fxFlex="79">
+                <mat-form-field appearance="outline">
+                  <input formControlName="project_details_section_desc" matInput placeholder="Title" >
+                  <mat-error class="red" *ngIf="sendProSectionDetails.controls.project_details_section_desc.errors?.required">
+                    {{ 'general.required' | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
+            <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()"  [disabled]="sendProSectionDetails.invalid">Add</button>
+          </div>
+          </form></div>
+    </ng-template>
+  <div fxLayout="row" fxFlex="28" fxLayoutAlign="end end">
+    <div fxLayout="column" fxFlex="19">
+    <button type="button" mat-raised-button class="bg-pale-grey btn-small"
+            (click)="createProDetails()" [disabled]="sendProDetails.invalid">{{button}}
+    </button></div>
+  </div>
+
+</form>
+</div>
+</div>
+</wid-scrollbar>

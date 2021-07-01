@@ -375,7 +375,7 @@ html body {
 }
 
 .m-t-10 {
-    margin-top: 10px !important;
+    margin-top: 10px;
 }
 
 .m-t-15 {
@@ -530,6 +530,9 @@ html body {
 .cool-grey {
   color: $cool-grey;
 }
+.denim{
+  color: $denim !important;
+}
 .black {
     color: $black;
 }
@@ -566,6 +569,9 @@ html body {
 /*******************
  background colors
 *******************/
+.bg-cool-grey {
+  background-color: $cool-grey !important;
+}
 .bg-primaryColor {
   background-color: $primaryColor !important;
 }
@@ -617,6 +623,9 @@ html body {
 .bg-purpley{
   background-color: $purpley !important;
 }
+.bg-pale-grey-four{
+  background-color: $pale-grey-four !important;
+}
 /*******************
        logo
 *******************/
@@ -631,6 +640,9 @@ html body {
 /*******************
  full-width-height
 *******************/
+.width-90{
+  width: 90%
+}
 .full-width {
   width: 100%;
 }
@@ -650,7 +662,7 @@ html body {
   min-height: $screen-height !important;
 }
 .height-50{
-  height: 50px;
+  height: 50%;
 }
 .mat-raised-button{
   box-shadow: none !important;
@@ -680,6 +692,8 @@ html body {
   margin: 20px;
   height: 87vh !important;
   background-color: $white;
+  margin: 0 25px 0 25px;
+  height: 84vh !important;
   // width: 88vw;
 }
 

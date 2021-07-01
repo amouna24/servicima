@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25.066" height="23.674" viewBox="0 0 25.066 23.674">
+  <g id="tabler-icon-certificate" transform="translate(-4.178 -6.963)">
+    <circle id="Ellipse_91" data-name="Ellipse 91" cx="3.738" cy="3.738" r="3.738" transform="translate(17.09 17.09)" fill="none"/>
+    <path id="Path_1241" data-name="Path 1241" d="M13,17.5v6.267l2.785-2.089,2.785,2.089V17.5" transform="translate(5.104 6.87)" fill="none"/>
+    <path id="Path_1242" data-name="Path 1242" d="M12.748,24.5H5.785A2.793,2.793,0,0,1,3,21.711V7.785A2.793,2.793,0,0,1,5.785,5h19.5a2.793,2.793,0,0,1,2.785,2.785V21.711a2.7,2.7,0,0,1-1.393,2.367" transform="translate(1.178 1.963)" fill="none"/>
+    <line id="Line_70" data-name="Line 70" x2="16.022" transform="translate(8.545 12.817)" fill="none" opacity="0.4"/>
+    <line id="Line_71" data-name="Line 71" x2="4.272" transform="translate(8.545 17.09)" fill="none" opacity="0.4"/>
+    <line id="Line_72" data-name="Line 72" x2="2.136" transform="translate(8.545 21.362)" fill="none" opacity="0.4"/>
+  </g>
+</svg>

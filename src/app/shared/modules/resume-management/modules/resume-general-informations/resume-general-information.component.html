@@ -1,0 +1,121 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxFlex="56">
+          <h1 class="steel font-size-24 font-medium">Resume</h1>
+        </div>
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+      </div>
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    </div>
+    <div  fxLayout="row" fxFlex="88">
+            <form [formGroup]="CreationForm" fxLayout="column" class="full-width"  >
+              <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+                <div fxLayout="column" fxFlex="86">
+                  <h4 class="steel font-size-18 font-small">General information</h4>
+                </div>
+              </div>
+              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center" >
+                <wid-scrollbar fxFlexFill >
+                  <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around ">
+                    <div   fxLayout="column" fxFlex="18"  class="height-90" fxLayoutGap="10px" fxLayoutAlign=" start" >
+                      <div fxlayout="row"  class="full-width">
+                        <mat-label class="black font-size-12 required">
+                          Name:
+                        </mat-label>
+                        <mat-form-field appearance="outline" class="full-width">
+                          <input    formControlName="init_name" matInput placeholder="Name" >
+                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.pattern">
+                            Numbers not allowed</mat-error>
+                        </mat-form-field></div>
+                      <div  class="full-width" >
+                        <mat-label class="black font-size-12 required">
+                          Actual job:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input    formControlName="actual_job" matInput placeholder="Actual job">
+                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.pattern">
+                            Numbers not allowed</mat-error>
+                        </mat-form-field></div>
+                      <div class="full-width">
+                      <mat-label class="black font-size-12 required">
+                        Language:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-select  formControlName="language_id" disableOptionCentering panelClass="panelColor"
+                                        placeholder="language" value="language_id">
+                          <ng-container *ngFor="let v of langList.getValue()">
+                            <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                        <mat-error class="red" *ngIf="CreationForm.invalid">
+                          Please select an item in the list</mat-error>
+                      </mat-form-field>
+                      </div>
+                      <div fxLayout="row" fxFlex="10">
+                        <section class="example-section">
+                          <mat-checkbox class="check" (change)="showHideYears()" [checked]="showYears" >Set years of experience manually</mat-checkbox>
+                        </section></div>
+                      <div fxLayout="row" fxFlex class="full-width">
+                       <div *ngIf="showYears">
+                         <mat-label class="black font-size-12">
+                           Years of experience:
+                         </mat-label>
+                         <mat-form-field appearance="outline" class="full-width">
+                           <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder="Years of experience" >
+                           <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
+                             You should select a number between 0 and 31</mat-error>
+                         </mat-form-field>
+                       </div>
+                  </div>
+                    </div>
+                    <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" class="height-80">
+                      <div fxLayout="row"  fxFlex="55" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
+                          <div  fxLayout="column" class="profile-image">
+                            <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
+                                               [haveImage]="haveImage"
+                                               [avatar]="avatar"
+                                               [modelObject]="user"
+                                               [singleUpload]="false"
+                                               [userType]="profileUserType"
+                                               [diameter]="140"
+                                               height="147"
+                                               width="122"
+                                               (newFile)="getFile($event)"
+                            ></wid-profile-image>
+                          </div>
+                          <div fxLayout="column" fxLayoutAlign="start" fxFlex="55">
+                            <div fxLayout="row">
+                              <p class="font-normal font-size-12" > First Name : </p> <p class="font-light font-size-12" >{{firstname}}</p></div>
+                            <div fxLayout="row">
+                              <p class="font-normal font-size-12" > Last name :  </p> <p class="font-light font-size-12" >{{lastname}}</p></div>
+                            <div fxLayout="row">
+                              <p class="font-normal font-size-12" > Company :  </p> <p class="font-light font-size-12" >{{company_name}}</p></div>
+                          </div>
+                    </div>
+                    </div>
+                  </div>
+                </wid-scrollbar>
+              </div>
+              <div fxLayout="row" fxFlex="14" fxLayoutAlign="center " >
+                <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+                  <button mat-raised-button type="submit" color="primary" class="white btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="CreationForm.invalid">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </form>
+    </div>
+  </div>
+
+

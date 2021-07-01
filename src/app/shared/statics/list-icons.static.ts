@@ -213,6 +213,47 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/drive.svg',
   },
   /* ------------------ */
+  /*     Resume Icon    */
+  {
+    name: 'wi_res_general_info',
+    path: 'assets/icons/gen info.svg',
+  },
+  {
+    name: 'wi_res_professional_experience',
+    path: 'assets/icons/proexp.svg',
+  },
+  {
+    name: 'wi_res_technical_skills',
+    path: 'assets/icons/skills.svg',
+  },
+  {
+    name: 'wi_res_functional_skills',
+    path: 'assets/icons/skills.svg',
+  },
+  {
+    name: 'wi_res_certif_diploma',
+    path: 'assets/icons/proexp.svg',
+  },
+  {
+    name: 'wi_res_custom_section',
+    path: 'assets/icons/section.svg',
+  },
+  {
+    name: 'wi_res_language',
+    path: 'assets/icons/language.svg',
+  },
+  {
+    name: 'wi_res_intervention',
+    path: 'assets/icons/intervention.svg',
+  },
+  {
+    name: 'wi_res_certif',
+    path: 'assets/icons/certif.svg',
+  },
+  {
+    name: 'wi_res_preview',
+    path: 'assets/icons/preview.svg',
+  },
   {
     name: 'wi_print',
     path: 'assets/icons/printer.svg',
