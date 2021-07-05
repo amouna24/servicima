@@ -46,6 +46,9 @@ export class ProExpComponent implements OnInit {
   showPosError = false;
   // tslint:disable-next-line:max-line-length
   disableDate = false;
+  startDateUpdate = '';
+  endDAteUpdate = '';
+  myDisabledDayFilter;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -53,17 +56,18 @@ export class ProExpComponent implements OnInit {
     this.getProExpInfo();
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDay();
+    const currentDay = new Date().getDate();
     this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 25);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 25);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
     this.createForm();
   }
   /**************************************************************************
    * @description Get Professional Data from Resume Service
    *************************************************************************/
   getProExpInfo() {
+    const disabledDates = [];
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
@@ -83,8 +87,16 @@ export class ProExpComponent implements OnInit {
                       exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
                       exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
                       exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
+                      for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
+                        disabledDates.push(new Date(date));
+                      }
                     }
                   );
+                  console.log('disabled dates =', disabledDates);
+                  this.myDisabledDayFilter = (d: Date): boolean => {
+                    const time = d.getTime();
+                    return !disabledDates.find(x => x.getTime() === time);
+                  };
                 }
               },
               (error) => {
@@ -144,10 +156,12 @@ export class ProExpComponent implements OnInit {
     }
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;
+      this.proExpUpdate.start_date = this.startDateUpdate;
+      this.proExpUpdate.end_date = this.endDAteUpdate;
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
       this.proExpUpdate._id = this._id;
-
+      console.log('pro exp = ', this.proExpUpdate);
       if (this.sendProExp.valid && this.showDateError === false ) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
@@ -165,7 +179,13 @@ export class ProExpComponent implements OnInit {
       position,
       customer,
     });
-    this.disableDate = true;
+    console.log('proExp', this.sendProExp.value);
+    this.startDateUpdate = this.sendProExp.controls.start_date.value;
+    this.endDAteUpdate = this.sendProExp.controls.end_date.value;
+    this.sendProExp.controls.start_date.disable();
+ this.sendProExp.controls.end_date.disable();
+    console.log('proExp', this.sendProExp.value);
+
     this._id = _id;
     this.button = 'Save';
     this.professional_experience_code = professional_experience_code;

@@ -25,16 +25,15 @@
         <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
           <div *ngFor="let item of funcSkillArray let pointIndex=index" class="p-l-65">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
-              <div fxLayout="column" fxFlex="20" class="p-l-20">
+              <div fxLayout="column" fxFlex="80" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.skill}}</p>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end"   fxFlex="60">
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"   fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.functional_skills_code,item.skill,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center center" class="p-r-20" fxFlex>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteFuncSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
-
             </div>
 
           </div>
@@ -77,8 +76,7 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/intervention']">
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}" (click)="makeSureBeforeYouLeave()">
             {{ 'resume-next' | translate }}
           </button>
         </div>

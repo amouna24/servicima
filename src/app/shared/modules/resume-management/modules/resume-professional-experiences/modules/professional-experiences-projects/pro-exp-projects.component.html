@@ -31,11 +31,10 @@
                     <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>{{ 'resume-no-exp' | translate }}</span>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="center">
-                      <button mat-raised-button (click)="onShowProject()" color="primary" class="btn-medium  white">
+                      <button mat-raised-button (click)="onShowProject()" color="primary" class="btn-medium  white p-r-10">
                         {{ 'resume-add-project' | translate }}
                       </button>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -46,26 +45,26 @@
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
                   <mat-panel-title style="margin-right: 0 !important;">
                     <div fxLayout="row" style="height: 80px" class="bg-pale-grey  full-width" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
-                      <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="50">
+                      <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="73">
                         <div fxLayout="row" fxFlex="34">
                           <p class="font-normal font-size-15">{{item.project_title}}</p>
                         </div>
-                        <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
+                        <div fxLayout="row" fxFlexAlign=" start" fxFlex="46">
                           <p class="font-extra-light font-size-10 help-blue">
                             {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="21" fxLayoutAlign="center center">
+                      <div fxLayout="column"  fxLayoutAlign="center end" class="p-r-20" fxFlex>
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" >{{ 'resume-add-section' | translate }}</button>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="14" fxLayoutAlign="center none">
+                      <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.project_code,item.project_title,item.end_date,item.start_date,pointIndex,item._id); panel.toggle()">{{ 'resume-edit' | translate }}</button>
                         </div>
                       </div>
-                      <div fxLayout="column" fxFlex="21" class="p-r-20" fxLayoutAlign="center none">
+                      <div fxLayout="column"  class="p-r-20" fxLayoutAlign="center end" fxFlex>
                         <div fxLayout="row" fxLayoutAlign="end" >
                           <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_code);panel.toggle()" >{{ 'resume-delete' | translate }}</button>
                         </div>
@@ -113,7 +112,7 @@
                           {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1 formControlName="start_date"
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1 formControlName="start_date"
                                  placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
@@ -128,7 +127,7 @@
                               {{ 'resume-end-date' | translate }}:
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2  formControlName="end_date"
+                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" [matDatepickerFilter]="myDisabledDayFilter" #date2  formControlName="end_date"
                                      placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
                               <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                               <mat-datepicker #datepickerend color="primary"></mat-datepicker>

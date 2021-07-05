@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
 import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router, Event } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -38,6 +38,24 @@ export class ResumeFuncSkillComponent implements OnInit {
   ngOnInit(): void {
     this.getFuncSkillsInfo();
     this.createForm();
+    }
+  makeSureBeforeYouLeave() {
+    const confirmation = {
+      code: 'delete',
+      title: 'Leave',
+      description: 'Are you sure you want to leave?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.router.navigate(['/candidate/resume/intervention']);
+          } else if (res === false) {
+            this.router.navigate(['/candidate/resume/functionalSkills']);
+          }
+          this.subscriptionModal.unsubscribe();
+        }
+      );
   }
   /**************************************************************************
    * @description Get Functional skills data from Resume Service
@@ -153,4 +171,5 @@ this.arrayFuncSkillCount++;
 /*
 */
   }
+
 }

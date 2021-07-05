@@ -161,7 +161,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       years_of_experience: generalInformation[0].years_of_experience,
       language_id: generalInformation[0].ResumeKey.language_id,
       resume_code: generalInformation[0].ResumeKey.resume_code,
-      image: this.avatar,
+      image: generalInformation[0].image,
     });
       console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
       if (this.CreationForm.controls.years_of_experience.value !== null) {
@@ -236,6 +236,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
     } } else {
       this.generalInfo = this.CreationForm.value;
+      console.log('filename=', filename);
+      if (filename === null) {
+        filename = this.CreationForm.controls.image.value;
+      }
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {

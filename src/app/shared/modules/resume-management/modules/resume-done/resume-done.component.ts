@@ -41,6 +41,7 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsList: IResumeProjectDetailsModel[] = [];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
   theme = '';
+  years = 0
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
@@ -53,7 +54,33 @@ export class ResumeDoneComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    await this.getResumeInfo();
+   await this.yearsOfExpAuto();
+   this.getResumeInfo();
+  }
+  yearsOfExpAuto() {
+     this.resumeService.getResume(
+      // tslint:disable-next-line:max-line-length
+      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .subscribe(
+        (response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getProExp(
+              `?resume_code=${this.resume_code}`)
+              .subscribe(
+                (responseProExp) => {
+                  if (responseProExp['msg_code'] !== '0004') {
+                    responseProExp.forEach((proExp) => {
+                      console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
+                      const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
+                        new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
+                      console.log('difference=', difference);
+                      this.years = difference + this.years;
+                    });
+                    console.log('years auto = ', this.years);
+
+  }});
+          }});
   }
   /**************************************************************************
    * @description Count the percentage of the resume
@@ -119,8 +146,14 @@ export class ResumeDoneComponent implements OnInit {
           ]).toPromise().then(
             (data) => {
               if (data[0].length > 0) {
+                if (data[0][0]['years_of_experience'] === null) {
+                  data[0][0]['years_of_experience'] = this.years;
+                  console.log('ylaaah', data[0][0]['years_of_experience']);
+                }
                 // @ts-ignore
-              this.generalInfoList = data[0]; }
+              this.generalInfoList = data[0];
+                console.log(data[0][0]);
+              }
               if (data[1].length > 0) {
                 // @ts-ignore
               this.proExpList = data[1]; }

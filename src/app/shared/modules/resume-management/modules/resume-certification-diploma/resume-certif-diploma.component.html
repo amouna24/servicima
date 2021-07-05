@@ -27,8 +27,8 @@
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
               <div *ngFor="let item of certifDiplomaArray let pointIndex=index" fxLayout="column">
                 <div fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80">
-                  <div fxLayout="column" fxFlex="50" class="p-l-20">
-                    <div fxLayout="row" fxFlex="34">
+                  <div fxLayout="column" fxFlex="80" class="p-l-20">
+                    <div fxLayout="row" fxFlex="44">
                       <p class="font-normal font-size-15">{{item.diploma}}</p>
                     </div>
                     <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
@@ -36,7 +36,7 @@
                         {{item.establishment}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
                     </div>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="31">
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex  >
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" style="align-items: center" fxLayoutAlign="center end" class="p-r-20" fxFlex>
@@ -80,7 +80,7 @@
                           {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1
                                  formControlName="start_date" placeholder="{{ 'resume-start-date' | translate }}" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
@@ -93,7 +93,7 @@
                           {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" #date2
+                          <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" [matDatepickerFilter]="myDisabledDayFilter" #date2
                                  formControlName="end_date" placeholder="{{ 'resume-end-date' | translate }}" (dateChange)="onChangeEndDate(date2.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>

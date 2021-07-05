@@ -39,6 +39,7 @@ export class ProExpProjectsComponent implements OnInit {
   showNumberError = false;
   start_date: any;
   end_date: any;
+  myDisabledDayFilter: any ;
   get getProject() {
     return this.ProjectArray;
   }
@@ -55,6 +56,7 @@ export class ProExpProjectsComponent implements OnInit {
     private modalServices: ModalService,
   ) { }
   getProjectInfo() {
+    const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
       `?professional_experience_code=${this.professional_experience_code}`)
@@ -68,7 +70,15 @@ export class ProExpProjectsComponent implements OnInit {
               this.ProjectArray.forEach(
                 (project) => {
                   project.project_code = project.ResumeProjectKey.project_code;
+                  for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+                    disabledDates.push(new Date(date));
+                  }
                 });
+              console.log('disabled dates =', disabledDates);
+              this.myDisabledDayFilter = (d: Date): boolean => {
+                const time = d.getTime();
+                return !disabledDates.find(x => x.getTime() === time);
+              };
             }
           } },
         (error) => {
@@ -83,7 +93,7 @@ export class ProExpProjectsComponent implements OnInit {
     this.createForm();
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDay();
+    const currentDay = new Date().getDate();
     this.minEndDate = this.start_date_pro_exp;
     this.maxEndDate =  this.end_date_pro_exp;
     this.minStartDate = this.start_date_pro_exp;
