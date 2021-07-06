@@ -18,23 +18,22 @@
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
-          <h4 class="steel font-size-18 font-small">Functional skills</h4>
+          <h4 class="steel font-size-18 font-small">{{ 'resume-functional-skills' | translate }}</h4>
         </div>
       </div>
       <wid-scrollbar fxFlex="80" class="full-width" fxLayout="row">
         <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
           <div *ngFor="let item of funcSkillArray let pointIndex=index" class="p-l-65">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
-              <div fxLayout="column" fxFlex="20" class="p-l-20">
+              <div fxLayout="column" fxFlex="80" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.skill}}</p>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center end"   fxFlex="60">
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.functional_skills_code,item.skill,pointIndex)">Edit</button>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"   fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.functional_skills_code,item.skill,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center center" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteFuncSkill(item._id,pointIndex)" >Delete</button>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteFuncSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
-
             </div>
 
           </div>
@@ -44,18 +43,25 @@
 
               <div fxLayout="column" fxFlex="80">
                 <mat-label class="black font-size-12 required">
-                  Skill title:
+                  {{ 'resume-skill-title' | translate }}:
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
-                  <input formControlName="skill" matInput placeholder="Skill title" required>
+                  <input formControlName="skill" matInput placeholder="{{ 'resume-skill-title' | translate }}" required>
                   <mat-error class="red" *ngIf="sendFuncSkill.controls.skill.errors?.required">
                     {{ 'general.required' | translate }}</mat-error>
                   <mat-error class="red" *ngIf="sendFuncSkill.controls.skill.errors?.pattern">
-                    Numbers not allowed</mat-error>
+                    {{ 'resume-numbers' | translate }}</mat-error>
                 </mat-form-field>
                 <div fxLayout="row" fxLayoutAlign="end end">
                   <button type="button" mat-raised-button class="bg-pale-grey btn-medium black"
-                          (click)="createUpdateFunctionalSkill()" [disabled]="sendFuncSkill.invalid">{{button}}
+                          (click)="createUpdateFunctionalSkill()" [disabled]="sendFuncSkill.invalid">
+                    <div *ngIf="button === 'Add';then add else save"></div>
+                    <ng-template #add>
+                      {{ 'resume-add' | translate }}
+                    </ng-template>
+                    <ng-template #save>
+                      {{ 'resume-save' | translate }}
+                    </ng-template>
                   </button>
                 </div>
               </div>
@@ -66,13 +72,12 @@
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
-            <span class="cool-grey">Previous</span>
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/intervention']">
-            Next
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}" (click)="makeSureBeforeYouLeave()">
+            {{ 'resume-next' | translate }}
           </button>
         </div>
       </div>

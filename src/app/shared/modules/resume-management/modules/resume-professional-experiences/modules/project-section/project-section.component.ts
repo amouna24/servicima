@@ -8,7 +8,7 @@ import { IViewParam } from '@shared/models/view.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { UserService } from '@core/services/user/user.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 @Component({
   selector: 'wid-project-section',
@@ -24,7 +24,9 @@ export class ProjectSectionComponent implements OnInit {
   proSectionArray: IResumeProjectDetailsSectionModel[] = [];
   ProDetails: IResumeProjectDetailsModel;
   ProSectionDetails: IResumeProjectDetailsSectionModel;
-  project_details_code = `` ;
+  sectionContentUpdate: IResumeProjectDetailsSectionModel;
+  project_details_code = ``;
+  project_details_section_code = '';
   showDesc = true;
   showSec = false;
   select = 'PARAGRAPH';
@@ -36,18 +38,19 @@ export class ProjectSectionComponent implements OnInit {
   proDetailUpdate: IResumeProjectDetailsModel;
   subscriptionModal: Subscription;
   selectValue = 'PARAGRAPH';
-
   @Input() project_code = '';
   _id = '';
   indexUpdate = 0;
   button = 'Add';
 
   get getProjectSection() {
-    return this.proDetailsArray ;
+    return this.proDetailsArray;
   }
+
   get inputFields() {
-    return this.proSectionArray ;
+    return this.proSectionArray;
   }
+
   constructor(
     private refdataService: RefdataService,
     private utilService: UtilsService,
@@ -56,31 +59,35 @@ export class ProjectSectionComponent implements OnInit {
     private resumeService: ResumeService,
     private router: Router,
     private modalServices: ModalService,
+  ) {
+  }
 
-  ) { }
-
- async ngOnInit() {
+  async ngOnInit() {
+    console.log('project code=', this.project_code);
     this.getConnectedUser();
     this.getProjectDetailsInfo();
     this.createFormProDetails();
     this.createFormSectionDetails();
-   await this.getSectionRefData();
+    await this.getSectionRefData();
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
-     this.select = selectedValue;
+      this.select = selectedValue;
     });
   }
+
   async getSectionRefData() {
     const data = await this.getRefdata();
     this.secList = data['SECTION_TYPE'];
   }
+
   async getRefdata() {
     const list = ['SECTION_TYPE'];
-    this.refData =  await this.refdataService
-      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
+    this.refData = await this.refdataService
+      .getRefData(this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId), this.userService.applicationId,
         list, false);
     return this.refData;
   }
+
   getConnectedUser() {
     this.userService.connectedUser$
       .subscribe(
@@ -90,13 +97,15 @@ export class ProjectSectionComponent implements OnInit {
           }
         });
   }
+
   createFormProDetails() {
     this.sendProDetails = this.fb.group({
-      project_detail_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      project_detail_title: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       project_detail_desc: '',
-        select: 'PARAGRAPH',
-      });
+      select: 'PARAGRAPH',
+    });
   }
+
   getProjectDetailsInfo() {
     this.resumeService.getProjectDetails(
       // tslint:disable-next-line:max-line-length
@@ -104,8 +113,9 @@ export class ProjectSectionComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-          this.proDetailsArray = response;
-       } },
+            this.proDetailsArray = response;
+          }
+        },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -113,46 +123,57 @@ export class ProjectSectionComponent implements OnInit {
       );
 
   }
+
   /**
    * @description Create Form
    */
   createFormSectionDetails() {
     this.sendProSectionDetails = this.fb.group({
-        project_details_section_desc: ['', [Validators.required]],
-      });
+      project_details_section_desc: [''],
+    });
   }
+
   /**
    * @description Create Custom section
    */
   createProSectionDetails() {
     this.ProSectionDetails = this.sendProSectionDetails.value;
-    this.ProSectionDetails.project_details_section_code = `WID-${Math.
-    floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D-S`;
+    this.ProSectionDetails.project_details_section_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D-S`;
     this.ProSectionDetails.project_details_code = this.project_details_code;
+    this.ProSectionDetails.ResumeProjectDetailsSectionKey = {
+      project_details_code: this.project_details_code,
+      project_details_section_code: this.ProSectionDetails.project_details_section_code
+    };
     if (this.sendProSectionDetails.valid) {
+      this.resumeService.addProjectDetailsSection(this.ProSectionDetails).subscribe((res) => {
+        console.log('created', res);
+      });
       this.proSectionArray.push(this.ProSectionDetails);
-    } else { console.log('Form is not valid');
+    } else {
+      console.log('Form is not valid');
     }
     this.sendProSectionDetails.reset();
     this.arrayProSectionDetailsCount++;
 
   }
+
   createProDetails() {
     if (this.button === 'Add') {
-    this.ProDetails = this.sendProDetails.value;
-    this.ProDetails.project_details_code = this.project_details_code;
-    this.ProDetails.project_code = this.project_code;
-    if (this.sendProDetails.valid) {
-      this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
-      if (this.ProSectionDetails !== undefined) {
-      this.proSectionArray.forEach((sec) => {
-        this.resumeService.
-        addProjectDetailsSection(sec).
-        subscribe(dataSection => console.log('Section details =', dataSection));
-        }); }
-      this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
-    } else { console.log('Form is not valid');
-    } } else if (this.button === 'Save') {
+      this.ProDetails = this.sendProDetails.value;
+      this.ProDetails.project_details_code = this.project_details_code;
+      this.ProDetails.project_code = this.project_code;
+      if (this.sendProDetails.valid) {
+        this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
+        if (this.ProSectionDetails !== undefined) {
+          this.proSectionArray.forEach((sec) => {
+            this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
+          });
+        }
+        this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
+      } else {
+        console.log('Form is not valid');
+      }
+    } else if (this.button === 'Save') {
       this.proDetailUpdate = this.sendProDetails.value;
       this.proDetailUpdate.project_code = this.project_code;
       this.proDetailUpdate.project_details_code = this.project_details_code;
@@ -171,6 +192,7 @@ export class ProjectSectionComponent implements OnInit {
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.proSectionArray = [];
   }
+
   onSelect() {
     if (this.select === 'PARAGRAPH') {
       this.showDesc = true;
@@ -180,7 +202,8 @@ export class ProjectSectionComponent implements OnInit {
       this.showSec = !this.showSec;
     }
 
-}
+  }
+
 // tslint:disable-next-line:max-line-length
   editForm(project_code: string, project_detail_title: any, project_detail_desc: any, pointIndex: number, _id: string, project_details_code: string) {
     this.sendProDetails.patchValue({
@@ -195,8 +218,10 @@ export class ProjectSectionComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response['msg_code'] !== '0004') {
+              console.log(response, 'response');
               this.proSectionArray = response;
-            } },
+            }
+          },
           (error) => {
             if (error.error.msg_code === '0004') {
             }
@@ -213,9 +238,10 @@ export class ProjectSectionComponent implements OnInit {
     this.project_code = project_code;
     this.project_details_code = project_details_code;
     this._id = _id.toString();
-  this.indexUpdate = pointIndex;
-  this.button = 'Save';
+    this.indexUpdate = pointIndex;
+    this.button = 'Save';
   }
+
   /**************************************************************************
    * @description Delete the selected certif/Diploma
    *************************************************************************/
@@ -232,28 +258,76 @@ export class ProjectSectionComponent implements OnInit {
             this.resumeService.deleteProjectDetails(_id).subscribe((pro) => {
                 this.resumeService.getProjectDetailsSection(`?project_code=${project_details_code}`).subscribe((resp) => {
                   if (resp.length !== undefined) {
-                  resp.forEach(sec => {
-                    this.resumeService.deleteProjectDetailsSection(sec._id).subscribe(secc => {
+                    resp.forEach(sec => {
+                      this.resumeService.deleteProjectDetailsSection(sec._id).subscribe(secc => {
+                      });
                     });
-                  }); }
+                  }
                 });
-              this.proDetailsArray.forEach((value, index) => {
-                if (index === pointIndex) {
-                  this.proDetailsArray.splice(index, 1);
-                }
-              });
+                this.proDetailsArray.forEach((value, index) => {
+                  if (index === pointIndex) {
+                    this.proDetailsArray.splice(index, 1);
+                  }
+                });
                 this.button = 'Add';
-              this.showDesc = true;
-              this.showSec = false;
-              this.createFormProDetails();
-              this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
-                this.select = selectedValue;
-              });
-              this.proSectionArray = [];
+                this.showDesc = true;
+                this.showSec = false;
+                this.createFormProDetails();
+                this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
+                  this.select = selectedValue;
+                });
+                this.proSectionArray = [];
               }
             );
           }
           this.subscriptionModal.unsubscribe();
 
-        }); }
+        });
   }
+  EditProDetSection(project_details_code: string, project_details_section_code: string, value: string, _id: string, pointIndex: number) {
+    this.sectionContentUpdate = {
+      ResumeProjectDetailsSectionKey: {
+        project_details_code,
+        project_details_section_code,
+      },
+      project_details_section_desc: value,
+      _id,
+      project_details_code,
+      project_details_section_code
+    };
+    this.proSectionArray[pointIndex].project_details_section_desc = value;
+    console.log(this.sectionContentUpdate);
+    if (value !== '') {
+     this.resumeService.updateProjectDetailsSection(this.sectionContentUpdate).subscribe((res) => {
+        console.log('section details updated');
+      });
+    }
+  }
+  disableEditButton(value: string) {
+    return value.toString() === '';
+  }
+
+  deleteProDetSec(_id: string, pointIndex: number) {
+    const confirmation = {
+      code: 'delete',
+      title: 'Delete This Project Detail ?',
+      description: 'Are you sure ?',
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService.deleteProjectDetailsSection(_id).subscribe( () => {
+              this.proDetailsArray.forEach((value, index) => {
+                if (index === pointIndex) {
+                  this.proSectionArray.splice(index, 1);
+                }
+              });
+            });
+          }
+          this.subscriptionModal.unsubscribe();
+
+        });
+
+  }
+}

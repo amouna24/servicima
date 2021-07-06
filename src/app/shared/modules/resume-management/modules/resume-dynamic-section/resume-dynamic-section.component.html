@@ -24,7 +24,7 @@
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
-          <h4 class="steel font-size-18 font-small">Custom Sections</h4>
+          <h4 class="steel font-size-18 font-small">{{ 'resume-dynamic-section' | translate }}</h4>
         </div>
       </div>
       <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
@@ -33,11 +33,11 @@
             <div fxLayout="column" fxFlex="80" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
               <div fxLayout="row" fxFlexFill>
                 <div fxLayout="column" fxFlexFill fxLayoutGap="30px" style="justify-content: center">
-                  <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>No custom section available</span>
+                  <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>{{ 'resume-no-custom' | translate }}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="center">
                     <button mat-raised-button (click)="showCustomSection()" color="primary" class="btn-large  white">
-                      Add section
+                      {{ 'resume-add-section' | translate }}
                     </button>
                   </div>
                 </div>
@@ -56,14 +56,14 @@
                     <div class="example-box" *ngFor="let item of getSection let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
               <div  class="p-l-65">
                 <div fxLayout="row" fxLayoutGap="10px" class="bg-pale-grey border-radius-15 width-90">
-                  <div fxLayout="column" fxFlex="20" class="p-l-20">
+                  <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end"  fxFlex="70">
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.section_title,item.section_desc,item.section_code,pointIndex)">Edit</button>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.section_title,item.section_desc,item.section_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >Delete</button>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" >
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
@@ -76,22 +76,22 @@
                 <div fxLayout="column" fxFlex="80">
                   <div fxLayout="column">
                     <mat-label class="black font-size-12 required">
-                      Section title:
+                      {{ 'resume-section-title' | translate }}:
                     </mat-label>
                     <mat-form-field appearance="outline" class="full-width">
-                      <input formControlName="section_title" matInput placeholder="Section title" required>
+                      <input formControlName="section_title" matInput placeholder="{{ 'resume-section-title' | translate }}" required>
                       <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.required">
                         {{ 'general.required' | translate }}</mat-error>
                       <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.pattern">
-                        Numbers not allowed</mat-error>
+                        {{ 'resume-numbers' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
                   <div fxLayout="column">
                     <mat-label class="black font-size-12 required">
-                      Description:
+                      {{ 'resume-desc' | translate }}:
                     </mat-label>
                     <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="Description" rows="7"
+                              <textarea matInput placeholder="{{ 'resume-desc' | translate }}" rows="7"
                                         formControlName="section_desc" required></textarea>
                       <mat-error class="red" *ngIf="sendSection.controls.section_desc.errors?.required">
                         {{ 'general.required' | translate }}</mat-error>
@@ -99,7 +99,14 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="end end">
                     <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                         #add   (click)="createUpdateSection()" [disabled]="sendSection.invalid">{{button}}
+                         #add   (click)="createUpdateSection()" [disabled]="sendSection.invalid">
+                      <div *ngIf="button === 'Add';then addSection else save"></div>
+                      <ng-template #addSection>
+                        {{ 'resume-add' | translate }}
+                      </ng-template>
+                      <ng-template #save>
+                        {{ 'resume-save' | translate }}
+                      </ng-template>
                     </button>
                   </div>
                 </div>
@@ -111,13 +118,13 @@
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/language">
-            <span class="cool-grey">Previous</span>
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
                   [routerLink]="['/candidate/resume/done']">
-            Next
+            {{ 'resume-next' | translate }}
           </button>
         </div>
       </div>

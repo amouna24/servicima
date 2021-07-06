@@ -27,6 +27,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   certif_diploma_code = '';
   indexUpdate = 0;
   button = 'Add';
+  myDisabledDayFilter: any;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
   _id = '';
   subscriptionModal: Subscription;
@@ -45,11 +46,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDay();
+    const currentDay = new Date().getDate();
     this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay + 23 );
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay  );
     this.minStartDate = new Date(currentYear - 20, 0, 1);
-    this.maxStartDate = new Date(currentYear, currentMonth, currentDay + 23);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
     this.getCertifDiplomaInfo();
     this.createForm();
   }
@@ -57,6 +58,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    * @description Get all Certification and diploma Data from Resume Service
    *************************************************************************/
   getCertifDiplomaInfo() {
+    const disabledDates = [];
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
@@ -73,8 +75,16 @@ export class ResumeCertifDiplomaComponent implements OnInit {
                     this.certifDiplomaArray.forEach(
                       (func) => {
                         func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
+                        for (const date = new Date(func.start_date) ; date <= new Date(func.end_date) ; date.setDate(date.getDate() + 1)) {
+                          disabledDates.push(new Date(date));
+                        }
                       }
                     );
+                    console.log('disabled dates =', disabledDates);
+                    this.myDisabledDayFilter = (d: Date): boolean => {
+                      const time = d.getTime();
+                      return !disabledDates.find(x => x.getTime() === time);
+                    };
                   }
                 },
                 (error) => {
