@@ -37,7 +37,6 @@ import { ResumeThemeComponent } from './modules/resume-theme/resume-theme.compon
     FlexModule,
     MaterialModule,
     ScrollbarModule,
-    ScrollbarModule,
     SharedModule,
     ReactiveFormsModule,
   ],

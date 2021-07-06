@@ -41,7 +41,7 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsList: IResumeProjectDetailsModel[] = [];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
   theme = '';
-  years = 0
+  years = 0;
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
