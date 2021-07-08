@@ -10,19 +10,21 @@ import { ResumeDynamicSectionComponent } from '@shared/modules/resume-management
 import { ResumeFuncSkillComponent } from '@shared/modules/resume-management/modules/resume-functional-skills/resume-func-skill.component';
 import { ResumeCertifDiplomaComponent } from '@shared/modules/resume-management/modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from '@shared/modules/resume-management/modules/resume-done/resume-done.component';
+import { ResumeGuard } from '@core/guard/resume.guard';
 
 const routes: Routes = [
   { path: '', component: ResumeGeneralInformationComponent},
-  { path: '', loadChildren: () => import('../resume-management/modules/resume-professional-experiences/resume-pro-exp.module')
+  { path: '', canActivate: [ResumeGuard],
+    loadChildren: () => import('../resume-management/modules/resume-professional-experiences/resume-pro-exp.module')
       .then(m => m.ResumeProExpModule),
   },
-  { path: 'language', component: ResumeLanguageComponent},
-  { path: 'intervention', component: ResumeInterventionComponent},
-  { path: 'technicalSkills', component: ResumeTechSkillComponent},
-  { path: 'dynamicSection', component: ResumeDynamicSectionComponent},
-  { path: 'functionalSkills', component: ResumeFuncSkillComponent},
-  { path: 'certifDiploma', component: ResumeCertifDiplomaComponent},
-  { path: 'done', component: ResumeDoneComponent},
+  { path: 'language', canActivate: [ResumeGuard],  component: ResumeLanguageComponent},
+  { path: 'intervention', canActivate: [ResumeGuard], component: ResumeInterventionComponent},
+  { path: 'technicalSkills', canActivate: [ResumeGuard], component: ResumeTechSkillComponent},
+  { path: 'dynamicSection', canActivate: [ResumeGuard], component: ResumeDynamicSectionComponent},
+  { path: 'functionalSkills', canActivate: [ResumeGuard], component: ResumeFuncSkillComponent},
+  { path: 'certifDiploma', canActivate: [ResumeGuard], component: ResumeCertifDiplomaComponent},
+  { path: 'done', canActivate: [ResumeGuard], component: ResumeDoneComponent},
 
 ];
 
