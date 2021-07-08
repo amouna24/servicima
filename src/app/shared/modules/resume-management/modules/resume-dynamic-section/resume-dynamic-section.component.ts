@@ -37,6 +37,8 @@ export class ResumeDynamicSectionComponent implements OnInit {
   sectionUpdate: IResumeSectionModel;
   _id = '';
   subscriptionModal: Subscription;
+  currentSection: IResumeSectionModel;
+  previousSection: IResumeSectionModel;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -47,7 +49,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   /**************************************************************************
    * @description Function that change the index between selected Section using cdkDropListGroup
    *************************************************************************/
-  drop(event: CdkDragDrop<IResumeSectionModel[]>) {
+ async drop(event: CdkDragDrop<IResumeSectionModel[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -56,6 +58,31 @@ export class ResumeDynamicSectionComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
+/*  await  this.resumeService.getCustomSection(`?index=${event.previousIndex.toString()}`).subscribe(
+      (res) => {
+          this.previousSection = res[0];
+        this.previousSection.section_code = this.previousSection.ResumeSectionKey.section_code;
+        this.previousSection.resume_code = this.previousSection.ResumeSectionKey.resume_code;
+          this.previousSection.index = event.currentIndex.toString();
+        console.log('previous =', this.previousSection);
+        this.resumeService.updateCustomSection(this.previousSection).subscribe( () => {
+          console.log('previous updated');
+        });
+        this.resumeService.getCustomSection(`?index=${event.currentIndex.toString()}`).subscribe(
+          (resCurrent) => {
+            this.currentSection = resCurrent[0];
+            this.currentSection.section_code = this.currentSection.ResumeSectionKey.section_code;
+            this.currentSection.resume_code = this.currentSection.ResumeSectionKey.resume_code;
+            this.currentSection.index = event.previousIndex.toString();
+            console.log('current =', this.currentSection);
+            this.resumeService.updateCustomSection(this.currentSection).subscribe( () => {
+              console.log('current updated');
+            });
+
+          }
+        );
+      }
+    );*/
   }
   /**************************************************************************
    * @description Get Dynamic section Data from Resume Service
@@ -74,6 +101,8 @@ export class ResumeDynamicSectionComponent implements OnInit {
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
                   this.SectionArray = responseOne;
+                  this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
+                  console.log('section array count =',  this.arraySectionCount);
                   this.SectionArray.forEach(
                     (sec) => {
                       sec.section_code = sec.ResumeSectionKey.section_code;
@@ -127,8 +156,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.resumeService.addCustomSection(this.Section).subscribe(data => {
         this.getDynamicSectionInfo();
       });
-    }
-    this.arraySectionCount++; } else {
+    }} else {
       this.sectionUpdate = this.sendSection.value;
       this.sectionUpdate.section_code = this.section_code;
       this.sectionUpdate.index = this.indexUpdate.toString();

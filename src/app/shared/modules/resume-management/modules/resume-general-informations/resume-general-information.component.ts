@@ -125,10 +125,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
                 );
               }
               this.updateForm(generalInfo);
-            } else {
-
+              this.update = true;
             }
-            this.update = true;
           } else {
             this.userService.connectedUser$.subscribe((data) => {
               if (!!data) {
@@ -231,7 +229,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.generalInfo.image = filename;
     if (this.CreationForm.valid && !this.showNumberError) {
       this.resumeService.addResume(this.generalInfo).subscribe(data => {
-        this.router.navigate(['/candidate/resume/professionalExperience']);
+        this.router.navigate(['/candidate/resume/certifDiploma']);
       });
       } else {
     } } else {
@@ -243,7 +241,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
-        this.router.navigate(['/candidate/resume/professionalExperience']);
+        this.router.navigate(['/candidate/resume/certifDiploma']);
        }); }
     }
     this.showNumberError = false;

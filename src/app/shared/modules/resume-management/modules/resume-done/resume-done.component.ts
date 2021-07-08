@@ -42,6 +42,7 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
   theme = '';
   years = 0;
+  imageUrl = 'http://192.168.1.22:8067/image/';
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
@@ -208,18 +209,7 @@ export class ResumeDoneComponent implements OnInit {
    * @description Upload Image to Server  with async to promise
    *************************************************************************/
   async uploadFile(res) {
-    const file = res;
-    // File Preview
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-    formData.append('file', file);
-    formData.append('caption',  `${this.generalInfoList[0].init_name}.docx`);
-    return this.uploadService.uploadImage(formData)
-      .pipe(
-        map(response => response.file.filename)
-      )
-      .toPromise();
+    return await this.uploadService.getImage(res);
   }
   /**************************************************************************
    * @description Get Project Details Data from Resume Service
@@ -290,7 +280,7 @@ export class ResumeDoneComponent implements OnInit {
         name: this.generalInfoList[0].init_name,
         role: this.generalInfoList[0].actual_job,
         experience: this.generalInfoList[0].years_of_experience || 0,
-        imageUrl: '',
+        imageUrl: this.imageUrl + this.generalInfoList[0].image,
         diplomas: this.certifList,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -327,5 +317,9 @@ export class ResumeDoneComponent implements OnInit {
       if (result !== undefined) {
       this.getDocument('preview', result); }
     });
+  }
+
+  showImage() {
+    console.log('this.generalInfoList[0].image', this.generalInfoList[0].image);
   }
 }

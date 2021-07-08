@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 

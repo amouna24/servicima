@@ -22,6 +22,7 @@ export class ProjectSectionComponent implements OnInit {
   arrayProDetailsCount = 0;
   proDetailsArray: IResumeProjectDetailsModel[] = [];
   proSectionArray: IResumeProjectDetailsSectionModel[] = [];
+  proSectionAddArray: IResumeProjectDetailsSectionModel[] = [];
   ProDetails: IResumeProjectDetailsModel;
   ProSectionDetails: IResumeProjectDetailsSectionModel;
   sectionContentUpdate: IResumeProjectDetailsSectionModel;
@@ -42,7 +43,6 @@ export class ProjectSectionComponent implements OnInit {
   _id = '';
   indexUpdate = 0;
   button = 'Add';
-
   get getProjectSection() {
     return this.proDetailsArray;
   }
@@ -145,10 +145,8 @@ export class ProjectSectionComponent implements OnInit {
       project_details_section_code: this.ProSectionDetails.project_details_section_code
     };
     if (this.sendProSectionDetails.valid) {
-      this.resumeService.addProjectDetailsSection(this.ProSectionDetails).subscribe((res) => {
-        console.log('created', res);
-      });
       this.proSectionArray.push(this.ProSectionDetails);
+      this.proSectionAddArray.push(this.ProSectionDetails);
     } else {
       console.log('Form is not valid');
     }
@@ -157,7 +155,7 @@ export class ProjectSectionComponent implements OnInit {
 
   }
 
-  createProDetails() {
+  async createProDetails() {
     if (this.button === 'Add') {
       this.ProDetails = this.sendProDetails.value;
       this.ProDetails.project_details_code = this.project_details_code;
@@ -165,7 +163,7 @@ export class ProjectSectionComponent implements OnInit {
       if (this.sendProDetails.valid) {
         this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
         if (this.ProSectionDetails !== undefined) {
-          this.proSectionArray.forEach((sec) => {
+          this.proSectionAddArray.forEach((sec) => {
             this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
           });
         }
@@ -174,14 +172,22 @@ export class ProjectSectionComponent implements OnInit {
         console.log('Form is not valid');
       }
     } else if (this.button === 'Save') {
+      console.log('Add pro section', this.proSectionAddArray);
       this.proDetailUpdate = this.sendProDetails.value;
       this.proDetailUpdate.project_code = this.project_code;
       this.proDetailUpdate.project_details_code = this.project_details_code;
       this.proDetailUpdate._id = this._id;
-      this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(data => this.getProjectDetailsInfo());
+      await this.proSectionAddArray.forEach((sec) => {
+        this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
+      });
+      this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
+        console.log('detail updated', data);
+        this.getProjectDetailsInfo();
+      });
       this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
       this.button = 'Add';
     }
+    this.proSectionAddArray = [];
     this.arrayProDetailsCount++;
     this.showDesc = true;
     this.showSec = false;
@@ -317,13 +323,16 @@ export class ProjectSectionComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
+            if (_id !== undefined) {
             this.resumeService.deleteProjectDetailsSection(_id).subscribe( () => {
               this.proDetailsArray.forEach((value, index) => {
-                if (index === pointIndex) {
-                  this.proSectionArray.splice(index, 1);
-                }
+                console.log('index =', index, '/indexPoint=', pointIndex);
+                  this.proSectionArray.splice(pointIndex, 1);
               });
             });
+            } else {
+              this.proSectionArray.splice(pointIndex, 1);
+            }
           }
           this.subscriptionModal.unsubscribe();
 

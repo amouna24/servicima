@@ -56,7 +56,7 @@
     <button mat-raised-button type="submit" color="primary" class="white  btn-large" (click)="openThemeDialog()" [style]="{marginRight: '4%'}">
       {{ 'resume-preview' | translate }}
     </button>
-    <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="getDocument('save','')" [style]="{marginRight: '4%'}">
+    <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="showImage()" [style]="{marginRight: '4%'}">
       {{ 'resume-save' | translate }}
     </button>
     </div>
@@ -92,7 +92,7 @@
             <button mat-raised-button type="submit" color="primary" class="white  btn-large" (click)="openThemeDialog()"  [style]="{marginRight: '4%'}">
               {{ 'resume-preview' | translate }}
             </button>
-            <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="getDocument('save','')" [style]="{marginRight: '4%'}">
+            <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="showImage()" [style]="{marginRight: '4%'}">
               {{ 'resume-save' | translate }}
             </button>
           </div>
