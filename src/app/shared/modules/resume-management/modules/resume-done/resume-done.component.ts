@@ -293,19 +293,21 @@ export class ResumeDoneComponent implements OnInit {
         section: this.sectionList,
       }
     };
-    this.resumeService.getResumePdf(data, theme)
-      .subscribe(
-        async res => {
-          if (action === 'preview') {
-            saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-          } else if (action === 'save') {
-            const resumeName = await this.uploadFile(res);
+    this.resumeService.downloadImageCV(this.imageUrl + this.generalInfoList[0].image).subscribe( () => {
+      this.resumeService.getResumePdf(data, theme)
+        .subscribe(
+          async res => {
+            if (action === 'preview') {
+              saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
+            } else if (action === 'save') {
+              const resumeName = await this.uploadFile(res);
+            }
+          },
+          (error) => {
+            console.log(error);
           }
-    },
-      (error) => {
-        console.log(error);
-      }
-    );
+        );
+    });
   }
   openThemeDialog(): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
