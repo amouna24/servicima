@@ -454,16 +454,11 @@ export class ResumeService {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
     return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=resume&theme=${theme}`, filter,   { responseType: 'blob'});
-    /*----------------------------------------------------------------------------------------*/
   }
-  downloadImageCV(imageUrl: any): Observable<any> {
+  downloadImageCV(imageUrl: any) {
     console.log('image=', imageUrl);
-    const  Url = {
-      imageUrl,
-    };
-    console.log('url=', Url);
-    // @ts-ignore
+   // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/downloadImage/?imageUrl=${Url}`, { responseType: 'text'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/downloadImage/?imageUrl=${imageUrl}`, { responseType: 'text'});
   }
 }

@@ -141,7 +141,7 @@ export class ResumeTechSkillComponent implements OnInit {
     const confirmation = {
       code: 'delete',
       title: 'Delete This Technical Skill ?',
-      description: 'Are you sure ?',
+      description: 'resume-done',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
