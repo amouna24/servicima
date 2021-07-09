@@ -42,6 +42,12 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
   theme = '';
   years = 0;
+  company_name = '';
+  company_email = '';
+  company_logo = '';
+  phone = '';
+  dateNow = new Date().getFullYear().toString();
+  contact_email = '';
   imageUrl = 'http://192.168.1.22:8067/image/';
   constructor(
     private resumeService: ResumeService,
@@ -114,6 +120,18 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Resume Data from Resume Service
    *************************************************************************/
   getResumeInfo() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            console.log('info', userInfo);
+            this.company_name = userInfo['company'][0]['company_name'];
+            this.company_logo = userInfo['company'][0]['photo'];
+            this.company_email = userInfo['company'][0]['companyKey']['email_address'];
+            this.phone = userInfo['company'][0]['phone_nbr1'];
+            this.contact_email = userInfo['company'][0]['contact_email'];
+          }
+        });
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
@@ -184,26 +202,37 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Get Project Data from Resume Service
    *************************************************************************/
-  getProjectInfo() {
-    if (this.proExpList.length > 0) {
-    this.proExpList.forEach(
-      (proExpData) => {
-        this.resumeService.getProject(
-          `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
-        ).subscribe(
-          (responseProject) => {
-            if (responseProject['msg_code'] !== '0004') {
-                responseProject.forEach(
-                (responseProjectData) => {
-                  this.projectList.push(responseProjectData);
+   getProjectInfo() {
+     let projectFinalList = [];
+   const Pro = new Promise((resolve, reject) => {
+      if (this.proExpList.length > 0) {
+         this.proExpList.forEach(
+          (proExpData) => {
+            this.resumeService.getProject(
+              `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
+            ).subscribe(
+              (responseProject) => {
+                if (responseProject['msg_code'] !== '0004') {
+                  responseProject.forEach(
+                    (responseProjectData) => {
+                      this.projectList.push(responseProjectData);
+                    }
+                  );
+                  if (this.projectList.length === projectFinalList.length) {
+                    resolve(this.projectList);
+                  }
+                  projectFinalList = [];
+                  projectFinalList = this.projectList;
                 }
-              );
-              this.getProjectDetailsInfo();
-            }
-          });
+              });
+          }
+        );
       }
-    ); }
-  }
+    }).then( (data) => {
+     console.log('data project', data);
+      this.getProjectDetailsInfo();
+   });
+   }
 
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
@@ -215,9 +244,14 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Project Details Data from Resume Service
    *************************************************************************/
   getProjectDetailsInfo() {
+    let projectFinalList = [];
+    const ProDet = new Promise((resolve, reject) => {
+      console.log('call dhia');
     if (this.projectList.length > 0) {
+      console.log('project list =', this.projectList);
       this.projectList.forEach(
         (projectData) => {
+          console.log('project = ', projectData);
           this.resumeService.getProjectDetails(
             `?project_code=${projectData.ResumeProjectKey.project_code}`
           ).subscribe(
@@ -228,11 +262,17 @@ export class ResumeDoneComponent implements OnInit {
                     this.projectDetailsList.push(responseProjectDetailsData);
                   }
                 );
-              this.getProjectDetailsSectionInfo();
+                if (this.projectDetailsList.length === projectFinalList.length) {
+                  resolve(this.projectDetailsList);
+                }
+                projectFinalList = [];
+                projectFinalList = this.projectDetailsList;
             } });
         }
       );
-    }
+    } }).then( () => {
+this.getProjectDetailsSectionInfo();
+      });
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -280,8 +320,14 @@ export class ResumeDoneComponent implements OnInit {
         name: this.generalInfoList[0].init_name,
         role: this.generalInfoList[0].actual_job,
         experience: this.generalInfoList[0].years_of_experience || 0,
+        phoneNum: this.phone.toString(),
+        currentYear: this.dateNow,
         imageUrl: this.imageUrl + this.generalInfoList[0].image,
         diplomas: this.certifList,
+        company_name: this.company_name,
+        company_email: this.company_email,
+        company_logo: this.imageUrl +  this.company_logo,
+        contact_email: this.contact_email,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
         intervention: this.interventionList,
@@ -293,22 +339,8 @@ export class ResumeDoneComponent implements OnInit {
         section: this.sectionList,
       }
     };
-   await this.resumeService.downloadImageCV(this.imageUrl + this.generalInfoList[0].image).subscribe( (dataImage) => {
-      console.log(dataImage);
-    });
-    this.resumeService.getResumePdf(data, theme)
-      .subscribe(
-        async res => {
-          if (action === 'preview') {
-            saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-          } else if (action === 'save') {
-            const resumeName = await this.uploadFile(res);
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    console.log('data cv', data);
+    await this.downloadDocs(data, action, theme);
   }
   openThemeDialog(): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
@@ -321,8 +353,21 @@ export class ResumeDoneComponent implements OnInit {
       this.getDocument('preview', result); }
     });
   }
-
   showImage() {
-    console.log('this.generalInfoList[0].image', this.generalInfoList[0].image);
+    console.log('data', this.imageUrl + 'r_50' + this.company_logo);
+  }
+  downloadDocs(data, action, theme) {
+       this.resumeService.getResumePdf(data, theme, this.imageUrl + this.generalInfoList[0].image).subscribe(
+           async res => {
+             if (action === 'preview') {
+               saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
+             } else if (action === 'save') {
+               const resumeName = await this.uploadFile(res);
+             }
+           },
+           (error) => {
+             console.log(error);
+           }
+         );
   }
 }

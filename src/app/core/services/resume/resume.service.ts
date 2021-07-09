@@ -449,16 +449,11 @@ export class ResumeService {
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
 
-  getResumePdf(filter: any, theme: string): Observable<any> {
+  getResumePdf(filter: any, theme: string, imageUrl: any): Observable<any> {
     // tslint:disable-next-line:prefer-const
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=resume&theme=${theme}`, filter,   { responseType: 'blob'});
-  }
-  downloadImageCV(imageUrl: any) {
-    console.log('image=', imageUrl);
-   // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/downloadImage/?imageUrl=${imageUrl}`, { responseType: 'text'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=resume&theme=${theme}&imageUrl=${imageUrl}`, filter,   { responseType: 'blob'});
   }
 }
