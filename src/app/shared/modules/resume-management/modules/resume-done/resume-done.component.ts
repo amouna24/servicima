@@ -15,11 +15,11 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { DatePipe } from '@angular/common';
-import { saveAs } from 'file-saver';
 import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'wid-resume-done',
@@ -49,6 +49,7 @@ export class ResumeDoneComponent implements OnInit {
   dateNow = new Date().getFullYear().toString();
   contact_email = '';
   imageUrl = 'http://192.168.1.22:8067/image/';
+  loading: boolean;
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
@@ -300,6 +301,7 @@ this.getProjectDetailsSectionInfo();
    * @description Get Cv Document in Docx format and the user chose if he want to save it in dataBase or just check it
    *************************************************************************/
   async getDocument(action: string, theme: string) {
+    this.loading = true;
     if ( this.certifList.length > 0) {
     this.certifList.forEach((cert) => {
       cert.start_date = this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');
@@ -326,7 +328,7 @@ this.getProjectDetailsSectionInfo();
         diplomas: this.certifList,
         company_name: this.company_name,
         company_email: this.company_email,
-        company_logo: this.imageUrl +  this.company_logo,
+        company_logo: 'http://192.168.1.22:8067/image/811dfeeadd68159412e17ef7315b5b29.png',
         contact_email: this.contact_email,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -342,7 +344,7 @@ this.getProjectDetailsSectionInfo();
     console.log('data cv', data);
     await this.downloadDocs(data, action, theme);
   }
-  openThemeDialog(): void {
+  openThemeDialog(action): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
       width: '800px',
       height: '200px',
@@ -350,18 +352,22 @@ this.getProjectDetailsSectionInfo();
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-      this.getDocument('preview', result); }
+      this.getDocument(action, result); }
     });
   }
   showImage() {
     console.log('data', this.imageUrl + 'r_50' + this.company_logo);
   }
   downloadDocs(data, action, theme) {
-       this.resumeService.getResumePdf(data, theme, this.imageUrl + this.generalInfoList[0].image).subscribe(
+       this.resumeService.getResumePdf(data, theme, action).subscribe(
            async res => {
              if (action === 'preview') {
+               console.log('res', res);
+              const fileURL = URL.createObjectURL(res);
+               const openPdf = window.open(fileURL, '_blank');
+              this.loading = false;
+             } else if (action === 'generate') {
                saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-             } else if (action === 'save') {
                const resumeName = await this.uploadFile(res);
              }
            },

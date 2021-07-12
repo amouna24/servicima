@@ -56,7 +56,6 @@ export class ProExpProjectsComponent implements OnInit {
     private modalServices: ModalService,
   ) { }
   getProjectInfo() {
-    const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
       `?professional_experience_code=${this.professional_experience_code}`)
@@ -67,18 +66,7 @@ export class ProExpProjectsComponent implements OnInit {
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;
-              this.ProjectArray.forEach(
-                (project) => {
-                  project.project_code = project.ResumeProjectKey.project_code;
-                  for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
-                    disabledDates.push(new Date(date));
-                  }
-                });
-              console.log('disabled dates =', disabledDates);
-              this.myDisabledDayFilter = (d: Date): boolean => {
-                const time = d.getTime();
-                return !disabledDates.find(x => x.getTime() === time);
-              };
+              this.filterDate();
             }
           } },
         (error) => {
@@ -91,13 +79,7 @@ export class ProExpProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.getProjectInfo();
     this.createForm();
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDate();
-    this.minEndDate = this.start_date_pro_exp;
-    this.maxEndDate =  this.end_date_pro_exp;
-    this.minStartDate = this.start_date_pro_exp;
-    this.maxStartDate = this.end_date_pro_exp;
+this.initDates();
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -106,7 +88,7 @@ export class ProExpProjectsComponent implements OnInit {
     this.sendProject = this.fb.group({
       project_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       start_date: ['', Validators.required],
-      end_date: ['', Validators.required],
+      end_date: [''],
     });
   }
 
@@ -136,14 +118,16 @@ export class ProExpProjectsComponent implements OnInit {
       this.button = 'Add';
         this.showForm = false; }
     }
-    this.sendProject.reset();
-    this.showNumberError = false ;
+    this.filterDate();
+    this.initDates();
+    this.getProjectInfo();
   }
   onShowForm() {
     this.showForm = true;
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
+    let projectEditArray = [];
        this.sendProject.patchValue({
       project_title,
       start_date,
@@ -154,6 +138,21 @@ export class ProExpProjectsComponent implements OnInit {
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     this.showForm = true;
+    projectEditArray = [...this.ProjectArray];
+    projectEditArray.splice(pointIndex, 1);
+    const disabledDates = [];
+    projectEditArray.forEach(
+      (project) => {
+        project.project_code = project.ResumeProjectKey.project_code;
+        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+          disabledDates.push(new Date(date));
+        }
+      });
+    console.log('disabled dates =', disabledDates);
+    this.myDisabledDayFilter = (d: Date): boolean => {
+      const time = d.getTime();
+      return !disabledDates.find(x => x.getTime() === time);
+    };
   }
 
   deleteProject(_id: string, pointIndex: number, project_code: string) {
@@ -192,14 +191,16 @@ export class ProExpProjectsComponent implements OnInit {
                           },
                         );
                     });
-
                   }
                   this.ProjectArray.forEach((value, index) => {
                     if (index === pointIndex) {
                       this.ProjectArray.splice(index, 1);
                     }
                   });
+                  this.filterDate();
+                  this.createForm();
                 });
+
           }
           this.subscriptionModal.unsubscribe();
         });
@@ -209,5 +210,27 @@ export class ProExpProjectsComponent implements OnInit {
   }
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
+  }
+  filterDate() {
+    const disabledDates = [];
+    this.ProjectArray.forEach(
+      (project) => {
+        console.log('project=', project);
+        project.project_code = project.ResumeProjectKey.project_code;
+        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+          disabledDates.push(new Date(date));
+        }
+      });
+    console.log('disabled dates =', disabledDates);
+    this.myDisabledDayFilter = (d: Date): boolean => {
+      const time = d.getTime();
+      return !disabledDates.find(x => x.getTime() === time);
+    };
+  }
+  initDates() {
+    this.minEndDate = this.start_date_pro_exp;
+    this.maxEndDate =  this.end_date_pro_exp;
+    this.minStartDate = this.start_date_pro_exp;
+    this.maxStartDate = this.end_date_pro_exp;
   }
 }
