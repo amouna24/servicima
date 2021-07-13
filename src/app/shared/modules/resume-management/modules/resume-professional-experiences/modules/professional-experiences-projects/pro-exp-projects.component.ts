@@ -74,11 +74,11 @@ export class ProExpProjectsComponent implements OnInit {
                     disabledDates.push(new Date(date));
                   }
                 });
-              console.log('disabled dates =', disabledDates);
               this.myDisabledDayFilter = (d: Date): boolean => {
                 const time = d.getTime();
                 return !disabledDates.find(x => x.getTime() === time);
               };
+              this.filterDate();
             }
           } },
         (error) => {
@@ -91,13 +91,8 @@ export class ProExpProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.getProjectInfo();
     this.createForm();
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDate();
-    this.minEndDate = this.start_date_pro_exp;
-    this.maxEndDate =  this.end_date_pro_exp;
-    this.minStartDate = this.start_date_pro_exp;
-    this.maxStartDate = this.end_date_pro_exp;
+    this.initDates();
+
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -136,24 +131,42 @@ export class ProExpProjectsComponent implements OnInit {
       this.button = 'Add';
         this.showForm = false; }
     }
-    this.sendProject.reset();
-    this.showNumberError = false ;
+this.createForm();
+this.initDates();
+this.filterDate();
+this.showNumberError = false ;
   }
   onShowForm() {
     this.showForm = true;
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
-       this.sendProject.patchValue({
+    let projectEditArray: any[];
+    const disabledDates = [];
+    this.sendProject.patchValue({
       project_title,
       start_date,
       end_date,
     });
+    this.myDisabledDayFilter = null;
     this.project_code = project_code;
     this._id = _id.toString();
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     this.showForm = true;
+    projectEditArray = [...this.ProjectArray];
+    projectEditArray.splice(pointIndex, 1);
+    projectEditArray.forEach(
+      (project) => {
+        project.project_code = project.ResumeProjectKey.project_code;
+        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+          disabledDates.push(new Date(date));
+        }
+      });
+    this.myDisabledDayFilter = (d: Date): boolean => {
+      const time = d.getTime();
+      return !disabledDates.find(x => x.getTime() === time);
+    };
   }
 
   deleteProject(_id: string, pointIndex: number, project_code: string) {
@@ -199,6 +212,8 @@ export class ProExpProjectsComponent implements OnInit {
                       this.ProjectArray.splice(index, 1);
                     }
                   });
+                  this.filterDate();
+                  this.createForm();
                 });
           }
           this.subscriptionModal.unsubscribe();
@@ -209,5 +224,24 @@ export class ProExpProjectsComponent implements OnInit {
   }
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
+  }
+  filterDate() {
+    const disabledDates = [];
+    this.ProjectArray.forEach(
+      (project) => {
+        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+          disabledDates.push(new Date(date));
+        }
+      });
+    this.myDisabledDayFilter = (d: Date): boolean => {
+      const time = d.getTime();
+      return !disabledDates.find(x => x.getTime() === time);
+    };
+  }
+  initDates() {
+    this.minEndDate = this.start_date_pro_exp;
+    this.maxEndDate =  this.end_date_pro_exp;
+    this.minStartDate = this.start_date_pro_exp;
+    this.maxStartDate = this.end_date_pro_exp;
   }
 }

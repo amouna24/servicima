@@ -54,20 +54,13 @@ export class ProExpComponent implements OnInit {
    *************************************************************************/
   ngOnInit(): void {
     this.getProExpInfo();
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDate();
-    this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
-    this.minStartDate = new Date(currentYear - 20, 0, 1);
-    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
+    this.initDates();
     this.createForm();
   }
   /**************************************************************************
    * @description Get Professional Data from Resume Service
    *************************************************************************/
   getProExpInfo() {
-    const disabledDates = [];
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
@@ -82,21 +75,7 @@ export class ProExpComponent implements OnInit {
                 if (responseProExp['msg_code'] !== '0004') {
                   // data found
                   this.proExpArray = responseProExp;
-                  this.proExpArray.forEach(
-                    (exp) => {
-                      exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
-                      exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
-                      exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
-                      for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
-                        disabledDates.push(new Date(date));
-                      }
-                    }
-                  );
-                  console.log('disabled dates =', disabledDates);
-                  this.myDisabledDayFilter = (d: Date): boolean => {
-                    const time = d.getTime();
-                    return !disabledDates.find(x => x.getTime() === time);
-                  };
+                  this.filterDate();
                 }
               },
               (error) => {
@@ -146,14 +125,7 @@ export class ProExpComponent implements OnInit {
     this.ProExp = this.sendProExp.value;
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-      if (this.sendProExp.valid && this.showDateError === false ) {
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
-      this.getProExpInfo();
-    } else {
-      this.showDateError = false;
-      this.showPosError = false;
-
-    }
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.start_date = this.startDateUpdate;
@@ -161,15 +133,18 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
       this.proExpUpdate._id = this._id;
-      console.log('pro exp = ', this.proExpUpdate);
       if (this.sendProExp.valid && this.showDateError === false ) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
       this.button = 'Add';
+        this.sendProExp.controls.start_date.enable();
+        this.sendProExp.controls.end_date.enable();
       this.disableDate = false;
       }
     }
-    this.sendProExp.reset();
+    this.createForm();
+    this.initDates();
+    this.getProExpInfo();
   }
   // tslint:disable-next-line:max-line-length
   editForm(_id: string, professional_experience_code: string, start_date: string, end_date: string, position: string, customer: string, index: number) {
@@ -179,12 +154,10 @@ export class ProExpComponent implements OnInit {
       position,
       customer,
     });
-    console.log('proExp', this.sendProExp.value);
     this.startDateUpdate = this.sendProExp.controls.start_date.value;
     this.endDAteUpdate = this.sendProExp.controls.end_date.value;
     this.sendProExp.controls.start_date.disable();
  this.sendProExp.controls.end_date.disable();
-    console.log('proExp', this.sendProExp.value);
 
     this._id = _id;
     this.button = 'Save';
@@ -242,6 +215,7 @@ export class ProExpComponent implements OnInit {
                       this.proExpArray.splice(index, 1);
                     }
                   });
+                  this.filterDate();
                   this.button = 'Add';
                 });
 
@@ -254,5 +228,31 @@ export class ProExpComponent implements OnInit {
   }
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
+  }
+  filterDate() {
+    const disabledDates = [];
+    this.proExpArray.forEach(
+      (exp) => {
+        exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
+        exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
+        exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
+        for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
+          disabledDates.push(new Date(date));
+        }
+      }
+    );
+    this.myDisabledDayFilter = (d: Date): boolean => {
+      const time = d.getTime();
+      return !disabledDates.find(x => x.getTime() === time);
+    };
+  }
+  initDates() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const currentDay = new Date().getDate();
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
 }

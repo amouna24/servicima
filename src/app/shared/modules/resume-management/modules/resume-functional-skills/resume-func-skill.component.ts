@@ -39,7 +39,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.getFuncSkillsInfo();
     this.createForm();
     }
-  makeSureBeforeYouLeave() {
+/*  makeSureBeforeYouLeave() {
     const confirmation = {
       code: 'delete',
       title: 'Leave',
@@ -56,7 +56,7 @@ export class ResumeFuncSkillComponent implements OnInit {
           this.subscriptionModal.unsubscribe();
         }
       );
-  }
+  }*/
   /**************************************************************************
    * @description Get Functional skills data from Resume Service
    *************************************************************************/

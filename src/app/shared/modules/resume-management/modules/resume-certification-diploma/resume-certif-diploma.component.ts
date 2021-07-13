@@ -75,16 +75,8 @@ export class ResumeCertifDiplomaComponent implements OnInit {
                     this.certifDiplomaArray.forEach(
                       (func) => {
                         func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
-                        for (const date = new Date(func.start_date) ; date <= new Date(func.end_date) ; date.setDate(date.getDate() + 1)) {
-                          disabledDates.push(new Date(date));
-                        }
                       }
                     );
-                    console.log('disabled dates =', disabledDates);
-                    this.myDisabledDayFilter = (d: Date): boolean => {
-                      const time = d.getTime();
-                      return !disabledDates.find(x => x.getTime() === time);
-                    };
                   }
                 },
                 (error) => {

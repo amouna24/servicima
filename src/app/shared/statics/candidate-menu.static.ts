@@ -46,13 +46,6 @@ export const candidateMenu: IMenu[] = [
         type: 'link',
       },
       {
-        state: 'professionalExperience',
-        name: 'Professional experience',
-        icon: 'wi_res_professional_experience',
-        feature: 'CONTRACT_ACCESS',
-        type: 'link',
-      },
-      {
         state: 'certifDiploma',
         name: 'Certifications and Diploma',
         icon: 'wi_res_certif',
@@ -81,9 +74,9 @@ export const candidateMenu: IMenu[] = [
         type: 'link',
       },
       {
-        state: 'language',
-        name: 'Language ',
-        icon: 'wi_res_language',
+        state: 'professionalExperience',
+        name: 'Professional experience',
+        icon: 'wi_res_professional_experience',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
@@ -94,7 +87,13 @@ export const candidateMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
-
+      {
+        state: 'language',
+        name: 'Language ',
+        icon: 'wi_res_language',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
       {
         state: 'done',
         name: 'Preview',

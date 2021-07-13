@@ -80,7 +80,7 @@
                           {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate"  #date1
                                  formControlName="start_date" placeholder="{{ 'resume-start-date' | translate }}" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
@@ -93,7 +93,7 @@
                           {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" [matDatepickerFilter]="myDisabledDayFilter" #date2
+                          <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate"  #date2
                                  formControlName="end_date" placeholder="{{ 'resume-end-date' | translate }}" (dateChange)="onChangeEndDate(date2.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                           <mat-datepicker #datepickerend color="primary"></mat-datepicker>
@@ -130,7 +130,7 @@
       </div>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/professionalExperience">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
