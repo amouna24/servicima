@@ -63,7 +63,6 @@ export class ProjectSectionComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('project code=', this.project_code);
     this.getConnectedUser();
     this.getProjectDetailsInfo();
     this.createFormProDetails();
@@ -172,7 +171,6 @@ export class ProjectSectionComponent implements OnInit {
         console.log('Form is not valid');
       }
     } else if (this.button === 'Save') {
-      console.log('Add pro section', this.proSectionAddArray);
       this.proDetailUpdate = this.sendProDetails.value;
       this.proDetailUpdate.project_code = this.project_code;
       this.proDetailUpdate.project_details_code = this.project_details_code;
@@ -181,7 +179,6 @@ export class ProjectSectionComponent implements OnInit {
         this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
       });
       this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
-        console.log('detail updated', data);
         this.getProjectDetailsInfo();
       });
       this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
@@ -224,7 +221,6 @@ export class ProjectSectionComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response['msg_code'] !== '0004') {
-              console.log(response, 'response');
               this.proSectionArray = response;
             }
           },
@@ -302,7 +298,6 @@ export class ProjectSectionComponent implements OnInit {
       project_details_section_code
     };
     this.proSectionArray[pointIndex].project_details_section_desc = value;
-    console.log(this.sectionContentUpdate);
     if (value !== '') {
      this.resumeService.updateProjectDetailsSection(this.sectionContentUpdate).subscribe((res) => {
         console.log('section details updated');
@@ -326,7 +321,6 @@ export class ProjectSectionComponent implements OnInit {
             if (_id !== undefined) {
             this.resumeService.deleteProjectDetailsSection(_id).subscribe( () => {
               this.proDetailsArray.forEach((value, index) => {
-                console.log('index =', index, '/indexPoint=', pointIndex);
                   this.proSectionArray.splice(pointIndex, 1);
               });
             });

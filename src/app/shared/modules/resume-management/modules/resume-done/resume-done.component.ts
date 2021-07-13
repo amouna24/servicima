@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../../../environments/environment';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { forkJoin, ObservedValuesFromArray } from 'rxjs';
@@ -40,15 +41,15 @@ export class ResumeDoneComponent implements OnInit {
   projectList: IResumeProjectModel[] = [];
   projectDetailsList: IResumeProjectDetailsModel[] = [];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
-  theme = '';
+  theme: string;
   years = 0;
-  company_name = '';
-  company_email = '';
-  company_logo = '';
-  phone = '';
+  company_name: string;
+  company_email: string;
+  company_logo: string;
+  phone: string;
   dateNow = new Date().getFullYear().toString();
-  contact_email = '';
-  imageUrl = 'http://192.168.1.22:8067/image/';
+  contact_email: string;
+  imageUrl =  `${environment.uploadFileApiUrl}/image/`;
   loading: boolean;
   constructor(
     private resumeService: ResumeService,
@@ -79,13 +80,10 @@ export class ResumeDoneComponent implements OnInit {
                 (responseProExp) => {
                   if (responseProExp['msg_code'] !== '0004') {
                     responseProExp.forEach((proExp) => {
-                      console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
                       const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
                         new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                      console.log('difference=', difference);
                       this.years = difference + this.years;
                     });
-                    console.log('years auto = ', this.years);
 
   }});
           }});
@@ -125,7 +123,6 @@ export class ResumeDoneComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            console.log('info', userInfo);
             this.company_name = userInfo['company'][0]['company_name'];
             this.company_logo = userInfo['company'][0]['photo'];
             this.company_email = userInfo['company'][0]['companyKey']['email_address'];
@@ -168,11 +165,9 @@ export class ResumeDoneComponent implements OnInit {
               if (data[0].length > 0) {
                 if (data[0][0]['years_of_experience'] === null) {
                   data[0][0]['years_of_experience'] = this.years;
-                  console.log('ylaaah', data[0][0]['years_of_experience']);
                 }
                 // @ts-ignore
               this.generalInfoList = data[0];
-                console.log(data[0][0]);
               }
               if (data[1].length > 0) {
                 // @ts-ignore
@@ -230,7 +225,6 @@ export class ResumeDoneComponent implements OnInit {
         );
       }
     }).then( (data) => {
-     console.log('data project', data);
       this.getProjectDetailsInfo();
    });
    }
@@ -247,12 +241,9 @@ export class ResumeDoneComponent implements OnInit {
   getProjectDetailsInfo() {
     let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
-      console.log('call dhia');
     if (this.projectList.length > 0) {
-      console.log('project list =', this.projectList);
       this.projectList.forEach(
         (projectData) => {
-          console.log('project = ', projectData);
           this.resumeService.getProjectDetails(
             `?project_code=${projectData.ResumeProjectKey.project_code}`
           ).subscribe(
@@ -328,7 +319,7 @@ this.getProjectDetailsSectionInfo();
         diplomas: this.certifList,
         company_name: this.company_name,
         company_email: this.company_email,
-        company_logo: 'http://192.168.1.22:8067/image/811dfeeadd68159412e17ef7315b5b29.png',
+        company_logo: this.imageUrl +  this.company_logo,
         contact_email: this.contact_email,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -341,7 +332,6 @@ this.getProjectDetailsSectionInfo();
         section: this.sectionList,
       }
     };
-    console.log('data cv', data);
     await this.downloadDocs(data, action, theme);
   }
   openThemeDialog(action): void {
@@ -355,14 +345,10 @@ this.getProjectDetailsSectionInfo();
       this.getDocument(action, result); }
     });
   }
-  showImage() {
-    console.log('data', this.imageUrl + 'r_50' + this.company_logo);
-  }
   downloadDocs(data, action, theme) {
        this.resumeService.getResumePdf(data, theme, action).subscribe(
            async res => {
              if (action === 'preview') {
-               console.log('res', res);
               const fileURL = URL.createObjectURL(res);
                const openPdf = window.open(fileURL, '_blank');
               this.loading = false;

@@ -70,12 +70,10 @@ export class ProExpProjectsComponent implements OnInit {
               this.ProjectArray.forEach(
                 (project) => {
                   project.project_code = project.ResumeProjectKey.project_code;
-                  console.log('project=', project);
                   for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
                     disabledDates.push(new Date(date));
                   }
                 });
-              console.log('disabled dates =', disabledDates);
               this.myDisabledDayFilter = (d: Date): boolean => {
                 const time = d.getTime();
                 return !disabledDates.find(x => x.getTime() === time);
@@ -160,11 +158,11 @@ this.showNumberError = false ;
     projectEditArray.splice(pointIndex, 1);
     projectEditArray.forEach(
       (project) => {
+        project.project_code = project.ResumeProjectKey.project_code;
         for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
       });
-    console.log('disabled dates =', disabledDates);
     this.myDisabledDayFilter = (d: Date): boolean => {
       const time = d.getTime();
       return !disabledDates.find(x => x.getTime() === time);
@@ -231,12 +229,10 @@ this.showNumberError = false ;
     const disabledDates = [];
     this.ProjectArray.forEach(
       (project) => {
-        console.log('project=', project);
         for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
       });
-    console.log('disabled dates =', disabledDates);
     this.myDisabledDayFilter = (d: Date): boolean => {
       const time = d.getTime();
       return !disabledDates.find(x => x.getTime() === time);

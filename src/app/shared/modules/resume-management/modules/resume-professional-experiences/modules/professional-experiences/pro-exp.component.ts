@@ -133,7 +133,6 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate.professional_experience_code = this.professional_experience_code;
       this.proExpUpdate.resume_code = this.resume_code;
       this.proExpUpdate._id = this._id;
-      console.log('pro exp = ', this.proExpUpdate);
       if (this.sendProExp.valid && this.showDateError === false ) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
       this.proExpArray[this.indexUpdate] = this.proExpUpdate;
@@ -155,12 +154,10 @@ export class ProExpComponent implements OnInit {
       position,
       customer,
     });
-    console.log('proExp', this.sendProExp.value);
     this.startDateUpdate = this.sendProExp.controls.start_date.value;
     this.endDAteUpdate = this.sendProExp.controls.end_date.value;
     this.sendProExp.controls.start_date.disable();
  this.sendProExp.controls.end_date.disable();
-    console.log('proExp', this.sendProExp.value);
 
     this._id = _id;
     this.button = 'Save';
@@ -244,7 +241,6 @@ export class ProExpComponent implements OnInit {
         }
       }
     );
-    console.log('disabled dates =', disabledDates);
     this.myDisabledDayFilter = (d: Date): boolean => {
       const time = d.getTime();
       return !disabledDates.find(x => x.getTime() === time);
