@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../../../environments/environment';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
-import { forkJoin, ObservedValuesFromArray } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { saveAs } from 'file-saver';
+
 import { IResumeModel } from '@shared/models/resume.model';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
@@ -10,17 +13,16 @@ import { IResumeInterventionModel } from '@shared/models/resumeIntervention.mode
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
-
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
-import { DatePipe } from '@angular/common';
+
 import { UploadService } from '@core/services/upload/upload.service';
-import { map } from 'rxjs/internal/operators/map';
+
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
-import { MatDialog } from '@angular/material/dialog';
-import { saveAs } from 'file-saver';
+
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-resume-done',
