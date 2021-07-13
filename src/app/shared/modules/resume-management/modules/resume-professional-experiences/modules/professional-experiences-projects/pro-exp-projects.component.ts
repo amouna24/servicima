@@ -56,6 +56,7 @@ export class ProExpProjectsComponent implements OnInit {
     private modalServices: ModalService,
   ) { }
   getProjectInfo() {
+    const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
       `?professional_experience_code=${this.professional_experience_code}`)
@@ -66,6 +67,19 @@ export class ProExpProjectsComponent implements OnInit {
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;
+              this.ProjectArray.forEach(
+                (project) => {
+                  project.project_code = project.ResumeProjectKey.project_code;
+                  console.log('project=', project);
+                  for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+                    disabledDates.push(new Date(date));
+                  }
+                });
+              console.log('disabled dates =', disabledDates);
+              this.myDisabledDayFilter = (d: Date): boolean => {
+                const time = d.getTime();
+                return !disabledDates.find(x => x.getTime() === time);
+              };
               this.filterDate();
             }
           } },
@@ -79,7 +93,8 @@ export class ProExpProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.getProjectInfo();
     this.createForm();
-this.initDates();
+    this.initDates();
+
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -88,7 +103,7 @@ this.initDates();
     this.sendProject = this.fb.group({
       project_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       start_date: ['', Validators.required],
-      end_date: [''],
+      end_date: ['', Validators.required],
     });
   }
 
@@ -118,21 +133,24 @@ this.initDates();
       this.button = 'Add';
         this.showForm = false; }
     }
-    this.filterDate();
-    this.initDates();
-    this.getProjectInfo();
+this.createForm();
+this.initDates();
+this.filterDate();
+this.showNumberError = false ;
   }
   onShowForm() {
     this.showForm = true;
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
-    let projectEditArray = [];
-       this.sendProject.patchValue({
+    let projectEditArray: any[];
+    const disabledDates = [];
+    this.sendProject.patchValue({
       project_title,
       start_date,
       end_date,
     });
+    this.myDisabledDayFilter = null;
     this.project_code = project_code;
     this._id = _id.toString();
     this.indexUpdate = pointIndex;
@@ -140,10 +158,8 @@ this.initDates();
     this.showForm = true;
     projectEditArray = [...this.ProjectArray];
     projectEditArray.splice(pointIndex, 1);
-    const disabledDates = [];
     projectEditArray.forEach(
       (project) => {
-        project.project_code = project.ResumeProjectKey.project_code;
         for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
@@ -191,6 +207,7 @@ this.initDates();
                           },
                         );
                     });
+
                   }
                   this.ProjectArray.forEach((value, index) => {
                     if (index === pointIndex) {
@@ -200,7 +217,6 @@ this.initDates();
                   this.filterDate();
                   this.createForm();
                 });
-
           }
           this.subscriptionModal.unsubscribe();
         });
@@ -216,7 +232,6 @@ this.initDates();
     this.ProjectArray.forEach(
       (project) => {
         console.log('project=', project);
-        project.project_code = project.ResumeProjectKey.project_code;
         for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
