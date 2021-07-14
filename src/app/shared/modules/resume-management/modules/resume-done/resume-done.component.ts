@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../../../environments/environment';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { forkJoin, ObservedValuesFromArray } from 'rxjs';
@@ -21,6 +20,8 @@ import { map } from 'rxjs/internal/operators/map';
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-resume-done',

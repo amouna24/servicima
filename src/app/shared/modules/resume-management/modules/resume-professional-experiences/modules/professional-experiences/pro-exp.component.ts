@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
@@ -123,8 +124,12 @@ export class ProExpComponent implements OnInit {
   createUpdateProExp(dateStart, dateEnd) {
     if (this.button === 'Add') {
     this.ProExp = this.sendProExp.value;
+    if (!this.sendProExp.controls.end_date.value) {
+      this.ProExp.end_date = 'Current Date';
+    }
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
+      console.log('Pro exp', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;
@@ -233,6 +238,10 @@ export class ProExpComponent implements OnInit {
     const disabledDates = [];
     this.proExpArray.forEach(
       (exp) => {
+        if (exp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
+          exp.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+        }
+        console.log('end date=', exp.ResumeProfessionalExperienceKey.end_date);
         exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
         exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
         exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
@@ -254,5 +263,16 @@ export class ProExpComponent implements OnInit {
     this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
+  }
+
+  checkCurrentDate(event: MatCheckboxChange) {
+    console.log('event', event);
+    if (event.checked) {
+    this.sendProExp.controls.end_date.disable();
+    } else {
+      this.sendProExp.controls.end_date.enable();
+      this.sendProExp.controls.end_date.setValue('');
+    }
+    console.log('send pro exp', this.sendProExp);
   }
 }
