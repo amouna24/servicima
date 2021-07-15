@@ -39,6 +39,8 @@ export class ProExpComponent implements OnInit {
   minEndDate: Date;
   maxEndDate: Date;
   showDateError = false;
+  disableCheckBox = false;
+  checkedBox = false;
   button = 'Add';
   proExpUpdate: IResumeProfessionalExperienceModel;
   indexUpdate = 0;
@@ -240,13 +242,23 @@ export class ProExpComponent implements OnInit {
       (exp) => {
         if (exp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
           exp.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+          console.log('end current date', exp.ResumeProfessionalExperienceKey.end_date);
         }
-        console.log('end date=', exp.ResumeProfessionalExperienceKey.end_date);
         exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
         exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
         exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
         for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
+        }
+        console.log(exp.ResumeProfessionalExperienceKey.end_date);
+        // tslint:disable-next-line:max-line-length
+        if (this.datepipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datepipe.transform(new Date(), 'yyyy-MM-dd')) {
+          this.checkedBox = true;
+          this.disableCheckBox = true;
+          this.sendProExp.controls.end_date.enable();
+        } else {
+          this.disableCheckBox = false;
+          this.checkedBox = false;
         }
       }
     );

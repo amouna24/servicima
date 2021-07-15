@@ -301,8 +301,11 @@ this.getProjectDetailsSectionInfo();
     }); }
     if ( this.proExpList.length > 0) {
       this.proExpList.forEach((pro) => {
-      pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
-      pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+      if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
+          pro.ResumeProfessionalExperienceKey.end_date = new Date().toString();
+        }
+        pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
+        pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
     }); }
     if ( this.projectList.length > 0) {
     this.projectList.forEach((proj) => {
