@@ -131,7 +131,6 @@ export class ProExpComponent implements OnInit {
     }
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-      console.log('Pro exp', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;
@@ -242,7 +241,6 @@ export class ProExpComponent implements OnInit {
       (exp) => {
         if (exp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
           exp.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
-          console.log('end current date', exp.ResumeProfessionalExperienceKey.end_date);
         }
         exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
         exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
@@ -250,7 +248,6 @@ export class ProExpComponent implements OnInit {
         for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
-        console.log(exp.ResumeProfessionalExperienceKey.end_date);
         // tslint:disable-next-line:max-line-length
         if (this.datepipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datepipe.transform(new Date(), 'yyyy-MM-dd')) {
           this.checkedBox = true;
@@ -278,13 +275,11 @@ export class ProExpComponent implements OnInit {
   }
 
   checkCurrentDate(event: MatCheckboxChange) {
-    console.log('event', event);
     if (event.checked) {
     this.sendProExp.controls.end_date.disable();
     } else {
       this.sendProExp.controls.end_date.enable();
       this.sendProExp.controls.end_date.setValue('');
     }
-    console.log('send pro exp', this.sendProExp);
   }
 }
