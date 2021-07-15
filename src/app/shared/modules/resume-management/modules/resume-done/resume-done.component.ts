@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../../../environments/environment';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { forkJoin, ObservedValuesFromArray } from 'rxjs';
@@ -21,6 +20,8 @@ import { map } from 'rxjs/internal/operators/map';
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-resume-done',
@@ -300,8 +301,11 @@ this.getProjectDetailsSectionInfo();
     }); }
     if ( this.proExpList.length > 0) {
       this.proExpList.forEach((pro) => {
-      pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
-      pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+      if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
+          pro.ResumeProfessionalExperienceKey.end_date = new Date().toString();
+        }
+        pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
+        pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
     }); }
     if ( this.projectList.length > 0) {
     this.projectList.forEach((proj) => {
