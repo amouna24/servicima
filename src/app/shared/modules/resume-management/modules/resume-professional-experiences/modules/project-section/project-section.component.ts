@@ -258,10 +258,11 @@ export class ProjectSectionComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteProjectDetails(_id).subscribe((pro) => {
-                this.resumeService.getProjectDetailsSection(`?project_code=${project_details_code}`).subscribe((resp) => {
+                this.resumeService.getProjectDetailsSection(`?project_details_code=${pro.project_details_code}`).subscribe((resp) => {
                   if (resp.length !== undefined) {
                     resp.forEach(sec => {
                       this.resumeService.deleteProjectDetailsSection(sec._id).subscribe(secc => {
+                        console.log('section deleted', secc);
                       });
                     });
                   }
