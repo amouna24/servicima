@@ -366,9 +366,9 @@ this.getProjectDetailsSectionInfo();
            }
          );
   }
-  organizeDataProExp() {
+  async organizeDataProExp() {
     const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
-    this.proExpList.forEach( (oneProExp) => {
+    for (const oneProExp of this.proExpList) {
       proExpData.push({
         _id: oneProExp._id,
         ResumeProfessionalExperienceKey: oneProExp.ResumeProfessionalExperienceKey,
@@ -378,33 +378,33 @@ this.getProjectDetailsSectionInfo();
         resume_code: oneProExp.ResumeProfessionalExperienceKey.resume_code,
         start_date: oneProExp.ResumeProfessionalExperienceKey.start_date,
         end_date: oneProExp.ResumeProfessionalExperienceKey.end_date,
-        projects: this.getProjectData(oneProExp),
+        projects: await this.getProjectData(oneProExp),
       });
-    });
+    }
     console.log('pro exp=', proExpData);
-    return(proExpData);
+    return (proExpData);
   }
-  getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
-    const project: IResumeProjectDoneModel[] = [];
-    this.projectList.forEach((oneProject) => {
-      if (oneProject.ResumeProjectKey.professional_experience_code === oneProExp.ResumeProfessionalExperienceKey.professional_experience_code) {
-        project.push({
-          _id: oneProject._id,
-          ResumeProjectKey: oneProject.ResumeProjectKey,
-          start_date: oneProject.start_date,
-          end_date: oneProject.end_date,
-          project_title: oneProject.project_title,
-          project_code: oneProject.ResumeProjectKey.project_code,
-          professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
-          projectDetails: this.getProjectDetailsData(oneProject),
-        });
-      }
-    });
-    return(project);
-  }
-  getProjectDetailsData(oneProject: IResumeProjectModel) {
+   async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
+     const project: IResumeProjectDoneModel[] = [];
+     for (const oneProject of this.projectList) {
+       if (oneProject.ResumeProjectKey.professional_experience_code === oneProExp.ResumeProfessionalExperienceKey.professional_experience_code) {
+         project.push({
+           _id: oneProject._id,
+           ResumeProjectKey: oneProject.ResumeProjectKey,
+           start_date: oneProject.start_date,
+           end_date: oneProject.end_date,
+           project_title: oneProject.project_title,
+           project_code: oneProject.ResumeProjectKey.project_code,
+           professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
+           projectDetails: await this.getProjectDetailsData(oneProject),
+         });
+       }
+     }
+     return (project);
+   }
+   getProjectDetailsData(oneProject: IResumeProjectModel) {
     const projectDetails: IResumeProjectDetailsDoneModel[] = [];
-    this.projectDetailsList.forEach((oneProjectDetails) => {
+    for (const oneProjectDetails of this.projectDetailsList) {
       if (oneProjectDetails.ResumeProjectDetailsKey.project_code === oneProject.ResumeProjectKey.project_code) {
         projectDetails.push({
           _id: oneProjectDetails._id,
@@ -413,11 +413,11 @@ this.getProjectDetailsSectionInfo();
           project_detail_desc: oneProjectDetails.project_detail_desc,
           project_details_code: oneProjectDetails.ResumeProjectDetailsKey.project_details_code,
           project_code: oneProjectDetails.ResumeProjectDetailsKey.project_code,
-          projectDetailsSection: this.getProjectDetailsSectionData(oneProjectDetails),
+          projectDetailsSection:   this.getProjectDetailsSectionData(oneProjectDetails),
         });
       }
-    });
-    return(projectDetails);
+    }
+    return (projectDetails);
   }
   getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel) {
     const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
@@ -435,7 +435,7 @@ this.getProjectDetailsSectionInfo();
     });
     return(projectDetailsSection);
   }
-  getPro() {
-    this.organizeDataProExp();
+  async getPro() {
+    await this.organizeDataProExp();
   }
 }

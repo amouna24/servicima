@@ -10,5 +10,5 @@ export interface IResumeProfessionalExperienceDoneModel {
   resume_code: string;
   start_date: string;
   end_date: string;
-  projects: any;
+  projects: IResumeProjectDoneModel[];
 }
