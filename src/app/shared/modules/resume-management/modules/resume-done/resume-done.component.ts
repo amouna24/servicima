@@ -183,11 +183,12 @@ export class ResumeDoneComponent implements OnInit {
                 // @ts-ignore
               this.certifList = data[6]; }
               this.countResume();
-              this.getProExp();
             });
         });
   }
   getProjectDetails(oneProject) {
+    this.projectDetailsList = [];
+    this.projectDetailsSectionList = [];
     this.resumeService.getProjectDetails(`?project_code=${oneProject.ResumeProjectKey.project_code}`)
         .subscribe((projectDetails) => {
           projectDetails.forEach((oneProjDet) => {
@@ -216,46 +217,64 @@ export class ResumeDoneComponent implements OnInit {
     return(this.projectDetailsList);
   }
   getProject(oneProExp) {
-    console.log('project=', oneProExp);
-        this.resumeService.getProject(`?professional_experience_code=${oneProExp.ResumeProfessionalExperienceKey.professional_experience_code}`)
-          .subscribe( (project) => {
+    this.projectList = [];
+    let projectTempo = [];
+    this.projectList = [];
+    this.projectDetailsList = [];
+    this.projectDetailsSectionList = [];
+    return   this.resumeService.getProject(`?professional_experience_code=${oneProExp.ResumeProfessionalExperienceKey.professional_experience_code}`)
+        .subscribe( (project) => {
+          projectTempo = project;
+          console.log('length project', project);
+        return   new Promise( (resolvePro) => {
             project.forEach( (oneProject) => {
-              const proj = {
-                  _id: oneProject._id,
-                  ResumeProjectKey: oneProject.ResumeProjectKey,
-                  start_date: oneProject.start_date,
-                  end_date: oneProject.end_date,
-                  project_title: oneProject.project_title,
-                  project_code: oneProject.project_code,
-                  professional_experience_code: oneProject.professional_experience_code,
-                  projectDetails: this.getProjectDetails(oneProject),
-              };
-              console.log('one project=', proj);
-              this.projectList.push(proj);
+              this.projectList.push({
+                _id: oneProject._id,
+                ResumeProjectKey: oneProject.ResumeProjectKey,
+                start_date: oneProject.start_date,
+                end_date: oneProject.end_date,
+                project_title: oneProject.project_title,
+                project_code: oneProject.project_code,
+                professional_experience_code: oneProject.professional_experience_code,
+                projectDetails: null,
+              });
             });
-            });
-        this.projectDetailsList = [];
-        return (this.projectList);
+          if ((project.length === this.projectList.length) && (this.projectList.length !== 0)) {
+            console.log('length', project.length, this.projectList.length);
+            resolvePro(this.projectList);
+          }
+        }).then( (res) => {
+          return(res);
+        });
+         });
   }
   getProExp() {
+    this.proExpList = [];
+    this.projectList = [];
     this.resumeService.getProExp(`?resume_code=${this.resume_code}`)
       .subscribe( async (proExp) => {
         for (const oneProject of proExp) {
-          const proExpD = {
-            _id: oneProject._id,
-            ResumeProfessionalExperienceKey: oneProject.ResumeProfessionalExperienceKey,
-            position: oneProject.position,
-            customer: oneProject.customer,
-            professional_experience_code: oneProject.professional_experience_code,
-            resume_code: oneProject.ResumeProfessionalExperienceKey.resume_code,
-            start_date: oneProject.ResumeProfessionalExperienceKey.start_date,
-            end_date: oneProject.ResumeProfessionalExperienceKey.end_date,
-            projects: await this.getProject(oneProject),
-          };
-          this.proExpList.push(proExpD);
+          new Promise( async (resolveExp) => {
+            this.proExpList.push({
+              _id: oneProject._id,
+              ResumeProfessionalExperienceKey: oneProject.ResumeProfessionalExperienceKey,
+              position: oneProject.position,
+              customer: oneProject.customer,
+              professional_experience_code: oneProject.ResumeProfessionalExperienceKey.professional_experience_code,
+              resume_code: oneProject.ResumeProfessionalExperienceKey.resume_code,
+              start_date: oneProject.ResumeProfessionalExperienceKey.start_date,
+              end_date: oneProject.ResumeProfessionalExperienceKey.end_date,
+              projects: this.getProject(oneProject),
+            });
+            if (this.proExpList.length === 2)  {
+              resolveExp(this.proExpList);
+            }
+          }).then( (res) => {
+            console.log('res=', res);
+            return(res);
+          });
         }
       });
-    return (this.proExpList);
   }
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
@@ -331,7 +350,7 @@ export class ResumeDoneComponent implements OnInit {
     };
     await this.downloadDocs(data, action, theme);
   }
-  openThemeDialog(action): void {
+  openThemeDialog(action) {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
       width: '800px',
       height: '200px',
@@ -359,7 +378,8 @@ export class ResumeDoneComponent implements OnInit {
            }
          );
   }
-  getPro() {
-    console.log('professional exp = ', this.proExpList);
+  async getPro() {
+    await this.getProExp();
+    console.log('this.prrExp', this.proExpList);
   }
 }
