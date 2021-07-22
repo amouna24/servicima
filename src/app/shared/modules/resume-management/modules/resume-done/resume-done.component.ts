@@ -76,7 +76,6 @@ export class ResumeDoneComponent implements OnInit {
       , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
       , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];
     this.translate.get(this.translateKey).subscribe(res => {
-      console.log('res=', res);
       this.label = {
         yearsOfExperience: res['resume-yrs-of-experience'],
         proExp: res['resume-pro-exp'],
@@ -93,7 +92,6 @@ export class ResumeDoneComponent implements OnInit {
         advanced: res['resume-advanced'],
         expert: res['resume-expert'],
       };
-      console.log(this.label);
     });
    await this.yearsOfExpAuto();
    this.getResumeInfo();
@@ -273,7 +271,6 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Project Details Data from Resume Service
    *************************************************************************/
   getProjectDetailsInfo() {
-    console.log('project list=', this.projectList);
     let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
     if (this.projectList.length > 0) {
@@ -292,18 +289,15 @@ export class ResumeDoneComponent implements OnInit {
                 );
                 a = a + 1 ;
                 if (this.projectList.length === a) {
-                  console.log(this.projectDetailsList.length, projectFinalList.length);
                   projectFinalList = this.projectDetailsList;
                   resolve(projectFinalList);
                 }
-                console.log(a, this.projectList.length);
                 projectFinalList = [];
                 projectFinalList = this.projectDetailsList;
             } });
         }
       );
     } }).then( (res: IResumeProjectDetailsModel[]) => {
-      console.log('res=', res);
 this.getProjectDetailsSectionInfo(res);
       });
   }
@@ -311,7 +305,6 @@ this.getProjectDetailsSectionInfo(res);
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
    getProjectDetailsSectionInfo(projectDetailsList) {
-    console.log('project details list=', projectDetailsList);
     if (projectDetailsList.length > 0) {
       for (const projectDetailsData of projectDetailsList) {
         new Promise( (resolve) => {
@@ -392,7 +385,6 @@ this.getProjectDetailsSectionInfo(res);
        this.resumeService.getResumePdf(data, theme, action).subscribe(
            async res => {
              if (action === 'preview') {
-               console.log('resume=', res);
               const fileURL = URL.createObjectURL(res);
                const openPdf = window.open(fileURL, '_blank');
               this.loading = false;
@@ -407,7 +399,6 @@ this.getProjectDetailsSectionInfo(res);
          );
   }
   async organizeDataProExp() {
-    console.log('details sections', this.projectDetailsSectionList);
     const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
     for (const oneProExp of this.proExpList) {
       proExpData.push({
@@ -422,7 +413,6 @@ this.getProjectDetailsSectionInfo(res);
         projects: await this.getProjectData(oneProExp),
       });
     }
-    console.log('pro exp=', proExpData);
     return (proExpData);
   }
    async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
