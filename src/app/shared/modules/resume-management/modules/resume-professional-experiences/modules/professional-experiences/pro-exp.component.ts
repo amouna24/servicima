@@ -131,6 +131,7 @@ export class ProExpComponent implements OnInit {
     }
     this.ProExp.resume_code = this.resume_code;
     this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
+      console.log('Pro exp', this.ProExp);
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
     this.arrayProExpCount++; } else {
       this.proExpUpdate = this.sendProExp.value;

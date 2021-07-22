@@ -9,13 +9,18 @@ import { IResumeInterventionModel } from '@shared/models/resumeIntervention.mode
 import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeCertificationDiplomaModel } from '@shared/models/resumeCertificationDiploma.model';
 import { IResumeLanguageModel } from '@shared/models/resumeLanguage.model';
-
+import { IResumeProjectDoneModel } from '@shared/models/projectDone.model';
+import { IResumeProjectDetailsDoneModel } from '@shared/models/projectDetailsDone.model';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
+import { IResumeProfessionalExperienceDoneModel } from '@shared/models/professionalExperienceDone.model';
+
 import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
+import { TranslateService } from '@ngx-translate/core';
+
 import { map } from 'rxjs/internal/operators/map';
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,18 +57,42 @@ export class ResumeDoneComponent implements OnInit {
   contact_email: string;
   imageUrl =  `${environment.uploadFileApiUrl}/image/`;
   loading: boolean;
+  translateKey: string[];
+  label: any;
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
     private datepipe: DatePipe,
     private uploadService: UploadService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    this.translateKey = [ 'resume-yrs-of-experience', 'resume-pro-exp', 'resume-certif-diploma'
+      , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
+      , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];
+    this.translate.get(this.translateKey).subscribe(res => {
+      this.label = {
+        yearsOfExperience: res['resume-yrs-of-experience'],
+        proExp: res['resume-pro-exp'],
+        certifDiploma: res['resume-certif-diploma'],
+        funcSkill: res['resume-functional-skills'],
+        technicalSkill: res['resume-technical-skills'],
+        intervention: res['resume-lvl-intervention'],
+        language: res['resume-language'],
+        phone: res['resume-phone'],
+        email: res['resume-email'],
+        beginner: res['resume-beginner'],
+        elementary: res['resume-elementary'],
+        intermediate: res['resume-intermediate'],
+        advanced: res['resume-advanced'],
+        expert: res['resume-expert'],
+      };
+    });
    await this.yearsOfExpAuto();
    this.getResumeInfo();
   }
@@ -203,7 +232,8 @@ export class ResumeDoneComponent implements OnInit {
      let projectFinalList = [];
    const Pro = new Promise((resolve, reject) => {
       if (this.proExpList.length > 0) {
-         this.proExpList.forEach(
+        let a = 0;
+        this.proExpList.forEach(
           (proExpData) => {
             this.resumeService.getProject(
               `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
@@ -215,7 +245,8 @@ export class ResumeDoneComponent implements OnInit {
                       this.projectList.push(responseProjectData);
                     }
                   );
-                  if (this.projectList.length === projectFinalList.length) {
+                  a = a + 1 ;
+                  if (this.proExpList.length === a) {
                     resolve(this.projectList);
                   }
                   projectFinalList = [];
@@ -243,6 +274,7 @@ export class ResumeDoneComponent implements OnInit {
     let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
     if (this.projectList.length > 0) {
+      let a = 0;
       this.projectList.forEach(
         (projectData) => {
           this.resumeService.getProjectDetails(
@@ -255,38 +287,43 @@ export class ResumeDoneComponent implements OnInit {
                     this.projectDetailsList.push(responseProjectDetailsData);
                   }
                 );
-                if (this.projectDetailsList.length === projectFinalList.length) {
-                  resolve(this.projectDetailsList);
+                a = a + 1 ;
+                if (this.projectList.length === a) {
+                  projectFinalList = this.projectDetailsList;
+                  resolve(projectFinalList);
                 }
                 projectFinalList = [];
                 projectFinalList = this.projectDetailsList;
             } });
         }
       );
-    } }).then( () => {
-this.getProjectDetailsSectionInfo();
+    } }).then( (res: IResumeProjectDetailsModel[]) => {
+this.getProjectDetailsSectionInfo(res);
       });
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  getProjectDetailsSectionInfo() {
-    if (this.projectDetailsList.length > 0) {
-      this.projectDetailsList.forEach(
-        (projectDetailsData) => {
+   getProjectDetailsSectionInfo(projectDetailsList) {
+    if (projectDetailsList.length > 0) {
+      for (const projectDetailsData of projectDetailsList) {
+        new Promise( (resolve) => {
           this.resumeService.getProjectDetailsSection(
             `?project_details_code=${projectDetailsData.ResumeProjectDetailsKey.project_details_code}`
           ).subscribe(
             (responseProjectDetailsSection) => {
               if (responseProjectDetailsSection.length > 0) {
-              responseProjectDetailsSection.forEach(
-                (responseProjectDetailsSectionData) => {
-                  this.projectDetailsSectionList.push(responseProjectDetailsSectionData);
-                }
-              ); }
+                resolve(responseProjectDetailsSection);
+              }
             });
-        }
-      );
+        }).then( (res: IResumeProjectDetailsSectionModel[]) => {
+          res.forEach(
+            (responseProjectDetailsSectionData) => {
+              this.projectDetailsSectionList.push(responseProjectDetailsSectionData);
+            }
+          );
+        });
+      }
     }
   }
   /**************************************************************************
@@ -318,6 +355,7 @@ this.getProjectDetailsSectionInfo();
         role: this.generalInfoList[0].actual_job,
         experience: this.generalInfoList[0].years_of_experience || 0,
         phoneNum: this.phone.toString(),
+        label: this.label,
         currentYear: this.dateNow,
         imageUrl: this.imageUrl + this.generalInfoList[0].image,
         diplomas: this.certifList,
@@ -328,10 +366,7 @@ this.getProjectDetailsSectionInfo();
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
         intervention: this.interventionList,
-        pro_exp: this.proExpList,
-        project: this.projectList,
-        project_details: this.projectDetailsList,
-        project_details_section: this.projectDetailsSectionList,
+        pro_exp: await this.organizeDataProExp(),
         language: this.languageList,
         section: this.sectionList,
       }
@@ -365,5 +400,76 @@ this.getProjectDetailsSectionInfo();
              console.log(error);
            }
          );
+  }
+  async organizeDataProExp() {
+    const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
+    for (const oneProExp of this.proExpList) {
+      proExpData.push({
+        _id: oneProExp._id,
+        ResumeProfessionalExperienceKey: oneProExp.ResumeProfessionalExperienceKey,
+        position: oneProExp.position,
+        customer: oneProExp.customer,
+        professional_experience_code: oneProExp.ResumeProfessionalExperienceKey.professional_experience_code,
+        resume_code: oneProExp.ResumeProfessionalExperienceKey.resume_code,
+        start_date: oneProExp.ResumeProfessionalExperienceKey.start_date,
+        end_date: oneProExp.ResumeProfessionalExperienceKey.end_date,
+        projects: await this.getProjectData(oneProExp),
+      });
+    }
+    return (proExpData);
+  }
+   async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
+     const project: IResumeProjectDoneModel[] = [];
+     for (const oneProject of this.projectList) {
+       if (oneProject.ResumeProjectKey.professional_experience_code === oneProExp.ResumeProfessionalExperienceKey.professional_experience_code) {
+         project.push({
+           _id: oneProject._id,
+           ResumeProjectKey: oneProject.ResumeProjectKey,
+           start_date: oneProject.start_date,
+           end_date: oneProject.end_date,
+           project_title: oneProject.project_title,
+           project_code: oneProject.ResumeProjectKey.project_code,
+           professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
+           projectDetails: await this.getProjectDetailsData(oneProject),
+         });
+       }
+     }
+     return (project);
+   }
+   getProjectDetailsData(oneProject: IResumeProjectModel) {
+    const projectDetails: IResumeProjectDetailsDoneModel[] = [];
+    for (const oneProjectDetails of this.projectDetailsList) {
+      if (oneProjectDetails.ResumeProjectDetailsKey.project_code === oneProject.ResumeProjectKey.project_code) {
+        projectDetails.push({
+          _id: oneProjectDetails._id,
+          ResumeProjectDetailsKey: oneProjectDetails.ResumeProjectDetailsKey,
+          project_detail_title: oneProjectDetails.project_detail_title,
+          project_detail_desc: oneProjectDetails.project_detail_desc,
+          project_details_code: oneProjectDetails.ResumeProjectDetailsKey.project_details_code,
+          project_code: oneProjectDetails.ResumeProjectDetailsKey.project_code,
+          projectDetailsSection:   this.getProjectDetailsSectionData(oneProjectDetails),
+        });
+      }
+    }
+    return (projectDetails);
+  }
+  getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel) {
+    const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
+    for (const oneProjectDetailsSection of this.projectDetailsSectionList) {
+      if (oneProjectDetailsSection.ResumeProjectDetailsSectionKey.project_details_code ===
+        projectDetail.ResumeProjectDetailsKey.project_details_code) {
+        projectDetailsSection.push({
+          _id: oneProjectDetailsSection._id,
+          ResumeProjectDetailsSectionKey: oneProjectDetailsSection.ResumeProjectDetailsSectionKey,
+          project_details_section_desc: oneProjectDetailsSection.project_details_section_desc,
+          project_details_code: oneProjectDetailsSection.ResumeProjectDetailsSectionKey.project_details_code,
+          project_details_section_code: oneProjectDetailsSection.ResumeProjectDetailsSectionKey.project_details_section_code,
+        });
+      }
+    }
+    return(projectDetailsSection);
+  }
+  async getPro() {
+    await this.organizeDataProExp();
   }
 }

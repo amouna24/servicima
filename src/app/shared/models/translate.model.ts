@@ -1,5 +1,6 @@
 import { TranslateKeyModel } from './translateKey.model';
 
+// tslint:disable-next-line:interface-name
 export interface TranslateModel {
 
   TranslateKey: TranslateKeyModel;
