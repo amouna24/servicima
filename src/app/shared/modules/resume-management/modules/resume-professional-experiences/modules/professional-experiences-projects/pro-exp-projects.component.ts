@@ -2,10 +2,18 @@ import { Component , OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+
+// tslint:disable-next-line:interface-name
+interface TreeNode {
+  name: string;
+  children?: TreeNode[];
+}
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
@@ -17,6 +25,7 @@ export class ProExpProjectsComponent implements OnInit {
   arrayProjectCount = 0;
   Project: IResumeProjectModel;
   showProject = false;
+  treeItems = [];
   ProjectArray: IResumeProjectModel[] = [];
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
   customer = this.router.getCurrentNavigation().extras.state?.customer;
@@ -25,6 +34,7 @@ export class ProExpProjectsComponent implements OnInit {
   end_date_pro_exp = this.router.getCurrentNavigation().extras.state?.end_date;
   showAddSection = false;
   showForm = false;
+  resume_code = '';
   project_code = '';
   indexUpdate = 0;
   button = 'Add';
@@ -40,6 +50,9 @@ export class ProExpProjectsComponent implements OnInit {
   start_date: any;
   end_date: any;
   myDisabledDayFilter: any ;
+  treeControl = new NestedTreeControl<TreeNode>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<TreeNode>();
+  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
   get getProject() {
     return this.ProjectArray;
   }
@@ -91,8 +104,9 @@ export class ProExpProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.getProjectInfo();
     this.createForm();
+    this.loadTree();
+    this.dataSource.data = this.treeItems;
     this.initDates();
-
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -244,4 +258,50 @@ this.showNumberError = false ;
     this.minStartDate = this.start_date_pro_exp;
     this.maxStartDate = this.end_date_pro_exp;
   }
+  loadTree() {
+    this.treeItems = [];
+    this.resumeService.getResume(
+      // tslint:disable-next-line:max-line-length
+      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      .subscribe(
+        (response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getProExp(
+              `?resume_code=${this.resume_code}`)
+              .subscribe((proExp) => {
+                console.log('pro exp array =', proExp);
+                proExp.forEach((pro, index) => {
+                  const proArray = [];
+                  this.resumeService.getProject(
+                    // tslint:disable-next-line:max-line-length
+                    `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
+                    .subscribe(
+                      (resProject) => {
+                        resProject.forEach((project) => {
+                          proArray.push({
+                            name: project.project_title,
+                          });
+                        });
+                      });
+                  if (this.professional_experience_code === pro.ResumeProfessionalExperienceKey.professional_experience_code) {
+                    this.treeItems.push(
+                      {
+                        name: pro.customer,
+                        children: proArray,
+                      });
+                  } else {
+                    this.treeItems.push(
+                      {
+                        name: pro.customer,
+                        children: proArray,
+                      });
+                  }
+
+                });
+              });
+          }
+        });
+  }
+
 }
