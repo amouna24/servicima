@@ -40,7 +40,7 @@
               </div>
             </div>
             <div *ngFor="let item of getProject let pointIndex=index" fxLayout="row" class="full-width p-b-10">
-              <mat-expansion-panel [hideToggle]="true" #panel fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
+              <mat-expansion-panel [hideToggle]="true" #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
                   <mat-panel-title style="margin-right: 0 !important;">
@@ -73,7 +73,7 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
-                  <wid-project-section [project_code]="item.project_code"
+                  <wid-project-section [project_code]="item.project_code" (refresh_tree)="refreshTreeHandler($event,item)"
                                        class="full-width full-height"></wid-project-section>
                 </div>
               </mat-expansion-panel>
@@ -156,33 +156,46 @@
             </form>
           </div>
           <div fxLayout="column" fxFlex="18" >
-            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
-              <!-- This is the tree node template for leaf nodes -->
-              <!-- There is inline padding applied to this node using styles.
-                This padding value depends on the mat-icon-button width. -->
-              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-                {{node.name}}
-              </mat-tree-node>
-              <!-- This is the tree node template for expandable nodes -->
-              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-                <div class="mat-tree-node">
-                  <button mat-icon-button matTreeNodeToggle
-                          [attr.aria-label]="'Toggle ' + node.name">
-                    <mat-icon class="mat-icon-rtl-mirror">
-                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                    </mat-icon>
-                  </button>
-                  {{node.name}}
-                </div>
-                <!-- There is inline padding applied to this div using styles.
-                    This padding value depends on the mat-icon-button width.  -->
-                <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
-                     role="group">
-                  <ng-container matTreeNodeOutlet></ng-container>
-                </div>
-              </mat-nested-tree-node>
-            </mat-tree>
-          </div>
+            <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
+              <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
+                <wid-scrollbar class="full-width full-height">
+                  <div fxLayout="row" fxFlex="100" class="border-radius-10 border_add_project">
+
+                  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                  <li>
+                    <div (click)="nodeSelect(node)">
+                      <button mat-icon-button disabled>
+                        <mat-icon class="steel-icon">
+                          brightness_1
+                        </mat-icon>
+                      </button>
+                      {{node.title}}
+                    </div>
+                  </li>
+                </mat-tree-node>
+
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
+                  <li>
+                    <div class="mat-tree-node" (click)="nodeSelect(node)" >
+                      <button mat-icon-button matTreeNodeToggle>
+                        <mat-icon class="topaz-icon">
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                      </button>
+                      <span class="onClickTree">{{node.title}}</span>
+                    </div>
+                    <ul [hidden]="!treeControl.isExpanded(node)">
+                      <ng-container matTreeNodeOutlet></ng-container>
+                    </ul>
+                  </li>
+                </mat-nested-tree-node>
+              </mat-tree>
+                  </div>
+                </wid-scrollbar>
+              </div>
+            </div>
+      </div>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">

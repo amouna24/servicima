@@ -6,26 +6,58 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 
+/** File node data with nested structure. */
 // tslint:disable-next-line:interface-name
-interface TreeNode {
-  name: string;
-  children?: TreeNode[];
+interface MyTreeNode {
+  title: string;
+  children?: MyTreeNode[];
+  expanded?: boolean;
+  object?: object;
 }
+
+const demoNodes: MyTreeNode[] = [
+  {
+    title: 'node 1',
+    children: [
+      {
+        title: 'node 1.1',
+        children: [
+          {
+            title: 'aaaa'
+          },
+          ]
+      },
+    ]
+  },
+  {
+    title: 'node 2',
+    children: [
+      {
+        title: 'Projet d\'analyse et de gestion des reservation de paiement en ligne'
+      },
+      {
+        title: 'node 2.2'
+      }
+    ]
+  }
+];
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
   styleUrls: ['./pro-exp-projects.component.scss']
 })
 export class ProExpProjectsComponent implements OnInit {
-
+  treeControl: NestedTreeControl<MyTreeNode>;
+  treeDataSource: MatTreeNestedDataSource<MyTreeNode>;
   sendProject: FormGroup;
   arrayProjectCount = 0;
   Project: IResumeProjectModel;
   showProject = false;
-  treeItems = [];
+  treeItems: MyTreeNode[] = [];
   ProjectArray: IResumeProjectModel[] = [];
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
   customer = this.router.getCurrentNavigation().extras.state?.customer;
@@ -50,9 +82,8 @@ export class ProExpProjectsComponent implements OnInit {
   start_date: any;
   end_date: any;
   myDisabledDayFilter: any ;
-  treeControl = new NestedTreeControl<TreeNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<TreeNode>();
-  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
+  openExpansion = false;
+
   get getProject() {
     return this.ProjectArray;
   }
@@ -67,7 +98,9 @@ export class ProExpProjectsComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private modalServices: ModalService,
-  ) { }
+  ) {
+  }
+
   getProjectInfo() {
     const disabledDates = [];
     this.resumeService.getProject(
@@ -101,12 +134,21 @@ export class ProExpProjectsComponent implements OnInit {
       );
 
   }
-  ngOnInit(): void {
+   async ngOnInit(): Promise<void> {
+     this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
+     this.treeDataSource = new MatTreeNestedDataSource();
+    console.log('tree item', 'static tree', demoNodes);
+   await this.loadTree();
     this.getProjectInfo();
     this.createForm();
-    this.loadTree();
-    this.dataSource.data = this.treeItems;
     this.initDates();
+  }
+  hasChildren = (_: number, node: MyTreeNode) => {
+    return node.children && node.children.length > 0;
+  };
+
+  private makeGetChildrenFunction() {
+    return node => of(node.children);
   }
   showAddSectionEvent() {
     this.showAddSection = !this.showAddSection;
@@ -258,50 +300,151 @@ this.showNumberError = false ;
     this.minStartDate = this.start_date_pro_exp;
     this.maxStartDate = this.end_date_pro_exp;
   }
-  loadTree() {
-    this.treeItems = [];
-    this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
-            this.resumeService.getProExp(
-              `?resume_code=${this.resume_code}`)
-              .subscribe((proExp) => {
-                console.log('pro exp array =', proExp);
-                proExp.forEach((pro, index) => {
-                  const proArray = [];
-                  this.resumeService.getProject(
-                    // tslint:disable-next-line:max-line-length
-                    `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
-                    .subscribe(
-                      (resProject) => {
-                        resProject.forEach((project) => {
-                          proArray.push({
-                            name: project.project_title,
-                          });
+  async loadTree() {
+    const treeItems = [];
+    let i = 0;
+    new Promise( (resolve) => {
+      this.resumeService.getResume(
+        // tslint:disable-next-line:max-line-length
+        `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+        .subscribe(
+          (response) => {
+            if (response['msg_code'] !== '0004') {
+              this.resume_code = response[0].ResumeKey.resume_code.toString();
+              this.resumeService.getProExp(
+                `?resume_code=${this.resume_code}`)
+                .subscribe(async (proExp) => {
+                  console.log('pro exp array =', proExp);
+                  for (const pro of proExp) {
+                    const index = proExp.indexOf(pro);
+                    i++;
+                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professional_experience_code) {
+                      treeItems.push(
+                        {
+                          title: pro.customer,
+                          children: await this.getProjectNode(pro),
+                          expanded: true,
+                          object: pro
                         });
-                      });
-                  if (this.professional_experience_code === pro.ResumeProfessionalExperienceKey.professional_experience_code) {
-                    this.treeItems.push(
-                      {
-                        name: pro.customer,
-                        children: proArray,
-                      });
-                  } else {
-                    this.treeItems.push(
-                      {
-                        name: pro.customer,
-                        children: proArray,
-                      });
+                    } else {
+                      treeItems.push(
+                        {
+                          title: pro.customer,
+                          children: await this.getProjectNode(pro),
+                          expanded: false,
+                          object: pro,
+                        });
+                      }
+                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professional_experience_code) { }
+                    if (i === proExp.length) {
+                      resolve(treeItems);
+                    }
                   }
-
                 });
-              });
+            }
+          });
+    }).then( (res: MyTreeNode[]) => {
+      console.log('res=', res);
+        this.treeItems = res;
+        this.treeDataSource.data = res;
+        this.treeDataSource.data.forEach( (expand) => {
+          if (expand.expanded === true) {
+            console.log('hello');
+            this.treeControl.expand(expand);
           }
         });
+    });
   }
+  async getProjectNode(pro: IResumeProfessionalExperienceModel) {
+    let i = 0;
+    let result = null;
+    const proArray = [];
+    await new Promise((resolve) => {
+      this.resumeService.getProject(
+        // tslint:disable-next-line:max-line-length
+        `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
+        .subscribe(
+          (resProject) => {
+            resProject.forEach((project) => {
+              i++;
+              proArray.push({
+                title: project.project_title,
+                object: project,
 
+              });
+            });
+            if (i === resProject.length) {
+              resolve(proArray);
+            }
+          });
+    }).then((res) => {
+      result = res;
+      return (res);
+    });
+    return result;
+  }
+  generateSections(project: IResumeProjectModel) {
+    console.log('before', this.openExpansion);
+    if (this.openExpansion === false) {
+      const detailsTree = [];
+      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+        if (proj['msg_code'] !== '0004') {
+          proj.forEach((pro) => {
+            detailsTree.push(
+              {
+                title: pro.project_detail_title,
+              });
+          });
+          if (detailsTree.length > 0) {
+            this.treeDataSource.data.map((node) => {
+              node.children.map((nodeChildren) => {
+                if (nodeChildren.title === project.project_title) {
+                  nodeChildren.children = detailsTree;
+                  this.treeControl.expand(nodeChildren);
+                }
+              });
+            });
+          }
+        }
+        const _data = this.treeDataSource.data;
+        this.treeDataSource.data = null;
+        this.treeDataSource.data = _data;
+        this.openExpansion = true;
+      });
+    } else if (this.openExpansion === true) {
+      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+        this.treeDataSource.data.map((node) => {
+          node.children.map((nodeChildren) => {
+            nodeChildren.children = [];
+            const _data = this.treeDataSource.data;
+            this.treeDataSource.data = null;
+            this.treeDataSource.data = _data;
+          });
+        });
+      });
+      this.openExpansion = false;
+    }
+
+    console.log('data source', this.treeDataSource.data, this.openExpansion);
+  }
+  async refreshTreeHandler(event: boolean, item) {
+    console.log('event=', event);
+    if (event === true) {
+      this.openExpansion = false;
+      this.generateSections(item);
+    }
+    return false;
+  }
+  nodeSelect(event: any) {
+    console.log('data =', event);
+    if (event.title !== this.customer) {
+        this.professional_experience_code = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
+        this.customer = event.object.customer;
+        this.position = event.object.position;
+        this.start_date_pro_exp = event.object.start_date;
+        this.end_date_pro_exp = event.object.end_date;
+      }
+      this.getProjectInfo();
+      this.loadTree();
+  }
 }
