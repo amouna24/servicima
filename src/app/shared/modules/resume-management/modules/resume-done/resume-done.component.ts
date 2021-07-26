@@ -36,29 +36,32 @@ import { environment } from '../../../../../../environments/environment';
 export class ResumeDoneComponent implements OnInit {
   count = 0;
   resume_code: string;
-  generalInfoList: IResumeModel[] = [];
-  proExpList: IResumeProfessionalExperienceModel[] = [];
-  techSkillList: IResumeTechnicalSkillsModel[] = [];
-  funcSkillList: IResumeFunctionalSkillsModel[] = [];
-  interventionList: IResumeInterventionModel[] = [];
-  languageList: IResumeLanguageModel[] = [];
-  sectionList: IResumeSectionModel[] = [];
-  certifList: IResumeCertificationDiplomaModel[] = [];
-  projectList: IResumeProjectModel[] = [];
-  projectDetailsList: IResumeProjectDetailsModel[] = [];
-  projectDetailsSectionList: IResumeProjectDetailsSectionModel[] = [];
+  generalInfoList: IResumeModel[];
+  proExpList: IResumeProfessionalExperienceModel[];
+  techSkillList: IResumeTechnicalSkillsModel[];
+  funcSkillList: IResumeFunctionalSkillsModel[];
+  interventionList: IResumeInterventionModel[];
+  languageList: IResumeLanguageModel[];
+  sectionList: IResumeSectionModel[];
+  certifList: IResumeCertificationDiplomaModel[];
+  projectList: IResumeProjectModel[];
+  projectDetailsList: IResumeProjectDetailsModel[];
+  projectDetailsSectionList: IResumeProjectDetailsSectionModel[];
   theme: string;
   years = 0;
   company_name: string;
   company_email: string;
   company_logo: string;
   phone: string;
-  dateNow = new Date().getFullYear().toString();
+  dateNow: string;
   contact_email: string;
-  imageUrl =  `${environment.uploadFileApiUrl}/image/`;
+  imageUrl: string;
   loading: boolean;
   translateKey: string[];
   label: any;
+  /**********************************************************************
+   * @description Resume Preview constructor
+   *********************************************************************/
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
@@ -72,30 +75,16 @@ export class ResumeDoneComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    this.translateKey = [ 'resume-yrs-of-experience', 'resume-pro-exp', 'resume-certif-diploma'
-      , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
-      , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];
-    this.translate.get(this.translateKey).subscribe(res => {
-      this.label = {
-        yearsOfExperience: res['resume-yrs-of-experience'],
-        proExp: res['resume-pro-exp'],
-        certifDiploma: res['resume-certif-diploma'],
-        funcSkill: res['resume-functional-skills'],
-        technicalSkill: res['resume-technical-skills'],
-        intervention: res['resume-lvl-intervention'],
-        language: res['resume-language'],
-        phone: res['resume-phone'],
-        email: res['resume-email'],
-        beginner: res['resume-beginner'],
-        elementary: res['resume-elementary'],
-        intermediate: res['resume-intermediate'],
-        advanced: res['resume-advanced'],
-        expert: res['resume-expert'],
-      };
-    });
+    this.dateNow = new Date().getFullYear().toString();
+    this.imageUrl =  `${environment.uploadFileApiUrl}/image/`;
+    this.initSectionLists();
+    this.translateDocs();
    await this.yearsOfExpAuto();
    this.getResumeInfo();
   }
+  /**************************************************************************
+   * @description Calculate years of experience from professional experience section
+   *************************************************************************/
   yearsOfExpAuto() {
      this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -260,7 +249,6 @@ export class ResumeDoneComponent implements OnInit {
       this.getProjectDetailsInfo();
    });
    }
-
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
    *************************************************************************/
@@ -327,7 +315,7 @@ this.getProjectDetailsSectionInfo(res);
     }
   }
   /**************************************************************************
-   * @description Get Cv Document in Docx format and the user chose if he want to save it in dataBase or just check it
+   * @description Get All resume Data
    *************************************************************************/
   async getDocument(action: string, theme: string) {
     this.loading = true;
@@ -373,17 +361,22 @@ this.getProjectDetailsSectionInfo(res);
     };
     await this.downloadDocs(data, action, theme);
   }
+  /**************************************************************************
+   * @description open pop up that gives the candidate access to choices his resume Template
+   *************************************************************************/
   openThemeDialog(action): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
       width: '800px',
       height: '200px',
     });
-
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
       this.getDocument(action, result); }
     });
   }
+  /**************************************************************************
+   * @description generate Resume in docx format or in PDF format
+   *************************************************************************/
   downloadDocs(data, action, theme) {
        this.resumeService.getResumePdf(data, theme, action).subscribe(
            async res => {
@@ -401,6 +394,9 @@ this.getProjectDetailsSectionInfo(res);
            }
          );
   }
+  /**************************************************************************
+   * @description get organized Professional experience data in JSON object
+   *************************************************************************/
   async organizeDataProExp() {
     const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
     for (const oneProExp of this.proExpList) {
@@ -418,6 +414,9 @@ this.getProjectDetailsSectionInfo(res);
     }
     return (proExpData);
   }
+  /**************************************************************************
+   * @description get organized Project data in JSON object
+   *************************************************************************/
    async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
      const project: IResumeProjectDoneModel[] = [];
      for (const oneProject of this.projectList) {
@@ -436,6 +435,9 @@ this.getProjectDetailsSectionInfo(res);
      }
      return (project);
    }
+  /**************************************************************************
+   * @description get organized Project details data in JSON object
+   *************************************************************************/
    getProjectDetailsData(oneProject: IResumeProjectModel) {
     const projectDetails: IResumeProjectDetailsDoneModel[] = [];
     for (const oneProjectDetails of this.projectDetailsList) {
@@ -453,6 +455,9 @@ this.getProjectDetailsSectionInfo(res);
     }
     return (projectDetails);
   }
+  /**************************************************************************
+   * @description get organized Project details section data in JSON object
+   *************************************************************************/
   getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel) {
     const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
     for (const oneProjectDetailsSection of this.projectDetailsSectionList) {
@@ -469,7 +474,46 @@ this.getProjectDetailsSectionInfo(res);
     }
     return(projectDetailsSection);
   }
-  async getPro() {
-    await this.organizeDataProExp();
-  }
+  /**************************************************************************
+   * @description get organized Project details section data in JSON object
+   *************************************************************************/
+initSectionLists() {
+  this.generalInfoList = [];
+  this.proExpList = [];
+  this.techSkillList = [];
+  this.funcSkillList = [];
+  this.interventionList = [];
+  this.languageList = [];
+  this.sectionList = [];
+  this.certifList = [];
+  this.projectList = [];
+  this.projectDetailsList = [];
+  this.projectDetailsSectionList = [];
+}
+  /**************************************************************************
+   * @description translate static labels in the resume docx format
+   *************************************************************************/
+translateDocs() {
+  this.translateKey = [ 'resume-yrs-of-experience', 'resume-pro-exp', 'resume-certif-diploma'
+    , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
+    , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];
+  this.translate.get(this.translateKey).subscribe(res => {
+    this.label = {
+      yearsOfExperience: res['resume-yrs-of-experience'],
+      proExp: res['resume-pro-exp'],
+      certifDiploma: res['resume-certif-diploma'],
+      funcSkill: res['resume-functional-skills'],
+      technicalSkill: res['resume-technical-skills'],
+      intervention: res['resume-lvl-intervention'],
+      language: res['resume-language'],
+      phone: res['resume-phone'],
+      email: res['resume-email'],
+      beginner: res['resume-beginner'],
+      elementary: res['resume-elementary'],
+      intermediate: res['resume-intermediate'],
+      advanced: res['resume-advanced'],
+      expert: res['resume-expert'],
+    };
+  });
+}
 }

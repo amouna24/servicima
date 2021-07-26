@@ -31,10 +31,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
   haveImage: any;
   profileUserType = userType.UT_RESUME;
   generalInfo: IResumeModel;
-  firstname: string = this.userService.connectedUser$.getValue().user[0]['first_name'];
-  lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
-  company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
-  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  firstname: string;
+  lastname: string;
+  company: string;
+  langList: BehaviorSubject<IViewParam[]>;
   company_name: string;
   isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -42,9 +42,12 @@ export class ResumeGeneralInformationComponent implements OnInit {
   showYears = false;
   update = false;
   photo: FormData;
-  resume_code = '';
+  resume_code: string;
   years = 0;
-  private showNumberError = false ;
+  showNumberError = false ;
+  /**********************************************************************
+   * @description Resume general information constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -63,26 +66,13 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    this.userService.connectedUser$
-      .subscribe(
-        (userInfo) => {
-          if (userInfo) {
-            console.log('info', userInfo);
-            this.company_name = userInfo['company'][0]['company_name'];
-          }
-        });
-    console.log('user =', this.userService.connectedUser$.getValue());
+    this.firstname = this.userService.connectedUser$.getValue().user[0]['first_name'];
+    this.lastname = this.userService.connectedUser$.getValue().user[0]['last_name'];
+    this.company = this.userService.connectedUser$.getValue().user[0]['company_email'];
+    this.getCompanyName();
     this.initForm();
-    this.langList.next(this.appInitializerService.languageList.map(
-      (obj) => {
-        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
-      }
-    ));
+   this.getLanguageList();
     await this.getResume();
-
-  }
-  getFile(obj: FormData) {
-    this.photo = obj;
   }
   /**************************************************************************
    * @description : Show or Hide The input of Years of experience
@@ -91,9 +81,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.showYears = !this.showYears;
   }
 
-  /**
-   *  @description Resume Resume Data from Resume Service
-   */
+  /**************************************************************************
+   *  @description Get Resume Data from Resume Service and reusme Image from upload Service
+   *************************************************************************/
   async getResume() {
     await this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
@@ -150,7 +140,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       );
   }
   /**************************************************************************
-   * @description set Existing data in the Resume Data
+   * @description set Existing data in the Resume Form
    *************************************************************************/
   async updateForm(generalInformation) {
     this.CreationForm.patchValue({
@@ -161,7 +151,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_code: generalInformation[0].ResumeKey.resume_code,
       image: generalInformation[0].image,
     });
-      console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
       if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
@@ -194,9 +183,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
             });
       }
       }
-  /**
+  /********************************************************
    * @description Initialization of Resume Form
-   */
+   ********************************************************/
   initForm() {
     this.CreationForm = this.fb.group({
       application_id: this.localStorageService.getItem('userCredentials').application_id,
@@ -211,9 +200,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
       status: 'A'
     });
   }
-  /**
-   * @description Create Or Update Resume
-   */
+  /****************************************************
+   * @description Create Or Update Resume General information
+   ***************************************************/
  async createUpdateResume() {
     let filename = null;
     if (this.photo) {
@@ -245,5 +234,34 @@ export class ResumeGeneralInformationComponent implements OnInit {
        }); }
     }
     this.showNumberError = false;
+  }
+  /**************************************************************************
+   * @description Get company name from user Service
+   *************************************************************************/
+  getCompanyName() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.company_name = userInfo['company'][0]['company_name'];
+          }
+        });
+  }
+  /**************************************************************************
+   * @description Get Language list from RefData and RefType
+   *************************************************************************/
+  getLanguageList() {
+    this.langList = new BehaviorSubject<IViewParam[]>([]);
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
+      }
+    ));
+  }
+  /**************************************************************************
+   * @description Get Language list from RefData and RefType
+   *************************************************************************/
+  getFile(obj: FormData) {
+    this.photo = obj;
   }
 }

@@ -16,15 +16,18 @@ export class ResumeInterventionComponent implements OnInit {
   sendIntervention: FormGroup;
   arrayInterventionCount = 0;
   Intervention: IResumeInterventionModel;
-  interventionArray: IResumeInterventionModel[] = [];
-  resume_code = '';
+  interventionArray: IResumeInterventionModel[];
+  resume_code: string;
   interventionUpdate: IResumeInterventionModel;
-  intervention_code = '';
-  button = 'Add';
+  intervention_code: string;
+  button: string;
   indexUpdate = 0 ;
-  _id = '';
+  _id: string;
   subscriptionModal: Subscription;
-  private showNumberError = false;
+  showNumberError: boolean;
+  /**********************************************************************
+   * @description Resume Level of intervention constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -36,6 +39,9 @@ export class ResumeInterventionComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.interventionArray = [];
+    this.button = 'Add';
+    this.showNumberError = false;
     this.getInterventionInfo();
     this.createForm();
   }
@@ -76,18 +82,17 @@ export class ResumeInterventionComponent implements OnInit {
         },
       );
   }
-
-  /**
-   * @description Inisaliszation of the Intervention Form
-   */
+  /**************************************************************************
+   * @description Initialization of the Intervention Form
+   *************************************************************************/
   createForm() {
     this.sendIntervention = this.fb.group({
       level_of_intervention_desc : ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
     });
   }
-  /**
+  /**************************************************************************
    * @description Create or Update Level Of Intervention
-   */
+   *************************************************************************/
   createUpdateIntervention() {
     if (this.button === 'Add') {
     this.Intervention = this.sendIntervention.value;

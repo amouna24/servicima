@@ -17,16 +17,18 @@ export class ResumeTechSkillComponent implements OnInit {
   sendTechSkill: FormGroup;
   arrayTechSkillCount = 0;
   TechSkill: IResumeTechnicalSkillsModel;
-  techSkillArray: IResumeTechnicalSkillsModel[] = [];
+  techSkillArray: IResumeTechnicalSkillsModel[];
   techSkillUpdate: IResumeTechnicalSkillsModel;
-  resume_code = ``;
-  technical_skill_code = '';
+  resume_code: string;
+  technical_skill_code: string ;
   indexUpdate = 0;
-  button = 'Add';
-  _id = '';
+  button: string;
+  _id: string;
   subscriptionModal: Subscription;
-  showNumberError = false;
-
+  showNumberError: boolean;
+  /**********************************************************************
+   * @description Resume Technical skills constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -38,6 +40,9 @@ export class ResumeTechSkillComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.showNumberError = false;
+    this.button = 'Add';
+    this.techSkillArray = [];
     this.getTechnicalSkillsInfo();
     this.createForm();
   }
@@ -78,21 +83,20 @@ export class ResumeTechSkillComponent implements OnInit {
           }
         },
       );
-
   }
 
-  /**
+  /**************************************************************************
    * @description Inisialize technical technical Form
-   */
+   *************************************************************************/
   createForm() {
     this.sendTechSkill = this.fb.group({
       technical_skill_desc :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       technologies:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       });
   }
-  /**
+  /**************************************************************************
    * @description Create or Update a Technical skill
-   */
+   * *************************************************************************/
   createUpdateTechnicalSkill() {
     if (this.button === 'Add') {
     this.TechSkill = this.sendTechSkill.value;

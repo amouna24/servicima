@@ -42,8 +42,8 @@ const routes: Routes = [
         loadChildren: () => import('@shared/modules/placement/placement.module').then(m => m.PlacementModule)
       },
       {
-        path: 'cv',
-        loadChildren: () => import('@shared/modules/cv/cv.module').then(m => m.CvModule)
+        path: 'Resume',
+        loadChildren: () => import('@shared/modules/resume-management/resume-management.module').then(m => m.ResumeManagementModule)
       },
       {
         path: 'user',

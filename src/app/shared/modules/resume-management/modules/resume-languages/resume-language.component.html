@@ -28,19 +28,19 @@
 
               <div fxLayout="row"  >
                 <div fxLayout="column" fxFlex="7" >
-                  <div fxLayout="row" fxFlex="70" style="align-items: flex-end; justify-content: space-around">
+                  <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around end" >
                   <button  mat-raised-button type="button"  class="bg-pale-grey p-10" (click)="deleteLanguage(item._id,pointIndex)">
                     <mat-icon svgIcon="close"></mat-icon>
                   </button>
                   </div>
                 </div>
-                <div fxLayout="column" fxFlex="88">
-                  <div fxLayout="row" fxLayoutAlign=" center" fxFlexFill>
-              <div  fxFlex="47" fxLayout="column"  >
+                <div fxLayout="column" fxFlex="57">
+                  <div fxLayout="row" fxLayoutAlign="space-between center"  fxFlexFill>
+              <div  fxFlex="52" fxLayout="column">
                 <mat-label class="black font-size-12">
                   {{ 'resume-language' | translate }}:
                 </mat-label>
-                <mat-form-field appearance="outline" class="width-69">
+                <mat-form-field appearance="outline" >
                   <mat-select   disableOptionCentering panelClass="panelColor"
                              [value]="item.resume_language_code" disabled>
                     <ng-container *ngFor="let v of langList">

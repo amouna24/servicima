@@ -29,7 +29,7 @@
       <ng-template [ngIf]="count === 100">
 <div fxLayout="column" fxFlexFill>
   <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-congratulation' | translate }}</h1> </div>
-  <div fxLayout="row" fxFlex="60" style="align-items: center; justify-content: center">
+  <div fxLayout="row" fxFlex="60" fxLayoutAlign="center center">
    <img src="assets/icons/done-resume.svg">
   </div>
   <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-done' | translate }}</h1> </div>
@@ -49,7 +49,7 @@
       <ng-template [ngIf]="count< 100">
         <div fxLayout="column" fxFlexFill>
           <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1> </div>
-          <div fxLayout="row" fxFlex="45" fxFlexAlign="center" style="align-items: center">
+          <div fxLayout="row" fxFlex="45" fxFlexAlign="center" fxLayoutAlign="center center">
            <img src="assets/icons/done-resume.svg">
           </div>
           <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-complete' | translate }}</h1> </div>

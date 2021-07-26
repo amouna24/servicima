@@ -37,28 +37,34 @@ export class ResumeLanguageComponent implements OnInit {
   get getLanguage() {
     return this.languageArray;
   }
-
   sendLanguage: FormGroup;
   rating = 0;
-  ratingEdit: number[] = [];
+  ratingEdit: number[];
   starCount = 5;
-  ratingArr = [];
+  ratingArr: number[];
   arrayLanguageCount = 0;
   language: IResumeLanguageModel;
   languageUpdate: IResumeLanguageModel;
-  languageArray: IResumeLanguageModel[] = [];
+  languageArray: IResumeLanguageModel[];
   langList: IViewParam[];
-  resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
+  resume_code: string;
   refData: { } = { };
   emailAddress: string;
-  showLevelError = false;
-  langListRes: IViewParam[] = [];
+  showLevelError: boolean;
+  langListRes: IViewParam[];
   subscriptionModal: Subscription;
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    this.resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
+    this.languageArray = [];
+    this.ratingArr = [];
+    this.languageArray = [];
+    this.ratingEdit = [];
+    this.langListRes = [];
+    this.showLevelError = false;
     this.getConnectedUser();
     this.createForm();
     await this.getLanguageRefData();
@@ -109,18 +115,8 @@ export class ResumeLanguageComponent implements OnInit {
     this.rating = rating;
     return false;
   }
-
-  showValidateIcon(index: number) {
-    const i = 0;
-    if (i >= index) {
-      return 'star';
-    } else {
-      return 'star_border';
-    }
-  }
-
   /**************************************************************************
-   * @description Select Level by clicking on the stars
+   * @description show level
    *************************************************************************/
   showIconDisabled(level: number, index: number) {
     if (level >= index + 1) {
@@ -129,7 +125,9 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
-
+  /**************************************************************************
+   * @description Select Level by clicking on the stars
+   *************************************************************************/
   showIcon(index: number) {
     if (this.rating >= index + 1) {
       return 'star';
@@ -166,7 +164,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.sendLanguage.reset();
     this.rating = 0;
   }
-
   /**************************************************************************
    * @description  Update a language by clicking on the stars
    *************************************************************************/
@@ -182,7 +179,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
     return false;
   }
-
   /**************************************************************************
    * @description Get Language Data from Resume Service
    *************************************************************************/
@@ -228,7 +224,6 @@ export class ResumeLanguageComponent implements OnInit {
       );
 
   }
-
   /**************************************************************************
    * @description Delete Selected Languages
    *************************************************************************/
@@ -260,24 +255,3 @@ export class ResumeLanguageComponent implements OnInit {
       );
   }
 }
-/*  /!**************************************************************************
-   * @description Convert the level from value to a string explication
-   *************************************************************************!/
-  translateLevel(level: string) {
-   switch (level) {
-     case '5': return 'Tres Bien';
-     case '4': return 'Bien';
-     case  '3': return 'Suffisant';
-     case '2': return 'mediocre';
-     case '1': return 'Mauvais';
-   }
-  }
-  translateInverseLevel(level: string) {
-
-  case 'Tres Bien': return '5';
-  case 'Bien': return '4';
-  case  'Suffisant': return '3';
-  case 'mediocre': return '3';
-  case 'Mauvais': return '2';  }
-
-}*/

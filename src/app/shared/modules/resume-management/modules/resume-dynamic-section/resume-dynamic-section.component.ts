@@ -14,10 +14,22 @@ import { Router } from '@angular/router';
   styleUrls: ['./resume-dynamic-section.component.scss']
 })
 export class ResumeDynamicSectionComponent implements OnInit {
-  private showNumberError = false;
-  get getSection() {
-    return this.SectionArray;
-  }
+  showNumberError: boolean;
+  sendSection: FormGroup;
+  arraySectionCount = 0;
+  Section: IResumeSectionModel;
+  showSection: boolean;
+  SectionArray: IResumeSectionModel[];
+  resume_code: string;
+  button: string;
+  section_code: string;
+  indexUpdate = 0;
+  sectionUpdate: IResumeSectionModel;
+  _id: string;
+  subscriptionModal: Subscription;
+  /**********************************************************************
+   * @description Resume Dynamic Section constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -25,24 +37,14 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
                ) { }
-  sendSection: FormGroup;
-  arraySectionCount = 0;
-  Section: IResumeSectionModel;
-  showSection = false;
-  SectionArray: IResumeSectionModel[] = [];
-  resume_code = '';
-  button = 'Add';
-  section_code = '';
-  indexUpdate = 0;
-  sectionUpdate: IResumeSectionModel;
-  _id = '';
-  subscriptionModal: Subscription;
-  currentSection: IResumeSectionModel;
-  previousSection: IResumeSectionModel;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.showNumberError = false;
+    this.showSection = false;
+    this.SectionArray = [];
+    this.button = 'Add';
     this.getDynamicSectionInfo();
     this.createForm();
     }
@@ -58,31 +60,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
-/*  await  this.resumeService.getCustomSection(`?index=${event.previousIndex.toString()}`).subscribe(
-      (res) => {
-          this.previousSection = res[0];
-        this.previousSection.section_code = this.previousSection.ResumeSectionKey.section_code;
-        this.previousSection.resume_code = this.previousSection.ResumeSectionKey.resume_code;
-          this.previousSection.index = event.currentIndex.toString();
-        console.log('previous =', this.previousSection);
-        this.resumeService.updateCustomSection(this.previousSection).subscribe( () => {
-          console.log('previous updated');
-        });
-        this.resumeService.getCustomSection(`?index=${event.currentIndex.toString()}`).subscribe(
-          (resCurrent) => {
-            this.currentSection = resCurrent[0];
-            this.currentSection.section_code = this.currentSection.ResumeSectionKey.section_code;
-            this.currentSection.resume_code = this.currentSection.ResumeSectionKey.resume_code;
-            this.currentSection.index = event.previousIndex.toString();
-            console.log('current =', this.currentSection);
-            this.resumeService.updateCustomSection(this.currentSection).subscribe( () => {
-              console.log('current updated');
-            });
-
-          }
-        );
-      }
-    );*/
   }
   /**************************************************************************
    * @description Get Dynamic section Data from Resume Service
@@ -102,7 +79,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
                 if (responseOne['msg_code'] !== '0004') {
                   this.SectionArray = responseOne;
                   this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
-                  console.log('section array count =',  this.arraySectionCount);
                   this.SectionArray.forEach(
                     (sec) => {
                       sec.section_code = sec.ResumeSectionKey.section_code;

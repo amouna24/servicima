@@ -17,14 +17,17 @@ export class ResumeFuncSkillComponent implements OnInit {
   arrayFuncSkillCount = 0;
   FuncSkill: IResumeFunctionalSkillsModel;
   FuncSkillUpdate: IResumeFunctionalSkillsModel;
-  funcSkillArray: IResumeFunctionalSkillsModel[] = [];
-  resume_code = '';
-  button = 'Add';
-  functional_skill_code = '';
+  funcSkillArray: IResumeFunctionalSkillsModel[];
+  resume_code: string;
+  button: string;
+  functional_skill_code: string;
   indexUpdate = 0;
-  _id = '';
+  _id: string;
   subscriptionModal: Subscription;
-  showNumberError = false;
+  showNumberError: boolean;
+  /**********************************************************************
+   * @description Resume Functional skills constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -36,27 +39,12 @@ export class ResumeFuncSkillComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.button = 'Add';
+    this.showNumberError = false;
+    this.funcSkillArray = [];
     this.getFuncSkillsInfo();
     this.createForm();
     }
-/*  makeSureBeforeYouLeave() {
-    const confirmation = {
-      code: 'delete',
-      title: 'Leave',
-      description: 'Are you sure you want to leave?',
-    };
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .subscribe(
-        (res) => {
-          if (res === true) {
-            this.router.navigate(['/candidate/resume/intervention']);
-          } else if (res === false) {
-            this.router.navigate(['/candidate/resume/functionalSkills']);
-          }
-          this.subscriptionModal.unsubscribe();
-        }
-      );
-  }*/
   /**************************************************************************
    * @description Get Functional skills data from Resume Service
    *************************************************************************/
@@ -119,19 +107,18 @@ export class ResumeFuncSkillComponent implements OnInit {
         }
       );
   }
-
-  /**
-   * @description Inisialization of the Functionnal skill form
-   */
+  /**************************************************************************
+   * @description Initialize the Functionnal skill form
+   *************************************************************************/
   createForm() {
     this.sendFuncSkill = this.fb.group({
       skill :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       });
   }
-  /**
+  /**************************************************************************
    * @description Create or Update Functional skill
-   */
- async createUpdateFunctionalSkill() {
+   *************************************************************************/
+  async createUpdateFunctionalSkill() {
     if (this.button === 'Add') {
     this.FuncSkill = this.sendFuncSkill.value;
     this.FuncSkill.resume_code = this.resume_code;
@@ -158,7 +145,7 @@ this.arrayFuncSkillCount++;
     this.showNumberError = false;
   }
   /**************************************************************************
-   * @description Set data of a selected Custom section and set it in the current form
+   * @description get data from a selected Custom section and set it in the current form
    *************************************************************************/
   editForm(_id: string, functional_skills_code: string, skill: string , index: number) {
     this.sendFuncSkill.patchValue({
@@ -171,5 +158,4 @@ this.arrayFuncSkillCount++;
 /*
 */
   }
-
 }

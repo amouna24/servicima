@@ -17,21 +17,23 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   sendCertifDiploma: FormGroup;
   arrayCertifDiplomaCount = 0;
   certifDiploma: IResumeCertificationDiplomaModel;
-  certifDiplomaArray: IResumeCertificationDiplomaModel[] = [];
-  resume_code = '';
+  certifDiplomaArray: IResumeCertificationDiplomaModel[];
+  resume_code: string;
   minStartDate: Date;
   maxStartDate: Date;
   minEndDate: Date;
   maxEndDate: Date;
-  showDateError = false;
-  certif_diploma_code = '';
+  showDateError: boolean;
+  certif_diploma_code: string;
   indexUpdate = 0;
-  button = 'Add';
-  myDisabledDayFilter: any;
+  button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
-  _id = '';
+  _id: string ;
   subscriptionModal: Subscription;
-   showNumberError = false;
+   showNumberError: boolean;
+  /**********************************************************************
+   * @description Resume Certifications and diplomas constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -44,13 +46,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const currentDay = new Date().getDate();
-    this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay  );
-    this.minStartDate = new Date(currentYear - 20, 0, 1);
-    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
+    this.showDateError = false;
+    this.showNumberError = false;
+    this.button = 'Add';
+    this.certifDiplomaArray = [];
+    this.initDate();
     this.getCertifDiplomaInfo();
     this.createForm();
   }
@@ -58,7 +58,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    * @description Get all Certification and diploma Data from Resume Service
    *************************************************************************/
   getCertifDiplomaInfo() {
-    const disabledDates = [];
     this.resumeService.getResume(
       // tslint:disable-next-line:max-line-length
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
@@ -92,12 +91,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           }
         },
       );
-
   }
-
-  /**
+  /**************************************************************************
    * @description Initialization of Certification and diploma Form
-   */
+   *************************************************************************/
   createForm() {
     this.sendCertifDiploma = this.fb.group({
       establishment: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -107,11 +104,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       certif_diploma_desc: '',
     });
   }
-
-  /**
+  /**************************************************************************
    * @description Create or Update Certification/Diploma
-   */
-  createUpdateCertifDiploma(dateStart, dateEnd) {
+   *************************************************************************/
+  createUpdateCertifDiploma() {
     if (this.button === 'Add') {
     this.certifDiploma = this.sendCertifDiploma.value;
     this.certifDiploma.resume_code = this.resume_code.toString();
@@ -140,10 +136,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.showNumberError = false;
   }
   /**************************************************************************
-   * @description Set data of a selected certification/Diploma and set it in the current form
+   * @description get data from a selected certification/Diploma and set it in the current form
    *************************************************************************/
-  // tslint:disable-next-line:max-line-length
-  editForm(_id: string, diploma: string, start_date: string, end_date: string, establishment: string, certif_diploma_desc: string, certif_diploma_code: string, pointIndex: number) {
+  editForm(_id: string, diploma: string, start_date: string, end_date: string, establishment: string,
+           certif_diploma_desc: string, certif_diploma_code: string, pointIndex: number) {
     this.sendCertifDiploma.patchValue({
       diploma,
       start_date,
@@ -191,5 +187,17 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    *************************************************************************/
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
+  }
+  /**************************************************************************
+   * @description Initialize Max and Min date in the DatePicker
+   *************************************************************************/
+  initDate() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const currentDay = new Date().getDate();
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay  );
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
 }
