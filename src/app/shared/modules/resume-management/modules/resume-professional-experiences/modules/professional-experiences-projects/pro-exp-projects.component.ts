@@ -18,33 +18,6 @@ interface MyTreeNode {
   expanded?: boolean;
   object?: object;
 }
-
-const demoNodes: MyTreeNode[] = [
-  {
-    title: 'node 1',
-    children: [
-      {
-        title: 'node 1.1',
-        children: [
-          {
-            title: 'aaaa'
-          },
-          ]
-      },
-    ]
-  },
-  {
-    title: 'node 2',
-    children: [
-      {
-        title: 'Projet d\'analyse et de gestion des reservation de paiement en ligne'
-      },
-      {
-        title: 'node 2.2'
-      }
-    ]
-  }
-];
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
@@ -59,6 +32,7 @@ export class ProExpProjectsComponent implements OnInit {
   showProject = false;
   treeItems: MyTreeNode[] = [];
   ProjectArray: IResumeProjectModel[] = [];
+  project: string;
   professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
   customer = this.router.getCurrentNavigation().extras.state?.customer;
   position = this.router.getCurrentNavigation().extras.state?.position;
@@ -137,7 +111,6 @@ export class ProExpProjectsComponent implements OnInit {
    async ngOnInit(): Promise<void> {
      this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
      this.treeDataSource = new MatTreeNestedDataSource();
-    console.log('tree item', 'static tree', demoNodes);
    await this.loadTree();
     this.getProjectInfo();
     this.createForm();
@@ -385,6 +358,7 @@ this.showNumberError = false ;
   }
   generateSections(project: IResumeProjectModel) {
     console.log('before', this.openExpansion);
+    this.project = project.project_title;
     if (this.openExpansion === false) {
       const detailsTree = [];
       this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
@@ -436,8 +410,8 @@ this.showNumberError = false ;
     return false;
   }
   nodeSelect(event: any) {
-    console.log('data =', event);
-    if (event.title !== this.customer) {
+    console.log('data =', event, 'project', this.Project);
+    if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
         this.professional_experience_code = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
         this.customer = event.object.customer;
         this.position = event.object.position;

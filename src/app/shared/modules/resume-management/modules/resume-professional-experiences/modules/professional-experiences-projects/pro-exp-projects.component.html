@@ -164,9 +164,9 @@
                   <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                   <li>
-                    <div (click)="nodeSelect(node)">
+                    <div>
                       <button mat-icon-button disabled>
-                        <mat-icon class="steel-icon">
+                        <mat-icon class="steel-icon mat-icon-steel">
                           brightness_1
                         </mat-icon>
                       </button>
@@ -178,8 +178,11 @@
                 <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
                   <li>
                     <div class="mat-tree-node" (click)="nodeSelect(node)" >
-                      <button mat-icon-button matTreeNodeToggle>
-                        <mat-icon class="topaz-icon">
+                      <button mat-icon-button matTreeNodeToggle disabled>
+                        <mat-icon *ngIf="node.title === customer || node.title === project" class="topaz-icon mat-icon-topaz" >
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                        <mat-icon *ngIf="node.title !== customer && node.title !==  project" class="steel-icon mat-icon-topaz" >
                           {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
                         </mat-icon>
                       </button>
