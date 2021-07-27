@@ -67,11 +67,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            console.log('info', userInfo);
             this.company_name = userInfo['company'][0]['company_name'];
           }
         });
-    console.log('user =', this.userService.connectedUser$.getValue());
     this.initForm();
     this.langList.next(this.appInitializerService.languageList.map(
       (obj) => {
@@ -101,7 +99,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       .subscribe(
         async (generalInfo) => {
           if (generalInfo['msg_code'] !== '0004') {
-            console.log('general info', generalInfo[0]);
             if (!!generalInfo) {
               if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
               this.haveImage = generalInfo[0].image;
@@ -161,7 +158,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_code: generalInformation[0].ResumeKey.resume_code,
       image: generalInformation[0].image,
     });
-      console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
       if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
@@ -178,13 +174,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
                     (responseProExp) => {
                       if (responseProExp['msg_code'] !== '0004') {
                         responseProExp.forEach((proExp) => {
-                          console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
                           const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
                             new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                          console.log('difference=', difference);
                           this.years = difference + this.years;
                         });
-                        console.log('years auto = ', this.years);
                         this.CreationForm.patchValue({
                           years_of_experience: this.years,
                       });
@@ -234,7 +227,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
     } } else {
       this.generalInfo = this.CreationForm.value;
-      console.log('filename=', filename);
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }

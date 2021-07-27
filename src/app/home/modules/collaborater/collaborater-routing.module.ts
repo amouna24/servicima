@@ -43,7 +43,7 @@ const routes: Routes = [
       },
       {
         path: 'cv',
-        loadChildren: () => import('@shared/modules/cv/cv.module').then(m => m.CvModule)
+        loadChildren: () => import('@shared/modules/resume-management/resume-management.module').then(m => m.ResumeManagementModule)
       },
       {
         path: 'user',

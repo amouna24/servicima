@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
@@ -40,6 +40,8 @@ export class ProjectSectionComponent implements OnInit {
   subscriptionModal: Subscription;
   selectValue = 'PARAGRAPH';
   @Input() project_code = '';
+  @Output() refresh_tree: EventEmitter<boolean> = new EventEmitter(false);
+
   _id = '';
   indexUpdate = 0;
   button = 'Add';
@@ -160,7 +162,10 @@ export class ProjectSectionComponent implements OnInit {
       this.ProDetails.project_details_code = this.project_details_code;
       this.ProDetails.project_code = this.project_code;
       if (this.sendProDetails.valid) {
-        this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
+        this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
+          this.getProjectDetailsInfo();
+          this.refresh_tree.emit(true);
+        });
         if (this.ProSectionDetails !== undefined) {
           this.proSectionAddArray.forEach((sec) => {
             this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
@@ -180,6 +185,7 @@ export class ProjectSectionComponent implements OnInit {
       });
       this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
         this.getProjectDetailsInfo();
+        this.refresh_tree.emit(true);
       });
       this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
       this.button = 'Add';
@@ -194,6 +200,7 @@ export class ProjectSectionComponent implements OnInit {
     });
     this.project_details_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.proSectionArray = [];
+    this.refresh_tree.emit(true);
   }
 
   onSelect() {
@@ -280,6 +287,7 @@ export class ProjectSectionComponent implements OnInit {
                   this.select = selectedValue;
                 });
                 this.proSectionArray = [];
+                this.refresh_tree.emit(true);
               }
             );
           }

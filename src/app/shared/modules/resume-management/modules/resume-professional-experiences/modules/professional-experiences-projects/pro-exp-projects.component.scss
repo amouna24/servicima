@@ -1,3 +1,4 @@
+@import "./src/assets/styles/variables.scss";
 
 .add_project {
   place-content: flex-end;
@@ -5,7 +6,8 @@
 .border_add_project {
   border-color: #e8f1f9;
   border-style: solid;
-  justify-content: center;
+  padding-left: 3%;
+  padding-top: 3%;
 }
 .border_add_section {
   border-color: #e8f1f9;
@@ -13,4 +15,55 @@
 }
 .mat-expansion-panel-body {
   padding: 0 !important;
+}
+li {
+  list-style-type: none;
+  margin: 0;
+}
+
+ul,
+li {
+  list-style-type: none;
+  margin: 0;
+}
+
+ul { padding-left: 1em; }
+
+.mat-tree-node {
+  display: unset;
+  cursor:pointer;
+}
+
+.mat-icon-button {
+  width:  unset;
+  height: unset;
+  line-height: unset;
+}
+
+.mat-icon-button {
+  width:  unset;
+  height: unset;
+  line-height: unset;
+}
+.topaz-icon {
+  color: $topaz;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.topaz-icon svg {
+  fill: $topaz;
+}
+.steel-icon {
+  color: $steel;
+}
+.steel-icon svg{
+  fill: $steel;
+}
+.onClickTree:hover {
+  color: blue;
+}
+.mat-icon-topaz {
+  font-size: 10px !important;
+}
+.mat-icon-steel {
+  font-size: 5px !important;
 }
