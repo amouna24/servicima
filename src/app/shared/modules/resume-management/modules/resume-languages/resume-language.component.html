@@ -1,0 +1,119 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxFlex="56">
+          <h1 class="steel font-size-24 font-medium">Resume</h1>
+        </div>
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+        <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+      </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center" >
+    <div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">{{ 'resume-language' | translate }}</h4>
+        </div>
+      </div>
+  <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width"  >
+          <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+            <div  *ngFor="let item of getLanguage let pointIndex=index">
+
+              <div fxLayout="row"  >
+                <div fxLayout="column" fxFlex="7" >
+                  <div fxLayout="row" fxFlex="70" style="align-items: flex-end; justify-content: space-around">
+                  <button  mat-raised-button type="button"  class="bg-pale-grey p-10" (click)="deleteLanguage(item._id,pointIndex)">
+                    <mat-icon svgIcon="close"></mat-icon>
+                  </button>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="88">
+                  <div fxLayout="row" fxLayoutAlign=" center" fxFlexFill>
+              <div  fxFlex="47" fxLayout="column"  >
+                <mat-label class="black font-size-12">
+                  {{ 'resume-language' | translate }}:
+                </mat-label>
+                <mat-form-field appearance="outline" class="width-69">
+                  <mat-select   disableOptionCentering panelClass="panelColor"
+                             [value]="item.resume_language_code" disabled>
+                    <ng-container *ngFor="let v of langList">
+                      <mat-option  [value]="item.resume_language_code">{{item.resume_language_code | titlecase}} </mat-option>
+                    </ng-container>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="20">
+                <div fxLayout="row" fxFlexFill>
+                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item.resume_language_code,item._id,item.ResumeLanguageKey)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                    <mat-icon>
+                      {{showIconDisabled(ratingEdit[pointIndex],i)}}
+                    </mat-icon>
+                  </button>
+                </div>
+              </div>
+                </div>
+                </div>
+                </div>
+            </div>
+          <form [formGroup]="sendLanguage" class="full-width full-height" >
+            <div fxLayout="row" fxLayoutAlign="space-around center" >
+                <div fxLayout="column" fxFlex="30"  >
+                  <mat-label class="black font-size-12 required">
+                    Language:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select disableOptionCentering panelClass="panelColor"
+                                placeholder="{{ 'resume-language' | translate }}" formControlName="resume_language_code" required>
+                      <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
+                    </mat-select>
+                    <mat-error class="red" *ngIf="sendLanguage.controls.resume_language_code.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="30">
+                  <div fxLayout="row" fxFlexFill>
+                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                      <mat-icon>
+                        {{showIcon(i)}}
+                      </mat-icon>
+                    </button>
+                  </div>
+                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="showLevelError && rating == 0" >
+                        Please select a level
+                  </mat-error>
+
+
+                </div>
+                <div fxLayout="column" fxFlex="16"    >
+                  <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="sendLanguage.invalid" (click)="createLanguage()">Add</button>
+                </div>
+            </div>
+
+
+          </form>
+          </div>
+        </wid-scrollbar>
+      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/dynamicSection">
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/done']">
+            {{ 'resume-next' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+  </div>

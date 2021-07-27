@@ -1,0 +1,138 @@
+<wid-scrollbar fxLayout="row" fxFlexFill>
+<div fxLayout="column" fxFlexFill >
+  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
+    <div fxLayout="column" fxFlex="82" >
+      <br>
+    <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
+      <div class="p-l-20" fxLayout="column" fxFlex="80" >
+        <p>{{item.project_detail_title}}</p>
+      </div>
+      <div fxLayout="column" fxFlex fxLayoutAlign="center end" class="p-r-10">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.ResumeProjectDetailsKey.project_code,item.project_detail_title,item.project_detail_desc,pointIndex,item._id,item.ResumeProjectDetailsKey.project_details_code); ">{{ 'resume-edit' | translate }}</button>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex class="p-r-20" fxLayoutAlign="center end">
+        <div fxLayout="row" fxLayoutAlign="end" >
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_details_code);" >{{ 'resume-delete' | translate }}</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+  <div fxLayout="row"   class="full-width" fxFlex="100">
+<form [formGroup]="sendProDetails" class="full-height" fxLayout="column" fxFlexFill fxLayoutGap="10px">
+  <div fxLayout="row" fxFlex="38"  fxLayoutAlign="space-around center" style="align-items: flex-end">
+    <div fxLayout="column" fxFlex="30">
+      <mat-label class="black font-size-12 required">
+        {{ 'resume-section-title' | translate }}:
+      </mat-label>
+      <mat-form-field appearance="outline">
+        <input formControlName="project_detail_title" matInput placeholder="{{ 'resume-section-title' | translate }}" required>
+        <mat-error class="red" *ngIf="sendProDetails.controls.project_detail_title.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="30">
+      <mat-label class="black font-size-12 required">
+        {{ 'resume-section-type' | translate }}:
+      </mat-label>
+      <mat-form-field appearance="outline">
+        <mat-select disableOptionCentering panelClass="panelColor"
+                    formControlName="select" (selectionChange)="onSelect()" [value]="select" placeholder=" {{ 'resume-section-type' | translate }}">
+          <mat-option *ngFor="let v of secList" [value]="v.value">{{v.viewValue}}</mat-option>
+        </mat-select>
+        <mat-error class="red" *ngIf="sendProDetails.controls.select.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+    <ng-template [ngIf]="showDesc" >
+      <div fxLayout="row" fxFlex="28" style="justify-content: center" class="full-width">
+      <div fxLayout="column" fxFlex="80">
+        <mat-label class="black font-size-12">
+          {{ 'resume-desc' | translate }}:
+        </mat-label>
+        <mat-form-field appearance="outline">
+          <textarea matInput placeholder="{{ 'resume-desc' | translate }}" rows="7"
+                    formControlName="project_detail_desc"></textarea>
+          <mat-error class="red" *ngIf="sendProDetails.controls.project_detail_desc.errors?.required">
+            {{ 'general.required' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+        </div>
+    </ng-template>
+  <ng-template  [ngIf]="showSec" >
+    <div fxLayout="row" fxFlexFill>
+    <div fxLayout="column" fxFlex="100" >
+      <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 19%">
+        {{ 'resume-section-content' | translate }}:
+      </mat-label>
+      <div *ngFor="let item of inputFields; let pointIndex=index" fxLayout="row"   >
+        <div fxLayout="column" fxFlex="68" fxLayoutAlign=" end"  >
+          <div fxLayout="row" fxFlexFill  fxLayoutGap="10px"   style="justify-content: flex-end">
+            <div fxLayout="column" fxFlex="55">
+              <mat-form-field appearance="outline">
+                <input  matInput  placeholder="{{ 'resume-section-content' | translate }}"  #project_details_section_desc [value]="item.project_details_section_desc" >
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center">
+                <button type="button" mat-raised-button class="bg-error-red btn-small black"
+                        (click)="deleteProDetSec(item._id,pointIndex)"
+                        >
+                  {{ 'resume-delete' | translate}}
+                </button>
+            </div>
+            <div fxLayout="column" fxFlex="14" fxLayoutAlign="center">
+              <ng-template [ngIf]="project_details_section_desc.value.toString() !== item.project_details_section_desc">
+              <button type="button" mat-raised-button class="bg-pale-grey btn-small"
+                      (click)="EditProDetSection(item.ResumeProjectDetailsSectionKey.project_details_code,item.ResumeProjectDetailsSectionKey.project_details_section_code,project_details_section_desc.value,item._id, pointIndex)"
+              [disabled]="project_details_section_desc.value.toString() === '' || project_details_section_desc.value.toString() === item.project_details_section_desc">
+                {{ 'resume-edit' | translate}}
+              </button>
+              </ng-template>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <form  [formGroup]="sendProSectionDetails" fxLayout="row">
+        <div fxLayout="column" fxFlex="47" fxLayoutAlign=" end"  >
+          <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
+            <div fxLayout="column" fxFlex="79">
+              <mat-form-field appearance="outline">
+                <input formControlName="project_details_section_desc" matInput placeholder="{{ 'resume-section-content' | translate }}" >
+                <mat-error class="red" *ngIf="sendProSectionDetails.controls.project_details_section_desc.errors?.required">
+                  {{ 'general.required' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
+          <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()"  [disabled]="sendProSectionDetails.invalid">
+            {{ 'resume-add' | translate }}</button>
+        </div>
+      </form>
+    </div>
+    </div>
+  </ng-template>
+  <div fxLayout="row" fxFlex="28" fxLayoutAlign="end end">
+    <div fxLayout="column" fxFlex="19">
+    <button type="button" mat-raised-button class="bg-pale-grey btn-small"
+            (click)="createProDetails()" [disabled]="sendProDetails.invalid">
+      <div *ngIf="button === 'Add';then add else save"></div>
+      <ng-template #add>
+        {{ 'resume-add' | translate }}
+      </ng-template>
+      <ng-template #save>
+        {{ 'resume-save' | translate }}
+      </ng-template>
+    </button></div>
+  </div>
+
+</form>
+</div>
+</div>
+</wid-scrollbar>

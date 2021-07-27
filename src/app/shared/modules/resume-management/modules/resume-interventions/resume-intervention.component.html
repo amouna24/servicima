@@ -1,0 +1,83 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">{{ 'resume-lvl-intervention' | translate }}</h4>
+        </div>
+      </div>
+      <wid-scrollbar fxFlex="80" class="full-width">
+        <div fxLayout="column" fxFlexFill style="align-items: center" fxLayoutGap="10px">
+          <div *ngFor="let item of interventionArray let pointIndex=index" class="p-l-65 full-width">
+            <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+              <div fxLayout="column" fxFlex="80" class="p-l-20">
+                <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item._id,item.level_of_intervention_desc,item.intervention_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="sendIntervention" fxFlex="100" class="width-86" fxLayout="row">
+            <div fxLayout="column" fxFlex="90">
+              <mat-label class="black font-size-12 required">
+                {{ 'resume-lvl-intervention' | translate }}:
+              </mat-label>
+              <mat-form-field appearance="outline">
+                              <textarea matInput placeholder=" {{ 'resume-lvl-intervention' | translate }}" rows="7"
+                                        formControlName="level_of_intervention_desc" required></textarea>
+                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.required">
+                  {{ 'general.required' | translate }}</mat-error>
+                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.pattern">
+                  {{ 'resume-numbers' | translate }}</mat-error>
+              </mat-form-field>
+              <div fxLayout="row" fxLayoutAlign="end end">
+                <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                        (click)="createUpdateIntervention()" [disabled]="sendIntervention.invalid">
+                  <div *ngIf="button === 'Add';then add else save"></div>
+                  <ng-template #add>
+                    {{ 'resume-add' | translate }}
+                  </ng-template>
+                  <ng-template #save>
+                    {{ 'resume-save' | translate }}
+                  </ng-template>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </wid-scrollbar>
+      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/professionalExperience']">
+            {{ 'resume-next' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

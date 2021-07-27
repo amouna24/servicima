@@ -1,0 +1,69 @@
+
+<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
+
+  <div fxLayout="column" fxFlex="4"   ></div>
+
+  <div fxLayout="column" fxFlex="90"    >
+
+    <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-24 font-medium">Resume</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+          <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    </div>
+    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+      <div fxLayout="column" fxFlex="86">
+        <h4 class="steel font-size-18 font-small">Preview</h4>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
+      <ng-template [ngIf]="count === 100">
+<div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-congratulation' | translate }}</h1> </div>
+  <div fxLayout="row" fxFlex="60" style="align-items: center; justify-content: center">
+   <img src="assets/icons/done-resume.svg">
+  </div>
+  <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-done' | translate }}</h1> </div>
+  <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
+
+    <button mat-raised-button type="submit" color="primary" class="white  btn-large" [class.spinner-auth]="loading" (click)="openThemeDialog('preview')" [style]="{marginRight: '4%'}">
+     <span *ngIf='!loading'>
+      {{ 'resume-preview' | translate }}
+     </span>
+    </button>
+    <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="openThemeDialog('generate')"  [style]="{marginRight: '4%'}">
+      {{ 'resume-save' | translate }}
+    </button>
+    </div>
+</div>
+      </ng-template>
+      <ng-template [ngIf]="count< 100">
+        <div fxLayout="column" fxFlexFill>
+          <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1> </div>
+          <div fxLayout="row" fxFlex="45" fxFlexAlign="center" style="align-items: center">
+           <img src="assets/icons/done-resume.svg">
+          </div>
+          <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-complete' | translate }}</h1> </div>
+          <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
+            <button mat-raised-button type="submit" color="primary" class="white  btn-large" (click)="openThemeDialog('preview')"  [style]="{marginRight: '4%'}">
+              {{ 'resume-preview' | translate }}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+</div>
+
+
+
+  </div>
+</div>

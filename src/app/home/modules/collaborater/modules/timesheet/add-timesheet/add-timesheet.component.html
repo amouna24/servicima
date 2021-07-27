@@ -1,284 +1,211 @@
-<form [formGroup]="initialForm">
-  <div class="dynamic-component-container bg-white border-radius-10">
-    <div fxLayout="column">
+ <div  fxLayout="column"
+        class="dynamic-component-container bg-white border-radius-20">
+   <div fxLayout="row" fxLayoutAlign="center center" fxFlex="12" class="full-width">
+     <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
+          style="border-bottom: 1px solid #afb1b8">
+     <ng-container *ngIf="buttonValue === 'edit' else Add">
+       <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
+     </ng-container>
+     <ng-template #Add>
+       <h2 class="steel font-medium font-size-24">Add timesheets</h2>
+     </ng-template>
+     <button mat-flat-button class="btn-small bg-pale-grey cool-grey">
+       Back
+     </button>
+     </div>
+   </div>
+   <wid-scrollbar>
+     <form fxLayout="column" class="full-width p-l-40 p-r-40 p-t-10">
+       <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
+       <!-- left column form -->
+       <div fxFlex="28" fxLayout="column">
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Week start on :</label>
+           <mat-form-field appearance="outline">
+             <input matInput [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
+             <mat-datepicker-toggle matSuffix [for]="datepicker">
+               <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
+             </mat-datepicker-toggle>
+             <mat-datepicker #datepicker></mat-datepicker>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Project : </label>
+           <mat-form-field appearance="outline">
+             <mat-select formControlName="project_code" (selectionChange)="onProjectSelect($event)" placeholder="Project">
+               <mat-option *ngFor="let project of listTimesheetProject" [value]="project.project_desc">
+                 {{ project.project_desc }}
+               </mat-option>
+             </mat-select>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Status : </label>
+           <mat-form-field appearance="outline">
+             <mat-select disabled placeholder="Status">
+               <mat-option value="Pending">
+                 Pending
+               </mat-option>
+               <mat-option value="Draft">
+                 Draft
+               </mat-option>
+               <mat-option value="Submited">
+                 Submited
+               </mat-option>
 
-      <!-- header -->
-      <div fxFlex="12"  fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
-        <ng-container *ngIf="buttonValue === 'edit'; else addTimesheet">
-          <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" > Edit Timesheet </div>
-        </ng-container>
-        <ng-template #addTimesheet>
-          <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" > Add Timesheet </div>
-        </ng-template>
-        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
-          <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
-            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
-            </mat-icon>
-            <span class="cool-grey"> back</span>
-          </button>
-        </div>
-      </div>
-      <!--
-     <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
-     -->
-     <!-- body -->
-      <div fxLayout="row" fxFlex class="p-t-20 font-size-12 ">
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
-          <wid-scrollbar class="scrollbar">
+             </mat-select>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Comment : </label>
+           <mat-form-field appearance="outline">
+             <mat-label>Textarea</mat-label>
+             <textarea rows="3" placeholder="comment ..." matInput></textarea>
+           </mat-form-field>
+         </div>
 
-            <div fxLayout="row">
+       </div>
+       <!-- right column form -->
+       <div fxFlex="50" >
+         <div fxFlex="56" fxLayout="column">
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Monday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Tuesday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Wednesday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Thursday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Friday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Saturday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+           <label class="font-size-12 required"> Sunday : </label>
+           <mat-form-field appearance="outline">
+             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.min">
+               minimum value is 0
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.max">
+               maximum value is 8
+             </mat-error>
+             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.required">
+               Required field
+             </mat-error>
+           </mat-form-field>
+         </div>
+         <div fxLayout="column">
+             <label class="font-size-12"> Total : </label>
+             <mat-form-field appearance="outline">
+               <input disabled matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
+             </mat-form-field>
+         </div>
+         </div>
+       </div>
+       </div>
+       <div fxLayout="row" fxLayoutAlign="space-between center">
+         <button mat-flat-button class="bg-pale-grey cool-grey btn-small">Cancel</button>
+         <div fxLayout="row" fxLayoutAlign="end center">
+         <button mat-flat-button class="bg-cerulean-blue white btn-small">Submit</button>
+         <button mat-flat-button class="cerulean-blue bg-pale-grey btn-small">Save</button>
+         </div>
+       </div>
+     </form>
+   </wid-scrollbar>
+ </div>
 
-              <!-- left column -->
-              <div fxLayout="column" fxFlex="50">
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Week start on :</label>
-                    <mat-form-field appearance="outline">
-                      <input matInput [matDatepicker]="datepicker" formControlName="start_date" placeholder="MM/DD/YYYY">
-                      <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                      <mat-datepicker #datepicker color="primary"></mat-datepicker>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Project : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-select formControlName="project_code" (selectionChange)="onProjectSelect($event)" placeholder="Project">
-                        <mat-option *ngFor="let project of listTimesheetProject" [value]="project.project_desc">
-                          {{ project.project_desc }}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12"> Category : </label>
-                    <mat-form-field appearance="outline">
-                      <input matInput placeholder="Category" [value]="categoryViewValue" [readonly]="true">
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12"> Comment : </label>
-                    <mat-form-field class="full-width" appearance="outline">
-                      <textarea matInput placeholder="comment" rows="8" formControlName="comment"></textarea>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-
-              <!-- right column -->
-              <div fxLayout="column" fxFlex="50">
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Monday : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.min">
-                        minimum value is 0
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.max">
-                        maximum value is 8
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Tuesday : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" (input)="calculTotalWeekHours()">
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.min">
-                        minimum value is 0
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.max">
-                        maximum value is 8
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Wednesday : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" (input)="calculTotalWeekHours()">
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.min">
-                        minimum value is 0
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.max">
-                        maximum value is 8
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Thursday : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" (input)="calculTotalWeekHours()">
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.min">
-                        minimum value is 0
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.max">
-                        maximum value is 8
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12 required"> Friday : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" (input)="calculTotalWeekHours()">
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.min">
-                        minimum value is 0
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.max">
-                        maximum value is 8
-                      </mat-error>
-                      <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.required">
-                        Required field
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-
-                <ng-container *ngIf="typeTimesheet === '/collaborator/timesheet/add-timesheet'; else showWeekend"></ng-container>
-                <ng-template #showWeekend>
-                  <div fxLayout="row">
-                    <div fxLayout="column" fxFlex="80">
-                      <label class="font-size-12 required"> Saturday : </label>
-                      <mat-form-field appearance="outline">
-                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                        <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" (input)="calculTotalWeekHours()">
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.min">
-                          minimum value is 0
-                        </mat-error>
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.max">
-                          maximum value is 8
-                        </mat-error>
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.required">
-                          Required field
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div fxLayout="row">
-                    <div fxLayout="column" fxFlex="80">
-                      <label class="font-size-12 required"> Sunday : </label>
-                      <mat-form-field appearance="outline">
-                        <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                        <input matInput placeholder="00h 00m" type="number" formControlName="sunday" (input)="calculTotalWeekHours()">
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.min">
-                          minimum value is 0
-                        </mat-error>
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.max">
-                          maximum value is 8
-                        </mat-error>
-                        <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.required">
-                          Required field
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </ng-template>
-
-                <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="80">
-                    <label class="font-size-12"> Total : </label>
-                    <mat-form-field appearance="outline">
-                      <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                      <input matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Buttons -->
-            <div fxLayout="row" [ngStyle]="{'margin-top': '3%'}">
-
-              <!-- reset button -->
-              <div fxLayout="column" fxFlex="50">
-                <button mat-button mat-raised-button (click)="resetClick()"  class="btn-medium bg-pale-grey black-three">
-                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="font-size-14"> Reset </span>
-                  </div>
-                </button>
-              </div>
-
-              <!-- delete + edit buttons -->
-              <ng-container *ngIf="buttonValue === 'edit'; else add">
-                <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
-                  <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                    <button  mat-button mat-raised-button (click)="deleteTimesheet()" class="btn-small bg-error-red white" >
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        Delete
-                      </div>
-                    </button>
-                    <button mat-button mat-raised-button (click)="editTimesheet()" class="white btn-small duck-egg-blue">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        Edit
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </ng-container>
-
-              <!-- submit + save buttons -->
-              <ng-template #add>
-                <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
-                  <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                    <button  mat-button mat-raised-button (click)="submitTimesheet('submit')" class="btn-small bg-cerulean-blue white" >
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        Submit
-                      </div>
-                    </button>
-                    <button mat-button mat-raised-button (click)="submitTimesheet('save')"   class="btn-small white duck-egg-blue">
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        Save
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </ng-template>
-
-            </div>
-
-          </wid-scrollbar>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</form>

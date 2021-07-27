@@ -1,62 +1,16 @@
-.mat-tab-labels {
-  justify-content: center;
+mat-button-toggle-group{
+  width: 220px !important;
 }
 
-.spacing{
-  padding: 15px;
+.mat-button-toggle-label-content{
+  line-height: 10px !important;
+}
+.feature{
+  border-bottom: 1px solid #f3f6f9;
 }
 
-.close{
-  display:flex;
-  justify-content: flex-end;
-  cursor: pointer;
+.mat-button-toggle-checked{
+  background-color: #1bc5bd !important;
+  color: white !important;
 }
 
-.icon-close{
-  display:flex;
-  justify-content: flex-end;
-}
-
-.price{
-  font-size: 35px;
-  text-align: center;
-  padding: 8px;color: #276da5;
-}
-
-.type-licence{
-  font-size: 24px;
-  text-align: center;
-  color:
-   #276da5;
-}
-
-.user-number{
-  text-align: center;
-  padding: 15px;
-}
-
-.title{
-  text-align: center ;
-  font-size: 31px;
-  color: #276da5;
-}
-
-.licence{
-  font-size: 16px;
-  border-bottom: 1px solid gray;
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
-  border-top: 4px solid #276da5;
-}
-
-.container-button{
-  width: 100%;
-  text-align: center;
-  padding-bottom: 8px;
-}
-
-.button-buy{
-  background-color: #79d509;
-  color: white;width: 40%;
-  text-align: center;
-}

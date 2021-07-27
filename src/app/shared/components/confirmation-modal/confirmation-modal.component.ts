@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'wid-confirmation-modal',
@@ -9,19 +10,32 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ConfirmationModalComponent implements OnInit {
   existForm = false;
+  description: string;
+  title: string;
+  modelConfig: any;
   constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
+              public translate: TranslateService,
               private modalService: ModalService, ) {
   }
 
-  modelConfig: any;
   ngOnInit(): void {
+    this.getTranslate();
     this.displayStyle();
   }
 
   onNotify(res: boolean): void {
       this.dialogRef.close();
       this.modalService.emitConfirmationModalResponse(res);
+  }
+
+  getTranslate() {
+    this.translate.get(this.data.description).subscribe((data: string) => {
+      this.description = data;
+    });
+    this.translate.get(this.data.title).subscribe((data: string) => {
+      this.title = data;
+    });
   }
 
   displayStyle() {

@@ -19,6 +19,7 @@ export interface IUserModel {
   facebook_url: string;
   skype_url: string;
   other_url: string;
+  resume_image: string;
   instagram_url: string;
   viber_url: string;
   youtube_url: string;
