@@ -5,7 +5,7 @@ import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSki
 import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { NavigationEnd, Router, Event } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -18,11 +18,11 @@ export class ResumeFuncSkillComponent implements OnInit {
   FuncSkill: IResumeFunctionalSkillsModel;
   FuncSkillUpdate: IResumeFunctionalSkillsModel;
   funcSkillArray: IResumeFunctionalSkillsModel[];
-  resume_code: string;
+  resumeCode: string;
   button: string;
   functional_skill_code: string;
   indexUpdate = 0;
-  _id: string;
+  id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
   /**********************************************************************
@@ -55,9 +55,9 @@ export class ResumeFuncSkillComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getFunctionalSkills(
-            `?resume_code=${this.resume_code}`)
+            `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -82,22 +82,23 @@ export class ResumeFuncSkillComponent implements OnInit {
           }
         },
       );
-
   }
   /**************************************************************************
-   * @description Delete Seleceted Functional Skilll
+   * @description Delete Selected Functional Skilll
+   * @param id the id of the deleted functionnal skill
+   * @param pointIndex the index of the deleted functional skill
    *************************************************************************/
-  deleteFuncSkill(_id: string, pointIndex: number) {
+  deleteFuncSkill(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Functionnal Skills ?',
-      description: 'Are you sure ?',
+      title: 'resume-delete-func',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteFunctionalSkills(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteFunctionalSkills(id).subscribe(data => console.log('Deleted'));
             this.funcSkillArray.forEach((value, index) => {
               if (index === pointIndex) { this.funcSkillArray.splice(index, 1); }
             });
@@ -121,7 +122,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   async createUpdateFunctionalSkill() {
     if (this.button === 'Add') {
     this.FuncSkill = this.sendFuncSkill.value;
-    this.FuncSkill.resume_code = this.resume_code;
+    this.FuncSkill.resume_code = this.resumeCode;
     this.FuncSkill.functional_skills_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
     this.FuncSkill.index = this.arrayFuncSkillCount;
     if (this.sendFuncSkill.valid ) {
@@ -133,9 +134,9 @@ this.arrayFuncSkillCount++;
     }} else {
       this.FuncSkillUpdate = this.sendFuncSkill.value;
       this.FuncSkillUpdate.functional_skills_code = this.functional_skill_code;
-      this.FuncSkillUpdate.resume_code = this.resume_code;
+      this.FuncSkillUpdate.resume_code = this.resumeCode;
       this.FuncSkillUpdate.index = this.indexUpdate;
-      this.FuncSkillUpdate._id = this._id;
+      this.FuncSkillUpdate._id = this.id;
       if (this.sendFuncSkill.valid && !this.showNumberError) {
       this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
       this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
@@ -145,17 +146,17 @@ this.arrayFuncSkillCount++;
     this.showNumberError = false;
   }
   /**************************************************************************
-   * @description get data from a selected Custom section and set it in the current form
+   * @description get data from a selected functional skills and set it in the current form
+   * @param functionalSkill the Functional Skill model
+   * @param index the index of the selected Functional skill
    *************************************************************************/
-  editForm(_id: string, functional_skills_code: string, skill: string , index: number) {
+  editForm(functionalSkill: IResumeFunctionalSkillsModel, index: number) {
     this.sendFuncSkill.patchValue({
-      skill,
+      skill: functionalSkill.skill,
     });
-    this._id = _id;
-    this.functional_skill_code = functional_skills_code;
+    this.id = functionalSkill._id;
+    this.functional_skill_code = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;
     this.indexUpdate = index;
     this.button = 'Save';
-/*
-*/
   }
 }

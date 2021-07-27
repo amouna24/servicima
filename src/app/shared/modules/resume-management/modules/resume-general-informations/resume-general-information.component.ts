@@ -39,7 +39,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
-  showYears = false;
+  showYears: boolean;
   update = false;
   photo: FormData;
   resume_code: string;
@@ -66,6 +66,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    this.showYears = false;
     this.firstname = this.userService.connectedUser$.getValue().user[0]['first_name'];
     this.lastname = this.userService.connectedUser$.getValue().user[0]['last_name'];
     this.company = this.userService.connectedUser$.getValue().user[0]['company_email'];
@@ -80,7 +81,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
   showHideYears() {
     this.showYears = !this.showYears;
   }
-
   /**************************************************************************
    *  @description Get Resume Data from Resume Service and reusme Image from upload Service
    *************************************************************************/
@@ -141,6 +141,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   }
   /**************************************************************************
    * @description set Existing data in the Resume Form
+   * @param generalInformation: General information model
    *************************************************************************/
   async updateForm(generalInformation) {
     this.CreationForm.patchValue({
@@ -259,7 +260,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
     ));
   }
   /**************************************************************************
-   * @description Get Language list from RefData and RefType
+   * @description Get imported image by the user
+   * @param obj: object uploaded
    *************************************************************************/
   getFile(obj: FormData) {
     this.photo = obj;

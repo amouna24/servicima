@@ -18,7 +18,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   arrayCertifDiplomaCount = 0;
   certifDiploma: IResumeCertificationDiplomaModel;
   certifDiplomaArray: IResumeCertificationDiplomaModel[];
-  resume_code: string;
+  resumeCode: string;
   minStartDate: Date;
   maxStartDate: Date;
   minEndDate: Date;
@@ -28,7 +28,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   indexUpdate = 0;
   button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
-  _id: string ;
+  id: string ;
   subscriptionModal: Subscription;
    showNumberError: boolean;
   /**********************************************************************
@@ -64,9 +64,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
             this.resumeService.getCertifDiploma(
-              `?resume_code=${this.resume_code}`)
+              `?resume_code=${this.resumeCode}`)
               .subscribe(
                 (responseOne) => {
                   if (responseOne['msg_code'] !== '0004') {
@@ -110,7 +110,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   createUpdateCertifDiploma() {
     if (this.button === 'Add') {
     this.certifDiploma = this.sendCertifDiploma.value;
-    this.certifDiploma.resume_code = this.resume_code.toString();
+    this.certifDiploma.resume_code = this.resumeCode.toString();
     this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
       if (this.sendCertifDiploma.valid && this.showDateError === false ) {
       this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
@@ -123,8 +123,8 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.arrayCertifDiplomaCount++; } else {
       this.certifDiplomaUpdate = this.sendCertifDiploma.value;
       this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
-      this.certifDiplomaUpdate.resume_code = this.resume_code;
-      this.certifDiplomaUpdate._id = this._id;
+      this.certifDiplomaUpdate.resume_code = this.resumeCode;
+      this.certifDiplomaUpdate._id = this.id;
       if (this.sendCertifDiploma.valid) {
         this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe((data) => {
           console.log('certif updated', data);
@@ -137,35 +137,38 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   }
   /**************************************************************************
    * @description get data from a selected certification/Diploma and set it in the current form
+   * @param certifDiploma Certifications and diploma Model
+   * @param pointIndex the index of the current certif and diploma
    *************************************************************************/
-  editForm(_id: string, diploma: string, start_date: string, end_date: string, establishment: string,
-           certif_diploma_desc: string, certif_diploma_code: string, pointIndex: number) {
+  editForm(certifDiploma: IResumeCertificationDiplomaModel, pointIndex: number) {
     this.sendCertifDiploma.patchValue({
-      diploma,
-      start_date,
-      end_date,
-      establishment,
-      certif_diploma_desc,
+      diploma: certifDiploma.diploma,
+      start_date: certifDiploma.start_date,
+      end_date: certifDiploma.end_date,
+      establishment: certifDiploma.establishment,
+      certif_diploma_desc: certifDiploma.certif_diploma_desc,
     });
-    this.certif_diploma_code = certif_diploma_code;
-    this._id = _id;
+    this.certif_diploma_code = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
+    this.id = certifDiploma._id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
   }
   /**************************************************************************
    * @description Delete the selected certif/Diploma
+   * @param id id of the certif and diploma model that is going to be deleted
+   * @param pointIndex index of the deleted certif and diploma
    *************************************************************************/
-  deleteCertif(_id: string, pointIndex: number) {
+  deleteCertif(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Certification/Diploma ?',
-      description: 'Are you sure ?'
+      title: 'resume-delete-certif',
+      description: 'resume-u-sure'
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteCertifDiploma(_id).subscribe(cert => console.log('deleted'));
+            this.resumeService.deleteCertifDiploma(id).subscribe(cert => console.log('deleted'));
             this.certifDiplomaArray.forEach((value, index) => {
               if (index === pointIndex) { this.certifDiplomaArray.splice(index, 1); }
             });
@@ -178,12 +181,14 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   }
   /**************************************************************************
    * @description change the minimumn of the end Date DatePicker
+   * @param date: the minimum of end date in the datePicker
    *************************************************************************/
   onChangeStartDate(date: string) {
     this.minEndDate = new Date(date);
   }
   /**************************************************************************
    * @description change the maximum of the Start Date DatePicker
+   * @param date the maximum of the start Date DatePicker
    *************************************************************************/
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);

@@ -20,7 +20,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   Section: IResumeSectionModel;
   showSection: boolean;
   SectionArray: IResumeSectionModel[];
-  resume_code: string;
+  resumeCode: string;
   button: string;
   section_code: string;
   indexUpdate = 0;
@@ -50,6 +50,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
     }
   /**************************************************************************
    * @description Function that change the index between selected Section using cdkDropListGroup
+   * @param event event of the drag and drop array
    *************************************************************************/
  async drop(event: CdkDragDrop<IResumeSectionModel[]>) {
     if (event.previousContainer === event.container) {
@@ -71,9 +72,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getCustomSection(
-            `?resume_code=${this.resume_code}`)
+            `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -110,9 +111,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
   showCustomSection() {
     this.showSection = !this.showSection;
   }
-  /**
+  /*************************************************************************
    * @description Initialization of Custom Section Form
-   */
+   *************************************************************************/
   createForm() {
     this.sendSection = this.fb.group({
       section_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -125,7 +126,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   createUpdateSection() {
     if (this.button === 'Add') {
     this.Section = this.sendSection.value;
-    this.Section.resume_code = this.resume_code;
+    this.Section.resume_code = this.resumeCode;
     this.Section.section_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-SEC`;
     this.Section.index = this.arraySectionCount.toString();
     if (this.sendSection.valid) {
@@ -136,7 +137,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.sectionUpdate = this.sendSection.value;
       this.sectionUpdate.section_code = this.section_code;
       this.sectionUpdate.index = this.indexUpdate.toString();
-      this.sectionUpdate.resume_code = this.resume_code;
+      this.sectionUpdate.resume_code = this.resumeCode;
       this.sectionUpdate._id = this._id;
       if  (this.sendSection.valid && !this.showNumberError) {
       this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => console.log('custom section updated =', data));
@@ -148,33 +149,35 @@ export class ResumeDynamicSectionComponent implements OnInit {
   }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
+   * @param dynamicSection the Dynamic section model
+   * @param pointIndex the index of the selected Dynamic Section
    *************************************************************************/
-  editForm(_id: string, section_title: string, section_desc: string, section_code: string, pointIndex: number) {
+  editForm(dynamicSection: IResumeSectionModel, pointIndex: number) {
       this.sendSection.patchValue({
-        section_title,
-        section_desc,
+        section_title: dynamicSection.section_title,
+        section_desc: dynamicSection.section_desc,
       });
-      this._id = _id;
-      this.section_code = section_code;
+      this._id = dynamicSection._id;
+      this.section_code = dynamicSection.ResumeSectionKey.section_code;
       this.indexUpdate = pointIndex;
       this.button = 'Save';
-      /*
-      */
     }
   /**************************************************************************
    * @description Delete the selected Custom section
+   * @param id the id of the deleted dynamic section
+   * @param pointIndex the index of the deleted dynamic section
    *************************************************************************/
-  deleteSection(_id: string, pointIndex: number) {
+  deleteSection(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Section ?',
-      description: 'Are you sure ?',
+      title: 'resume-delete-section',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteCustomSection(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteCustomSection(id).subscribe(data => console.log('Deleted'));
             this.SectionArray.forEach((value, index) => {
               if (index === pointIndex) { this.SectionArray.splice(index, 1); }
             });

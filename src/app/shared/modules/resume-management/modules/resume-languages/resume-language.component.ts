@@ -9,7 +9,6 @@ import { AppInitializerService } from '@core/services/app-initializer/app-initia
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ModalService } from '@core/services/modal/modal.service';
-import { IResumeLanguageKeyModel } from '@shared/models/resumeLanguageKey.model';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -20,23 +19,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./resume-language.component.scss']
 })
 export class ResumeLanguageComponent implements OnInit {
-  constructor(
-    private utilService: UtilsService,
-    private fb: FormBuilder,
-    private resumeService: ResumeService,
-    private userService: UserService,
-    private appInitializerService: AppInitializerService,
-    private refdataService: RefdataService,
-    private modalServices: ModalService,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private router: Router,
-  ) {
-  }
-
-  get getLanguage() {
-    return this.languageArray;
-  }
   sendLanguage: FormGroup;
   rating = 0;
   ratingEdit: number[];
@@ -47,18 +29,31 @@ export class ResumeLanguageComponent implements OnInit {
   languageUpdate: IResumeLanguageModel;
   languageArray: IResumeLanguageModel[];
   langList: IViewParam[];
-  resume_code: string;
+  resumeCode: string;
   refData: { } = { };
   emailAddress: string;
   showLevelError: boolean;
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
 
+  constructor(
+    private utilService: UtilsService,
+    private fb: FormBuilder,
+    private resumeService: ResumeService,
+    private userService: UserService,
+    private appInitializerService: AppInitializerService,
+    private refDataService: RefdataService,
+    private modalServices: ModalService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    private router: Router,
+  ) {
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    this.resume_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
+    this.resumeCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
     this.languageArray = [];
     this.ratingArr = [];
     this.languageArray = [];
@@ -68,7 +63,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.getConnectedUser();
     this.createForm();
     await this.getLanguageRefData();
-    /********************************** LANGUAGE **********************************/
     this.getLanguageInfo();
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
@@ -83,16 +77,17 @@ export class ResumeLanguageComponent implements OnInit {
    * @description set Language RefData in a language List
    *************************************************************************/
   async getLanguageRefData() {
-    const data = await this.getRefdata();
+    const data = await this.getRefData();
     this.langList = data['LANGUAGE'];
   }
 
   /**************************************************************************
    * @description Get Languages from Ref Data
+   * @return refData return language refData
    *************************************************************************/
-  async getRefdata() {
+  async getRefData() {
     const list = ['LANGUAGE'];
-    this.refData = await this.refdataService
+    this.refData = await this.refDataService
       .getRefData(this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId), this.userService.applicationId,
         list, false);
     return this.refData;
@@ -110,13 +105,18 @@ export class ResumeLanguageComponent implements OnInit {
           }
         });
   }
-
+  /**************************************************************************
+   * @description get the rating added by the candidate
+   *************************************************************************/
   onClick(rating: number) {
     this.rating = rating;
     return false;
   }
   /**************************************************************************
-   * @description show level
+   * @description show Rating that are already exists in database
+   * @param level level of the existing language
+   * @param index index of the language
+   * @return star return a filled or  empty star
    *************************************************************************/
   showIconDisabled(level: number, index: number) {
     if (level >= index + 1) {
@@ -127,6 +127,8 @@ export class ResumeLanguageComponent implements OnInit {
   }
   /**************************************************************************
    * @description Select Level by clicking on the stars
+   * @param index index of the language
+   * @return start return a filled or empty star
    *************************************************************************/
   showIcon(index: number) {
     if (this.rating >= index + 1) {
@@ -135,23 +137,22 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
-
-  /**
+  /**************************************************************************
    * @description initialize a Language Form
-   */
+   *************************************************************************/
   createForm() {
     this.sendLanguage = this.fb.group({
       resume_language_code: ['', [Validators.required]],
     });
   }
 
-  /**
+  /*************************************************************************
    * @description Create new Language
-   */
+   ***********************************************************************/
   createLanguage() {
     this.language = this.sendLanguage.value;
     this.language.level = this.rating.toString();
-    this.language.resume_code = this.resume_code.toString();
+    this.language.resume_code = this.resumeCode.toString();
     if (this.sendLanguage.valid && this.rating > 0) {
       this.resumeService.addLanguage(this.language).subscribe(data => {
         this.ratingEdit = [];
@@ -166,15 +167,18 @@ export class ResumeLanguageComponent implements OnInit {
   }
   /**************************************************************************
    * @description  Update a language by clicking on the stars
+   * @param rating the rating selected by the candidate
+   * @param pointIndex the index of the language selected
+   * @param language the language model
    *************************************************************************/
-  updateLanguage(rating: number, pointIndex: number, resume_language_code: string, _id: string, ResumeLanguageKey: IResumeLanguageKeyModel) {
+  updateLanguage(rating: number, pointIndex: number, language: IResumeLanguageModel) {
     this.ratingEdit[pointIndex] = rating;
     this.languageUpdate = ({
-      _id,
-      ResumeLanguageKey,
-      resume_language_code,
+      _id: language._id,
+      ResumeLanguageKey: language.ResumeLanguageKey,
+      resume_language_code: language.ResumeLanguageKey.resume_language_code,
       level: rating.toString(),
-      resume_code: this.resume_code,
+      resume_code: this.resumeCode,
     });
     this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
     return false;
@@ -189,9 +193,9 @@ export class ResumeLanguageComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getLanguage(
-            `?resume_code=${this.resume_code}`)
+            `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -227,17 +231,17 @@ export class ResumeLanguageComponent implements OnInit {
   /**************************************************************************
    * @description Delete Selected Languages
    *************************************************************************/
-  deleteLanguage(_id: string, pointIndex: number) {
+  deleteLanguage(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Language?',
-      description: 'Are you sure ?',
+      title: 'resume-delete-language',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteLanguage(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteLanguage(id).subscribe(data => console.log('Deleted'));
             this.languageArray.forEach((lang, indexlang) => {
               if (indexlang === pointIndex) {
                 this.languageArray.splice(indexlang, 1);

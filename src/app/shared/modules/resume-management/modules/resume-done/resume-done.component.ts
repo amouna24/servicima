@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
-import { forkJoin, ObservedValuesFromArray } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { IResumeModel } from '@shared/models/resume.model';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
@@ -21,7 +21,6 @@ import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 
-import { map } from 'rxjs/internal/operators/map';
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
@@ -35,7 +34,7 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class ResumeDoneComponent implements OnInit {
   count = 0;
-  resume_code: string;
+  resumeCode: string;
   generalInfoList: IResumeModel[];
   proExpList: IResumeProfessionalExperienceModel[];
   techSkillList: IResumeTechnicalSkillsModel[];
@@ -51,14 +50,14 @@ export class ResumeDoneComponent implements OnInit {
   years = 0;
   company_name: string;
   company_email: string;
-  company_logo: string;
+  companyLogo: string;
   phone: string;
   dateNow: string;
   contact_email: string;
   imageUrl: string;
   loading: boolean;
   translateKey: string[];
-  label: any;
+  label: object;
   /**********************************************************************
    * @description Resume Preview constructor
    *********************************************************************/
@@ -92,9 +91,9 @@ export class ResumeDoneComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
             this.resumeService.getProExp(
-              `?resume_code=${this.resume_code}`)
+              `?resume_code=${this.resumeCode}`)
               .subscribe(
                 (responseProExp) => {
                   if (responseProExp['msg_code'] !== '0004') {
@@ -109,6 +108,7 @@ export class ResumeDoneComponent implements OnInit {
   }
   /**************************************************************************
    * @description Count the percentage of the resume
+   * @return count returns the percentage reached of the reusme
    *************************************************************************/
   countResume() {
     if (this.generalInfoList.length > 0) {
@@ -143,7 +143,7 @@ export class ResumeDoneComponent implements OnInit {
         (userInfo) => {
           if (userInfo) {
             this.company_name = userInfo['company'][0]['company_name'];
-            this.company_logo = userInfo['company'][0]['photo'];
+            this.companyLogo = userInfo['company'][0]['photo'];
             this.company_email = userInfo['company'][0]['companyKey']['email_address'];
             this.phone = userInfo['company'][0]['phone_nbr1'];
             this.contact_email = userInfo['company'][0]['contact_email'];
@@ -154,30 +154,30 @@ export class ResumeDoneComponent implements OnInit {
       `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
-          this.resume_code = response[0].ResumeKey.resume_code.toString();
+          this.resumeCode = response[0].ResumeKey.resume_code.toString();
           forkJoin([
             this.resumeService.getResume(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getProExp(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getTechnicalSkills(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getLanguage(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getIntervention(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ), this.resumeService.getFunctionalSkills(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getCustomSection(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
             this.resumeService.getCertifDiploma(
-              `?resume_code=${this.resume_code}`
+              `?resume_code=${this.resumeCode}`
             ),
           ]).toPromise().then(
             (data) => {
@@ -251,6 +251,8 @@ export class ResumeDoneComponent implements OnInit {
    }
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
+   * @param res It contains the resume in docx format
+   * @return res return the image uploaded
    *************************************************************************/
   async uploadFile(res) {
     return await this.uploadService.getImage(res);
@@ -262,7 +264,7 @@ export class ResumeDoneComponent implements OnInit {
     let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
     if (this.projectList.length > 0) {
-      let a = 0;
+      let i = 0;
       this.projectList.forEach(
         (projectData) => {
           this.resumeService.getProjectDetails(
@@ -275,8 +277,8 @@ export class ResumeDoneComponent implements OnInit {
                     this.projectDetailsList.push(responseProjectDetailsData);
                   }
                 );
-                a = a + 1 ;
-                if (this.projectList.length === a) {
+                i = i + 1 ;
+                if (this.projectList.length === i) {
                   projectFinalList = this.projectDetailsList;
                   resolve(projectFinalList);
                 }
@@ -316,6 +318,8 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description Get All resume Data
+   * @param action  which differs between the generation in pdf or docx format
+   * @param theme choose the theme of the resume
    *************************************************************************/
   async getDocument(action: string, theme: string) {
     this.loading = true;
@@ -349,7 +353,7 @@ this.getProjectDetailsSectionInfo(res);
         diplomas: this.certifList,
         company_name: this.company_name,
         company_email: this.company_email,
-        company_logo: this.imageUrl +  this.company_logo,
+        company_logo: this.imageUrl +  this.companyLogo,
         contact_email: this.contact_email,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -363,6 +367,8 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description open pop up that gives the candidate access to choices his resume Template
+   * @param action  which differs between the generation in pdf or docx format
+
    *************************************************************************/
   openThemeDialog(action): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
@@ -376,6 +382,9 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description generate Resume in docx format or in PDF format
+   * @param action which differs between the generation in pdf or docx format
+   * @param theme choose the theme of the resume
+   * @param data it contains the necessary data for the Resume
    *************************************************************************/
   downloadDocs(data, action, theme) {
        this.resumeService.getResumePdf(data, theme, action).subscribe(
@@ -396,6 +405,7 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description get organized Professional experience data in JSON object
+   * @return proExpData return the professional experience relating to this candidates
    *************************************************************************/
   async organizeDataProExp() {
     const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
@@ -416,6 +426,8 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description get organized Project data in JSON object
+   * @param oneProExp it contains the professional experience relating to these projects
+   * @return project returns the projects relating to one professional experience
    *************************************************************************/
    async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
      const project: IResumeProjectDoneModel[] = [];
@@ -437,6 +449,8 @@ this.getProjectDetailsSectionInfo(res);
    }
   /**************************************************************************
    * @description get organized Project details data in JSON object
+   * @param oneProject It contains the project relating to these project details
+   * @return projectDetails returns the project details relating to one Project
    *************************************************************************/
    getProjectDetailsData(oneProject: IResumeProjectModel) {
     const projectDetails: IResumeProjectDetailsDoneModel[] = [];
@@ -457,6 +471,8 @@ this.getProjectDetailsSectionInfo(res);
   }
   /**************************************************************************
    * @description get organized Project details section data in JSON object
+   * @param projectDetail it contains the project detail relating to these project details section
+   * @return projectDetailsSection return the project details section of one project detail
    *************************************************************************/
   getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel) {
     const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
@@ -477,7 +493,7 @@ this.getProjectDetailsSectionInfo(res);
   /**************************************************************************
    * @description get organized Project details section data in JSON object
    *************************************************************************/
-initSectionLists() {
+  initSectionLists() {
   this.generalInfoList = [];
   this.proExpList = [];
   this.techSkillList = [];
@@ -493,7 +509,7 @@ initSectionLists() {
   /**************************************************************************
    * @description translate static labels in the resume docx format
    *************************************************************************/
-translateDocs() {
+  translateDocs() {
   this.translateKey = [ 'resume-yrs-of-experience', 'resume-pro-exp', 'resume-certif-diploma'
     , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
     , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];

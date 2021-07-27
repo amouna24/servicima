@@ -24,8 +24,7 @@
       </div>
   <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width"  >
           <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-            <div  *ngFor="let item of getLanguage let pointIndex=index">
-
+            <div  *ngFor="let item of languageArray let pointIndex=index">
               <div fxLayout="row"  >
                 <div fxLayout="column" fxFlex="7" >
                   <div fxLayout="row" fxFlex="70" fxLayoutAlign="space-around end" >
@@ -51,7 +50,7 @@
               </div>
               <div fxLayout="column" fxLayoutAlign="20">
                 <div fxLayout="row" fxFlexFill>
-                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item.resume_language_code,item._id,item.ResumeLanguageKey)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                  <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item)" [matTooltip]="ratingId+1" matTooltipPosition="above">
                     <mat-icon>
                       {{showIconDisabled(ratingEdit[pointIndex],i)}}
                     </mat-icon>

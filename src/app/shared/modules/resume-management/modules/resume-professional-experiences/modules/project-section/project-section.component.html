@@ -1,6 +1,6 @@
 <wid-scrollbar fxLayout="row" fxFlexFill>
 <div fxLayout="column" fxFlexFill >
-  <div *ngFor="let item of getProjectSection let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
+  <div *ngFor="let item of proDetailsArray let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
     <div fxLayout="column" fxFlex="82" >
       <br>
     <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
@@ -9,7 +9,7 @@
       </div>
       <div fxLayout="column" fxFlex fxLayoutAlign="center end" class="p-r-10">
         <div fxLayout="row" fxLayoutAlign="end" >
-          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.ResumeProjectDetailsKey.project_code,item.project_detail_title,item.project_detail_desc,pointIndex,item._id,item.ResumeProjectDetailsKey.project_details_code); ">{{ 'resume-edit' | translate }}</button>
+          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item,pointIndex); ">{{ 'resume-edit' | translate }}</button>
         </div>
       </div>
       <div fxLayout="column" fxFlex class="p-r-20" fxLayoutAlign="center end">
@@ -70,7 +70,7 @@
       <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 19%">
         {{ 'resume-section-content' | translate }}:
       </mat-label>
-      <div *ngFor="let item of inputFields; let pointIndex=index" fxLayout="row"   >
+      <div *ngFor="let item of proSectionArray; let pointIndex=index" fxLayout="row"   >
         <div fxLayout="column" fxFlex="68" fxLayoutAlign=" end"  >
           <div fxLayout="row" fxFlexFill  fxLayoutGap="10px"   style="justify-content: flex-end">
             <div fxLayout="column" fxFlex="55">
@@ -88,7 +88,7 @@
             <div fxLayout="column" fxFlex="14" fxLayoutAlign="center">
               <ng-template [ngIf]="project_details_section_desc.value.toString() !== item.project_details_section_desc">
               <button type="button" mat-raised-button class="bg-pale-grey btn-small"
-                      (click)="EditProDetSection(item.ResumeProjectDetailsSectionKey.project_details_code,item.ResumeProjectDetailsSectionKey.project_details_section_code,project_details_section_desc.value,item._id, pointIndex)"
+                      (click)="EditProDetSection(item,project_details_section_desc.value, pointIndex)"
               [disabled]="project_details_section_desc.value.toString() === '' || project_details_section_desc.value.toString() === item.project_details_section_desc">
                 {{ 'resume-edit' | translate}}
               </button>

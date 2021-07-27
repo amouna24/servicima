@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
-import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -107,7 +106,6 @@ export class ResumeTechSkillComponent implements OnInit {
       this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => {
         this.getTechnicalSkillsInfo();
       });
-    } else { console.log('Form is not valid');
     }
     this.arrayTechSkillCount++; } else {
       this.techSkillUpdate = this.sendTechSkill.value;
@@ -125,14 +123,16 @@ export class ResumeTechSkillComponent implements OnInit {
   }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
+   * @param techSkill the Technical Skill model
+   * @param pointIndex the index of the selected technical skill
    *************************************************************************/
-  editForm(_id: string, technologies: string, technical_skill_desc: string, technical_skill_code: string, pointIndex: number) {
+  editForm(techSkill: IResumeTechnicalSkillsModel, pointIndex: number) {
     this.sendTechSkill.patchValue({
-      technical_skill_desc,
-      technologies,
+      technical_skill_desc: techSkill.technical_skill_desc,
+      technologies: techSkill.technologies,
     });
-    this.technical_skill_code = technical_skill_code;
-    this._id = _id;
+    this.technical_skill_code = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
+    this._id = techSkill._id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     /*
@@ -140,18 +140,20 @@ export class ResumeTechSkillComponent implements OnInit {
   }
   /**************************************************************************
    * @description Delete the selected Custom section
+   * @param id the id of the deleted technical skill
+   * @param pointIndex the index of the deleted technical skill
    *************************************************************************/
-  deleteTechSkill(_id: string, pointIndex: number) {
+  deleteTechSkill(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Technical Skill ?',
-      description: 'resume-done',
+      title: 'resume-delete-tech',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteTechnicalSkills(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteTechnicalSkills(id).subscribe(data => console.log('Deleted'));
             this.techSkillArray.forEach((value, index) => {
               if (index === pointIndex) { this.techSkillArray.splice(index, 1); }
             });

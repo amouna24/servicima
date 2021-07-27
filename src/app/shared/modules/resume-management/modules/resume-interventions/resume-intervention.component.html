@@ -29,7 +29,7 @@
                 <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item._id,item.level_of_intervention_desc,item.intervention_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>

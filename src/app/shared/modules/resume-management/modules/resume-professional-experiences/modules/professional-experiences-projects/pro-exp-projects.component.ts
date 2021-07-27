@@ -1,5 +1,5 @@
 import { Component , OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
@@ -16,50 +16,68 @@ export class ProExpProjectsComponent implements OnInit {
   sendProject: FormGroup;
   arrayProjectCount = 0;
   Project: IResumeProjectModel;
-  showProject = false;
-  ProjectArray: IResumeProjectModel[] = [];
-  professional_experience_code = this.router.getCurrentNavigation().extras.state?.id;
-  customer = this.router.getCurrentNavigation().extras.state?.customer;
-  position = this.router.getCurrentNavigation().extras.state?.position;
-  start_date_pro_exp = this.router.getCurrentNavigation().extras.state?.start_date;
-  end_date_pro_exp = this.router.getCurrentNavigation().extras.state?.end_date;
-  showAddSection = false;
-  showForm = false;
-  project_code = '';
+  showProject: boolean;
+  ProjectArray: IResumeProjectModel[];
+  professionalExperienceCode: string;
+  customer: string;
+  position: string;
+  startDateProExp: Date;
+  endDateProExp: Date;
+  showAddSection: boolean;
+  showForm: boolean;
+  project_code: string;
   indexUpdate = 0;
-  button = 'Add';
-  _id = '';
+  button: string;
+  id: string;
   projectUpdate: IResumeProjectModel;
   subscriptionModal: Subscription;
   minStartDate: Date;
   maxStartDate: Date;
   minEndDate: Date;
   maxEndDate: Date;
-  showDateError = false;
-  showNumberError = false;
-  start_date: any;
-  end_date: any;
+  showDateError: boolean;
+  showNumberError: boolean;
+  startDate: string;
+  endDate: string;
   myDisabledDayFilter: any ;
-  get getProject() {
-    return this.ProjectArray;
-  }
-  onShowProject() {
-    this.showProject = !this.showProject;
-    this.showForm = !this.showForm;
-  }
-
+  /**********************************************************************
+   * @description Resume Professional experience constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private userService: UserService,
     private router: Router,
     private modalServices: ModalService,
-  ) { }
+  ) {
+    this.getDataFromPreviousRoute();
+  }
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
+  ngOnInit(): void {
+    this.createForm();
+    this.ProjectArray = [];
+    this.showProject = false;
+    this.showAddSection = false;
+    this.showForm = false;
+    this.button = 'Add';
+    this.showDateError = false;
+    this.showNumberError = false;
+    this.project_code = '';
+    this.getProjectInfo();
+    this.createForm();
+    this.initDates();
+
+  }
+  /**************************************************************************
+   * @description Get Project Data from Resume Service
+   *************************************************************************/
   getProjectInfo() {
     const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
-      `?professional_experience_code=${this.professional_experience_code}`)
+      `?professional_experience_code=${this.professionalExperienceCode}`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
@@ -88,15 +106,9 @@ export class ProExpProjectsComponent implements OnInit {
       );
 
   }
-  ngOnInit(): void {
-    this.getProjectInfo();
-    this.createForm();
-    this.initDates();
-
-  }
-  showAddSectionEvent() {
-    this.showAddSection = !this.showAddSection;
-  }
+  /**************************************************************************
+   * @description Create Project Form
+   *************************************************************************/
   createForm() {
     this.sendProject = this.fb.group({
       project_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -104,15 +116,20 @@ export class ProExpProjectsComponent implements OnInit {
       end_date: ['', Validators.required],
     });
   }
-
-  createUpdateProject(dateStart, dateEnd) {
+  /**************************************************************************
+   * @description Create or UpdateProject
+   * @param dateEnd contains the end date added by the user
+   * @param dateStart contains the start date added by the user
+   *************************************************************************/
+  createUpdateProject(dateStart: string, dateEnd: string) {
     if (this.button === 'Add') {
-      this.start_date = dateStart;
-      this.end_date = dateEnd;
+      this.startDate = dateStart;
+      this.endDate = dateEnd;
     this.Project = this.sendProject.value;
-    this.Project.professional_experience_code = this.professional_experience_code;
+    this.Project.professional_experience_code = this.professionalExperienceCode;
     this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
     if (this.sendProject.valid ) {
+      console.log(this.Project);
       this.resumeService.addProject(this.Project).subscribe(data => {
         this.getProjectInfo();
       });
@@ -123,8 +140,8 @@ export class ProExpProjectsComponent implements OnInit {
     this.arrayProjectCount++; } else {
       this.projectUpdate = this.sendProject.value;
       this.projectUpdate.project_code = this.project_code;
-      this.projectUpdate.professional_experience_code = this.professional_experience_code;
-      this.projectUpdate._id = this._id;
+      this.projectUpdate.professional_experience_code = this.professionalExperienceCode;
+      this.projectUpdate._id = this.id;
       if (this.sendProject.valid) {
         this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
       this.ProjectArray[this.indexUpdate] = this.projectUpdate;
@@ -136,21 +153,28 @@ this.initDates();
 this.filterDate();
 this.showNumberError = false ;
   }
+  /**************************************************************************
+   * @description action allows to show or hide project form
+   *************************************************************************/
   onShowForm() {
     this.showForm = true;
   }
-
-  editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
+  /**************************************************************************
+   * @description Set data of a selected Project and set it in the current form
+   * @param oneProject the  Project model
+   * @param pointIndex the index of the selected Project
+   *************************************************************************/
+  editForm(oneProject: IResumeProjectModel, pointIndex: number) {
     let projectEditArray: any[];
     const disabledDates = [];
     this.sendProject.patchValue({
-      project_title,
-      start_date,
-      end_date,
+      project_title: oneProject.project_title,
+      start_date: oneProject.start_date,
+      end_date: oneProject.end_date,
     });
     this.myDisabledDayFilter = null;
-    this.project_code = project_code;
-    this._id = _id.toString();
+    this.project_code = oneProject.ResumeProjectKey.project_code;
+    this.id = oneProject._id.toString();
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     this.showForm = true;
@@ -168,18 +192,23 @@ this.showNumberError = false ;
       return !disabledDates.find(x => x.getTime() === time);
     };
   }
-
-  deleteProject(_id: string, pointIndex: number, project_code: string) {
+  /**************************************************************************
+   * @description Delete the selected Project
+   * @param id the id of the deleted Project
+   * @param pointIndex the index of the deleted Project
+   * @param project_code it contains the project code
+   *************************************************************************/
+  deleteProject(id: string, pointIndex: number, project_code: string) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Project ?',
-      description: 'Are you sure ?',
+      title: 'resume-delete-project',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteProject(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteProject(id).subscribe(data => console.log('Deleted'));
             this.resumeService.getProjectDetails(
               // tslint:disable-next-line:max-line-length
               `?project_code=${project_code}`)
@@ -219,12 +248,24 @@ this.showNumberError = false ;
           this.subscriptionModal.unsubscribe();
         });
   }
+  /*******************************************************************
+   * @description Change the minimum of the end date
+   * @param date the minimum of the end date
+   *******************************************************************/
   onChangeStartDate(date: string) {
     this.minEndDate = new Date(date);
   }
+  /*******************************************************************
+   * @description Change the maximum of the start date
+   * @param date the maximum of the start date
+   *******************************************************************/
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
   }
+  /*******************************************************************
+   * @description Filter Dates that are already taken by other project
+   * @return !disabledDates return enabled dates
+   *******************************************************************/
   filterDate() {
     const disabledDates = [];
     this.ProjectArray.forEach(
@@ -238,10 +279,30 @@ this.showNumberError = false ;
       return !disabledDates.find(x => x.getTime() === time);
     };
   }
+  /*******************************************************************
+   * @description Initialize Max end Min Dates
+   *******************************************************************/
   initDates() {
-    this.minEndDate = this.start_date_pro_exp;
-    this.maxEndDate =  this.end_date_pro_exp;
-    this.minStartDate = this.start_date_pro_exp;
-    this.maxStartDate = this.end_date_pro_exp;
+    this.minEndDate = this.startDateProExp;
+    this.maxEndDate =  this.endDateProExp;
+    this.minStartDate = this.startDateProExp;
+    this.maxStartDate = this.endDateProExp;
+  }
+  /*******************************************************************
+   * @description Action allows to show the project page
+   *******************************************************************/
+  onShowProject() {
+    this.showProject = !this.showProject;
+    this.showForm = !this.showForm;
+  }
+  /*******************************************************************
+   * @description initialize data that are coming from the previous route
+   *******************************************************************/
+  getDataFromPreviousRoute() {
+    this.professionalExperienceCode = this.router.getCurrentNavigation().extras.state?.id;
+    this.customer = this.router.getCurrentNavigation().extras.state?.customer;
+    this.position = this.router.getCurrentNavigation().extras.state?.position;
+    this.startDateProExp = this.router.getCurrentNavigation().extras.state?.start_date;
+    this.endDateProExp = this.router.getCurrentNavigation().extras.state?.end_date;
   }
 }

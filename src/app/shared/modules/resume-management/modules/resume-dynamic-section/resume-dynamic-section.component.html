@@ -55,7 +55,7 @@
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.section_title,item.section_desc,item.section_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" >
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>

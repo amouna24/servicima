@@ -17,12 +17,12 @@ export class ResumeInterventionComponent implements OnInit {
   arrayInterventionCount = 0;
   Intervention: IResumeInterventionModel;
   interventionArray: IResumeInterventionModel[];
-  resume_code: string;
+  resumeCode: string;
   interventionUpdate: IResumeInterventionModel;
   intervention_code: string;
   button: string;
   indexUpdate = 0 ;
-  _id: string;
+  id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
   /**********************************************************************
@@ -55,9 +55,9 @@ export class ResumeInterventionComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getIntervention(
-            `?resume_code=${this.resume_code}`)
+            `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -96,7 +96,7 @@ export class ResumeInterventionComponent implements OnInit {
   createUpdateIntervention() {
     if (this.button === 'Add') {
     this.Intervention = this.sendIntervention.value;
-    this.Intervention.resume_code = this.resume_code;
+    this.Intervention.resume_code = this.resumeCode;
     this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
     if (this.sendIntervention.valid ) {
       this.resumeService.addIntervention(this.Intervention).subscribe(data => {
@@ -108,8 +108,8 @@ export class ResumeInterventionComponent implements OnInit {
     this.arrayInterventionCount++; } else {
       this.interventionUpdate = this.sendIntervention.value;
       this.interventionUpdate.intervention_code = this.intervention_code;
-      this.interventionUpdate.resume_code = this.resume_code;
-      this.interventionUpdate._id = this._id;
+      this.interventionUpdate.resume_code = this.resumeCode;
+      this.interventionUpdate._id = this.id;
       if (this.sendIntervention.valid && !this.showNumberError) {
       this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
       this.interventionArray[this.indexUpdate] = this.interventionUpdate;
@@ -120,31 +120,35 @@ export class ResumeInterventionComponent implements OnInit {
     this.showNumberError = false;
   }
   /**************************************************************************
-   * @description Set data of a selected Custom section and set it in the current form
+   * @description Set data of a selected Level intervention and set it in the current form
+   * @param intervention the Level intervention model
+   * @param index the index of the selected Level of intervention
    *************************************************************************/
-  EditForm(_id: string, level_of_intervention_desc: string, intervention_code: string, index: number) {
+  EditForm(intervention: IResumeInterventionModel, index: number) {
     this.sendIntervention.patchValue({
-      level_of_intervention_desc,
+      level_of_intervention_desc: intervention.level_of_intervention_desc,
     });
-    this._id = _id;
-    this.intervention_code = intervention_code;
+    this.id = intervention._id;
+    this.intervention_code = intervention.ResumeInterventionKey.intervention_code;
     this.indexUpdate = index;
     this.button = 'Save';
   }
   /**************************************************************************
    * @description Delete the selected Custom section
+   * @param id the id of the deleted level of intervention
+   * @param pointIndex the index of the deleted Level of intervention
    *************************************************************************/
-  deleteIntervention(_id: string, pointIndex: number) {
+  deleteIntervention(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete This Level o intervention ?',
-      description: 'Are you sure ?',
+      title: 'resume-delete-interv',
+      description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteIntervention(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteIntervention(id).subscribe(data => console.log('Deleted'));
             this.interventionArray.forEach((value, index) => {
               if (index === pointIndex) { this.interventionArray.splice(index, 1); }
             });
