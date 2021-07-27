@@ -1,9 +1,9 @@
 <form [formGroup]="initialForm">
-  <div class="dynamic-component-container bg-white border-radius-20 m-l-30">
-    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+  <div class="dynamic-component-container bg-white border-radius-10">
+    <div fxLayout="column">
 
       <!-- header -->
-      <div fxFlex="7"  fxLayout="row" class="line-height-2">
+      <div fxFlex="12"  fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
         <ng-container *ngIf="buttonValue === 'edit'; else addTimesheet">
           <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium" > Edit Timesheet </div>
         </ng-container>
@@ -18,12 +18,11 @@
           </button>
         </div>
       </div>
-      <div fxFlex="2" fxLayout="row">
-        <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
-      </div>
-
-      <!-- body -->
-      <div fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 ">
+      <!--
+     <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+     -->
+     <!-- body -->
+      <div fxLayout="row" fxFlex class="p-t-20 font-size-12 ">
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
           <wid-scrollbar class="scrollbar">
 
@@ -241,14 +240,14 @@
               <ng-container *ngIf="buttonValue === 'edit'; else add">
                 <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
                   <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                    <button  mat-button mat-raised-button (click)="deleteTimesheet()" class="btn-medium bg-error-red white" >
+                    <button  mat-button mat-raised-button (click)="deleteTimesheet()" class="btn-small bg-error-red white" >
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        <span class="font-size-14"> Delete </span>
+                        Delete
                       </div>
                     </button>
-                    <button mat-button mat-raised-button (click)="editTimesheet()" class="white btn-medium duck-egg-blue">
+                    <button mat-button mat-raised-button (click)="editTimesheet()" class="white btn-small duck-egg-blue">
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        <span class="font-size-14 cerulean-blue"> Edit </span>
+                        Edit
                       </div>
                     </button>
                   </div>
@@ -259,14 +258,14 @@
               <ng-template #add>
                 <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
                   <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                    <button  mat-button mat-raised-button (click)="submitTimesheet('submit')" class="btn-medium bg-cerulean-blue white" >
+                    <button  mat-button mat-raised-button (click)="submitTimesheet('submit')" class="btn-small bg-cerulean-blue white" >
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        <span class="font-size-14"> Submit </span>
+                        Submit
                       </div>
                     </button>
-                    <button mat-button mat-raised-button (click)="submitTimesheet('save')"   class="btn-medium white duck-egg-blue">
+                    <button mat-button mat-raised-button (click)="submitTimesheet('save')"   class="btn-small white duck-egg-blue">
                       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                        <span class="font-size-14 cerulean-blue"> Save </span>
+                        Save
                       </div>
                     </button>
                   </div>
