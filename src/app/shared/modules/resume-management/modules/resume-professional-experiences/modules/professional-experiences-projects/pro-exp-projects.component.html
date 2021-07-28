@@ -155,11 +155,11 @@
               </div>
             </form>
           </div>
-          <div fxLayout="column" fxFlex="18" >
+          <div fxLayout="column" fxFlex="18" class="p-l-10" >
             <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
               <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
                 <wid-scrollbar class="full-width full-height">
-                  <div fxLayout="row" fxFlex="100" class="border-radius-10 border_add_project">
+                  <div fxLayout="row" style="min-height: 50%" class="border-radius-10 border_add_project">
 
                   <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>

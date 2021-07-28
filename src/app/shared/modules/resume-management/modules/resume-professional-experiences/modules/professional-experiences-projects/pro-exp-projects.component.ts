@@ -338,6 +338,7 @@ this.showNumberError = false ;
         `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
         .subscribe(
           (resProject) => {
+            if (resProject.length > 0) {
             resProject.forEach((project) => {
               i++;
               proArray.push({
@@ -349,7 +350,9 @@ this.showNumberError = false ;
             if (i === resProject.length) {
               resolve(proArray);
             }
-          });
+            } else {
+              resolve([]);
+            }});
     }).then((res) => {
       result = res;
       return (res);
@@ -420,5 +423,6 @@ this.showNumberError = false ;
       }
       this.getProjectInfo();
       this.loadTree();
+    this.openExpansion = false;
   }
 }
