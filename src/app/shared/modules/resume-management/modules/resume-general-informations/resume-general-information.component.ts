@@ -91,7 +91,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       .subscribe(
         async (generalInfo) => {
           if (generalInfo['msg_code'] !== '0004') {
-            console.log('general info', generalInfo[0]);
             if (!!generalInfo) {
               if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
               this.haveImage = generalInfo[0].image;
@@ -168,13 +167,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
                     (responseProExp) => {
                       if (responseProExp['msg_code'] !== '0004') {
                         responseProExp.forEach((proExp) => {
-                          console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
                           const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
                             new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                          console.log('difference=', difference);
                           this.years = difference + this.years;
                         });
-                        console.log('years auto = ', this.years);
                         this.CreationForm.patchValue({
                           years_of_experience: this.years,
                       });
@@ -224,7 +220,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
     } } else {
       this.generalInfo = this.CreationForm.value;
-      console.log('filename=', filename);
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }
