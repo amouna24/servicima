@@ -76,6 +76,7 @@ export class ProExpProjectsComponent implements OnInit {
   }
 
   getProjectInfo() {
+    this.ProjectArray = [];
     const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
@@ -84,6 +85,7 @@ export class ProExpProjectsComponent implements OnInit {
         (response) => {
           if (response['msg_code'] !== '0004') {
             this.ProjectArray = response;
+            console.log('project array', this.ProjectArray);
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;
@@ -99,16 +101,24 @@ export class ProExpProjectsComponent implements OnInit {
                 return !disabledDates.find(x => x.getTime() === time);
               };
               this.filterDate();
+            } else {
+              this.showProject = false;
+              this.showForm = false;
+              console.log(this.showProject, this.showForm);
             }
+          } else {
+            this.showProject = false;
+            this.showForm = false;
           } },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
         },
       );
-
   }
    async ngOnInit(): Promise<void> {
+     console.log(this.showProject, '+++', this.showForm);
+    this.showProject = false;
      this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
      this.treeDataSource = new MatTreeNestedDataSource();
    await this.loadTree();
@@ -163,13 +173,16 @@ export class ProExpProjectsComponent implements OnInit {
 this.createForm();
 this.initDates();
 this.filterDate();
-this.showNumberError = false ;
+this.loadTree();
+
   }
   onShowForm() {
     this.showForm = true;
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
+    this.openExpansion = false;
+    this.loadTree();
     let projectEditArray: any[];
     const disabledDates = [];
     this.sendProject.patchValue({
@@ -196,7 +209,8 @@ this.showNumberError = false ;
       const time = d.getTime();
       return !disabledDates.find(x => x.getTime() === time);
     };
-  }
+    this.openExpansion = false;
+this.loadTree();  }
 
   deleteProject(_id: string, pointIndex: number, project_code: string) {
     const confirmation = {
@@ -322,7 +336,6 @@ this.showNumberError = false ;
         this.treeDataSource.data = res;
         this.treeDataSource.data.forEach( (expand) => {
           if (expand.expanded === true) {
-            console.log('hello');
             this.treeControl.expand(expand);
           }
         });
@@ -338,6 +351,7 @@ this.showNumberError = false ;
         `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
         .subscribe(
           (resProject) => {
+            if (resProject.length > 0) {
             resProject.forEach((project) => {
               i++;
               proArray.push({
@@ -349,7 +363,9 @@ this.showNumberError = false ;
             if (i === resProject.length) {
               resolve(proArray);
             }
-          });
+          } else {
+              resolve([]);
+            }} );
     }).then((res) => {
       result = res;
       return (res);
@@ -398,8 +414,7 @@ this.showNumberError = false ;
       });
       this.openExpansion = false;
     }
-
-    console.log('data source', this.treeDataSource.data, this.openExpansion);
+    console.log(this.openExpansion);
   }
   async refreshTreeHandler(event: boolean, item) {
     console.log('event=', event);
@@ -417,8 +432,10 @@ this.showNumberError = false ;
         this.position = event.object.position;
         this.start_date_pro_exp = event.object.start_date;
         this.end_date_pro_exp = event.object.end_date;
-      }
       this.getProjectInfo();
       this.loadTree();
+      this.openExpansion = false;
+      }
+
   }
 }
