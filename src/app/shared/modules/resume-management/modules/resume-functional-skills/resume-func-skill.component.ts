@@ -25,6 +25,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+
   /**********************************************************************
    * @description Resume Functional skills constructor
    *********************************************************************/
@@ -34,7 +35,9 @@ export class ResumeFuncSkillComponent implements OnInit {
     private userService: UserService,
     private modalServices: ModalService,
     private router: Router,
-  ) { }
+  ) {
+  }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -44,18 +47,19 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.funcSkillArray = [];
     this.getFuncSkillsInfo();
     this.createForm();
-    }
+  }
+
   /**************************************************************************
    * @description Get Functional skills data from Resume Service
    *************************************************************************/
   getFuncSkillsInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`).subscribe(
+      (response) => {
+        if (response['msg_code'] !== '0004') {
+          this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getFunctionalSkills(
             `?resume_code=${this.resumeCode}`)
             .subscribe(
@@ -69,20 +73,23 @@ export class ResumeFuncSkillComponent implements OnInit {
                     }
                   );
                 }
-                },
+              },
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
               },
-            ); } else {
-            this.router.navigate(['/candidate/resume/']);
-          }},
-        (error) => {
-          if (error.error.msg_code === '0004') {
-          }
-        },
-      );
+            );
+        } else {
+          this.router.navigate(['/candidate/resume/']);
+        }
+      },
+      (error) => {
+        if (error.error.msg_code === '0004') {
+        }
+      },
+    );
   }
+
   /**************************************************************************
    * @description Delete Selected Functional Skilll
    * @param id the id of the deleted functionnal skill
@@ -100,7 +107,9 @@ export class ResumeFuncSkillComponent implements OnInit {
           if (res === true) {
             this.resumeService.deleteFunctionalSkills(id).subscribe(data => console.log('Deleted'));
             this.funcSkillArray.forEach((value, index) => {
-              if (index === pointIndex) { this.funcSkillArray.splice(index, 1); }
+              if (index === pointIndex) {
+                this.funcSkillArray.splice(index, 1);
+              }
             });
             this.button = 'Add';
           }
@@ -108,43 +117,49 @@ export class ResumeFuncSkillComponent implements OnInit {
         }
       );
   }
+
   /**************************************************************************
    * @description Initialize the Functionnal skill form
    *************************************************************************/
   createForm() {
     this.sendFuncSkill = this.fb.group({
-      skill :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      });
+      skill: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+    });
   }
+
   /**************************************************************************
    * @description Create or Update Functional skill
    *************************************************************************/
   async createUpdateFunctionalSkill() {
     if (this.button === 'Add') {
-    this.FuncSkill = this.sendFuncSkill.value;
-    this.FuncSkill.resume_code = this.resumeCode;
-    this.FuncSkill.functional_skills_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
-    this.FuncSkill.index = this.arrayFuncSkillCount;
-    if (this.sendFuncSkill.valid ) {
-     await this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => {
-       this.getFuncSkillsInfo();
-     });
-this.arrayFuncSkillCount++;
-    } else { console.log('Form is not valid');
-    }} else {
+      this.FuncSkill = this.sendFuncSkill.value;
+      this.FuncSkill.resume_code = this.resumeCode;
+      this.FuncSkill.functional_skills_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-FUNC`;
+      this.FuncSkill.index = this.arrayFuncSkillCount;
+      if (this.sendFuncSkill.valid) {
+        await this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => {
+          this.getFuncSkillsInfo();
+        });
+        this.arrayFuncSkillCount++;
+      } else {
+        console.log('Form is not valid');
+      }
+    } else {
       this.FuncSkillUpdate = this.sendFuncSkill.value;
       this.FuncSkillUpdate.functional_skills_code = this.functional_skill_code;
       this.FuncSkillUpdate.resume_code = this.resumeCode;
       this.FuncSkillUpdate.index = this.indexUpdate;
       this.FuncSkillUpdate._id = this.id;
       if (this.sendFuncSkill.valid && !this.showNumberError) {
-      this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
-      this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
-      this.button = 'Add'; }
+        this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
+        this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
+        this.button = 'Add';
+      }
     }
     this.sendFuncSkill.reset();
     this.showNumberError = false;
   }
+
   /**************************************************************************
    * @description get data from a selected functional skills and set it in the current form
    * @param functionalSkill the Functional Skill model

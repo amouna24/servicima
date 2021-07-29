@@ -28,9 +28,10 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   indexUpdate = 0;
   button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
-  id: string ;
+  id: string;
   subscriptionModal: Subscription;
-   showNumberError: boolean;
+  showNumberError: boolean;
+
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor
    *********************************************************************/
@@ -42,6 +43,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
   }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -54,44 +56,46 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.getCertifDiplomaInfo();
     this.createForm();
   }
+
   /**************************************************************************
    * @description Get all Certification and diploma Data from Resume Service
    *************************************************************************/
   getCertifDiplomaInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resumeCode = response[0].ResumeKey.resume_code.toString();
-            this.resumeService.getCertifDiploma(
-              `?resume_code=${this.resumeCode}`)
-              .subscribe(
-                (responseOne) => {
-                  if (responseOne['msg_code'] !== '0004') {
-                    this.certifDiplomaArray = responseOne;
-                    this.certifDiplomaArray.forEach(
-                      (func) => {
-                        func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
-                      }
-                    );
-                  }
-                },
-                (error) => {
-                  if (error.error.msg_code === '0004') {
-                  }
-                },
-              );
-          } else {
-            this.router.navigate(['/candidate/resume/']);
-          }},
-        (error) => {
-          if (error.error.msg_code === '0004') {
-          }
-        },
-      );
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`).subscribe((response) => {
+        if (response['msg_code'] !== '0004') {
+          this.resumeCode = response[0].ResumeKey.resume_code.toString();
+          this.resumeService.getCertifDiploma(
+            `?resume_code=${this.resumeCode}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.certifDiplomaArray = responseOne;
+                  this.certifDiplomaArray.forEach(
+                    (func) => {
+                      func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
+                    }
+                  );
+                }
+              },
+              (error) => {
+                if (error.error.msg_code === '0004') {
+                }
+              },
+            );
+        } else {
+          this.router.navigate(['/candidate/resume/']);
+        }
+      },
+      (error) => {
+        if (error.error.msg_code === '0004') {
+        }
+      },
+    );
   }
+
   /**************************************************************************
    * @description Initialization of Certification and diploma Form
    *************************************************************************/
@@ -99,28 +103,30 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.sendCertifDiploma = this.fb.group({
       establishment: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       diploma: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      start_date: ['',  Validators.required],
+      start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       certif_diploma_desc: '',
     });
   }
+
   /**************************************************************************
    * @description Create or Update Certification/Diploma
    *************************************************************************/
   createUpdateCertifDiploma() {
     if (this.button === 'Add') {
-    this.certifDiploma = this.sendCertifDiploma.value;
-    this.certifDiploma.resume_code = this.resumeCode.toString();
-    this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
-      if (this.sendCertifDiploma.valid && this.showDateError === false ) {
-      this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
-        this.getCertifDiplomaInfo();
-      });
+      this.certifDiploma = this.sendCertifDiploma.value;
+      this.certifDiploma.resume_code = this.resumeCode.toString();
+      this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
+      if (this.sendCertifDiploma.valid && this.showDateError === false) {
+        this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
+          this.getCertifDiplomaInfo();
+        });
+      } else {
+        this.showDateError = false;
+        this.showNumberError = false;
+      }
+      this.arrayCertifDiplomaCount++;
     } else {
-      this.showDateError = false;
-      this.showNumberError = false;
-    }
-    this.arrayCertifDiplomaCount++; } else {
       this.certifDiplomaUpdate = this.sendCertifDiploma.value;
       this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
       this.certifDiplomaUpdate.resume_code = this.resumeCode;
@@ -129,12 +135,14 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe((data) => {
           console.log('certif updated', data);
         });
-      this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
-      this.button = 'Add'; }
+        this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
+        this.button = 'Add';
+      }
     }
     this.sendCertifDiploma.reset();
     this.showNumberError = false;
   }
+
   /**************************************************************************
    * @description get data from a selected certification/Diploma and set it in the current form
    * @param certifDiploma Certifications and diploma Model
@@ -153,6 +161,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.indexUpdate = pointIndex;
     this.button = 'Save';
   }
+
   /**************************************************************************
    * @description Delete the selected certif/Diploma
    * @param id id of the certif and diploma model that is going to be deleted
@@ -170,7 +179,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           if (res === true) {
             this.resumeService.deleteCertifDiploma(id).subscribe(cert => console.log('deleted'));
             this.certifDiplomaArray.forEach((value, index) => {
-              if (index === pointIndex) { this.certifDiplomaArray.splice(index, 1); }
+              if (index === pointIndex) {
+                this.certifDiplomaArray.splice(index, 1);
+              }
             });
             this.button = 'Add';
 
@@ -179,6 +190,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         }
       );
   }
+
   /**************************************************************************
    * @description change the minimumn of the end Date DatePicker
    * @param date: the minimum of end date in the datePicker
@@ -186,6 +198,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   onChangeStartDate(date: string) {
     this.minEndDate = new Date(date);
   }
+
   /**************************************************************************
    * @description change the maximum of the Start Date DatePicker
    * @param date the maximum of the start Date DatePicker
@@ -193,6 +206,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
   }
+
   /**************************************************************************
    * @description Initialize Max and Min date in the DatePicker
    *************************************************************************/
@@ -201,7 +215,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDate();
     this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay  );
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }

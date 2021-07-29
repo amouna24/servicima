@@ -21,10 +21,11 @@ export class ResumeInterventionComponent implements OnInit {
   interventionUpdate: IResumeInterventionModel;
   intervention_code: string;
   button: string;
-  indexUpdate = 0 ;
+  indexUpdate = 0;
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+
   /**********************************************************************
    * @description Resume Level of intervention constructor
    *********************************************************************/
@@ -34,7 +35,9 @@ export class ResumeInterventionComponent implements OnInit {
     private userService: UserService,
     private modalServices: ModalService,
     private router: Router,
-  ) { }
+  ) {
+  }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -45,17 +48,17 @@ export class ResumeInterventionComponent implements OnInit {
     this.getInterventionInfo();
     this.createForm();
   }
+
   /**************************************************************************
    * @description Get Intervention Data from Resume Service
    *************************************************************************/
   getInterventionInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`).subscribe((response) => {
+        if (response['msg_code'] !== '0004') {
+          this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getIntervention(
             `?resume_code=${this.resumeCode}`)
             .subscribe(
@@ -67,58 +70,66 @@ export class ResumeInterventionComponent implements OnInit {
                       func.intervention_code = func.ResumeInterventionKey.intervention_code;
                     }
                   );
-                }},
+                }
+              },
               (error) => {
                 if (error.error.msg_code === '0004') {
                 }
               },
             );
         } else {
-      this.router.navigate(['/candidate/resume/']);
-    }},
-        (error) => {
-          if (error.error.msg_code === '0004') {
-          }
-        },
-      );
+          this.router.navigate(['/candidate/resume/']);
+        }
+      },
+      (error) => {
+        if (error.error.msg_code === '0004') {
+        }
+      },
+    );
   }
+
   /**************************************************************************
    * @description Initialization of the Intervention Form
    *************************************************************************/
   createForm() {
     this.sendIntervention = this.fb.group({
-      level_of_intervention_desc : ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      level_of_intervention_desc: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
     });
   }
+
   /**************************************************************************
    * @description Create or Update Level Of Intervention
    *************************************************************************/
   createUpdateIntervention() {
     if (this.button === 'Add') {
-    this.Intervention = this.sendIntervention.value;
-    this.Intervention.resume_code = this.resumeCode;
-    this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
-    if (this.sendIntervention.valid ) {
-      this.resumeService.addIntervention(this.Intervention).subscribe(data => {
-        console.log('added');
-        this.getInterventionInfo();
-      });
-    } else { console.log('Form is not valid');
-    }
-    this.arrayInterventionCount++; } else {
+      this.Intervention = this.sendIntervention.value;
+      this.Intervention.resume_code = this.resumeCode;
+      this.Intervention.intervention_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-INT`;
+      if (this.sendIntervention.valid) {
+        this.resumeService.addIntervention(this.Intervention).subscribe(data => {
+          console.log('added');
+          this.getInterventionInfo();
+        });
+      } else {
+        console.log('Form is not valid');
+      }
+      this.arrayInterventionCount++;
+    } else {
       this.interventionUpdate = this.sendIntervention.value;
       this.interventionUpdate.intervention_code = this.intervention_code;
       this.interventionUpdate.resume_code = this.resumeCode;
       this.interventionUpdate._id = this.id;
       if (this.sendIntervention.valid && !this.showNumberError) {
-      this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
-      this.interventionArray[this.indexUpdate] = this.interventionUpdate;
-      this.button = 'Add'; }
+        this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => console.log('Intervention updated =', data));
+        this.interventionArray[this.indexUpdate] = this.interventionUpdate;
+        this.button = 'Add';
+      }
     }
 
     this.sendIntervention.reset();
     this.showNumberError = false;
   }
+
   /**************************************************************************
    * @description Set data of a selected Level intervention and set it in the current form
    * @param intervention the Level intervention model
@@ -133,6 +144,7 @@ export class ResumeInterventionComponent implements OnInit {
     this.indexUpdate = index;
     this.button = 'Save';
   }
+
   /**************************************************************************
    * @description Delete the selected Custom section
    * @param id the id of the deleted level of intervention
@@ -150,7 +162,9 @@ export class ResumeInterventionComponent implements OnInit {
           if (res === true) {
             this.resumeService.deleteIntervention(id).subscribe(data => console.log('Deleted'));
             this.interventionArray.forEach((value, index) => {
-              if (index === pointIndex) { this.interventionArray.splice(index, 1); }
+              if (index === pointIndex) {
+                this.interventionArray.splice(index, 1);
+              }
             });
             this.button = 'Add';
           }

@@ -66,26 +66,27 @@
     </ng-template>
   <ng-template  [ngIf]="showSec" >
     <div fxLayout="row" fxFlexFill>
-    <div fxLayout="column" fxFlex="100" >
-      <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 19%">
-        {{ 'resume-section-content' | translate }}:
-      </mat-label>
+      <div fxLayout="column" fxFlex="10"></div>
+      <div fxLayout="column" fxFlex="90" >
+        <mat-label class="black font-size-12 required" fxLayout="row">
+          {{ 'resume-section-content' | translate }}:
+        </mat-label>
       <div *ngFor="let item of proSectionArray; let pointIndex=index" fxLayout="row"   >
-        <div fxLayout="column" fxFlex="68" fxLayoutAlign=" end"  >
-          <div fxLayout="row" fxFlexFill  fxLayoutGap="10px"   style="justify-content: flex-end">
-            <div fxLayout="column" fxFlex="55">
+        <div fxLayout="column" fxFlex="81" fxLayoutAlign=" start"  >
+          <div fxLayout="row" fxFlexFill  fxLayoutGap="10px" fxLayoutAlign="start">
+            <div fxLayout="column" fxFlex="58">
               <mat-form-field appearance="outline">
                 <input  matInput  placeholder="{{ 'resume-section-content' | translate }}"  #project_details_section_desc [value]="item.project_details_section_desc" >
               </mat-form-field>
             </div>
-            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center">
-                <button type="button" mat-raised-button class="bg-error-red btn-small black"
+            <div fxLayout="column"   fxLayoutAlign="center start">
+              <button type="button" mat-raised-button class="bg-error-red btn-small white"
                         (click)="deleteProDetSec(item._id,pointIndex)"
                         >
                   {{ 'resume-delete' | translate}}
                 </button>
             </div>
-            <div fxLayout="column" fxFlex="14" fxLayoutAlign="center">
+            <div fxLayout="column"  fxLayoutAlign="center">
               <ng-template [ngIf]="project_details_section_desc.value.toString() !== item.project_details_section_desc">
               <button type="button" mat-raised-button class="bg-pale-grey btn-small"
                       (click)="EditProDetSection(item,project_details_section_desc.value, pointIndex)"
@@ -100,8 +101,8 @@
       </div>
       <form  [formGroup]="sendProSectionDetails" fxLayout="row">
         <div fxLayout="column" fxFlex="47" fxLayoutAlign=" end"  >
-          <div fxLayout="row" fxFlexFill style="justify-content: flex-end">
-            <div fxLayout="column" fxFlex="79">
+          <div fxLayout="row" fxFlexFill >
+            <div fxLayout="column" fxFlex="100">
               <mat-form-field appearance="outline">
                 <input formControlName="project_details_section_desc" matInput placeholder="{{ 'resume-section-content' | translate }}" >
                 <mat-error class="red" *ngIf="sendProSectionDetails.controls.project_details_section_desc.errors?.required">
@@ -131,7 +132,6 @@
       </ng-template>
     </button></div>
   </div>
-
 </form>
 </div>
 </div>

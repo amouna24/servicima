@@ -49,6 +49,7 @@ export class ResumeLanguageComponent implements OnInit {
     private router: Router,
   ) {
   }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -105,6 +106,7 @@ export class ResumeLanguageComponent implements OnInit {
           }
         });
   }
+
   /**************************************************************************
    * @description get the rating added by the candidate
    *************************************************************************/
@@ -112,6 +114,7 @@ export class ResumeLanguageComponent implements OnInit {
     this.rating = rating;
     return false;
   }
+
   /**************************************************************************
    * @description show Rating that are already exists in database
    * @param level level of the existing language
@@ -125,6 +128,7 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
+
   /**************************************************************************
    * @description Select Level by clicking on the stars
    * @param index index of the language
@@ -137,6 +141,7 @@ export class ResumeLanguageComponent implements OnInit {
       return 'star_border';
     }
   }
+
   /**************************************************************************
    * @description initialize a Language Form
    *************************************************************************/
@@ -165,6 +170,7 @@ export class ResumeLanguageComponent implements OnInit {
     this.sendLanguage.reset();
     this.rating = 0;
   }
+
   /**************************************************************************
    * @description  Update a language by clicking on the stars
    * @param rating the rating selected by the candidate
@@ -183,44 +189,47 @@ export class ResumeLanguageComponent implements OnInit {
     this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
     return false;
   }
+
   /**************************************************************************
    * @description Get Language Data from Resume Service
    *************************************************************************/
   getLanguageInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
             this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getLanguage(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.languageArray = responseOne;
-                  this.languageArray.forEach(
-                    (lang) => {
-                      this.ratingEdit.push(+lang.level);
-                      lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
-                      this.langList.forEach((value, index) => {
-                        if (value.value === lang.resume_language_code) {
-                          this.langListRes.push(value);
-                          this.langList.splice(index, 1);
-                        }
+            this.resumeService.getLanguage(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.languageArray = responseOne;
+                    this.languageArray.forEach(
+                      (lang) => {
+                        this.ratingEdit.push(+lang.level);
+                        lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
+                        this.langList.forEach((value, index) => {
+                          if (value.value === lang.resume_language_code) {
+                            this.langListRes.push(value);
+                            this.langList.splice(index, 1);
+                          }
+                        });
                       });
-                    });
-                }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-      this.router.navigate(['/candidate/resume/']);
-    }},
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }
+        },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -228,6 +237,7 @@ export class ResumeLanguageComponent implements OnInit {
       );
 
   }
+
   /**************************************************************************
    * @description Delete Selected Languages
    *************************************************************************/
@@ -242,9 +252,9 @@ export class ResumeLanguageComponent implements OnInit {
         (res) => {
           if (res === true) {
             this.resumeService.deleteLanguage(id).subscribe(data => console.log('Deleted'));
-            this.languageArray.forEach((lang, indexlang) => {
-              if (indexlang === pointIndex) {
-                this.languageArray.splice(indexlang, 1);
+            this.languageArray.forEach((lang, indexLang) => {
+              if (indexLang === pointIndex) {
+                this.languageArray.splice(indexLang, 1);
                 this.langListRes.forEach((value, index) => {
                   if (value.value === lang.resume_language_code) {
                     this.langList.push(value);

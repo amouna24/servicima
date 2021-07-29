@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { UserService } from '@core/services/user/user.service';
@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
@@ -37,6 +38,7 @@ export class ProExpComponent implements OnInit {
   startDateUpdate: string;
   endDAteUpdate: string;
   myDisabledDayFilter;
+
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -49,6 +51,7 @@ export class ProExpComponent implements OnInit {
     private modalServices: ModalService
   ) {
   }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -60,23 +63,22 @@ export class ProExpComponent implements OnInit {
     this.initDates();
     this.createForm();
   }
+
   /**************************************************************************
    * @description Get Professional Data from Resume Service
    *************************************************************************/
   getProExpInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+      `?email_address=${this.userService.connectedUser$.getValue()
+        .user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue()
+        .user[0]['company_email']}`).subscribe((response) => {
+        if (response['msg_code'] !== '0004') {
+          this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getProExp(
             `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseProExp) => {
                 if (responseProExp['msg_code'] !== '0004') {
-                  // data found
                   this.proExpArray = responseProExp;
                   this.filterDate();
                 }
@@ -86,16 +88,18 @@ export class ProExpComponent implements OnInit {
                 }
               },
             );
-          } else {
-            this.router.navigate(['/candidate/resume/']);
-          }},
-        (error) => {
-          if (error.error.msg_code === '0004') {
-          }
-        },
-      );
+        } else {
+          this.router.navigate(['/candidate/resume/']);
+        }
+      },
+      (error) => {
+        if (error.error.msg_code === '0004') {
+        }
+      },
+    );
 
   }
+
   /**************************************************************************
    * @description Action that Route to Professional experience project component with passing parametrs in the state
    * @param professionalExp the professionalExperience model
@@ -112,31 +116,33 @@ export class ProExpComponent implements OnInit {
         }
       });
   }
+
   /*******************************************************************
    * @description Create Form
    *******************************************************************/
   createForm() {
     this.sendProExp = this.fb.group({
-      position:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      position: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       customer: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      start_date:  ['', [Validators.required]],
-      end_date:  ['', [Validators.required]],
+      start_date: ['', [Validators.required]],
+      end_date: ['', [Validators.required]],
     });
   }
+
   /*******************************************************************
    * @description Create or update a professional experience
    *******************************************************************/
   createUpdateProExp() {
     if (this.button === 'Add') {
-    this.ProExp = this.sendProExp.value;
-    if (!this.sendProExp.controls.end_date.value) {
-      this.ProExp.end_date = 'Current Date';
-    }
-    this.ProExp.resume_code = this.resumeCode;
-    this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-      console.log('Pro exp', this.ProExp);
+      this.ProExp = this.sendProExp.value;
+      if (!this.sendProExp.controls.end_date.value) {
+        this.ProExp.end_date = 'Current Date';
+      }
+      this.ProExp.resume_code = this.resumeCode;
+      this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
       this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
-    this.arrayProExpCount++; } else {
+      this.arrayProExpCount++;
+    } else {
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.start_date = this.startDateUpdate;
       this.proExpUpdate.end_date = this.endDAteUpdate;
@@ -145,17 +151,18 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate._id = this.id;
       if (this.sendProExp.valid) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
-      this.proExpArray[this.indexUpdate] = this.proExpUpdate;
-      this.button = 'Add';
+        this.proExpArray[this.indexUpdate] = this.proExpUpdate;
+        this.button = 'Add';
         this.sendProExp.controls.start_date.enable();
         this.sendProExp.controls.end_date.enable();
-      this.disableDate = false;
+        this.disableDate = false;
       }
     }
     this.createForm();
     this.initDates();
     this.getProExpInfo();
   }
+
   /**************************************************************************
    * @description get data from a selected professional experience and set it in the current form
    * @param professionalExp the Professional Experience model
@@ -171,13 +178,14 @@ export class ProExpComponent implements OnInit {
     this.startDateUpdate = this.sendProExp.controls.start_date.value;
     this.endDAteUpdate = this.sendProExp.controls.end_date.value;
     this.sendProExp.controls.start_date.disable();
- this.sendProExp.controls.end_date.disable();
+    this.sendProExp.controls.end_date.disable();
 
     this.id = professionalExp._id;
     this.button = 'Save';
     this.professional_experience_code = professionalExp.ResumeProfessionalExperienceKey.professional_experience_code;
     this.indexUpdate = index;
   }
+
   /**************************************************************************
    * @description Delete Selected Functional Skilll
    * @param id the id of the deleted functionnal skill
@@ -196,7 +204,6 @@ export class ProExpComponent implements OnInit {
           if (res === true) {
             this.resumeService.deleteProExp(id).subscribe(data => console.log('Deleted'));
             this.resumeService.getProject(
-              // tslint:disable-next-line:max-line-length
               `?professional_experience_code=${professional_experience_code}`)
               .subscribe(
                 (response) => {
@@ -205,20 +212,19 @@ export class ProExpComponent implements OnInit {
                       this.resumeService.deleteProject(project._id).subscribe(data => console.log('Deleted'));
 
                       this.resumeService.getProjectDetails(
-                        // tslint:disable-next-line:max-line-length
                         `?project_code=${project.ResumeProjectKey.project_code}`)
                         .subscribe(
-                          (responsedet) => {
-                            if (responsedet['msg_code'] !== '0004') {
-                              responsedet.forEach((det) => {
+                          (responseDet) => {
+                            if (responseDet['msg_code'] !== '0004') {
+                              responseDet.forEach((det) => {
                                 this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
                                 this.resumeService.getProjectDetailsSection(
                                   // tslint:disable-next-line:max-line-length
                                   `?project_details_code=${det.ResumeProjectDetailsKey.project_details_code}`)
                                   .subscribe(
-                                    (responsedetsec) => {
-                                      if (responsedetsec['msg_code'] !== '0004') {
-                                        responsedetsec.forEach((section) => {
+                                    (responseDetSec) => {
+                                      if (responseDetSec['msg_code'] !== '0004') {
+                                        responseDetSec.forEach((section) => {
                                           this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
                                         });
                                       }
@@ -241,6 +247,7 @@ export class ProExpComponent implements OnInit {
           this.subscriptionModal.unsubscribe();
         });
   }
+
   /*******************************************************************
    * @description Change the minimum of the end date
    * @param date the minimum of the end date
@@ -248,6 +255,7 @@ export class ProExpComponent implements OnInit {
   onChangeStartDate(date: string) {
     this.minEndDate = new Date(date);
   }
+
   /*******************************************************************
    * @description Change the maximum of the start date
    * @param date the maximum of the start date
@@ -255,6 +263,7 @@ export class ProExpComponent implements OnInit {
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
   }
+
   /*******************************************************************
    * @description Filter Dates that are already taken by other experiences
    * @return !disabledDates return enabled dates
@@ -269,11 +278,11 @@ export class ProExpComponent implements OnInit {
         exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
         exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
         exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
-        for (const date = new Date(exp.start_date) ; date <= new Date(exp.end_date) ; date.setDate(date.getDate() + 1)) {
+        for (const date = new Date(exp.start_date); date <= new Date(exp.end_date); date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
-        // tslint:disable-next-line:max-line-length
-        if (this.datePipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
+        if (this.datePipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datePipe
+          .transform(new Date(), 'yyyy-MM-dd')) {
           this.checkedBox = true;
           this.disableCheckBox = true;
           this.sendProExp.controls.end_date.enable();
@@ -288,6 +297,7 @@ export class ProExpComponent implements OnInit {
       return !disabledDates.find(x => x.getTime() === time);
     };
   }
+
   /*******************************************************************
    * @description Initialize Max end Min Dates
    *******************************************************************/
@@ -300,18 +310,20 @@ export class ProExpComponent implements OnInit {
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
+
   /*******************************************************************
    * @description Action on checkbox of the current date
    * @param event event of the checkbox
    *******************************************************************/
   checkCurrentDate(event: MatCheckboxChange) {
     if (event.checked) {
-    this.sendProExp.controls.end_date.disable();
+      this.sendProExp.controls.end_date.disable();
     } else {
       this.sendProExp.controls.end_date.enable();
       this.sendProExp.controls.end_date.setValue('');
     }
   }
+
   /*******************************************************************
    * @description initialize Boolean variables
    *******************************************************************/

@@ -22,7 +22,7 @@ export class ResumeTechSkillComponent implements OnInit {
   technical_skill_code: string ;
   indexUpdate = 0;
   button: string;
-  _id: string;
+  id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
   /**********************************************************************
@@ -50,10 +50,9 @@ export class ResumeTechSkillComponent implements OnInit {
    *************************************************************************/
   getTechnicalSkillsInfo() {
     this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`).subscribe((response) => {
           if (response['msg_code'] !== '0004') {
             this.resume_code = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getTechnicalSkills(
@@ -112,7 +111,7 @@ export class ResumeTechSkillComponent implements OnInit {
       this.techSkillUpdate.technical_skill_code = this.technical_skill_code;
       this.techSkillUpdate.resume_code = this.resume_code;
       this.techSkillUpdate.skill_index = this.indexUpdate.toString();
-      this.techSkillUpdate._id = this._id;
+      this.techSkillUpdate._id = this.id;
       if (this.sendTechSkill.valid && this.showNumberError === false) {
         this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => console.log('Technical skill updated =', data));
       this.techSkillArray[this.indexUpdate] = this.techSkillUpdate;
@@ -132,7 +131,7 @@ export class ResumeTechSkillComponent implements OnInit {
       technologies: techSkill.technologies,
     });
     this.technical_skill_code = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
-    this._id = techSkill._id;
+    this.id = techSkill._id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     /*

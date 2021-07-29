@@ -1,31 +1,24 @@
-import { Component , OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { Router } from '@angular/router';
-import { BehaviorSubject, of, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
+import { IMyTreeNode } from '@shared/models/treeView';
 
-/** File node data with nested structure. */
-// tslint:disable-next-line:interface-name
-interface MyTreeNode {
-  title: string;
-  children?: MyTreeNode[];
-  expanded?: boolean;
-  object?: object;
-}
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
-  styleUrls: ['./pro-exp-projects.component.scss']
+  styleUrls: ['./pro-exp-projects.component.scss'],
 })
 export class ProExpProjectsComponent implements OnInit {
-  treeControl: NestedTreeControl<MyTreeNode>;
-  treeDataSource: MatTreeNestedDataSource<MyTreeNode>;
+  treeControl: NestedTreeControl<IMyTreeNode>;
+  treeDataSource: MatTreeNestedDataSource<IMyTreeNode>;
   sendProject: FormGroup;
   arrayProjectCount = 0;
   Project: IResumeProjectModel;
@@ -39,7 +32,7 @@ export class ProExpProjectsComponent implements OnInit {
   showAddSection: boolean;
   showForm: boolean;
   projectCode: string;
-  treeItems: MyTreeNode[] = [];
+  treeItems: IMyTreeNode[] = [];
   project: string;
   resumeCode: string;
   indexUpdate = 0;
@@ -55,7 +48,7 @@ export class ProExpProjectsComponent implements OnInit {
   showNumberError: boolean;
   startDate: string;
   endDate: string;
-  myDisabledDayFilter: any ;
+  myDisabledDayFilter: any;
   openExpansion: boolean;
   hasChildren: any;
 
@@ -71,11 +64,12 @@ export class ProExpProjectsComponent implements OnInit {
   ) {
     this.getDataFromPreviousRoute();
   }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit(): Promise<void> {
-    this.hasChildren = (_: number, node: MyTreeNode) => {
+    this.hasChildren = (_: number, node: IMyTreeNode) => {
       return node.children && node.children.length > 0;
     };
     this.createForm();
@@ -91,10 +85,11 @@ export class ProExpProjectsComponent implements OnInit {
     this.getProjectInfo();
     this.createForm();
     this.initDates();
-    this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
+    this.treeControl = new NestedTreeControl<IMyTreeNode>(this.makeGetChildrenFunction());
     this.treeDataSource = new MatTreeNestedDataSource();
     await this.loadTree();
   }
+
   /**************************************************************************
    * @description Get Project Data from Resume Service
    *************************************************************************/
@@ -102,7 +97,6 @@ export class ProExpProjectsComponent implements OnInit {
     this.ProjectArray = [];
     const disabledDates = [];
     this.resumeService.getProject(
-      // tslint:disable-next-line:max-line-length
       `?professional_experience_code=${this.professionalExperienceCode}`)
       .subscribe(
         (response) => {
@@ -114,7 +108,7 @@ export class ProExpProjectsComponent implements OnInit {
               this.ProjectArray.forEach(
                 (project) => {
                   project.project_code = project.ResumeProjectKey.project_code;
-                  for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+                  for (const date = new Date(project.start_date); date <= new Date(project.end_date); date.setDate(date.getDate() + 1)) {
                     disabledDates.push(new Date(date));
                   }
                 });
@@ -130,7 +124,8 @@ export class ProExpProjectsComponent implements OnInit {
           } else {
             this.showProject = false;
             this.showForm = false;
-          } },
+          }
+        },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
@@ -138,16 +133,18 @@ export class ProExpProjectsComponent implements OnInit {
       );
 
   }
+
   /**************************************************************************
    * @description Create Project Form
    *************************************************************************/
   createForm() {
     this.sendProject = this.fb.group({
-      project_title:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      project_title: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
     });
   }
+
   /**************************************************************************
    * @description Create or UpdateProject
    * @param dateEnd contains the end date added by the user
@@ -157,45 +154,51 @@ export class ProExpProjectsComponent implements OnInit {
     if (this.button === 'Add') {
       this.startDate = dateStart;
       this.endDate = dateEnd;
-    this.Project = this.sendProject.value;
-    this.Project.professional_experience_code = this.professionalExperienceCode;
-    this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
-    if (this.sendProject.valid ) {
-      this.resumeService.addProject(this.Project).subscribe(data => {
-        this.getProjectInfo();
-      });
-      this.showForm = false;
-    } else { console.log('Form is not valid');
-      this.showDateError = false;
-    }
-    this.arrayProjectCount++; } else {
+      this.Project = this.sendProject.value;
+      this.Project.professional_experience_code = this.professionalExperienceCode;
+      this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
+      if (this.sendProject.valid) {
+        this.resumeService.addProject(this.Project).subscribe(data => {
+          this.getProjectInfo();
+        });
+        this.showForm = false;
+      } else {
+        console.log('Form is not valid');
+        this.showDateError = false;
+      }
+      this.arrayProjectCount++;
+    } else {
       this.projectUpdate = this.sendProject.value;
       this.projectUpdate.project_code = this.projectCode;
       this.projectUpdate.professional_experience_code = this.professionalExperienceCode;
       this.projectUpdate._id = this.id;
       if (this.sendProject.valid) {
         this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
-      this.ProjectArray[this.indexUpdate] = this.projectUpdate;
-      this.button = 'Add';
-        this.showForm = false; }
+        this.ProjectArray[this.indexUpdate] = this.projectUpdate;
+        this.button = 'Add';
+        this.showForm = false;
+      }
     }
-this.createForm();
-this.initDates();
-this.filterDate();
-this.loadTree();
+    this.createForm();
+    this.initDates();
+    this.filterDate();
+    this.loadTree();
   }
+
   /**************************************************************************
    * @description action allows to show or hide project form
    *************************************************************************/
   onShowForm() {
     this.showForm = true;
   }
+
   /**************************************************************************
    * @description Action allows to to get children from a node
    *************************************************************************/
   private makeGetChildrenFunction() {
     return node => of(node.children);
   }
+
   /**************************************************************************
    * @description Set data of a selected Project and set it in the current form
    * @param oneProject the  Project model
@@ -220,7 +223,7 @@ this.loadTree();
     projectEditArray.forEach(
       (project) => {
         project.project_code = project.ResumeProjectKey.project_code;
-        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+        for (const date = new Date(project.start_date); date <= new Date(project.end_date); date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
       });
@@ -229,6 +232,7 @@ this.loadTree();
       return !disabledDates.find(x => x.getTime() === time);
     };
   }
+
   /**************************************************************************
    * @description Delete the selected Project
    * @param id the id of the deleted Project
@@ -249,7 +253,6 @@ this.loadTree();
               this.loadTree();
             });
             this.resumeService.getProjectDetails(
-              // tslint:disable-next-line:max-line-length
               `?project_code=${project_code}`)
               .subscribe(
                 (response) => {
@@ -257,12 +260,11 @@ this.loadTree();
                     response.forEach((det) => {
                       this.resumeService.deleteProjectDetails(det._id).subscribe(data => console.log('Deleted'));
                       this.resumeService.getProjectDetailsSection(
-                        // tslint:disable-next-line:max-line-length
                         `?project_details_code=${det.ResumeProjectDetailsKey.project_details_code}`)
                         .subscribe(
-                          (responsedet) => {
-                            if (responsedet['msg_code'] !== '0004') {
-                              responsedet.forEach((section) => {
+                          (responseDet) => {
+                            if (responseDet['msg_code'] !== '0004') {
+                              responseDet.forEach((section) => {
                                 this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => {
                                   console.log('Deleted');
                                 });
@@ -289,6 +291,7 @@ this.loadTree();
           this.subscriptionModal.unsubscribe();
         });
   }
+
   /*******************************************************************
    * @description Change the minimum of the end date
    * @param date the minimum of the end date
@@ -296,6 +299,7 @@ this.loadTree();
   onChangeStartDate(date: string) {
     this.minEndDate = new Date(date);
   }
+
   /*******************************************************************
    * @description Change the maximum of the start date
    * @param date the maximum of the start date
@@ -303,6 +307,7 @@ this.loadTree();
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
   }
+
   /*******************************************************************
    * @description Filter Dates that are already taken by other project
    * @return !disabledDates return enabled dates
@@ -311,7 +316,7 @@ this.loadTree();
     const disabledDates = [];
     this.ProjectArray.forEach(
       (project) => {
-        for (const date = new Date(project.start_date) ; date <= new Date(project.end_date) ; date.setDate(date.getDate() + 1)) {
+        for (const date = new Date(project.start_date); date <= new Date(project.end_date); date.setDate(date.getDate() + 1)) {
           disabledDates.push(new Date(date));
         }
       });
@@ -320,15 +325,17 @@ this.loadTree();
       return !disabledDates.find(x => x.getTime() === time);
     };
   }
+
   /*******************************************************************
    * @description Initialize Max end Min Dates
    *******************************************************************/
   initDates() {
     this.minEndDate = this.startDateProExp;
-    this.maxEndDate =  this.endDateProExp;
+    this.maxEndDate = this.endDateProExp;
     this.minStartDate = this.startDateProExp;
     this.maxStartDate = this.endDateProExp;
   }
+
   /*******************************************************************
    * @description Action allows to show the project page
    *******************************************************************/
@@ -336,6 +343,7 @@ this.loadTree();
     this.showProject = !this.showProject;
     this.showForm = !this.showForm;
   }
+
   /*******************************************************************
    * @description initialize data that are coming from the previous route
    *******************************************************************/
@@ -346,16 +354,18 @@ this.loadTree();
     this.startDateProExp = this.router.getCurrentNavigation().extras.state?.start_date;
     this.endDateProExp = this.router.getCurrentNavigation().extras.state?.end_date;
   }
+
   /*******************************************************************
    * @description Load data from resume service and set it in a the tree
    *******************************************************************/
   async loadTree() {
     const treeItems = [];
     let i = 0;
-    new Promise( (resolve) => {
+    new Promise((resolve) => {
       this.resumeService.getResume(
-        // tslint:disable-next-line:max-line-length
-        `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`)
         .subscribe(
           (response) => {
             if (response['msg_code'] !== '0004') {
@@ -382,8 +392,9 @@ this.loadTree();
                           expanded: false,
                           object: pro,
                         });
-                      }
-                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) { }
+                    }
+                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                    }
                     if (i === proExp.length) {
                       resolve(treeItems);
                     }
@@ -391,17 +402,18 @@ this.loadTree();
                 });
             }
           });
-    }).then( (res: MyTreeNode[]) => {
-        this.treeItems = res;
-        this.treeDataSource.data = res;
-        this.treeDataSource.data.forEach( (expand) => {
-          if (expand.expanded === true) {
-            this.treeControl.expand(expand);
-          }
-        });
+    }).then((res: IMyTreeNode[]) => {
+      this.treeItems = res;
+      this.treeDataSource.data = res;
+      this.treeDataSource.data.forEach((expand) => {
+        if (expand.expanded === true) {
+          this.treeControl.expand(expand);
+        }
+      });
     });
     this.openExpansion = false;
   }
+
   /*******************************************************************
    * @description Get the data of the projects of one professional experience
    * @param pro the professional experience model
@@ -412,31 +424,32 @@ this.loadTree();
     const proArray = [];
     await new Promise((resolve) => {
       this.resumeService.getProject(
-        // tslint:disable-next-line:max-line-length
         `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
         .subscribe(
           (resProject) => {
             if (resProject.length > 0) {
-            resProject.forEach((project) => {
-              i++;
-              proArray.push({
-                title: project.project_title,
-                object: project,
+              resProject.forEach((project) => {
+                i++;
+                proArray.push({
+                  title: project.project_title,
+                  object: project,
 
+                });
               });
-            });
-            if (i === resProject.length) {
-              resolve(proArray);
-            }
-          } else {
+              if (i === resProject.length) {
+                resolve(proArray);
+              }
+            } else {
               resolve([]);
-            }} );
+            }
+          });
     }).then((res) => {
       result = res;
       return (res);
     });
     return result;
   }
+
   /*******************************************************************
    * @description Get the data of the projects of one professional experience
    * @param project the project model
@@ -483,6 +496,7 @@ this.loadTree();
       this.openExpansion = false;
     }
   }
+
   /*******************************************************************
    * @description get new changes from section component and update it in the tree view
    * @param event event that return true if there is a change
@@ -494,20 +508,21 @@ this.loadTree();
     }
     return false;
   }
+
   /*******************************************************************
    * @description Change from professional experience to other
    * @param event contains the data of the node object
    *******************************************************************/
   nodeSelect(event: any) {
     if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
-        this.professionalExperienceCode = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
-        this.customer = event.object.customer;
-        this.position = event.object.position;
-        this.startDateProExp = event.object.start_date;
-        this.endDateProExp = event.object.end_date;
+      this.professionalExperienceCode = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
+      this.customer = event.object.customer;
+      this.position = event.object.position;
+      this.startDateProExp = event.object.start_date;
+      this.endDateProExp = event.object.end_date;
       this.getProjectInfo();
       this.loadTree();
       this.openExpansion = false;
-      }
+    }
   }
 }

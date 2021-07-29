@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { ResumeService } from '@core/services/resume/resume.service';
@@ -115,7 +115,6 @@ export class ProjectSectionComponent implements OnInit {
    *************************************************************************/
   getProjectDetailsInfo() {
     this.resumeService.getProjectDetails(
-      // tslint:disable-next-line:max-line-length
       `?project_code=${this.projectCode}`)
       .subscribe(
         (response) => {
@@ -235,7 +234,6 @@ export class ProjectSectionComponent implements OnInit {
     });
     if (projectDetail.project_detail_desc === null || projectDetail.project_detail_desc === '') {
       this.resumeService.getProjectDetailsSection(
-        // tslint:disable-next-line:max-line-length
         `?project_details_code=${projectDetail.ResumeProjectDetailsKey.project_details_code}`)
         .subscribe(
           (response) => {
