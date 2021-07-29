@@ -155,22 +155,30 @@
               </div>
             </form>
           </div>
-          <div fxLayout="column" fxFlex="18" >
+          <div fxLayout="column" fxFlex="18" class="p-l-10" >
             <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
               <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
                 <wid-scrollbar class="full-width full-height">
-                  <div fxLayout="row" fxFlex="100" class="border-radius-10 border_add_project">
+                  <div fxLayout="row"  class="border-radius-10 border_add_project min-height-50">
 
                   <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                   <li>
                     <div>
                       <button mat-icon-button disabled>
-                        <mat-icon class="steel-icon mat-icon-steel">
+                        <mat-icon *ngIf="node.object === undefined" class="steel-icon mat-icon-steel">
                           brightness_1
                         </mat-icon>
+                        <div *ngIf="node.object !== undefined">
+                          <mat-icon *ngIf="node.object.customer !== customer" class="steel-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                          <mat-icon *ngIf="node.object.customer === customer" class="topaz-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                        </div>
                       </button>
-                      {{node.title}}
+                      <span (click)="nodeSelect(node)" class="onClickTree">{{node.title}}</span>
                     </div>
                   </li>
                 </mat-tree-node>
