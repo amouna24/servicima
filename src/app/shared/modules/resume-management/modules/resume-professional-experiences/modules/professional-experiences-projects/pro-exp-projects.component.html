@@ -40,7 +40,7 @@
               </div>
             </div>
             <div *ngFor="let item of ProjectArray let pointIndex=index" fxLayout="row" class="full-width p-b-10">
-              <mat-expansion-panel [hideToggle]="true" #panel fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
+              <mat-expansion-panel [hideToggle]="true" #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
                   <mat-panel-title style="margin-right: 0 !important;">
@@ -73,7 +73,7 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
-                  <wid-project-section [projectCode]="item.project_code"
+                  <wid-project-section [projectCode]="item.project_code" (refresh_tree)="refreshTreeHandler($event,item)"
                                        class="full-width full-height"></wid-project-section>
                 </div>
               </mat-expansion-panel>
@@ -155,9 +155,58 @@
               </div>
             </form>
           </div>
-          <div fxLayout="column" fxFlex="18" >
+          <div fxLayout="column" fxFlex="18" class="p-l-10" >
+            <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
+              <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
+                <wid-scrollbar class="full-width full-height">
+                  <div fxLayout="row"  class="border-radius-10 border_add_project min-height-50">
 
-          </div>
+                  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                  <li>
+                    <div>
+                      <button mat-icon-button disabled>
+                        <mat-icon *ngIf="node.object === undefined" class="steel-icon mat-icon-steel">
+                          brightness_1
+                        </mat-icon>
+                        <div *ngIf="node.object !== undefined">
+                          <mat-icon *ngIf="node.object.customer !== customer" class="steel-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                          <mat-icon *ngIf="node.object.customer === customer" class="topaz-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                        </div>
+                      </button>
+                      <span (click)="nodeSelect(node)" class="onClickTree">{{node.title}}</span>
+                    </div>
+                  </li>
+                </mat-tree-node>
+
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
+                  <li>
+                    <div class="mat-tree-node" (click)="nodeSelect(node)" >
+                      <button mat-icon-button matTreeNodeToggle disabled>
+                        <mat-icon *ngIf="node.title === customer || node.title === project" class="topaz-icon mat-icon-topaz" >
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                        <mat-icon *ngIf="node.title !== customer && node.title !==  project" class="steel-icon mat-icon-topaz" >
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                      </button>
+                      <span class="onClickTree">{{node.title}}</span>
+                    </div>
+                    <ul [hidden]="!treeControl.isExpanded(node)">
+                      <ng-container matTreeNodeOutlet></ng-container>
+                    </ul>
+                  </li>
+                </mat-nested-tree-node>
+              </mat-tree>
+                  </div>
+                </wid-scrollbar>
+              </div>
+            </div>
+      </div>
         </wid-scrollbar>
       </div>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">

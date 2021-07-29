@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { ResumeService } from '@core/services/resume/resume.service';
@@ -36,6 +36,7 @@ export class ProjectSectionComponent implements OnInit {
   proDetailUpdate: IResumeProjectDetailsModel;
   subscriptionModal: Subscription;
   @Input() projectCode = '';
+  @Output() refresh_tree: EventEmitter<boolean> = new EventEmitter(false);
   id = '';
   indexUpdate = 0;
   button = 'Add';
@@ -152,9 +153,11 @@ export class ProjectSectionComponent implements OnInit {
       this.proSectionArray.push(this.ProSectionDetails);
       this.proSectionAddArray.push(this.ProSectionDetails);
     } else {
+      console.log('Form is not valid');
     }
     this.sendProSectionDetails.reset();
     this.arrayProSectionDetailsCount++;
+
   }
   /***************************************************************
    * @description Create or update project details and project details section
@@ -165,7 +168,10 @@ export class ProjectSectionComponent implements OnInit {
       this.ProDetails.project_details_code = this.projectDetailsCode;
       this.ProDetails.project_code = this.projectCode;
       if (this.sendProDetails.valid) {
-        this.resumeService.addProjectDetails(this.ProDetails).subscribe(dataProDeta => this.getProjectDetailsInfo());
+        this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
+          this.getProjectDetailsInfo();
+          this.refresh_tree.emit(true);
+        });
         if (this.ProSectionDetails !== undefined) {
           this.proSectionAddArray.forEach((sec) => {
             this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
@@ -173,6 +179,7 @@ export class ProjectSectionComponent implements OnInit {
         }
         this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P-D`;
       } else {
+        console.log('Form is not valid');
       }
     } else if (this.button === 'Save') {
       this.proDetailUpdate = this.sendProDetails.value;
@@ -180,25 +187,28 @@ export class ProjectSectionComponent implements OnInit {
       this.proDetailUpdate.project_details_code = this.projectDetailsCode;
       this.proDetailUpdate._id = this.id;
       if (this.proSectionAddArray !== undefined) {
-      await this.proSectionAddArray.forEach((sec) => {
-        this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
-      }); }
-      this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
-        this.getProjectDetailsInfo();
+        await this.proSectionAddArray.forEach((sec) => {
+          this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
+        });
+        this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
+          this.getProjectDetailsInfo();
+          this.refresh_tree.emit(true);
+        });
+        this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
+        this.button = 'Add';
+      }
+      this.proSectionAddArray = [];
+      this.arrayProDetailsCount++;
+      this.showDesc = true;
+      this.showSec = false;
+      this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
+        this.select = selectedValue;
       });
-      this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
-      this.button = 'Add';
+      this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
+      this.proSectionArray = [];
+      this.refresh_tree.emit(true);
     }
-    this.proSectionAddArray = [];
-    this.arrayProDetailsCount++;
-    this.showDesc = true;
-    this.showSec = false;
     this.createFormProDetails();
-    this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
-      this.select = selectedValue;
-    });
-    this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
-    this.proSectionArray = [];
   }
   /*****************************************************************
    * @description Action allows to choose between a project details in paragraph format or a list format
@@ -211,7 +221,6 @@ export class ProjectSectionComponent implements OnInit {
       this.showDesc = !this.showDesc;
       this.showSec = !this.showSec;
     }
-
   }
   /**************************************************************************
    * @description get data from a selected Project details and set it in the current form
@@ -292,6 +301,7 @@ export class ProjectSectionComponent implements OnInit {
                   this.select = selectedValue;
                 });
                 this.proSectionArray = [];
+                this.refresh_tree.emit(true);
               }
             );
           }

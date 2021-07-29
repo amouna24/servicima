@@ -1,18 +1,31 @@
 import { Component , OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
+
+/** File node data with nested structure. */
+// tslint:disable-next-line:interface-name
+interface MyTreeNode {
+  title: string;
+  children?: MyTreeNode[];
+  expanded?: boolean;
+  object?: object;
+}
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
   styleUrls: ['./pro-exp-projects.component.scss']
 })
 export class ProExpProjectsComponent implements OnInit {
-
+  treeControl: NestedTreeControl<MyTreeNode>;
+  treeDataSource: MatTreeNestedDataSource<MyTreeNode>;
   sendProject: FormGroup;
   arrayProjectCount = 0;
   Project: IResumeProjectModel;
@@ -25,7 +38,10 @@ export class ProExpProjectsComponent implements OnInit {
   endDateProExp: Date;
   showAddSection: boolean;
   showForm: boolean;
-  project_code: string;
+  projectCode: string;
+  treeItems: MyTreeNode[] = [];
+  project: string;
+  resumeCode: string;
   indexUpdate = 0;
   button: string;
   id: string;
@@ -40,6 +56,9 @@ export class ProExpProjectsComponent implements OnInit {
   startDate: string;
   endDate: string;
   myDisabledDayFilter: any ;
+  openExpansion: boolean;
+  hasChildren: any;
+
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -55,7 +74,10 @@ export class ProExpProjectsComponent implements OnInit {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.hasChildren = (_: number, node: MyTreeNode) => {
+      return node.children && node.children.length > 0;
+    };
     this.createForm();
     this.ProjectArray = [];
     this.showProject = false;
@@ -64,16 +86,20 @@ export class ProExpProjectsComponent implements OnInit {
     this.button = 'Add';
     this.showDateError = false;
     this.showNumberError = false;
-    this.project_code = '';
+    this.projectCode = '';
+    this.openExpansion = false;
     this.getProjectInfo();
     this.createForm();
     this.initDates();
-
+    this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
+    this.treeDataSource = new MatTreeNestedDataSource();
+    await this.loadTree();
   }
   /**************************************************************************
    * @description Get Project Data from Resume Service
    *************************************************************************/
   getProjectInfo() {
+    this.ProjectArray = [];
     const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
@@ -97,7 +123,13 @@ export class ProExpProjectsComponent implements OnInit {
                 return !disabledDates.find(x => x.getTime() === time);
               };
               this.filterDate();
+            } else {
+              this.showProject = false;
+              this.showForm = false;
             }
+          } else {
+            this.showProject = false;
+            this.showForm = false;
           } },
         (error) => {
           if (error.error.msg_code === '0004') {
@@ -129,7 +161,6 @@ export class ProExpProjectsComponent implements OnInit {
     this.Project.professional_experience_code = this.professionalExperienceCode;
     this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
     if (this.sendProject.valid ) {
-      console.log(this.Project);
       this.resumeService.addProject(this.Project).subscribe(data => {
         this.getProjectInfo();
       });
@@ -139,7 +170,7 @@ export class ProExpProjectsComponent implements OnInit {
     }
     this.arrayProjectCount++; } else {
       this.projectUpdate = this.sendProject.value;
-      this.projectUpdate.project_code = this.project_code;
+      this.projectUpdate.project_code = this.projectCode;
       this.projectUpdate.professional_experience_code = this.professionalExperienceCode;
       this.projectUpdate._id = this.id;
       if (this.sendProject.valid) {
@@ -151,13 +182,19 @@ export class ProExpProjectsComponent implements OnInit {
 this.createForm();
 this.initDates();
 this.filterDate();
-this.showNumberError = false ;
+this.loadTree();
   }
   /**************************************************************************
    * @description action allows to show or hide project form
    *************************************************************************/
   onShowForm() {
     this.showForm = true;
+  }
+  /**************************************************************************
+   * @description Action allows to to get children from a node
+   *************************************************************************/
+  private makeGetChildrenFunction() {
+    return node => of(node.children);
   }
   /**************************************************************************
    * @description Set data of a selected Project and set it in the current form
@@ -173,7 +210,7 @@ this.showNumberError = false ;
       end_date: oneProject.end_date,
     });
     this.myDisabledDayFilter = null;
-    this.project_code = oneProject.ResumeProjectKey.project_code;
+    this.projectCode = oneProject.ResumeProjectKey.project_code;
     this.id = oneProject._id.toString();
     this.indexUpdate = pointIndex;
     this.button = 'Save';
@@ -208,7 +245,9 @@ this.showNumberError = false ;
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteProject(id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteProject(id).subscribe(data => {
+              this.loadTree();
+            });
             this.resumeService.getProjectDetails(
               // tslint:disable-next-line:max-line-length
               `?project_code=${project_code}`)
@@ -224,7 +263,9 @@ this.showNumberError = false ;
                           (responsedet) => {
                             if (responsedet['msg_code'] !== '0004') {
                               responsedet.forEach((section) => {
-                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
+                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => {
+                                  console.log('Deleted');
+                                });
                               });
                             }
                           },
@@ -304,5 +345,169 @@ this.showNumberError = false ;
     this.position = this.router.getCurrentNavigation().extras.state?.position;
     this.startDateProExp = this.router.getCurrentNavigation().extras.state?.start_date;
     this.endDateProExp = this.router.getCurrentNavigation().extras.state?.end_date;
+  }
+  /*******************************************************************
+   * @description Load data from resume service and set it in a the tree
+   *******************************************************************/
+  async loadTree() {
+    const treeItems = [];
+    let i = 0;
+    new Promise( (resolve) => {
+      this.resumeService.getResume(
+        // tslint:disable-next-line:max-line-length
+        `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+        .subscribe(
+          (response) => {
+            if (response['msg_code'] !== '0004') {
+              this.resumeCode = response[0].ResumeKey.resume_code.toString();
+              this.resumeService.getProExp(
+                `?resume_code=${this.resumeCode}`)
+                .subscribe(async (proExp) => {
+                  for (const pro of proExp) {
+                    const index = proExp.indexOf(pro);
+                    i++;
+                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                      treeItems.push(
+                        {
+                          title: pro.customer,
+                          children: await this.getProjectNode(pro),
+                          expanded: true,
+                          object: pro
+                        });
+                    } else {
+                      treeItems.push(
+                        {
+                          title: pro.customer,
+                          children: await this.getProjectNode(pro),
+                          expanded: false,
+                          object: pro,
+                        });
+                      }
+                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) { }
+                    if (i === proExp.length) {
+                      resolve(treeItems);
+                    }
+                  }
+                });
+            }
+          });
+    }).then( (res: MyTreeNode[]) => {
+        this.treeItems = res;
+        this.treeDataSource.data = res;
+        this.treeDataSource.data.forEach( (expand) => {
+          if (expand.expanded === true) {
+            this.treeControl.expand(expand);
+          }
+        });
+    });
+    this.openExpansion = false;
+  }
+  /*******************************************************************
+   * @description Get the data of the projects of one professional experience
+   * @param pro the professional experience model
+   *******************************************************************/
+  async getProjectNode(pro: IResumeProfessionalExperienceModel) {
+    let i = 0;
+    let result = null;
+    const proArray = [];
+    await new Promise((resolve) => {
+      this.resumeService.getProject(
+        // tslint:disable-next-line:max-line-length
+        `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
+        .subscribe(
+          (resProject) => {
+            if (resProject.length > 0) {
+            resProject.forEach((project) => {
+              i++;
+              proArray.push({
+                title: project.project_title,
+                object: project,
+
+              });
+            });
+            if (i === resProject.length) {
+              resolve(proArray);
+            }
+          } else {
+              resolve([]);
+            }} );
+    }).then((res) => {
+      result = res;
+      return (res);
+    });
+    return result;
+  }
+  /*******************************************************************
+   * @description Get the data of the projects of one professional experience
+   * @param project the project model
+   *******************************************************************/
+  generateSections(project: IResumeProjectModel) {
+    this.project = project.project_title;
+    if (this.openExpansion === false) {
+      const detailsTree = [];
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
+        if (proj['msg_code'] !== '0004') {
+          proj.forEach((pro) => {
+            detailsTree.push(
+              {
+                title: pro.project_detail_title,
+              });
+          });
+          if (detailsTree.length > 0) {
+            this.treeDataSource.data.map((node) => {
+              node.children.map((nodeChildren) => {
+                if (nodeChildren.title === project.project_title) {
+                  nodeChildren.children = detailsTree;
+                  this.treeControl.expand(nodeChildren);
+                }
+              });
+            });
+          }
+        }
+        const _data = this.treeDataSource.data;
+        this.treeDataSource.data = null;
+        this.treeDataSource.data = _data;
+        this.openExpansion = true;
+      });
+    } else if (this.openExpansion === true) {
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
+        this.treeDataSource.data.map((node) => {
+          node.children.map((nodeChildren) => {
+            nodeChildren.children = [];
+            const _data = this.treeDataSource.data;
+            this.treeDataSource.data = null;
+            this.treeDataSource.data = _data;
+          });
+        });
+      });
+      this.openExpansion = false;
+    }
+  }
+  /*******************************************************************
+   * @description get new changes from section component and update it in the tree view
+   * @param event event that return true if there is a change
+   *******************************************************************/
+  async refreshTreeHandler(event: boolean, item) {
+    if (event === true) {
+      this.openExpansion = false;
+      this.generateSections(item);
+    }
+    return false;
+  }
+  /*******************************************************************
+   * @description Change from professional experience to other
+   * @param event contains the data of the node object
+   *******************************************************************/
+  nodeSelect(event: any) {
+    if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
+        this.professionalExperienceCode = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
+        this.customer = event.object.customer;
+        this.position = event.object.position;
+        this.startDateProExp = event.object.start_date;
+        this.endDateProExp = event.object.end_date;
+      this.getProjectInfo();
+      this.loadTree();
+      this.openExpansion = false;
+      }
   }
 }
