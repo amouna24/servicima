@@ -299,7 +299,6 @@ this.loadTree();
               this.resumeService.getProExp(
                 `?resume_code=${this.resume_code}`)
                 .subscribe(async (proExp) => {
-                  console.log('pro exp array =', proExp);
                   for (const pro of proExp) {
                     const index = proExp.indexOf(pro);
                     i++;
@@ -329,12 +328,10 @@ this.loadTree();
             }
           });
     }).then( (res: MyTreeNode[]) => {
-      console.log('res=', res);
         this.treeItems = res;
         this.treeDataSource.data = res;
         this.treeDataSource.data.forEach( (expand) => {
           if (expand.expanded === true) {
-            console.log('hello');
             this.treeControl.expand(expand);
           }
         });
@@ -433,5 +430,4 @@ this.loadTree();
       this.loadTree();
       this.openExpansion = false;
       }
-  }
 }
