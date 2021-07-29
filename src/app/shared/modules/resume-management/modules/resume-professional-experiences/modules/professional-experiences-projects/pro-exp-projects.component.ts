@@ -76,6 +76,7 @@ export class ProExpProjectsComponent implements OnInit {
   }
 
   getProjectInfo() {
+    this.ProjectArray = [];
     const disabledDates = [];
     this.resumeService.getProject(
       // tslint:disable-next-line:max-line-length
@@ -99,7 +100,13 @@ export class ProExpProjectsComponent implements OnInit {
                 return !disabledDates.find(x => x.getTime() === time);
               };
               this.filterDate();
+            } else {
+              this.showProject = false;
+              this.showForm = false;
             }
+          } else {
+            this.showProject = false;
+            this.showForm = false;
           } },
         (error) => {
           if (error.error.msg_code === '0004') {
@@ -109,6 +116,7 @@ export class ProExpProjectsComponent implements OnInit {
 
   }
    async ngOnInit(): Promise<void> {
+    this.showProject = false;
      this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
      this.treeDataSource = new MatTreeNestedDataSource();
    await this.loadTree();
@@ -146,7 +154,7 @@ export class ProExpProjectsComponent implements OnInit {
         this.getProjectInfo();
       });
       this.showForm = false;
-    } else { console.log('Form is not valid');
+    } else {
       this.showDateError = false;
     }
     this.arrayProjectCount++; } else {
@@ -163,7 +171,7 @@ export class ProExpProjectsComponent implements OnInit {
 this.createForm();
 this.initDates();
 this.filterDate();
-this.showNumberError = false ;
+this.loadTree();
   }
   onShowForm() {
     this.showForm = true;
@@ -208,7 +216,9 @@ this.showNumberError = false ;
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteProject(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteProject(_id).subscribe(data => {
+              this.loadTree();
+            });
             this.resumeService.getProjectDetails(
               // tslint:disable-next-line:max-line-length
               `?project_code=${project_code}`)
@@ -224,7 +234,9 @@ this.showNumberError = false ;
                           (responsedet) => {
                             if (responsedet['msg_code'] !== '0004') {
                               responsedet.forEach((section) => {
-                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
+                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => {
+                                  console.log('Deleted');
+                                });
                               });
                             }
                           },
@@ -327,6 +339,7 @@ this.showNumberError = false ;
           }
         });
     });
+    this.openExpansion = false;
   }
   async getProjectNode(pro: IResumeProfessionalExperienceModel) {
     let i = 0;
@@ -350,9 +363,9 @@ this.showNumberError = false ;
             if (i === resProject.length) {
               resolve(proArray);
             }
-            } else {
+          } else {
               resolve([]);
-            }});
+            }} );
     }).then((res) => {
       result = res;
       return (res);
@@ -360,11 +373,10 @@ this.showNumberError = false ;
     return result;
   }
   generateSections(project: IResumeProjectModel) {
-    console.log('before', this.openExpansion);
     this.project = project.project_title;
     if (this.openExpansion === false) {
       const detailsTree = [];
-      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
         if (proj['msg_code'] !== '0004') {
           proj.forEach((pro) => {
             detailsTree.push(
@@ -389,7 +401,7 @@ this.showNumberError = false ;
         this.openExpansion = true;
       });
     } else if (this.openExpansion === true) {
-      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
         this.treeDataSource.data.map((node) => {
           node.children.map((nodeChildren) => {
             nodeChildren.children = [];
@@ -401,11 +413,8 @@ this.showNumberError = false ;
       });
       this.openExpansion = false;
     }
-
-    console.log('data source', this.treeDataSource.data, this.openExpansion);
   }
   async refreshTreeHandler(event: boolean, item) {
-    console.log('event=', event);
     if (event === true) {
       this.openExpansion = false;
       this.generateSections(item);
@@ -413,7 +422,6 @@ this.showNumberError = false ;
     return false;
   }
   nodeSelect(event: any) {
-    console.log('data =', event, 'project', this.Project);
     if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
         this.professional_experience_code = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
         this.customer = event.object.customer;
@@ -423,6 +431,7 @@ this.showNumberError = false ;
       }
       this.getProjectInfo();
       this.loadTree();
-    this.openExpansion = false;
+      this.openExpansion = false;
+      }
   }
 }
