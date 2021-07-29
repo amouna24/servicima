@@ -113,6 +113,7 @@ export class ProExpProjectsComponent implements OnInit {
           }
         },
       );
+
   }
    async ngOnInit(): Promise<void> {
     this.showProject = false;
@@ -424,9 +425,9 @@ this.loadTree();
         this.position = event.object.position;
         this.start_date_pro_exp = event.object.start_date;
         this.end_date_pro_exp = event.object.end_date;
+      }
       this.getProjectInfo();
       this.loadTree();
       this.openExpansion = false;
       }
-  }
 }
