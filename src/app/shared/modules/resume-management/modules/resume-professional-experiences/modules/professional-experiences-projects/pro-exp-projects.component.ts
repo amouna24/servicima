@@ -85,7 +85,6 @@ export class ProExpProjectsComponent implements OnInit {
         (response) => {
           if (response['msg_code'] !== '0004') {
             this.ProjectArray = response;
-            console.log('project array', this.ProjectArray);
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;
@@ -104,7 +103,6 @@ export class ProExpProjectsComponent implements OnInit {
             } else {
               this.showProject = false;
               this.showForm = false;
-              console.log(this.showProject, this.showForm);
             }
           } else {
             this.showProject = false;
@@ -117,7 +115,6 @@ export class ProExpProjectsComponent implements OnInit {
       );
   }
    async ngOnInit(): Promise<void> {
-     console.log(this.showProject, '+++', this.showForm);
     this.showProject = false;
      this.treeControl = new NestedTreeControl<MyTreeNode>(this.makeGetChildrenFunction());
      this.treeDataSource = new MatTreeNestedDataSource();
@@ -156,7 +153,7 @@ export class ProExpProjectsComponent implements OnInit {
         this.getProjectInfo();
       });
       this.showForm = false;
-    } else { console.log('Form is not valid');
+    } else {
       this.showDateError = false;
     }
     this.arrayProjectCount++; } else {
@@ -174,15 +171,12 @@ this.createForm();
 this.initDates();
 this.filterDate();
 this.loadTree();
-
   }
   onShowForm() {
     this.showForm = true;
   }
 
   editForm(project_code: string, project_title: string, end_date: string, start_date: string, pointIndex: number, _id: string) {
-    this.openExpansion = false;
-    this.loadTree();
     let projectEditArray: any[];
     const disabledDates = [];
     this.sendProject.patchValue({
@@ -209,8 +203,7 @@ this.loadTree();
       const time = d.getTime();
       return !disabledDates.find(x => x.getTime() === time);
     };
-    this.openExpansion = false;
-this.loadTree();  }
+  }
 
   deleteProject(_id: string, pointIndex: number, project_code: string) {
     const confirmation = {
@@ -222,7 +215,9 @@ this.loadTree();  }
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteProject(_id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteProject(_id).subscribe(data => {
+              this.loadTree();
+            });
             this.resumeService.getProjectDetails(
               // tslint:disable-next-line:max-line-length
               `?project_code=${project_code}`)
@@ -238,7 +233,9 @@ this.loadTree();  }
                           (responsedet) => {
                             if (responsedet['msg_code'] !== '0004') {
                               responsedet.forEach((section) => {
-                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => console.log('Deleted'));
+                                this.resumeService.deleteProjectDetailsSection(section._id).subscribe(data => {
+                                  console.log('Deleted');
+                                });
                               });
                             }
                           },
@@ -301,7 +298,6 @@ this.loadTree();  }
               this.resumeService.getProExp(
                 `?resume_code=${this.resume_code}`)
                 .subscribe(async (proExp) => {
-                  console.log('pro exp array =', proExp);
                   for (const pro of proExp) {
                     const index = proExp.indexOf(pro);
                     i++;
@@ -331,7 +327,6 @@ this.loadTree();  }
             }
           });
     }).then( (res: MyTreeNode[]) => {
-      console.log('res=', res);
         this.treeItems = res;
         this.treeDataSource.data = res;
         this.treeDataSource.data.forEach( (expand) => {
@@ -340,6 +335,7 @@ this.loadTree();  }
           }
         });
     });
+    this.openExpansion = false;
   }
   async getProjectNode(pro: IResumeProfessionalExperienceModel) {
     let i = 0;
@@ -373,11 +369,10 @@ this.loadTree();  }
     return result;
   }
   generateSections(project: IResumeProjectModel) {
-    console.log('before', this.openExpansion);
     this.project = project.project_title;
     if (this.openExpansion === false) {
       const detailsTree = [];
-      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
         if (proj['msg_code'] !== '0004') {
           proj.forEach((pro) => {
             detailsTree.push(
@@ -402,7 +397,7 @@ this.loadTree();  }
         this.openExpansion = true;
       });
     } else if (this.openExpansion === true) {
-      this.resumeService.getProjectDetails(`?project_code=${project.ResumeProjectKey.project_code}`).subscribe((proj) => {
+      this.resumeService.getProjectDetails(`?project_code=${project.project_code}`).subscribe((proj) => {
         this.treeDataSource.data.map((node) => {
           node.children.map((nodeChildren) => {
             nodeChildren.children = [];
@@ -414,10 +409,8 @@ this.loadTree();  }
       });
       this.openExpansion = false;
     }
-    console.log(this.openExpansion);
   }
   async refreshTreeHandler(event: boolean, item) {
-    console.log('event=', event);
     if (event === true) {
       this.openExpansion = false;
       this.generateSections(item);
@@ -425,7 +418,6 @@ this.loadTree();  }
     return false;
   }
   nodeSelect(event: any) {
-    console.log('data =', event, 'project', this.Project);
     if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
         this.professional_experience_code = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
         this.customer = event.object.customer;
@@ -436,6 +428,5 @@ this.loadTree();  }
       this.loadTree();
       this.openExpansion = false;
       }
-
   }
 }
