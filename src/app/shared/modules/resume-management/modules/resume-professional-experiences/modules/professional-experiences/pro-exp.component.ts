@@ -12,7 +12,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
-  styleUrls: ['./pro-exp.component.scss']
+  styleUrls: ['./pro-exp.component.scss'],
 })
 export class ProExpComponent implements OnInit {
   sendProExp: FormGroup;
@@ -38,7 +38,7 @@ export class ProExpComponent implements OnInit {
   startDateUpdate: string;
   endDAteUpdate: string;
   myDisabledDayFilter;
-
+ placeHolderEndDate: string;
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -50,17 +50,19 @@ export class ProExpComponent implements OnInit {
     public datePipe: DatePipe,
     private modalServices: ModalService
   ) {
+    this.checkedBox = false;
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.placeHolderEndDate = 'resume-end-date';
     this.button = 'Add';
+    this.initBooleanVars();
     this.initDates();
     this.proExpArray = [];
     this.getProExpInfo();
-    this.initDates();
     this.createForm();
   }
 
@@ -140,7 +142,13 @@ export class ProExpComponent implements OnInit {
       }
       this.ProExp.resume_code = this.resumeCode;
       this.ProExp.professional_experience_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE`;
-      this.resumeService.addProExp(this.ProExp).subscribe(data => console.log('Professional experience =', data));
+      this.resumeService.addProExp(this.ProExp).subscribe(data => {
+        this.disableCheckBox = false;
+        this.checkedBox = false;
+        this.placeHolderEndDate = 'resume-end-date';
+        this.sendProExp.controls.end_date.enable();
+        this.sendProExp.controls.end_date.setValue('');
+      });
       this.arrayProExpCount++;
     } else {
       this.proExpUpdate = this.sendProExp.value;
@@ -184,6 +192,7 @@ export class ProExpComponent implements OnInit {
     this.button = 'Save';
     this.professional_experience_code = professionalExp.ResumeProfessionalExperienceKey.professional_experience_code;
     this.indexUpdate = index;
+    this.disableCheckBox = true;
   }
 
   /**************************************************************************
@@ -202,7 +211,10 @@ export class ProExpComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteProExp(id).subscribe(data => console.log('Deleted'));
+            this.resumeService.deleteProExp(id).subscribe(data => {
+              this.disableCheckBox = false;
+              this.filterDate();
+            });
             this.resumeService.getProject(
               `?professional_experience_code=${professional_experience_code}`)
               .subscribe(
@@ -283,12 +295,8 @@ export class ProExpComponent implements OnInit {
         }
         if (this.datePipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datePipe
           .transform(new Date(), 'yyyy-MM-dd')) {
-          this.checkedBox = true;
-          this.disableCheckBox = true;
-          this.sendProExp.controls.end_date.enable();
-        } else {
-          this.disableCheckBox = false;
           this.checkedBox = false;
+          this.disableCheckBox = true;
         }
       }
     );
@@ -317,8 +325,13 @@ export class ProExpComponent implements OnInit {
    *******************************************************************/
   checkCurrentDate(event: MatCheckboxChange) {
     if (event.checked) {
+      this.sendProExp.controls.end_date.setValue('');
       this.sendProExp.controls.end_date.disable();
+      this.placeHolderEndDate = 'Present';
+      this.checkedBox = true;
     } else {
+      this.checkedBox = false;
+      this.placeHolderEndDate = 'resume-end-date';
       this.sendProExp.controls.end_date.enable();
       this.sendProExp.controls.end_date.setValue('');
     }

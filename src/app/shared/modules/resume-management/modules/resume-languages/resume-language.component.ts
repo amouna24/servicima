@@ -123,9 +123,9 @@ export class ResumeLanguageComponent implements OnInit {
    *************************************************************************/
   showIconDisabled(level: number, index: number) {
     if (level >= index + 1) {
-      return 'star';
+      return 'assets/icons/star.svg';
     } else {
-      return 'star_border';
+      return 'assets/icons/star_border.svg';
     }
   }
 
@@ -136,9 +136,9 @@ export class ResumeLanguageComponent implements OnInit {
    *************************************************************************/
   showIcon(index: number) {
     if (this.rating >= index + 1) {
-      return 'star';
+      return 'assets/icons/star.svg';
     } else {
-      return 'star_border';
+      return 'assets/icons/star_border.svg';
     }
   }
 
