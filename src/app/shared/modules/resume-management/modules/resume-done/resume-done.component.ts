@@ -48,12 +48,12 @@ export class ResumeDoneComponent implements OnInit {
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[];
   theme: string;
   years = 0;
-  company_name: string;
-  company_email: string;
+  companyName: string;
+  companyEmail: string;
   companyLogo: string;
   phone: string;
   dateNow: string;
-  contact_email: string;
+  contactEmail: string;
   imageUrl: string;
   loading: boolean;
   translateKey: string[];
@@ -65,7 +65,7 @@ export class ResumeDoneComponent implements OnInit {
   constructor(
     private resumeService: ResumeService,
     private userService: UserService,
-    private datepipe: DatePipe,
+    private datePipe: DatePipe,
     private uploadService: UploadService,
     private dialog: MatDialog,
     private translate: TranslateService
@@ -113,7 +113,7 @@ export class ResumeDoneComponent implements OnInit {
 
   /**************************************************************************
    * @description Count the percentage of the resume
-   * @return count returns the percentage reached of the reusme
+   * @return count returns the percentage reached of the resume
    *************************************************************************/
   countResume() {
     if (this.generalInfoList.length > 0) {
@@ -148,11 +148,11 @@ export class ResumeDoneComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.company_name = userInfo['company'][0]['company_name'];
+            this.companyName = userInfo['company'][0]['company_name'];
             this.companyLogo = userInfo['company'][0]['photo'];
-            this.company_email = userInfo['company'][0]['companyKey']['email_address'];
+            this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
             this.phone = userInfo['company'][0]['phone_nbr1'];
-            this.contact_email = userInfo['company'][0]['contact_email'];
+            this.contactEmail = userInfo['company'][0]['contact_email'];
           }
         });
     this.resumeService.getResume(
@@ -232,9 +232,9 @@ export class ResumeDoneComponent implements OnInit {
    *************************************************************************/
   getProjectInfo() {
     let projectFinalList = [];
-    const Pro = new Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (this.proExpList.length > 0) {
-        let a = 0;
+        let i = 0;
         this.proExpList.forEach(
           (proExpData) => {
             this.resumeService.getProject(
@@ -247,8 +247,8 @@ export class ResumeDoneComponent implements OnInit {
                       this.projectList.push(responseProjectData);
                     }
                   );
-                  a = a + 1;
-                  if (this.proExpList.length === a) {
+                  i = i + 1;
+                  if (this.proExpList.length === i) {
                     resolve(this.projectList);
                   }
                   projectFinalList = [];
@@ -258,7 +258,7 @@ export class ResumeDoneComponent implements OnInit {
           }
         );
       }
-    }).then((data) => {
+    }).then(() => {
       this.getProjectDetailsInfo();
     });
   }
@@ -312,7 +312,7 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  getProjectDetailsSectionInfo(projectDetailsList) {
+  getProjectDetailsSectionInfo(projectDetailsList: IResumeProjectDetailsModel[]) {
     if (projectDetailsList.length > 0) {
       for (const projectDetailsData of projectDetailsList) {
         new Promise((resolve) => {
@@ -344,8 +344,8 @@ export class ResumeDoneComponent implements OnInit {
     this.loading = true;
     if (this.certifList.length > 0) {
       this.certifList.forEach((cert) => {
-        cert.start_date = this.datepipe.transform(cert.start_date, 'yyyy-MM-dd');
-        cert.end_date = this.datepipe.transform(cert.end_date, 'yyyy-MM-dd');
+        cert.start_date = this.datePipe.transform(cert.start_date, 'yyyy-MM-dd');
+        cert.end_date = this.datePipe.transform(cert.end_date, 'yyyy-MM-dd');
       });
     }
     if (this.proExpList.length > 0) {
@@ -353,14 +353,14 @@ export class ResumeDoneComponent implements OnInit {
         if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
           pro.ResumeProfessionalExperienceKey.end_date = new Date().toString();
         }
-        pro.ResumeProfessionalExperienceKey.start_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
-        pro.ResumeProfessionalExperienceKey.end_date = this.datepipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+        pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
+        pro.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
       });
     }
     if (this.projectList.length > 0) {
       this.projectList.forEach((proj) => {
-        proj.start_date = this.datepipe.transform(proj.start_date, 'yyyy-MM-dd');
-        proj.end_date = this.datepipe.transform(proj.end_date, 'yyyy-MM-dd');
+        proj.start_date = this.datePipe.transform(proj.start_date, 'yyyy-MM-dd');
+        proj.end_date = this.datePipe.transform(proj.end_date, 'yyyy-MM-dd');
       });
     }
     const data = {
@@ -373,10 +373,10 @@ export class ResumeDoneComponent implements OnInit {
         currentYear: this.dateNow,
         imageUrl: this.imageUrl + this.generalInfoList[0].image,
         diplomas: this.certifList,
-        company_name: this.company_name,
-        company_email: this.company_email,
+        company_name: this.companyName,
+        company_email: this.companyEmail,
         company_logo: this.imageUrl + this.companyLogo,
-        contact_email: this.contact_email,
+        contact_email: this.contactEmail,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
         intervention: this.interventionList,
@@ -393,7 +393,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param action  which differs between the generation in pdf or docx format
 
    *************************************************************************/
-  openThemeDialog(action): void {
+  openThemeDialog(action: string): void {
     const dialogRef = this.dialog.open(ResumeThemeComponent, {
       width: '800px',
       height: '200px',
@@ -411,16 +411,16 @@ export class ResumeDoneComponent implements OnInit {
    * @param theme choose the theme of the resume
    * @param data it contains the necessary data for the Resume
    *************************************************************************/
-  downloadDocs(data, action, theme) {
+  downloadDocs(data: object, action: string, theme: string) {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
         if (action === 'preview') {
           const fileURL = URL.createObjectURL(res);
-          const openPdf = window.open(fileURL, '_blank');
+          window.open(fileURL, '_blank');
           this.loading = false;
         } else if (action === 'generate') {
           saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-          const resumeName = await this.uploadFile(res);
+          await this.uploadFile(res);
         }
       },
       (error) => {
@@ -433,7 +433,7 @@ export class ResumeDoneComponent implements OnInit {
    * @description get organized Professional experience data in JSON object
    * @return proExpData return the professional experience relating to this candidates
    *************************************************************************/
-  async organizeDataProExp() {
+  async organizeDataProExp(): Promise<IResumeProfessionalExperienceDoneModel[]> {
     const proExpData: IResumeProfessionalExperienceDoneModel[] = [];
     for (const oneProExp of this.proExpList) {
       proExpData.push({
@@ -456,7 +456,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param oneProExp it contains the professional experience relating to these projects
    * @return project returns the projects relating to one professional experience
    *************************************************************************/
-  async getProjectData(oneProExp: IResumeProfessionalExperienceModel) {
+  async getProjectData(oneProExp: IResumeProfessionalExperienceModel): Promise<IResumeProjectDoneModel[]> {
     const project: IResumeProjectDoneModel[] = [];
     for (const oneProject of this.projectList) {
       if (oneProject.ResumeProjectKey.professional_experience_code === oneProExp.ResumeProfessionalExperienceKey.professional_experience_code) {
@@ -468,7 +468,7 @@ export class ResumeDoneComponent implements OnInit {
           project_title: oneProject.project_title,
           project_code: oneProject.ResumeProjectKey.project_code,
           professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
-          projectDetails: await this.getProjectDetailsData(oneProject),
+          projectDetails:  this.getProjectDetailsData(oneProject),
         });
       }
     }
@@ -480,7 +480,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param oneProject It contains the project relating to these project details
    * @return projectDetails returns the project details relating to one Project
    *************************************************************************/
-  getProjectDetailsData(oneProject: IResumeProjectModel) {
+  getProjectDetailsData(oneProject: IResumeProjectModel): IResumeProjectDetailsDoneModel[] {
     const projectDetails: IResumeProjectDetailsDoneModel[] = [];
     for (const oneProjectDetails of this.projectDetailsList) {
       if (oneProjectDetails.ResumeProjectDetailsKey.project_code === oneProject.ResumeProjectKey.project_code) {
@@ -503,7 +503,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param projectDetail it contains the project detail relating to these project details section
    * @return projectDetailsSection return the project details section of one project detail
    *************************************************************************/
-  getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel) {
+  getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel): IResumeProjectDetailsSectionModel[] {
     const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
     for (const oneProjectDetailsSection of this.projectDetailsSectionList) {
       if (oneProjectDetailsSection.ResumeProjectDetailsSectionKey.project_details_code ===

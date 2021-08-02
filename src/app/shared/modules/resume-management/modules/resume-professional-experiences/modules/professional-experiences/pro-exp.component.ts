@@ -148,6 +148,7 @@ export class ProExpComponent implements OnInit {
         this.placeHolderEndDate = 'resume-end-date';
         this.sendProExp.controls.end_date.enable();
         this.sendProExp.controls.end_date.setValue('');
+        this.getProExpInfo();
       });
       this.arrayProExpCount++;
     } else {
@@ -278,7 +279,6 @@ export class ProExpComponent implements OnInit {
 
   /*******************************************************************
    * @description Filter Dates that are already taken by other experiences
-   * @return !disabledDates return enabled dates
    *******************************************************************/
   filterDate() {
     const disabledDates = [];

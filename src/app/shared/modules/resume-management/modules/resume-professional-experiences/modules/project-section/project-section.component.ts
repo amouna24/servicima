@@ -36,7 +36,7 @@ export class ProjectSectionComponent implements OnInit {
   proDetailUpdate: IResumeProjectDetailsModel;
   subscriptionModal: Subscription;
   @Input() projectCode = '';
-  @Output() refresh_tree: EventEmitter<boolean> = new EventEmitter(false);
+  @Output() refreshTree: EventEmitter<boolean> = new EventEmitter(false);
   id = '';
   indexUpdate = 0;
   button = 'Add';
@@ -169,7 +169,7 @@ export class ProjectSectionComponent implements OnInit {
       if (this.sendProDetails.valid) {
         this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
           this.getProjectDetailsInfo();
-          this.refresh_tree.emit(true);
+          this.refreshTree.emit(true);
         });
         if (this.ProSectionDetails !== undefined) {
           this.proSectionAddArray.forEach((sec) => {
@@ -191,7 +191,7 @@ export class ProjectSectionComponent implements OnInit {
         });
         this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
           this.getProjectDetailsInfo();
-          this.refresh_tree.emit(true);
+          this.refreshTree.emit(true);
         });
         this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
         this.button = 'Add';
@@ -205,7 +205,7 @@ export class ProjectSectionComponent implements OnInit {
       });
       this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
       this.proSectionArray = [];
-      this.refresh_tree.emit(true);
+      this.refreshTree.emit(true);
     }
     this.createFormProDetails();
   }
@@ -299,7 +299,7 @@ export class ProjectSectionComponent implements OnInit {
                   this.select = selectedValue;
                 });
                 this.proSectionArray = [];
-                this.refresh_tree.emit(true);
+                this.refreshTree.emit(true);
               }
             );
           }

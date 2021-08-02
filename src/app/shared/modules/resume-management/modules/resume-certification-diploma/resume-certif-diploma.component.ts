@@ -24,7 +24,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   minEndDate: Date;
   maxEndDate: Date;
   showDateError: boolean;
-  certif_diploma_code: string;
+  certifDiplomaCode: string;
   indexUpdate = 0;
   button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
@@ -128,7 +128,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.arrayCertifDiplomaCount++;
     } else {
       this.certifDiplomaUpdate = this.sendCertifDiploma.value;
-      this.certifDiplomaUpdate.certif_diploma_code = this.certif_diploma_code;
+      this.certifDiplomaUpdate.certif_diploma_code = this.certifDiplomaCode;
       this.certifDiplomaUpdate.resume_code = this.resumeCode;
       this.certifDiplomaUpdate._id = this.id;
       if (this.sendCertifDiploma.valid) {
@@ -156,7 +156,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       establishment: certifDiploma.establishment,
       certif_diploma_desc: certifDiploma.certif_diploma_desc,
     });
-    this.certif_diploma_code = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
+    this.certifDiplomaCode = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
     this.id = certifDiploma._id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
@@ -192,7 +192,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   }
 
   /**************************************************************************
-   * @description change the minimumn of the end Date DatePicker
+   * @description change the minimum of the end Date DatePicker
    * @param date: the minimum of end date in the datePicker
    *************************************************************************/
   onChangeStartDate(date: string) {

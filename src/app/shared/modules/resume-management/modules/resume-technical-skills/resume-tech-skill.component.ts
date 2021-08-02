@@ -18,8 +18,8 @@ export class ResumeTechSkillComponent implements OnInit {
   TechSkill: IResumeTechnicalSkillsModel;
   techSkillArray: IResumeTechnicalSkillsModel[];
   techSkillUpdate: IResumeTechnicalSkillsModel;
-  resume_code: string;
-  technical_skill_code: string ;
+  resumeCode: string;
+  technicalSkillCode: string ;
   indexUpdate = 0;
   button: string;
   id: string;
@@ -54,9 +54,9 @@ export class ResumeTechSkillComponent implements OnInit {
         .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
         .getValue().user[0]['company_email']}`).subscribe((response) => {
           if (response['msg_code'] !== '0004') {
-            this.resume_code = response[0].ResumeKey.resume_code.toString();
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
           this.resumeService.getTechnicalSkills(
-            `?resume_code=${this.resume_code}`)
+            `?resume_code=${this.resumeCode}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -98,7 +98,7 @@ export class ResumeTechSkillComponent implements OnInit {
   createUpdateTechnicalSkill() {
     if (this.button === 'Add') {
     this.TechSkill = this.sendTechSkill.value;
-    this.TechSkill.resume_code = this.resume_code;
+    this.TechSkill.resume_code = this.resumeCode;
     this.TechSkill.technical_skill_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-TECH`;
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid ) {
@@ -108,8 +108,8 @@ export class ResumeTechSkillComponent implements OnInit {
     }
     this.arrayTechSkillCount++; } else {
       this.techSkillUpdate = this.sendTechSkill.value;
-      this.techSkillUpdate.technical_skill_code = this.technical_skill_code;
-      this.techSkillUpdate.resume_code = this.resume_code;
+      this.techSkillUpdate.technical_skill_code = this.technicalSkillCode;
+      this.techSkillUpdate.resume_code = this.resumeCode;
       this.techSkillUpdate.skill_index = this.indexUpdate.toString();
       this.techSkillUpdate._id = this.id;
       if (this.sendTechSkill.valid && this.showNumberError === false) {
@@ -130,7 +130,7 @@ export class ResumeTechSkillComponent implements OnInit {
       technical_skill_desc: techSkill.technical_skill_desc,
       technologies: techSkill.technologies,
     });
-    this.technical_skill_code = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
+    this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;
     this.indexUpdate = pointIndex;
     this.button = 'Save';

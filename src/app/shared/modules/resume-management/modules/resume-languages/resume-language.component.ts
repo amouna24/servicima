@@ -123,9 +123,9 @@ export class ResumeLanguageComponent implements OnInit {
    *************************************************************************/
   showIconDisabled(level: number, index: number) {
     if (level >= index + 1) {
-      return 'assets/icons/star.svg';
+      return 'assets/icons/star_yellow.svg';
     } else {
-      return 'assets/icons/star_border.svg';
+      return 'assets/icons/star_yellow_empty.svg';
     }
   }
 
@@ -134,7 +134,7 @@ export class ResumeLanguageComponent implements OnInit {
    * @param index index of the language
    * @return start return a filled or empty star
    *************************************************************************/
-  showIcon(index: number) {
+  showIcon(index: number): string {
     if (this.rating >= index + 1) {
       return 'assets/icons/star.svg';
     } else {
@@ -177,7 +177,7 @@ export class ResumeLanguageComponent implements OnInit {
    * @param pointIndex the index of the language selected
    * @param language the language model
    *************************************************************************/
-  updateLanguage(rating: number, pointIndex: number, language: IResumeLanguageModel) {
+  updateLanguage(rating: number, pointIndex: number, language: IResumeLanguageModel): boolean {
     this.ratingEdit[pointIndex] = rating;
     this.languageUpdate = ({
       _id: language._id,

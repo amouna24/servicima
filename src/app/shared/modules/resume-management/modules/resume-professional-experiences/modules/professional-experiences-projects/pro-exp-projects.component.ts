@@ -310,7 +310,6 @@ export class ProExpProjectsComponent implements OnInit {
 
   /*******************************************************************
    * @description Filter Dates that are already taken by other project
-   * @return !disabledDates return enabled dates
    *******************************************************************/
   filterDate() {
     const disabledDates = [];
@@ -500,11 +499,12 @@ export class ProExpProjectsComponent implements OnInit {
   /*******************************************************************
    * @description get new changes from section component and update it in the tree view
    * @param event event that return true if there is a change
+   * @param project generate the project details  of this project
    *******************************************************************/
-  async refreshTreeHandler(event: boolean, item) {
+  async refreshTreeHandler(event: boolean, project: IResumeProjectModel) {
     if (event === true) {
       this.openExpansion = false;
-      this.generateSections(item);
+      this.generateSections(project);
     }
     return false;
   }

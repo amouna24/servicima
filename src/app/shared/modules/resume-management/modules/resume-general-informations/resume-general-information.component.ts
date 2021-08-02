@@ -35,14 +35,14 @@ export class ResumeGeneralInformationComponent implements OnInit {
   lastname: string;
   company: string;
   langList: BehaviorSubject<IViewParam[]>;
-  company_name: string;
+  companyName: string;
   isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
   showYears: boolean;
   update = false;
   photo: FormData;
-  resume_code: string;
+  resumeCode: string;
   years = 0;
   showNumberError = false;
 
@@ -149,7 +149,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description set Existing data in the Resume Form
    * @param generalInformation: General information model
    *************************************************************************/
-  async updateForm(generalInformation) {
+  async updateForm(generalInformation: IResumeModel[]) {
     this.CreationForm.patchValue({
       init_name: generalInformation[0].init_name,
       actual_job: generalInformation[0].actual_job,
@@ -169,9 +169,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response['msg_code'] !== '0004') {
-              this.resume_code = response[0].ResumeKey.resume_code.toString();
+              this.resumeCode = response[0].ResumeKey.resume_code.toString();
               this.resumeService.getProExp(
-                `?resume_code=${this.resume_code}`)
+                `?resume_code=${this.resumeCode}`)
                 .subscribe(
                   (responseProExp) => {
                     if (responseProExp['msg_code'] !== '0004') {
@@ -204,7 +204,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: ['', Validators['required']],
-      years_of_experience: [null, Validators.pattern('^(0?[0-9]|[12][0-9]|3[01])$')],
+      years_of_experience: [null],
       actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       image: this.avatar,
       init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -258,7 +258,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.company_name = userInfo['company'][0]['company_name'];
+            this.companyName = userInfo['company'][0]['company_name'];
           }
         });
   }
