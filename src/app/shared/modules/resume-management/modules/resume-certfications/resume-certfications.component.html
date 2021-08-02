@@ -1,0 +1,155 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">Certifications</h4>
+        </div>
+      </div>
+      <wid-scrollbar fxFlex = 80 fxLayout="row" class="full-width">
+        <div fxLayout="column" fxFlexFill >
+          <div  fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+            <div fxLayout="column" fxFlex="80" >
+              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center" class="border-radius-15 pale-grey border-solid">
+                  <div fxLayout="column" fxFlex="96" fxLayoutAlign="center">
+                    <div fxLayout="row" fxFlex="90" fxLayoutAlign="center center">
+                          <form  fxLayout="column"  class="full-width full-height">
+                            <div fxLayout="row" fxFlex="90" class="full-width">
+                              <div fxLayout="column"  fxFlexFill >
+                          <div fxLayout="row" fxFlex="30" class="full-width" >
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 required">
+                                Certification title:
+                              </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input  matInput placeholder="{{ 'resume-position' | translate }}" required>
+                              <mat-error class="red" >
+                                {{ 'general.required' | translate }}</mat-error>
+                              <mat-error class="red" >
+                                {{ 'resume-numbers' | translate }}</mat-error>
+                            </mat-form-field>
+                            </div>
+                            <div fxLayout="column" fxFlex="15"></div>
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 required">
+                                Organization:
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+
+                                <input  matInput placeholder="{{ 'resume-position' | translate }}" required>
+                                <mat-error class="red" >
+                                  {{ 'general.required' | translate }}</mat-error>
+                                <mat-error class="red" >
+                                  {{ 'resume-numbers' | translate }}</mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxFlex="16" class="full-width" >
+                              <div fxLayout="column" >
+                                  <mat-checkbox class="black font-size-12 "  > This certification does not expire</mat-checkbox>
+                              </div>
+                            </div>
+                          <div fxLayout="row" fxFlex="28" class="full-width" >
+                              <div fxLayout="column" fxFlex="35">
+                                <mat-label class="black font-size-12 required">
+                                  Achievement date:
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput [matDatepicker]="datepicker"    #date1
+                                          placeholder="{{ 'resume-start-date' | translate }}"   required>
+                                  <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
+                                  <mat-datepicker #datepicker color="primary" ></mat-datepicker>
+                                  <mat-error class="red" >
+                                    {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div fxLayout="column" fxFlex="15"></div>
+                              <div fxLayout="column" fxFlex="35">
+                                <mat-label class="black font-size-12 required">
+                                  Expired date:
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  required>
+                                  <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
+                                  <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
+                                  <mat-error class="red" >
+                                    {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          <div fxLayout="row" fxFlex="28" class="full-width" >
+                              <div fxLayout="column" fxFlex="35">
+                                <mat-label class="black font-size-12 required">
+                                  Certification Ref:
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input  matInput placeholder="{{ 'resume-position' | translate }}" required>
+                                  <mat-error class="red" >
+                                    {{ 'general.required' | translate }}</mat-error>
+                                  <mat-error class="red" >
+                                    {{ 'resume-numbers' | translate }}</mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div fxLayout="column" fxFlex="15"></div>
+                              <div fxLayout="column" fxFlex="35">
+                                <mat-label class="black font-size-12 required">
+                                  Certification URL:
+                                </mat-label>
+                                <mat-form-field appearance="outline">
+
+                                  <input  matInput placeholder="{{ 'resume-position' | translate }}" required>
+                                  <mat-error class="red" >
+                                    {{ 'general.required' | translate }}</mat-error>
+                                  <mat-error class="red" >
+                                    {{ 'resume-numbers' | translate }}</mat-error>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                              </div>
+                            </div>
+                            <div fxLayout="row" fxFlex="10" fxLayoutAlign="end end">
+                              <div fxLayout="column" fxLayoutAlign=" start" fxFlex="12">
+                              <button mat-raised-button type="button" class="btn-small bg-pale-grey">
+                               Add
+                              </button>
+                              </div>
+                            </div>
+                          </form>
+                          </div>
+                        </div>
+                    </div>
+
+                  </div>
+              </div>
+            </div>
+      </wid-scrollbar>
+      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/technicalSkills">
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  [routerLink]="['/candidate/resume/intervention']">
+            {{ 'resume-next' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
