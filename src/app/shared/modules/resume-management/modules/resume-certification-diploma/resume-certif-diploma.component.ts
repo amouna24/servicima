@@ -219,4 +219,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
+  }
 }

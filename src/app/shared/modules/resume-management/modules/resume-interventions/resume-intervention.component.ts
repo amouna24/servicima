@@ -172,4 +172,11 @@ export class ResumeInterventionComponent implements OnInit {
         }
       );
   }
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
+  }
 }

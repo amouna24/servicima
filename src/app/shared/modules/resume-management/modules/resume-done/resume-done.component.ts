@@ -434,7 +434,6 @@ export class ResumeDoneComponent implements OnInit {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
         if (action === 'preview') {
-          console.log(data);
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');
           this.loading = false;

@@ -282,4 +282,11 @@ export class ResumeGeneralInformationComponent implements OnInit {
   getFile(obj: FormData) {
     this.photo = obj;
   }
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
+  }
 }

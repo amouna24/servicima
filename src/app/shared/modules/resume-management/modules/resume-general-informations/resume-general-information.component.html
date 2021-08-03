@@ -15,7 +15,7 @@
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
     <div  fxLayout="row" fxFlex="88">
-            <form [formGroup]="CreationForm" fxLayout="column" class="full-width"  >
+            <form [formGroup]="CreationForm" fxLayout="column" fxFlex="94"  >
               <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
                 <div fxLayout="column" fxFlex="86">
                   <h4 class="steel font-size-18 font-small">{{ 'resume-general-info' | translate }}</h4>
@@ -115,7 +115,31 @@
                 </div>
               </div>
             </form>
+            <div fxLayout="column" fxLayoutAlign="start start" fxFlex="6">
+              <div fxLayout="row" fxFlex="93" fxLayoutAlign=" end">
+                <div fxLayout="column" fxLayoutAlign="end" fxFlexFill>
+                  <div fxLayout="row"  *ngFor="let item of addIndexation()">
+                    <div fxLayout="column" fxFlexFill>
+                      <div fxLayout="row">
+                        <ng-template [ngIf]="item === '01'">
+                          <span style="color: blue; font-size: 10px">{{item}}</span>
+                        </ng-template>
+                        <ng-template [ngIf]="item !== '01'">
+                          <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                        </ng-template>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="center center">
+                        <ng-template [ngIf]="item === '01'">
+                          <div style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                        </ng-template>
+                      </div>
+                    </div>
+
+                    <br>
+                  </div>
+                </div>
+            </div>
+
     </div>
   </div>
-
-
+</div>

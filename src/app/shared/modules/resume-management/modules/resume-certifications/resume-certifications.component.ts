@@ -194,4 +194,11 @@ button: string;
     }
     this.button = 'Save';
   }
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
+  }
 }
