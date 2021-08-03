@@ -81,6 +81,10 @@ export const iconsList: IIcon[] = [
     name: 'wi-three-dots',
     path: 'assets/icons/three-dots-ellipsis.svg'
   },
+  {
+    name: 'wi_timesheet',
+    path: 'assets/icons/timesheet.svg'
+  },
   /* Alert Icons */
   {
     name: 'wi_alert_error',
@@ -273,5 +277,9 @@ export const iconsList: IIcon[] = [
   {
     name: 'wi_print',
     path: 'assets/icons/printer.svg',
+  },
+  {
+    name: 'wi_certification',
+    path: 'assets/icons/certification.svg',
   }
 ];

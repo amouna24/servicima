@@ -1,8 +1,3 @@
-<!--
-<form [formGroup]="CreationForm" (submit)="createSections()">
--->
-
-
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
 
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
@@ -29,10 +24,10 @@
       </div>
       <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
         <div fxLayout="column" fxFlexFill>
-          <div fxLayout="row" fxFlex="52" style="justify-content: center" *ngIf="!showSection">
-            <div fxLayout="column" fxFlex="80" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid">
+          <div fxLayout="row" fxFlex="52" class="justify-content" *ngIf="!showSection">
+            <div fxLayout="column" fxFlex="80" class="no-section">
               <div fxLayout="row" fxFlexFill>
-                <div fxLayout="column" fxFlexFill fxLayoutGap="30px" style="justify-content: center">
+                <div fxLayout="column" fxFlexFill fxLayoutGap="30px" class="justify-content">
                   <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>{{ 'resume-no-custom' | translate }}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="center">
@@ -50,17 +45,17 @@
                 <div class="example-container">
                   <div
                     cdkDropList
-                    [cdkDropListData]="getSection"
+                    [cdkDropListData]="SectionArray"
                     class="example-list"
                     (cdkDropListDropped)="drop($event)">
-                    <div class="example-box" *ngFor="let item of getSection let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
+                    <div class="example-box" *ngFor="let item of SectionArray let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
               <div  class="p-l-65">
                 <div fxLayout="row" fxLayoutGap="10px" class="bg-pale-grey border-radius-15 width-90">
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.section_title,item.section_desc,item.section_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" >
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>

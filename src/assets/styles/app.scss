@@ -413,7 +413,7 @@ html body {
 }
 
 .m-b-0 {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 .m-b-5 {
@@ -429,7 +429,7 @@ html body {
 }
 
 .m-b-20 {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
 }
 
 .m-b-30 {
@@ -706,8 +706,8 @@ html body {
 /*    DYNAMIC COMPONENT   */
 .dynamic-component-container  {
   @include get-page(servicima);
-  margin: 20px;
-  height: 87vh !important;
+  margin: 0px 20px 20px;
+  height: 80vh !important;
   background-color: $white;
 }
 

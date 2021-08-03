@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="23" viewBox="0 0 25 23">
-  <defs>
-    <pattern id="pattern" preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 52 46">
-      <image width="52" height="46" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAAuCAYAAABnNToWAAADKUlEQVRoge2aPWgUQRTHfzlCgiAhivgd0S6ghY0meAZErYIKipWgCIqJCoIpEkVQ0EKJaOMHgp9gY6E2sVAr5aKYVAFNI6KBmGhAIYoWRuVk4H8yObJzm927vTHmD8Ps3pvZef95M2/fm70KWgaqgFPATmABfmEYuA0cB8bCaFYJnATaPSOSw0KgA8gCR8N0SMkyBmmgwrPSJN12hZ0Bs+Syf6/9xKT0q3TIsg7Z+EnxCClPrRIZLgv5ugSdmNIWCrtnvMaUtpDvbjsUppyFpgn5DhehZ1q/kykZq/9k+2aL4WldhNZEeN7aGLoUBa5IIS7K4jX/q1guLqLuh1iWdVmoO8LzMiHalBQuCzXFHHh6DxUDUTLWipjyQijZHvonESdjjSsPQg2wCdgI1APv1c44nH7gCdAFfJ9YKX9OfaqB/UALMLNA22/AJeAK8MsWuAgluYeeAjN0sIisYazQC3zQb0a2WtbLeeBXwG5gxCdCD4EVun6rU9yeAn0agU5gmZbkdmCIAk4h6BQ1rtwu1dYzDYktIcgYvFBbY8HFWnpVhQglgYPAcllmD/BlgjEHVfIxqj4DwEqgtdyEaoF9um4PIFMIozrMR86kppyEmuXNMiGXWRCeK+407r65nIQ2qO4KkJt35DHrvs3x3nyger0h9Ek3SWeb9ap7A+Tme1CrdX8YOBTQNmfhekPolm4yMc4BopQlGnckQEnjig22AtssUoMTOIqPquemNBOdrqksE35q2PzXhQvZlEKHDqtRUl/x3mm8eQEK3lV9H7in68tAnVVymK96xHYKw6qT2kv9qhsC5OcUr5kl+Vkvz7MBbRtVvzahT+7H08CR4urshB1F74j5rDv6RtxmW+gEcMayVFJosmY4CtIqX4FHNqExOYhFCe2hOmsJnQdmRyBTKyMYXDCkyh3LmX3xUuSuSsGwmAXcAJYCfcBNPAhOxxTPDSnX6Qp5BJ1W21XaInuBHygfKr3ahWGW+TUrL+pWONOTl+A1KMFL67c+kRmX4PlACOUzB0Km4MYBXASu5/8HyCdCOZioeTOwThabA/yWpd4Aj403E6nxAP4AzDDTAtV6BSIAAAAASUVORK5CYII="/>
-    </pattern>
-  </defs>
-  <rect id="Calque_2" data-name="Calque 2" width="25" height="23" fill="url(#pattern)"/>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
 </svg>
+
+

@@ -1,6 +1,6 @@
  <div  fxLayout="column"
         class="dynamic-component-container bg-white border-radius-20">
-   <div fxLayout="row" fxLayoutAlign="center center" fxFlex="12" class="full-width">
+   <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
      <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
           style="border-bottom: 1px solid #afb1b8">
      <ng-container *ngIf="buttonValue === 'edit' else Add">
@@ -15,14 +15,14 @@
      </div>
    </div>
    <wid-scrollbar>
-     <form fxLayout="column" class="full-width p-l-40 p-r-40 p-t-10">
+     <form fxLayout="column" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
        <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
        <!-- left column form -->
        <div fxFlex="28" fxLayout="column">
          <div fxLayout="column">
            <label class="font-size-12 required"> Week start on :</label>
            <mat-form-field appearance="outline">
-             <input matInput [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
+             <input matInput [matDatepickerFilter]="startDateFilter" [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
              <mat-datepicker-toggle matSuffix [for]="datepicker">
                <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
              </mat-datepicker-toggle>
@@ -68,7 +68,6 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Comment : </label>
            <mat-form-field appearance="outline">
-             <mat-label>Textarea</mat-label>
              <textarea rows="3" placeholder="comment ..." matInput></textarea>
            </mat-form-field>
          </div>
@@ -198,11 +197,11 @@
          </div>
        </div>
        </div>
-       <div fxLayout="row" fxLayoutAlign="space-between center">
-         <button mat-flat-button class="bg-pale-grey cool-grey btn-small">Cancel</button>
-         <div fxLayout="row" fxLayoutAlign="end center">
-         <button mat-flat-button class="bg-cerulean-blue white btn-small">Submit</button>
-         <button mat-flat-button class="cerulean-blue bg-pale-grey btn-small">Save</button>
+       <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
+         <button mat-flat-button type="reset" class="bg-pale-grey cool-grey btn-small">Cancel</button>
+         <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
+         <button mat-flat-button (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
+         <button mat-flat-button (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">Save</button>
          </div>
        </div>
      </form>

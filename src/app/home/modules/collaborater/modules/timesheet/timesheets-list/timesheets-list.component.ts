@@ -116,14 +116,13 @@ export class TimesheetsListComponent implements OnInit {
    * @description Navigate to ADD NEW TIMESHEET Component
    */
   addNewTimesheet() {
+    this.redirectUrl = '/collaborator/timesheet/add-timesheet/';
     if ( this.typeTimesheet === 'extra' ) {
-      this.redirectUrl = '/collaborator/timesheet/add-timesheet-extra';
-      this.addButtonLabel = 'New';
+      this.redirectUrl += 'extra';
     } else {
-      // console.log(this.typeTimesheet);
-      this.redirectUrl = '/collaborator/timesheet/add-timesheet';
-      this.addButtonLabel = 'New';
+      this.redirectUrl += 'normal';
     }
+      this.addButtonLabel = 'New';
   }
 
   /**

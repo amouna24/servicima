@@ -39,14 +39,14 @@ export const collaboraterMenu: IMenu[] = [
       {
         state: '',
         name: 'timesheet',
-        icon: '',
+        icon: 'wi_timesheet',
         feature: 'HR_FOLDER_ACCESS',
         type: 'link',
       },
       {
         state: '',
         name: 'timesheet extra',
-        icon: '',
+        icon: 'wi_timesheet',
         feature: 'HR_FOLDER_ACCESS',
         type: 'link',
         queryParams: { type_timesheet: 'extra' },

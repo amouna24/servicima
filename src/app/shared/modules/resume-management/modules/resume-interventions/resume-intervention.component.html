@@ -22,14 +22,14 @@
         </div>
       </div>
       <wid-scrollbar fxFlex="80" class="full-width">
-        <div fxLayout="column" fxFlexFill style="align-items: center" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlexFill fxLayoutAlign=" center" fxLayoutGap="10px">
           <div *ngFor="let item of interventionArray let pointIndex=index" class="p-l-65 full-width">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
               <div fxLayout="column" fxFlex="80" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item._id,item.level_of_intervention_desc,item.intervention_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>

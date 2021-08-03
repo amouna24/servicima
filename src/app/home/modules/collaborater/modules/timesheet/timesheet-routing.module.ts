@@ -14,18 +14,10 @@ const routes: Routes = [
   },
 
   {
-    path: 'add-timesheet',
+    path: 'add-timesheet/:type',
     component: AddTimesheetComponent,
     data: {
       breadcrumb: 'add-timesheet'
-    },
-  },
-
-  {
-    path: 'add-timesheet-extra',
-    component: AddTimesheetComponent,
-    data: {
-      breadcrumb: 'add-timesheet-extra'
     },
   },
 

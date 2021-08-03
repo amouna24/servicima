@@ -56,7 +56,9 @@ export class TimesheetService {
    * @param filter search query like [ ?id=123 ]
    * @returns All TimesheetProject Observable<ITimesheetProjectModel[]>
    *************************************************************************/
-  getTimesheetProject(filter: string): Observable<ITimesheetProjectModel[]> {
-    return this.httpClient.get<ITimesheetProjectModel[]>(`${environment.timesheetProjectApiUrl}/${filter}`);
+  getTimesheetProject(company_email: string): Observable<ITimesheetProjectModel[]> {
+    return this.httpClient.get<ITimesheetProjectModel[]>(
+      `${environment.timesheetProjectApiUrl}/?company_email=${company_email}`
+    );
   }
 }

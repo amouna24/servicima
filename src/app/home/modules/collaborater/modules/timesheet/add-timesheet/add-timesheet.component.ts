@@ -9,9 +9,10 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
 import { takeUntil } from 'rxjs/operators';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-add-timesheet',
@@ -37,7 +38,6 @@ export class AddTimesheetComponent implements OnInit {
   timesheet = this.router.getCurrentNavigation().extras.state.data;
   buttonValue = this.router.getCurrentNavigation().extras.state.buttonClicked;
   statusTimesheet = this.router.getCurrentNavigation().extras.state.statusTimesheet;
-  // typeTimesheet = this.router.getCurrentNavigation().extras.state.typeTimesheet;
   typeTimesheet: string;
   date: Date;
   /**************************************************************************
@@ -47,6 +47,10 @@ export class AddTimesheetComponent implements OnInit {
   /** subscription */
   subscriptionModal: Subscription;
   subscriptions: Subscription;
+  startDateFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day === 1;
+  };
 
   constructor( private fb: FormBuilder,
                private timesheetService: TimesheetService,
@@ -55,18 +59,21 @@ export class AddTimesheetComponent implements OnInit {
                private utilService: UtilsService,
                private location: Location,
                private router: Router,
-               private modalServices: ModalService,
+               private activeRoute: ActivatedRoute,
+               private modalServices: ModalService
                ) {
-    this.typeTimesheet = this.router.url;
-    console.log('statusTimesheet', this.statusTimesheet);
   }
 
   async ngOnInit() {
-    this.getAllProjects();
+    this.getTimesheetType();
     this.getUserInfo();
     this.createForm();
     await this.getRefDataCategory();
     this.updateForm();
+  }
+
+  getTimesheetType(): void {
+    this.typeTimesheet = this.activeRoute.snapshot.params.type;
   }
 
   /**
@@ -74,7 +81,7 @@ export class AddTimesheetComponent implements OnInit {
    */
   getProjectByName() {
     this.timesheetService
-        .getTimesheetProject(`?project_desc=${this.projectName}`)
+        .getTimesheetProject(this.companyEmail)
         .subscribe(
         res => {
           this.projectCode = res[0].TimesheetProjectKey.project_code;
@@ -98,16 +105,6 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   /**
-   * @description : get projects of collaborator
-   */
-  getAllProjects() {
-    this.timesheetService.getTimesheetProject('').subscribe(
-      data => { this.listTimesheetProject = data; },
-      error => console.log(error)
-    );
-  }
-
-  /**
    * @description : get user info
    */
   getUserInfo() {
@@ -115,8 +112,6 @@ export class AddTimesheetComponent implements OnInit {
       (data) => {
         if (!!data) {
           this.companyEmail = data.user[0]['company_email'];
-          // console.log('companyId', data.company[0]);
-          // this.companyId = data.company[0]['company_id'];
           this.languageId = data.user[0].language_id;
         }
     });
@@ -217,33 +212,15 @@ export class AddTimesheetComponent implements OnInit {
    */
   submitTimesheet(value) {
     if (this.initialForm.valid) {
-      if (this.typeTimesheet === '/collaborator/timesheet/add-timesheet-extra') {
-        // TIMESHEET_EXTRA
-        if (value === 'submit') {
-          this.initialForm.patchValue({ timesheet_status : 'Pending' });
-        } else if (value === 'save') {
-          this.initialForm.patchValue({ timesheet_status : 'Draft' });
-        }
-        this.initialForm.patchValue({ type_timesheet : 'TIMESHEET_EXTRA' });
-
-      } else {
-        // TIMESHEET
-        if (value === 'submit') {
-          this.initialForm.patchValue({ timesheet_status : 'Pending' });
-        } else if (value === 'save') {
-          this.initialForm.patchValue({ timesheet_status : 'Draft' });
-        }
-        this.initialForm.patchValue({ type_timesheet : 'TIMESHEET' });
-      }
-
-      this.initialForm.patchValue({ timesheet_week: this.initialForm.value.start_date});
-      this.initialForm.patchValue({ project_code: this.projectCode});
-
+      this.initialForm.patchValue({
+        timesheet_status : value === 'submit' ? 'Pending' : 'save' ? 'Draft' : '',
+        type_timesheet : this.typeTimesheet === 'extra' ? 'TIMESHEET_EXTRA' : 'TIMESHEET',
+        imesheet_week: this.initialForm.value.start_date,
+        project_code: this.projectCode
+      });
       const endDate = new Date(this.initialForm.value.start_date);
       const date = endDate.setDate(endDate.getDate() + 7);
       this.initialForm.patchValue({ end_date: endDate});
-
-      // console.log(this.initialForm.value, 'value');
       const confirmation = {
         code: 'add',
         title: `${value} timesheet`,
@@ -372,24 +349,4 @@ export class AddTimesheetComponent implements OnInit {
   backClicked() {
     this.location.back();
   }
-
-  /**
-   * @description: clear form
-   */
-  resetClick(): void {
-    this.initialForm.get('start_date').setValue(null);
-    this.initialForm.get('project_code').setValue(null);
-    this.initialForm.get('comment').setValue(null);
-    this.categoryViewValue = '';
-
-    this.initialForm.get('monday').setValue(0);
-    this.initialForm.get('tuesday').setValue(0);
-    this.initialForm.get('wednesday').setValue(0);
-    this.initialForm.get('thursday').setValue(0);
-    this.initialForm.get('friday').setValue(0);
-    this.initialForm.get('saturday').setValue(0);
-    this.initialForm.get('sunday').setValue(0);
-    this.initialForm.get('total_week_hours').setValue(0);
-  }
-
 }
