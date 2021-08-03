@@ -27,7 +27,7 @@ export class ResumeGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     this.spinnerService.isLoadingSubject.next(false);
-    this.translate.get('You should set your general informations').subscribe((message: string) => {
+    this.translate.get('You must set your general information first').subscribe((message: string) => {
       this.message = message;
     });
 

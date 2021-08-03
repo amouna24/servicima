@@ -19,6 +19,7 @@ import { ResumeFuncSkillComponent } from './modules/resume-functional-skills/res
 import { ResumeCertifDiplomaComponent } from './modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from './modules/resume-done/resume-done.component';
 import { ResumeThemeComponent } from './modules/resume-theme/resume-theme.component';
+import { ResumeCertificationsComponent } from './modules/resume-certifications/resume-certifications.component';
 @NgModule({
   declarations: [
     ResumeGeneralInformationComponent,
@@ -30,6 +31,7 @@ import { ResumeThemeComponent } from './modules/resume-theme/resume-theme.compon
     ResumeCertifDiplomaComponent,
     ResumeDoneComponent,
     ResumeThemeComponent,
+    ResumeCertificationsComponent,
   ],
   imports: [
     CommonModule,

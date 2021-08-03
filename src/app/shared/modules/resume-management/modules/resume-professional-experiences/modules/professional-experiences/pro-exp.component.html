@@ -25,7 +25,7 @@
         <wid-scrollbar fxFlexFill fxLayout="column">
           <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
-              <div *ngFor="let item of getProExp let pointIndex=index" fxLayout="column">
+              <div *ngFor="let item of proExpArray let pointIndex=index" fxLayout="column">
                 <div fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80">
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <div fxLayout="row" fxFlex="44">
@@ -39,12 +39,12 @@
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="routeToProject(item.professional_experience_code,item.customer,item.position,item.start_date,item.end_date)">{{ 'resume-project-list' | translate }}
+                            (click)="routeToProject(item)">{{ 'resume-project-list' | translate }}
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="editForm(item._id, item.professional_experience_code,item.start_date,item.end_date,item.position,item.customer,pointIndex)">{{ 'resume-edit' | translate }}
+                            (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
@@ -53,8 +53,7 @@
                 </div>
               </div>
               <form [formGroup]="sendProExp" class="full-height" fxLayout="column" fxFlex="60">
-                <div fxLayout="row" fxFlex="70" class="border-radius-15 pale-grey " fxLayoutAlign=" center"
-                     style="border-style: solid">
+                <div fxLayout="row" fxFlex="70" class="border-radius-15 pale-grey border-solid" fxLayoutAlign=" center">
                   <div fxLayout="column" fxFlexFill class="full-width full-height" fxLayoutAlign="center">
                     <div fxLayout="row" fxLayoutAlign="space-around end" fxFlex="40" class="width-90">
                       <div fxLayout="column" fxFlex="35">
@@ -95,7 +94,7 @@
                           <mat-error class="red" *ngIf="sendProExp.controls.start_date.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
-                        <mat-checkbox class="example-margin black font-size-12" [checked]="checkedBox" (change)="checkCurrentDate($event)" [disabled]="disableCheckBox" >Im currently working in this role</mat-checkbox>
+                        <mat-checkbox class="example-margin black font-size-12" [checked]="checkedBox === true" (change)="checkCurrentDate($event)" [disabled]="disableCheckBox" >Im currently working in this role</mat-checkbox>
 
                       </div>
                       <div fxLayout="column" fxFlex="35">
@@ -103,10 +102,10 @@
                           {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend"  [min]="minEndDate" [max]="maxEndDate"  [matDatepickerFilter]="myDisabledDayFilter" #date2
-                                 formControlName="end_date" placeholder=" {{ 'resume-end-date' | translate }}" (dateChange)="onChangeEndDate(date2.value)"  required>
-                          <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
-                          <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                          <input matInput [matDatepicker]="datepickerend"   [min]="minEndDate" [max]="maxEndDate"   [matDatepickerFilter]="myDisabledDayFilter" #date2
+                                 formControlName="end_date" placeholder=" {{ placeHolderEndDate | translate }}" (dateChange)="onChangeEndDate(date2.value)"  required>
+                          <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
+                          <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
                           <mat-error class="red" *ngIf="sendProExp.controls.end_date.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
@@ -115,7 +114,7 @@
                     <div fxLayout="row" fxFlex="20">
                       <div fxLayout="column" fxFlex="92" fxLayoutAlign="space-arround end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                (click)="createUpdateProExp(date1.value,date2.value)" [disabled]="sendProExp.invalid">
+                                (click)="createUpdateProExp()" [disabled]="sendProExp.invalid">
                           <div *ngIf="button === 'Add';then add else save"></div>
                           <ng-template #add>
                             {{ 'resume-add' | translate }}

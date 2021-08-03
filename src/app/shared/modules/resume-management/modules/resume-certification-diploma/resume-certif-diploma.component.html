@@ -37,16 +37,15 @@
                     </div>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex  >
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item._id,item.diploma,item.start_date,item.end_date,item.establishment,item.certif_diploma_desc,item.certif_diploma_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
-                  <div fxLayout="column" style="align-items: center" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
-              <form [formGroup]="sendCertifDiploma" style="justify-content: center">
-                <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey " fxLayoutAlign="space-arround center"
-                     style="border-style: solid">
+              <form [formGroup]="sendCertifDiploma" >
+                <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey border-solid" fxLayoutAlign="space-arround center" >
                   <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="center">
                     <div fxLayout="row" fxFlex="21" fxLayoutAlign="space-around center">
                       <div fxLayout="column" fxFlex="32">
@@ -116,7 +115,7 @@
                     <div fxLayout="row" fxFlex="6">
                       <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end">
                         <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                (click)="createUpdateCertifDiploma(date1.value,date2.value)" [disabled]="sendCertifDiploma.invalid">
+                                (click)="createUpdateCertifDiploma()" [disabled]="sendCertifDiploma.invalid">
                           {{button}}
                         </button>
                       </div>

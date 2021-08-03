@@ -30,7 +30,7 @@
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item._id,item.technologies,item.technical_skill_desc,item.technical_skill_code,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>

@@ -39,7 +39,7 @@
                 </div>
               </div>
             </div>
-            <div *ngFor="let item of getProject let pointIndex=index" fxLayout="row" class="full-width p-b-10">
+            <div *ngFor="let item of ProjectArray let pointIndex=index" fxLayout="row" class="full-width p-b-10">
               <mat-expansion-panel [hideToggle]="true" #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
                 <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
@@ -61,7 +61,7 @@
                       </div>
                       <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                         <div fxLayout="row" fxLayoutAlign="end" >
-                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item.project_code,item.project_title,item.end_date,item.start_date,pointIndex,item._id); panel.toggle()">{{ 'resume-edit' | translate }}</button>
+                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item,pointIndex); panel.toggle()">{{ 'resume-edit' | translate }}</button>
                         </div>
                       </div>
                       <div fxLayout="column"  class="p-r-20" fxLayoutAlign="center end" fxFlex>
@@ -73,7 +73,7 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
-                  <wid-project-section [project_code]="item.project_code" (refresh_tree)="refreshTreeHandler($event,item)"
+                  <wid-project-section [projectCode]="item.project_code" (refreshTree)="refreshTreeHandler($event,item)"
                                        class="full-width full-height"></wid-project-section>
                 </div>
               </mat-expansion-panel>

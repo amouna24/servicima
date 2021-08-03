@@ -31,20 +31,24 @@ export class ResumeGeneralInformationComponent implements OnInit {
   haveImage: any;
   profileUserType = userType.UT_RESUME;
   generalInfo: IResumeModel;
-  firstname: string = this.userService.connectedUser$.getValue().user[0]['first_name'];
-  lastname: string = this.userService.connectedUser$.getValue().user[0]['last_name'];
-  company: string = this.userService.connectedUser$.getValue().user[0]['company_email'];
-  langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  company_name: string;
+  firstname: string;
+  lastname: string;
+  company: string;
+  langList: BehaviorSubject<IViewParam[]>;
+  companyName: string;
   isChecked = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   email: string;
-  showYears = false;
+  showYears: boolean;
   update = false;
   photo: FormData;
-  resume_code = '';
+  resumeCode: string;
   years = 0;
-  private showNumberError = false ;
+  showNumberError = false;
+
+  /**********************************************************************
+   * @description Resume general information constructor
+   *********************************************************************/
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
@@ -59,29 +63,21 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private uploadService: UploadService,
   ) {
   }
+
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    this.userService.connectedUser$
-      .subscribe(
-        (userInfo) => {
-          if (userInfo) {
-            this.company_name = userInfo['company'][0]['company_name'];
-          }
-        });
+    this.showYears = false;
+    this.firstname = this.userService.connectedUser$.getValue().user[0]['first_name'];
+    this.lastname = this.userService.connectedUser$.getValue().user[0]['last_name'];
+    this.company = this.userService.connectedUser$.getValue().user[0]['company_email'];
+    this.getCompanyName();
     this.initForm();
-    this.langList.next(this.appInitializerService.languageList.map(
-      (obj) => {
-        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
-      }
-    ));
+    this.getLanguageList();
     await this.getResume();
+  }
 
-  }
-  getFile(obj: FormData) {
-    this.photo = obj;
-  }
   /**************************************************************************
    * @description : Show or Hide The input of Years of experience
    *************************************************************************/
@@ -89,20 +85,22 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.showYears = !this.showYears;
   }
 
-  /**
-   *  @description Resume Resume Data from Resume Service
-   */
+  /**************************************************************************
+   *  @description Get Resume Data from Resume Service and reusme Image from upload Service
+   *************************************************************************/
   async getResume() {
     await this.resumeService.getResume(
-      // tslint:disable-next-line:max-line-length
-      `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+      `?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`)
       .subscribe(
         async (generalInfo) => {
           if (generalInfo['msg_code'] !== '0004') {
             if (!!generalInfo) {
               if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
-              this.haveImage = generalInfo[0].image;
-              this.avatar = await this.uploadService.getImage(generalInfo[0].image); } else {
+                this.haveImage = generalInfo[0].image;
+                this.avatar = await this.uploadService.getImage(generalInfo[0].image);
+              } else {
                 this.userService.connectedUser$.subscribe((data) => {
                   if (!!data) {
                     this.user = data['user'][0];
@@ -146,10 +144,12 @@ export class ResumeGeneralInformationComponent implements OnInit {
         }
       );
   }
+
   /**************************************************************************
-   * @description set Existing data in the Resume Data
+   * @description set Existing data in the Resume Form
+   * @param generalInformation: General information model
    *************************************************************************/
-  async updateForm(generalInformation) {
+  async updateForm(generalInformation: IResumeModel[]) {
     this.CreationForm.patchValue({
       init_name: generalInformation[0].init_name,
       actual_job: generalInformation[0].actual_job,
@@ -158,38 +158,45 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_code: generalInformation[0].ResumeKey.resume_code,
       image: generalInformation[0].image,
     });
-      if (this.CreationForm.controls.years_of_experience.value !== null) {
+    console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
+    if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
-        await this.resumeService.getResume(
-          // tslint:disable-next-line:max-line-length
-          `?email_address=${this.userService.connectedUser$.getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-          .subscribe(
-            (response) => {
-              if (response['msg_code'] !== '0004') {
-                this.resume_code = response[0].ResumeKey.resume_code.toString();
-                this.resumeService.getProExp(
-                  `?resume_code=${this.resume_code}`)
-                  .subscribe(
-                    (responseProExp) => {
-                      if (responseProExp['msg_code'] !== '0004') {
-                        responseProExp.forEach((proExp) => {
-                          const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
-                            new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                          this.years = difference + this.years;
-                        });
-                        this.CreationForm.patchValue({
-                          years_of_experience: this.years,
+      await this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`)
+        .subscribe(
+          (response) => {
+            if (response['msg_code'] !== '0004') {
+              this.resumeCode = response[0].ResumeKey.resume_code.toString();
+              this.resumeService.getProExp(
+                `?resume_code=${this.resumeCode}`)
+                .subscribe(
+                  (responseProExp) => {
+                    if (responseProExp['msg_code'] !== '0004') {
+                      responseProExp.forEach((proExp) => {
+                        console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
+                        const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
+                          new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
+                        console.log('difference=', difference);
+                        this.years = difference + this.years;
                       });
-                        this.showHideYears();
-                    }});
-              }
-            });
-      }
-      }
-  /**
+                      console.log('years auto = ', this.years);
+                      this.CreationForm.patchValue({
+                        years_of_experience: this.years,
+                      });
+                      this.showHideYears();
+                    }
+                  });
+            }
+          });
+    }
+  }
+
+  /********************************************************
    * @description Initialization of Resume Form
-   */
+   ********************************************************/
   initForm() {
     this.CreationForm = this.fb.group({
       application_id: this.localStorageService.getItem('userCredentials').application_id,
@@ -197,17 +204,18 @@ export class ResumeGeneralInformationComponent implements OnInit {
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: ['', Validators['required']],
-      years_of_experience: [null, Validators.pattern('^(0?[0-9]|[12][0-9]|3[01])$')],
+      years_of_experience: [null],
       actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       image: this.avatar,
       init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       status: 'A'
     });
   }
-  /**
-   * @description Create Or Update Resume
-   */
- async createUpdateResume() {
+
+  /****************************************************
+   * @description Create Or Update Resume General information
+   ***************************************************/
+  async createUpdateResume() {
     let filename = null;
     if (this.photo) {
       filename = await this.uploadService.uploadImage(this.photo)
@@ -218,24 +226,60 @@ export class ResumeGeneralInformationComponent implements OnInit {
         .toPromise();
     }
     if (this.update === false) {
-    this.generalInfo = this.CreationForm.value;
-    this.generalInfo.image = filename;
-    if (this.CreationForm.valid && !this.showNumberError) {
-      this.resumeService.addResume(this.generalInfo).subscribe(data => {
-        this.router.navigate(['/candidate/resume/certifDiploma']);
-      });
-      } else {
-    } } else {
       this.generalInfo = this.CreationForm.value;
+      this.generalInfo.image = filename;
+      if (this.CreationForm.valid && !this.showNumberError) {
+        this.resumeService.addResume(this.generalInfo).subscribe(data => {
+          this.router.navigate(['/candidate/resume/certifDiploma']);
+        });
+      } else {
+      }
+    } else {
+      this.generalInfo = this.CreationForm.value;
+      console.log('filename=', filename);
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
-        this.router.navigate(['/candidate/resume/certifDiploma']);
-       }); }
+          this.router.navigate(['/candidate/resume/certifDiploma']);
+        });
+      }
     }
     this.showNumberError = false;
+  }
+
+  /**************************************************************************
+   * @description Get company name from user Service
+   *************************************************************************/
+  getCompanyName() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyName = userInfo['company'][0]['company_name'];
+          }
+        });
+  }
+
+  /**************************************************************************
+   * @description Get Language list from RefData and RefType
+   *************************************************************************/
+  getLanguageList() {
+    this.langList = new BehaviorSubject<IViewParam[]>([]);
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
+      }
+    ));
+  }
+
+  /**************************************************************************
+   * @description Get imported image by the user
+   * @param obj: object uploaded
+   *************************************************************************/
+  getFile(obj: FormData) {
+    this.photo = obj;
   }
 }
