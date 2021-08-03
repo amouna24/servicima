@@ -11,7 +11,7 @@ import { ResumeFuncSkillComponent } from '@shared/modules/resume-management/modu
 import { ResumeCertifDiplomaComponent } from '@shared/modules/resume-management/modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from '@shared/modules/resume-management/modules/resume-done/resume-done.component';
 import { ResumeGuard } from '@core/guard/resume.guard';
-import { ResumeCertficationsComponent } from '@shared/modules/resume-management/modules/resume-certfications/resume-certfications.component';
+import { ResumeCertificationsComponent } from '@shared/modules/resume-management/modules/resume-certifications/resume-certifications.component';
 
 const routes: Routes = [
   { path: '', component: ResumeGeneralInformationComponent},
@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'functionalSkills', canActivate: [ResumeGuard], component: ResumeFuncSkillComponent},
   { path: 'certifDiploma', canActivate: [ResumeGuard], component: ResumeCertifDiplomaComponent},
   { path: 'done', canActivate: [ResumeGuard], component: ResumeDoneComponent},
-  { path: 'certifications', canActivate: [ResumeGuard], component: ResumeCertficationsComponent},
+  { path: 'certifications', canActivate: [ResumeGuard], component: ResumeCertificationsComponent},
 
 ];
 

@@ -20,6 +20,7 @@ import { IResumeProfessionalExperienceDoneModel } from '@shared/models/professio
 import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
+import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
 
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,7 +43,8 @@ export class ResumeDoneComponent implements OnInit {
   interventionList: IResumeInterventionModel[];
   languageList: IResumeLanguageModel[];
   sectionList: IResumeSectionModel[];
-  certifList: IResumeCertificationDiplomaModel[];
+  certifList: IResumeCertificationModel[];
+  diplomaList: IResumeCertificationDiplomaModel[];
   projectList: IResumeProjectModel[];
   projectDetailsList: IResumeProjectDetailsModel[];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[];
@@ -132,7 +134,10 @@ export class ResumeDoneComponent implements OnInit {
       this.count += 13;
     }
     if (this.certifList.length > 0) {
-      this.count += 13;
+      this.count += 6;
+    }
+    if (this.diplomaList.length > 0) {
+      this.count += 7;
     }
     if (this.languageList.length > 0) {
       this.count += 13;
@@ -184,6 +189,9 @@ export class ResumeDoneComponent implements OnInit {
         this.resumeService.getCertifDiploma(
           `?resume_code=${this.resumeCode}`
         ),
+        this.resumeService.getCertification(
+          `?resume_code=${this.resumeCode}`
+        ),
       ]).toPromise().then(
         (data) => {
           if (data[0].length > 0) {
@@ -219,7 +227,11 @@ export class ResumeDoneComponent implements OnInit {
           }
           if (data[7].length > 0) {
             // @ts-ignore
-            this.certifList = data[7];
+            this.diplomaList = data[7];
+          }
+          if (data[8].length > 0) {
+            // @ts-ignore
+            this.certifList = data[8];
           }
           this.countResume();
           this.getProjectInfo();
@@ -342,10 +354,16 @@ export class ResumeDoneComponent implements OnInit {
    *************************************************************************/
   async getDocument(action: string, theme: string) {
     this.loading = true;
+    if (this.diplomaList.length > 0) {
+      this.diplomaList.forEach((diploma) => {
+        console.log(diploma);
+        diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
+        diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
+      });
+    }
     if (this.certifList.length > 0) {
-      this.certifList.forEach((cert) => {
-        cert.start_date = this.datePipe.transform(cert.start_date, 'yyyy-MM-dd');
-        cert.end_date = this.datePipe.transform(cert.end_date, 'yyyy-MM-dd');
+      this.certifList.forEach((certif) => {
+        certif.date = this.datePipe.transform(certif.date, 'MMMM yyyy');
       });
     }
     if (this.proExpList.length > 0) {
@@ -372,7 +390,8 @@ export class ResumeDoneComponent implements OnInit {
         label: this.label,
         currentYear: this.dateNow,
         imageUrl: this.imageUrl + this.generalInfoList[0].image,
-        diplomas: this.certifList,
+        diplomas: this.diplomaList,
+        certifications: this.certifList,
         company_name: this.companyName,
         company_email: this.companyEmail,
         company_logo: this.imageUrl + this.companyLogo,
@@ -415,6 +434,7 @@ export class ResumeDoneComponent implements OnInit {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
         if (action === 'preview') {
+          console.log(data);
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');
           this.loading = false;
@@ -532,6 +552,7 @@ export class ResumeDoneComponent implements OnInit {
     this.languageList = [];
     this.sectionList = [];
     this.certifList = [];
+    this.diplomaList = [];
     this.projectList = [];
     this.projectDetailsList = [];
     this.projectDetailsSectionList = [];

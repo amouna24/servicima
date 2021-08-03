@@ -11,8 +11,9 @@ import { IResumeSectionModel } from '@shared/models/resumeSection.model';
 import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
+import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
+
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
@@ -456,4 +457,40 @@ export class ResumeService {
     // @ts-ignore
     return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}&theme=${theme}`, filter,   { responseType: 'blob'});
   }
+  /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Certification List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IResumeCertificationModel[]>
+   *************************************************************************/
+  getCertification(filter: string): Observable<IResumeCertificationModel[]> {
+    return this.httpClient.get<IResumeCertificationModel[]>(`${environment.resumeCertificationApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description Add new Certification
+   * @param certif : IResumeCertificationModel  model
+   *************************************************************************/
+  addCertification(certif: IResumeCertificationModel): Observable<any> {
+    return this.httpClient.post<IResumeCertificationModel>(`${environment.resumeCertificationApiUrl}`, certif);
+  }
+
+  /**************************************************************************
+   * @description Update Certification Status
+   * @param certif: updated  Certification Object
+   *************************************************************************/
+  updateCertification(certif: IResumeCertificationModel): Observable<any> {
+    return this.httpClient.put<IResumeCertificationModel>(`${environment.resumeCertificationApiUrl}`, certif);
+  }
+
+  /**************************************************************************
+   * @description Delete Certification Status
+   * @param id: Delete Certification Object
+   *************************************************************************/
+  deleteCertification(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeCertificationModel>(`${environment.resumeCertificationApiUrl}/?_id=${id}`);
+  }
+
+  /*-------------------------------------------------------------------------------------*/
 }
