@@ -7,11 +7,17 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
   templateUrl: './resume-dynamic-section.component.html',
-  styleUrls: ['./resume-dynamic-section.component.scss']
+  styleUrls: ['./resume-dynamic-section.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+  ],
 })
 export class ResumeDynamicSectionComponent implements OnInit {
   showNumberError: boolean;

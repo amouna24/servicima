@@ -8,11 +8,17 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
   styleUrls: ['./pro-exp.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+  ]
 })
 export class ProExpComponent implements OnInit {
   sendProExp: FormGroup;

@@ -6,11 +6,16 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-
+import { blueToGrey, GreyToBlue, downLine } from '@shared/animations/animations';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
-  styleUrls: ['./resume-certifications.component.scss']
+  styleUrls: ['./resume-certifications.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+  ]
 })
 export class ResumeCertificationsComponent implements OnInit {
 certifForm: FormGroup;

@@ -6,11 +6,17 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-intervention',
   templateUrl: './resume-intervention.component.html',
-  styleUrls: ['./resume-intervention.component.scss']
+  styleUrls: ['./resume-intervention.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+  ]
 })
 export class ResumeInterventionComponent implements OnInit {
   sendIntervention: FormGroup;

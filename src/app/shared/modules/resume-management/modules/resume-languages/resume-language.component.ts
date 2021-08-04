@@ -12,11 +12,17 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-language',
   templateUrl: './resume-language.component.html',
-  styleUrls: ['./resume-language.component.scss']
+  styleUrls: ['./resume-language.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine(),
+  ],
 })
 export class ResumeLanguageComponent implements OnInit {
   sendLanguage: FormGroup;
@@ -35,7 +41,9 @@ export class ResumeLanguageComponent implements OnInit {
   showLevelError: boolean;
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
-
+  previousRouteIndex: string;
+  previous: string;
+  result = `translateY(${((9 - 5) * -20)}px)`;
   constructor(
     private utilService: UtilsService,
     private fb: FormBuilder,
@@ -48,12 +56,14 @@ export class ResumeLanguageComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private router: Router,
   ) {
+    this.previousRouteIndex = '05';
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    console.log(this.result);
     this.resumeCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
     this.languageArray = [];
     this.ratingArr = [];

@@ -18,6 +18,7 @@ const defaultMinFontSize = '20px';
 const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
 const defaultMinPosition = '51px';
+const defaultPreviousRoute = '01';
 
 export function mainContentAnimation(animationDuration: string = '400ms',
 minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth,
@@ -131,3 +132,31 @@ export function closeAlertAnimation(animationDuration: string = '500ms'): Animat
     transition('* => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+export let blueToGrey = trigger('blueToGrey', [
+  transition('void => *', [
+    style({ color: 'blue'}),
+    animate(1000, style( { color: '#afb1b8'})),
+  ]),
+]);
+export let GreyToBlue =  trigger('GreyToBlue', [
+  transition('void => *', [
+    style({ color: '#afb1b8'}),
+    animate(1000, style( { color: 'blue'})),
+  ]),
+]);
+export function downLine() {
+  return trigger('downLine', [
+    state('void', style({ transform: '{{result}}'}),
+  { params: { result: 'translateY(0px)'}}),
+    state('low', style({ transform: 'translateY(0px)'})),
+    transition('void <=> *',  [
+      animate(500),
+    ])
+  ]);
+}
+export let uPLine =     trigger('showLine', [
+  transition('void => *', [
+    style({ transform: 'translateY(-100px)'}),
+    animate(50, style( { transform: 'translateY(20px)'})),
+  ]),
+]);

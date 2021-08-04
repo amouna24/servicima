@@ -7,11 +7,17 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
   templateUrl: './resume-certif-diploma.component.html',
-  styleUrls: ['./resume-certif-diploma.component.scss']
+  styleUrls: ['./resume-certif-diploma.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine(),
+  ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
   sendCertifDiploma: FormGroup;
@@ -31,6 +37,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+  previousRoute = '02';
 
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor

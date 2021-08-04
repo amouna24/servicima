@@ -6,11 +6,17 @@ import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-func-skill',
   templateUrl: './resume-func-skill.component.html',
-  styleUrls: ['./resume-func-skill.component.scss']
+  styleUrls: ['./resume-func-skill.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine(),
+  ]
 })
 export class ResumeFuncSkillComponent implements OnInit {
   sendFuncSkill: FormGroup;

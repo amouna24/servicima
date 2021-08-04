@@ -86,15 +86,18 @@
             <div fxLayout="column" fxFlexFill>
               <div fxLayout="row">
                 <ng-template [ngIf]="item === '06'">
-                  <span style="color: blue; font-size: 10px">{{item}}</span>
+                  <span @GreyToBlue style="color: blue; font-size: 10px">{{item}}</span>
                 </ng-template>
-                <ng-template [ngIf]="item !== '06'">
+                <ng-template [ngIf]="item !== '06' && item !== '05'">
                   <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                </ng-template>
+                <ng-template [ngIf]="item === '05'">
+                  <span @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
                 <ng-template [ngIf]="item === '06'">
-                  <div style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                  <div @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
                 </ng-template>
               </div>
             </div>

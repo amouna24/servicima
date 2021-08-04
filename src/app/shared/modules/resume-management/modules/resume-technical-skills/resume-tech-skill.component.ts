@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
+import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -10,7 +11,12 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'wid-resume-tech-skill',
   templateUrl: './resume-tech-skill.component.html',
-  styleUrls: ['./resume-tech-skill.component.scss']
+  styleUrls: ['./resume-tech-skill.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+  ]
 })
 export class ResumeTechSkillComponent implements OnInit {
   sendTechSkill: FormGroup;
