@@ -16,7 +16,7 @@ import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations'
   animations: [
     blueToGrey,
     GreyToBlue,
-    downLine(),
+    downLine,
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {

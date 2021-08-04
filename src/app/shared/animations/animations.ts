@@ -144,16 +144,13 @@ export let GreyToBlue =  trigger('GreyToBlue', [
     animate(1000, style( { color: 'blue'})),
   ]),
 ]);
-export function downLine() {
-  return trigger('downLine', [
+export let downLine = trigger('downLine', [
     state('void', style({ transform: '{{result}}'}),
   { params: { result: 'translateY(0px)'}}),
-    state('low', style({ transform: 'translateY(0px)'})),
     transition('void <=> *',  [
       animate(500),
     ])
   ]);
-}
 export let uPLine =     trigger('showLine', [
   transition('void => *', [
     style({ transform: 'translateY(-100px)'}),

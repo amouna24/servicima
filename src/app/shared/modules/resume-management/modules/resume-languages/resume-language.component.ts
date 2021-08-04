@@ -21,7 +21,7 @@ import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations'
   animations: [
     blueToGrey,
     GreyToBlue,
-    downLine(),
+    downLine,
   ],
 })
 export class ResumeLanguageComponent implements OnInit {
@@ -41,9 +41,9 @@ export class ResumeLanguageComponent implements OnInit {
   showLevelError: boolean;
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
-  previousRouteIndex: string;
+  previousRouteIndex = '03';
   previous: string;
-  result = `translateY(${((9 - 5) * -20)}px)`;
+  result = `translateY(${((9 - 3) * -20)}px)`;
   constructor(
     private utilService: UtilsService,
     private fb: FormBuilder,
@@ -56,7 +56,6 @@ export class ResumeLanguageComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private router: Router,
   ) {
-    this.previousRouteIndex = '05';
   }
 
   /**************************************************************************
