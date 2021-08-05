@@ -1,11 +1,11 @@
-<!--
 <wid-dynamic-data-table
   [tableData]="ELEMENT_DATA"
   [tableCode]="'CONTRACT'"
   [isLoading]="isLoading"
-  [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
+  [header]="{ title: 'Project management', type:'dialog', addActionText: 'New Project',
+    addActionDialog: { modalName: 'addProject', modalComponent: 'AddProjectComponent', data: null, width: '657px', height: '480px' }}"
   (rowActionData)="switchAction($event)"
   [allowedActions]="{update: true, delete: true, show: true}"
+  (pagination)="loadMoreItems($event)"
 >
 </wid-dynamic-data-table>
--->

@@ -730,17 +730,15 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           this.haveImage.next(res[0]['results'][0]['photo']);
           const av = await this.uploadService.getImage(res[0]['results'][0]['photo']);
           this.avatar.next(av);
-          if (res[1]['msg_code'] === '0004') {
-            this.contractorContactInfo = [];
-          } else {
-            this.contractorContactInfo = res[1];
-            this.contractorContactInfo.map(
-              (contact) => {
-                contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                  type.value === contact.title_cd)?.viewValue;
-              }
-            );
-          }
+
+          res[1]['results'][0] === [] ? this.contractorContactInfo = [] : this.contractorContactInfo = res[1]['results'];
+
+          this.contractorContactInfo.map(
+            (contact) => {
+              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                type.value === contact.title_cd)?.viewValue;
+            }
+          );
           this.updateForms(this.contractorInfo);
           this.contactList.next(this.contractorContactInfo.slice());
           this.isLoading.next(false);
