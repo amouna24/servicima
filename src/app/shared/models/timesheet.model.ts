@@ -4,18 +4,16 @@ export interface ITimesheetModel {
   /* ID */
   _id: string;
   TimeSheetKey: ITimesheetKeyModel;
-  start_date: string;
   end_date: string;
   timesheet_status: string;
   comment?: string;
-  monday?: string;
-  tuesday?: string;
-  wednesday?: string;
-  thursday?: string;
-  friday?: string;
-  saturday?: string;
-  sunday?: string;
-  total_week_hours?: string;
-  type_timesheet?: string;
+  monday?: number;
+  tuesday?: number;
+  wednesday?: number;
+  thursday?: number;
+  friday?: number;
+  saturday?: number;
+  sunday?: number;
+  total_week_hours?: number;
   customer_timesheet?: string;
 }

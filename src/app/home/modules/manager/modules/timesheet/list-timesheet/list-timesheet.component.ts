@@ -30,14 +30,11 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   title_id: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
-  // pending = 'Pending';
-  // rejected = 'Rejected';
-  // approved = 'Approved';
   refData: { } = { };
   collaboratorArray: IUserModel[] = [];
   categoryList: IViewParam[];
   profTitleList: IViewParam[];
-  searchCriteria: string;
+  listStatus: string;
   refdata: any;
   categoryCode: string;
 
@@ -66,20 +63,8 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.modalsServices.registerModals({ modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
     this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.isLoading.next(true);
-    this.route.queryParams
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(params => {
-        // console.log('params', params);
-        if (!!params.timesheet_status) {
-          this.searchCriteria = params.timesheet_status;
-          this.getAllTimesheet();
-        } else {
-          this.searchCriteria = '';
-          this.getAllTimesheet();
-        }
-      });
+    this.listStatus = this.route.snapshot.params.status;
+    await this.getAllTimesheet();
   }
 
   /**
@@ -133,7 +118,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.profTitleList = this.refdata['PROF_TITLES'];
     this.timesheetService
         .getTimesheet(
-          `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.searchCriteria}`)
+          `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.listStatus}`)
         .subscribe((res) => {
           // console.log(res, 'res');
           res.map( (result) => {

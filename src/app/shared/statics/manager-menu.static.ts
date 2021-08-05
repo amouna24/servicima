@@ -10,28 +10,25 @@ export const managerMenu: IMenu[] = [
     feature: 'CONTRACT_ACCESS',
     children: [
       {
-        state: '',
+        state: 'Pending',
         name: 'Pending',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
-        queryParams: { timesheet_status: 'Pending' },
       },
       {
-        state: '',
+        state: 'Rejected',
         name: 'Rejected',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
-        queryParams: { timesheet_status: 'Rejected' },
       },
       {
-        state: '',
+        state: 'Approved',
         name: 'Approved',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
-        queryParams: { timesheet_status: 'Approved' },
       },
     ]
   },

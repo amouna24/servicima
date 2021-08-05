@@ -3,11 +3,11 @@
    <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
      <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
           style="border-bottom: 1px solid #afb1b8">
-     <ng-container *ngIf="buttonValue === 'edit' else Add">
-       <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
-     </ng-container>
-     <ng-template #Add>
+     <ng-container *ngIf="addForm else Edit">
        <h2 class="steel font-medium font-size-24">Add timesheets</h2>
+     </ng-container>
+     <ng-template #Edit>
+       <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
      </ng-template>
      <button mat-flat-button class="btn-small bg-pale-grey cool-grey">
        Back
@@ -22,7 +22,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Week start on :</label>
            <mat-form-field appearance="outline">
-             <input matInput [matDatepickerFilter]="startDateFilter" [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
+             <input matInput [matDatepickerFilter]="startDateFilter" formControlName="start_date" [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
              <mat-datepicker-toggle matSuffix [for]="datepicker">
                <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
              </mat-datepicker-toggle>
@@ -35,8 +35,8 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select formControlName="project_code" (selectionChange)="onProjectSelect($event)" placeholder="Project">
-               <mat-option *ngFor="let project of listTimesheetProject" [value]="project.project_desc">
+             <mat-select formControlName="project_code" placeholder="Project">
+               <mat-option *ngFor="let project of projectsList" [value]="project.project_desc">
                  {{ project.project_desc }}
                </mat-option>
              </mat-select>
@@ -46,29 +46,9 @@
            </mat-form-field>
          </div>
          <div fxLayout="column">
-           <label class="font-size-12 required"> Status : </label>
-           <mat-form-field appearance="outline">
-             <mat-select disabled placeholder="Status">
-               <mat-option value="Pending">
-                 Pending
-               </mat-option>
-               <mat-option value="Draft">
-                 Draft
-               </mat-option>
-               <mat-option value="Submited">
-                 Submited
-               </mat-option>
-
-             </mat-select>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
-               Required field
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
            <label class="font-size-12 required"> Comment : </label>
            <mat-form-field appearance="outline">
-             <textarea rows="3" placeholder="comment ..." matInput></textarea>
+             <textarea rows="3" placeholder="comment ..." matInput formControlName="comment"></textarea>
            </mat-form-field>
          </div>
 
@@ -80,7 +60,7 @@
            <label class="font-size-12 required"> Monday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday">
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -96,7 +76,7 @@
            <label class="font-size-12 required"> Tuesday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" >
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -112,7 +92,7 @@
            <label class="font-size-12 required"> Wednesday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" >
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -128,7 +108,7 @@
            <label class="font-size-12 required"> Thursday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" >
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -144,7 +124,7 @@
            <label class="font-size-12 required"> Friday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" >
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -160,7 +140,7 @@
            <label class="font-size-12 required"> Saturday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" >
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -176,7 +156,7 @@
            <label class="font-size-12 required"> Sunday : </label>
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday" (input)="calculTotalWeekHours()">
+             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday">
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.min">
                minimum value is 0
              </mat-error>
@@ -190,8 +170,8 @@
          </div>
          <div fxLayout="column">
              <label class="font-size-12"> Total : </label>
-             <mat-form-field appearance="outline">
-               <input disabled matInput placeholder="{{totalWeek}}" formControlName="total_week_hours" [readonly]="true">
+             <mat-form-field appearance="outline" class="disabled">
+               <input disabled matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
              </mat-form-field>
          </div>
          </div>

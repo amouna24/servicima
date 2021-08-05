@@ -86,7 +86,6 @@ export class UserService {
         `/getprofileinfos?application_id=${this.applicationId}&email_address=${this.emailAddress}`)
         .subscribe( (data) => {
           this.userInfo = data;
-          console.log('this.userInfo', this.userInfo);
           this.userType = this.userInfo['user'][0].user_type;
           this.connectedUser$.next(data);
           this.getImage(data['user'][0].photo);

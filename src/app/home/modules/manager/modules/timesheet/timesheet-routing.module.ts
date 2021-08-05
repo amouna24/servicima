@@ -5,21 +5,7 @@ import { ListTimesheetComponent } from './list-timesheet/list-timesheet.componen
 
 const routes: Routes = [
   {
-    path: '',
-    component: ListTimesheetComponent,
-    data: {
-      breadcrumb: 'Timesheet'
-    },
-  },
-  {
-    path: '/rejected',
-    component: ListTimesheetComponent,
-    data: {
-      breadcrumb: 'Timesheet'
-    },
-  },
-  {
-    path: '/approved',
+    path: ':status',
     component: ListTimesheetComponent,
     data: {
       breadcrumb: 'Timesheet'

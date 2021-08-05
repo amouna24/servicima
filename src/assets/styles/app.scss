@@ -163,6 +163,10 @@ Paddings
     padding: 10px;
 }
 
+.p-15 {
+  padding: 15px;
+}
+
 .p-20 {
     padding: 20px;
 }
@@ -243,7 +247,6 @@ Paddings
 .p-t-30 {
     padding-top: 30px;
 }
-
 .p-b-0 {
     padding-bottom: 0;
 }
@@ -406,6 +409,10 @@ html body {
 
 .m-t-30 {
     margin-top: 30px;
+}
+
+.m-t-35 {
+  margin-top: 35px;
 }
 
 .m-t-40 {
@@ -804,9 +811,10 @@ html body {
 .mat-error{
   color: $error-red !important;
 }
-/*******************
-   Bottom Sheet
-*******************/
+
+  /*******************
+     Bottom Sheet
+  *******************/
 .bottom-sheet {
   border-top-left-radius: 25px !important;
   border-top-right-radius: 24px !important;

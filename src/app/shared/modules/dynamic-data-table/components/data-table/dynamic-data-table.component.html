@@ -8,7 +8,7 @@
           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
           </mat-icon>
           &nbsp;
-          <span class="white font-size-15 font-normal">{{ header.addActionText | spliceText: 10  }}</span>
+          <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
         </button>
       </div>
   </div>
@@ -60,7 +60,7 @@
               <span class="cool-grey font-size-18">No Data Found</span>
             </div>
             <div  fxFlex="15" fxLayout="row">
-              <button mat-raised-button  class="btn-medium bg-cerulean-blue">
+              <button mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
                 <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
               </button>
             </div>
@@ -69,7 +69,7 @@
       </ng-container>
 
       <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
-        <table cdk-table [style]="{'width': '100%'}" [dataSource]="dataSource" [trackBy]="identify" >
+        <table cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" >
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -151,9 +151,8 @@
         </table>
       </ng-container>
 
-
       <ng-container *ngIf="isLoading.getValue();" >
-        <div  fxLayoutAlign="center center">
+        <div fxFlex="100" fxLayoutAlign="center center">
           <mat-progress-spinner
             color="primary"
             mode="indeterminate">

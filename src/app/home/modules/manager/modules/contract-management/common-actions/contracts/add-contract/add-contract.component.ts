@@ -58,6 +58,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
   extensionsList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  canUpdateContractProjectAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  canAddContractProjectAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  canUpdateProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  canAddProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   companyTimesheet: ICompanyTimesheetSettingModel;
   /**************************************************************************
    * @description Declaring Form Group
@@ -84,6 +88,22 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Dynamic Component
    *************************************************************************/
   isLoading = new BehaviorSubject<boolean>(false);
+
+  /**************************************************************************
+   * @description Variable used to destroy all subscriptions
+   *************************************************************************/
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  private subscriptions: Subscription[] = [];
+
+  /**************************************************************************
+   * @description list of Data filtered by search keyword
+   *************************************************************************/
+  public filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+
+  avatar: any;
+  selectedContractFile = { file: FormData, name: ''};
+  selectedExtensionFile = [];
+
   /**************************************************************************
    * @description Menu Items List
    *************************************************************************/
@@ -115,6 +135,16 @@ export class AddContractComponent implements OnInit, OnDestroy {
       titleKey: 'CONTRACT_EXTENSION',
       child: []
     },
+    {
+      title: 'Contract Project',
+      titleKey: 'CONTRACT_PROJECT',
+      child: []
+    },
+    {
+      title: 'Project Collaborator',
+      titleKey: 'PROJECT_COLLABORATOR',
+      child: []
+    },
   ];
   dynamicForm: BehaviorSubject<IDynamicForm[] > = new BehaviorSubject<IDynamicForm[]>([
     {
@@ -129,11 +159,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
           formControlName: 'contractor_code'
         },
         {
-          label: 'Collaborator email',
-          placeholder: 'Collaborator email',
+          label: 'Status',
+          placeholder: 'Status',
           type: FieldsType.SELECT,
-          selectFieldList: this.collaboratorList,
-          formControlName: 'collaborator_email'
+          selectFieldList: this.statusList,
+          formControlName: 'contract_status'
         },
       ],
     },
@@ -158,15 +188,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
     },
     {
       titleRef: 'INFORMATION',
-      fieldsLayout: FieldsAlignment.tow_items,
+      fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
-        {
-          label: 'Status',
-          placeholder: 'Status',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
-          formControlName: 'contract_status'
-        },
         {
           label: 'Attachments',
           placeholder: 'File',
@@ -384,22 +407,203 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
       ],
     },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.one_item_stretch,
+      fields: [
+        {
+          type: FieldsType.DATA_TABLE,
+          dataTable: {
+            displayedColumns: [
+              'rowItem',
+              'category_code', 'project_desc',
+              'start_date', 'end_date',
+              'Actions'],
+            columns: [
+              { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
+              { name: 'Category', prop: 'category_code', type: InputType.DATE},
+              { name: 'Description', prop: 'project_desc', type: InputType.DATE},
+              { name: 'Start Date', prop: 'start_date', type: InputType.TEXT},
+              { name: 'End date', prop: 'end_date', type: InputType.TEXT},
+              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+            ],
+            dataSource: this.extensionsList
+          }
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Category',
+          placeholder: 'Category',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'category_code',
+        },
+        {
+          label: 'Description',
+          placeholder: 'Description',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'project_desc',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Start date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.DATE_PICKER,
+          formControlName: 'start_date',
+        },
+        {
+          label: 'End date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.DATE_PICKER,
+          formControlName: 'end_date',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Rate',
+          placeholder: '0.00',
+          type: FieldsType.INPUT,
+          inputType: InputType.NUMBER,
+          formControlName: 'project_rate',
+        },
+        {
+          label: 'Currency',
+          placeholder: 'Currency',
+          type: FieldsType.SELECT,
+          selectFieldList: this.currencyList,
+          formControlName: 'rate_currency',
+        },
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.tow_items_with_textarea,
+      fields: [
+        {
+          label: 'VAT',
+          placeholder: 'VAT',
+          type: FieldsType.SELECT,
+          selectFieldList: this.statusList,
+          formControlName: 'vat_nbr'
+        },
+        {
+          label: 'Status',
+          placeholder: 'Status',
+          type: FieldsType.SELECT,
+          selectFieldList: this.statusList,
+          formControlName: 'project_status',
+        },
+        {
+          label: 'Comment',
+          placeholder: 'Comment',
+          type: FieldsType.TEXTAREA,
+          formControlName: 'comment'
+        }
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.one_item_at_right,
+      fields: [
+        {
+          type: FieldsType.ADD_MORE_OR_UPDATE,
+          canUpdate: this.canUpdateContractProjectAction,
+          canAdd: this.canAddContractProjectAction,
+        },
+      ],
+    },
+    {
+      titleRef: 'PROJECT_COLLABORATOR',
+      fieldsLayout: FieldsAlignment.one_item_stretch,
+      fields: [
+        {
+          type: FieldsType.DATA_TABLE,
+          dataTable: {
+            displayedColumns: [
+              'rowItem',
+              'contract_project_code', 'email_address',
+              'start_date', 'end_date',
+              'Actions'],
+            columns: [
+              { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
+              { name: 'Code', prop: 'contract_project_code', type: InputType.DATE},
+              { name: 'Collaborator Email', prop: 'email_address', type: InputType.DATE},
+              { name: 'Start Date', prop: 'start_date', type: InputType.TEXT},
+              { name: 'End date', prop: 'end_date', type: InputType.TEXT},
+              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+            ],
+            dataSource: this.extensionsList
+          }
+        },
+      ],
+    },
+    {
+      titleRef: 'PROJECT_COLLABORATOR',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Project Code',
+          placeholder: 'Project Code',
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
+          searchControlName: 'projectCodeFilterCtrl',
+          formControlName: 'contract_project_code',
+        },
+        {
+          label: 'Collaborator',
+          placeholder: 'Collaborator',
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
+          searchControlName: 'emailAddressFilterCtrl',
+          formControlName: 'email_address',
+        },
+      ],
+    },
+    {
+      titleRef: 'PROJECT_COLLABORATOR',
+      fieldsLayout: FieldsAlignment.tow_items,
+      fields: [
+        {
+          label: 'Start date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.DATE_PICKER,
+          formControlName: 'start_date',
+        },
+        {
+          label: 'End date',
+          placeholder: 'dd/mm/yyyy',
+          type: FieldsType.DATE_PICKER,
+          formControlName: 'end_date',
+        },
+      ],
+    },
+    {
+      titleRef: 'PROJECT_COLLABORATOR',
+      fieldsLayout: FieldsAlignment.one_item_at_right,
+      fields: [
+        {
+          type: FieldsType.ADD_MORE_OR_UPDATE,
+          canUpdate: this.canUpdateProjectCollaboratorAction,
+          canAdd: this.canAddProjectCollaboratorAction,
+        },
+      ],
+    },
   ]);
-
-  /**************************************************************************
-   * @description Variable used to destroy all subscriptions
-   *************************************************************************/
-  destroy$: Subject<boolean> = new Subject<boolean>();
-  private subscriptions: Subscription[] = [];
-
-  /**************************************************************************
-   * @description list of Data filtered by search keyword
-   *************************************************************************/
-  public filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
-
-  avatar: any;
-  selectedContractFile = { file: FormData, name: ''};
-  selectedExtensionFile = [];
 
   constructor(
     private contractsService: ContractsService,
@@ -498,13 +702,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
       await this.profileService.getAllUser(this.companyEmail)
         .subscribe((res) => {
           this.collaboratorList.next(
-            res.filter(value => value.user_type === 'COLLABORATOR').map(
+            res['results'].filter(value => value.user_type === 'COLLABORATOR').map(
               (obj) => {
                 return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
               }
             )
           );
-          this.staffList.next(res.filter(value => value.user_type === 'STAFF').map(
+          this.staffList.next(res['results'].filter(value => value.user_type === 'STAFF').map(
             (obj) => {
               return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
             }
@@ -526,9 +730,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.contractors = res;
+          this.contractors = res['results'];
           this.contractorsList.next(
-            res.map(
+            res['results'].map(
               (obj) => {
                 return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
               }
@@ -584,6 +788,25 @@ export class AddContractComponent implements OnInit, OnDestroy {
         extension_rate: ['', Validators.required],
         extension_currency_cd: [''],
         attachments: [''],
+      }),
+      CONTRACT_PROJECT: this.formBuilder.group({
+        category_code: [''],
+        project_desc: ['', Validators.required],
+        start_date: ['', Validators.required],
+        end_date: ['', Validators.required],
+        project_rate: ['', Validators.required],
+        rate_currency: [''],
+        vat_nbr: ['', Validators.required],
+        project_status: [''],
+        comment: [''],
+      }),
+      PROJECT_COLLABORATOR: this.formBuilder.group({
+        contract_project_code: ['', Validators.required],
+        projectCodeFilterCtrl: [''],
+        email_address: ['', Validators.required],
+        emailAddressFilterCtrl: [''],
+        start_date: ['', Validators.required],
+        end_date: ['', Validators.required],
       }),
     });
   }

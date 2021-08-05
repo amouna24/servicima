@@ -45,7 +45,7 @@ export const environment = {
   docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
 
   /************************* TIMESHEET + PROJECT + TASK + COMPANY-TIMESHEET-SETTING ******************************/
-  timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
   timesheetProjectApiUrl: 'http://192.168.1.22:8081/servicima/timesheetproject/v1',
 
   /************************* AUTHENTICATION ******************************/
