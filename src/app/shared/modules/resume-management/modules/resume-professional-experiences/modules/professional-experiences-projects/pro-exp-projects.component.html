@@ -1,0 +1,229 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="space-around">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">{{position}}-{{customer}}</h4>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
+        <wid-scrollbar fxFlex="87" class="full-height">
+          <div fxLayout="column" fxFlex="82" fxFlexAlign="10px">
+            <div fxLayout="row" *ngIf="!showProject" class="height-50" fxLayoutAlign="center">
+              <div fxLayout="column" fxFlex="100" class="border-radius-10 border_add_project">
+                <div fxLayout="row">
+                  <div fxLayout="column" fxFlexFill fxLayoutGap="30px">
+                    <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>{{ 'resume-no-exp' | translate }}</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center">
+                      <button mat-raised-button (click)="onShowProject()" color="primary" class="btn-medium  white p-r-10">
+                        {{ 'resume-add-project' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let item of ProjectArray let pointIndex=index" fxLayout="row" class="full-width p-b-10">
+              <mat-expansion-panel [hideToggle]="true" #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
+                                   style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
+                <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
+                  <mat-panel-title style="margin-right: 0 !important;">
+                    <div fxLayout="row" style="height: 80px" class="bg-pale-grey  full-width" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
+                      <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="73">
+                        <div fxLayout="row" fxFlex="34">
+                          <p class="font-normal font-size-15">{{item.project_title}}</p>
+                        </div>
+                        <div fxLayout="row" fxFlexAlign=" start" fxFlex="46">
+                          <p class="font-extra-light font-size-10 help-blue">
+                            {{item.start_date | date:"longDate"}}-{{item.end_date | date:"longDate"}}</p>
+                        </div>
+                      </div>
+                      <div fxLayout="column"  fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                        <div fxLayout="row" fxLayoutAlign="end" >
+                          <button mat-raised-button class="steel-two btn-small bg-white" >{{ 'resume-add-section' | translate }}</button>
+                        </div>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                        <div fxLayout="row" fxLayoutAlign="end" >
+                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item,pointIndex); panel.toggle()">{{ 'resume-edit' | translate }}</button>
+                        </div>
+                      </div>
+                      <div fxLayout="column"  class="p-r-20" fxLayoutAlign="center end" fxFlex>
+                        <div fxLayout="row" fxLayoutAlign="end" >
+                          <button mat-raised-button class="steel-two btn-small bg-white" (click)="deleteProject(item._id,pointIndex,item.project_code);panel.toggle()" >{{ 'resume-delete' | translate }}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
+                  <wid-project-section [projectCode]="item.project_code" (refreshTree)="refreshTreeHandler($event,item)"
+                                       class="full-width full-height"></wid-project-section>
+                </div>
+              </mat-expansion-panel>
+            </div>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="100">
+                <div fxLayout="row" fxFlexFill class="add_project" *ngIf="!showForm && showProject">
+                  <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
+                          (click)="onShowForm()">+
+                  </button>
+                  <span class="font-size-12 steel"> {{ 'resume-add-project' | translate }} </span></div>
+              </div>
+            </div>
+            <form fxLayout="row" [formGroup]="sendProject" *ngIf="showForm">
+              <div fxLayout="column" fxFlex="100">
+                <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey"
+                     style="border-style: solid ; justify-content: center">
+                  <div fxLayout="column" fxFlex="95" fxLayoutGap="30px" class="p-t-20" fxLayoutAlign="center">
+                    <div fxLayout="row" fxFlex="36">
+                      <div fxLayout="column" fxFlex="80">
+                        <mat-label class="black font-size-12 required">
+                          {{ 'resume-project-title' | translate }}:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input formControlName="project_title" matInput placeholder="Project title" required>
+                          <mat-error class="red" *ngIf="sendProject.controls.project_title.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="sendProject.controls.project_title.errors?.pattern">
+                            {{ 'resume-numbers' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="25">
+                      <div fxLayout="column" fxFlex="30">
+                        <mat-label class="black font-size-12 required">
+                          {{ 'resume-start-date' | translate }}:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1 formControlName="start_date"
+                                 placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
+                          <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                          <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                          <mat-error class="red" *ngIf="sendProject.controls.start_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row" fxLayoutAlign="end end">
+                          <div fxLayout="column" fxFlex="60">
+                            <mat-label class="black font-size-12 required">
+                              {{ 'resume-end-date' | translate }}:
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" [matDatepickerFilter]="myDisabledDayFilter" #date2  formControlName="end_date"
+                                     placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
+                              <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
+                              <mat-datepicker #datepickerend color="primary"></mat-datepicker>
+                              <mat-error class="red" *ngIf="sendProject.controls.end_date.errors?.required">
+                                {{ 'general.required' | translate }}</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="30" fxLayoutAlign="end">
+                      <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-small"
+                              style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="sendProject.invalid">
+                        <div *ngIf="button === 'Add';then add else save"></div>
+                        <ng-template #add>
+                          {{ 'resume-add' | translate }}
+                        </ng-template>
+                        <ng-template #save>
+                          {{ 'resume-save' | translate }}
+                        </ng-template>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div fxLayout="column" fxFlex="18" class="p-l-10" >
+            <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
+              <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
+                <wid-scrollbar class="full-width full-height">
+                  <div fxLayout="row"  class="border-radius-10 border_add_project min-height-50">
+
+                  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                  <li>
+                    <div>
+                      <button mat-icon-button disabled>
+                        <mat-icon *ngIf="node.object === undefined" class="steel-icon mat-icon-steel">
+                          brightness_1
+                        </mat-icon>
+                        <div *ngIf="node.object !== undefined">
+                          <mat-icon *ngIf="node.object.customer !== customer" class="steel-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                          <mat-icon *ngIf="node.object.customer === customer" class="topaz-icon mat-icon-topaz">
+                            brightness_1
+                          </mat-icon>
+                        </div>
+                      </button>
+                      <span (click)="nodeSelect(node)" class="onClickTree">{{node.title}}</span>
+                    </div>
+                  </li>
+                </mat-tree-node>
+
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
+                  <li>
+                    <div class="mat-tree-node" (click)="nodeSelect(node)" >
+                      <button mat-icon-button matTreeNodeToggle disabled>
+                        <mat-icon *ngIf="node.title === customer || node.title === project" class="topaz-icon mat-icon-topaz" >
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                        <mat-icon *ngIf="node.title !== customer && node.title !==  project" class="steel-icon mat-icon-topaz" >
+                          {{treeControl.isExpanded(node) ? 'brightness_1' : 'brightness_1'}}
+                        </mat-icon>
+                      </button>
+                      <span class="onClickTree">{{node.title}}</span>
+                    </div>
+                    <ul [hidden]="!treeControl.isExpanded(node)">
+                      <ng-container matTreeNodeOutlet></ng-container>
+                    </ul>
+                  </li>
+                </mat-nested-tree-node>
+              </mat-tree>
+                  </div>
+                </wid-scrollbar>
+              </div>
+            </div>
+      </div>
+        </wid-scrollbar>
+      </div>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/professionalExperience">
+            <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey"> {{ 'resume-previous' | translate }}</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+                  [routerLink]="['/candidate/resume/professionalExperience']">
+            {{ 'resume-save' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

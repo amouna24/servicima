@@ -1,0 +1,98 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxFlex="56">
+          <h1 class="steel font-size-24 font-medium">Resume</h1>
+        </div>
+        <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+          <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
+            <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+            </mat-icon>
+            <span class="cool-grey">back</span>
+          </button>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+        <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+      </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center" >
+    <div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+        <div fxLayout="column" fxFlex="86">
+          <h4 class="steel font-size-18 font-small">{{ 'resume-language' | translate }}</h4>
+        </div>
+      </div>
+  <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
+          <div fxLayout="column" fxFlexFill >
+            <div  *ngFor="let item of languageArray let pointIndex=index"  fxLayoutAlign="center" >
+              <div fxLayout="column" fxLayoutAlign="center center"  fxFlex="80" class="p-t-10">
+                <div fxLayout="row" fxLayoutAlign=" center" style="min-height: 80px" class="bg-pale-grey border-radius-15 full-width" >
+                  <div  fxFlex="30" class="p-l-20" fxLayout="column">
+                    <mat-label>{{item.resume_language_code | titlecase}}</mat-label>
+                  </div>
+                  <div fxLayout="column" fxFlex="30">
+                    <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                      <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                          <img src="{{showIconDisabled(ratingEdit[pointIndex],i)}}">
+                      </button>
+                    </div>
+                  </div>
+                  <div fxLayout="column" fxFlex="40"  fxLayoutAlign=" center"  >
+                    <button  mat-raised-button type="button"  class="bg-white btn-medium black"  (click)="deleteLanguage(item._id, pointIndex)">{{ 'resume-delete' | translate }}</button>
+                  </div>
+              </div>
+
+                </div></div>
+          <form [formGroup]="sendLanguage" class="full-width full-height p-t-30" fxLayout="row" fxLayoutAlign="center">
+            <div fxLayout="column"   fxFlex="80" >
+            <div fxLayout="row" fxLayoutAlign=" center" >
+                <div fxLayout="column" fxFlex="30"  >
+                  <mat-label class="black font-size-12 required">
+                    Language:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select disableOptionCentering panelClass="panelColor"
+                                placeholder="{{ 'resume-language' | translate }}" required>
+                      <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
+                    </mat-select>
+                    <mat-error class="red" *ngIf="sendLanguage.controls.resume_language_code.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" fxFlex="30" >
+                  <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
+                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                      <img src="{{showIcon(i)}}">
+                    </button>
+                  </div>
+                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="showLevelError && rating == 0" >
+                        Please select a level
+                  </mat-error>
+
+
+                </div>
+                <div fxLayout="column" fxFlex="40" fxLayoutAlign=" center"   >
+                <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="sendLanguage.invalid" (click)="createLanguage()">Add</button>
+              </div>
+            </div>
+            </div>
+          </form>
+          </div>
+        </wid-scrollbar>
+      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button  class="btn-medium bg-pale-grey" routerLink="/candidate/resume/dynamicSection">
+            <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}" [routerLink]="['/candidate/resume/done']">
+            {{ 'resume-next' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+  </div>

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -31,6 +31,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   emailAddress: string;
   /** subscription */
   destroy$: Subject<boolean> = new Subject<boolean>();
+  subscriptionModal: Subscription;
+
   avatar: any;
   user: IUserModel;
   constructor(
@@ -67,11 +69,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (userInfo) {
         this.getData(userInfo);
         // open dialog expiration licence when trial licence expire
-       if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
+       /*if (this.endLicence <= 0 && this.licenceType === 'TRIAL') {
          this.modalsServices.displayModal('expirationLicence', null, '570px', '480px');
-        }
+        }*/
       }
-    });
+        });
   }
 
   /**

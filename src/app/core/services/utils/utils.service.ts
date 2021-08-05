@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 import { IError } from '@shared/models/error.model';
 import { IViewParam } from '@shared/models/view.model';

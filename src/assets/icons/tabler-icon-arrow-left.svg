@@ -1,0 +1,6 @@
+<svg id="tabler-icon-arrow-left" xmlns="http://www.w3.org/2000/svg" width="30.235" height="30.235" viewBox="0 0 30.235 30.235">
+  <path id="Path_1233" data-name="Path 1233" d="M0,0H30.235V30.235H0Z" fill="none"/>
+  <line id="Line_63" data-name="Line 63" x2="18" transform="translate(6 15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <line id="Line_64" data-name="Line 64" x2="8" y2="8" transform="translate(6 15)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <line id="Line_65" data-name="Line 65" y1="7" x2="8" transform="translate(6 8)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+</svg>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CvComponent } from './cv.component';
+import { ResumeInterventionComponent } from './resume-intervention.component';
 
-describe('CvComponent', () => {
-  let component: CvComponent;
-  let fixture: ComponentFixture<CvComponent>;
+describe('ResumeInterventionComponent', () => {
+  let component: ResumeInterventionComponent;
+  let fixture: ComponentFixture<ResumeInterventionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CvComponent ]
+      declarations: [ ResumeInterventionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CvComponent);
+    fixture = TestBed.createComponent(ResumeInterventionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

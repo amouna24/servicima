@@ -307,7 +307,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
       };
       const add = {
         code: 'add',
-        title: 'add your account',
+        title: 'user.add',
+        description: 'Are you sure you want to add your account?'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(add, '528px', '300px').subscribe((value) => {
         if (value) {
@@ -346,7 +347,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
       };
       const confirmation = {
         code: 'edit',
-        title: 'edit your account',
+        title: 'user.edit',
+        description: 'Are you sure you want to add your account?'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
         if (value) {

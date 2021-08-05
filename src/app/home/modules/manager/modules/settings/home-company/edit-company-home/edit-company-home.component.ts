@@ -302,7 +302,8 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       };
       const confirmation = {
         code: 'edit',
-        title: 'edit your company',
+        title: 'user.back',
+        description: 'user.back',
       };
       this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
         if (value === true) {
