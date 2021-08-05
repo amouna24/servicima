@@ -23,7 +23,7 @@
       </div>
       <wid-scrollbar fxFlex = 80 fxLayout="row" class="full-width">
         <div fxLayout="column" fxFlexFill >
-          <div fxLayout="row" fxLayoutAlign="center"  *ngFor="let item of certificationArray let pointIndex=index" >
+          <div fxLayout="row" fxLayoutAlign="center"  *ngFor="let item of certificationArray let pointIndex=index" @showBloc>
             <div fxLayout="column" fxFlex="80"  >
             <div fxLayout="row" fxFlex="80" class="bg-pale-grey border-radius-15 full-width">
               <div fxLayout="column" fxFlex="80" class="p-l-20" fxLayoutAlign="center">

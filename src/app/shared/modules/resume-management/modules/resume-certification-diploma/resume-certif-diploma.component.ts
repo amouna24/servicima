@@ -7,7 +7,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -17,6 +17,7 @@ import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations'
     blueToGrey,
     GreyToBlue,
     downLine,
+    showBloc
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
@@ -37,7 +38,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
-  previousRoute = '02';
 
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor
@@ -126,8 +126,13 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
       if (this.sendCertifDiploma.valid && this.showDateError === false) {
         this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
-          this.getCertifDiplomaInfo();
-        });
+          this.resumeService.getCertifDiploma(
+            `?certif_diploma_code=${this.certifDiploma.certif_diploma_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.certifDiplomaArray.push(responseOne[0]);
+                }});        });
       } else {
         this.showDateError = false;
         this.showNumberError = false;
@@ -140,9 +145,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.certifDiplomaUpdate._id = this.id;
       if (this.sendCertifDiploma.valid) {
         this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe((data) => {
+          this.certifDiplomaArray.splice(this.indexUpdate, 0, data);
           console.log('certif updated', data);
         });
-        this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
         this.button = 'Add';
       }
     }
@@ -166,6 +171,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.certifDiplomaCode = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
     this.id = certifDiploma._id;
     this.indexUpdate = pointIndex;
+    this.certifDiplomaArray.splice(pointIndex, 1);
     this.button = 'Save';
   }
 

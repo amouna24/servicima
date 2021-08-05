@@ -41,9 +41,7 @@ export class ResumeLanguageComponent implements OnInit {
   showLevelError: boolean;
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
-  previousRouteIndex = '03';
-  previous: string;
-  result = `translateY(${((9 - 3) * -20)}px)`;
+
   constructor(
     private utilService: UtilsService,
     private fb: FormBuilder,
@@ -62,7 +60,6 @@ export class ResumeLanguageComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    console.log(this.result);
     this.resumeCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
     this.languageArray = [];
     this.ratingArr = [];

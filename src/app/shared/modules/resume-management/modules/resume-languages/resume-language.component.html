@@ -51,7 +51,7 @@
                     Language:
                   </mat-label>
                   <mat-form-field appearance="outline">
-                    <mat-select disableOptionCentering panelClass="panelColor"
+                    <mat-select disableOptionCentering panelClass="panelColor" formControlName="resume_language_code"
                                 placeholder="{{ 'resume-language' | translate }}" required>
                       <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
                     </mat-select>
@@ -99,18 +99,18 @@
             <div fxLayout="column" fxFlexFill>
               <div fxLayout="row">
                 <ng-template [ngIf]="item === '09'">
-                  <span @GreyToBlue style="color: blue; font-size: 10px">{{item}}</span>
+                  <span style="color: blue; font-size: 10px">{{item}}</span>
                 </ng-template>
-                <ng-template [ngIf]="item !== '09' && item !== previousRouteIndex">
+                <ng-template [ngIf]="item !== '09' && item !== '08'">
                   <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
-                <ng-template [ngIf]="item === previousRouteIndex">
-                  <span @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                <ng-template [ngIf]="item === '08'">
+                  <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
                 <ng-template [ngIf]="item === '09'">
-                  <div  [@downLine]="{value: 'void', params: {result: result}}" style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                  <div  @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
                 </ng-template>
               </div>
             </div>

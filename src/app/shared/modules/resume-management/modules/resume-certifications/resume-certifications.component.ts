@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { blueToGrey, GreyToBlue, downLine } from '@shared/animations/animations';
+import { blueToGrey, GreyToBlue, downLine, showBloc } from '@shared/animations/animations';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
@@ -15,6 +15,7 @@ import { blueToGrey, GreyToBlue, downLine } from '@shared/animations/animations'
     blueToGrey,
     GreyToBlue,
     downLine,
+    showBloc
   ]
 })
 export class ResumeCertificationsComponent implements OnInit {
@@ -46,6 +47,7 @@ button: string;
   ngOnInit(): void {
     this.expire = true;
     this.button = 'Add';
+    this.certificationArray = [];
     this.showExpireDatePicker = true;
     this.getCertificationInfo();
     this.createCertifForm();
@@ -77,8 +79,13 @@ button: string;
         this.certificationArrayCount++;
         this.certifForm.controls.expiring_date.enable();
         this.expire = true;
-        this.getCertificationInfo();
-      });
+        this.resumeService.getCertification(
+          `?certification_code=${this.certification.certification_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                this.certificationArray.push(responseOne[0]);
+              }});      });
     } else if (this.button === 'Save') {
       this.certificationUpdate = this.certifForm.value;
       this.certificationUpdate.certification_code = this.certificationCode;
@@ -86,9 +93,7 @@ button: string;
       this.certificationUpdate._id = this.id;
         this.resumeService.updateCertification(this.certificationUpdate).subscribe(data => {
           this.createCertifForm();
-          this.certificationArray[this.indexUpdate] = this.certificationUpdate;
-          this.getCertificationInfo();
-
+          this.certificationArray.splice(this.indexUpdate, 0, data);
         });
         this.button = 'Add';
     }
@@ -189,7 +194,7 @@ button: string;
     this.id = certification._id;
     this.certificationCode = certification.ResumeCertificationKey.certification_code;
     this.indexUpdate = index;
-
+    this.certificationArray.splice( index, 1);
     if (certification.expiring_date !== undefined) {
       this.certifForm.controls.expiring_date.enable();
       this.certifForm.controls.expire.setValue(false);

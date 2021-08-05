@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
-import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
     blueToGrey,
     GreyToBlue,
     downLine,
+    showBloc
   ]
 })
 export class ResumeTechSkillComponent implements OnInit {
@@ -109,23 +110,32 @@ export class ResumeTechSkillComponent implements OnInit {
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid ) {
       this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => {
-        this.getTechnicalSkillsInfo();
-      });
-    }
-    this.arrayTechSkillCount++; } else {
+        this.resumeService.getTechnicalSkills(
+          `?technical_skill_code=${this.TechSkill.technical_skill_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                this.techSkillArray.push(responseOne[0]);
+                   }});
+        this.arrayTechSkillCount++;
+    });
+  } else {
       this.techSkillUpdate = this.sendTechSkill.value;
       this.techSkillUpdate.technical_skill_code = this.technicalSkillCode;
       this.techSkillUpdate.resume_code = this.resumeCode;
       this.techSkillUpdate.skill_index = this.indexUpdate.toString();
       this.techSkillUpdate._id = this.id;
       if (this.sendTechSkill.valid && this.showNumberError === false) {
-        this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => console.log('Technical skill updated =', data));
-      this.techSkillArray[this.indexUpdate] = this.techSkillUpdate;
-      this.button = 'Add'; }
+        this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => {
+          this.techSkillArray.splice(this.indexUpdate, 0,  data);
+          console.log('Technical skill updated =', data);
+        });
+this.button = 'Add'; }
     }
     this.sendTechSkill.reset();
     this.showNumberError = false;
   }
+    }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
    * @param techSkill the Technical Skill model
@@ -138,6 +148,7 @@ export class ResumeTechSkillComponent implements OnInit {
     });
     this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;
+    this.techSkillArray.splice(this.indexUpdate, 1);
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     /*

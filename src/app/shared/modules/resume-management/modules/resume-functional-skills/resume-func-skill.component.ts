@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -16,6 +16,7 @@ import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations'
     blueToGrey,
     GreyToBlue,
     downLine,
+    showBloc
   ]
 })
 export class ResumeFuncSkillComponent implements OnInit {
@@ -144,9 +145,15 @@ export class ResumeFuncSkillComponent implements OnInit {
       this.FuncSkill.index = this.arrayFuncSkillCount;
       if (this.sendFuncSkill.valid) {
         await this.resumeService.addFunctionalSkills(this.FuncSkill).subscribe(data => {
-          this.getFuncSkillsInfo();
+          this.resumeService.getFunctionalSkills(
+            `?functional_skills_code=${this.FuncSkill.functional_skills_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.funcSkillArray.push(responseOne[0]);
+                }});
+          this.arrayFuncSkillCount++;
         });
-        this.arrayFuncSkillCount++;
       } else {
         console.log('Form is not valid');
       }
@@ -157,7 +164,10 @@ export class ResumeFuncSkillComponent implements OnInit {
       this.FuncSkillUpdate.index = this.indexUpdate;
       this.FuncSkillUpdate._id = this.id;
       if (this.sendFuncSkill.valid && !this.showNumberError) {
-        this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => console.log('functional skill updated =', data));
+        this.resumeService.updateFunctionalSkills(this.FuncSkillUpdate).subscribe(data => {
+          console.log('functional skill updated =', data);
+          this.funcSkillArray.splice( this.indexUpdate, 0, data);
+        });
         this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
         this.button = 'Add';
       }
@@ -175,6 +185,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.sendFuncSkill.patchValue({
       skill: functionalSkill.skill,
     });
+    this.funcSkillArray.splice( index, 1);
     this.id = functionalSkill._id;
     this.functional_skill_code = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;
     this.indexUpdate = index;

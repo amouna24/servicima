@@ -18,7 +18,6 @@ const defaultMinFontSize = '20px';
 const defaultMaxFontSize = '20px';
 const defaultMaxPosition = '230px';
 const defaultMinPosition = '51px';
-const defaultPreviousRoute = '01';
 
 export function mainContentAnimation(animationDuration: string = '400ms',
 minWidth: string = defaultMinWidth, maxWidth: string = defaultMaxWidth,
@@ -145,15 +144,27 @@ export let GreyToBlue =  trigger('GreyToBlue', [
   ]),
 ]);
 export let downLine = trigger('downLine', [
-    state('void', style({ transform: '{{result}}'}),
-  { params: { result: 'translateY(0px)'}}),
-    transition('void <=> *',  [
-      animate(500),
-    ])
-  ]);
-export let uPLine =     trigger('showLine', [
-  transition('void => *', [
-    style({ transform: 'translateY(-100px)'}),
-    animate(50, style( { transform: 'translateY(20px)'})),
+  state('void', style({ transform: 'translateY(-20px)' })),
+  transition('void <=> *',  [
+    animate(500),
+  ]),
+]);
+export let showProExp = trigger('showProExp', [
+  transition('void => *',  [
+    style({ opacity: 0}),
+    animate(500),
+  ]),
+  transition('* => void',  [
+    style({ opacity: 100}),
+    animate(1000, style({ opacity: 0})),
+  ]),
+]);
+export let showBloc = trigger('showBloc', [
+  transition('void => *',  [
+    style({ height: 0}),
+    animate(350),
+  ]),
+  transition('* => void',  [
+    animate(500, style({ height: 0})),
   ]),
 ]);

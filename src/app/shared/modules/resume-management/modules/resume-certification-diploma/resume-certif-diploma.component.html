@@ -25,7 +25,7 @@
         <wid-scrollbar fxFlexFill fxLayout="column">
           <div fxLayout="row" fxFlex="55" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
-              <div *ngFor="let item of certifDiplomaArray let pointIndex=index" fxLayout="column">
+              <div *ngFor="let item of certifDiplomaArray let pointIndex=index" fxLayout="column" @showBloc>
                 <div fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80">
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <div fxLayout="row" fxFlex="44">
@@ -159,7 +159,7 @@
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
                 <ng-template [ngIf]="item === '02'">
-                  <div [@downLine]="{ params: {previousRoute: previousRoute}}" style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                  <div @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
                 </ng-template>
               </div>
             </div>

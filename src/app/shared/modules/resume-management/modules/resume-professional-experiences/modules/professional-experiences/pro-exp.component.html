@@ -25,7 +25,7 @@
         <wid-scrollbar fxFlexFill fxLayout="column">
           <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
-              <div *ngFor="let item of proExpArray let pointIndex=index" fxLayout="column">
+              <div *ngFor="let item of proExpArray let pointIndex=index" @showBloc fxLayout="column">
                 <div fxLayout="row" class="bg-pale-grey border-radius-15 " fxFlex="80">
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <div fxLayout="row" fxFlex="44">
@@ -155,10 +155,10 @@
                 <ng-template [ngIf]="item === '07'">
                   <span @GreyToBlue style="color: blue; font-size: 10px">{{item}}</span>
                 </ng-template>
-                <ng-template [ngIf]="item !== '07' && item !== '01'">
+                <ng-template [ngIf]="item !== '07' && item !== '06'">
                   <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
-                <ng-template [ngIf]="item === '01'">
+                <ng-template [ngIf]="item === '06'">
                   <span @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
               </div>

@@ -18,11 +18,15 @@ import { IViewParam } from '@shared/models/view.model';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
+import { showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-general-information',
   templateUrl: './resume-general-information.component.html',
-  styleUrls: ['./resume-general-information.component.scss']
+  styleUrls: ['./resume-general-information.component.scss'],
+  animations: [
+    showProExp,
+  ]
 })
 export class ResumeGeneralInformationComponent implements OnInit {
   CreationForm: FormGroup;

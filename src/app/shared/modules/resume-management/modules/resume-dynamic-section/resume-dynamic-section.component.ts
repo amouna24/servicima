@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
@@ -17,6 +17,8 @@ import { blueToGrey, downLine, GreyToBlue } from '@shared/animations/animations'
     blueToGrey,
     GreyToBlue,
     downLine,
+    showProExp,
+    showBloc
   ],
 })
 export class ResumeDynamicSectionComponent implements OnInit {
@@ -56,21 +58,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.button = 'Add';
     this.getDynamicSectionInfo();
     this.createForm();
-  }
-
-  /**************************************************************************
-   * @description Function that change the index between selected Section using cdkDropListGroup
-   * @param event event of the drag and drop array
-   *************************************************************************/
-  async drop(event: CdkDragDrop<IResumeSectionModel[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
   }
 
   /**************************************************************************
@@ -146,8 +133,13 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.Section.index = this.arraySectionCount.toString();
       if (this.sendSection.valid) {
         this.resumeService.addCustomSection(this.Section).subscribe(data => {
-          this.getDynamicSectionInfo();
-        });
+          this.resumeService.getCustomSection(
+            `?section_code=${this.Section.section_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.SectionArray.push(responseOne[0]);
+                }});          });
       }
     } else {
       this.sectionUpdate = this.sendSection.value;
@@ -156,8 +148,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.sectionUpdate.resume_code = this.resumeCode;
       this.sectionUpdate._id = this.id;
       if (this.sendSection.valid && !this.showNumberError) {
-        this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => console.log('custom section updated =', data));
-        this.SectionArray[this.indexUpdate] = this.sectionUpdate;
+        this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => {
+          console.log('custom section updated =', data);
+          this.SectionArray.splice(this.indexUpdate, 0, data);
+        });
         this.button = 'Add';
       }
     }
@@ -175,6 +169,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
       section_title: dynamicSection.section_title,
       section_desc: dynamicSection.section_desc,
     });
+    this.SectionArray.splice(pointIndex, 1);
     this.id = dynamicSection._id;
     this.section_code = dynamicSection.ResumeSectionKey.section_code;
     this.indexUpdate = pointIndex;

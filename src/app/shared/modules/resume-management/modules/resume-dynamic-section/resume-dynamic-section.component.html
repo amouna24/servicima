@@ -39,30 +39,19 @@
               </div>
             </div>
           </div>
-          <div fxLayout="row" fxFlexFill *ngIf="showSection">
-            <div fxLayout="column"  fxFlexFill>
-              <div cdkDropListGroup>
-                <div class="example-container">
-                  <div
-                    cdkDropList
-                    [cdkDropListData]="SectionArray"
-                    class="example-list"
-                    (cdkDropListDropped)="drop($event)">
-                    <div class="example-box" *ngFor="let item of SectionArray let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
-              <div  class="p-l-65">
-                <div fxLayout="row" fxLayoutGap="10px" class="bg-pale-grey border-radius-15 width-90">
+          <div fxLayout="row" fxFlexFill *ngIf="showSection" @showProExp>
+            <div fxLayout="column"  fxFlexFill fxLayoutGap="10px">
+              <div *ngFor="let item of SectionArray let pointIndex=index" class="p-l-65" @showBloc>
+                <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+                  <br>
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" >
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
-                  </div>
-                </div>
-              </div>
-                    </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
@@ -137,7 +126,7 @@
                   <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
                 <ng-template [ngIf]="item === '07'">
-                  <span @blueToGrey style="color:  #afb1b8; font-size: 10px">{{item}}</span>
+                  <span @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
                 </ng-template>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
