@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { blueToGrey, GreyToBlue, downLine, showBloc } from '@shared/animations/animations';
+import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/animations/animations';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
@@ -15,7 +15,8 @@ import { blueToGrey, GreyToBlue, downLine, showBloc } from '@shared/animations/a
     blueToGrey,
     GreyToBlue,
     downLine,
-    showBloc
+    showBloc,
+    showProExp
   ]
 })
 export class ResumeCertificationsComponent implements OnInit {
@@ -157,7 +158,7 @@ button: string;
   deleteCertification(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete Certification',
+      title: 'resume-delete-certificate',
       description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')

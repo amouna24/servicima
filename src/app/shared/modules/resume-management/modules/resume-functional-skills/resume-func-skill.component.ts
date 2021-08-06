@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -16,7 +16,9 @@ import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/a
     blueToGrey,
     GreyToBlue,
     downLine,
-    showBloc
+    showBloc,
+    showProExp,
+
   ]
 })
 export class ResumeFuncSkillComponent implements OnInit {
@@ -27,7 +29,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   funcSkillArray: IResumeFunctionalSkillsModel[];
   resumeCode: string;
   button: string;
-  functional_skill_code: string;
+  functionalSkillCode: string;
   indexUpdate = 0;
   id: string;
   subscriptionModal: Subscription;
@@ -159,7 +161,7 @@ export class ResumeFuncSkillComponent implements OnInit {
       }
     } else {
       this.FuncSkillUpdate = this.sendFuncSkill.value;
-      this.FuncSkillUpdate.functional_skills_code = this.functional_skill_code;
+      this.FuncSkillUpdate.functional_skills_code = this.functionalSkillCode;
       this.FuncSkillUpdate.resume_code = this.resumeCode;
       this.FuncSkillUpdate.index = this.indexUpdate;
       this.FuncSkillUpdate._id = this.id;
@@ -168,7 +170,6 @@ export class ResumeFuncSkillComponent implements OnInit {
           console.log('functional skill updated =', data);
           this.funcSkillArray.splice( this.indexUpdate, 0, data);
         });
-        this.funcSkillArray[this.indexUpdate] = this.FuncSkillUpdate;
         this.button = 'Add';
       }
     }
@@ -187,10 +188,13 @@ export class ResumeFuncSkillComponent implements OnInit {
     });
     this.funcSkillArray.splice( index, 1);
     this.id = functionalSkill._id;
-    this.functional_skill_code = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;
+    this.functionalSkillCode = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;
     this.indexUpdate = index;
     this.button = 'Save';
   }
+  /**************************************************************************
+   * @description add indexation
+   *************************************************************************/
   addIndexation() {
     const indexationArray = [];
     for (let i = 1; i < 10; i++) {

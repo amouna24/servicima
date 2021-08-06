@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
-import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -16,7 +16,8 @@ import { Router } from '@angular/router';
     blueToGrey,
     GreyToBlue,
     downLine,
-    showBloc
+    showBloc,
+    showProExp
   ]
 })
 export class ResumeTechSkillComponent implements OnInit {
@@ -32,6 +33,7 @@ export class ResumeTechSkillComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+  skillIndex: string;
   /**********************************************************************
    * @description Resume Technical skills constructor
    *********************************************************************/
@@ -118,14 +120,15 @@ export class ResumeTechSkillComponent implements OnInit {
                 this.techSkillArray.push(responseOne[0]);
                    }});
         this.arrayTechSkillCount++;
-    });
+    }); }
   } else {
       this.techSkillUpdate = this.sendTechSkill.value;
       this.techSkillUpdate.technical_skill_code = this.technicalSkillCode;
       this.techSkillUpdate.resume_code = this.resumeCode;
-      this.techSkillUpdate.skill_index = this.indexUpdate.toString();
+      this.techSkillUpdate.skill_index = this.skillIndex;
       this.techSkillUpdate._id = this.id;
-      if (this.sendTechSkill.valid && this.showNumberError === false) {
+      if (this.sendTechSkill.valid) {
+        console.log('this.techSkillUpdate', this.techSkillUpdate, 'other', this.TechSkill);
         this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => {
           this.techSkillArray.splice(this.indexUpdate, 0,  data);
           console.log('Technical skill updated =', data);
@@ -135,7 +138,6 @@ this.button = 'Add'; }
     this.sendTechSkill.reset();
     this.showNumberError = false;
   }
-    }
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
    * @param techSkill the Technical Skill model
@@ -146,13 +148,12 @@ this.button = 'Add'; }
       technical_skill_desc: techSkill.technical_skill_desc,
       technologies: techSkill.technologies,
     });
+    this.techSkillArray.splice(pointIndex, 1);
     this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;
-    this.techSkillArray.splice(this.indexUpdate, 1);
+    this.skillIndex = techSkill.ResumeTechnicalSkillsKey.skill_index;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
-    /*
-    */
   }
   /**************************************************************************
    * @description Delete the selected Custom section

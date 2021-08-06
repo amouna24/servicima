@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-intervention',
@@ -16,7 +16,8 @@ import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/a
     blueToGrey,
     GreyToBlue,
     downLine,
-    showBloc
+    showBloc,
+    showProExp,
   ]
 })
 export class ResumeInterventionComponent implements OnInit {
@@ -134,9 +135,8 @@ export class ResumeInterventionComponent implements OnInit {
       if (this.sendIntervention.valid && !this.showNumberError) {
         this.resumeService.updateIntervention(this.interventionUpdate).subscribe(data => {
           console.log('Intervention updated =', data);
-          this.interventionArray.splice(this.indexUpdate, 0, data);
+          this.interventionArray.splice(this.indexUpdate, 0, this.interventionUpdate);
         });
-        this.interventionArray[this.indexUpdate] = this.interventionUpdate;
         this.button = 'Add';
       }
     }

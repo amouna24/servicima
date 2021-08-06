@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp',
@@ -19,6 +19,8 @@ import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/a
     GreyToBlue,
     downLine,
     showBloc,
+    showProExp,
+
   ]
 })
 export class ProExpComponent implements OnInit {
@@ -176,6 +178,7 @@ export class ProExpComponent implements OnInit {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => {
           console.log('Professional experience updated =', data);
           this.proExpArray.splice(this.indexUpdate, 0 , data);
+          this.filterDate();
         });
         this.button = 'Add';
         this.sendProExp.controls.start_date.enable();

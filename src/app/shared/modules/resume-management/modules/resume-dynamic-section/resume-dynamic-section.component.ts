@@ -5,7 +5,6 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
@@ -35,6 +34,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   sectionUpdate: IResumeSectionModel;
   id: string;
   subscriptionModal: Subscription;
+  showEmpty = true;
 
   /**********************************************************************
    * @description Resume Dynamic Section constructor
@@ -53,7 +53,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
    *************************************************************************/
   ngOnInit(): void {
     this.showNumberError = false;
-    this.showSection = false;
     this.SectionArray = [];
     this.button = 'Add';
     this.getDynamicSectionInfo();
@@ -82,10 +81,11 @@ export class ResumeDynamicSectionComponent implements OnInit {
                       sec.section_code = sec.ResumeSectionKey.section_code;
                     }
                   );
-                  if (this.SectionArray.length !== 0) {
-                    this.showSection = true;
-                  }
+                  this.showSection = true;
+                } else {
+                  this.showSection = false;
                 }
+                this.showEmpty = false;
               }
               ,
               (error) => {

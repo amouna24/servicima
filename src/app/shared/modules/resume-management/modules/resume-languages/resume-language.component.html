@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
 
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
@@ -22,9 +22,9 @@
           <h4 class="steel font-size-18 font-small">{{ 'resume-language' | translate }}</h4>
         </div>
       </div>
-  <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
+  <wid-scrollbar fxLayout="row" fxFlex="80" @showProExp class="full-width">
           <div fxLayout="column" fxFlexFill >
-            <div  *ngFor="let item of languageArray let pointIndex=index"  fxLayoutAlign="center" >
+            <div  *ngFor="let item of languageArray let pointIndex=index"  @showBloc fxLayoutAlign="center" >
               <div fxLayout="column" fxLayoutAlign="center center"  fxFlex="80" class="p-t-10">
                 <div fxLayout="row" fxLayoutAlign=" center" style="min-height: 80px" class="bg-pale-grey border-radius-15 full-width" >
                   <div  fxFlex="30" class="p-l-20" fxLayout="column">

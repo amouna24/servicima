@@ -7,7 +7,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -17,7 +17,8 @@ import { blueToGrey, downLine, GreyToBlue, showBloc } from '@shared/animations/a
     blueToGrey,
     GreyToBlue,
     downLine,
-    showBloc
+    showBloc,
+    showProExp,
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
@@ -32,7 +33,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   maxEndDate: Date;
   showDateError: boolean;
   certifDiplomaCode: string;
-  indexUpdate = 0;
+  indexUpdate: number;
   button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
   id: string;
@@ -183,7 +184,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   deleteCertif(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'resume-delete-certif',
+      title: 'resume-delete-diploma',
       description: 'resume-u-sure'
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')

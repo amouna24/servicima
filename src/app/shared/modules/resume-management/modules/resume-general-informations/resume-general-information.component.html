@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
           <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -21,7 +21,7 @@
                   <h4 class="steel font-size-18 font-small">{{ 'resume-general-info' | translate }}</h4>
                 </div>
               </div>
-              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center" >
+              <div fxLayout="row" fxFlex="80" @showProExp fxLayoutAlign="center" >
                 <wid-scrollbar fxFlexFill >
                   <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around ">
                     <div   fxLayout="column" fxFlex="18"   fxLayoutGap="10px" fxLayoutAlign=" start" >

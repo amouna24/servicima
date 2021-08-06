@@ -10,11 +10,16 @@ import { of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IMyTreeNode } from '@shared/models/treeView';
+import { showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp-projects',
   templateUrl: './pro-exp-projects.component.html',
   styleUrls: ['./pro-exp-projects.component.scss'],
+  animations: [
+    showBloc,
+    showProExp,
+  ]
 })
 export class ProExpProjectsComponent implements OnInit {
   treeControl: NestedTreeControl<IMyTreeNode>;
@@ -159,7 +164,13 @@ export class ProExpProjectsComponent implements OnInit {
       this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
       if (this.sendProject.valid) {
         this.resumeService.addProject(this.Project).subscribe(data => {
-          this.getProjectInfo();
+          this.resumeService.getProject(
+            `?professional_experience_code=${this.Project.professional_experience_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.ProjectArray.push( responseOne[0]);
+                }});
         });
         this.showForm = false;
       } else {
@@ -173,8 +184,10 @@ export class ProExpProjectsComponent implements OnInit {
       this.projectUpdate.professional_experience_code = this.professionalExperienceCode;
       this.projectUpdate._id = this.id;
       if (this.sendProject.valid) {
-        this.resumeService.updateProject(this.projectUpdate).subscribe(data => console.log('project updated =', data));
-        this.ProjectArray[this.indexUpdate] = this.projectUpdate;
+        this.resumeService.updateProject(this.projectUpdate).subscribe(data => {
+          console.log('project updated =', data);
+          this.ProjectArray.splice( this.indexUpdate, 0, data);
+        });
         this.button = 'Add';
         this.showForm = false;
       }
@@ -218,6 +231,7 @@ export class ProExpProjectsComponent implements OnInit {
     this.indexUpdate = pointIndex;
     this.button = 'Save';
     this.showForm = true;
+    this.ProjectArray.splice(pointIndex, 1);
     projectEditArray = [...this.ProjectArray];
     projectEditArray.splice(pointIndex, 1);
     projectEditArray.forEach(

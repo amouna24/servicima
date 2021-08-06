@@ -156,7 +156,7 @@ export let showProExp = trigger('showProExp', [
   ]),
   transition('* => void',  [
     style({ opacity: 100}),
-    animate(1000, style({ opacity: 0})),
+    animate(500, style({ opacity: 0})),
   ]),
 ]);
 export let showBloc = trigger('showBloc', [

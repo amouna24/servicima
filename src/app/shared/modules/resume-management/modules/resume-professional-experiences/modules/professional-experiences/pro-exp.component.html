@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
-        <wid-scrollbar fxFlexFill fxLayout="column">
+        <wid-scrollbar fxFlexFill @showProExp fxLayout="column">
           <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
               <div *ngFor="let item of proExpArray let pointIndex=index" @showBloc fxLayout="column">
@@ -44,7 +44,7 @@
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                     <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
-                            (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}
+                            [disabled]="button === 'Save'"  (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}
                     </button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>

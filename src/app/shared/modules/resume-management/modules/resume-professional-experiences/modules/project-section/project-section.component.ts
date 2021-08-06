@@ -7,13 +7,18 @@ import { Router } from '@angular/router';
 import { IViewParam } from '@shared/models/view.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { showBloc, showProExp } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 @Component({
   selector: 'wid-project-section',
   templateUrl: './project-section.component.html',
-  styleUrls: ['./project-section.component.scss']
+  styleUrls: ['./project-section.component.scss'],
+  animations: [
+    showProExp,
+    showBloc
+  ]
 })
 export class ProjectSectionComponent implements OnInit {
   sendProSectionDetails: FormGroup;
@@ -168,7 +173,13 @@ export class ProjectSectionComponent implements OnInit {
       this.ProDetails.project_code = this.projectCode;
       if (this.sendProDetails.valid) {
         this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
-          this.getProjectDetailsInfo();
+          this.resumeService.getProjectDetails(
+            `?project_details_code=${this.ProDetails.project_details_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.proDetailsArray.push( responseOne[0]);
+                }});
           this.refreshTree.emit(true);
         });
         if (this.ProSectionDetails !== undefined) {
@@ -190,12 +201,11 @@ export class ProjectSectionComponent implements OnInit {
           this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
         });
         this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
-          this.getProjectDetailsInfo();
+          this.proDetailsArray.splice( this.indexUpdate, 1, data);
           this.refreshTree.emit(true);
         });
-        this.proDetailsArray[this.indexUpdate] = this.proDetailUpdate;
         this.button = 'Add';
-      }
+      }   }
       this.proSectionAddArray = [];
       this.arrayProDetailsCount++;
       this.showDesc = true;
@@ -206,7 +216,6 @@ export class ProjectSectionComponent implements OnInit {
       this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
       this.proSectionArray = [];
       this.refreshTree.emit(true);
-    }
     this.createFormProDetails();
   }
   /*****************************************************************
@@ -232,6 +241,7 @@ export class ProjectSectionComponent implements OnInit {
       project_detail_desc: projectDetail.project_detail_desc,
       select: this.select
     });
+    this.proDetailsArray.splice( pointIndex, 1);
     if (projectDetail.project_detail_desc === null || projectDetail.project_detail_desc === '') {
       this.resumeService.getProjectDetailsSection(
         `?project_details_code=${projectDetail.ResumeProjectDetailsKey.project_details_code}`)
@@ -326,7 +336,6 @@ export class ProjectSectionComponent implements OnInit {
     };
     this.proSectionArray[pointIndex].project_details_section_desc = value;
     if (value !== '' && this.sectionContentUpdate._id !== undefined) {
-      console.log(this.sectionContentUpdate);
      this.resumeService.updateProjectDetailsSection(this.sectionContentUpdate).subscribe((res) => {
         console.log('section details updated');
       });

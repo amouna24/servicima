@@ -1,5 +1,5 @@
 
-<div class="dynamic-component-container border-radius-20" fxLayout="row" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="row" @showProExp fxFlex="100">
 
   <div fxLayout="column" fxFlex="4"   ></div>
 
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
-      <ng-template [ngIf]="count === 100">
+      <ng-template [ngIf]="count === 100 && !showEmpty">
 <div fxLayout="column" fxFlexFill>
   <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-congratulation' | translate }}</h1> </div>
   <div fxLayout="row" fxFlex="60" fxLayoutAlign="center center">
@@ -46,7 +46,7 @@
     </div>
 </div>
       </ng-template>
-      <ng-template [ngIf]="count< 100">
+      <ng-template [ngIf]="count< 100 && !showEmpty">
         <div fxLayout="column" fxFlexFill>
           <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1> </div>
           <div fxLayout="row" fxFlex="45" fxFlexAlign="center" fxLayoutAlign="center center">

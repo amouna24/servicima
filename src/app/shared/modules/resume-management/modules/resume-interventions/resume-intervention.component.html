@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -21,7 +21,7 @@
           <h4 class="steel font-size-18 font-small">{{ 'resume-lvl-intervention' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxFlex="80" class="full-width">
+      <wid-scrollbar fxFlex="80" @showProExp class="full-width">
         <div fxLayout="column" fxFlexFill fxLayoutAlign=" center" fxLayoutGap="10px">
           <div *ngFor="let item of interventionArray let pointIndex=index" @showBloc class="p-l-65 full-width">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
@@ -29,7 +29,7 @@
                 <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
