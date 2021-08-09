@@ -168,3 +168,10 @@ export let showBloc = trigger('showBloc', [
     animate(500, style({ height: 0})),
   ]),
 ]);
+export let lineIndexation = trigger( 'lineIndexation', [
+  state( 'void', style({ opacity: 1}), { params: { translate: 'translateY(-80px)' }}),
+  transition(':enter', [
+    style({  transform: '{{translate}}' }),
+    animate('500ms', style({ transform: 'translateY(0)' })),
+  ]),
+]);

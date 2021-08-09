@@ -6,8 +6,9 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { Router, RoutesRecognized } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue, lineIndexation, showBloc, showProExp } from '@shared/animations/animations';
+import { filter, pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -19,6 +20,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     downLine,
     showBloc,
     showProExp,
+    lineIndexation,
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
@@ -39,6 +41,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+  getIndex =  this.getPreviousUrl();
 
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor
@@ -55,7 +58,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.showDateError = false;
     this.showNumberError = false;
     this.button = 'Add';
@@ -63,6 +66,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.initDate();
     this.getCertifDiplomaInfo();
     this.createForm();
+
   }
 
   /**************************************************************************
@@ -240,4 +244,40 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     }
     return(indexationArray);
   }
+      getPreviousUrl() {
+        new Promise((resolve) => {
+         this.router.events
+           .pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
+           .subscribe((events: RoutesRecognized[]) => {
+             resolve(events[0].urlAfterRedirects);
+           });
+       }).then((res) => {
+         return (res);
+       });
+     }
+
+  getIndexF(res): string {
+    console.log('res getIndex=', res);
+     switch (res) {
+       case '/candidate/resume':
+         return `translateY(${(2 - 1) * -20}px)`;
+       case '/candidate/resume/certifications':
+         return `translateY(${(2 - 3) * -20}px)`;
+       case '/candidate/resume/technicalSkills':
+         return `translateY(${(2 - 4) * -20}px)`;
+       case '/candidate/resume/functionalSkills':
+         return `translateY(${(2 - 5) * -20}px)`;
+       case '/candidate/resume/intervention':
+         return `translateY(${(2 - 6) * -20}px)`;
+       case '/candidate/resume/professionalExperience':
+         return `translateY(${(2 - 7) * -20}px)`;
+       case '/candidate/resume/dynamicSection':
+         return `translateY(${(2 - 8) * -20}px)`;
+       case '/candidate/resume/language':
+         return `translateY(${(2 - 9) * -20}px)`;
+       default: {
+         return'translateY(-20px)';
+       }
+     }
+   }
 }

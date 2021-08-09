@@ -158,8 +158,8 @@
                 </ng-template>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
-                <ng-template [ngIf]="item === '02'">
-                  <div @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                <ng-template [ngIf]="item === '02'" >
+                  <div [@lineIndexation]="{ value: ':enter' , params: { translate:  getIndexF(getIndex)}}" style="border-left: 1px solid blue; padding-bottom: 20px"></div>
                 </ng-template>
               </div>
             </div>

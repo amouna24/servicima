@@ -148,6 +148,7 @@ export class ResumeDoneComponent implements OnInit {
       this.count += 13;
     }
     this.showEmpty = false;
+    console.log( this.count);
     return this.count;
   }
 
