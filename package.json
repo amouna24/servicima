@@ -52,7 +52,6 @@
     "node-sass": "4.13.1",
     "rxjs": "6.5.4",
     "tslib": "1.10.0",
-    "web-animations-js": "^2.3.2",
     "zone.js": "0.10.2",
     "zxcvbn": "4.4.2"
   },

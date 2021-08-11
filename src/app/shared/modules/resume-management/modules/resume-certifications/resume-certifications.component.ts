@@ -78,8 +78,6 @@ button: string;
       this.resumeService.addCertification(this.certification).subscribe(data => {
         this.createCertifForm();
         this.certificationArrayCount++;
-        this.certifForm.controls.expiring_date.enable();
-        this.expire = true;
         this.resumeService.getCertification(
           `?certification_code=${this.certification.certification_code}`)
           .subscribe(
@@ -87,6 +85,8 @@ button: string;
               if (responseOne['msg_code'] !== '0004') {
                 this.certificationArray.push(responseOne[0]);
               }});      });
+      this.certifForm.controls.expiring_date.enable();
+      this.expire = true;
     } else if (this.button === 'Save') {
       this.certificationUpdate = this.certifForm.value;
       this.certificationUpdate.certification_code = this.certificationCode;
