@@ -365,6 +365,9 @@ export class ProExpComponent implements OnInit {
     this.showPosError = false;
     this.disableDate = false;
   }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
   addIndexation() {
     const indexationArray = [];
     for (let i = 1; i < 10; i++) {

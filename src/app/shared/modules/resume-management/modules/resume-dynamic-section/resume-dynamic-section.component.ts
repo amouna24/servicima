@@ -203,6 +203,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
         }
       );
   }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
   addIndexation() {
     const indexationArray = [];
     for (let i = 1; i < 10; i++) {

@@ -41,7 +41,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
-  getIndex =  this.getPreviousUrl();
 
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor
@@ -237,6 +236,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
   addIndexation() {
     const indexationArray = [];
     for (let i = 1; i < 10; i++) {
@@ -244,7 +246,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     }
     return(indexationArray);
   }
-      getPreviousUrl() {
+/*      getPreviousUrl() {
         new Promise((resolve) => {
          this.router.events
            .pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
@@ -254,9 +256,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
        }).then((res) => {
          return (res);
        });
-     }
+     }*/
 
-  getIndexF(res): string {
+/*  getIndexF(res): string {
     console.log('res getIndex=', res);
      switch (res) {
        case '/candidate/resume':
@@ -279,5 +281,5 @@ export class ResumeCertifDiplomaComponent implements OnInit {
          return'translateY(-20px)';
        }
      }
-   }
+   }*/
 }
