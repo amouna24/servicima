@@ -26,6 +26,7 @@ export enum InputType {
 export enum FieldsType {
   IMAGE = 'image',
   INPUT = 'input',
+  TEXTAREA = 'textarea',
   SELECT = 'select',
   SELECT_WITH_SEARCH = 'selectWithSearch',
   SLIDE_TOGGLE = 'slideToggle',
