@@ -12,11 +12,20 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-language',
   templateUrl: './resume-language.component.html',
-  styleUrls: ['./resume-language.component.scss']
+  styleUrls: ['./resume-language.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showProExp,
+    showBloc
+
+  ],
 })
 export class ResumeLanguageComponent implements OnInit {
   sendLanguage: FormGroup;
@@ -160,9 +169,20 @@ export class ResumeLanguageComponent implements OnInit {
     this.language.resume_code = this.resumeCode.toString();
     if (this.sendLanguage.valid && this.rating > 0) {
       this.resumeService.addLanguage(this.language).subscribe(data => {
-        this.ratingEdit = [];
-        this.getLanguageInfo();
-      });
+        this.resumeService.getLanguage(
+          `?resume_language_code=${this.language.resume_language_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                responseOne[0].resume_language_code = responseOne[0].ResumeLanguageKey.resume_language_code;
+                this.ratingEdit.push(+responseOne[0].level);
+                this.langList.forEach((value, index) => {
+                  if (value.value === responseOne[0].resume_language_code) {
+                    this.langListRes.push(value);
+                    this.langList.splice(index, 1);
+                  }});
+                this.languageArray.push(responseOne[0]);
+              }});     });
     } else {
       this.showLevelError = true;
     }
@@ -267,5 +287,15 @@ export class ResumeLanguageComponent implements OnInit {
           this.subscriptionModal.unsubscribe();
         }
       );
+  }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
   }
 }

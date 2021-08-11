@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -15,22 +15,22 @@
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
   <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
-    <div fxLayout="column" fxFlexFill>
+    <div fxLayout="column" fxFlex="94">
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{ 'resume-technical-skills' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxLayout="row" fxFlex="80">
+      <wid-scrollbar fxLayout="row" fxFlex="80" @showProExp>
         <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-          <div *ngFor="let item of techSkillArray let pointIndex=index" class="p-l-65">
+          <div *ngFor="let item of techSkillArray let pointIndex=index" class="p-l-65" @showBloc>
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
               <br>
               <div fxLayout="column" fxFlex="80" class="p-l-20">
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
@@ -86,7 +86,7 @@
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey"
-                  routerLink="/candidate/resume/certifDiploma">
+                  routerLink="/candidate/resume/certifications">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
@@ -95,6 +95,33 @@
                   [routerLink]="['/candidate/resume/functionalSkills']">
             {{ 'resume-next' | translate }}
           </button>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlex="6" fxLayoutAlign="start start">
+      <div fxLayout="row" fxFlex="93" fxLayoutAlign=" end">
+        <div fxLayout="column" fxLayoutAlign="end" fxFlexFill>
+          <div fxLayout="row"  *ngFor="let item of addIndexation()">
+            <div fxLayout="column" fxFlexFill>
+              <div fxLayout="row">
+                <ng-template [ngIf]="item === '04'">
+                  <span @GreyToBlue style="color: blue; font-size: 10px">{{item}}</span>
+                </ng-template>
+                <ng-template [ngIf]="item !== '04' && item !== '03'">
+                  <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                </ng-template>
+                <ng-template [ngIf]="item === '03'">
+                  <span  @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                </ng-template>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <ng-template [ngIf]="item === '04'">
+                  <div @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                </ng-template>
+              </div>
+            </div>
+            <br>
+          </div>
         </div>
       </div>
     </div>

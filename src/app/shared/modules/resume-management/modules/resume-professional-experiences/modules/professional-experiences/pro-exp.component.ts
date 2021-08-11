@@ -8,11 +8,20 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp',
   templateUrl: './pro-exp.component.html',
   styleUrls: ['./pro-exp.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showBloc,
+    showProExp,
+
+  ]
 })
 export class ProExpComponent implements OnInit {
   sendProExp: FormGroup;
@@ -148,9 +157,16 @@ export class ProExpComponent implements OnInit {
         this.placeHolderEndDate = 'resume-end-date';
         this.sendProExp.controls.end_date.enable();
         this.sendProExp.controls.end_date.setValue('');
-        this.getProExpInfo();
+        this.resumeService.getProExp(
+          `?professional_experience_code=${this.ProExp.professional_experience_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                this.proExpArray.push(responseOne[0]);
+                this.filterDate();
+                this.arrayProExpCount++;
+              }});
       });
-      this.arrayProExpCount++;
     } else {
       this.proExpUpdate = this.sendProExp.value;
       this.proExpUpdate.start_date = this.startDateUpdate;
@@ -159,8 +175,11 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate.resume_code = this.resumeCode;
       this.proExpUpdate._id = this.id;
       if (this.sendProExp.valid) {
-        this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => console.log('Professional experience updated =', data));
-        this.proExpArray[this.indexUpdate] = this.proExpUpdate;
+        this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => {
+          console.log('Professional experience updated =', data);
+          this.proExpArray.splice(this.indexUpdate, 0 , data);
+          this.filterDate();
+        });
         this.button = 'Add';
         this.sendProExp.controls.start_date.enable();
         this.sendProExp.controls.end_date.enable();
@@ -169,7 +188,6 @@ export class ProExpComponent implements OnInit {
     }
     this.createForm();
     this.initDates();
-    this.getProExpInfo();
   }
 
   /**************************************************************************
@@ -188,7 +206,7 @@ export class ProExpComponent implements OnInit {
     this.endDAteUpdate = this.sendProExp.controls.end_date.value;
     this.sendProExp.controls.start_date.disable();
     this.sendProExp.controls.end_date.disable();
-
+    this.proExpArray.splice(index, 1);
     this.id = professionalExp._id;
     this.button = 'Save';
     this.professional_experience_code = professionalExp.ResumeProfessionalExperienceKey.professional_experience_code;
@@ -346,5 +364,15 @@ export class ProExpComponent implements OnInit {
     this.checkedBox = false;
     this.showPosError = false;
     this.disableDate = false;
+  }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
   }
 }

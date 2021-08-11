@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
 
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
@@ -15,16 +15,17 @@
   <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div fxLayout="row" fxFlex="88">
-    <div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="88" >
+    <div fxLayout="column" fxFlex="94">
       <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{ 'resume-dynamic-section' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxLayout="row" fxFlex="80" class="full-width">
+      <wid-scrollbar fxLayout="row" fxFlex="80" @showProExp class="full-width">
         <div fxLayout="column" fxFlexFill>
-          <div fxLayout="row" fxFlex="52" class="justify-content" *ngIf="!showSection">
+          <ng-template [ngIf]="!showSection && !showEmpty">
+          <div fxLayout="row" fxFlex="52" class="justify-content" >
             <div fxLayout="column" fxFlex="80" class="no-section">
               <div fxLayout="row" fxFlexFill>
                 <div fxLayout="column" fxFlexFill fxLayoutGap="30px" class="justify-content">
@@ -39,30 +40,21 @@
               </div>
             </div>
           </div>
-          <div fxLayout="row" fxFlexFill *ngIf="showSection">
-            <div fxLayout="column"  fxFlexFill>
-              <div cdkDropListGroup>
-                <div class="example-container">
-                  <div
-                    cdkDropList
-                    [cdkDropListData]="SectionArray"
-                    class="example-list"
-                    (cdkDropListDropped)="drop($event)">
-                    <div class="example-box" *ngFor="let item of SectionArray let pointIndex=index" fxLayout="column"  class="p-b-10" fxLayoutGap="10px" cdkDrag>
-              <div  class="p-l-65">
-                <div fxLayout="row" fxLayoutGap="10px" class="bg-pale-grey border-radius-15 width-90">
+          </ng-template>
+          <ng-template [ngIf]="showSection && !showEmpty">
+          <div fxLayout="row" fxFlexFill *ngIf="showSection" @showProExp>
+            <div fxLayout="column"  fxFlexFill fxLayoutGap="10px">
+              <div *ngFor="let item of SectionArray let pointIndex=index" class="p-l-65" @showBloc>
+                <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
+                  <br>
                   <div fxLayout="column" fxFlex="80" class="p-l-20">
                     <p class="font-normal font-size-15">{{item.section_title}}</p>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
-                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" >
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
-                  </div>
-                </div>
-              </div>
-                    </div>
+                  <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteSection(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
@@ -108,6 +100,7 @@
               </form>
             </div>
           </div>
+          </ng-template>
         </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
@@ -121,6 +114,34 @@
                   [routerLink]="['/candidate/resume/language']">
             {{ 'resume-next' | translate }}
           </button>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start start" fxFlex="6">
+      <div fxLayout="row" fxFlex="93" fxLayoutAlign=" end">
+        <div fxLayout="column" fxLayoutAlign="end" fxFlexFill>
+          <div fxLayout="row"  *ngFor="let item of addIndexation()">
+            <div fxLayout="column" fxFlexFill>
+              <div fxLayout="row">
+                <ng-template [ngIf]="item === '08'">
+                  <span @GreyToBlue style="color: blue; font-size: 10px">{{item}}</span>
+                </ng-template>
+                <ng-template [ngIf]="item !== '08' && item !== '07'">
+                  <span style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                </ng-template>
+                <ng-template [ngIf]="item === '07'">
+                  <span @blueToGrey style="color: #afb1b8; font-size: 10px">{{item}}</span>
+                </ng-template>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <ng-template [ngIf]="item === '08'">
+                  <div @downLine style="border-left: 1px solid blue; padding-bottom: 20px"></div>
+                </ng-template>
+              </div>
+            </div>
+
+            <br>
+          </div>
         </div>
       </div>
     </div>

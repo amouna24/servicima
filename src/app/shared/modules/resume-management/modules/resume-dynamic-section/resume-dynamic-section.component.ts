@@ -5,13 +5,20 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
   templateUrl: './resume-dynamic-section.component.html',
-  styleUrls: ['./resume-dynamic-section.component.scss']
+  styleUrls: ['./resume-dynamic-section.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showProExp,
+    showBloc
+  ],
 })
 export class ResumeDynamicSectionComponent implements OnInit {
   showNumberError: boolean;
@@ -27,6 +34,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   sectionUpdate: IResumeSectionModel;
   id: string;
   subscriptionModal: Subscription;
+  showEmpty = true;
 
   /**********************************************************************
    * @description Resume Dynamic Section constructor
@@ -45,26 +53,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
    *************************************************************************/
   ngOnInit(): void {
     this.showNumberError = false;
-    this.showSection = false;
     this.SectionArray = [];
     this.button = 'Add';
     this.getDynamicSectionInfo();
     this.createForm();
-  }
-
-  /**************************************************************************
-   * @description Function that change the index between selected Section using cdkDropListGroup
-   * @param event event of the drag and drop array
-   *************************************************************************/
-  async drop(event: CdkDragDrop<IResumeSectionModel[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
   }
 
   /**************************************************************************
@@ -89,10 +81,11 @@ export class ResumeDynamicSectionComponent implements OnInit {
                       sec.section_code = sec.ResumeSectionKey.section_code;
                     }
                   );
-                  if (this.SectionArray.length !== 0) {
-                    this.showSection = true;
-                  }
+                  this.showSection = true;
+                } else {
+                  this.showSection = false;
                 }
+                this.showEmpty = false;
               }
               ,
               (error) => {
@@ -140,8 +133,13 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.Section.index = this.arraySectionCount.toString();
       if (this.sendSection.valid) {
         this.resumeService.addCustomSection(this.Section).subscribe(data => {
-          this.getDynamicSectionInfo();
-        });
+          this.resumeService.getCustomSection(
+            `?section_code=${this.Section.section_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.SectionArray.push(responseOne[0]);
+                }});          });
       }
     } else {
       this.sectionUpdate = this.sendSection.value;
@@ -150,8 +148,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
       this.sectionUpdate.resume_code = this.resumeCode;
       this.sectionUpdate._id = this.id;
       if (this.sendSection.valid && !this.showNumberError) {
-        this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => console.log('custom section updated =', data));
-        this.SectionArray[this.indexUpdate] = this.sectionUpdate;
+        this.resumeService.updateCustomSection(this.sectionUpdate).subscribe(data => {
+          console.log('custom section updated =', data);
+          this.SectionArray.splice(this.indexUpdate, 0, data);
+        });
         this.button = 'Add';
       }
     }
@@ -169,6 +169,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
       section_title: dynamicSection.section_title,
       section_desc: dynamicSection.section_desc,
     });
+    this.SectionArray.splice(pointIndex, 1);
     this.id = dynamicSection._id;
     this.section_code = dynamicSection.ResumeSectionKey.section_code;
     this.indexUpdate = pointIndex;
@@ -202,5 +203,14 @@ export class ResumeDynamicSectionComponent implements OnInit {
         }
       );
   }
-
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
+  }
 }
