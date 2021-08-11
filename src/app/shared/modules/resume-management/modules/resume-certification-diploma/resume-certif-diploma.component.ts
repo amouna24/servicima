@@ -7,7 +7,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router, RoutesRecognized } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, lineIndexation, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 import { filter, pairwise } from 'rxjs/operators';
 
 @Component({
@@ -20,7 +20,6 @@ import { filter, pairwise } from 'rxjs/operators';
     downLine,
     showBloc,
     showProExp,
-    lineIndexation,
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
