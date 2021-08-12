@@ -22,6 +22,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
 import { showProExp } from '@shared/animations/animations';
+import { map } from 'rxjs/internal/operators/map';
 
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,6 +39,19 @@ import { environment } from '../../../../../../environments/environment';
   ]
 })
 export class ResumeDoneComponent implements OnInit {
+
+  /**********************************************************************
+   * @description Resume Preview constructor
+   *********************************************************************/
+  constructor(
+    private resumeService: ResumeService,
+    private userService: UserService,
+    private datePipe: DatePipe,
+    private uploadService: UploadService,
+    private dialog: MatDialog,
+    private translate: TranslateService
+  ) {
+  }
   count = 0;
   resumeCode: string;
   generalInfoList: IResumeModel[];
@@ -66,18 +80,13 @@ export class ResumeDoneComponent implements OnInit {
   label: object;
   showEmpty = true;
 
-  /**********************************************************************
-   * @description Resume Preview constructor
-   *********************************************************************/
-  constructor(
-    private resumeService: ResumeService,
-    private userService: UserService,
-    private datePipe: DatePipe,
-    private uploadService: UploadService,
-    private dialog: MatDialog,
-    private translate: TranslateService
-  ) {
-  }
+  /**************************************************************************
+   * @description generate Resume in docx format or in PDF format
+   * @param action which differs between the generation in pdf or docx format
+   * @param theme choose the theme of the resume
+   * @param data it contains the necessary data for the Resume
+   *************************************************************************/
+  selectedFile = { file: null, name: '' };
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -287,8 +296,12 @@ export class ResumeDoneComponent implements OnInit {
    * @param res It contains the resume in docx format
    * @return res return the image uploaded
    *************************************************************************/
-  async uploadFile(res) {
-    return await this.uploadService.getImage(res);
+  async uploadFile(formData) {
+    return await this.uploadService.uploadImage(formData)
+      .pipe(
+         map(response => response.file.filename)
+      )
+      .toPromise();
   }
 
   /**************************************************************************
@@ -429,29 +442,62 @@ export class ResumeDoneComponent implements OnInit {
       }
     });
   }
-
-  /**************************************************************************
-   * @description generate Resume in docx format or in PDF format
-   * @param action which differs between the generation in pdf or docx format
-   * @param theme choose the theme of the resume
-   * @param data it contains the necessary data for the Resume
-   *************************************************************************/
   downloadDocs(data: object, action: string, theme: string) {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
         if (action === 'preview') {
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');
+          const file = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
+            { lastModified: new Date().getTime(), type: 'pdf' });
+          const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+          formData.append('file', file);
+          formData.append('caption', file.name);
+          this.selectedFile.file = formData;
+          this.selectedFile.name = file.name;
+          await this.uploadFile(this.selectedFile.file).then( (filename) => {
+            this.generalInfoList[0].resume_filename_pdf = filename;
+            this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+            this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+            this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+            this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+            this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+            console.log(this.generalInfoList[0]);
+            this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+              console.log('new general info ', generalInfo);
+            });
+          });
           this.loading = false;
         } else if (action === 'generate') {
           saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-          await this.uploadFile(res);
+          const file = new File([res], `${this.generalInfoList[0].email_address}.docx`,
+            { lastModified: new Date().getTime(), type: 'docx' });
+          const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+          formData.append('file', file);
+          formData.append('caption', file.name);
+          this.selectedFile.file = formData;
+          this.selectedFile.name = file.name;
+          await this.uploadFile(this.selectedFile.file).then( (filename) => {
+            console.log('filename', filename);
+            this.generalInfoList[0].resume_filename_docx = filename;
+            this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+            this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+            this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+            this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+            this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+            console.log(this.generalInfoList[0]);
+            this.resumeService.updateResume(this.generalInfoList[0]).subscribe( (generalInfo) => {
+              console.log('new general info ', generalInfo);
+            });
+
+          });
         }
       },
       (error) => {
         console.log(error);
       }
     );
+
   }
 
   /**************************************************************************
