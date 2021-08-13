@@ -7,6 +7,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/animations/animations';
+import { Router } from '@angular/router';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
@@ -41,7 +42,10 @@ button: string;
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
-) { }
+    private router: Router,
+) {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -103,6 +107,27 @@ button: string;
    * @description Get Certification data from Resume Service
    *************************************************************************/
   getCertificationInfo() {
+    if (this.resumeCode) {
+      this.resumeService.getCertification(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.certificationArray = responseOne;
+              this.certificationArrayCount = responseOne.length;
+              this.certificationArray.forEach(
+                (certif) => {
+                  certif.certification_code = certif.ResumeCertificationKey.certification_code;
+                }
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -136,6 +161,7 @@ button: string;
           }
         },
       );
+    }
     }
   /*******************************************************************
    * @description Action on checkbox of the expired certificate
@@ -214,5 +240,20 @@ button: string;
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/technicalSkills'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/certifications'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
   }
 }

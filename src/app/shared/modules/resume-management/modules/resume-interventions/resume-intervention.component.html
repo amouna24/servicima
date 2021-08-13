@@ -67,13 +67,13 @@
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/professionalExperience']">
+                  (click)="routeNextBack('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

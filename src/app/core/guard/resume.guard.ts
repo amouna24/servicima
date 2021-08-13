@@ -25,28 +25,32 @@ export class ResumeGuard implements CanActivate {
   }
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    state: RouterStateSnapshot,
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     this.spinnerService.isLoadingSubject.next(false);
     this.translate.get('You must set your general information first').subscribe((message: string) => {
       this.message = message;
     });
 
     return new Promise<boolean>(resolve => {
-
-      this.resumeService.getResume(
-        `?email_address=${this.userService.connectedUser$
-          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-        .subscribe(
-          async (generalInfo) => {
-            if (generalInfo['msg_code'] === '0004') {
-              this.router.navigate(['/candidate/resume']);
-              this.utilsService.openSnackBar(this.message, 'close');
-              this.spinnerService.isLoadingSubject.next(false);
-              resolve(true);
-            } else {
-              resolve(true);
-            }
-          });
+         if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+           resolve(true);
+         } else {
+           this.resumeService.getResume(
+             `?email_address=${this.userService.connectedUser$
+               .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
+             .subscribe(
+               async (generalInfo) => {
+                 if (generalInfo['msg_code'] === '0004') {
+                   this.router.navigate(['/candidate/resume']);
+                   this.utilsService.openSnackBar(this.message, 'close');
+                   this.spinnerService.isLoadingSubject.next(false);
+                   resolve(true);
+                 } else {
+                   resolve(true);
+                 }
+               });
+         }
     }
     );
   }

@@ -44,6 +44,7 @@ export class ResumeInterventionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -61,39 +62,61 @@ export class ResumeInterventionComponent implements OnInit {
    * @description Get Intervention Data from Resume Service
    *************************************************************************/
   getInterventionInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getIntervention(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.interventionArray = responseOne;
-                  this.interventionArray.forEach(
-                    (func) => {
-                      func.intervention_code = func.ResumeInterventionKey.intervention_code;
-                    }
-                  );
+    if (this.resumeCode) {
+      this.resumeService.getIntervention(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.interventionArray = responseOne;
+              this.interventionArray.forEach(
+                (func) => {
+                  func.intervention_code = func.ResumeInterventionKey.intervention_code;
                 }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe((response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getIntervention(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.interventionArray = responseOne;
+                    this.interventionArray.forEach(
+                      (func) => {
+                        func.intervention_code = func.ResumeInterventionKey.intervention_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
+
   }
 
   /**************************************************************************
@@ -198,5 +221,20 @@ export class ResumeInterventionComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/functionalSkills'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
   }
 }

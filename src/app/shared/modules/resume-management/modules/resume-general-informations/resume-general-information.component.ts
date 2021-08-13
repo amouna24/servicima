@@ -49,6 +49,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   resumeCode: string;
   years = 0;
   showNumberError = false;
+  generalInfoManager: IResumeModel;
 
   /**********************************************************************
    * @description Resume general information constructor
@@ -66,6 +67,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private appInitializerService: AppInitializerService,
     private uploadService: UploadService,
   ) {
+    this.generalInfoManager = this.router.getCurrentNavigation().extras.state?.generalInformation;
   }
 
   /**************************************************************************
@@ -80,6 +82,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.initForm();
     this.getLanguageList();
     await this.getResume();
+    console.log('general info manager = ', this.generalInfoManager);
   }
 
   /**************************************************************************
@@ -93,89 +96,96 @@ export class ResumeGeneralInformationComponent implements OnInit {
    *  @description Get Resume Data from Resume Service and reusme Image from upload Service
    *************************************************************************/
   async getResume() {
-    await this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`)
-      .subscribe(
-        async (generalInfo) => {
-          if (generalInfo['msg_code'] !== '0004') {
-            if (!!generalInfo) {
-              if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
-                this.haveImage = generalInfo[0].image;
-                this.avatar = await this.uploadService.getImage(generalInfo[0].image);
-              } else {
-                this.userService.connectedUser$.subscribe((data) => {
-                  if (!!data) {
-                    this.user = data['user'][0];
-                    this.haveImage = data['user'][0]['photo'];
-                    if (!this.haveImage) {
-                      this.userService.haveImage$.subscribe((res) => {
-                          this.haveImage = res;
-                        }
-                      );
-                    }
-                  }
-                });
-                this.userService.avatar$.subscribe(
-                  avatar => {
-                    this.avatar = avatar;
-                  }
-                );
-              }
-              this.updateForm(generalInfo);
-              this.update = true;
-            }
-          } else {
-            this.userService.connectedUser$.subscribe((data) => {
-              if (!!data) {
-                this.user = data['user'][0];
-                this.haveImage = data['user'][0]['photo'];
-                if (!this.haveImage) {
-                  this.userService.haveImage$.subscribe((res) => {
-                      this.haveImage = res;
-                    }
-                  );
-                }
-              }
-            });
-            this.userService.avatar$.subscribe(
-              avatar => {
-                this.avatar = avatar;
-              }
-            );
+    if (this.generalInfoManager) {
+      if ((this.generalInfoManager.image !== undefined) && (this.generalInfoManager.image !== null)) {
+        this.haveImage = this.generalInfoManager.image;
+        this.avatar = await this.uploadService.getImage(this.generalInfoManager.image);
+      } else {
+        this.userService.avatar$.subscribe(
+          avatar => {
+            this.avatar = avatar;
           }
-        }
-      );
-  }
-
-  /**************************************************************************
-   * @description set Existing data in the Resume Form
-   * @param generalInformation: General information model
-   *************************************************************************/
-  async updateForm(generalInformation: IResumeModel[]) {
-    this.CreationForm.patchValue({
-      init_name: generalInformation[0].init_name,
-      actual_job: generalInformation[0].actual_job,
-      years_of_experience: generalInformation[0].years_of_experience,
-      language_id: generalInformation[0].ResumeKey.language_id,
-      resume_code: generalInformation[0].ResumeKey.resume_code,
-      image: generalInformation[0].image,
-    });
-    console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
-    if (this.CreationForm.controls.years_of_experience.value !== null) {
-      this.showHideYears();
+        );
+      }
+      await this.updateForm(this.generalInfoManager);
+      this.update = true;
     } else {
       await this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
           .getValue().user[0]['company_email']}`)
         .subscribe(
-          (response) => {
-            if (response['msg_code'] !== '0004') {
-              this.resumeCode = response[0].ResumeKey.resume_code.toString();
+          async (generalInfo) => {
+            if (generalInfo['msg_code'] !== '0004') {
+              if (!!generalInfo) {
+                if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
+                  this.haveImage = generalInfo[0].image;
+                  this.avatar = await this.uploadService.getImage(generalInfo[0].image);
+                } else {
+                  this.userService.connectedUser$.subscribe((data) => {
+                    if (!!data) {
+                      this.user = data['user'][0];
+                      this.haveImage = data['user'][0]['photo'];
+                      if (!this.haveImage) {
+                        this.userService.haveImage$.subscribe((res) => {
+                            this.haveImage = res;
+                          }
+                        );
+                      }
+                    }
+                  });
+                  this.userService.avatar$.subscribe(
+                    avatar => {
+                      this.avatar = avatar;
+                    }
+                  );
+                }
+                this.updateForm(generalInfo[0]);
+                this.update = true;
+              }
+            } else {
+              this.userService.connectedUser$.subscribe((data) => {
+                if (!!data) {
+                  this.user = data['user'][0];
+                  this.haveImage = data['user'][0]['photo'];
+                  if (!this.haveImage) {
+                    this.userService.haveImage$.subscribe((res) => {
+                        this.haveImage = res;
+                      }
+                    );
+                  }
+                }
+              });
+              this.userService.avatar$.subscribe(
+                avatar => {
+                  this.avatar = avatar;
+                }
+              );
+            }
+          }
+        );
+    }
+  }
+
+  /**************************************************************************
+   * @description set Existing data in the Resume Form
+   * @param generalInformation: General information model
+   *************************************************************************/
+  async updateForm(generalInformation: IResumeModel) {
+    this.CreationForm.patchValue({
+      init_name: generalInformation.init_name,
+      actual_job: generalInformation.actual_job,
+      years_of_experience: generalInformation.years_of_experience,
+      language_id: generalInformation.ResumeKey.language_id,
+      resume_code: generalInformation.ResumeKey.resume_code,
+      image: generalInformation.image,
+    });
+    console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
+    if (this.CreationForm.controls.years_of_experience.value !== null) {
+      this.showHideYears();
+    } else {
               this.resumeService.getProExp(
-                `?resume_code=${this.resumeCode}`)
+                `?resume_code=${generalInformation.ResumeKey.resume_code}`)
                 .subscribe(
                   (responseProExp) => {
                     if (responseProExp['msg_code'] !== '0004') {
@@ -194,17 +204,16 @@ export class ResumeGeneralInformationComponent implements OnInit {
                     }
                   });
             }
-          });
     }
-  }
-
   /********************************************************
    * @description Initialization of Resume Form
    ********************************************************/
   initForm() {
     this.CreationForm = this.fb.group({
-      application_id: this.localStorageService.getItem('userCredentials').application_id,
-      email_address: this.localStorageService.getItem('userCredentials').email_address,
+      application_id: this.generalInfoManager ? this.generalInfoManager.application_id :
+        this.localStorageService.getItem('userCredentials').application_id,
+      email_address: this.generalInfoManager ? this.generalInfoManager.email_address :
+        this.localStorageService.getItem('userCredentials').email_address,
       company_email: this.company,
       resume_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES`,
       language_id: ['', Validators['required']],
@@ -246,8 +255,13 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
+        console.log(this.generalInfo);
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
-          this.router.navigate(['/candidate/resume/certifDiploma']);
+          this.router.navigate(['/candidate/resume/certifDiploma'], {
+          state: {
+            resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+          }
+          });
         });
       }
     }

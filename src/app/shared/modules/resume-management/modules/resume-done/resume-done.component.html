@@ -28,11 +28,26 @@
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
       <ng-template [ngIf]="count === 100 && !showEmpty">
 <div fxLayout="column" fxFlexFill>
-  <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-congratulation' | translate }}</h1> </div>
+  <div fxLayout="row" fxFlexAlign="center">
+    <ng-template [ngIf]="userType === 'candidate'">
+      <h1 class="font-medium font-size-24 cerulean-blue">{{ 'resume-congratulation' | translate }}</h1>
+    </ng-template>
+    <ng-template [ngIf]="userType === 'manager'">
+      <h1 class="font-medium font-size-24 cerulean-blue"> Resume Completed</h1>
+    </ng-template>
+  </div>
   <div fxLayout="row" fxFlex="60" fxLayoutAlign="center center">
    <img src="assets/icons/done-resume.svg">
   </div>
-  <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-done' | translate }}</h1> </div>
+  <div fxLayout="row" fxFlex="20" fxFlexAlign="center">
+    <ng-template [ngIf]="userType === 'candidate'">
+    <h1 class="font-extra-light font-size-18 black"> {{ 'resume-done' | translate }}</h1>
+    </ng-template>
+    <ng-template [ngIf]="userType === 'manager'">
+      <h1 class="font-extra-light font-size-18 black">this candidate has reached 100% of his Resume </h1>
+
+    </ng-template>
+  </div>
   <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
 
     <button mat-raised-button type="submit" color="primary" class="white  btn-large" [class.spinner-auth]="loading" (click)="openThemeDialog('preview')" [style]="{marginRight: '4%'}">
@@ -48,7 +63,14 @@
       </ng-template>
       <ng-template [ngIf]="count< 100 && !showEmpty">
         <div fxLayout="column" fxFlexFill>
-          <div fxLayout="row" fxFlexAlign="center"><h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1> </div>
+          <div fxLayout="row" fxFlexAlign="center">
+            <ng-template [ngIf]="userType === 'candidate'">
+              <h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1>
+            </ng-template>
+            <ng-template [ngIf]="userType === 'manager'">
+              <h1 class="font-medium font-size-24 cerulean-blue"> this candidate has reached {{count}}%  of his resume</h1>
+            </ng-template>
+          </div>
           <div fxLayout="row" fxFlex="45" fxFlexAlign="center" fxLayoutAlign="center center">
            <img src="assets/icons/done-resume.svg">
           </div>

@@ -45,6 +45,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -62,41 +63,63 @@ export class ResumeFuncSkillComponent implements OnInit {
    * @description Get Functional skills data from Resume Service
    *************************************************************************/
   getFuncSkillsInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe(
-      (response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getFunctionalSkills(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.funcSkillArray = responseOne;
-                  this.arrayFuncSkillCount = responseOne.length;
-                  this.funcSkillArray.forEach(
-                    (func) => {
-                      func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
-                    }
-                  );
+    if (this.resumeCode) {
+      this.resumeService.getFunctionalSkills(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.funcSkillArray = responseOne;
+              this.arrayFuncSkillCount = responseOne.length;
+              this.funcSkillArray.forEach(
+                (func) => {
+                  func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
                 }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe(
+        (response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getFunctionalSkills(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.funcSkillArray = responseOne;
+                    this.arrayFuncSkillCount = responseOne.length;
+                    this.funcSkillArray.forEach(
+                      (func) => {
+                        func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
   }
 
   /**************************************************************************
@@ -202,4 +225,20 @@ export class ResumeFuncSkillComponent implements OnInit {
     }
     return(indexationArray);
   }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/intervention'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/technicalSkills'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
+  }
+
 }

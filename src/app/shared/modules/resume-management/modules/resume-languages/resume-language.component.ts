@@ -44,6 +44,7 @@ export class ResumeLanguageComponent implements OnInit {
   showLevelError: boolean;
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
+  button: string;
 
   constructor(
     private utilService: UtilsService,
@@ -57,13 +58,15 @@ export class ResumeLanguageComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    this.resumeCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-LANG`;
+    console.log('connected', this.userService.connectedUser$.getValue());
+    this.button = this.resumeCode ? 'Save' : 'Next';
     this.languageArray = [];
     this.ratingArr = [];
     this.languageArray = [];
@@ -214,48 +217,74 @@ export class ResumeLanguageComponent implements OnInit {
    * @description Get Language Data from Resume Service
    *************************************************************************/
   getLanguageInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`)
-      .subscribe(
-        (response) => {
-          if (response['msg_code'] !== '0004') {
-            this.resumeCode = response[0].ResumeKey.resume_code.toString();
-            this.resumeService.getLanguage(
-              `?resume_code=${this.resumeCode}`)
-              .subscribe(
-                (responseOne) => {
-                  if (responseOne['msg_code'] !== '0004') {
-                    this.languageArray = responseOne;
-                    this.languageArray.forEach(
-                      (lang) => {
-                        this.ratingEdit.push(+lang.level);
-                        lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
-                        this.langList.forEach((value, index) => {
-                          if (value.value === lang.resume_language_code) {
-                            this.langListRes.push(value);
-                            this.langList.splice(index, 1);
-                          }
+    if (this.resumeCode) {
+      this.resumeService.getLanguage(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.languageArray = responseOne;
+              this.languageArray.forEach(
+                (lang) => {
+                  this.ratingEdit.push(+lang.level);
+                  lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
+                  this.langList.forEach((value, index) => {
+                    if (value.value === lang.resume_language_code) {
+                      this.langListRes.push(value);
+                      this.langList.splice(index, 1);
+                    }
+                  });
+                });
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`)
+        .subscribe(
+          (response) => {
+            if (response['msg_code'] !== '0004') {
+              this.resumeCode = response[0].ResumeKey.resume_code.toString();
+              this.resumeService.getLanguage(
+                `?resume_code=${this.resumeCode}`)
+                .subscribe(
+                  (responseOne) => {
+                    if (responseOne['msg_code'] !== '0004') {
+                      this.languageArray = responseOne;
+                      this.languageArray.forEach(
+                        (lang) => {
+                          this.ratingEdit.push(+lang.level);
+                          lang.resume_language_code = lang.ResumeLanguageKey.resume_language_code;
+                          this.langList.forEach((value, index) => {
+                            if (value.value === lang.resume_language_code) {
+                              this.langListRes.push(value);
+                              this.langList.splice(index, 1);
+                            }
+                          });
                         });
-                      });
-                  }
-                },
-                (error) => {
-                  if (error.error.msg_code === '0004') {
-                  }
-                },
-              );
-          } else {
-            this.router.navigate(['/candidate/resume/']);
-          }
-        },
-        (error) => {
-          if (error.error.msg_code === '0004') {
-          }
-        },
-      );
-
+                    }
+                  },
+                  (error) => {
+                    if (error.error.msg_code === '0004') {
+                    }
+                  },
+                );
+            } else {
+              this.router.navigate(['/candidate/resume/']);
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    }
   }
 
   /**************************************************************************
@@ -297,5 +326,20 @@ export class ResumeLanguageComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/done'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/intervention'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
   }
 }

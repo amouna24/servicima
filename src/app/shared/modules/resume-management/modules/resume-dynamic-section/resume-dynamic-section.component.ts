@@ -46,6 +46,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -63,46 +64,73 @@ export class ResumeDynamicSectionComponent implements OnInit {
    * @description Get Dynamic section Data from Resume Service
    *************************************************************************/
   getDynamicSectionInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getCustomSection(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.SectionArray = responseOne;
-                  this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
-                  this.SectionArray.forEach(
-                    (sec) => {
-                      sec.section_code = sec.ResumeSectionKey.section_code;
-                    }
-                  );
-                  this.showSection = true;
-                } else {
-                  this.showSection = false;
+    if (this.resumeCode) {
+      this.resumeService.getCustomSection(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.SectionArray = responseOne;
+              this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
+              this.SectionArray.forEach(
+                (sec) => {
+                  sec.section_code = sec.ResumeSectionKey.section_code;
                 }
-                this.showEmpty = false;
-              }
-              ,
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+              this.showSection = true;
+            } else {
+              this.showSection = false;
+            }
+            this.showEmpty = false;
+          }
+          ,
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe((response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getCustomSection(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.SectionArray = responseOne;
+                    this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
+                    this.SectionArray.forEach(
+                      (sec) => {
+                        sec.section_code = sec.ResumeSectionKey.section_code;
+                      }
+                    );
+                    this.showSection = true;
+                  } else {
+                    this.showSection = false;
+                  }
+                  this.showEmpty = false;
+                  console.log(this.showSection , this.showEmpty);
 
+                }
+                ,
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
+    console.log('this', this.showEmpty, this.showSection);
   }
 
   /**************************************************************************
@@ -212,5 +240,20 @@ export class ResumeDynamicSectionComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/language'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/intervention'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
   }
 }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ResumeService } from '@core/services/resume/resume.service';
+import { Router } from '@angular/router';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -17,6 +18,7 @@ export class ResumeComponent implements OnInit {
   constructor(
     private userService: UserService,
     private resumeService: ResumeService,
+    private router: Router,
   ) {
   }
 
@@ -32,7 +34,6 @@ export class ResumeComponent implements OnInit {
       this.userService.connectedUser$.subscribe((userInfo) => {
         console.log(userInfo);
         this.userService.getUsers(userInfo['company'][0].companyKey.email_address, 'CANDIDATE').subscribe((res) => {
-          console.log(res, ' 75');
           res['results'].forEach((candidate) => {
             console.log('mail address', candidate.userKey.email_address, 'company email', candidate.company_email,
               'name=', candidate.first_name + ' ' + candidate.last_name);
@@ -48,6 +49,7 @@ export class ResumeComponent implements OnInit {
                     resume_user_type: candidate.user_type,
                     resume_filename_docx: resume[0].resume_filename_docx,
                     resume_filename_pdf: resume[0].resume_filename_pdf,
+                    user_info: resume[0],
                   });
                   console.log('res', resume);
                 }
@@ -76,8 +78,21 @@ export class ResumeComponent implements OnInit {
       window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf,  '_blank');
     }
   private updateBloc(data) {
+    console.log('general info =', data.user_info);
+    data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
+    data.user_info.language_id = data.user_info.ResumeKey.language_id;
+    data.user_info.company_email = data.user_info.ResumeKey.company_email;
+    data.user_info.email_address = data.user_info.ResumeKey.email_address;
+    data.user_info.application_id = data.user_info.ResumeKey.application_id;
+    this.router.navigate(['/candidate/resume/'],
+      {
+        state: {
+          generalInformation: data.user_info
+        }
+      });
   }
 
   private deleteBloc(data) {
+    window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
   }
 }

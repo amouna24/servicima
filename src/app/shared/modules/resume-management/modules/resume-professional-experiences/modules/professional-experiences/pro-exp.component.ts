@@ -59,13 +59,14 @@ export class ProExpComponent implements OnInit {
     public datePipe: DatePipe,
     private modalServices: ModalService
   ) {
-    this.checkedBox = false;
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.checkedBox = false;
     this.placeHolderEndDate = 'resume-end-date';
     this.button = 'Add';
     this.initBooleanVars();
@@ -79,6 +80,22 @@ export class ProExpComponent implements OnInit {
    * @description Get Professional Data from Resume Service
    *************************************************************************/
   getProExpInfo() {
+    if (this.resumeCode) {
+      this.resumeService.getProExp(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseProExp) => {
+            if (responseProExp['msg_code'] !== '0004') {
+              this.proExpArray = responseProExp;
+              this.filterDate();
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
     this.resumeService.getResume(
       `?email_address=${this.userService.connectedUser$.getValue()
         .user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue()
@@ -99,8 +116,6 @@ export class ProExpComponent implements OnInit {
                 }
               },
             );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
         }
       },
       (error) => {
@@ -108,7 +123,7 @@ export class ProExpComponent implements OnInit {
         }
       },
     );
-
+    }
   }
 
   /**************************************************************************
@@ -374,5 +389,20 @@ export class ProExpComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  routeNextBack(typeRoute: string) {
+    if (typeRoute === 'next') {
+      this.router.navigate(['/candidate/resume/dynamicSection'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/intervention'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    }
   }
 }
