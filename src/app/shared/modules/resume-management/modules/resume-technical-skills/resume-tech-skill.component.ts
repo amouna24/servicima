@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -10,7 +11,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'wid-resume-tech-skill',
   templateUrl: './resume-tech-skill.component.html',
-  styleUrls: ['./resume-tech-skill.component.scss']
+  styleUrls: ['./resume-tech-skill.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showBloc,
+    showProExp
+  ]
 })
 export class ResumeTechSkillComponent implements OnInit {
   sendTechSkill: FormGroup;
@@ -25,6 +33,7 @@ export class ResumeTechSkillComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+  skillIndex: string;
   /**********************************************************************
    * @description Resume Technical skills constructor
    *********************************************************************/
@@ -103,19 +112,28 @@ export class ResumeTechSkillComponent implements OnInit {
     this.TechSkill.skill_index = this.arrayTechSkillCount.toString();
     if (this.sendTechSkill.valid ) {
       this.resumeService.addTechnicalSkills(this.TechSkill).subscribe(data => {
-        this.getTechnicalSkillsInfo();
-      });
-    }
-    this.arrayTechSkillCount++; } else {
+        this.resumeService.getTechnicalSkills(
+          `?technical_skill_code=${this.TechSkill.technical_skill_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                this.techSkillArray.push(responseOne[0]);
+                   }});
+        this.arrayTechSkillCount++;
+    }); }
+  } else {
       this.techSkillUpdate = this.sendTechSkill.value;
       this.techSkillUpdate.technical_skill_code = this.technicalSkillCode;
       this.techSkillUpdate.resume_code = this.resumeCode;
-      this.techSkillUpdate.skill_index = this.indexUpdate.toString();
+      this.techSkillUpdate.skill_index = this.skillIndex;
       this.techSkillUpdate._id = this.id;
-      if (this.sendTechSkill.valid && this.showNumberError === false) {
-        this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => console.log('Technical skill updated =', data));
-      this.techSkillArray[this.indexUpdate] = this.techSkillUpdate;
-      this.button = 'Add'; }
+      if (this.sendTechSkill.valid) {
+        console.log('this.techSkillUpdate', this.techSkillUpdate, 'other', this.TechSkill);
+        this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => {
+          this.techSkillArray.splice(this.indexUpdate, 0,  data);
+          console.log('Technical skill updated =', data);
+        });
+this.button = 'Add'; }
     }
     this.sendTechSkill.reset();
     this.showNumberError = false;
@@ -130,12 +148,12 @@ export class ResumeTechSkillComponent implements OnInit {
       technical_skill_desc: techSkill.technical_skill_desc,
       technologies: techSkill.technologies,
     });
+    this.techSkillArray.splice(pointIndex, 1);
     this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;
+    this.skillIndex = techSkill.ResumeTechnicalSkillsKey.skill_index;
     this.indexUpdate = pointIndex;
     this.button = 'Save';
-    /*
-    */
   }
   /**************************************************************************
    * @description Delete the selected Custom section
@@ -163,6 +181,16 @@ export class ResumeTechSkillComponent implements OnInit {
         }
   );
 
+  }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
   }
 
 }

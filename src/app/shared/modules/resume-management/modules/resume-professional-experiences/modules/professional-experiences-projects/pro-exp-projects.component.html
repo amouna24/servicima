@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Resume</h1>
@@ -14,17 +14,17 @@
   <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div fxLayout="row" fxFlex="88" fxLayoutAlign="space-around">
+  <div fxLayout="row" fxFlex="88"  fxLayoutAlign="space-around">
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{position}}-{{customer}}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="80" fxLayoutAlign="space-around">
+      <div fxLayout="row" fxFlex="80"  @showProExp fxLayoutAlign="space-around">
         <wid-scrollbar fxFlex="87" class="full-height">
-          <div fxLayout="column" fxFlex="82" fxFlexAlign="10px">
-            <div fxLayout="row" *ngIf="!showProject" class="height-50" fxLayoutAlign="center">
+          <div fxLayout="column" fxFlex="100" fxFlexAlign="10px">
+            <div fxLayout="row" *ngIf="!showProject"  class="height-50"  fxLayoutAlign="center">
               <div fxLayout="column" fxFlex="100" class="border-radius-10 border_add_project">
                 <div fxLayout="row">
                   <div fxLayout="column" fxFlexFill fxLayoutGap="30px">
@@ -40,9 +40,9 @@
               </div>
             </div>
             <div *ngFor="let item of ProjectArray let pointIndex=index" fxLayout="row" class="full-width p-b-10">
-              <mat-expansion-panel [hideToggle]="true" #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="full-height mat-expansion-panel-body"
+              <mat-expansion-panel hideToggle [hideToggle]="true" [expanded]="false"  #panel (opened)="generateSections(item)" (closed)="generateSections(item)" fxLayout="column" fxFlex="100" class="mat-expansion-panel-body"
                                    style="border-style: solid;border-color: #e8f1f9 ;border-radius: 15px;">
-                <mat-expansion-panel-header style="background-color: transparent; padding: 0 !important;">
+                <mat-expansion-panel-header @showBloc  style="background-color: transparent; padding: 0 !important;">
                   <mat-panel-title style="margin-right: 0 !important;">
                     <div fxLayout="row" style="height: 80px" class="bg-pale-grey  full-width" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
                       <div fxLayout="column" fxLayoutAlign="center none" class="p-l-20" fxFlex="73">
@@ -80,7 +80,7 @@
             </div>
             <div fxLayout="row">
               <div fxLayout="column" fxFlex="100">
-                <div fxLayout="row" fxFlexFill class="add_project" *ngIf="!showForm && showProject">
+                <div fxLayout="row" fxFlexFill class="add_project"   *ngIf="!showForm && showProject">
                   <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
                           (click)="onShowForm()">+
                   </button>
@@ -155,13 +155,13 @@
               </div>
             </form>
           </div>
-          <div fxLayout="column" fxFlex="18" class="p-l-10" >
-            <div fxLayout="row" fxFlex="90" fxLayoutAlign=" end">
+          <div fxLayout="column" fxFlex="18"  class="p-l-10" *ngIf="showProject">
+            <div fxLayout="row" @showProExp fxFlex="90" fxLayoutAlign=" end">
               <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
-                <wid-scrollbar class="full-width full-height">
-                  <div fxLayout="row"  class="border-radius-10 border_add_project min-height-50">
+                <wid-scrollbar class="full-width full-height" >
+                  <div fxLayout="row"  class="border-radius-10 border_add_project min-height-55" >
 
-                  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+                  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl" >
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                   <li>
                     <div>

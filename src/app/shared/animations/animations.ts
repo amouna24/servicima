@@ -131,3 +131,47 @@ export function closeAlertAnimation(animationDuration: string = '500ms'): Animat
     transition('* => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+export let blueToGrey = trigger('blueToGrey', [
+  transition('void => *', [
+    style({ color: 'blue'}),
+    animate(1000, style( { color: '#afb1b8'})),
+  ]),
+]);
+export let GreyToBlue =  trigger('GreyToBlue', [
+  transition('void => *', [
+    style({ color: '#afb1b8'}),
+    animate(1000, style( { color: 'blue'})),
+  ]),
+]);
+export let downLine = trigger('downLine', [
+  state('void', style({ transform: 'translateY(-20px)' })),
+  transition('void <=> *',  [
+    animate(500),
+  ]),
+]);
+export let showProExp = trigger('showProExp', [
+  transition('void => *',  [
+    style({ opacity: 0}),
+    animate(500),
+  ]),
+  transition('* => void',  [
+    style({ opacity: 100}),
+    animate(500, style({ opacity: 0})),
+  ]),
+]);
+export let showBloc = trigger('showBloc', [
+  transition('void => *',  [
+    style({ height: 0}),
+    animate(350),
+  ]),
+  transition('* => void',  [
+    animate(500, style({ height: 0})),
+  ]),
+]);
+export let lineIndexation = trigger( 'lineIndexation', [
+  state( 'void', style({ opacity: 1}), { params: { translate: 'translateY(-80px)' }}),
+  transition(':enter', [
+    style({  transform: '{{translate}}' }),
+    animate('500ms', style({ transform: 'translateY(0)' })),
+  ]),
+]);

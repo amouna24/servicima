@@ -1,6 +1,6 @@
-<wid-scrollbar fxLayout="row" fxFlexFill>
+<wid-scrollbar fxLayout="row" fxFlexFill @showProExp>
 <div fxLayout="column" fxFlexFill >
-  <div *ngFor="let item of proDetailsArray let pointIndex=index" fxLayout="row" style="justify-content: center; align-items: center"    >
+  <div *ngFor="let item of proDetailsArray let pointIndex=index" @showBloc fxLayout="row" style="justify-content: center; align-items: center"    >
     <div fxLayout="column" fxFlex="82" >
       <br>
     <div fxLayout="row"  class="bg-pale-grey border-radius-15 full-width" >
@@ -9,7 +9,7 @@
       </div>
       <div fxLayout="column" fxFlex fxLayoutAlign="center end" class="p-r-10">
         <div fxLayout="row" fxLayoutAlign="end" >
-          <button mat-raised-button class="steel-two btn-small bg-white" (click)="editForm(item,pointIndex); ">{{ 'resume-edit' | translate }}</button>
+          <button mat-raised-button class="steel-two btn-small bg-white" [disabled]="button === 'Save'" (click)="editForm(item,pointIndex); ">{{ 'resume-edit' | translate }}</button>
         </div>
       </div>
       <div fxLayout="column" fxFlex class="p-r-20" fxLayoutAlign="center end">
@@ -71,7 +71,7 @@
         <mat-label class="black font-size-12 required" fxLayout="row">
           {{ 'resume-section-content' | translate }}:
         </mat-label>
-      <div *ngFor="let item of proSectionArray; let pointIndex=index" fxLayout="row"   >
+      <div *ngFor="let item of proSectionArray; let pointIndex=index" @showBloc fxLayout="row"   >
         <div fxLayout="column" fxFlex="81" fxLayoutAlign=" start"  >
           <div fxLayout="row" fxFlexFill  fxLayoutGap="10px" fxLayoutAlign="start">
             <div fxLayout="column" fxFlex="58">

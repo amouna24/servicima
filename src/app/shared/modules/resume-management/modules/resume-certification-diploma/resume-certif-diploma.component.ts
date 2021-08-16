@@ -7,11 +7,19 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
   templateUrl: './resume-certif-diploma.component.html',
-  styleUrls: ['./resume-certif-diploma.component.scss']
+  styleUrls: ['./resume-certif-diploma.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showBloc,
+    showProExp,
+  ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
   sendCertifDiploma: FormGroup;
@@ -25,7 +33,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   maxEndDate: Date;
   showDateError: boolean;
   certifDiplomaCode: string;
-  indexUpdate = 0;
+  indexUpdate: number;
   button: string;
   certifDiplomaUpdate: IResumeCertificationDiplomaModel;
   id: string;
@@ -47,7 +55,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  ngOnInit(): void {
+   ngOnInit() {
     this.showDateError = false;
     this.showNumberError = false;
     this.button = 'Add';
@@ -55,6 +63,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.initDate();
     this.getCertifDiplomaInfo();
     this.createForm();
+
   }
 
   /**************************************************************************
@@ -119,8 +128,13 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.certifDiploma.certif_diploma_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
       if (this.sendCertifDiploma.valid && this.showDateError === false) {
         this.resumeService.addCertifDiploma(this.certifDiploma).subscribe(data => {
-          this.getCertifDiplomaInfo();
-        });
+          this.resumeService.getCertifDiploma(
+            `?certif_diploma_code=${this.certifDiploma.certif_diploma_code}`)
+            .subscribe(
+              (responseOne) => {
+                if (responseOne['msg_code'] !== '0004') {
+                  this.certifDiplomaArray.push(responseOne[0]);
+                }});        });
       } else {
         this.showDateError = false;
         this.showNumberError = false;
@@ -133,9 +147,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       this.certifDiplomaUpdate._id = this.id;
       if (this.sendCertifDiploma.valid) {
         this.resumeService.updateCertifDiploma(this.certifDiplomaUpdate).subscribe((data) => {
+          this.certifDiplomaArray.splice(this.indexUpdate, 0, data);
           console.log('certif updated', data);
         });
-        this.certifDiplomaArray[this.indexUpdate] = this.certifDiplomaUpdate;
         this.button = 'Add';
       }
     }
@@ -159,6 +173,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.certifDiplomaCode = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
     this.id = certifDiploma._id;
     this.indexUpdate = pointIndex;
+    this.certifDiplomaArray.splice(pointIndex, 1);
     this.button = 'Save';
   }
 
@@ -170,7 +185,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   deleteCertif(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'resume-delete-certif',
+      title: 'resume-delete-diploma',
       description: 'resume-u-sure'
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
@@ -218,5 +233,15 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
+  }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
   }
 }

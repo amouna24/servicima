@@ -26,6 +26,8 @@ export class AuthGuard implements CanActivate {
   userCredentials: string;
   emailAddress: string;
   applicationId: string;
+  i = 0;
+  currentState: string;
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -48,6 +50,10 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
+      if (this.i === 0 ) {
+        this.currentState = state.url;
+        this.i ++;
+      }
     /* Call the backend to check fingerprint is OK */
     if (state.root.queryParams.rg && state.root.queryParams.auto === 'yes') {
       return new Promise<boolean>(resolve =>
@@ -81,7 +87,7 @@ export class AuthGuard implements CanActivate {
               if (! this.userService.userInfo || (this.userService.refresh && this.userService.userInfo))  {
                 this.userService.getUserInfo().then((data) => {
                   if (data) {
-                    this.userService.redirectUser(data['user'][0].user_type);
+                    this.userService.redirectUser(data['user'][0].user_type, this.currentState);
                     this.utilService.getCompanies();
                     this.userService.getRoleFeature(data, data.userroles[0].userRolesKey.role_code);
                     this.resolveValue = true;

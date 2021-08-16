@@ -25,43 +25,73 @@ export class ShowTimesheetComponent implements OnInit {
   userInfo: IUserInfo;
   rejected: boolean;
   approved: boolean;
+  week: any[];
 
-  constructor( public dialogRef: MatDialogRef<ShowTimesheetComponent>,
-               private dialog: MatDialog,
-               @Inject(MAT_DIALOG_DATA) public data: any,
-               private uploadService: UploadService,
-               private modalsServices: ModalService,
-  ) { }
+  constructor(public dialogRef: MatDialogRef<ShowTimesheetComponent>,
+              private dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private uploadService: UploadService,
+              private modalsServices: ModalService,
+  ) {
+  }
 
   async ngOnInit() {
-    this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
+    this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent});
     this.timesheet = this.data;
     console.log('timesheet', this.timesheet);
     this.avatar = await this.uploadService.getImage(this.timesheet.photo);
     this.statusButton();
+    this.week = [
+      {
+        day: 'MON',
+        hours: this.timesheet.monday,
+      },
+      {
+        day: 'TUE',
+        hours: this.timesheet.tuesday,
+      },
+      {
+        day: 'WED',
+        hours: this.timesheet.wednesday,
+      },
+      {
+        day: 'THU',
+        hours: this.timesheet.thursday,
+      },
+      {
+        day: 'FRI',
+        hours: this.timesheet.friday,
+      },
+      {
+        day: 'SAT',
+        hours: this.timesheet.saturday,
+      },
+      { day: 'SUN',
+        hours: this.timesheet.sunday
+      }];
   }
 
-  /**
-   * @description : disable button
-   */
-  statusButton() {
-    if (this.timesheet.timesheet_status === 'Rejected') {
-      return this.rejected = true;
-    } else if (this.timesheet.timesheet_status === 'Approved') {
-      return this.approved = true;
+    /**
+     * @description : disable button
+     */
+    statusButton() {
+      if (this.timesheet.timesheet_status === 'Rejected') {
+        return this.rejected = true;
+      } else if (this.timesheet.timesheet_status === 'Approved') {
+        return this.approved = true;
+      }
     }
-  }
 
-  onCloseClick(): void {
-    this.dialogRef.close();
-  }
+    onCloseClick(): void {
+      this.dialogRef.close();
+    }
 
-  rejectTimesheet() {
-    this.dialogRef.close('reject');
-  }
+    rejectTimesheet() {
+      this.dialogRef.close('reject');
+    }
 
-  approveTimesheet() {
-    this.dialogRef.close('approve');
-  }
+    approveTimesheet() {
+      this.dialogRef.close('approve');
+    }
 
-}
+  }

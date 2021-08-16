@@ -21,6 +21,7 @@ import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
+import { showProExp } from '@shared/animations/animations';
 
 import { ResumeThemeComponent } from '@shared/modules/resume-management/modules/resume-theme/resume-theme.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,7 +32,10 @@ import { environment } from '../../../../../../environments/environment';
 @Component({
   selector: 'wid-resume-done',
   templateUrl: './resume-done.component.html',
-  styleUrls: ['./resume-done.component.scss']
+  styleUrls: ['./resume-done.component.scss'],
+  animations: [
+    showProExp,
+  ]
 })
 export class ResumeDoneComponent implements OnInit {
   count = 0;
@@ -60,6 +64,7 @@ export class ResumeDoneComponent implements OnInit {
   loading: boolean;
   translateKey: string[];
   label: object;
+  showEmpty = true;
 
   /**********************************************************************
    * @description Resume Preview constructor
@@ -142,6 +147,8 @@ export class ResumeDoneComponent implements OnInit {
     if (this.languageList.length > 0) {
       this.count += 13;
     }
+    this.showEmpty = false;
+    console.log( this.count);
     return this.count;
   }
 
@@ -356,7 +363,6 @@ export class ResumeDoneComponent implements OnInit {
     this.loading = true;
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-        console.log(diploma);
         diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
         diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
       });
@@ -434,7 +440,6 @@ export class ResumeDoneComponent implements OnInit {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
         if (action === 'preview') {
-          console.log(data);
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');
           this.loading = false;

@@ -96,24 +96,35 @@ export class UserService {
    * @description Redirect User to specific route and set SideNav items
    * @param userRole Role of connected User
    *************************************************************************/
-  redirectUser(userRole: string): void {
+  redirectUser(userRole: string, currentState: string): void {
     switch (userRole) {
       case 'COMPANY':
       case 'STAFF':
-      { this.moduleName$.next('manager');
-        this.router.navigate(['/manager']);
+      { this.getUrl('manager', currentState );
       }
         break;
       case 'COLLABORATOR': {
-        this.moduleName$.next('collaborator');
-        this.router.navigate(['/collaborator']);
+        this.getUrl('collaborator', currentState );
       }
         break;
       case 'CANDIDATE': {
-        this.moduleName$.next('candidate');
-        this.router.navigate(['/candidate']);
+        this.getUrl('candidate', currentState );
       }
         break;
+    }
+  }
+
+  /**************************************************************************
+   * @description : Get url
+   * @param: startUrl: start url
+   * @param: currentState: current state
+   *************************************************************************/
+  getUrl(startUrl: string, currentState: string) {
+    this.moduleName$.next(startUrl);
+    if (currentState.startsWith(`/${startUrl}`)) {
+      this.router.navigate([currentState]);
+    } else {
+      this.router.navigate([`/${startUrl}`]);
     }
   }
 

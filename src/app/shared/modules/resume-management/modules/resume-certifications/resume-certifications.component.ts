@@ -6,11 +6,18 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-
+import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/animations/animations';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
-  styleUrls: ['./resume-certifications.component.scss']
+  styleUrls: ['./resume-certifications.component.scss'],
+  animations: [
+    blueToGrey,
+    GreyToBlue,
+    downLine,
+    showBloc,
+    showProExp
+  ]
 })
 export class ResumeCertificationsComponent implements OnInit {
 certifForm: FormGroup;
@@ -41,6 +48,7 @@ button: string;
   ngOnInit(): void {
     this.expire = true;
     this.button = 'Add';
+    this.certificationArray = [];
     this.showExpireDatePicker = true;
     this.getCertificationInfo();
     this.createCertifForm();
@@ -70,10 +78,15 @@ button: string;
       this.resumeService.addCertification(this.certification).subscribe(data => {
         this.createCertifForm();
         this.certificationArrayCount++;
-        this.certifForm.controls.expiring_date.enable();
-        this.expire = true;
-        this.getCertificationInfo();
-      });
+        this.resumeService.getCertification(
+          `?certification_code=${this.certification.certification_code}`)
+          .subscribe(
+            (responseOne) => {
+              if (responseOne['msg_code'] !== '0004') {
+                this.certificationArray.push(responseOne[0]);
+              }});      });
+      this.certifForm.controls.expiring_date.enable();
+      this.expire = true;
     } else if (this.button === 'Save') {
       this.certificationUpdate = this.certifForm.value;
       this.certificationUpdate.certification_code = this.certificationCode;
@@ -81,9 +94,7 @@ button: string;
       this.certificationUpdate._id = this.id;
         this.resumeService.updateCertification(this.certificationUpdate).subscribe(data => {
           this.createCertifForm();
-          this.certificationArray[this.indexUpdate] = this.certificationUpdate;
-          this.getCertificationInfo();
-
+          this.certificationArray.splice(this.indexUpdate, 0, data);
         });
         this.button = 'Add';
     }
@@ -147,7 +158,7 @@ button: string;
   deleteCertification(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
-      title: 'Delete Certification',
+      title: 'resume-delete-certificate',
       description: 'resume-u-sure',
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
@@ -184,7 +195,7 @@ button: string;
     this.id = certification._id;
     this.certificationCode = certification.ResumeCertificationKey.certification_code;
     this.indexUpdate = index;
-
+    this.certificationArray.splice( index, 1);
     if (certification.expiring_date !== undefined) {
       this.certifForm.controls.expiring_date.enable();
       this.certifForm.controls.expire.setValue(false);
@@ -193,5 +204,15 @@ button: string;
       this.certifForm.controls.expire.setValue(true);
     }
     this.button = 'Save';
+  }
+  /**************************************************************************
+   * @description Show indexation
+   *************************************************************************/
+  addIndexation() {
+    const indexationArray = [];
+    for (let i = 1; i < 10; i++) {
+      indexationArray[i] = '0' + i.toString();
+    }
+    return(indexationArray);
   }
 }
