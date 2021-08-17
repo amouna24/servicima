@@ -28,7 +28,7 @@
                              [@iconAnimation]="sidebarState">
                 <mat-icon class="icon material-icons-outlined" [svgIcon]="menuItem.icon">
                 </mat-icon>
-                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
+                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate  }}</span>
               </mat-list-item>
             </ng-template>
           </ng-container>
@@ -50,7 +50,7 @@
                      [routerLinkActiveOptions]="{exact: true}" class="list-item" [@iconAnimation]="sidebarState">
                     <mat-icon class="icon material-icons-outlined" svgIcon="{{ subMenuItem.icon }}">
                     </mat-icon>
-                    <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                    <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name  | translate }}</span>
                   </a>
                 </ng-container>
                 <ng-template #accordion>
@@ -62,7 +62,7 @@
                         <mat-icon class="icon material-icons-outlined" svgIcon="{{ subMenuItem.icon }}">
                         </mat-icon>
                         <span class="font-light font-size-14"
-                              [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                              [@labelAnimation]="sidebarState">{{subMenuItem.name  | translate }}</span>
                       </mat-panel-title>
                     </mat-expansion-panel-header>
                     <a mat-list-item routerLinkActive="active-sub-menu-child-item"
@@ -71,7 +71,7 @@
                        [queryParams]="subChildMenu?.queryParams"
                        [routerLinkActiveOptions]="{exact: true}"
                        class="font-light font-size-14 sub-menu-child-item " [@labelAnimation]="sidebarState">
-                      {{subChildMenu.name }}
+                      {{subChildMenu.name  | translate }}
                     </a>
                   </mat-expansion-panel>
                 </ng-template>
