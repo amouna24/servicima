@@ -10,7 +10,7 @@ export const sidenavRightMenu = [
   },*/
   {
     state: '/user/profile',
-    name: 'My Account',
+    name: 'right-sidenav-menu.static.myaccount',
     type: 'link',
     icon: 'wi_user',
     // feature: 'my-account',
@@ -18,7 +18,7 @@ export const sidenavRightMenu = [
   },
   {
     state: '/settings',
-    name: 'Settings',
+    name: 'right-sidenav-menu.static.settings',
     type: 'link',
     icon: 'wi_settings',
     // feature: 'settings'
@@ -26,7 +26,7 @@ export const sidenavRightMenu = [
   },
   {
     state: 'themes',
-    name: 'Themes',
+    name: 'right-sidenav-menu.static.themes',
     type: 'sub',
     icon: 'wi_theme',
    //  feature: 'themes',
@@ -34,7 +34,7 @@ export const sidenavRightMenu = [
     children: [
       {
         state: 'themes',
-        name: 'themes',
+        name: 'right-sidenav-menu.static.theme',
         icon: '',
         feature: 'SETTINGS_THEMES',
         type: 'link',
@@ -43,7 +43,7 @@ export const sidenavRightMenu = [
   },
   {
     state: 'logout',
-    name: 'Logout',
+    name: 'right-sidenav-menu.static.logout',
     type: 'link',
     icon: 'wi_logout',
     feature: 'logout',
