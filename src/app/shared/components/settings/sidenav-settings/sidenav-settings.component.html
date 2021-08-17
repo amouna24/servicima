@@ -33,7 +33,7 @@
         <a mat-list-item [routerLink]="['/', moduleName, 'settings', sMenu.state]"
            fxLayoutAlign="start center" routerLinkActive="active-submenu-item"
            class="border-radius-10 submenu-item full-width">
-          <p class="pale-grey">{{sMenu.name}}</p>
+          <p class="pale-grey">{{sMenu.name | translate}}</p>
         </a>
       </ng-container>
     </mat-nav-list>

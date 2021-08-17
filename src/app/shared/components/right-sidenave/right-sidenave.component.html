@@ -22,7 +22,7 @@
     <div *ngIf="subMenu.length === 0; else subMenuContainer" fxLayout="column" >
       <ng-container *ngFor=" let menuItem of menu" >
         <ng-container *ngIf=" menuItem.type === 'link';  else subMenuLabel" >
-            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Logout'" class="list-item m-l-10" (click)="logout()" [@iconAnimation]="sidebarState"  >
+            <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'right-sidenav-menu.static.logout'" class="list-item m-l-10" (click)="logout()" [@iconAnimation]="sidebarState"  >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
@@ -31,7 +31,7 @@
             </a>
 
           <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
-            <a mat-list-item *ngIf="menuItem.name !== 'Logout' && menuItem.name !== 'Themes'" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
+            <a mat-list-item *ngIf="menuItem.name !== 'right-sidenav-menu.static.logout' && menuItem.name !== 'right-sidenav-menu.static.themes'" routerLinkActive="active-list-item"  [routerLink]="['/' + moduleName + menuItem.state]"
                class="list-item m-l-10" [@iconAnimation]="sidebarState" (click)="toggleSideNav()" >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
@@ -45,7 +45,7 @@
 
           <ng-template #subMenuLabel>
             <ng-container *canBeDisplayed="{'feature':menuItem.feature}">
-              <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'Themes' && !hideTheme" (click)="toggleSubMenu(menuItem.children, menuItem.state)"  class="list-item m-l-10" [@iconAnimation]="sidebarState"  >
+              <a mat-list-item routerLinkActive="active-list-item" *ngIf="menuItem.name === 'right-sidenav-menu.static.themes' && !hideTheme" (click)="toggleSubMenu(menuItem.children, menuItem.state)"  class="list-item m-l-10" [@iconAnimation]="sidebarState"  >
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
@@ -53,13 +53,13 @@
                 <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
               </a>
             <div fxLayout="column" class="cursor-pointer">
-              <mat-list-item *ngIf="menuItem.name !== 'Themes'" (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item m-l-10"
+              <mat-list-item *ngIf="menuItem.name !== 'right-sidenav-menu.static.themes'" (click)="toggleSubMenu(menuItem.children, menuItem.state)" class="list-item m-l-10"
                              [@iconAnimation]="sidebarState">
             <span>
             <mat-icon class="icon material-icons-outlined" [@iconAnimation]="sidebarState" svgIcon="{{menuItem.icon}}">
             </mat-icon>
               </span>
-                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name }}</span>
+                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{menuItem.name | translate }}</span>
               </mat-list-item>
             </div>
             </ng-container>
@@ -106,7 +106,7 @@
           <ng-container *ngFor=" let subMenuItem of subMenu">
             <ng-container *ngIf=" parentMenu == 'themes'">
               <div fxLayout="column" class="m-l-15" fxLayoutGap="15px">
-                <span class="font-light font-size-19" [@labelAnimation]="sidebarState">{{parentMenu | titlecase}}
+                <span class="font-light font-size-19" [@labelAnimation]="sidebarState">{{parentMenu| translate}}
                   :</span>
                 <mat-list-item *ngFor="let list of listColor">
                   <div [style.backgroundColor]="list.status ? '#f3f6f9': 'white' " class="theme-checkbox" *ngIf="list.color !== 'setting'">
@@ -129,7 +129,7 @@
                   {{subMenuItem.icon}}
                 </mat-icon>
                   </span>
-                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name }}</span>
+                <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{subMenuItem.name | translate}}</span>
               </a>
             </ng-container>
           </ng-container>
