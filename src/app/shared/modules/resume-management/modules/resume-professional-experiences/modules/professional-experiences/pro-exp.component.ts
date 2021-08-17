@@ -59,7 +59,7 @@ export class ProExpComponent implements OnInit {
     public datePipe: DatePipe,
     private modalServices: ModalService
   ) {
-    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -131,16 +131,32 @@ export class ProExpComponent implements OnInit {
    * @param professionalExp the professionalExperience model
    *************************************************************************/
   routeToProject(professionalExp: IResumeProfessionalExperienceModel) {
-    this.router.navigate(['/candidate/resume/projects'],
-      {
-        state: {
-          id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
-          customer: professionalExp.customer,
-          position: professionalExp.position,
-          start_date: professionalExp.start_date,
-          end_date: professionalExp.end_date,
-        }
-      });
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    } else {
+      this.router.navigate(['/candidate/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    }
+
   }
 
   /*******************************************************************
@@ -391,18 +407,35 @@ export class ProExpComponent implements OnInit {
     return(indexationArray);
   }
   routeNextBack(typeRoute: string) {
-    if (typeRoute === 'next') {
-      this.router.navigate(['/candidate/resume/dynamicSection'], {
-        state: {
-          resumeCode: this.resumeCode
+
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/dynamicSection'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } } else {
+        if (typeRoute === 'next') {
+          this.router.navigate(['/candidate/resume/dynamicSection'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        } else {
+          this.router.navigate(['/candidate/resume/intervention'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
         }
-      });
-    } else {
-      this.router.navigate(['/candidate/resume/intervention'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
-    }
+      }
+
   }
 }

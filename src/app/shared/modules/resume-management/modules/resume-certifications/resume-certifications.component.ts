@@ -44,7 +44,7 @@ button: string;
     private modalServices: ModalService,
     private router: Router,
 ) {
-    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -108,6 +108,7 @@ button: string;
    *************************************************************************/
   getCertificationInfo() {
     if (this.resumeCode) {
+      console.log('resume code');
       this.resumeService.getCertification(
         `?resume_code=${this.resumeCode}`)
         .subscribe(
@@ -127,7 +128,10 @@ button: string;
             }
           },
         );
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' && !this.resumeCode) {
+      console.log('candidate');
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -242,18 +246,35 @@ button: string;
     return(indexationArray);
   }
   routeNextBack(typeRoute: string) {
-    if (typeRoute === 'next') {
-      this.router.navigate(['/candidate/resume/technicalSkills'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/diploma'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     } else {
-      this.router.navigate(['/candidate/resume/certifications'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/certifDiploma'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     }
+
   }
 }

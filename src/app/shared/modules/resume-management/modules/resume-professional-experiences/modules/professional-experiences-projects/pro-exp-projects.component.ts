@@ -361,6 +361,7 @@ export class ProExpProjectsComponent implements OnInit {
    * @description initialize data that are coming from the previous route
    *******************************************************************/
   getDataFromPreviousRoute() {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
     this.professionalExperienceCode = this.router.getCurrentNavigation().extras.state?.id;
     this.customer = this.router.getCurrentNavigation().extras.state?.customer;
     this.position = this.router.getCurrentNavigation().extras.state?.position;
@@ -375,46 +376,79 @@ export class ProExpProjectsComponent implements OnInit {
     const treeItems = [];
     let i = 0;
     new Promise((resolve) => {
-      this.resumeService.getResume(
-        `?email_address=${this.userService.connectedUser$
-          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-          .getValue().user[0]['company_email']}`)
-        .subscribe(
-          (response) => {
-            if (response['msg_code'] !== '0004') {
-              this.resumeCode = response[0].ResumeKey.resume_code.toString();
-              this.resumeService.getProExp(
-                `?resume_code=${this.resumeCode}`)
-                .subscribe(async (proExp) => {
-                  for (const pro of proExp) {
-                    const index = proExp.indexOf(pro);
-                    i++;
-                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
-                      treeItems.push(
-                        {
-                          title: pro.customer,
-                          children: await this.getProjectNode(pro),
-                          expanded: true,
-                          object: pro
-                        });
-                    } else {
-                      treeItems.push(
-                        {
-                          title: pro.customer,
-                          children: await this.getProjectNode(pro),
-                          expanded: false,
-                          object: pro,
-                        });
-                    }
-                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
-                    }
-                    if (i === proExp.length) {
-                      resolve(treeItems);
-                    }
-                  }
-                });
+      if (this.resumeCode) {
+        this.resumeService.getProExp(
+          `?resume_code=${this.resumeCode}`)
+          .subscribe(async (proExp) => {
+            for (const pro of proExp) {
+              const index = proExp.indexOf(pro);
+              i++;
+              if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                treeItems.push(
+                  {
+                    title: pro.customer,
+                    children: await this.getProjectNode(pro),
+                    expanded: true,
+                    object: pro
+                  });
+              } else {
+                treeItems.push(
+                  {
+                    title: pro.customer,
+                    children: await this.getProjectNode(pro),
+                    expanded: false,
+                    object: pro,
+                  });
+              }
+              if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+              }
+              if (i === proExp.length) {
+                resolve(treeItems);
+              }
             }
           });
+      } else {
+        this.resumeService.getResume(
+          `?email_address=${this.userService.connectedUser$
+            .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+            .getValue().user[0]['company_email']}`)
+          .subscribe(
+            (response) => {
+              if (response['msg_code'] !== '0004') {
+                this.resumeCode = response[0].ResumeKey.resume_code.toString();
+                this.resumeService.getProExp(
+                  `?resume_code=${this.resumeCode}`)
+                  .subscribe(async (proExp) => {
+                    for (const pro of proExp) {
+                      const index = proExp.indexOf(pro);
+                      i++;
+                      if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                        treeItems.push(
+                          {
+                            title: pro.customer,
+                            children: await this.getProjectNode(pro),
+                            expanded: true,
+                            object: pro
+                          });
+                      } else {
+                        treeItems.push(
+                          {
+                            title: pro.customer,
+                            children: await this.getProjectNode(pro),
+                            expanded: false,
+                            object: pro,
+                          });
+                      }
+                      if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                      }
+                      if (i === proExp.length) {
+                        resolve(treeItems);
+                      }
+                    }
+                  });
+              }
+            });
+      }
     }).then((res: IMyTreeNode[]) => {
       this.treeItems = res;
       this.treeDataSource.data = res;
@@ -537,6 +571,21 @@ export class ProExpProjectsComponent implements OnInit {
       this.getProjectInfo();
       this.loadTree();
       this.openExpansion = false;
+    }
+  }
+  routeToProfessionalExperience() {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/candidate/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
     }
   }
 }

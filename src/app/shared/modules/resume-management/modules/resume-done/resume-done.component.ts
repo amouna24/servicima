@@ -53,7 +53,7 @@ export class ResumeDoneComponent implements OnInit {
     private translate: TranslateService,
     private router: Router,
   ) {
-    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
   count = 0;
   resumeCode: string;
@@ -98,6 +98,7 @@ export class ResumeDoneComponent implements OnInit {
   async ngOnInit() {
     this.dateNow = new Date().getFullYear().toString();
     this.imageUrl = `${environment.uploadFileApiUrl}/image/`;
+    this.verifyUserType();
     this.initSectionLists();
     this.translateDocs();
     await this.yearsOfExpAuto();
@@ -170,7 +171,6 @@ export class ResumeDoneComponent implements OnInit {
    *************************************************************************/
   getResumeInfo() {
     if (this.resumeCode) {
-      this.userType = 'manager';
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
@@ -253,7 +253,9 @@ export class ResumeDoneComponent implements OnInit {
           this.countResume();
           this.getProjectInfo();
         });
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
@@ -265,7 +267,6 @@ export class ResumeDoneComponent implements OnInit {
               this.contactEmail = userInfo['company'][0]['contact_email'];
             }
           });
-      this.userType = 'candidate';
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -719,5 +720,8 @@ export class ResumeDoneComponent implements OnInit {
         expert: res['resume-expert'],
       };
     });
+  }
+  verifyUserType() {
+    this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' ? this.userType = 'manager' : this.userType = 'candidate';
   }
 }

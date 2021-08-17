@@ -44,7 +44,7 @@ export class ResumeTechSkillComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
-    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -79,8 +79,9 @@ export class ResumeTechSkillComponent implements OnInit {
             }
           },
         );
-    } else {
-    this.resumeService.getResume(
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {    this.resumeService.getResume(
       `?email_address=${this.userService.connectedUser$
         .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
         .getValue().user[0]['company_email']}`).subscribe((response) => {
@@ -215,18 +216,35 @@ this.button = 'Add'; }
     return(indexationArray);
   }
   routeNextBack(typeRoute: string) {
-    if (typeRoute === 'next') {
-      this.router.navigate(['/candidate/resume/functionalSkills'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
+
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/functionnalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     } else {
-      this.router.navigate(['/candidate/resume/technicalSkills'], {
-        state: {
-          resumeCode: this.resumeCode
+      if (typeRoute === 'next') {
+          this.router.navigate(['/candidate/resume/functionalSkills'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        } else {
+          this.router.navigate(['/candidate/resume/certifications'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
         }
-      });
     }
   }
 

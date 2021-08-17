@@ -50,6 +50,8 @@ export class ResumeComponent implements OnInit {
                     resume_filename_docx: resume[0].resume_filename_docx,
                     resume_filename_pdf: resume[0].resume_filename_pdf,
                     user_info: resume[0],
+                    first_name: candidate.first_name,
+                    last_name: candidate.last_name,
                   });
                   console.log('res', resume);
                 }
@@ -65,34 +67,35 @@ export class ResumeComponent implements OnInit {
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
       case ('show'):
-        this.showBloc(rowAction.data);
+        this.exportPdf(rowAction.data);
         break;
       case ('update'):
-        this.updateBloc(rowAction.data);
+        this.updateResume(rowAction.data);
         break;
       case('delete'):
-        this.deleteBloc(rowAction.data);
+        this.downloadDocx(rowAction.data);
     }
   }
-  showBloc(data) {
+  exportPdf(data) {
       window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf,  '_blank');
     }
-  private updateBloc(data) {
+  private updateResume(data) {
     console.log('general info =', data.user_info);
     data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
     data.user_info.language_id = data.user_info.ResumeKey.language_id;
     data.user_info.company_email = data.user_info.ResumeKey.company_email;
     data.user_info.email_address = data.user_info.ResumeKey.email_address;
     data.user_info.application_id = data.user_info.ResumeKey.application_id;
-    this.router.navigate(['/candidate/resume/'],
+    this.router.navigate(['/manager/resume/generalInformation'],
       {
         state: {
-          generalInformation: data.user_info
+          generalInformation: data.user_info,
+          firstName: data.first_name,
+          lastName: data.last_name,
         }
       });
   }
-
-  private deleteBloc(data) {
+  private downloadDocx(data) {
     window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
   }
 }

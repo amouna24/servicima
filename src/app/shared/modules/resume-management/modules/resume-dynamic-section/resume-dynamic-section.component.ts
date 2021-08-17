@@ -46,7 +46,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
-    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -89,7 +89,9 @@ export class ResumeDynamicSectionComponent implements OnInit {
             }
           },
         );
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -242,18 +244,35 @@ export class ResumeDynamicSectionComponent implements OnInit {
     return(indexationArray);
   }
   routeNextBack(typeRoute: string) {
-    if (typeRoute === 'next') {
-      this.router.navigate(['/candidate/resume/language'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/language'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     } else {
-      this.router.navigate(['/candidate/resume/intervention'], {
-        state: {
-          resumeCode: this.resumeCode
-        }
-      });
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/language'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     }
+
   }
 }

@@ -33,24 +33,23 @@ export class ResumeGuard implements CanActivate {
     });
 
     return new Promise<boolean>(resolve => {
-         if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
-           resolve(true);
-         } else {
+        console.log('loading');
            this.resumeService.getResume(
              `?email_address=${this.userService.connectedUser$
                .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue().user[0]['company_email']}`)
-             .subscribe(
+               .subscribe(
                async (generalInfo) => {
                  if (generalInfo['msg_code'] === '0004') {
-                   this.router.navigate(['/candidate/resume']);
+                   console.log(generalInfo[0]);
+                   await this.router.navigate(['/candidate/resume']);
                    this.utilsService.openSnackBar(this.message, 'close');
                    this.spinnerService.isLoadingSubject.next(false);
                    resolve(true);
                  } else {
+                   console.log('gen info =', generalInfo[0]);
                    resolve(true);
                  }
                });
-         }
     }
     );
   }

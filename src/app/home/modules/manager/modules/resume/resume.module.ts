@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 import { ResumeRoutingModule } from './resume-routing.module';
@@ -11,6 +11,8 @@ import { ResumeComponent } from './resume.component';
     CommonModule,
     ResumeRoutingModule,
     DynamicDataTableModule
-  ]
-})
+  ],
+  providers: [
+    DatePipe,
+]})
 export class ResumeModule { }

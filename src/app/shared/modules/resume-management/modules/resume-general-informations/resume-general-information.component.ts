@@ -50,7 +50,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
   years = 0;
   showNumberError = false;
   generalInfoManager: IResumeModel;
-
+  firstNameManager: string;
+  lastNameManager: string;
   /**********************************************************************
    * @description Resume general information constructor
    *********************************************************************/
@@ -67,7 +68,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private appInitializerService: AppInitializerService,
     private uploadService: UploadService,
   ) {
-    this.generalInfoManager = this.router.getCurrentNavigation().extras.state?.generalInformation;
+    this.generalInfoManager = this.router.getCurrentNavigation()?.extras?.state?.generalInformation;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
+    this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
   }
 
   /**************************************************************************
@@ -75,8 +79,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
    *************************************************************************/
   async ngOnInit() {
     this.showYears = false;
-    this.firstname = this.userService.connectedUser$.getValue().user[0]['first_name'];
-    this.lastname = this.userService.connectedUser$.getValue().user[0]['last_name'];
+    this.firstname = this.firstNameManager ? this.firstNameManager : this.userService.connectedUser$.getValue().user[0]['first_name'];
+    this.lastname = this.lastNameManager ? this.lastNameManager : this.userService.connectedUser$.getValue().user[0]['last_name'];
     this.company = this.userService.connectedUser$.getValue().user[0]['company_email'];
     this.getCompanyName();
     this.initForm();
@@ -97,6 +101,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
    *************************************************************************/
   async getResume() {
     if (this.generalInfoManager) {
+      console.log('manager');
       if ((this.generalInfoManager.image !== undefined) && (this.generalInfoManager.image !== null)) {
         this.haveImage = this.generalInfoManager.image;
         this.avatar = await this.uploadService.getImage(this.generalInfoManager.image);
@@ -109,11 +114,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
       await this.updateForm(this.generalInfoManager);
       this.update = true;
-    } else {
+    } else if (this.resumeCode) {
+      console.log('resumeCode');
       await this.resumeService.getResume(
-        `?email_address=${this.userService.connectedUser$
-          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-          .getValue().user[0]['company_email']}`)
+        `?resume_code=${this.resumeCode}`)
         .subscribe(
           async (generalInfo) => {
             if (generalInfo['msg_code'] !== '0004') {
@@ -141,9 +145,11 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   );
                 }
                 this.updateForm(generalInfo[0]);
+                this.generalInfoManager = generalInfo[0];
                 this.update = true;
               }
             } else {
+              console.log('candidate');
               this.userService.connectedUser$.subscribe((data) => {
                 if (!!data) {
                   this.user = data['user'][0];
@@ -164,8 +170,66 @@ export class ResumeGeneralInformationComponent implements OnInit {
             }
           }
         );
+    } if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.generalInfoManager && !this.resumeCode) {
+       await this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      console.log('hello');
+        await this.resumeService.getResume(
+          `?email_address=${this.userService.connectedUser$
+            .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+            .getValue().user[0]['company_email']}`)
+          .subscribe(
+            async (generalInfo) => {
+              if (generalInfo['msg_code'] !== '0004') {
+                if (!!generalInfo) {
+                  if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
+                    this.haveImage = generalInfo[0].image;
+                    this.avatar = await this.uploadService.getImage(generalInfo[0].image);
+                  } else {
+                    this.userService.connectedUser$.subscribe((data) => {
+                      if (!!data) {
+                        this.user = data['user'][0];
+                        this.haveImage = data['user'][0]['photo'];
+                        if (!this.haveImage) {
+                          this.userService.haveImage$.subscribe((res) => {
+                              this.haveImage = res;
+                            }
+                          );
+                        }
+                      }
+                    });
+                    this.userService.avatar$.subscribe(
+                      avatar => {
+                        this.avatar = avatar;
+                      }
+                    );
+                  }
+                  this.updateForm(generalInfo[0]);
+                  this.update = true;
+                }
+              } else {
+                this.userService.connectedUser$.subscribe((data) => {
+                  if (!!data) {
+                    this.user = data['user'][0];
+                    this.haveImage = data['user'][0]['photo'];
+                    if (!this.haveImage) {
+                      this.userService.haveImage$.subscribe((res) => {
+                          this.haveImage = res;
+                        }
+                      );
+                    }
+                  }
+                });
+                this.userService.avatar$.subscribe(
+                  avatar => {
+                    this.avatar = avatar;
+                  }
+                );
+              }
+            }
+          );
+      }
     }
-  }
 
   /**************************************************************************
    * @description set Existing data in the Resume Form
@@ -243,7 +307,19 @@ export class ResumeGeneralInformationComponent implements OnInit {
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         this.resumeService.addResume(this.generalInfo).subscribe(data => {
-          this.router.navigate(['/candidate/resume/certifDiploma']);
+
+          if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+            this.router.navigate(['/manager/resume/diploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+              }
+            });          } else {
+            this.router.navigate(['/candidate/resume/certifDiploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+              }
+            });
+          }
         });
       } else {
       }
@@ -256,12 +332,22 @@ export class ResumeGeneralInformationComponent implements OnInit {
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
         console.log(this.generalInfo);
+        if (this.generalInfoManager) {
+          this.generalInfo.email_address = this.generalInfoManager.ResumeKey.email_address;
+        }
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
-          this.router.navigate(['/candidate/resume/certifDiploma'], {
-          state: {
-            resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+          if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+            this.router.navigate(['/manager/resume/diploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.ResumeKey.resume_code : this.resumeCode
+              }
+            });          } else {
+            this.router.navigate(['/candidate/resume/certifDiploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.ResumeKey.resume_code : this.resumeCode
+              }
+            });
           }
-          });
         });
       }
     }
@@ -272,15 +358,14 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Get company name from user Service
    *************************************************************************/
   getCompanyName() {
-    this.userService.connectedUser$
-      .subscribe(
-        (userInfo) => {
-          if (userInfo) {
-            this.companyName = userInfo['company'][0]['company_name'];
-          }
-        });
+      this.userService.connectedUser$
+        .subscribe(
+          (userInfo) => {
+            if (userInfo) {
+              this.companyName = userInfo['company'][0]['company_name'];
+            }
+          });
   }
-
   /**************************************************************************
    * @description Get Language list from RefData and RefType
    *************************************************************************/
