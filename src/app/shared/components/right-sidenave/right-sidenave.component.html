@@ -120,7 +120,7 @@
                 </mat-list-item>
               </div>
             </ng-container>
-            <ng-container *ngIf=" subMenuItem.type === 'link' && parentMenu != 'right-sidenav-menu.static.theme' ;">
+            <ng-container *ngIf=" subMenuItem.type === 'link' && parentMenu != 'themes' ;">
               <a mat-list-item routerLinkActive="active-list-item" fxLayout="column"
                  [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
                  [routerLinkActiveOptions]="{exact: true}" class="list-item m-l-10" [@iconAnimation]="sidebarState">
