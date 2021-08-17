@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
-import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
 
 import { Observable } from 'rxjs';
 
@@ -38,7 +37,7 @@ export class TimesheetService {
    * @description Update Timesheet
    * @param timesheet: updated timesheet Object
    *************************************************************************/
-  updateTimesheet(timesheet: ITimesheetModel): Observable<any> {
+  updateTimesheet(timesheet: any): Observable<any> {
     return this.httpClient.put<ITimesheetModel>(`${environment.timesheetApiUrl}`, timesheet);
   }
 
@@ -48,15 +47,5 @@ export class TimesheetService {
    *************************************************************************/
   deleteTimesheet(id: string): Observable<any> {
     return this.httpClient.delete<ITimesheetModel>(`${environment.timesheetApiUrl}?_id=${id}`);
-  }
-
-  /*------------------------------------ TIMESHEET PROJECT --------------------------------------*/
-  /**************************************************************************
-   * @description Get TimesheetProject List
-   * @param filter search query like [ ?id=123 ]
-   * @returns All TimesheetProject Observable<ITimesheetProjectModel[]>
-   *************************************************************************/
-  getTimesheetProject(filter: string): Observable<ITimesheetProjectModel[]> {
-    return this.httpClient.get<ITimesheetProjectModel[]>(`${environment.timesheetProjectApiUrl}/${filter}`);
   }
 }

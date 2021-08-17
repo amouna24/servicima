@@ -9,7 +9,7 @@
      <ng-template #Edit>
        <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
      </ng-template>
-     <button mat-flat-button class="btn-small bg-pale-grey cool-grey">
+     <button mat-flat-button class="btn-small bg-pale-grey cool-grey" (click)="backClicked()">
        Back
      </button>
      </div>
@@ -36,8 +36,8 @@
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
              <mat-select formControlName="project_code" placeholder="Project">
-               <mat-option *ngFor="let project of projectsList" [value]="project.project_desc">
-                 {{ project.project_desc }}
+               <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
+                 {{ project.project_desc}}
                </mat-option>
              </mat-select>
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
@@ -61,14 +61,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday">
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.monday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.monday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -77,14 +71,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" >
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.tuesday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.tuesday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -93,14 +81,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" >
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.wednesday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.wednesday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -109,14 +91,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" >
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.thursday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.thursday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -125,14 +101,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" >
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.friday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.friday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -141,14 +111,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" >
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.saturday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.saturday)}}
              </mat-error>
            </mat-form-field>
          </div>
@@ -157,14 +121,8 @@
            <mat-form-field appearance="outline">
              <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
              <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday">
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.min">
-               minimum value is 0
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.max">
-               maximum value is 8
-             </mat-error>
-             <mat-error class="wid-error-messages" *ngIf="initialForm.controls.sunday?.errors?.required">
-               Required field
+             <mat-error class="wid-error-messages">
+               {{dayValidator(initialForm.controls.sunday)}}
              </mat-error>
            </mat-form-field>
          </div>

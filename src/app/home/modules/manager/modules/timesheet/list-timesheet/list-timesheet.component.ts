@@ -13,7 +13,7 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
 import { ModalService } from '@core/services/modal/modal.service';
-import { takeUntil } from 'rxjs/operators';
+import { ContractsService } from '@core/services/contracts/contracts.service';
 
 import { ShowTimesheetComponent } from '../show-timesheet/show-timesheet.component';
 import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.component';
@@ -36,7 +36,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   profTitleList: IViewParam[];
   listStatus: string;
   refdata: any;
-  categoryCode: string;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -54,6 +53,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     private utilService: UtilsService,
     private modalsServices: ModalService,
     private route: ActivatedRoute,
+    private contractService: ContractsService
   ) { }
 
   async ngOnInit() {
@@ -92,10 +92,9 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    */
   getAllCollaborators() {
     this.profileService
-        .getAllUser(this.companyEmail)
+        .getUsersByType(this.companyEmail, 'COLLABORATOR')
         .subscribe((res) => {
-          this.collaboratorArray = res['results'].filter(value => value.user_type === 'COLLABORATOR');
-          // console.log('collaboratorArray', this.collaboratorArray);
+          this.collaboratorArray = res['results'];
         });
   }
 
@@ -114,17 +113,12 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @description : get all timesheet
    */
   async getAllTimesheet() {
-    this.categoryList = this.refdata['TIMESHEET_PROJECT_CATEGORY'];
-    this.profTitleList = this.refdata['PROF_TITLES'];
     this.timesheetService
         .getTimesheet(
           `?application_id=${this.userService.applicationId}&company_email=${this.companyEmail}&timesheet_status=${this.listStatus}`)
         .subscribe((res) => {
-          // console.log(res, 'res');
           res.map( (result) => {
-            // console.log(result, 'result');
             this.collaboratorArray.forEach( (collaborator) => {
-             // console.log(collaborator, 'collaborator');
               if ( result.TimeSheetKey.email_address === collaborator.userKey.email_address ) {
                 this.title_id = collaborator.title_id;
                 this.profTitleList.forEach((profTitle) => {
@@ -136,15 +130,9 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
                 result['last_name'] = collaborator.last_name;
                 result['profile'] = collaborator.first_name + ' ' + collaborator.last_name;
                 result['photo'] = collaborator.photo;
-                this.timesheetService.getTimesheetProject(`?project_code=${result.TimeSheetKey.project_code}`)
+                this.contractService.getContractProject(`?project_code=${result.TimeSheetKey.project_code}`)
                     .subscribe((timesheetProject) => {
                       result['project_desc'] = timesheetProject[0].project_desc;
-                      this.categoryCode = timesheetProject[0].category_code;
-                      this.categoryList.forEach((category) => {
-                        if (category.value === this.categoryCode) {
-                          result['category'] = category.viewValue;
-                        }
-                      });
                     });
               }
             });
@@ -159,7 +147,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
    * @param data: object
    */
   showTimesheet(data: ITimesheetModel) {
-    // console.log(data, 'show');
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
         .subscribe(
           (res) => {

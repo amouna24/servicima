@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
-import { ITimesheetProjectModel } from '@shared/models/timesheetProject.model';
 import { UserService } from '@core/services/user/user.service';
 import { Subject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
@@ -12,6 +11,9 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
 import { takeUntil } from 'rxjs/operators';
+import { IContractProject } from '@shared/models/contractProject.model';
+import { ContractsService } from '@core/services/contracts/contracts.service';
+import { IContract } from '@shared/models/contract.model';
 
 const TIMESHEET_EXTRA = 'TIMESHEET_EXTRA';
 const TIMESHEET = 'TIMESHEET';
@@ -24,7 +26,7 @@ const TIMESHEET = 'TIMESHEET';
 
 export class AddTimesheetComponent implements OnInit {
   initialForm: FormGroup;
-  projectsList: ITimesheetProjectModel[];
+  projectsList: IContractProject[];
   userInfo: IUserInfo;
   companyEmail: string;
   companyId: string;
@@ -35,7 +37,7 @@ export class AddTimesheetComponent implements OnInit {
   projectCode: string;
   startDate: string;
   categoryCode = '';
-  categoryViewValue = '';
+  categoryViewValue: number ;
   timesheet = this.router.getCurrentNavigation().extras.state.data;
   addForm = this.router.getCurrentNavigation().extras.state.buttonClicked !== 'edit';
   typeTimesheet: string;
@@ -60,7 +62,8 @@ export class AddTimesheetComponent implements OnInit {
               private location: Location,
               private router: Router,
               private activeRoute: ActivatedRoute,
-              private modalServices: ModalService
+              private modalServices: ModalService,
+              private contractService: ContractsService
   ) {
   }
 
@@ -77,13 +80,44 @@ export class AddTimesheetComponent implements OnInit {
     this.typeTimesheet = this.activeRoute.snapshot.params.type;
   }
 
+  getContracts(): Promise<IContract> {
+    return new Promise(resolve => {
+      this.contractService.getContracts(
+        `?collaborator_email=${this.userService.emailAddress}` +
+        `&email_address=${this.companyEmail}` +
+        `&contract_start_date[$lte]=${new Date()}` +
+        `&contract_end_date[$gte]=${new Date()}`
+      ).subscribe(
+        (data) => {
+          const res = data['results'][0];
+          resolve(res);
+        }
+      );
+    } );
+  }
+
   /**
    * @description : get Project
    */
-  getProjects(): void {
-    this.timesheetService.getTimesheetProject('').toPromise().then(
-      (res) => this.projectsList = res
-    );
+  getProjects(contractCode?: string): void {
+    if (!contractCode) {
+      this.getContracts().then(
+        (data) => {
+          this.contractService.getContractProject(`?contract_code=${data.contractKey.contract_code}`).subscribe(
+            (res) => {
+                this.projectsList = res;
+            }
+          );
+        }
+      );
+    } else {
+          this.contractService.getContractProject(`?contract_code=${contractCode}`).subscribe(
+            (res) => {
+                this.projectName = res[0].project_desc;
+                this.initialForm.patchValue({ project_code: this.projectName});
+            }
+          );
+    }
   }
 
   /**
@@ -174,16 +208,7 @@ export class AddTimesheetComponent implements OnInit {
         customer_timesheet: this.timesheet.customer_timesheet,
       });
       this.projectCode = this.timesheet.TimeSheetKey.project_code;
-      this.timesheetService.getTimesheetProject(`?project_code=${this.projectCode}`).subscribe(
-        data => {
-          this.projectName = data[0].project_desc;
-          this.initialForm.patchValue({ project_code: this.projectName});
-          this.categoryViewValue = data[0].category_code;
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      this.getProjects(this.projectCode);
     }
   }
 
@@ -338,5 +363,15 @@ export class AddTimesheetComponent implements OnInit {
    */
   backClicked() {
     this.location.back();
+  }
+
+  dayValidator(input: AbstractControl): string | void {
+    if (input?.errors?.required) {
+      return 'Required field';
+    } else if (input?.errors?.max) {
+      return 'maximum value is 8';
+    } else if (input?.errors?.min) {
+      return 'maximum value is 0';
+    }
   }
 }

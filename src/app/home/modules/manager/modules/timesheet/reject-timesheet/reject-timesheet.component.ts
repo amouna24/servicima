@@ -29,7 +29,6 @@ export class RejectTimesheetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // console.log(this.data, 'daaataaa');
     this.openApproveComponent.next({ opened: false, value: this.data.value});
     this.getUserInfo();
   }
@@ -54,20 +53,15 @@ export class RejectTimesheetComponent implements OnInit {
     this.commentManager = event.target.value;
   }
 
-  /**
-   * @description : reject timesheet
-   */
-  rejectTimesheet() {
-    console.log(this.data, 'rejected');
-    this.timesheetToUpdate = {
+  async initUpdateStatus(status: string): Promise<any> {
+    return {
       application_id : this.data.TimeSheetKey.application_id,
       email_address : this.data.email_address,
       company_email : this.data.company_email,
-      timesheet_week : this.data.timesheet_week,
       project_code : this.data.project_code,
       start_date : this.data.start_date,
       end_date : this.data.end_date,
-      timesheet_status : 'Rejected',
+      timesheet_status : status,
       comment : this.commentManager,
       monday : this.data.monday,
       tuesday : this.data.tuesday,
@@ -77,44 +71,39 @@ export class RejectTimesheetComponent implements OnInit {
       saturday : this.data.saturday,
       sunday : this.data.sunday,
       type_timesheet: this.data.type_timesheet,
-      total_week_hours : this.data.total_week_hours,
-      customer_timesheet : this.data.customer_timesheet
+      total_week_hours : this.data.total_week_hours
     };
+  }
 
-    this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
-      data => { console.log(data);
-        this.dialogRef.close('reject');
-        },
-      error => console.log(error)
+  /**
+   * @description : reject timesheet
+   */
+  rejectTimesheet() {
+    this.initUpdateStatus('Rejected').then(
+      (data) => {
+        this.timesheetToUpdate = data;
+        console.log(data);
+      }
+    ).finally(
+      () => {
+        console.log('var', this.timesheetToUpdate);
+        this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
+          data => {
+            console.log(data);
+            this.dialogRef.close('reject');
+          },
+          error => console.log(error)
+        );
+      }
     );
+
   }
 
   /**
    * @description : approve timesheet
    */
   approveTimesheet() {
-    console.log(this.data, 'approuved');
-    this.timesheetToUpdate = {
-      application_id : this.data.timesheet.TimeSheetKey.application_id,
-      email_address : this.data.timesheet.email_address,
-      company_email : this.data.timesheet.company_email,
-      timesheet_week : this.data.timesheet.timesheet_week,
-      project_code : this.data.timesheet.project_code,
-      start_date : this.data.timesheet.start_date,
-      end_date : this.data.timesheet.end_date,
-      timesheet_status : 'Approved',
-      comment : this.data.timesheet.comment,
-      monday : this.data.timesheet.monday,
-      tuesday : this.data.timesheet.tuesday,
-      wednesday : this.data.timesheet.wednesday,
-      thursday : this.data.timesheet.thursday,
-      friday : this.data.timesheet.friday,
-      saturday : this.data.timesheet.saturday,
-      sunday : this.data.timesheet.sunday,
-      type_timesheet: this.data.timesheet.type_timesheet,
-      total_week_hours : this.data.timesheet.total_week_hours,
-      customer_timesheet : this.data.timesheet.customer_timesheet
-    };
+    this.initUpdateStatus('Approved');
 
     this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
       data => {

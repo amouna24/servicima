@@ -40,7 +40,7 @@
       </div>
       <div fxFlex >
         <p class="font-size-12 m-0 font-normal black-three">Project:
-          <span class="steel font-light">{{timesheet.project_code}}</span>
+          <span class="steel font-light">{{timesheet.project_desc}}</span>
         </p>
       </div>
     </div>
@@ -51,14 +51,24 @@
     </div>
   </div>
   <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" class="full-width p-l-15">
-    <ng-container *ngFor="let day of week">
-    <div style="width: 85px; height: 65px" class="bg-pale-grey-four border-radius-10 m-r-10 m-b-10"
-         fxLayout="column" fxLayoutAlign="center center">
-      <p class="black font-light font-size-12 m-0" >{{day.day}}:</p>
-      <p class="steel font-light font-size-10 m-0" >{{day.hours}}h00m</p>
-    </div>
+    <ng-container *ngIf="week, else loading">
+      <ng-container *ngFor="let day of week">
+        <div style="width: 85px; height: 65px" class="bg-pale-grey-four border-radius-10 m-r-10 m-b-10"
+             fxLayout="column" fxLayoutAlign="center center">
+          <p class="black font-light font-size-12 m-0" >{{day.day | uppercase}}:</p>
+          <p class="steel font-light font-size-10 m-0" >{{day.hours}}h00m</p>
+        </div>
+      </ng-container>
     </ng-container>
-    <div style="width: 85px; height: 65px" class="bg-pale-grey border-radius-10"
+    <ng-template #loading >
+      <wid-skeleton-loader
+        nbrColumn="4" nbrRow="2"
+        height="65" width="85"
+        marginTop="0" marginBottom="20" marginLeft="9"
+      ></wid-skeleton-loader>
+    </ng-template>
+
+    <div *ngIf="week" style="width: 85px; height: 65px" class="bg-pale-grey border-radius-10"
          fxLayout="column" fxLayoutAlign="center center">
      <p class="black font-light font-size-12 m-0" >Total:</p>
       <p class="steel font-light font-size-10 m-0" >{{timesheet.total_week_hours}}h00m</p>
