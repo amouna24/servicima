@@ -83,15 +83,6 @@ export class ResumeDoneComponent implements OnInit {
   label: object;
   showEmpty = true;
   userType: string;
-
-  /**************************************************************************
-   * @description generate Resume in docx format or in PDF format
-   * @param action which differs between the generation in pdf or docx format
-   * @param theme choose the theme of the resume
-   * @param data it contains the necessary data for the Resume
-   *************************************************************************/
-  selectedFile = { file: null, name: '' };
-
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -162,7 +153,6 @@ export class ResumeDoneComponent implements OnInit {
       this.count += 13;
     }
     this.showEmpty = false;
-    console.log( this.count);
     return this.count;
   }
 
@@ -386,7 +376,7 @@ export class ResumeDoneComponent implements OnInit {
 
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
-   * @param res It contains the resume in docx format
+   * @param formData It contains the resume in docx format
    * @return res return the image uploaded
    *************************************************************************/
   async uploadFile(formData) {
@@ -535,6 +525,12 @@ export class ResumeDoneComponent implements OnInit {
       }
     });
   }
+  /**************************************************************************
+   * @description generate Resume in docx format or in PDF format
+   * @param action which differs between the generation in pdf or docx format
+   * @param theme choose the theme of the resume
+   * @param data it contains the necessary data for the Resume
+   *************************************************************************/
   downloadDocs(data: object, action: string, theme: string) {
     this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
@@ -544,23 +540,18 @@ export class ResumeDoneComponent implements OnInit {
           this.loading = false;
         } else if (action === 'generate') {
           saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-          const file = new File([res], `${this.generalInfoList[0].email_address}.docx`,
+          const file = new File([res], `${this.generalInfoList[0].init_name}.docx`,
             { lastModified: new Date().getTime(), type: 'docx' });
           const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
           formData.append('file', file);
           formData.append('caption', file.name);
-          this.selectedFile.file = formData;
-          this.selectedFile.name = file.name;
-          await this.uploadFile(this.selectedFile.file).then( async (filename) => {
+          await this.uploadFile(formData).then( async (filename) => {
             const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
               { lastModified: new Date().getTime(), type: 'pdf'});
             const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
             formDataPdf.append('file', filePdf);
             formDataPdf.append('caption', filePdf.name);
-            this.selectedFile.file = formDataPdf;
-            this.selectedFile.name = filePdf.name;
-            await this.uploadFile(this.selectedFile.file).then((filenamePdf) => {
-              console.log('filename', filenamePdf);
+            await this.uploadFile(formDataPdf).then((filenamePdf) => {
               this.generalInfoList[0].resume_filename_docx = filename;
               this.generalInfoList[0].resume_filename_pdf = filenamePdf;
               this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
@@ -568,9 +559,7 @@ export class ResumeDoneComponent implements OnInit {
               this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
               this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
               this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-              console.log(this.generalInfoList[0]);
               this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                console.log('new general info ', generalInfo);
                  if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
                    this.router.navigate(['/manager/resume/']);
                  }
@@ -721,6 +710,9 @@ export class ResumeDoneComponent implements OnInit {
       };
     });
   }
+  /**************************************************************************
+   * @description verify the type of the connected user
+   *************************************************************************/
   verifyUserType() {
     this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' ? this.userType = 'manager' : this.userType = 'candidate';
   }

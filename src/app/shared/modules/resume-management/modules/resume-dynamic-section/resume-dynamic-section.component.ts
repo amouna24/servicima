@@ -115,7 +115,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
                     this.showSection = false;
                   }
                   this.showEmpty = false;
-                  console.log(this.showSection , this.showEmpty);
 
                 }
                 ,
@@ -132,7 +131,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
         },
       );
     }
-    console.log('this', this.showEmpty, this.showSection);
   }
 
   /**************************************************************************
@@ -243,6 +241,10 @@ export class ResumeDynamicSectionComponent implements OnInit {
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
   routeNextBack(typeRoute: string) {
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
       if (typeRoute === 'next') {

@@ -151,7 +151,6 @@ export class ResumeTechSkillComponent implements OnInit {
       this.techSkillUpdate.skill_index = this.skillIndex;
       this.techSkillUpdate._id = this.id;
       if (this.sendTechSkill.valid) {
-        console.log('this.techSkillUpdate', this.techSkillUpdate, 'other', this.TechSkill);
         this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => {
           this.techSkillArray.splice(this.indexUpdate, 0,  data);
           console.log('Technical skill updated =', data);
@@ -215,6 +214,10 @@ this.button = 'Add'; }
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
   routeNextBack(typeRoute: string) {
 
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {

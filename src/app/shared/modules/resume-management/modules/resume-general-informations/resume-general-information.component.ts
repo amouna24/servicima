@@ -68,10 +68,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private appInitializerService: AppInitializerService,
     private uploadService: UploadService,
   ) {
-    this.generalInfoManager = this.router.getCurrentNavigation()?.extras?.state?.generalInformation;
-    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
-    this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
+    this.getDataFromPreviousRoute();
   }
 
   /**************************************************************************
@@ -86,22 +83,18 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.initForm();
     this.getLanguageList();
     await this.getResume();
-    console.log('general info manager = ', this.generalInfoManager);
   }
-
   /**************************************************************************
    * @description : Show or Hide The input of Years of experience
    *************************************************************************/
   showHideYears() {
     this.showYears = !this.showYears;
   }
-
   /**************************************************************************
    *  @description Get Resume Data from Resume Service and reusme Image from upload Service
    *************************************************************************/
   async getResume() {
     if (this.generalInfoManager) {
-      console.log('manager');
       if ((this.generalInfoManager.image !== undefined) && (this.generalInfoManager.image !== null)) {
         this.haveImage = this.generalInfoManager.image;
         this.avatar = await this.uploadService.getImage(this.generalInfoManager.image);
@@ -115,7 +108,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       await this.updateForm(this.generalInfoManager);
       this.update = true;
     } else if (this.resumeCode) {
-      console.log('resumeCode');
       await this.resumeService.getResume(
         `?resume_code=${this.resumeCode}`)
         .subscribe(
@@ -149,7 +141,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
                 this.update = true;
               }
             } else {
-              console.log('candidate');
               this.userService.connectedUser$.subscribe((data) => {
                 if (!!data) {
                   this.user = data['user'][0];
@@ -173,7 +164,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     } if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.generalInfoManager && !this.resumeCode) {
        await this.router.navigate(['manager/resume/']);
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
-      console.log('hello');
         await this.resumeService.getResume(
           `?email_address=${this.userService.connectedUser$
             .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -230,7 +220,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
           );
       }
     }
-
   /**************************************************************************
    * @description set Existing data in the Resume Form
    * @param generalInformation: General information model
@@ -244,7 +233,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_code: generalInformation.ResumeKey.resume_code,
       image: generalInformation.image,
     });
-    console.log('this.CreationForm.controls.years_of_experience.value', this.CreationForm.controls.years_of_experience.value);
     if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
@@ -254,13 +242,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   (responseProExp) => {
                     if (responseProExp['msg_code'] !== '0004') {
                       responseProExp.forEach((proExp) => {
-                        console.log('proExp', new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear());
                         const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
                           new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                        console.log('difference=', difference);
                         this.years = difference + this.years;
                       });
-                      console.log('years auto = ', this.years);
                       this.CreationForm.patchValue({
                         years_of_experience: this.years,
                       });
@@ -288,7 +273,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       status: 'A'
     });
   }
-
   /****************************************************
    * @description Create Or Update Resume General information
    ***************************************************/
@@ -325,13 +309,11 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
     } else {
       this.generalInfo = this.CreationForm.value;
-      console.log('filename=', filename);
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }
       this.generalInfo.image = filename;
       if (this.CreationForm.valid && !this.showNumberError) {
-        console.log(this.generalInfo);
         if (this.generalInfoManager) {
           this.generalInfo.email_address = this.generalInfoManager.ResumeKey.email_address;
         }
@@ -353,7 +335,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     }
     this.showNumberError = false;
   }
-
   /**************************************************************************
    * @description Get company name from user Service
    *************************************************************************/
@@ -377,7 +358,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
       }
     ));
   }
-
   /**************************************************************************
    * @description Get imported image by the user
    * @param obj: object uploaded
@@ -394,5 +374,14 @@ export class ResumeGeneralInformationComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description get resume general informations data of a user
+   *************************************************************************/
+  getDataFromPreviousRoute() {
+    this.generalInfoManager = this.router.getCurrentNavigation()?.extras?.state?.generalInformation;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
+    this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
   }
 }

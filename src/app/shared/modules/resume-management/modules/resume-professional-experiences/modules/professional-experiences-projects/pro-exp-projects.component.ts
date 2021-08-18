@@ -573,6 +573,9 @@ export class ProExpProjectsComponent implements OnInit {
       this.openExpansion = false;
     }
   }
+  /**************************************************************************
+   * @description Route to professional experience  page
+   *************************************************************************/
   routeToProfessionalExperience() {
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
       this.router.navigate(['/manager/resume/professionalExperience'], {

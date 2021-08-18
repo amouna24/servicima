@@ -65,7 +65,6 @@ export class ResumeLanguageComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    console.log('connected', this.userService.connectedUser$.getValue());
     this.button = this.resumeCode ? 'Save' : 'Next';
     this.languageArray = [];
     this.ratingArr = [];
@@ -329,6 +328,10 @@ export class ResumeLanguageComponent implements OnInit {
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
   routeNextBack(typeRoute: string) {
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
       if (typeRoute === 'next') {

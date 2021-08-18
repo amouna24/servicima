@@ -406,6 +406,10 @@ export class ProExpComponent implements OnInit {
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
   routeNextBack(typeRoute: string) {
 
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {

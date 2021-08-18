@@ -108,7 +108,6 @@ button: string;
    *************************************************************************/
   getCertificationInfo() {
     if (this.resumeCode) {
-      console.log('resume code');
       this.resumeService.getCertification(
         `?resume_code=${this.resumeCode}`)
         .subscribe(
@@ -131,7 +130,6 @@ button: string;
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' && !this.resumeCode) {
-      console.log('candidate');
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -245,6 +243,10 @@ button: string;
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous opage
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
   routeNextBack(typeRoute: string) {
     if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
       if (typeRoute === 'next') {
