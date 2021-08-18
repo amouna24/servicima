@@ -72,8 +72,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
               private socialNetwork: SocialNetwork,
               private refdataService: RefdataService,
               ) {
-    this.id = this.router.getCurrentNavigation().extras.state?.id;
-    this.add = this.router.getCurrentNavigation().extras.state?.action;
+    this.id = this.router.getCurrentNavigation()?.extras.state?.id;
+    this.add = this.router.getCurrentNavigation()?.extras.state?.action;
   }
 
   /** list filtered by search keyword */

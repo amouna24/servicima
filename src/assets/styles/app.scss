@@ -692,11 +692,9 @@ html body {
 /*    DYNAMIC COMPONENT   */
 .dynamic-component-container  {
   @include get-page(servicima);
-  margin: 20px;
-  height: 87vh !important;
+  height: 78vh !important;
   background-color: $white;
   margin: 0 25px 0 25px;
-  height: 84vh !important;
   // width: 88vw;
 }
 
@@ -761,8 +759,7 @@ html body {
    user
 *******************/
 .container-show{
-  height: 88vh !important;
-  margin: 20px;
+  height: 78vh !important;
 }
 .container-btn{
   width: 43px;

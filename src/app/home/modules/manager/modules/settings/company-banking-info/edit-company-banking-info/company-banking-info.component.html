@@ -1,0 +1,123 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100" >
+    <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
+      <div fxLayout="column" fxFlex="56">
+        <h1 class="steel font-size-24 font-medium">{{'company.banking.info.title' | translate}}</h1>
+      </div>
+      <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button class="btn-medium bg-pale-grey" >
+          <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">{{'company.banking.info.back' | translate}}</span>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row" fxFlex="1" fxLayoutAlign="space-around center">
+      <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+    </div>
+  <div fxLayout="column"  class="m-l-60" fxFlexOffset="50px" fxFlex="50"  [formGroup]="form">
+    <wid-scrollbar >
+
+<div fxLayout="column" > 
+
+
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'company.banking.info.company' | translate }} : </label>
+      <mat-form-field appearance="outline">
+        <input  formControlName="company"  class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.banking.info.company' | translate | capitalizeFirstLetter"
+               [ngStyle.xs]="{'font-size': '15px'}" />
+        <!--<mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error> -->
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">BIC code:</label>
+      <mat-form-field appearance="outline">
+        <input formControlName="bicCode" class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.banking.info.biccode' | translate | capitalizeFirstLetter"
+               [ngStyle.xs]="{'font-size': '15px'}" />
+        <!--<mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error> -->
+      </mat-form-field>
+    </div>
+  </div>
+  
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'company.banking.info.bankname' | translate }} </label>
+      <mat-form-field appearance="outline">
+        <input  formControlName="bankName"  class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.banking.info.bankname' | translate | capitalizeFirstLetter"
+               [ngStyle.xs]="{'font-size': '15px'}" />
+        <!--<mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error> -->
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="40" >
+      <label class="font-size-12 black-three  required">{{'company.banking.info.bankdomiciliation' | translate }} :</label>
+      <mat-form-field appearance="outline">
+        <input formControlName="bankDomiciliation"  class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.banking.info.bankdomiciliation' | translate | capitalizeFirstLetter"
+               [ngStyle.xs]="{'font-size': '15px'}" />
+        <!--<mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error> -->
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three" required> {{'company.banking.info.iban' | translate }} : </label>
+      <mat-form-field appearance="outline">
+        <input formControlName="iban"  autocomplete="off" class="black-three" matInput  [placeholder]=" 'company.banking.info.iban' | translate | capitalizeFirstLetter"
+              [ngStyle.xs]="{'font-size': '15px'}" />
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three">{{'company.banking.info.rib' | translate }} : </label>
+      <mat-form-field appearance="outline">
+        <input formControlName="rib" autocomplete="off" class="black-three" matInput [placeholder]=" 'company.banking.info.rib' | translate | capitalizeFirstLetter"
+                [ngStyle.xs]="{'font-size': '15px'}" />
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three  required" required>{{'company.banking.info.bankaddress'| translate }}: </label>
+      <mat-form-field appearance="outline">
+               <textarea formControlName="bankAddress" [placeholder]=" 'company.banking.info.bankaddress' | translate" rows="7"
+                          autocomplete="off" matInput
+                          cdkTextareaAutosize
+                          cdkAutosizeMinRows="1"
+                         [ngStyle.xs]="{'font-size': '15px'}" class="black-three">
+                    </textarea>
+       <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
+          {{ 'general.required' | translate }}</mat-error> -->
+  
+      </mat-form-field>
+    </div>
+  
+    <div fxLayout="column" fxFlex="40">
+      <label class="font-size-12 black-three">{{'company.banking.info.factorinformations'| translate }} : </label>
+      <mat-form-field appearance="outline">
+               <textarea formControlName="factorInformation" [placeholder]=" 'company.banking.info.factorinformations' | translate" rows="7"
+                         autocomplete="off" matInput
+                         cdkTextareaAutosize
+                         cdkAutosizeMinRows="1"
+                         style="overflow: hidden;"
+                         [ngStyle.xs]="{'font-size': '15px'}" class="black-three">
+                    </textarea>
+        <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
+           {{ 'general.required' | translate }}</mat-error> -->
+  
+      </mat-form-field>
+    </div>
+  
+
+  </div>
+</div>
+</wid-scrollbar>
+  </div>
+    <div class="modal-footer" fxFlex="22" fxLayoutAlign="flex-end flex-end" fxLayout="row" fxLayoutGap="30px" class="m-r-20" >
+      <button mat-raised-button class="btn-small bg-pale-grey black-three" >{{'company.banking.info.cancel'| translate }} : </button>
+      <button mat-raised-button (click)="addOrEdit()" class="btn-small bg-ocean-blue white" >{{'company.banking.info.confirm'| translate }}</button>
+    </div>
+  
+  </div>
+  

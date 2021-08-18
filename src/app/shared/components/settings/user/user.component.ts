@@ -56,7 +56,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private refdataService: RefdataService,
   ) {
-    this.id = this.router.getCurrentNavigation().extras.state?.id;
+    this.id = this.router.getCurrentNavigation()?.extras?.state?.id;
   }
 
   /**
