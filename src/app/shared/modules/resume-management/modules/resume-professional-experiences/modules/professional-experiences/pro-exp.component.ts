@@ -302,7 +302,6 @@ export class ProExpComponent implements OnInit {
                     }
                   });
                   this.filterDate();
-                  this.button = 'Add';
                 });
 
           }

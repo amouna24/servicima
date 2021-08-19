@@ -25,18 +25,16 @@ export class ResumeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.getData().then((data) => {
       this.tableData.next(data);
-      console.log('table data', this.tableData);
     });
   }
 
   getData() {
     return new Promise((resolve) => {
       this.userService.connectedUser$.subscribe((userInfo) => {
-        console.log(userInfo);
-        this.userService.getUsers(userInfo['company'][0].companyKey.email_address, 'CANDIDATE').subscribe((res) => {
+        console.log('company info', userInfo);
+        this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe((res) => {
+          console.log('res', res);
           res['results'].forEach((candidate) => {
-            console.log('mail address', candidate.userKey.email_address, 'company email', candidate.company_email,
-              'name=', candidate.first_name + ' ' + candidate.last_name);
             this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
               .subscribe((resume) => {
                 if (resume['msg_code'] !== '0004') {
@@ -44,7 +42,7 @@ export class ResumeComponent implements OnInit {
                     resume_name: candidate.first_name + ' ' + candidate.last_name,
                     resume_years_exp: resume[0].years_of_experience,
                     resume_position: resume[0].actual_job,
-                    resume_status: 'Candidate',
+                    resume_status: candidate.user_type,
                     resume_email: candidate.userKey.email_address,
                     resume_user_type: candidate.user_type,
                     resume_filename_docx: resume[0].resume_filename_docx,
@@ -53,11 +51,10 @@ export class ResumeComponent implements OnInit {
                     first_name: candidate.first_name,
                     last_name: candidate.last_name,
                   });
-                  console.log('res', resume);
                 }
-              });
+                });
           });
-          console.log(this.blocData);
+          console.log('bloc Data', this.blocData);
           resolve(this.blocData);
         });
       });

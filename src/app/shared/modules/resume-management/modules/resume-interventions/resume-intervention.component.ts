@@ -206,7 +206,6 @@ export class ResumeInterventionComponent implements OnInit {
                 this.interventionArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }

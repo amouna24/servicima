@@ -538,6 +538,23 @@ export class ResumeDoneComponent implements OnInit {
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');
           this.loading = false;
+          const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
+            { lastModified: new Date().getTime(), type: 'pdf'});
+          const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
+          formDataPdf.append('file', filePdf);
+          formDataPdf.append('caption', filePdf.name);
+          await this.uploadFile(formDataPdf).then((filenamePdf) => {
+            console.log('uploaded');
+            this.generalInfoList[0].resume_filename_pdf = filenamePdf;
+            this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+            this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+            this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+            this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+            this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+            this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+              console.log( 'updated', generalInfo);
+            });
+          });
         } else if (action === 'generate') {
           saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
           const file = new File([res], `${this.generalInfoList[0].init_name}.docx`,
@@ -546,14 +563,7 @@ export class ResumeDoneComponent implements OnInit {
           formData.append('file', file);
           formData.append('caption', file.name);
           await this.uploadFile(formData).then( async (filename) => {
-            const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
-              { lastModified: new Date().getTime(), type: 'pdf'});
-            const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
-            formDataPdf.append('file', filePdf);
-            formDataPdf.append('caption', filePdf.name);
-            await this.uploadFile(formDataPdf).then((filenamePdf) => {
               this.generalInfoList[0].resume_filename_docx = filename;
-              this.generalInfoList[0].resume_filename_pdf = filenamePdf;
               this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
               this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
               this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
@@ -565,16 +575,13 @@ export class ResumeDoneComponent implements OnInit {
                  }
               });
             });
-          });
         }
       },
       (error) => {
         console.log(error);
       }
     );
-
   }
-
   /**************************************************************************
    * @description get organized Professional experience data in JSON object
    * @return proExpData return the professional experience relating to this candidates

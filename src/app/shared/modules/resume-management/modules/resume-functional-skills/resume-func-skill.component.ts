@@ -145,7 +145,6 @@ export class ResumeFuncSkillComponent implements OnInit {
                 this.funcSkillArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }

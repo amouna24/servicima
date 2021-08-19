@@ -196,7 +196,6 @@ this.button = 'Add'; }
             this.techSkillArray.forEach((value, index) => {
               if (index === pointIndex) { this.techSkillArray.splice(index, 1); }
             });
-            this.button = 'Add';
           }
           this.arrayTechSkillCount--;
           this.subscriptionModal.unsubscribe();

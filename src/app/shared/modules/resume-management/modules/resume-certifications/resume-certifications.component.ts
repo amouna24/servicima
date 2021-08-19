@@ -199,7 +199,6 @@ button: string;
                 this.certificationArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }

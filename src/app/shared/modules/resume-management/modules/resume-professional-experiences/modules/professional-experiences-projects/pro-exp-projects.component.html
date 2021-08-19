@@ -80,11 +80,16 @@
             </div>
             <div fxLayout="row">
               <div fxLayout="column" fxFlex="100">
-                <div fxLayout="row" fxFlexFill class="add_project"   *ngIf="!showForm && showProject">
-                  <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
-                          (click)="onShowForm()">+
-                  </button>
-                  <span class="font-size-12 steel"> {{ 'resume-add-project' | translate }} </span></div>
+                <div fxLayout="row" fxFlexFill class="add_project" fxLayoutGap="5px"   *ngIf="!showForm && showProject">
+                  <div fxLayout="column">
+                    <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
+                            (click)="onShowForm()">+
+                    </button>
+                  </div>
+                  <div fxLayout="column">
+                    <span class="font-size-12 steel"> {{ 'resume-add-project' | translate }} </span>
+                  </div>
+                </div>
               </div>
             </div>
             <form fxLayout="row" [formGroup]="sendProject" *ngIf="showForm">

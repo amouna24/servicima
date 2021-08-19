@@ -220,7 +220,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
                 this.certifDiplomaArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
 
           }
           this.subscriptionModal.unsubscribe();

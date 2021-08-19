@@ -212,4 +212,7 @@ export class UserService {
   getUsers(company_email: string, user_type: string) {
     return this.httpClient.get(`${environment.userApiUrl}?company_email=${company_email}&user_type=${user_type}`);
   }
+  getAllUsers(filter: string) {
+    return this.httpClient.get(`${environment.userApiUrl}/${filter}`);
+  }
 }

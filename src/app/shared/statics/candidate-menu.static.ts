@@ -19,7 +19,7 @@ export const candidateMenu: IMenu[] = [
     },
     {
         state: 'files',
-        name: 'files',
+        name: 'cand.menu.static.files',
         type: 'link',
         icon: 'wi_dashboard',
         feature: 'SOURCING_CAND_FILE_ACCESS',
@@ -33,7 +33,7 @@ export const candidateMenu: IMenu[] = [
     },
   {
     state: 'resume',
-    name: 'Resume management',
+    name: 'cand.menu.static.res-mng',
     type: 'sub',
     icon: 'wi_dashboard',
     feature: 'SOURCING_CAND_FILE_ACCESS',
