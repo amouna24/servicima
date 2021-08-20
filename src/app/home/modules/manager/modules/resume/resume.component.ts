@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { Router } from '@angular/router';
+import { ModalService } from '@core/services/modal/modal.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -15,14 +16,18 @@ export class ResumeComponent implements OnInit {
   blocData = [];
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
+  subscriptionModal: Subscription;
+  clientEmailAddress: string;
   constructor(
     private userService: UserService,
     private resumeService: ResumeService,
     private router: Router,
+    private modalServices: ModalService,
   ) {
   }
 
   async ngOnInit(): Promise<void> {
+    this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
     this.getData().then((data) => {
       this.tableData.next(data);
     });
@@ -32,10 +37,10 @@ export class ResumeComponent implements OnInit {
     return new Promise((resolve) => {
       this.userService.connectedUser$.subscribe((userInfo) => {
         console.log('company info', userInfo);
-        this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe((res) => {
+        this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe(async (res) => {
           console.log('res', res);
-          res['results'].forEach((candidate) => {
-            this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+          for (const candidate of res['results']) {
+            await this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
               .subscribe((resume) => {
                 if (resume['msg_code'] !== '0004') {
                   this.blocData.push({
@@ -52,8 +57,8 @@ export class ResumeComponent implements OnInit {
                     last_name: candidate.last_name,
                   });
                 }
-                });
-          });
+              });
+          }
           console.log('bloc Data', this.blocData);
           resolve(this.blocData);
         });
@@ -70,12 +75,14 @@ export class ResumeComponent implements OnInit {
         this.updateResume(rowAction.data);
         break;
       case('delete'):
-        this.downloadDocx(rowAction.data);
+        this.sendMail(rowAction.data);
     }
   }
+
   exportPdf(data) {
-      window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf,  '_blank');
-    }
+    window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf, '_blank');
+  }
+
   private updateResume(data) {
     console.log('general info =', data.user_info);
     data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
@@ -92,7 +99,35 @@ export class ResumeComponent implements OnInit {
         }
       });
   }
+
   private downloadDocx(data) {
     window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
+  }
+
+  private sendMail(data) {
+    const confirmation = {
+      code: 'edit',
+      title: 'Send Email',
+      description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            this.resumeService
+              .sendMail('5eac544ad4cb666637fe1354',
+                data.user_info.ResumeKey.application_id,
+                '5ee69e061d291480d44f4cf2',
+                this.clientEmailAddress,
+                'WIDIGITAL',
+                data.user_info.actual_job,
+                `${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}`
+              ).subscribe((dataB) => {
+              console.log(dataB);
+            });
+          }
+          this.subscriptionModal.unsubscribe();
+        }
+      );
   }
 }

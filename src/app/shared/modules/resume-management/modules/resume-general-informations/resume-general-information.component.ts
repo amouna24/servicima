@@ -232,6 +232,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
       language_id: generalInformation.ResumeKey.language_id,
       resume_code: generalInformation.ResumeKey.resume_code,
       image: generalInformation.image,
+      resume_filename_docx: generalInformation.resume_filename_docx,
+      resume_filename_pdf: generalInformation.resume_filename_pdf,
     });
     if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
@@ -270,7 +272,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
       actual_job: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       image: this.avatar,
       init_name: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      status: 'A'
+      status: 'A',
+      resume_filename_docx: null,
+      resume_filename_pdf: null,
     });
   }
   /****************************************************
@@ -317,6 +321,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
         if (this.generalInfoManager) {
           this.generalInfo.email_address = this.generalInfoManager.ResumeKey.email_address;
         }
+        console.log('gen info', this.generalInfo);
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {

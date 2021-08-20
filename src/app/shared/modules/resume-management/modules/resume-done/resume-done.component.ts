@@ -16,7 +16,6 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IResumeProfessionalExperienceDoneModel } from '@shared/models/professionalExperienceDone.model';
-
 import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
