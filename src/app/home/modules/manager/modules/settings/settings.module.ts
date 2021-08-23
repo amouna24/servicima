@@ -18,6 +18,7 @@ import { RoleManagementComponent } from './role-management/role-management/role-
 import { TimesheetManagementComponent } from './timesheet management/timesheet-management/timesheet-management.component';
 import { InvoiceComponent } from './invoices/invoice-management/invoice.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { CompanyBankingInfoComponent } from './company-banking-info/edit-company-banking-info/company-banking-info.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     TimesheetManagementComponent,
     InvoiceComponent,
     DashboardComponent,
+    CompanyBankingInfoComponent,
   ],
   imports: [
     CommonModule,
