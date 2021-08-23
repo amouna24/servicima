@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp
+    dataAppearance
   ]
 })
 export class ResumeTechSkillComponent implements OnInit {

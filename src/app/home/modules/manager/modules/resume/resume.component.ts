@@ -36,11 +36,11 @@ export class ResumeComponent implements OnInit {
   getData() {
     return new Promise((resolve) => {
       this.userService.connectedUser$.subscribe((userInfo) => {
-        console.log('company info', userInfo);
         this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe(async (res) => {
           console.log('res', res);
-          for (const candidate of res['results']) {
-            await this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+          res['results'].forEach( (candidate, index) => {
+            console.log('index', index, 'aa', res['results'].length);
+             this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
               .subscribe((resume) => {
                 if (resume['msg_code'] !== '0004') {
                   this.blocData.push({
@@ -58,9 +58,11 @@ export class ResumeComponent implements OnInit {
                   });
                 }
               });
-          }
-          console.log('bloc Data', this.blocData);
-          resolve(this.blocData);
+            if (index + 1 === res['results'].length) {
+              resolve(this.blocData);
+            }
+          });
+
         });
       });
     });
@@ -80,7 +82,23 @@ export class ResumeComponent implements OnInit {
   }
 
   exportPdf(data) {
-    window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf, '_blank');
+    if (data.resume_filename_pdf !== undefined && data.resume_filename_pdf !== null) {
+      window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf, '_blank');
+    } else {
+      const confirmation = {
+        code: 'info',
+        title: 'Export Resume',
+        description: `You cant export this resume because it doesnt exist`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
   }
 
   private updateResume(data) {
@@ -101,7 +119,23 @@ export class ResumeComponent implements OnInit {
   }
 
   private downloadDocx(data) {
-    window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
+    if (data.resume_filename_docx !== undefined && data.resume_filename_docx !== null) {
+      window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
+    } else {
+      const confirmation = {
+        code: 'info',
+        title: 'Export Resume',
+        description: `You cant export this resume because it doesnt exist`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
   }
 
   private sendMail(data) {

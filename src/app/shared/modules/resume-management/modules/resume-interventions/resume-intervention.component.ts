@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-intervention',
@@ -17,7 +17,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ResumeInterventionComponent implements OnInit {

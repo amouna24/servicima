@@ -12,7 +12,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-language',
@@ -22,7 +22,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     blueToGrey,
     GreyToBlue,
     downLine,
-    showProExp,
+    dataAppearance,
     showBloc
 
   ],

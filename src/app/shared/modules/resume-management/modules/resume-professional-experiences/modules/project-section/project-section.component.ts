@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { IViewParam } from '@shared/models/view.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { showBloc, showProExp } from '@shared/animations/animations';
+import { showBloc, dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -16,7 +16,7 @@ import { ModalService } from '@core/services/modal/modal.service';
   templateUrl: './project-section.component.html',
   styleUrls: ['./project-section.component.scss'],
   animations: [
-    showProExp,
+    dataAppearance,
     showBloc
   ]
 })

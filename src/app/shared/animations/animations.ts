@@ -149,7 +149,7 @@ export let downLine = trigger('downLine', [
     animate(500),
   ]),
 ]);
-export let showProExp = trigger('showProExp', [
+export let dataAppearance = trigger('dataAppearance', [
   transition('void => *',  [
     style({ opacity: 0}),
     animate(500),

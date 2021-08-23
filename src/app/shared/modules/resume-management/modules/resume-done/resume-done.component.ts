@@ -20,7 +20,7 @@ import { DatePipe } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
-import { showProExp } from '@shared/animations/animations';
+import { dataAppearance } from '@shared/animations/animations';
 import { map } from 'rxjs/internal/operators/map';
 import { Router } from '@angular/router';
 
@@ -35,7 +35,7 @@ import { environment } from '../../../../../../environments/environment';
   templateUrl: './resume-done.component.html',
   styleUrls: ['./resume-done.component.scss'],
   animations: [
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ResumeDoneComponent implements OnInit {

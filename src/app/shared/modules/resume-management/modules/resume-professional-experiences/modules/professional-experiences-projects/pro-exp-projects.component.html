@@ -21,7 +21,7 @@
           <h4 class="steel font-size-18 font-small">{{position}}-{{customer}}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="76"  @showProExp fxLayoutAlign="space-around">
+      <div fxLayout="row" fxFlex="76"  @dataAppearance fxLayoutAlign="space-around">
         <wid-scrollbar fxFlex="87" class="full-height">
           <div fxLayout="column" fxFlex="100" fxFlexAlign="10px">
             <div fxLayout="row" *ngIf="!showProject"  class="height-50"  fxLayoutAlign="center">
@@ -161,7 +161,7 @@
             </form>
           </div>
           <div fxLayout="column" fxFlex="18"  class="p-l-10" *ngIf="showProject">
-            <div fxLayout="row" @showProExp fxFlex="90" fxLayoutAlign=" end">
+            <div fxLayout="row" @dataAppearance fxFlex="90" fxLayoutAlign=" end">
               <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
                 <wid-scrollbar class="full-width full-height" >
                   <div fxLayout="row"  class="border-radius-10 border_add_project min-height-55" >

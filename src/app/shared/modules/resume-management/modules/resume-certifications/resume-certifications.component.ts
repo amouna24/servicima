@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, GreyToBlue, downLine, showBloc, dataAppearance } from '@shared/animations/animations';
 import { Router } from '@angular/router';
 @Component({
   selector: 'wid-resume-certifications',
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp
+    dataAppearance
   ]
 })
 export class ResumeCertificationsComponent implements OnInit {

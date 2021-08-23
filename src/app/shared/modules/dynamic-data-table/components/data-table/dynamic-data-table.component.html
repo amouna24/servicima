@@ -1,14 +1,14 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100" >
   <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
       <div fxLayout="column" fxFlex="56">
         <h1 class="steel font-size-24 font-medium" >{{ header.title }}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
+        <button *ngIf="buttonAdd !== false" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
           <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
           </mat-icon>
           &nbsp;
-          <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
+          <span   class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
         </button>
       </div>
   </div>
@@ -36,14 +36,14 @@
             </button>
           </div>
       </div>
-    <div fxLayout="row" fxFlex="30" fxLayoutAlign="space-evenly center">
+    <div fxLayout="row" fxFlex="30" fxLayoutAlign="space-evenly center" >
       <div fxLayout="row" fxFlex="35">
-        <button mat-raised-button  class="btn-small bg-topaz">
+        <button *ngIf="buttonImportExport !== false" mat-raised-button  class="btn-small bg-topaz">
           <span class="white">Export</span>
         </button>
       </div>
       <div fxLayout="row" fxFlex="35">
-        <button mat-raised-button  class="btn-small bg-topaz">
+        <button *ngIf="buttonImportExport !== false" mat-raised-button  class="btn-small bg-topaz">
           <span class="white">Import</span>
         </button>
       </div>
@@ -51,7 +51,7 @@
   </div>
   <div fxLayout="row" fxFlex="64" fxLayoutAlign="space-around">
 
-    <wid-scrollbar class="dynamic-data-table-content" style="width: 100%">
+    <wid-scrollbar class="dynamic-data-table-content" style="width: 100%" >
 
       <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
@@ -60,16 +60,18 @@
               <span class="cool-grey font-size-18">No Data Found</span>
             </div>
             <div  fxFlex="15" fxLayout="row">
-              <button mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
-                <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
-              </button>
+              <div *ngIf="buttonAdd !== false">
+                <button  mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
+                  <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </ng-container>
 
       <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
-        <table cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" >
+        <table cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -133,7 +135,16 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell
-                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light" >
+                        <div (mouseover)="showAllText=true" (mouseout)="showAllText=false">
+                          <span *ngIf="showAllText"
+                                matTooltip="{{row[col.prop]}}">
+                           {{ row[col.prop] | spliceText: 40 }}
+                          </span>
+                          <span *ngIf="!showAllText">
+                            {{ row[col.prop] | spliceText: 40 }}
+                          </span>
+                        </div>
                       </td>
                     </ng-container>
                   </ng-container>

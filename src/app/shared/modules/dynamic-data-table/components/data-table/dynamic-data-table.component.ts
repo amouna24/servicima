@@ -12,11 +12,15 @@ import * as _ from 'lodash';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
+import { dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-dynamic-data-table',
   templateUrl: './dynamic-data-table.component.html',
-  styleUrls: ['./dynamic-data-table.component.scss']
+  styleUrls: ['./dynamic-data-table.component.scss'],
+  animations: [
+    dataAppearance
+  ]
 })
 export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
@@ -29,7 +33,8 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
                    };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
-
+  @Input() buttonAdd: boolean;
+  @Input() buttonImportExport: boolean;
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
 
@@ -61,6 +66,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   newConfig: IDataListModel[] =  [];
   dataSource: any;
   refData: { } = { };
+  showAllText: boolean;
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -83,6 +89,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           this.pagination.emit({ limit: value, offset: 0});
         },
       );
+    this.showAllText = false;
   }
 
    getDataSource() {

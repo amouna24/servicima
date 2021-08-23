@@ -10,7 +10,7 @@ import { of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IMyTreeNode } from '@shared/models/treeView';
-import { showBloc, showProExp } from '@shared/animations/animations';
+import { showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp-projects',
@@ -18,7 +18,7 @@ import { showBloc, showProExp } from '@shared/animations/animations';
   styleUrls: ['./pro-exp-projects.component.scss'],
   animations: [
     showBloc,
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ProExpProjectsComponent implements OnInit {
