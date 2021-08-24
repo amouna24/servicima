@@ -13,7 +13,6 @@ import { environment } from '../../../../../../environments/environment';
   styleUrls: ['./resume.component.scss']
 })
 export class ResumeComponent implements OnInit {
-  blocData = [];
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   subscriptionModal: Subscription;
@@ -34,6 +33,7 @@ export class ResumeComponent implements OnInit {
   }
 
   getData() {
+    const blocData = [];
     return new Promise((resolve) => {
       this.userService.connectedUser$.subscribe((userInfo) => {
         this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe(async (res) => {
@@ -43,7 +43,7 @@ export class ResumeComponent implements OnInit {
              this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
               .subscribe((resume) => {
                 if (resume['msg_code'] !== '0004') {
-                  this.blocData.push({
+                  blocData.push({
                     resume_name: candidate.first_name + ' ' + candidate.last_name,
                     resume_years_exp: resume[0].years_of_experience,
                     resume_position: resume[0].actual_job,
@@ -59,7 +59,7 @@ export class ResumeComponent implements OnInit {
                 }
               });
             if (index + 1 === res['results'].length) {
-              resolve(this.blocData);
+              resolve(blocData);
             }
           });
 

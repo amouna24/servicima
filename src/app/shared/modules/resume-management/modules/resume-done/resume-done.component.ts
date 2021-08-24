@@ -82,6 +82,7 @@ export class ResumeDoneComponent implements OnInit {
   label: object;
   showEmpty = true;
   userType: string;
+  testDateDiploma: string;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -232,6 +233,7 @@ export class ResumeDoneComponent implements OnInit {
             this.sectionList = data[6];
           }
           if (data[7].length > 0) {
+            console.log('diploma list', data[7]);
             // @ts-ignore
             this.diplomaList = data[7];
           }
@@ -322,6 +324,7 @@ export class ResumeDoneComponent implements OnInit {
               this.sectionList = data[6];
             }
             if (data[7].length > 0) {
+              console.log('diploma list', data[7]);
               // @ts-ignore
               this.diplomaList = data[7];
             }
@@ -458,8 +461,12 @@ export class ResumeDoneComponent implements OnInit {
     this.loading = true;
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-        diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
-        diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
+        console.log('diplom start data', diploma.start_date);
+        if (this.testDateDiploma === undefined) {
+          diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
+          diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
+          this.testDateDiploma = 'Done';
+        }
       });
     }
     if (this.certifList.length > 0) {
@@ -472,8 +479,8 @@ export class ResumeDoneComponent implements OnInit {
         if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
           pro.ResumeProfessionalExperienceKey.end_date = new Date().toString();
         }
-        pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'yyyy-MM-dd');
-        pro.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd');
+        pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
+        pro.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
       });
     }
     if (this.projectList.length > 0) {
