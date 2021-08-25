@@ -506,4 +506,17 @@ export class ResumeService {
       resume_url
     });
   }
+  /*-------------------------------------------------------------------------------------*/
+  sendMailManager(language_id, application_id, company_id, email_address, company_name, candidate_name, resume_url): Observable<any> {
+    console.log('resume service');
+    return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailingmanager`, {
+      language_id,
+      application_id,
+      company_id,
+      email_address,
+      company_name,
+      candidate_name,
+      resume_url
+    });
+  }
 }

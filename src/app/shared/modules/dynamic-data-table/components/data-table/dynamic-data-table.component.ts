@@ -67,6 +67,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   dataSource: any;
   refData: { } = { };
   showAllText: boolean;
+  black: '#000000';
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -93,7 +94,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   }
 
    getDataSource() {
-    this.tableData.subscribe((res) => {
+     this.tableData.subscribe((res) => {
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
       this.offset = res?.offset ? Number(res?.offset) + 1 : null;

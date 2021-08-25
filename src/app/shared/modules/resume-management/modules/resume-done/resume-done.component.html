@@ -50,12 +50,12 @@
   </div>
   <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
 
-    <button mat-raised-button type="submit" color="primary" class="white  btn-large" [class.spinner-auth]="loading" (click)="openThemeDialog('preview')" [style]="{marginRight: '4%'}">
-     <span *ngIf='!loading'>
+    <button mat-raised-button type="submit" color="primary" class="white  btn-large"  (click)="getDocument('preview')" [style]="{marginRight: '4%'}">
+     <span>
       {{ 'resume-preview' | translate }}
      </span>
     </button>
-    <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="openThemeDialog('generate')"  [style]="{marginRight: '4%'}">
+    <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="getDocument('generate')"  [style]="{marginRight: '4%'}">
       {{ 'resume-save' | translate }}
     </button>
     </div>
@@ -76,7 +76,7 @@
           </div>
           <div fxLayout="row" fxFlex="20" fxFlexAlign="center"><h1 class="font-extra-light font-size-18 black"> {{ 'resume-complete' | translate }}</h1> </div>
           <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
-            <button mat-raised-button type="submit" color="primary" class="white  btn-large" (click)="openThemeDialog('preview')"  [style]="{marginRight: '4%'}">
+            <button mat-raised-button type="submit" color="primary" class="white  btn-large" (click)="getDocument('preview')"  [style]="{marginRight: '4%'}">
               {{ 'resume-preview' | translate }}
             </button>
           </div>

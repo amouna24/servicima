@@ -31,7 +31,6 @@ export class ResumeComponent implements OnInit {
       this.tableData.next(data);
     });
   }
-
   getData() {
     const blocData = [];
     return new Promise((resolve) => {
@@ -48,7 +47,13 @@ export class ResumeComponent implements OnInit {
                     resume_years_exp: resume[0].years_of_experience,
                     resume_position: resume[0].actual_job,
                     resume_status: candidate.user_type,
-                    resume_email: candidate.userKey.email_address,
+                    resume_email: candidate.userKey.email_address === 'khmayesbounguicha@gmail.com' ?
+                      { value: candidate.userKey.email_address, color: '#00FF00'} :
+                      candidate.userKey.email_address === 'ndanydanyel536s@hangsuka.com' ?
+                        { value: candidate.userKey.email_address, color: '#FFFF00'} :
+                        candidate.userKey.email_address === '4snapie187k@digimexplus.com' ?
+                          { value: candidate.userKey.email_address, color: '#FF0000'} :
+                          candidate.userKey.email_address,
                     resume_user_type: candidate.user_type,
                     resume_filename_docx: resume[0].resume_filename_docx,
                     resume_filename_pdf: resume[0].resume_filename_pdf,
