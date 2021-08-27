@@ -719,7 +719,10 @@ html body {
   @include get-page(servicima);
   margin: 0px 20px 20px;
   height: 80vh !important;
+  height: 78vh !important;
   background-color: $white;
+  margin: 0 25px 0 25px;
+  // width: 88vw;
 }
 
 .dynamic-component-content {
@@ -783,8 +786,7 @@ html body {
    user
 *******************/
 .container-show{
-  height: 88vh !important;
-  margin: 20px;
+  height: 78vh !important;
 }
 .container-btn{
   width: 43px;

@@ -6,7 +6,7 @@ import { AddTimesheetComponent } from './add-timesheet/add-timesheet.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':type_timesheet',
     component: TimesheetsListComponent,
     data: {
       breadcrumb: 'Timesheet'
@@ -14,7 +14,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'add-timesheet/:type',
+    path: ':action/:type',
     component: AddTimesheetComponent,
     data: {
       breadcrumb: 'add-timesheet'

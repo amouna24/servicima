@@ -1,5 +1,5 @@
  <div  fxLayout="column"
-        class="dynamic-component-container bg-white border-radius-20">
+        class="dynamic-component-container bg-white border-radius-20 p-b-5">
    <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
      <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
           style="border-bottom: 1px solid #afb1b8">
@@ -14,7 +14,7 @@
      </button>
      </div>
    </div>
-   <wid-scrollbar>
+   <wid-scrollbar *ngIf="isLoading">
      <form fxLayout="column" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
        <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
        <!-- left column form -->
@@ -22,7 +22,11 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Week start on :</label>
            <mat-form-field appearance="outline">
-             <input matInput [matDatepickerFilter]="startDateFilter" formControlName="start_date" [matDatepicker]="datepicker" placeholder="dd/mm/yyyy">
+             <input matInput [disabled]="!addForm"
+                    formControlName="start_date"
+                    [matDatepickerFilter]="startDateFilter"
+                    [matDatepicker]="datepicker"
+                    placeholder="dd/mm/yyyy">
              <mat-datepicker-toggle matSuffix [for]="datepicker">
                <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
              </mat-datepicker-toggle>
@@ -35,7 +39,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select formControlName="project_code" placeholder="Project">
+             <mat-select [disabled]="!addForm" formControlName="project_code" placeholder="Project">
                <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
                  {{ project.project_desc}}
                </mat-option>
@@ -136,10 +140,15 @@
        </div>
        </div>
        <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
-         <button mat-flat-button type="reset" class="bg-pale-grey cool-grey btn-small">Cancel</button>
+         <ng-container *ngIf="addForm, else deleteBtn">
+           <button mat-flat-button type="reset" class="bg-pale-grey cool-grey btn-small">Cancel</button>
+         </ng-container>
+         <ng-template #deleteBtn>
+           <button mat-flat-button (click)="deleteTimesheet()" class="bg-error-red white btn-small">Delete</button>
+         </ng-template>
          <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
          <button mat-flat-button (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
-         <button mat-flat-button (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">Save</button>
+         <button mat-flat-button (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">{{addForm ? 'Save' : 'Edit'}}</button>
          </div>
        </div>
      </form>

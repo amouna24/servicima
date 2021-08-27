@@ -53,7 +53,6 @@ export class TimesheetsListComponent implements OnInit {
     this.getUserInfo();
     this.getTimesheetParams();
     this.addNewTimesheet();
-    this.getAllTimesheet();
     this.isLoading.next(true);
   }
 
@@ -61,16 +60,9 @@ export class TimesheetsListComponent implements OnInit {
    * @description : get timesheet list types
    */
 getTimesheetParams(): void {
-    this.route.queryParams
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(params => {
-        if (!!params.type_timesheet) {
-          this.typeTimesheet = TIMESHEET_EXTRA ;
-        } else {
-          this.typeTimesheet = TIMESHEET ;
-        }
+    this.route.params.subscribe(params => {
+          this.typeTimesheet = params.type_timesheet;
+          this.getAllTimesheet();
       });
   }
 
@@ -91,11 +83,17 @@ getTimesheetParams(): void {
    * @description : get all timesheet of collaborator
    */
   getAllTimesheet() {
-      this.timesheetService
-        // tslint:disable-next-line:max-line-length
-        .getTimesheet(`?application_id=${this.userService.applicationId}&email_address=${this.userService.emailAddress}&company_email=${this.companyEmail}&type_timesheet=${this.typeTimesheet}`)
+      this.timesheetService.getTimesheet(
+        `?application_id=${this.userService.applicationId}` +
+        `&email_address=${this.userService.emailAddress}` +
+        `&company_email=${this.companyEmail}` +
+        `&type_timesheet=${TIMESHEET}`)
         .subscribe((res) => {
-          this.ELEMENT_DATA.next(res);
+          if (!!res) {
+            this.ELEMENT_DATA.next(res);
+          } else {
+            this.ELEMENT_DATA.next([]);
+          }
           this.isLoading.next(false);
         });
   }
@@ -104,7 +102,7 @@ getTimesheetParams(): void {
    * @description Navigate to ADD NEW TIMESHEET Component
    */
   addNewTimesheet() {
-    this.redirectUrl = '/collaborator/timesheet/add-timesheet/' + this.typeTimesheet;
+    this.redirectUrl = '/collaborator/timesheet/add/' + this.typeTimesheet;
     this.addButtonLabel = 'New';
   }
 
@@ -120,8 +118,10 @@ getTimesheetParams(): void {
    */
   updateTimesheet(data) {
       this.router.navigate(
-        ['/collaborator/timesheet/add-timesheet'],
-        { state: { data, buttonClicked: 'edit' }
+        ['/collaborator/timesheet/edit', this.typeTimesheet], {
+          queryParams: {
+            'id': data._id.toString()
+          }
         });
   }
 

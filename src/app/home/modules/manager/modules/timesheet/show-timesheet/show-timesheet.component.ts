@@ -16,82 +16,72 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
 })
 export class ShowTimesheetComponent implements OnInit {
   timesheet: any;
-  haveImage: any;
   avatar: any;
   user: IUserModel;
   id: string;
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   subscriptions: Subscription;
   userInfo: IUserInfo;
-  rejected: boolean;
-  approved: boolean;
-  week: any[];
+  week: any[] = [
+    {
+      day: 'MON',
+      hours: this.data.monday,
+    },
+    {
+      day: 'TUE',
+      hours: this.data.tuesday,
+    },
+    {
+      day: 'WED',
+      hours: this.data.wednesday,
+    },
+    {
+      day: 'THU',
+      hours: this.data.thursday,
+    },
+    {
+      day: 'FRI',
+      hours: this.data.friday,
+    },
+    {
+      day: 'SAT',
+      hours: this.data.saturday,
+    },
+    {
+      day: 'SUN',
+      hours: this.data.sunday
+    }];
 
   constructor(public dialogRef: MatDialogRef<ShowTimesheetComponent>,
               private dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
+              @Inject(MAT_DIALOG_DATA) private data: any,
               private uploadService: UploadService,
               private modalsServices: ModalService,
   ) {
   }
 
   async ngOnInit() {
-    this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent});
+    this.modalsServices.registerModals(
+      {
+        modalName: 'rejectTimesheet',
+        modalComponent: RejectTimesheetComponent
+      });
     this.timesheet = this.data;
-    console.log('timesheet', this.timesheet);
-    this.avatar = await this.uploadService.getImage(this.timesheet.photo);
-    this.statusButton();
-    this.week = [
-      {
-        day: 'MON',
-        hours: this.timesheet.monday,
-      },
-      {
-        day: 'TUE',
-        hours: this.timesheet.tuesday,
-      },
-      {
-        day: 'WED',
-        hours: this.timesheet.wednesday,
-      },
-      {
-        day: 'THU',
-        hours: this.timesheet.thursday,
-      },
-      {
-        day: 'FRI',
-        hours: this.timesheet.friday,
-      },
-      {
-        day: 'SAT',
-        hours: this.timesheet.saturday,
-      },
-      { day: 'SUN',
-        hours: this.timesheet.sunday
-      }];
+    this.getAvatar();
   }
 
-    /**
-     * @description : disable button
-     */
-    statusButton() {
-      if (this.timesheet.timesheet_status === 'Rejected') {
-        return this.rejected = true;
-      } else if (this.timesheet.timesheet_status === 'Approved') {
-        return this.approved = true;
-      }
-    }
+  getAvatar(): void {
+    this.uploadService.getImage(this.timesheet.photo)
+      .then((data) => {
+        this.avatar = data;
+      });
+  }
 
-    onCloseClick(): void {
+  modalActions(action?: string) {
+    if (action) {
+      this.dialogRef.close(action);
+    } else {
       this.dialogRef.close();
     }
-
-    rejectTimesheet() {
-      this.dialogRef.close('reject');
-    }
-
-    approveTimesheet() {
-      this.dialogRef.close('approve');
-    }
-
   }
+}

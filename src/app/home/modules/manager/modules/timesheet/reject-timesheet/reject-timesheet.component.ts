@@ -82,14 +82,11 @@ export class RejectTimesheetComponent implements OnInit {
     this.initUpdateStatus('Rejected').then(
       (data) => {
         this.timesheetToUpdate = data;
-        console.log(data);
       }
     ).finally(
       () => {
-        console.log('var', this.timesheetToUpdate);
         this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
           data => {
-            console.log(data);
             this.dialogRef.close('reject');
           },
           error => console.log(error)
@@ -103,14 +100,20 @@ export class RejectTimesheetComponent implements OnInit {
    * @description : approve timesheet
    */
   approveTimesheet() {
-    this.initUpdateStatus('Approved');
-
-    this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
-      data => {
-        console.log(data);
-        this.dialogRef.close('approve');
-        },
-      error => console.log(error)
+    this.initUpdateStatus('Approved').then(
+      (data) => {
+        this.timesheetToUpdate = data;
+      }
+    ).finally(
+      () => {
+        this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
+          data => {
+            console.log(data);
+            this.dialogRef.close('approve');
+          },
+          error => console.log(error)
+        );
+      }
     );
   }
 

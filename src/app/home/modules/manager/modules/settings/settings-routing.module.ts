@@ -70,6 +70,14 @@ const routes: Routes = [
   },
 
   {
+    path: 'company-banking-info',
+    loadChildren: () => import('./company-banking-info/companyBankingInfo.module').then(m => m.CompanyBankingInfoModule),
+    data: {
+      breadcrumb: 'company banking informations'
+    },
+  },
+
+  {
     path: 'role',
     loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule),
     data: {

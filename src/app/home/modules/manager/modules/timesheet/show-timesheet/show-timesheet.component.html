@@ -1,7 +1,7 @@
 <div fxLayout="column" class="full-height full-width">
   <div class="bg-pale-grey-four" fxFlex="22" fxLayout="column">
     <div fxFlex="38" fxLayout="row" fxLayoutAlign="end center" class="p-r-15">
-      <button mat-button class="btn-close" (click)="onCloseClick()">
+      <button mat-button class="btn-close" (click)="modalActions()">
         <mat-icon svgIcon="wi-close"></mat-icon>
       </button>
     </div>
@@ -11,7 +11,7 @@
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.last_name}}</p>
       </div>
       <div fxFlex>
-        <img class="img-rounded absolute m-t-30"  [src]="'assets/img/default.jpg'">
+        <img class="img-rounded absolute m-t-30 avatar"  [src]=" avatar ? avatar : 'assets/img/default.jpg'">
       </div>
       <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.user_position}}</p>
@@ -75,8 +75,15 @@
     </div>
   </div>
   <div fxFlex="10" class="full-width" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="25px">
-    <button mat-flat-button (click)="rejectTimesheet()" class="btn-small bg-error-red white">Reject</button>
-    <button mat-flat-button (click)="approveTimesheet()" class="btn-small bg-topaz white">Approve</button>
+    <ng-container *ngIf="timesheet.timesheet_status === 'Pending', else status">
+      <button mat-flat-button (click)="modalActions('reject')" class="btn-small bg-error-red white">Reject</button>
+      <button mat-flat-button (click)="modalActions('approve')" class="btn-small bg-topaz white">Approve</button>
+    </ng-container>
+    <ng-template #status>
+      <span *ngIf="timesheet.timesheet_status === 'Pending'" class="topaz">Approved</span>
+      <span *ngIf="timesheet.timesheet_status === 'Rejected'" class="red">Rejected</span>
+    </ng-template>
+
   </div>
 </div>
 

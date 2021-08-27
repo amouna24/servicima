@@ -91,6 +91,14 @@ export const ManagerSettingMenu: IMenu[] = [
         feature: 'SOURCING_ACCESS' // change feature with correct name
       },
       {
+        state: 'company-banking-info',
+        name: 'manager-setting-menu.company.banking.info',
+        type: 'link',
+        icon: 'wi_company',
+        //  feature: 'company-profile',
+        feature: 'SOURCING_ACCESS' // change feature with correct name
+      },
+      {
         state: 'departments',
         name: 'manager-setting-menu.departments',
         icon: 'assignment',
