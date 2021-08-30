@@ -50,6 +50,8 @@ export const environment = {
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
+  collaboratorApiUrl: 'http://127.0.0.1:8032/auth/collaborators/v1',
+  candidateApiUrl: 'http://127.0.0.1:8031/auth/candidates/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

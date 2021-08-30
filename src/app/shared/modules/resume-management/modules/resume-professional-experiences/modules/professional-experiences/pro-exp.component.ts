@@ -143,8 +143,20 @@ export class ProExpComponent implements OnInit {
             end_date: professionalExp.end_date,
           }
         });
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       this.router.navigate(['/candidate/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    } else {
+      this.router.navigate(['/collaborator/resume/projects'],
         {
           state: {
             resumeCode: this.resumeCode,
@@ -424,7 +436,7 @@ export class ProExpComponent implements OnInit {
             resumeCode: this.resumeCode
           }
         });
-      } } else {
+      } } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
         if (typeRoute === 'next') {
           this.router.navigate(['/candidate/resume/dynamicSection'], {
             state: {
@@ -438,7 +450,21 @@ export class ProExpComponent implements OnInit {
             }
           });
         }
+      } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/dynamicSection'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
       }
+    }
 
   }
 }

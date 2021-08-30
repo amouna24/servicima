@@ -92,7 +92,8 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         );
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
        this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -284,7 +285,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           }
         });
       }
-    } else {
+    } else   if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       if (typeRoute === 'next') {
         this.router.navigate(['/candidate/resume/certifications'], {
           state: {
@@ -293,6 +294,20 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         });
       } else {
         this.router.navigate(['/candidate/resume/'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/'], {
           state: {
             resumeCode: this.resumeCode
           }

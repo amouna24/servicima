@@ -562,7 +562,7 @@ export class ProExpProjectsComponent implements OnInit {
    * @param event contains the data of the node object
    *******************************************************************/
   nodeSelect(event: any) {
-    if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
+    if ((event.title !== this.customer) && (event.object?.ResumeProfessionalExperienceKey !== undefined)) {
       this.professionalExperienceCode = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
       this.customer = event.object.customer;
       this.position = event.object.position;
@@ -583,8 +583,14 @@ export class ProExpProjectsComponent implements OnInit {
           resumeCode: this.resumeCode
         }
       });
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       this.router.navigate(['/candidate/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/collaborator/resume/professionalExperience'], {
         state: {
           resumeCode: this.resumeCode
         }

@@ -150,7 +150,8 @@ export class ResumeInterventionComponent implements OnInit {
       this.arrayInterventionCount++;
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.interventionUpdate = this.sendIntervention.value;
       this.interventionUpdate.intervention_code = this.intervention_code;
       this.interventionUpdate.resume_code = this.resumeCode;
@@ -240,7 +241,7 @@ export class ResumeInterventionComponent implements OnInit {
           }
         });
       }
-    } else {
+    } else  if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
         if (typeRoute === 'next') {
           this.router.navigate(['/candidate/resume/professionalExperience'], {
             state: {
@@ -254,6 +255,20 @@ export class ResumeInterventionComponent implements OnInit {
             }
           });
         }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/functionalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     }
 
   }

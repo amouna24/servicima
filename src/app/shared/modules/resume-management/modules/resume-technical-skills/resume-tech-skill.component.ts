@@ -81,7 +81,8 @@ export class ResumeTechSkillComponent implements OnInit {
         );
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {    this.resumeService.getResume(
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {    this.resumeService.getResume(
       `?email_address=${this.userService.connectedUser$
         .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
         .getValue().user[0]['company_email']}`).subscribe((response) => {
@@ -233,7 +234,7 @@ this.button = 'Add'; }
           }
         });
       }
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       if (typeRoute === 'next') {
           this.router.navigate(['/candidate/resume/functionalSkills'], {
             state: {
@@ -247,6 +248,20 @@ this.button = 'Add'; }
             }
           });
         }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/functionalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
     }
   }
 

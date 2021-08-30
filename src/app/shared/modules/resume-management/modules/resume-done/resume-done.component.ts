@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
-import { forkJoin, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 import { IResumeModel } from '@shared/models/resume.model';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
 import { IResumeFunctionalSkillsModel } from '@shared/models/resumeFunctionalSkills.model';
@@ -72,6 +72,7 @@ export class ResumeDoneComponent implements OnInit {
   projectList: IResumeProjectModel[];
   projectDetailsList: IResumeProjectDetailsModel[];
   projectDetailsSectionList: IResumeProjectDetailsSectionModel[];
+  isLoading = new BehaviorSubject<boolean>(false);
   theme: string;
   years = 0;
   companyName: string;
@@ -252,7 +253,8 @@ export class ResumeDoneComponent implements OnInit {
         });
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
@@ -537,6 +539,7 @@ export class ResumeDoneComponent implements OnInit {
           .subscribe(
             (resMail) => {
               if (resMail === true) {
+                this.isLoading.next(true);
                 this.resumeService.getResumePdf(data, theme, action).subscribe(
                   async res => {
                     saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
@@ -564,6 +567,8 @@ export class ResumeDoneComponent implements OnInit {
                             `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
                           ).subscribe((dataB) => {
                           console.log('mail sent', this.localStorageService.getItem('language'));
+                          this.isLoading.next(false);
+                          this.router.navigate(['/candidate/']);
                         });
                       });
                     });
@@ -595,6 +600,7 @@ export class ResumeDoneComponent implements OnInit {
           });
       }
     } else if (action === 'preview') {
+      this.isLoading.next(true);
       this.resumeService.getResumePdf(data, theme, action).subscribe(
       async res => {
           const fileURL = URL.createObjectURL(res);
@@ -614,6 +620,8 @@ export class ResumeDoneComponent implements OnInit {
             this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
             this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
               console.log( 'updated', generalInfo);
+              this.isLoading.next(false);
+
             });
           });
         });

@@ -75,6 +75,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    console.log('hello');
     this.showYears = false;
     this.firstname = this.firstNameManager ? this.firstNameManager : this.userService.connectedUser$.getValue().user[0]['first_name'];
     this.lastname = this.lastNameManager ? this.lastNameManager : this.userService.connectedUser$.getValue().user[0]['last_name'];
@@ -94,6 +95,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
    *  @description Get Resume Data from Resume Service and reusme Image from upload Service
    *************************************************************************/
   async getResume() {
+    console.log('this.generalInfoManager=', this.userService.connectedUser$.getValue().user[0].user_type);
     if (this.generalInfoManager) {
       if ((this.generalInfoManager.image !== undefined) && (this.generalInfoManager.image !== null)) {
         this.haveImage = this.generalInfoManager.image;
@@ -163,8 +165,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
         );
     } if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.generalInfoManager && !this.resumeCode) {
        await this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
-        await this.resumeService.getResume(
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+      await this.resumeService.getResume(
           `?email_address=${this.userService.connectedUser$
             .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
             .getValue().user[0]['company_email']}`)
@@ -301,8 +304,14 @@ export class ResumeGeneralInformationComponent implements OnInit {
               state: {
                 resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
               }
-            });          } else {
+            });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+              }
+            });
+          } else {
+            this.router.navigate(['/collaborator/resume/certifDiploma'], {
               state: {
                 resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
               }
@@ -326,12 +335,18 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.ResumeKey.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
               }
-            });          } else {
+            });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.ResumeKey.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+              }
+            });
+          } else {
+            this.router.navigate(['/collaborator/resume/certifDiploma'], {
+              state: {
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
               }
             });
           }

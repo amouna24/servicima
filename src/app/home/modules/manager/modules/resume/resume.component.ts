@@ -4,9 +4,12 @@ import { UserService } from '@core/services/user/user.service';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
+import { CollaboratorService } from '@core/services/collaborator/collaborator.service';
+import { CandidateService } from '@core/services/candidate/candidate.service';
+import { ICollaborator } from '@shared/models/collaborator.model';
+import { IUserModel } from '@shared/models/user.model';
 
 import { environment } from '../../../../../../environments/environment';
-
 @Component({
   selector: 'wid-resume',
   templateUrl: './resume.component.html',
@@ -22,6 +25,8 @@ export class ResumeComponent implements OnInit {
     private resumeService: ResumeService,
     private router: Router,
     private modalServices: ModalService,
+    private collaboratorService: CollaboratorService,
+    private candidateService: CandidateService,
   ) {
   }
 
@@ -38,7 +43,6 @@ export class ResumeComponent implements OnInit {
         this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe(async (res) => {
           console.log('res', res);
           res['results'].forEach( (candidate, index) => {
-            console.log('index', index, 'aa', res['results'].length);
              this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
               .subscribe((resume) => {
                 if (resume['msg_code'] !== '0004') {
@@ -51,8 +55,6 @@ export class ResumeComponent implements OnInit {
                       { value: candidate.userKey.email_address, color: '#00FF00'} :
                       candidate.userKey.email_address === 'ndanydanyel536s@hangsuka.com' ?
                         { value: candidate.userKey.email_address, color: '#FFFF00'} :
-                        candidate.userKey.email_address === '4snapie187k@digimexplus.com' ?
-                          { value: candidate.userKey.email_address, color: '#FF0000'} :
                           candidate.userKey.email_address,
                     resume_user_type: candidate.user_type,
                     resume_filename_docx: resume[0].resume_filename_docx,
@@ -76,7 +78,7 @@ export class ResumeComponent implements OnInit {
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
       case ('show'):
-        this.exportPdf(rowAction.data);
+        this.changeCandidateToCollaborator(rowAction.data);
         break;
       case ('update'):
         this.updateResume(rowAction.data);
@@ -168,5 +170,70 @@ export class ResumeComponent implements OnInit {
           this.subscriptionModal.unsubscribe();
         }
       );
+  }
+  changeCandidateToCollaborator(data) {
+    const confirmation = {
+      code: 'edit',
+      title: 'Change user type',
+      description: `Are you sure you want to change the candidate ${data.resume_name} to collaborator`,
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+      .subscribe(
+        (res) => {
+          if (res === true) {
+            console.log('true');
+            this.candidateService.getCandidate(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe((candidateData) => {
+              console.log('hello get candidate', candidateData);
+              const collaborator: ICollaborator = {
+                collaboratorKey: {
+                  application_id: candidateData[0].candidateKey.application_id,
+                  email_address: candidateData[0].candidateKey.email_address,
+                },
+                adress: candidateData[0].adress ? candidateData[0].adress : null,
+                zip_code: candidateData[0].zip_code ? candidateData[0].zip_code : null,
+                country_id: candidateData[0].country_code ? candidateData[0].country_code : null,
+                family_situation_id: null,
+                nationality_id: candidateData[0].nationality_id ? candidateData[0].nationality_id : null,
+                birth_date: candidateData[0].birth_date ? candidateData[0].birth_date : null,
+                birth_city: candidateData[0].birth_city ? candidateData[0].birth_city : null,
+                birth_country_id: candidateData[0].birth_country_id ? candidateData[0].birth_country_id : null,
+                birth_name: null,
+                manager_email: null,
+                calendar_id: null,
+                departement_id: null,
+                emergency_contact_name: null,
+                emergency_contact_phone: null,
+                bank_name: null,
+                bank_iban: null,
+                rib_key: null,
+                medical_exam_date: null,
+                status: 'A',
+                application_id: candidateData[0].candidateKey.application_id,
+                email_address: candidateData[0].candidateKey.email_address,
+              };
+              console.log('collaborator =', collaborator);
+              this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
+                this.userService.getAllUsers(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe( (user: IUserModel[]) => {
+                  console.log(user);
+                  user['results'][0].user_type = 'COLLABORATOR';
+                  user['results'][0].application_id = user['results'][0].userKey.application_id;
+                  user['results'][0].email_address = user['results'][0].userKey.email_address;
+
+                  this.userService.updateUser(user['results'][0]).subscribe(() => {
+                    console.log('user updated');
+                    this.candidateService.deleteCandidate(candidateData[0]._id).subscribe((deleteCandidate) => {
+                      console.log('candidate deleted', deleteCandidate);
+                      this.getData().then((dataUsers) => {
+                        this.tableData.next(dataUsers);
+                      });
+                    });
+                  });
+
+                });
+              });
+            });
+          }
+          this.subscriptionModal.unsubscribe();
+        });
   }
 }
