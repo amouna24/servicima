@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 // tslint:disable-next-line:max-line-length
 import { ResumeGeneralInformationComponent } from '@shared/modules/resume-management/modules/resume-general-informations/resume-general-information.component';
 import { ResumeLanguageComponent } from '@shared/modules/resume-management/modules/resume-languages/resume-language.component';

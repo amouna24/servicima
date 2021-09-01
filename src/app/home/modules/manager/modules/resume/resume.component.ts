@@ -32,47 +32,45 @@ export class ResumeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
-    this.getData().then((data) => {
-      this.tableData.next(data);
-    });
+await this.getData();
   }
-  getData() {
+  async getData() {
+    this.isLoading.next(true);
     const blocData = [];
-    return new Promise((resolve) => {
-      this.userService.connectedUser$.subscribe((userInfo) => {
-        this.userService.getAllUsers(`?company_email=${userInfo['company'][0].companyKey.email_address}`).subscribe(async (res) => {
-          console.log('res', res);
-          res['results'].forEach( (candidate, index) => {
-             this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
-              .subscribe((resume) => {
-                if (resume['msg_code'] !== '0004') {
-                  blocData.push({
-                    resume_name: candidate.first_name + ' ' + candidate.last_name,
-                    resume_years_exp: resume[0].years_of_experience,
-                    resume_position: resume[0].actual_job,
-                    resume_status: candidate.user_type,
-                    resume_email: candidate.userKey.email_address === 'khmayesbounguicha@gmail.com' ?
-                      { value: candidate.userKey.email_address, color: '#00FF00'} :
-                      candidate.userKey.email_address === 'ndanydanyel536s@hangsuka.com' ?
-                        { value: candidate.userKey.email_address, color: '#FFFF00'} :
+    this.userService.connectedUser$
+      .subscribe((userInfo) => {
+        this.userService.getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}`)
+          .subscribe(async (res) => {
+            await res['results'].forEach((candidate, index) => {
+              this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+                .subscribe( (resume) => {
+                  if (resume['msg_code'] !== '0004') {
+                    blocData.push({
+                      resume_name: candidate.first_name + ' ' + candidate.last_name,
+                      resume_years_exp: resume[0].years_of_experience ? resume[0].years_of_experience : '0',
+                      resume_position: resume[0].actual_job,
+                      resume_status: candidate.user_type,
+                      resume_email: candidate.userKey.email_address === 'khmayesbounguicha@gmail.com' ?
+                        { value: candidate.userKey.email_address, color: '#00FF00'} :
+                        candidate.userKey.email_address === 'ndanydanyel536s@hangsuka.com' ?
+                          { value: candidate.userKey.email_address, color: '#FFFF00'} :
                           candidate.userKey.email_address,
-                    resume_user_type: candidate.user_type,
-                    resume_filename_docx: resume[0].resume_filename_docx,
-                    resume_filename_pdf: resume[0].resume_filename_pdf,
-                    user_info: resume[0],
-                    first_name: candidate.first_name,
-                    last_name: candidate.last_name,
-                  });
-                }
-              });
-            if (index + 1 === res['results'].length) {
-              resolve(blocData);
-            }
+                      resume_user_type: candidate.user_type,
+                      resume_filename_docx: resume[0].resume_filename_docx,
+                      resume_filename_pdf: resume[0].resume_filename_pdf,
+                      user_info: resume[0],
+                      first_name: candidate.first_name,
+                      last_name: candidate.last_name,
+                    });
+                    if (index + 1 === res['results'].length) {
+                      this.isLoading.next(false);
+                      this.tableData.next(blocData);
+                    }
+                  }
+                });
+            });
           });
-
-        });
       });
-    });
   }
 
   switchAction(rowAction: any) {
@@ -181,9 +179,9 @@ export class ResumeComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
-            console.log('true');
+            this.isLoading.next( true);
+            this.tableData.next([]);
             this.candidateService.getCandidate(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe((candidateData) => {
-              console.log('hello get candidate', candidateData);
               const collaborator: ICollaborator = {
                 collaboratorKey: {
                   application_id: candidateData[0].candidateKey.application_id,
@@ -211,26 +209,22 @@ export class ResumeComponent implements OnInit {
                 application_id: candidateData[0].candidateKey.application_id,
                 email_address: candidateData[0].candidateKey.email_address,
               };
-              console.log('collaborator =', collaborator);
               this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
                 this.userService.getAllUsers(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe( (user: IUserModel[]) => {
                   console.log(user);
                   user['results'][0].user_type = 'COLLABORATOR';
                   user['results'][0].application_id = user['results'][0].userKey.application_id;
                   user['results'][0].email_address = user['results'][0].userKey.email_address;
-
-                  this.userService.updateUser(user['results'][0]).subscribe(() => {
-                    console.log('user updated');
-                    this.candidateService.deleteCandidate(candidateData[0]._id).subscribe((deleteCandidate) => {
+                  this.userService.updateUser(user['results'][0]).subscribe(async () => {
+                    await this.getData();
+                this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
                       console.log('candidate deleted', deleteCandidate);
-                      this.getData().then((dataUsers) => {
-                        this.tableData.next(dataUsers);
-                      });
                     });
                   });
 
                 });
               });
+
             });
           }
           this.subscriptionModal.unsubscribe();

@@ -100,8 +100,8 @@ export class ResumeDoneComponent implements OnInit {
     this.translateDocs();
     await this.yearsOfExpAuto();
     this.getResumeInfo();
-  }
 
+  }
   /**************************************************************************
    * @description Calculate years of experience from professional experience section
    *************************************************************************/
@@ -128,12 +128,12 @@ export class ResumeDoneComponent implements OnInit {
       }
     });
   }
-
   /**************************************************************************
    * @description Count the percentage of the resume
    * @return count returns the percentage reached of the resume
    *************************************************************************/
   countResume() {
+    console.log('hello');
     if (this.generalInfoList.length > 0) {
       this.count += 13;
     }
@@ -159,13 +159,14 @@ export class ResumeDoneComponent implements OnInit {
       this.count += 13;
     }
     this.showEmpty = false;
+    console.log('count = ', this.count);
     return this.count;
   }
-
-  /**************************************************************************
+  /*************************************************************************
    * @description Get Resume Data from Resume Service
    *************************************************************************/
   getResumeInfo() {
+    console.log('this.resume code', this.resumeCode , 'connected user', this.userService.connectedUser$.getValue().user[0].user_type);
     if (this.resumeCode) {
       this.userService.connectedUser$
         .subscribe(
@@ -347,7 +348,6 @@ export class ResumeDoneComponent implements OnInit {
     }
 
   }
-
   /**************************************************************************
    * @description Get Project Data from Resume Service
    *************************************************************************/
@@ -383,7 +383,6 @@ export class ResumeDoneComponent implements OnInit {
       this.getProjectDetailsInfo();
     });
   }
-
   /**************************************************************************
    * @description Upload Image to Server  with async to promise
    * @param formData It contains the resume in docx format
@@ -396,7 +395,6 @@ export class ResumeDoneComponent implements OnInit {
       )
       .toPromise();
   }
-
   /**************************************************************************
    * @description Get Project Details Data from Resume Service
    *************************************************************************/
@@ -433,7 +431,6 @@ export class ResumeDoneComponent implements OnInit {
       this.getProjectDetailsSectionInfo(res);
     });
   }
-
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -459,7 +456,6 @@ export class ResumeDoneComponent implements OnInit {
       }
     }
   }
-
   /**************************************************************************
    * @description Get All resume Data
    * @param action  which differs between the generation in pdf or docx format
@@ -648,7 +644,6 @@ export class ResumeDoneComponent implements OnInit {
     }
     return (proExpData);
   }
-
   /**************************************************************************
    * @description get organized Project data in JSON object
    * @param oneProExp it contains the professional experience relating to these projects
@@ -672,7 +667,6 @@ export class ResumeDoneComponent implements OnInit {
     }
     return (project);
   }
-
   /**************************************************************************
    * @description get organized Project details data in JSON object
    * @param oneProject It contains the project relating to these project details
@@ -695,7 +689,6 @@ export class ResumeDoneComponent implements OnInit {
     }
     return (projectDetails);
   }
-
   /**************************************************************************
    * @description get organized Project details section data in JSON object
    * @param projectDetail it contains the project detail relating to these project details section

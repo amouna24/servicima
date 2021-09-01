@@ -30,7 +30,7 @@ export const environment = {
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
-  resumeApiUrl: 'http://127.0.0.1:8068/servicima/resume/v1',
+  resumeApiUrl: 'http://192.168.1.22:8068/servicima/resume/v1',
   resumeCertifDiplomaApiUrl: 'http://192.168.1.22:8074/servicima/resumecertificationdiploma/v1',
   resumeFunctionalSkillsApiUrl: 'http://192.168.1.22:8072/servicima/resumefunctionalskills/v1',
   resumeLanguageApiUrl: 'http://192.168.1.22:8069/servicima/resumelanguage/v1',
@@ -50,8 +50,8 @@ export const environment = {
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
-  collaboratorApiUrl: 'http://127.0.0.1:8032/auth/collaborators/v1',
-  candidateApiUrl: 'http://127.0.0.1:8031/auth/candidates/v1',
+  collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
+  candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

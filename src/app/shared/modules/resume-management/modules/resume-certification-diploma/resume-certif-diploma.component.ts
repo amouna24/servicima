@@ -6,8 +6,9 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -51,6 +52,18 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    console.log('aa');
+    this.router.events
+      .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
+      .subscribe(event => {
+        if (
+          event.id === 1 &&
+          event.url === event.urlAfterRedirects
+        ) {
+          console.log('whyyyyyyyyyyyyyyyyyyyy');
+          this.router.navigate(['resume/candidate']);
+        }
+      });
   }
 
   /**************************************************************************

@@ -107,6 +107,7 @@ export class ProExpComponent implements OnInit {
             .subscribe(
               (responseProExp) => {
                 if (responseProExp['msg_code'] !== '0004') {
+                  console.log('sort pro exp', this.sortProExp(responseProExp));
                   this.proExpArray = responseProExp;
                   this.filterDate();
                 }
@@ -466,5 +467,10 @@ export class ProExpComponent implements OnInit {
       }
     }
 
+  }
+  sortProExp(proExp: object[]) {
+    return this.proExpArray.sort( (val, val2) => {
+      return +val.start_date - +val2.start_date;
+    });
   }
 }
