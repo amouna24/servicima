@@ -106,7 +106,9 @@ export class ProExpProjectsComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.ProjectArray = response;
+            this.ProjectArray = response.sort( (val1, val2) => {
+              return +new Date(val1.start_date) - +new Date(val2.start_date);
+            });
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;

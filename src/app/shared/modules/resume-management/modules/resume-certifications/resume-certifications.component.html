@@ -103,7 +103,7 @@
                                   {{ 'resume-date-expire' | translate}}:
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input formControlName="expiring_date" matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  >
+                                  <input formControlName="expiringDate" matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  >
                                   <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
                                   <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
                                   <mat-error class="red" >
@@ -117,7 +117,7 @@
                                   {{ 'resume-certif-ref' | translate}}:
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_ref" matInput placeholder="{{ 'resume-position' | translate }}" >
+                                  <input  formControlName="certifRef" matInput placeholder="{{ 'resume-position' | translate }}" >
                                 </mat-form-field>
                               </div>
                               <div fxLayout="column" fxFlex="15"></div>
@@ -126,7 +126,7 @@
                                   {{ 'resume-certif-url' | translate}}:
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_url" matInput placeholder="{{ 'resume-position' | translate }}" >
+                                  <input  formControlName="certifUrl" matInput placeholder="{{ 'resume-position' | translate }}" >
                                 </mat-form-field>
                               </div>
                             </div>

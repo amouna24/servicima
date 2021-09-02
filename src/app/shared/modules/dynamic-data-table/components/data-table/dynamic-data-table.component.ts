@@ -34,7 +34,6 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
   @Input() buttonAdd: boolean;
-  @Input() buttonImportExport: boolean;
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
 

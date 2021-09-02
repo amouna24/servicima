@@ -52,7 +52,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    console.log('aa');
     this.router.events
       .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
       .subscribe(event => {
@@ -60,7 +59,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           event.id === 1 &&
           event.url === event.urlAfterRedirects
         ) {
-          console.log('whyyyyyyyyyyyyyyyyyyyy');
           this.router.navigate(['resume/candidate']);
         }
       });
@@ -118,7 +116,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
               .subscribe(
                 (responseOne) => {
                   if (responseOne['msg_code'] !== '0004') {
-                    this.certifDiplomaArray = responseOne;
+                    this.certifDiplomaArray = responseOne.sort( (val1, val2) => {
+                      return +new Date(val1.start_date) - +new Date(val2.start_date);
+                    });
                     this.certifDiplomaArray.forEach(
                       (func) => {
                         func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;

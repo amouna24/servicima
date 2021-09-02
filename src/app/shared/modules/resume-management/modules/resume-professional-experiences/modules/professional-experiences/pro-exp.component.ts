@@ -86,7 +86,9 @@ export class ProExpComponent implements OnInit {
         .subscribe(
           (responseProExp) => {
             if (responseProExp['msg_code'] !== '0004') {
-              this.proExpArray = responseProExp;
+              this.proExpArray =  responseProExp.sort( (val1, val2) => {
+                return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
+              });
               this.filterDate();
             }
           },
@@ -468,9 +470,9 @@ export class ProExpComponent implements OnInit {
     }
 
   }
-  sortProExp(proExp: object[]) {
-    return this.proExpArray.sort( (val, val2) => {
-      return +val.start_date - +val2.start_date;
+  sortProExp(proExp: IResumeProfessionalExperienceModel[]) {
+    return proExp.sort( (val1, val2) => {
+      return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
     });
   }
 }

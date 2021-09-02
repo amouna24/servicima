@@ -66,9 +66,9 @@ button: string;
       organization: ['', [Validators.required]],
       expire: [false],
       date: ['', [Validators.required]],
-      expiring_date: '',
-      certif_ref: '',
-      certif_url: '',
+      expiringDate: '',
+      certifRef: '',
+      certifUrl: '',
     });
   }
   /**************************************************************************
@@ -143,7 +143,9 @@ button: string;
               .subscribe(
                 (responseOne) => {
                   if (responseOne['msg_code'] !== '0004') {
-                    this.certificationArray = responseOne;
+                    this.certificationArray = responseOne.sort( (val1, val2) => {
+                      return +new Date(val1.date) - +new Date(val2.date);
+                    });
                     this.certificationArrayCount = responseOne.length;
                     this.certificationArray.forEach(
                       (certif) => {

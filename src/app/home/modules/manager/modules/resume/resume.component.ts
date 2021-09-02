@@ -44,7 +44,7 @@ await this.getData();
             await res['results'].forEach((candidate, index) => {
               this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
                 .subscribe( (resume) => {
-                  if (resume['msg_code'] !== '0004') {
+               if (resume['msg_code'] !== '0004') {
                     blocData.push({
                       resume_name: candidate.first_name + ' ' + candidate.last_name,
                       resume_years_exp: resume[0].years_of_experience ? resume[0].years_of_experience : '0',
@@ -62,10 +62,10 @@ await this.getData();
                       first_name: candidate.first_name,
                       last_name: candidate.last_name,
                     });
-                    if (index + 1 === res['results'].length) {
-                      this.isLoading.next(false);
-                      this.tableData.next(blocData);
-                    }
+                  }
+                  if (index + 1 >= res['results'].length) {
+                    this.isLoading.next(false);
+                    this.tableData.next(blocData);
                   }
                 });
             });
@@ -160,7 +160,8 @@ await this.getData();
                 this.clientEmailAddress,
                 'WIDIGITAL',
                 data.user_info.actual_job,
-                `${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}`
+                  [{ filename: data.user_info.init_name + '.docx',
+                  path: `${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}` }, ]
               ).subscribe((dataB) => {
               console.log(dataB);
             });
@@ -212,7 +213,7 @@ await this.getData();
               this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
                 this.userService.getAllUsers(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe( (user: IUserModel[]) => {
                   console.log(user);
-                  user['results'][0].user_type = 'COLLABORATOR';
+                  user['results'][0].user_type = 'CANDIDATE';
                   user['results'][0].application_id = user['results'][0].userKey.application_id;
                   user['results'][0].email_address = user['results'][0].userKey.email_address;
                   this.userService.updateUser(user['results'][0]).subscribe(async () => {
@@ -221,10 +222,8 @@ await this.getData();
                       console.log('candidate deleted', deleteCandidate);
                     });
                   });
-
                 });
               });
-
             });
           }
           this.subscriptionModal.unsubscribe();

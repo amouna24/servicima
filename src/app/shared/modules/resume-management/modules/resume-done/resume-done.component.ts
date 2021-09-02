@@ -133,7 +133,6 @@ export class ResumeDoneComponent implements OnInit {
    * @return count returns the percentage reached of the resume
    *************************************************************************/
   countResume() {
-    console.log('hello');
     if (this.generalInfoList.length > 0) {
       this.count += 13;
     }
@@ -218,7 +217,9 @@ export class ResumeDoneComponent implements OnInit {
           }
           if (data[1].length > 0) {
             // @ts-ignore
-            this.proExpList = data[1];
+            this.proExpList = data[1].sort( (val1, val2) => {
+              return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
+            });
           }
           if (data[2].length > 0) {
             // @ts-ignore
@@ -243,11 +244,15 @@ export class ResumeDoneComponent implements OnInit {
           if (data[7].length > 0) {
             console.log('diploma list', data[7]);
             // @ts-ignore
-            this.diplomaList = data[7];
+            this.diplomaList = data[7].sort( (val1, val2) => {
+              return +new Date(val1.start_date) - +new Date(val2.start_date);
+            });
           }
           if (data[8].length > 0) {
             // @ts-ignore
-            this.certifList = data[8];
+            this.certifList = data[8].sort( (val1, val2) => {
+              return +new Date(val1.date) - +new Date(val2.date);
+            });
           }
           this.countResume();
           this.getProjectInfo();
@@ -310,7 +315,9 @@ export class ResumeDoneComponent implements OnInit {
             }
             if (data[1].length > 0) {
               // @ts-ignore
-              this.proExpList = data[1];
+              this.proExpList = data[1].sort( (val1, val2) => {
+                return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
+              });
             }
             if (data[2].length > 0) {
               // @ts-ignore
@@ -335,11 +342,15 @@ export class ResumeDoneComponent implements OnInit {
             if (data[7].length > 0) {
               console.log('diploma list', data[7]);
               // @ts-ignore
-              this.diplomaList = data[7];
+              this.diplomaList = data[7].sort( (val1, val2) => {
+                return +new Date(val1.start_date) - +new Date(val2.start_date);
+              });
             }
             if (data[8].length > 0) {
               // @ts-ignore
-              this.certifList = data[8];
+              this.certifList = data[8].sort( (val1, val2) => {
+                return +new Date(val1.date) - +new Date(val2.date);
+              });
             }
             this.countResume();
             this.getProjectInfo();
@@ -370,6 +381,9 @@ export class ResumeDoneComponent implements OnInit {
                   );
                   i = i + 1;
                   if (this.proExpList.length === i) {
+                    this.projectList = this.projectList.sort( (val1, val2) => {
+                      return +new Date(val1.start_date) - +new Date(val2.start_date);
+                    });
                     resolve(this.projectList);
                   }
                   projectFinalList = [];
@@ -560,7 +574,8 @@ export class ResumeDoneComponent implements OnInit {
                             this.companyName,
                             this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
                             this.userService.connectedUser$.getValue().user[0]['last_name'],
-                            `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
+                            [{ filename: this.generalInfoList[0].init_name + '.docx',
+                              path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
                           ).subscribe((dataB) => {
                           console.log('mail sent', this.localStorageService.getItem('language'));
                           this.isLoading.next(false);
