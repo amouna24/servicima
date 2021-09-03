@@ -67,7 +67,7 @@ export class ShowTimesheetComponent implements OnInit {
         modalComponent: RejectTimesheetComponent
       });
     this.timesheet = this.data;
-    this.getAvatar();
+    await this.getAvatar();
   }
 
   getAvatar(): void {

@@ -13,108 +13,65 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 })
 export class RejectTimesheetComponent implements OnInit {
   commentManager: string;
-  timesheetToUpdate: any;
-  approvedButton: string;
-  companyEmail: string;
-  subscriptions: Subscription;
-  userInfo: IUserInfo;
-  openApproveComponent = new BehaviorSubject<{ opened: boolean, value: string}>({ opened: false, value: this.approvedButton});
-
+  reject: boolean;
   constructor(
     private dialogRef: MatDialogRef<RejectTimesheetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private timesheetService: TimesheetService,
-    private userService: UserService,
-    // private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.openApproveComponent.next({ opened: false, value: this.data.value});
-    this.getUserInfo();
-  }
-
-  /**
-   * @description : get user Info
-   */
-  getUserInfo() {
-    this.subscriptions = this.userService.connectedUser$.subscribe(
-      (data) => {
-        if (!!data) {
-          this.userInfo = data;
-          this.companyEmail = data.user[0]['company_email'];
-        }
-      });
+    this.reject = this.data.action === 'Rejected';
   }
 
   /**
    * @description : get comment value
+   * @param: event
    */
   getComment(event: any) {
     this.commentManager = event.target.value;
   }
-
-  async initUpdateStatus(status: string): Promise<any> {
+  /**
+   * @description : Initialize update object
+   * @param: New status
+   * @return: Promise<any>
+   */
+  async initUpdateStatus(): Promise<any> {
     return {
-      application_id : this.data.TimeSheetKey.application_id,
-      email_address : this.data.email_address,
-      company_email : this.data.company_email,
-      project_code : this.data.project_code,
-      start_date : this.data.start_date,
-      end_date : this.data.end_date,
-      timesheet_status : status,
+      application_id : this.data.timesheet.TimeSheetKey.application_id,
+      email_address : this.data.timesheet.email_address,
+      company_email : this.data.timesheet.company_email,
+      project_code : this.data.timesheet.project_code,
+      start_date : this.data.timesheet.start_date,
+      end_date : this.data.timesheet.end_date,
+      timesheet_status : this.data.action,
       comment : this.commentManager,
-      monday : this.data.monday,
-      tuesday : this.data.tuesday,
-      wednesday : this.data.wednesday,
-      thursday : this.data.thursday,
-      friday : this.data.friday,
-      saturday : this.data.saturday,
-      sunday : this.data.sunday,
-      type_timesheet: this.data.type_timesheet,
-      total_week_hours : this.data.total_week_hours
+      monday : this.data.timesheet.monday,
+      tuesday : this.data.timesheet.tuesday,
+      wednesday : this.data.timesheet.wednesday,
+      thursday : this.data.timesheet.thursday,
+      friday : this.data.timesheet.friday,
+      saturday : this.data.timesheet.saturday,
+      sunday : this.data.timesheet.sunday,
+      type_timesheet: this.data.timesheet.type_timesheet,
+      total_week_hours : this.data.timesheet.total_week_hours
     };
   }
 
   /**
    * @description : reject timesheet
+   * @param: status
    */
-  rejectTimesheet() {
-    this.initUpdateStatus('Rejected').then(
+  responseTimesheet() {
+    this.initUpdateStatus().then(
       (data) => {
-        this.timesheetToUpdate = data;
-      }
-    ).finally(
-      () => {
-        this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
-          data => {
-            this.dialogRef.close('reject');
-          },
+        this.timesheetService.updateTimesheet(data).toPromise().then(
+          res =>  this.dialogRef.close(this.data.action),
           error => console.log(error)
         );
       }
     );
 
-  }
-
-  /**
-   * @description : approve timesheet
-   */
-  approveTimesheet() {
-    this.initUpdateStatus('Approved').then(
-      (data) => {
-        this.timesheetToUpdate = data;
-      }
-    ).finally(
-      () => {
-        this.timesheetService.updateTimesheet(this.timesheetToUpdate).subscribe(
-          data => {
-            console.log(data);
-            this.dialogRef.close('approve');
-          },
-          error => console.log(error)
-        );
-      }
-    );
   }
 
   /**

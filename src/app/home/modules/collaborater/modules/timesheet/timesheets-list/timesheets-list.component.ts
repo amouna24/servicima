@@ -87,7 +87,7 @@ getTimesheetParams(): void {
         `?application_id=${this.userService.applicationId}` +
         `&email_address=${this.userService.emailAddress}` +
         `&company_email=${this.companyEmail}` +
-        `&type_timesheet=${TIMESHEET}`)
+        `&type_timesheet=${this.typeTimesheet}`)
         .subscribe((res) => {
           if (!!res) {
             this.ELEMENT_DATA.next(res);

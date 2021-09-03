@@ -1,8 +1,8 @@
 <div fxLayout="column" class="full-height full-width">
   <div class="bg-pale-grey-four" fxFlex="22" fxLayout="column">
-    <div fxFlex="38" fxLayout="row" fxLayoutAlign="end center" class="p-r-15">
-      <button mat-button class="btn-close" (click)="modalActions()">
-        <mat-icon svgIcon="wi-close"></mat-icon>
+    <div fxFlex="38" fxLayout="row" fxLayoutAlign="end" class="p-15">
+      <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
+        <mat-icon svgIcon="wi-close-normal"></mat-icon>
       </button>
     </div>
     <div fxFlex="62" fxLayout="row">
@@ -76,12 +76,12 @@
   </div>
   <div fxFlex="10" class="full-width" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="25px">
     <ng-container *ngIf="timesheet.timesheet_status === 'Pending', else status">
-      <button mat-flat-button (click)="modalActions('reject')" class="btn-small bg-error-red white">Reject</button>
-      <button mat-flat-button (click)="modalActions('approve')" class="btn-small bg-topaz white">Approve</button>
+      <button mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">Reject</button>
+      <button mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">Approve</button>
     </ng-container>
     <ng-template #status>
-      <span *ngIf="timesheet.timesheet_status === 'Pending'" class="topaz">Approved</span>
-      <span *ngIf="timesheet.timesheet_status === 'Rejected'" class="red">Rejected</span>
+      <span *ngIf="timesheet.timesheet_status === 'Pending'" class="topaz font-light font-size-12">Approved</span>
+      <span *ngIf="timesheet.timesheet_status === 'Rejected'" class="red font-light font-size-12">Rejected</span>
     </ng-template>
 
   </div>

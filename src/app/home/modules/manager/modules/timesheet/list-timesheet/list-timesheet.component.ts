@@ -132,46 +132,21 @@ getAllTimesheet() {
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
         .subscribe(
           (res) => {
-            if (res === 'reject') {
-              this.modalsServices.displayModal('rejectTimesheet', data, '600px', '350px')
+              this.modalsServices.displayModal(
+                'rejectTimesheet',
+                { timesheet: data, action: res},
+                '607px',
+                '350px')
                   .subscribe((result) => {
-                    if (result === 'reject') {
+                    if (result) {
                       this.getAllTimesheet();
                     }
                   });
-
-          } else if (res === 'approve') {
-            this.modalsServices.displayModal('rejectTimesheet', { timesheet: data , value: 'Approved' }, '600px', '350px')
-                .subscribe((result) => {
-                  if (result === 'approve') {
-                    this.getAllTimesheet();
-                  }
-                });
-          }},
+              },
     error => {
           console.log(error);
         }
       );
-  }
-
-  /**
-   * @description : update user
-   * @param data: object
-   */
-  updateTimesheet(data) {
-  }
-
-  /**
-   * @description : change the status of the user
-   * @param id: string
-   * @param status: string
-   */
-  onChangeStatus(id: string) {
-    const confirmation = {
-      code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
-    };
   }
 
   /**
@@ -182,9 +157,10 @@ getAllTimesheet() {
     switch (rowAction.actionType) {
       case ('show'): this.showTimesheet(rowAction.data);
         break;
-      case ('update'): this.updateTimesheet(rowAction.data);
+      case ('update'):
         break;
-      case('delete'): this.onChangeStatus(rowAction.data);
+      case('delete'):
+        break;
     }
   }
 
