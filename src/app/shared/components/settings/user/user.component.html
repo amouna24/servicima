@@ -33,7 +33,6 @@
         nbrColumn=1
       ></wid-skeleton-loader>
       <div fxLayout="column" fxFlex="55" fxLayoutGap="20px"  *ngIf="!isLoading">
-
         <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="50px"
           *ngFor=" let list of showList; let index = index">
           <button mat-button mat-raised-button class="btn-medium white"
@@ -53,9 +52,15 @@
     </div>
     <div fxLayout="column" fxFlex="70" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
       fxFlexOffset="50px">
+
       <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
         <div fxLayout="column" fxFlex="100" class="m-l-20">
+          <div fxLayout="column"  fxFlex="90">
+
+         
+          <wid-scrollbar class="scrollbar">
           <div fxLayout="column" fxFlex="90">
+            
             <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{'margin-top': '5%'}">
               <h5 class="steel">{{'user.personnelinformation'| translate}}:</h5>
             </div>
@@ -195,6 +200,8 @@
             </div>
             <br>
           </div>
+          </wid-scrollbar>
+        </div>
             <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
                 <button [disableControl]="{'feature':'SOURCING_ACCESS'}"  mat-button color="accent" (click)="update()" mat-raised-button class="btn-small white">

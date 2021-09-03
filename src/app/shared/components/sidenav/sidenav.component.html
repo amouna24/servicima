@@ -1,15 +1,16 @@
 
-<wid-scrollbar class="scrollbar side-nav-container bg-theme" >
-  <div  fxFlex="100" fxLayout="column"  [@onSideNavChange]="sidebarState">
+  <div  fxFlex="100" fxLayout="column"  [@onSideNavChange]="sidebarState" class="bg-theme">
+    <!---------------------------------------- menu header ----------q-------------------------------------------------->
+    <mat-list-item>
+      <p [@nameAnimation]="sidebarState" class="company-label font-size-25">
+        {{companyName()}}
+      </p>
+    </mat-list-item>
+    <!---------------------------------------- menu container ------------------------------------------------------------>
+    <wid-scrollbar class="scrollbar side-nav-container " fxFlex="90">
     <div fxFlex="93" fxLayout="row" fxLayoutAlign="center start">
       <mat-nav-list [@listAnimation]="sidebarState">
-        <!---------------------------------------- menu header ----------q-------------------------------------------------->
-        <mat-list-item>
-          <p [@nameAnimation]="sidebarState" class="company-label font-size-25">
-            {{companyName()}}
-          </p>
-        </mat-list-item>
-        <!---------------------------------------- menu container ------------------------------------------------------------>
+
         <div *ngIf="subMenu.length === 0; else subMenuContainer">
           <ng-container *ngFor=" let menuItem of menu">
             <div *canBeDisplayed="{'feature':menuItem.feature}">
@@ -81,8 +82,9 @@
         </ng-template>
       </mat-nav-list>
     </div>
+</wid-scrollbar>
 
-    <div fxFlex="7" fxLayout="column" fxLayoutAlign="end center">
+    <div fxFlex="10" fxLayout="column" fxLayoutAlign="end center">
       <!---------------------------------------- footer ------------------------------------------------------------>
       <span class="servicima-logo" fxLayout="row">
                 <ng-container *ngIf="iconBool; else miniLogo" [@labelAnimation]="sidebarState">
@@ -107,7 +109,6 @@
   </div>
 
 
-</wid-scrollbar>
 
 <button mat-icon-button mat-raised-button color="accent" (click)="toggleSideNav()"
         [@buttonAnimation]="sidebarState">

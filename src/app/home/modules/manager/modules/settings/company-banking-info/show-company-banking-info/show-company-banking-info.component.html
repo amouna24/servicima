@@ -1,0 +1,114 @@
+<div class="container-show">
+    <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
+        <div fxLayout="column" fxFlex="100" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
+            fxFlexOffset="50px" style="min-height: 100% !important;">
+            <ng-container *ngIf="companyBankingInfoExist == 'no data'">
+                <h1 class="steel" style="text-align: center;">Company banking informations</h1>
+                <div fxLayout="row" fxLayoutAlign="center start">
+                    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center" class="border-none"
+                        [style]="{border: 'solid 3px #e8f1f9',  height: '250px'}">
+                        <div fxFlex="15" fxLayout="row">
+                            <button mat-raised-button class="btn-medium bg-cerulean-blue"
+                                (click)="addCompanyBankingInfo()">
+                                <span class="white font-normal">Add company banking Info</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="companyBankingInfoExist == 'company Banking Info'" style="min-height: 100% !important;">
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="20px">
+                    <div fxLayout="column" fxFlex="100" class="m-l-20">
+                        <div fxLayout="column" fxFlex="90">
+                            <div fxLayout="row" fxLayoutGap="20px" [ngStyle]="{'margin-top': '5%'}">
+                                <h5 class="steel">{{'company.banking.info.title' | translate}}:</h5>
+                            </div>
+                            <wid-scrollbar class="scrollbar">
+                                <div fxLayout="column" fxFlex="90" fxLayoutGap="10px">
+                                    <wid-skeleton-loader height="25" width="250" *ngIf="isLoading" nbrRow=2 nbrColumn=2>
+                                    </wid-skeleton-loader>
+                                    <div fxLayout="row" *ngIf="!isLoading">
+                                        <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                                class="font-size-12">
+                                                <span> {{'company.banking.info.company' | translate }} : </span>
+                                                <span class="steel"> {{companyName}}</span>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                                class="font-size-12">
+                                                <span> {{'company.banking.info.bankname' | translate }}: </span>
+                                                <span class="steel"> {{bankName}}</span>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                                class="font-size-12">
+                                                <span> {{'company.banking.info.bankdomiciliation' | translate }}:
+                                                </span>
+                                                <span class="steel"> {{bankDomiciliation}}</span>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                                class="font-size-12">
+                                                <span> {{'company.banking.info.iban' | translate }}: </span>
+                                                <span class="steel"> {{iban}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <wid-skeleton-loader height="25" width="250" *ngIf="isLoading" nbrRow=2 nbrColumn=2>
+                                    </wid-skeleton-loader>
+                                    <div fxLayout="row" *ngIf="!isLoading">
+                                        <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                                                <span> {{'company.banking.info.rib' | translate }}: </span>
+                                                <span class="steel"> {{rib}}</span>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                                class="font-size-12">
+                                                <span> {{'company.banking.info.biccode'| translate }}: </span>
+                                                <span class="steel"> {{bicCode}}</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                        class="font-size-12">
+                                        <span> {{'company.banking.info.bankaddress'| translate }}: </span>
+                                        <span class="steel"> {{bankAddress}}</span>
+                                    </div>
+                                    <span> {{'company.banking.info.factorinformations'| translate }}: </span>
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px"
+                                        class="font-size-12">
+                                        <div class="container-factor-informations">
+                                            {{factorInformation}}
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            </wid-scrollbar>
+                        </div>
+                        <div fxLayout="column" fxFlex="10" fxLayoutAlign="center">
+                            <div fxLayout="row" fxLayoutAlign="flex-end" class="m-r-10">
+                                <button [disableControl]="{'feature':'SOURCING_ACCESS'}"
+                                    (click)='updateCompanyBankingInfo()' mat-button color="accent" mat-raised-button
+                                    class="btn-small white">
+                                    {{'company.banking.info.edit'| translate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="companyBankingInfoExist == 'spinner'">
+                <div fxFlex="100" fxLayoutAlign="center center">
+                    <mat-progress-spinner color="primary" mode="indeterminate">
+                    </mat-progress-spinner>
+                </div>
+            </ng-container>
+
+
+        </div>
+    </div>
+</div>
