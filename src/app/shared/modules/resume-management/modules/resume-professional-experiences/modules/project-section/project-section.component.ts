@@ -277,9 +277,8 @@ export class ProjectSectionComponent implements OnInit {
    * @description Delete Selected Project detail
    * @param id the id of the deleted functionnal skill
    * @param pointIndex the index of the deleted Project detail
-   * @param project_details_code contains the project details code
    *************************************************************************/
-  deleteProject(id: string, pointIndex: number, project_details_code) {
+  deleteProject(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-pro-det',

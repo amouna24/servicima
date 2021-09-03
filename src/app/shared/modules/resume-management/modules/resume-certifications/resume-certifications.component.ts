@@ -66,9 +66,9 @@ button: string;
       organization: ['', [Validators.required]],
       expire: [false],
       date: ['', [Validators.required]],
-      expiringDate: '',
-      certifRef: '',
-      certifUrl: '',
+      expiring_date: '',
+      certif_ref: '',
+      certif_url: '',
     });
   }
   /**************************************************************************

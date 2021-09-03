@@ -29,11 +29,16 @@ export class ResumeComponent implements OnInit {
     private candidateService: CandidateService,
   ) {
   }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   async ngOnInit(): Promise<void> {
     this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
 await this.getData();
   }
+  /**************************************************************************
+   * @description Get Users Data  from user service and resume service
+   *************************************************************************/
   async getData() {
     this.isLoading.next(true);
     const blocData = [];
@@ -72,7 +77,9 @@ await this.getData();
           });
       });
   }
-
+  /**************************************************************************
+   To change
+   *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
       case ('show'):
@@ -85,7 +92,10 @@ await this.getData();
         this.sendMail(rowAction.data);
     }
   }
-
+  /**************************************************************************
+   * @description Export Resume in pdf format
+   * @param data: contains the data of resume
+   *************************************************************************/
   exportPdf(data) {
     if (data.resume_filename_pdf !== undefined && data.resume_filename_pdf !== null) {
       window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf, '_blank');
@@ -105,9 +115,11 @@ await this.getData();
         );
     }
   }
-
+  /**************************************************************************
+   * @description Update the resume of user
+   * @param data contain the resume resume date of the user
+   *************************************************************************/
   private updateResume(data) {
-    console.log('general info =', data.user_info);
     data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
     data.user_info.language_id = data.user_info.ResumeKey.language_id;
     data.user_info.company_email = data.user_info.ResumeKey.company_email;
@@ -122,7 +134,10 @@ await this.getData();
         }
       });
   }
-
+  /**************************************************************************
+   * @description Download resume in Docx format
+   * @param data: contains the data of resume
+   *************************************************************************/
   private downloadDocx(data) {
     if (data.resume_filename_docx !== undefined && data.resume_filename_docx !== null) {
       window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
@@ -142,7 +157,10 @@ await this.getData();
         );
     }
   }
-
+  /**************************************************************************
+   * @description Send mail contains the resume of the collaborator to client
+   * data: contains the data of resume
+   *************************************************************************/
   private sendMail(data) {
     const confirmation = {
       code: 'edit',
@@ -170,6 +188,10 @@ await this.getData();
         }
       );
   }
+  /**************************************************************************
+   * @description Change status of candidate to collaborator
+   * data: contains the data of user
+   *************************************************************************/
   changeCandidateToCollaborator(data) {
     const confirmation = {
       code: 'edit',
@@ -212,7 +234,6 @@ await this.getData();
               };
               this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
                 this.userService.getAllUsers(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe( (user: IUserModel[]) => {
-                  console.log(user);
                   user['results'][0].user_type = 'CANDIDATE';
                   user['results'][0].application_id = user['results'][0].userKey.application_id;
                   user['results'][0].email_address = user['results'][0].userKey.email_address;

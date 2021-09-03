@@ -25,7 +25,6 @@ import { map } from 'rxjs/internal/operators/map';
 import { Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 
@@ -54,7 +53,6 @@ export class ResumeDoneComponent implements OnInit {
     private router: Router,
     private modalServices: ModalService,
     private utilsService: UtilsService,
-    private localStorageService: LocalStorageService,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
@@ -158,19 +156,16 @@ export class ResumeDoneComponent implements OnInit {
       this.count += 13;
     }
     this.showEmpty = false;
-    console.log('count = ', this.count);
     return this.count;
   }
   /*************************************************************************
    * @description Get Resume Data from Resume Service
    *************************************************************************/
   getResumeInfo() {
-    console.log('this.resume code', this.resumeCode , 'connected user', this.userService.connectedUser$.getValue().user[0].user_type);
     if (this.resumeCode) {
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
-            console.log(userInfo);
             if (userInfo) {
               this.companyName = userInfo['company'][0]['company_name'];
               this.companyLogo = userInfo['company'][0]['photo'];
@@ -242,7 +237,6 @@ export class ResumeDoneComponent implements OnInit {
             this.sectionList = data[6];
           }
           if (data[7].length > 0) {
-            console.log('diploma list', data[7]);
             // @ts-ignore
             this.diplomaList = data[7].sort( (val1, val2) => {
               return +new Date(val1.start_date) - +new Date(val2.start_date);
@@ -340,7 +334,6 @@ export class ResumeDoneComponent implements OnInit {
               this.sectionList = data[6];
             }
             if (data[7].length > 0) {
-              console.log('diploma list', data[7]);
               // @ts-ignore
               this.diplomaList = data[7].sort( (val1, val2) => {
                 return +new Date(val1.start_date) - +new Date(val2.start_date);
@@ -473,12 +466,10 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Get All resume Data
    * @param action  which differs between the generation in pdf or docx format
-   * @param theme choose the theme of the resume
    *************************************************************************/
   async getDocument(action: string) {
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-        console.log('diplom start data', diploma.start_date);
         if (this.testDateDiploma === undefined) {
           diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
           diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
@@ -577,7 +568,6 @@ export class ResumeDoneComponent implements OnInit {
                             [{ filename: this.generalInfoList[0].init_name + '.docx',
                               path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
                           ).subscribe((dataB) => {
-                          console.log('mail sent', this.localStorageService.getItem('language'));
                           this.isLoading.next(false);
                           this.router.navigate(['/candidate/']);
                         });
@@ -622,7 +612,6 @@ export class ResumeDoneComponent implements OnInit {
           formDataPdf.append('file', filePdf);
           formDataPdf.append('caption', filePdf.name);
           await this.uploadFile(formDataPdf).then((filenamePdf) => {
-            console.log('uploaded');
             this.generalInfoList[0].resume_filename_pdf = filenamePdf;
             this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
             this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
@@ -725,7 +714,6 @@ export class ResumeDoneComponent implements OnInit {
     }
     return (projectDetailsSection);
   }
-
   /**************************************************************************
    * @description get organized Project details section data in JSON object
    *************************************************************************/
@@ -743,7 +731,6 @@ export class ResumeDoneComponent implements OnInit {
     this.projectDetailsList = [];
     this.projectDetailsSectionList = [];
   }
-
   /**************************************************************************
    * @description translate static labels in the resume docx format
    *************************************************************************/

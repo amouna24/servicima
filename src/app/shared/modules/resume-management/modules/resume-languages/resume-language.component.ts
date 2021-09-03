@@ -60,7 +60,6 @@ export class ResumeLanguageComponent implements OnInit {
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
-
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -83,7 +82,6 @@ export class ResumeLanguageComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/close.svg')
     );
   }
-
   /**************************************************************************
    * @description set Language RefData in a language List
    *************************************************************************/
@@ -91,7 +89,6 @@ export class ResumeLanguageComponent implements OnInit {
     const data = await this.getRefData();
     this.langList = data['LANGUAGE'];
   }
-
   /**************************************************************************
    * @description Get Languages from Ref Data
    * @return refData return language refData
@@ -103,7 +100,6 @@ export class ResumeLanguageComponent implements OnInit {
         list, false);
     return this.refData;
   }
-
   /**************************************************************************
    * @description get Email address from Connected User
    *************************************************************************/
@@ -116,7 +112,6 @@ export class ResumeLanguageComponent implements OnInit {
           }
         });
   }
-
   /**************************************************************************
    * @description get the rating added by the candidate
    *************************************************************************/
@@ -124,7 +119,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.rating = rating;
     return false;
   }
-
   /**************************************************************************
    * @description show Rating that are already exists in database
    * @param level level of the existing language
@@ -138,7 +132,6 @@ export class ResumeLanguageComponent implements OnInit {
       return 'assets/icons/star_yellow_empty.svg';
     }
   }
-
   /**************************************************************************
    * @description Select Level by clicking on the stars
    * @param index index of the language
@@ -151,7 +144,6 @@ export class ResumeLanguageComponent implements OnInit {
       return 'assets/icons/star_border.svg';
     }
   }
-
   /**************************************************************************
    * @description initialize a Language Form
    *************************************************************************/
@@ -160,7 +152,6 @@ export class ResumeLanguageComponent implements OnInit {
       resume_language_code: ['', [Validators.required]],
     });
   }
-
   /*************************************************************************
    * @description Create new Language
    ***********************************************************************/
@@ -191,7 +182,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.sendLanguage.reset();
     this.rating = 0;
   }
-
   /**************************************************************************
    * @description  Update a language by clicking on the stars
    * @param rating the rating selected by the candidate
@@ -210,7 +200,6 @@ export class ResumeLanguageComponent implements OnInit {
     this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
     return false;
   }
-
   /**************************************************************************
    * @description Get Language Data from Resume Service
    *************************************************************************/
@@ -287,7 +276,6 @@ export class ResumeLanguageComponent implements OnInit {
         );
     }
   }
-
   /**************************************************************************
    * @description Delete Selected Languages
    *************************************************************************/

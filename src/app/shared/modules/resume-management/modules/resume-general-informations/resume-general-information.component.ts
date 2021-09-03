@@ -75,7 +75,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-    console.log('hello');
     this.showYears = false;
     this.firstname = this.firstNameManager ? this.firstNameManager : this.userService.connectedUser$.getValue().user[0]['first_name'];
     this.lastname = this.lastNameManager ? this.lastNameManager : this.userService.connectedUser$.getValue().user[0]['last_name'];
@@ -95,7 +94,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
    *  @description Get Resume Data from Resume Service and reusme Image from upload Service
    *************************************************************************/
   async getResume() {
-    console.log('this.generalInfoManager=', this.userService.connectedUser$.getValue().user[0].user_type);
     if (this.generalInfoManager) {
       if ((this.generalInfoManager.image !== undefined) && (this.generalInfoManager.image !== null)) {
         this.haveImage = this.generalInfoManager.image;
@@ -330,7 +328,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
         if (this.generalInfoManager) {
           this.generalInfo.email_address = this.generalInfoManager.ResumeKey.email_address;
         }
-        console.log('gen info', this.generalInfo);
         this.resumeService.updateResume(this.generalInfo).subscribe(data => {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {

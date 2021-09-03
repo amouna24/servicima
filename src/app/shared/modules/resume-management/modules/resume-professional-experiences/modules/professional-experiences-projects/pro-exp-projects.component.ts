@@ -253,9 +253,9 @@ export class ProExpProjectsComponent implements OnInit {
    * @description Delete the selected Project
    * @param id the id of the deleted Project
    * @param pointIndex the index of the deleted Project
-   * @param project_code it contains the project code
+   * @param projectCode it contains the project code
    *************************************************************************/
-  deleteProject(id: string, pointIndex: number, project_code: string) {
+  deleteProject(id: string, pointIndex: number, projectCode: string) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-project',
@@ -269,7 +269,7 @@ export class ProExpProjectsComponent implements OnInit {
               this.loadTree();
             });
             this.resumeService.getProjectDetails(
-              `?project_code=${project_code}`)
+              `?project_code=${projectCode}`)
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
@@ -465,15 +465,15 @@ export class ProExpProjectsComponent implements OnInit {
 
   /*******************************************************************
    * @description Get the data of the projects of one professional experience
-   * @param pro the professional experience model
+   * @param projectNode the professional experience model
    *******************************************************************/
-  async getProjectNode(pro: IResumeProfessionalExperienceModel) {
+  async getProjectNode(projectNode: IResumeProfessionalExperienceModel) {
     let i = 0;
     let result = null;
     const proArray = [];
     await new Promise((resolve) => {
       this.resumeService.getProject(
-        `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
+        `?professional_experience_code=${projectNode.ResumeProfessionalExperienceKey.professional_experience_code}`)
         .subscribe(
           (resProject) => {
             if (resProject.length > 0) {

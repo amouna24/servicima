@@ -140,7 +140,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       );
     }
   }
-
   /**************************************************************************
    * @description Initialization of Certification and diploma Form
    *************************************************************************/
@@ -153,7 +152,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       certif_diploma_desc: '',
     });
   }
-
   /**************************************************************************
    * @description Create or Update Certification/Diploma
    *************************************************************************/
@@ -192,7 +190,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.sendCertifDiploma.reset();
     this.showNumberError = false;
   }
-
   /**************************************************************************
    * @description get data from a selected certification/Diploma and set it in the current form
    * @param certifDiploma Certifications and diploma Model

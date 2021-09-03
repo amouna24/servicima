@@ -109,7 +109,6 @@ export class ProExpComponent implements OnInit {
             .subscribe(
               (responseProExp) => {
                 if (responseProExp['msg_code'] !== '0004') {
-                  console.log('sort pro exp', this.sortProExp(responseProExp));
                   this.proExpArray = responseProExp;
                   this.filterDate();
                 }
@@ -222,7 +221,6 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate._id = this.id;
       if (this.sendProExp.valid) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => {
-          console.log('Professional experience updated =', data);
           this.proExpArray.splice(this.indexUpdate, 0 , data);
           this.filterDate();
         });
@@ -264,9 +262,9 @@ export class ProExpComponent implements OnInit {
    * @description Delete Selected Functional Skilll
    * @param id the id of the deleted functionnal skill
    * @param pointIndex the index of the deleted functional skill
-   * @param professional_experience_code it contains te professional experience code
+   * @param professionalExperienceCode it contains te professional experience code
    *************************************************************************/
-  deleteProExp(id: string, pointIndex: number, professional_experience_code: string) {
+  deleteProExp(id: string, pointIndex: number, professionalExperienceCode: string) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-pro-exp',
@@ -281,7 +279,7 @@ export class ProExpComponent implements OnInit {
               this.filterDate();
             });
             this.resumeService.getProject(
-              `?professional_experience_code=${professional_experience_code}`)
+              `?professional_experience_code=${professionalExperienceCode}`)
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
@@ -469,10 +467,5 @@ export class ProExpComponent implements OnInit {
       }
     }
 
-  }
-  sortProExp(proExp: IResumeProfessionalExperienceModel[]) {
-    return proExp.sort( (val1, val2) => {
-      return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
-    });
   }
 }
