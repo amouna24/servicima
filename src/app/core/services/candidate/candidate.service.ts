@@ -41,8 +41,8 @@ export class CandidateService {
   }
 
   /**************************************************************************
-   * @description Delete Technical skills Status
-   * @param id: Delete technical skills Object
+   * @description Delete Candidate
+   * @param id: Id of the deleted candidate
    *************************************************************************/
   deleteCandidate(id: string): Observable<any> {
     return this.httpClient.delete<ICandidateModel>(`${environment.candidateApiUrl}/?_id=${id}`);

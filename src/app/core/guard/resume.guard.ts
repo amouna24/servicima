@@ -5,15 +5,12 @@ import {
   RouterStateSnapshot,
   UrlTree,
   Router,
-  NavigationEnd
 } from '@angular/router';
 import { ResumeService } from '@core/services/resume/resume.service';
-import { SpinnerService } from '@core/services/spinner/spinner.service';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
