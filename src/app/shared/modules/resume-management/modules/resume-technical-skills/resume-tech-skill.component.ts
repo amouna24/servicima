@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { IResumeTechnicalSkillsModel } from '@shared/models/resumeTechnicalSkills.model';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp
+    dataAppearance
   ]
 })
 export class ResumeTechSkillComponent implements OnInit {
@@ -43,7 +43,9 @@ export class ResumeTechSkillComponent implements OnInit {
     private userService: UserService,
     private modalServices: ModalService,
     private router: Router,
-  ) { }
+  ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -58,7 +60,29 @@ export class ResumeTechSkillComponent implements OnInit {
    * @description Get Technical Skill Data from Resume Service
    *************************************************************************/
   getTechnicalSkillsInfo() {
-    this.resumeService.getResume(
+    if (this.resumeCode) {
+      this.resumeService.getTechnicalSkills(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.techSkillArray = responseOne;
+              this.arrayTechSkillCount = responseOne.length;
+              this.techSkillArray.forEach(
+                (tech) => {
+                  tech.technical_skill_code = tech.ResumeTechnicalSkillsKey.technical_skill_code;
+                }
+              );
+            }},
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {    this.resumeService.getResume(
       `?email_address=${this.userService.connectedUser$
         .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
         .getValue().user[0]['company_email']}`).subscribe((response) => {
@@ -82,14 +106,14 @@ export class ResumeTechSkillComponent implements OnInit {
                 }
               },
             );
-        } else {
-      this.router.navigate(['/candidate/resume/']);
-    }},
+        }
+    },
         (error) => {
           if (error.error.msg_code === '0004') {
           }
         },
       );
+    }
   }
 
   /**************************************************************************
@@ -128,7 +152,6 @@ export class ResumeTechSkillComponent implements OnInit {
       this.techSkillUpdate.skill_index = this.skillIndex;
       this.techSkillUpdate._id = this.id;
       if (this.sendTechSkill.valid) {
-        console.log('this.techSkillUpdate', this.techSkillUpdate, 'other', this.TechSkill);
         this.resumeService.updateTechnicalSkills(this.techSkillUpdate).subscribe(data => {
           this.techSkillArray.splice(this.indexUpdate, 0,  data);
           console.log('Technical skill updated =', data);
@@ -174,7 +197,6 @@ this.button = 'Add'; }
             this.techSkillArray.forEach((value, index) => {
               if (index === pointIndex) { this.techSkillArray.splice(index, 1); }
             });
-            this.button = 'Add';
           }
           this.arrayTechSkillCount--;
           this.subscriptionModal.unsubscribe();
@@ -191,6 +213,56 @@ this.button = 'Add'; }
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/functionnalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      if (typeRoute === 'next') {
+          this.router.navigate(['/candidate/resume/functionalSkills'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        } else {
+          this.router.navigate(['/candidate/resume/certifications'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/functionalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
   }
 
 }

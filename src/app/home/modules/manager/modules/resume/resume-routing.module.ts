@@ -9,28 +9,67 @@ import { ResumeDynamicSectionComponent } from '@shared/modules/resume-management
 import { ResumeFuncSkillComponent } from '@shared/modules/resume-management/modules/resume-functional-skills/resume-func-skill.component';
 import { ResumeCertifDiplomaComponent } from '@shared/modules/resume-management/modules/resume-certification-diploma/resume-certif-diploma.component';
 import { ResumeDoneComponent } from '@shared/modules/resume-management/modules/resume-done/resume-done.component';
-import { ResumeGuard } from '@core/guard/resume.guard';
 import { ResumeCertificationsComponent } from '@shared/modules/resume-management/modules/resume-certifications/resume-certifications.component';
+// tslint:disable-next-line:max-line-length
+import { ProExpComponent } from '@shared/modules/resume-management/modules/resume-professional-experiences/modules/professional-experiences/pro-exp.component';
+// tslint:disable-next-line:max-line-length
+import { ProExpProjectsComponent } from '@shared/modules/resume-management/modules/resume-professional-experiences/modules/professional-experiences-projects/pro-exp-projects.component';
+
+import { ResumeComponent } from './resume.component';
 
 const routes: Routes = [
-  { path: '', component: ResumeGeneralInformationComponent},
-  { path: '', canActivate: [ResumeGuard],
-    loadChildren: () => import('../resume-management/modules/resume-professional-experiences/resume-pro-exp.module')
-      .then(m => m.ResumeProExpModule),
+  {
+    path: '',
+    component: ResumeComponent
   },
-  { path: 'language', canActivate: [ResumeGuard],  component: ResumeLanguageComponent},
-  { path: 'intervention', canActivate: [ResumeGuard], component: ResumeInterventionComponent},
-  { path: 'technicalSkills', canActivate: [ResumeGuard], component: ResumeTechSkillComponent},
-  { path: 'dynamicSection', canActivate: [ResumeGuard], component: ResumeDynamicSectionComponent},
-  { path: 'functionalSkills', canActivate: [ResumeGuard], component: ResumeFuncSkillComponent},
-  { path: 'certifDiploma', canActivate: [ResumeGuard], component: ResumeCertifDiplomaComponent},
-  { path: 'done', canActivate: [ResumeGuard], component: ResumeDoneComponent},
-  { path: 'certifications', canActivate: [ResumeGuard], component: ResumeCertificationsComponent},
-
+  {
+    path: 'generalInformation',
+    component: ResumeGeneralInformationComponent
+  },
+  {
+    path: 'certifications',
+    component: ResumeCertificationsComponent
+  },
+  {
+    path: 'diploma',
+    component: ResumeCertifDiplomaComponent
+  },
+  {
+    path: 'technicalSkills',
+    component: ResumeTechSkillComponent
+  },
+  {
+    path: 'functionnalSkills',
+    component: ResumeFuncSkillComponent
+  },
+  {
+    path: 'intervention',
+    component: ResumeInterventionComponent
+  },
+  {
+    path: 'professionalExperience',
+    component: ProExpComponent
+  },
+  {
+    path: 'dynamicSection',
+    component: ResumeDynamicSectionComponent
+  },
+  {
+    path: 'language',
+    component: ResumeLanguageComponent
+  },
+  {
+    path: 'projects',
+    component: ProExpProjectsComponent
+  },
+  {
+    path: 'done',
+    component: ResumeDoneComponent
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ResumeManagementRoutingModule { }
+export class ResumeRoutingModule { }

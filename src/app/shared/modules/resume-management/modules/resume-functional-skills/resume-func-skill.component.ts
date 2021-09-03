@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-func-skill',
@@ -17,7 +17,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp,
+    dataAppearance,
 
   ]
 })
@@ -45,6 +45,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -62,41 +63,66 @@ export class ResumeFuncSkillComponent implements OnInit {
    * @description Get Functional skills data from Resume Service
    *************************************************************************/
   getFuncSkillsInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe(
-      (response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getFunctionalSkills(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.funcSkillArray = responseOne;
-                  this.arrayFuncSkillCount = responseOne.length;
-                  this.funcSkillArray.forEach(
-                    (func) => {
-                      func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
-                    }
-                  );
+    if (this.resumeCode) {
+      this.resumeService.getFunctionalSkills(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.funcSkillArray = responseOne;
+              this.arrayFuncSkillCount = responseOne.length;
+              this.funcSkillArray.forEach(
+                (func) => {
+                  func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
                 }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe(
+        (response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getFunctionalSkills(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.funcSkillArray = responseOne;
+                    this.arrayFuncSkillCount = responseOne.length;
+                    this.funcSkillArray.forEach(
+                      (func) => {
+                        func.functional_skills_code = func.ResumeFunctionalSkillsKey.functional_skills_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
   }
 
   /**************************************************************************
@@ -120,7 +146,6 @@ export class ResumeFuncSkillComponent implements OnInit {
                 this.funcSkillArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }
@@ -202,4 +227,55 @@ export class ResumeFuncSkillComponent implements OnInit {
     }
     return(indexationArray);
   }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
+  }
+
 }

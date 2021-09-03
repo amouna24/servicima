@@ -100,7 +100,7 @@
           <mat-icon class="icon">arrow_back
           </mat-icon>
             </span>
-          <span class="font-light font-size-14" [@labelAnimation]="sidebarState">go back</span>
+          <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{'sidenav.go-back' | translate}}</span>
         </mat-list-item>
         <mat-accordion multi="false" fxLayout="column">
           <ng-container *ngFor=" let subMenuItem of subMenu">

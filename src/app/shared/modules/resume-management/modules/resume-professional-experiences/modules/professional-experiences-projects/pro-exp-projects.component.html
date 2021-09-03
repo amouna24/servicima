@@ -21,7 +21,7 @@
           <h4 class="steel font-size-18 font-small">{{position}}-{{customer}}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="80"  @showProExp fxLayoutAlign="space-around">
+      <div fxLayout="row" fxFlex="76"  @dataAppearance fxLayoutAlign="space-around">
         <wid-scrollbar fxFlex="87" class="full-height">
           <div fxLayout="column" fxFlex="100" fxFlexAlign="10px">
             <div fxLayout="row" *ngIf="!showProject"  class="height-50"  fxLayoutAlign="center">
@@ -80,11 +80,16 @@
             </div>
             <div fxLayout="row">
               <div fxLayout="column" fxFlex="100">
-                <div fxLayout="row" fxFlexFill class="add_project"   *ngIf="!showForm && showProject">
-                  <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
-                          (click)="onShowForm()">+
-                  </button>
-                  <span class="font-size-12 steel"> {{ 'resume-add-project' | translate }} </span></div>
+                <div fxLayout="row" fxFlexFill class="add_project" fxLayoutGap="5px"   *ngIf="!showForm && showProject">
+                  <div fxLayout="column">
+                    <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button"
+                            (click)="onShowForm()">+
+                    </button>
+                  </div>
+                  <div fxLayout="column">
+                    <span class="font-size-12 steel"> {{ 'resume-add-project' | translate }} </span>
+                  </div>
+                </div>
               </div>
             </div>
             <form fxLayout="row" [formGroup]="sendProject" *ngIf="showForm">
@@ -156,7 +161,7 @@
             </form>
           </div>
           <div fxLayout="column" fxFlex="18"  class="p-l-10" *ngIf="showProject">
-            <div fxLayout="row" @showProExp fxFlex="90" fxLayoutAlign=" end">
+            <div fxLayout="row" @dataAppearance fxFlex="90" fxLayoutAlign=" end">
               <div fxLayout="column"  fxFlexFill fxLayoutAlign="end"  >
                 <wid-scrollbar class="full-width full-height" >
                   <div fxLayout="row"  class="border-radius-10 border_add_project min-height-55" >
@@ -219,7 +224,7 @@
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/professionalExperience']">
+                  (click)="routeToProfessionalExperience()">
             {{ 'resume-save' | translate }}
           </button>
         </div>

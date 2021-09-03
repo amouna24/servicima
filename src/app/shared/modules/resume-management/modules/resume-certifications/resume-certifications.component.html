@@ -21,7 +21,7 @@
           <h4 class="steel font-size-18 font-small">{{'resume-certif' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxFlex = 80 fxLayout="row" @showProExp class="full-width">
+      <wid-scrollbar fxFlex ="76" fxLayout="row" @dataAppearance class="full-width">
         <div fxLayout="column" fxFlexFill >
           <div fxLayout="row" fxLayoutAlign="center"  *ngFor="let item of certificationArray let pointIndex=index" @showBloc>
             <div fxLayout="column" fxFlex="80"  >
@@ -157,12 +157,12 @@
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/certifDiploma ">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  [routerLink]="['/candidate/resume/technicalSkills']">
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  (click)="routeNextBack('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

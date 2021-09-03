@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-dynamic-section',
@@ -16,7 +16,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     blueToGrey,
     GreyToBlue,
     downLine,
-    showProExp,
+    dataAppearance,
     showBloc
   ],
 })
@@ -46,8 +46,8 @@ export class ResumeDynamicSectionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
-
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -58,60 +58,85 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.getDynamicSectionInfo();
     this.createForm();
   }
-
   /**************************************************************************
    * @description Get Dynamic section Data from Resume Service
    *************************************************************************/
   getDynamicSectionInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getCustomSection(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.SectionArray = responseOne;
-                  this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
-                  this.SectionArray.forEach(
-                    (sec) => {
-                      sec.section_code = sec.ResumeSectionKey.section_code;
-                    }
-                  );
-                  this.showSection = true;
-                } else {
-                  this.showSection = false;
+    if (this.resumeCode) {
+      this.resumeService.getCustomSection(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.SectionArray = responseOne;
+              this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
+              this.SectionArray.forEach(
+                (sec) => {
+                  sec.section_code = sec.ResumeSectionKey.section_code;
                 }
-                this.showEmpty = false;
-              }
-              ,
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+              this.showSection = true;
+            } else {
+              this.showSection = false;
+            }
+            this.showEmpty = false;
+          }
+          ,
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe((response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getCustomSection(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.SectionArray = responseOne;
+                    this.arraySectionCount = +this.SectionArray[this.SectionArray.length - 1].index + 1;
+                    this.SectionArray.forEach(
+                      (sec) => {
+                        sec.section_code = sec.ResumeSectionKey.section_code;
+                      }
+                    );
+                    this.showSection = true;
+                  } else {
+                    this.showSection = false;
+                  }
+                  this.showEmpty = false;
 
+                }
+                ,
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
   }
-
   /**************************************************************************
    * @description Show The Form of Custom Section
    *************************************************************************/
   showCustomSection() {
     this.showSection = !this.showSection;
   }
-
   /*************************************************************************
    * @description Initialization of Custom Section Form
    *************************************************************************/
@@ -121,7 +146,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
       section_desc: '',
     });
   }
-
   /**************************************************************************
    * @description Create or Update a Custom Section
    *************************************************************************/
@@ -158,7 +182,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.sendSection.reset();
     this.showNumberError = false;
   }
-
   /**************************************************************************
    * @description Set data of a selected Custom section and set it in the current form
    * @param dynamicSection the Dynamic section model
@@ -175,7 +198,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
     this.indexUpdate = pointIndex;
     this.button = 'Save';
   }
-
   /**************************************************************************
    * @description Delete the selected Custom section
    * @param id the id of the deleted dynamic section
@@ -197,7 +219,6 @@ export class ResumeDynamicSectionComponent implements OnInit {
                 this.SectionArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }
@@ -212,5 +233,55 @@ export class ResumeDynamicSectionComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/language'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/language'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/language'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
   }
 }

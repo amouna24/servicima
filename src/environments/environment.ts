@@ -43,7 +43,7 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
-  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
+  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
@@ -51,6 +51,8 @@ export const environment = {
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
+  collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
+  candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

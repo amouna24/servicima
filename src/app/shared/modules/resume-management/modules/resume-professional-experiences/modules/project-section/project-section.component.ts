@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { IViewParam } from '@shared/models/view.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { showBloc, showProExp } from '@shared/animations/animations';
+import { showBloc, dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -16,7 +16,7 @@ import { ModalService } from '@core/services/modal/modal.service';
   templateUrl: './project-section.component.html',
   styleUrls: ['./project-section.component.scss'],
   animations: [
-    showProExp,
+    dataAppearance,
     showBloc
   ]
 })
@@ -201,7 +201,10 @@ export class ProjectSectionComponent implements OnInit {
           this.resumeService.addProjectDetailsSection(sec).subscribe(dataSection => console.log('Section details =', dataSection));
         });
         this.resumeService.updateProjectDetails(this.proDetailUpdate).subscribe(async data => {
-          this.proDetailsArray.splice( this.indexUpdate, 1, data);
+          this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
+            this.select = selectedValue;
+          });
+          this.proDetailsArray.splice( this.indexUpdate, 0, data);
           this.refreshTree.emit(true);
         });
         this.button = 'Add';
@@ -274,9 +277,8 @@ export class ProjectSectionComponent implements OnInit {
    * @description Delete Selected Project detail
    * @param id the id of the deleted functionnal skill
    * @param pointIndex the index of the deleted Project detail
-   * @param project_details_code contains the project details code
    *************************************************************************/
-  deleteProject(id: string, pointIndex: number, project_details_code) {
+  deleteProject(id: string, pointIndex: number) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-pro-det',
@@ -301,10 +303,8 @@ export class ProjectSectionComponent implements OnInit {
                     this.proDetailsArray.splice(index, 1);
                   }
                 });
-                this.button = 'Add';
                 this.showDesc = true;
                 this.showSec = false;
-                this.createFormProDetails();
                 this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
                   this.select = selectedValue;
                 });
@@ -358,18 +358,14 @@ export class ProjectSectionComponent implements OnInit {
           if (res === true) {
             if (id !== undefined) {
             this.resumeService.deleteProjectDetailsSection(id).subscribe( () => {
-              this.proDetailsArray.forEach((value, index) => {
                   this.proSectionArray.splice(pointIndex, 1);
-              });
             });
             } else {
               this.proSectionArray.splice(pointIndex, 1);
             }
           }
           this.subscriptionModal.unsubscribe();
-
         });
-
   }
   /**************************************************************************
    * @description Initialize all arrays

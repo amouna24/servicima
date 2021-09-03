@@ -21,7 +21,7 @@
           <h4 class="steel font-size-18 font-small">{{ 'resume-lvl-intervention' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxFlex="80" @showProExp class="full-width">
+      <wid-scrollbar fxFlex="76" @dataAppearance class="full-width">
         <div fxLayout="column" fxFlexFill fxLayoutAlign=" center" fxLayoutGap="10px">
           <div *ngFor="let item of interventionArray let pointIndex=index" @showBloc class="p-l-65 full-width">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
@@ -67,13 +67,13 @@
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/functionalSkills">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  [routerLink]="['/candidate/resume/professionalExperience']">
+                  (click)="routeNextBack('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>
