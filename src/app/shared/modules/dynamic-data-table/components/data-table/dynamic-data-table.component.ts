@@ -12,28 +12,24 @@ import * as _ from 'lodash';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
-import { dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-dynamic-data-table',
   templateUrl: './dynamic-data-table.component.html',
-  styleUrls: ['./dynamic-data-table.component.scss'],
-  animations: [
-    dataAppearance
-  ]
+  styleUrls: ['./dynamic-data-table.component.scss']
 })
 export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
   @Input() header: {  title: string, addActionURL?: string, addActionText?: string,
-                      type?: string,
-                      addActionDialog?:
-                        { modalName: string, modalComponent: string, data: object, width: string, height: string }
-                   };
+    type?: string,
+    addActionDialog?:
+      { modalName: string, modalComponent: string, data: object, width: string, height: string }
+  };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
-  @Input() buttonAdd: boolean;
+
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
 
@@ -65,8 +61,6 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   newConfig: IDataListModel[] =  [];
   dataSource: any;
   refData: { } = { };
-  showAllText: boolean;
-  black: '#000000';
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -89,11 +83,10 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           this.pagination.emit({ limit: value, offset: 0});
         },
       );
-    this.showAllText = false;
   }
 
-   getDataSource() {
-     this.tableData.subscribe((res) => {
+  getDataSource() {
+    this.tableData.subscribe((res) => {
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
       this.offset = res?.offset ? Number(res?.offset) + 1 : null;
@@ -124,47 +117,47 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         });
       });
       this.dataSource = dataList;
-     this.convertData();
+      this.convertData();
     });
   }
 
   /**************************************************************************
- * @description get data list
- *************************************************************************/
+   * @description get data list
+   *************************************************************************/
   getDataList() {
     this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
-                                            [...this.tableData?.getValue()];
+      [...this.tableData?.getValue()];
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent });
-      if (this.localStorageService.getItem(this.tableCode)) {
-        this.getConfigDatatable();
-      } else {
-    this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
-      .subscribe(
-        res => {
-          this.modalConfiguration = res;
-          this.displayedColumns = this.dynamicDataTableService.getDefaultDisplayedColumns(this.modalConfiguration);
-          this.canBeDisplayedColumns = this.dynamicDataTableService.generateColumns(
-            this.dynamicDataTableService.getCanBeDisplayedColumns(this.modalConfiguration)
-          );
-          this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
-            this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
-          );
-          this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
-          this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
-          this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
-          this.columnsList.push('Actions');
-          this.localStorageService.setItem(this.tableCode,
-            { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.modalConfiguration, actualColumn: this.columns });
-        }
-      );
-      }
+    if (this.localStorageService.getItem(this.tableCode)) {
+      this.getConfigDatatable();
+    } else {
+      this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
+        .subscribe(
+          res => {
+            this.modalConfiguration = res;
+            this.displayedColumns = this.dynamicDataTableService.getDefaultDisplayedColumns(this.modalConfiguration);
+            this.canBeDisplayedColumns = this.dynamicDataTableService.generateColumns(
+              this.dynamicDataTableService.getCanBeDisplayedColumns(this.modalConfiguration)
+            );
+            this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
+              this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
+            );
+            this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
+            this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
+            this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+            this.columnsList.push('Actions');
+            this.localStorageService.setItem(this.tableCode,
+              { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.modalConfiguration, actualColumn: this.columns });
+          }
+        );
+    }
 
   }
 
   /**************************************************************************
- * @description display table config
- *************************************************************************/
+   * @description display table config
+   *************************************************************************/
   displayTableConfig() {
     this.newConfig = [];
     this.getConfigDatatable();
@@ -196,10 +189,10 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
                 this.newConfig.push(list);
               }
             });
-            this.canBeDisplayedColumns = _.sortBy(this.canBeDisplayedColumns, 'index');
-            this.newConfig  = _.sortBy(this.newConfig , 'colum_disp_index');
-            this.localStorageService.setItem(this.tableCode,
-              { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.newConfig , actualColumn: this.columns});
+          this.canBeDisplayedColumns = _.sortBy(this.canBeDisplayedColumns, 'index');
+          this.newConfig  = _.sortBy(this.newConfig , 'colum_disp_index');
+          this.localStorageService.setItem(this.tableCode,
+            { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.newConfig , actualColumn: this.columns});
         }
       });
   }
@@ -233,19 +226,19 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
    * @description get refData
    *************************************************************************/
   async getRefData() {
-  this.refData =  await this.refDataServices.getRefData(
+    this.refData =  await this.refDataServices.getRefData(
       this.utilService.getCompanyId(
         this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
-    false
+      false
     );
   }
 
   /**************************************************************************
    * @description get config datatable
    *************************************************************************/
-   getConfigDatatable() {
+  getConfigDatatable() {
     const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
     this.columns = getConfigTableFromLocalStorage.columns ? getConfigTableFromLocalStorage.columns : this.columns;
     this.columnsList = getConfigTableFromLocalStorage.columnsList ? getConfigTableFromLocalStorage.columnsList : this.columnsList;
@@ -261,9 +254,9 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   }
 
- /**************************************************************************
- * @description display description
- *************************************************************************/
+  /**************************************************************************
+   * @description display description
+   *************************************************************************/
   convertData() {
     this.dataSource.map((dataS) => {
       if (dataS.application_id) {
@@ -329,28 +322,28 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0 });
         this.currentPage = this.nbrPages[0];
       }
-      break;
+        break;
       case 'previous-page' : {
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 - this.itemsPerPageControl.value });
         this.currentPage -= 1;
 
       }
-      break;
+        break;
       case 'specific-page' : {
         this.currentPage = pageNumber;
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.itemsPerPageControl.value * (pageNumber - 1) });
       }
-      break;
+        break;
       case 'next-page' : {
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 + this.itemsPerPageControl.value });
         this.currentPage += 1;
       }
-      break;
+        break;
       case 'last-page' : {
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: (this.itemsPerPageControl.value * (this.nbrPages.length - 1))});
         this.currentPage = this.nbrPages[this.nbrPages.length - 1];
       }
-      break;
+        break;
     }
   }
 
