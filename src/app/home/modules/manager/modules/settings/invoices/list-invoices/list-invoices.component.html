@@ -1,0 +1,13 @@
+<div class="page-container">
+    <wid-dynamic-data-table
+      [tableData]="ELEMENT_DATA"
+      [tableCode]="'INVOICES-LIST'"
+      [isLoading]="isLoading"
+      [header]="{ title: 'Invoice management', addActionURL: '/manager/settings/invoices/add-invoice', addActionText: 'New invoice'}"
+      [title]="'Invoices list'"
+      (rowActionData)="switchAction($event)"
+      [allowedActions]="['show', 'download', 'to pay', 'archiver','sendMailing']"
+    >
+    </wid-dynamic-data-table>
+  </div>
+  
