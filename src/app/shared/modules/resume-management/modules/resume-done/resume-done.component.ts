@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
@@ -86,7 +86,7 @@ export class ResumeDoneComponent implements OnInit {
   userType: string;
   testDateDiploma: string;
   subscriptionModal: Subscription;
-
+  showWaiting = true;
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -540,6 +540,7 @@ export class ResumeDoneComponent implements OnInit {
           .subscribe(
             (resMail) => {
               if (resMail === true) {
+                this.showWaiting = true;
                 this.isLoading.next(true);
                 this.resumeService.getResumePdf(data, theme, action).subscribe(
                   async res => {
@@ -568,6 +569,7 @@ export class ResumeDoneComponent implements OnInit {
                             [{ filename: this.generalInfoList[0].init_name + '.docx',
                               path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
                           ).subscribe((dataB) => {
+                            this.showWaiting = true;
                           this.isLoading.next(false);
                           this.router.navigate(['/candidate/']);
                         });
@@ -579,6 +581,7 @@ export class ResumeDoneComponent implements OnInit {
               }
             });
       } else {
+        this.showWaiting = true;
         this.resumeService.getResumePdf(data, theme, action).subscribe(
           async res => {
             saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
@@ -595,6 +598,7 @@ export class ResumeDoneComponent implements OnInit {
               this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
               this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
               this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                  this.showWaiting = false;
                   this.router.navigate(['/manager/resume/']);
               });
             });
@@ -763,4 +767,5 @@ export class ResumeDoneComponent implements OnInit {
   verifyUserType() {
     this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' ? this.userType = 'manager' : this.userType = 'candidate';
   }
+
 }

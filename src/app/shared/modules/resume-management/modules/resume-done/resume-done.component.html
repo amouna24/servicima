@@ -67,7 +67,19 @@
      </span>
         </button>
         <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="getDocument('generate')"  [style]="{marginRight: '4%'}">
-          {{ 'resume-save' | translate }}
+          <ng-template [ngIf]="!showWaiting">
+            {{ 'resume-save' | translate }}
+          </ng-template>
+          <ng-template [ngIf]="showWaiting" >
+            <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
+              <div fxLayout="column" style="padding-right: 19px">
+                Waiting
+              </div>
+              <div fxLayout="column" style="padding-top: 8px">
+              <div  class="dot-elastic">
+              </div></div>
+            </div>
+          </ng-template>
         </button>
       </div>
     </div>
