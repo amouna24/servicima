@@ -16,6 +16,7 @@ import { ContractsService } from '@core/services/contracts/contracts.service';
 import { ContractProjectService } from '@core/services/contract-project/contract-project.service';
 import { InvoiceService } from '@core/services/invoice/invoice.service';
 import { ModalService } from '@core/services/modal/modal.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { IContractProject } from '@shared/models/contractProject.model';
 import { IContractor } from '@shared/models/contractor.model';
@@ -24,12 +25,14 @@ import { ICompanyBankingInfoModel } from '@shared/models/companyBankingInfo.mode
 import { IUserInfo } from '@shared/models/userInfo.model';
 
 import { environment } from '../../../../../../../../environments/environment';
+
 @Component({
   selector: 'wid-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
 })
 export class InvoiceComponent implements OnInit {
+  applicationId: string;
   userInfo: IUserInfo;
   contractorAddress: string;
   contractorName: string;
@@ -48,7 +51,7 @@ export class InvoiceComponent implements OnInit {
   formFactor: FormGroup;
   formHeader: FormGroup;
   formCompanyBanking: FormGroup;
-
+  companyEmail: string; // A changer
   contractorCode: string;
   contractCode: string;
   invoiceNbr: number;
@@ -82,7 +85,8 @@ export class InvoiceComponent implements OnInit {
     private projectCollaboratorService: ProjectCollaboratorService,
     private translate: TranslateService,
     private paymentTermsService: CompanyPaymentTermsService,
-    private contractorsService: ContractorsService) {
+    private contractorsService: ContractorsService,
+    private localStorageService: LocalStorageService) {
     this.invoiceNbr = this.router.getCurrentNavigation()?.extras?.state?.nbrInvoice;
   }
 
@@ -90,6 +94,7 @@ export class InvoiceComponent implements OnInit {
    *  @description Loaded when component in init state
    *************************************************************************/
    async ngOnInit() {
+    this.applicationId = this.localStorageService.getItem('userCredentials');
     this.translateKey = ['invoice.siteWeb', 'invoice.email', 'invoice.phone', 'invoice.accountsPayable',
       'invoice.totalTTC', 'invoice.Subtotal', 'invoice.BicCode', 'invoice.RIB', 'invoice.IBAN', 'invoice.address',
       'invoice.ConditionAndModality', 'invoice.amountLine', 'invoice.vatLine', 'invoice.quantity',
@@ -118,7 +123,6 @@ export class InvoiceComponent implements OnInit {
       invoice_line_total_amount: [''],
       input: this.formBuilder.array(
         [Validators.required])
-
     });
 
     this.formFactor = this.formBuilder.group({
@@ -203,6 +207,9 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.totalTTC = this.getSum('vat_amount') + this.getSum('invoice_line_total_amount');
   }
 
+  /**************************************************************************
+   *  @description : edit contractor
+   *************************************************************************/
   editContractor() {
     this.editContractors = true;
   }
@@ -217,6 +224,7 @@ RIB:${this.companyBankingInfos?.rib}`);
           if (userInfo) {
             this.userInfo = userInfo['company'][0];
             this.avatar = await this.uploadService.getImage(this.userInfo['photo']);
+            this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
           }
         });
   }
@@ -245,7 +253,7 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   getContractor(): Promise<IContractor[]> {
     return new Promise((resolve) => {
-      this.contractorsService.getContractors(`?email_address=amine.sboui.1@esprit.tn`).subscribe((contractor) => {
+      this.contractorsService.getContractors(`?email_address=${this.companyEmail}`).subscribe((contractor) => {
         this.listContractor = contractor['results'];
         resolve(this.listContractor);
       });
@@ -265,7 +273,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.contractorEmailAddress = this.listContractor.find(value => value.contractorKey.contractor_code === contractorCode)
       .contractorKey.email_address;
     this.contractorCode = contractorCode;
-    this.contractsService.getContracts(`?email_address=amine.sboui.1@esprit.tn&contractor_code=${contractorCode}`)
+    this.contractsService.getContracts(`?email_address=${this.companyEmail}&contractor_code=${contractorCode}`)
       .subscribe((contract) => {
         if (contract['results']) {
           this.listContract = contract['results'];
@@ -302,7 +310,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.contract = this.listContract.find(value => value.contractKey.contract_code === contractCode);
     this.contractCode = contractCode;
     this.currencyCode = this.contract['currency_cd'];
-    this.paymentTermsService.getCompanyPaymentTerms('amine.sboui.1@esprit.tn').subscribe((data) => {
+    this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`).subscribe((data) => {
       this.paymentTerms = data.find(value => value.companyPaymentTermsKey.payment_terms_code === this.contract['payment_terms']).delay;
       this.formHeader.controls['invoiceDelay'].
         setValue(this.paymentTerms ? this.datePipe.transform(new Date().setDate(new Date().getDate() + this.paymentTerms)) : null);
@@ -313,7 +321,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.sousTotalHT = 0;
     this.totalTTC = 0;
     this.vatMount = 0;
-    //  this.getTimesheet('amine.sboui.1@esprit.tn',);
+    //  this.getTimesheet(this.companyEmail,);
   }
 
   /**************************************************************************
@@ -326,10 +334,16 @@ RIB:${this.companyBankingInfos?.rib}`);
       });*/
   }
 
+  /**************************************************************************
+   *  @description mouse Enter
+   *************************************************************************/
   mouseEnter() {
     this.iconVisible = true;
   }
 
+  /**************************************************************************
+   *  @description mouse leave
+   *************************************************************************/
   mouseLeave() {
     this.iconVisible = false;
   }
@@ -338,12 +352,12 @@ RIB:${this.companyBankingInfos?.rib}`);
    *  @description Get Contract Project
    *************************************************************************/
   getProjectCollab(contractCode: string): void {
-    this.projectCollaboratorService.getProjectCollaborator('amine.sboui.1@esprit.tn', contractCode).subscribe((projectCollab) => {
+    this.projectCollaboratorService.getProjectCollaborator(`${this.companyEmail}`, contractCode).subscribe((projectCollab) => {
       const listCollaborator = projectCollab.map((data) => {
         return data.ProjectCollaboratorKey.email_address;
       });
       listCollaborator.map((data) => {
-        // this.getTimesheet('amine.sboui.1@esprit.tn', this.contractCode, data, '2021-05-31T23:00:00.000Z');
+        // this.getTimesheet(this.companyEmail, this.contractCode, data, '2021-05-31T23:00:00.000Z');
       });
     });
   }
@@ -353,7 +367,7 @@ RIB:${this.companyBankingInfos?.rib}`);
    *  @param contractCode: string
    *************************************************************************/
   getContractProject(contractCode: string): void {
-    this.contractProjectService.getContractProject('amine.sboui.1@esprit.tn', contractCode).subscribe((data) => {
+    this.contractProjectService.getContractProject(`${this.companyEmail}`, contractCode).subscribe((data) => {
       this.listProject = data;
     });
   }
@@ -394,15 +408,15 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   async getInvoice(): Promise<void> {
     const promise1 = new Promise((resolve) => {
-      this.invoiceService.getInvoiceHeader(`?company_email=amine.sboui.1@esprit.tn&invoice_nbr=` + this.invoiceNbr).subscribe((invoiceHeader) => {
+      this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((invoiceHeader) => {
         resolve(invoiceHeader);
       }, () => {
         resolve([]);
       });
     });
 
-  /*  const promise2 = new Promise((resolve) => {
-      this.invoiceService.getInvoicePayment(`?company_email=amine.sboui.1@esprit.tn&invoice_nbr=` + this.invoiceNbr).subscribe((invoicePayment) => {
+  /* const promise2 = new Promise((resolve) => {
+      this.invoiceService.getInvoicePayment(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((invoicePayment) => {
         resolve(invoicePayment);
       }, () => {
         resolve([]);
@@ -410,7 +424,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     });*/
 
     const promise3 = new Promise((resolve) => {
-      this.invoiceService.getInvoiceLine(`?company_email=amine.sboui.1@esprit.tn&invoice_nbr=${this.invoiceNbr}`).subscribe((invoiceLine) => {
+      this.invoiceService.getInvoiceLine(`?company_email=${this.companyEmail}&invoice_nbr=${this.invoiceNbr}`).subscribe((invoiceLine) => {
         resolve(invoiceLine);
       }, () => {
         resolve([]);
@@ -428,7 +442,7 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   async getMaxHeaderInvoiceNbr() {
     return new Promise((resolve) => {
-      this.invoiceService.getInvoiceHeader(`?company_email=amine.sboui.1@esprit.tn`).subscribe((invoiceHeader) => {
+      this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`).subscribe((invoiceHeader) => {
         this.maxInvoiceHeader = invoiceHeader['max'];
         resolve(this.maxInvoiceHeader);
       }, error => {
@@ -442,8 +456,8 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   addInvoiceHeader(type: string, valueAttachment?: string) {
     const invoiceHeader = {
-      application_id: '5eac544a92809d7cd5dae21f',
-      company_email: 'amine.sboui.1@esprit.tn',
+      application_id: this.applicationId,
+      company_email: this.companyEmail,
       invoice_nbr: this.action === 'update' ? this.invoiceNbr : parseInt(this.formHeader.value.invoiceNbr, 10),
       invoice_status: type,
       factor_involved: this.formFactor.value.factorInvoice ? 'Y' : 'N',
@@ -459,7 +473,6 @@ RIB:${this.companyBankingInfos?.rib}`);
       comment2: '',
       attachment: valueAttachment ? valueAttachment : '',
     };
-    console.log(invoiceHeader, 'uo');
     if (!this.invoiceHeader) {
       this.invoiceService.addInvoiceHeader(invoiceHeader).subscribe((data) => {
         this.invoiceHeader = data[0];
@@ -500,7 +513,7 @@ RIB:${this.companyBankingInfos?.rib}`);
   /**************************************************************************
    * @description  add new line invoice
    *************************************************************************/
-  onAddAnotherRoleName() {
+  onAddAnotherLine() {
     return this.getListRole().push(this.formBuilder.group({
       project_code: '',
       project_desc: '',
@@ -514,20 +527,24 @@ RIB:${this.companyBankingInfos?.rib}`);
 
   }
 
+  /**************************************************************************
+   * @description Get list invoice line
+   *************************************************************************/
   getListInvoiceLine() {
    const listLine = this.form.value.input.map((res) => {
       return {
         ...res,
         InvoiceLineKey: {
-          company_email: 'amine.sboui.1@esprit.tn',
+          company_email: this.companyEmail,
           invoice_nbr: this.action === 'update' ? this.invoiceNbr : parseInt(this.formHeader.value.invoiceNbr, 10),
-          application_id: '5eac544a92809d7cd5dae21f',
+          application_id: this.applicationId,
           invoice_line_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-ILC`,
         }
       };
     });
    return listLine;
   }
+
   /**************************************************************************
    * @description Generate Invoice
    *************************************************************************/
@@ -547,13 +564,12 @@ RIB:${this.companyBankingInfos?.rib}`);
 
         this.invoiceService.deleteManyInvoiceLine(dhaw).subscribe(() => {
           this.invoiceService.addManyInvoiceLine(listLine).subscribe(() => {
-            this.invoiceService.getInvoiceLine(`?company_email=amine.sboui.1@esprit.tn&invoice_nbr=${this.formHeader.value.invoiceNbr}`)
+            this.invoiceService.getInvoiceLine(`?company_email=${this.companyEmail}&invoice_nbr=${this.formHeader.value.invoiceNbr}`)
               .subscribe((invoice) => {
                 if (invoice) {
                   this.mp = invoice;
                 }
               });
-
           });
         });
       }
@@ -629,14 +645,13 @@ RIB:${this.companyBankingInfos?.rib}`);
       if (type === 'PENDING') {
         this.invoiceService.generateInvoice(final).subscribe(async (res) => {
           const file = new File([res], `invoice${company.invoiceNbr}.pdf`, { lastModified: new Date().getTime(), type: res.type });
-
           const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
           formData.append('file', file);
           formData.append('caption', file.name);
           const fileName = await this.uploadFile(formData);
           this.addInvoiceHeader(type, fileName);
-          const datacc = { path: file.name };
-          this.invoiceService.deleteInvoice(datacc).subscribe(() => {
+          const path = { path: file.name };
+          this.invoiceService.deleteInvoice(path).subscribe(() => {
           });
           this.router.navigate(['/manager/settings/invoices']);
         }

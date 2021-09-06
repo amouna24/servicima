@@ -8,9 +8,12 @@ import { Router } from '@angular/router';
 import { IContractor } from '@shared/models/contractor.model';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { AddTaxCompanyComponent } from '../../tax/add-tax-company/add-tax-company.component';
 import { environment } from '../../../../../../../../environments/environment';
+
 declare var require: any;
 // tslint:disable-next-line:no-var-requires
 const FileSaver = require ('file-saver');
@@ -24,27 +27,34 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<ICompanyTaxModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   listContractor: any;
-  emailAddress: string;
+  companyEmail: string;
   finalMapping = new BehaviorSubject<any>([]);
   allowedActions = [];
+  applicationId: string;
+  languageId: string;
   private subscriptions: Subscription[] = [];
+
   constructor(private userService: UserService,
               private modalService: ModalService,
               private invoiceService: InvoiceService,
               private contractorsService: ContractorsService,
               private uploadService: UploadService,
-              private router: Router, ) { }
+              private router: Router,
+              private utilsService: UtilsService,
+              private localStorageService: LocalStorageService) { }
   /**
    * @description Loaded when component in init state
    */
  async ngOnInit() {
-  await this.getContractor();
+    this.applicationId = this.localStorageService.getItem('userCredentials');
+    this.languageId = this.localStorageService.getItem('language').langId;
+
+    await this.getContractor();
     this.modalService.registerModals(
       { modalName: 'addTax', modalComponent: AddTaxCompanyComponent });
     this.isLoading.next(true);
     this.getConnectedUser();
     this.getAllInvoices();
-
   }
 
   /**
@@ -55,7 +65,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+            this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
           }
         });
   }
@@ -65,7 +75,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    *************************************************************************/
     getContractor(): Promise<IContractor[]> {
       return new Promise((resolve) => {
-        this.contractorsService.getContractors(`?email_address=amine.sboui.1@esprit.tn`).subscribe((contractor) => {
+        this.contractorsService.getContractors(`?email_address=${this.companyEmail}`).subscribe((contractor) => {
           this.listContractor = contractor['results'];
           resolve(this.listContractor);
         });
@@ -76,13 +86,12 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description get all invoices by company
    */
   getAllInvoices() {
-    this.invoiceService.getInvoiceHeader('?company_email=amine.sboui.1@esprit.tn').subscribe((data) => {
-      console.log(data['results'][0]['invoice_status'], 'jjjjj');
+    this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`).subscribe((data) => {
       console.log(this.listContractor);
         data['results'].map((datas) => {
           datas['code'] = datas['contractor_code'];
-        // tslint:disable-next-line:max-line-length
-        datas['contractor_code'] = this.listContractor.find(value => value.contractorKey.contractor_code === datas['contractor_code']).contractor_name;
+        datas['contractor_code'] = this.listContractor
+          .find(value => value.contractorKey.contractor_code === datas['contractor_code']).contractor_name;
         if (datas['invoice_status'] === 'DRAFT') {
           datas['action'] = { update: true, delete: true, show: false };
           } else {
@@ -102,11 +111,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   switchAction(rowAction: any) {
     console.log(rowAction.data, 'row');
     switch (rowAction.actionType) {
-       case ('show'): this.showUser(rowAction.data);
+       case ('show'): this.showInvoice(rowAction.data);
         break;
       case ('update'): this.updateInvoice(rowAction.data);
         break;
-       case('download'): this.onChangeStatus(rowAction.data);
+       case('download'): this.downloadInvoice(rowAction.data);
        break;
       case('to pay'): this.toPay(rowAction.data);
        break;
@@ -126,15 +135,23 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
       });
   }
-  showUser(data) {
+
+  /**
+   * @description : show invoice
+   * @param data: invoice to show
+   */
+  showInvoice(data) {
     data.map((invoive) => {
       const fileURL = `${environment.uploadFileApiUrl}/show/` + invoive['attachment'] ;
       window.open(fileURL);
     });
-
    }
 
-  onChangeStatus(data) {
+  /**
+   * @description : download invoice
+   * @param data: invoice to show
+   */
+  downloadInvoice(data) {
     data.map((invoice) => {
       const fileURL = `${environment.uploadFileApiUrl}/show/` + invoice['attachment'] ;
       FileSaver.saveAs(fileURL, 'invoice' + invoice['InvoiceHeaderKey']['invoice_nbr'] + '.pdf');
@@ -142,18 +159,21 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * @description : send mailing
+   * @param row: list invoices to send
+   */
   sendMailing(row) {
     row.map((data) => {
-      this.invoiceService.sendInvoiceMail('5eac544ad4cb666637fe1354',
-        '5eac544a92809d7cd5dae21f',
-        '5ee69e061d291480d44f4cf2',
-        'dhia.othmen@widigital-group.com',
+      this.invoiceService.sendInvoiceMail(this.languageId,
+        this.applicationId,
+        this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+       this. companyEmail,
         data.contractor_code,
         'data.user_info.actual_job',
         '${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}',
         [{ filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
-         path: 'http://192.168.1.22:8067/show/' + data.attachment }, { filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
-          path: 'http://192.168.1.22:8067/show/' + data.attachment }]
+         path: environment.uploadFileApiUrl + '/show/' + data.attachment }]
       ).subscribe(() => {
         this.getAllInvoices();
       });

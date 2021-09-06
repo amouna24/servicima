@@ -224,7 +224,7 @@
             </div>
             <div *ngIf='getListRole().controls.length >0' class="btn-add-line" fxLayout="row"
               fxLayoutAlign="flex-start center">
-                  <button [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-medium bg-cerulean-blue white" (click)="onAddAnotherRoleName()"> <span
+                  <button [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-medium bg-cerulean-blue white" (click)="onAddAnotherLine()"> <span
                     class="btn-plus">+</span> Ajouter une ligne</button>
 
 
@@ -235,7 +235,7 @@
                   [ngStyle]="{border: 'solid 3px #e8f1f9',  height: '250px'}" >
                   <div fxFlex="15" fxLayout="row">
                     <button mat-raised-button class="btn-medium bg-cerulean-blue">
-                      <span class="white font-normal" (click)="onAddAnotherRoleName()">Add  new line Invoice</span>
+                      <span class="white font-normal" (click)="onAddAnotherLine()">Add  new line Invoice</span>
                     </button>
                   </div>
                 </div>
