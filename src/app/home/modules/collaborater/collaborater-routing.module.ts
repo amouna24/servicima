@@ -42,7 +42,7 @@ const routes: Routes = [
         loadChildren: () => import('@shared/modules/placement/placement.module').then(m => m.PlacementModule)
       },
       {
-        path: 'Resume',
+        path: 'resume',
         loadChildren: () => import('@shared/modules/resume-management/resume-management.module').then(m => m.ResumeManagementModule)
       },
       {

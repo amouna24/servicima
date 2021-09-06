@@ -43,11 +43,11 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
+  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
   invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
   invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
   invoicePaymentApiUrl: 'http://192.168.1.22:8107/servicima/invoicepayment/v1',
-  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
@@ -56,6 +56,8 @@ export const environment = {
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
+  collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
+  candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

@@ -58,6 +58,10 @@ const routes: Routes = [
         },
         loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
       },
+      {
+        path: 'resume',
+        loadChildren: () => import('./modules/resume/resume.module').then(m => m.ResumeModule),
+      },
     ]
   }
 ];

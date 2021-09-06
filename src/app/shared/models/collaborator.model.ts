@@ -2,7 +2,7 @@ import { ICollaboratorKey } from '@shared/models/collaboratorKey.model';
 
 export interface ICollaborator {
   /* ID */
-  _id: string;
+  _id?: string;
   collaboratorKey: ICollaboratorKey;
   adress?: string;
   zip_code?: string;
@@ -23,4 +23,6 @@ export interface ICollaborator {
   rib_key?: string;
   medical_exam_date?: string;
   status?: string;
+  application_id: string;
+  email_address: string;
 }

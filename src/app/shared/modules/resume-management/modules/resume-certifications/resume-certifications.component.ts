@@ -6,7 +6,8 @@ import { UserService } from '@core/services/user/user.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, GreyToBlue, downLine, showBloc, dataAppearance } from '@shared/animations/animations';
+import { Router } from '@angular/router';
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
@@ -16,7 +17,7 @@ import { blueToGrey, GreyToBlue, downLine, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp
+    dataAppearance
   ]
 })
 export class ResumeCertificationsComponent implements OnInit {
@@ -41,7 +42,10 @@ button: string;
     private resumeService: ResumeService,
     private userService: UserService,
     private modalServices: ModalService,
-) { }
+    private router: Router,
+) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -103,6 +107,30 @@ button: string;
    * @description Get Certification data from Resume Service
    *************************************************************************/
   getCertificationInfo() {
+    if (this.resumeCode) {
+      this.resumeService.getCertification(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.certificationArray = responseOne;
+              this.certificationArrayCount = responseOne.length;
+              this.certificationArray.forEach(
+                (certif) => {
+                  certif.certification_code = certif.ResumeCertificationKey.certification_code;
+                }
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' && !this.resumeCode ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.resumeService.getResume(
         `?email_address=${this.userService.connectedUser$
           .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
@@ -115,7 +143,9 @@ button: string;
               .subscribe(
                 (responseOne) => {
                   if (responseOne['msg_code'] !== '0004') {
-                    this.certificationArray = responseOne;
+                    this.certificationArray = responseOne.sort( (val1, val2) => {
+                      return +new Date(val1.date) - +new Date(val2.date);
+                    });
                     this.certificationArrayCount = responseOne.length;
                     this.certificationArray.forEach(
                       (certif) => {
@@ -136,6 +166,7 @@ button: string;
           }
         },
       );
+    }
     }
   /*******************************************************************
    * @description Action on checkbox of the expired certificate
@@ -171,7 +202,6 @@ button: string;
                 this.certificationArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }
@@ -214,5 +244,55 @@ button: string;
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous opage
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/diploma'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/certifDiploma'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/technicalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/certifDiploma'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
   }
 }

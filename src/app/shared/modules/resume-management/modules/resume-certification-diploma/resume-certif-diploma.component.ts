@@ -6,8 +6,9 @@ import { ResumeService } from '@core/services/resume/resume.service';
 import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
-import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { NavigationEnd, Router } from '@angular/router';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-resume-certif-diploma',
@@ -18,7 +19,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ResumeCertifDiplomaComponent implements OnInit {
@@ -50,6 +51,17 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router
   ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.router.events
+      .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
+      .subscribe(event => {
+        if (
+          event.id === 1 &&
+          event.url === event.urlAfterRedirects
+        ) {
+          this.router.navigate(['resume/candidate']);
+        }
+      });
   }
 
   /**************************************************************************
@@ -70,41 +82,64 @@ export class ResumeCertifDiplomaComponent implements OnInit {
    * @description Get all Certification and diploma Data from Resume Service
    *************************************************************************/
   getCertifDiplomaInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getCertifDiploma(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.certifDiplomaArray = responseOne;
-                  this.certifDiplomaArray.forEach(
-                    (func) => {
-                      func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
-                    }
-                  );
+    if (this.resumeCode) {
+      this.resumeService.getCertifDiploma(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.certifDiplomaArray = responseOne;
+              this.certifDiplomaArray.forEach(
+                (func) => {
+                  func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
                 }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+       this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe((response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getCertifDiploma(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.certifDiplomaArray = responseOne.sort( (val1, val2) => {
+                      return +new Date(val1.start_date) - +new Date(val2.start_date);
+                    });
+                    this.certifDiplomaArray.forEach(
+                      (func) => {
+                        func.certif_diploma_code = func.ResumeCertificationDiplomaKey.certif_diploma_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
   }
-
   /**************************************************************************
    * @description Initialization of Certification and diploma Form
    *************************************************************************/
@@ -117,7 +152,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       certif_diploma_desc: '',
     });
   }
-
   /**************************************************************************
    * @description Create or Update Certification/Diploma
    *************************************************************************/
@@ -156,7 +190,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.sendCertifDiploma.reset();
     this.showNumberError = false;
   }
-
   /**************************************************************************
    * @description get data from a selected certification/Diploma and set it in the current form
    * @param certifDiploma Certifications and diploma Model
@@ -198,7 +231,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
                 this.certifDiplomaArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
 
           }
           this.subscriptionModal.unsubscribe();
@@ -243,5 +275,55 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/generalInformation'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else   if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/candidate/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/certifications'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
   }
 }

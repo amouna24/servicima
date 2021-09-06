@@ -1,0 +1,9 @@
+<wid-dynamic-data-table
+  [tableData]="this.tableData"
+  [tableCode]="'RESUME_MANAGER'"
+  [isLoading]="isLoading"
+  [buttonAdd]="false"
+  [header]="{ title: 'Resume management'}"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="{ update: true, delete: true, show: true }">
+</wid-dynamic-data-table>

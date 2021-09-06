@@ -149,7 +149,7 @@ export let downLine = trigger('downLine', [
     animate(500),
   ]),
 ]);
-export let showProExp = trigger('showProExp', [
+export let dataAppearance = trigger('dataAppearance', [
   transition('void => *',  [
     style({ opacity: 0}),
     animate(500),
@@ -166,12 +166,5 @@ export let showBloc = trigger('showBloc', [
   ]),
   transition('* => void',  [
     animate(500, style({ height: 0})),
-  ]),
-]);
-export let lineIndexation = trigger( 'lineIndexation', [
-  state( 'void', style({ opacity: 1}), { params: { translate: 'translateY(-80px)' }}),
-  transition(':enter', [
-    style({  transform: '{{translate}}' }),
-    animate('500ms', style({ transform: 'translateY(0)' })),
   ]),
 ]);

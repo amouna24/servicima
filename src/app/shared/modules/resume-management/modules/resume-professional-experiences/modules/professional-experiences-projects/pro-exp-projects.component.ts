@@ -10,7 +10,7 @@ import { of, Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IMyTreeNode } from '@shared/models/treeView';
-import { showBloc, showProExp } from '@shared/animations/animations';
+import { showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp-projects',
@@ -18,7 +18,7 @@ import { showBloc, showProExp } from '@shared/animations/animations';
   styleUrls: ['./pro-exp-projects.component.scss'],
   animations: [
     showBloc,
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ProExpProjectsComponent implements OnInit {
@@ -106,7 +106,9 @@ export class ProExpProjectsComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
-            this.ProjectArray = response;
+            this.ProjectArray = response.sort( (val1, val2) => {
+              return +new Date(val1.start_date) - +new Date(val2.start_date);
+            });
             if (this.ProjectArray.length !== 0) {
               this.showProject = true;
               this.showForm = false;
@@ -251,9 +253,9 @@ export class ProExpProjectsComponent implements OnInit {
    * @description Delete the selected Project
    * @param id the id of the deleted Project
    * @param pointIndex the index of the deleted Project
-   * @param project_code it contains the project code
+   * @param projectCode it contains the project code
    *************************************************************************/
-  deleteProject(id: string, pointIndex: number, project_code: string) {
+  deleteProject(id: string, pointIndex: number, projectCode: string) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-project',
@@ -267,7 +269,7 @@ export class ProExpProjectsComponent implements OnInit {
               this.loadTree();
             });
             this.resumeService.getProjectDetails(
-              `?project_code=${project_code}`)
+              `?project_code=${projectCode}`)
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
@@ -361,6 +363,7 @@ export class ProExpProjectsComponent implements OnInit {
    * @description initialize data that are coming from the previous route
    *******************************************************************/
   getDataFromPreviousRoute() {
+    this.resumeCode = this.router.getCurrentNavigation().extras.state?.resumeCode;
     this.professionalExperienceCode = this.router.getCurrentNavigation().extras.state?.id;
     this.customer = this.router.getCurrentNavigation().extras.state?.customer;
     this.position = this.router.getCurrentNavigation().extras.state?.position;
@@ -375,46 +378,79 @@ export class ProExpProjectsComponent implements OnInit {
     const treeItems = [];
     let i = 0;
     new Promise((resolve) => {
-      this.resumeService.getResume(
-        `?email_address=${this.userService.connectedUser$
-          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-          .getValue().user[0]['company_email']}`)
-        .subscribe(
-          (response) => {
-            if (response['msg_code'] !== '0004') {
-              this.resumeCode = response[0].ResumeKey.resume_code.toString();
-              this.resumeService.getProExp(
-                `?resume_code=${this.resumeCode}`)
-                .subscribe(async (proExp) => {
-                  for (const pro of proExp) {
-                    const index = proExp.indexOf(pro);
-                    i++;
-                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
-                      treeItems.push(
-                        {
-                          title: pro.customer,
-                          children: await this.getProjectNode(pro),
-                          expanded: true,
-                          object: pro
-                        });
-                    } else {
-                      treeItems.push(
-                        {
-                          title: pro.customer,
-                          children: await this.getProjectNode(pro),
-                          expanded: false,
-                          object: pro,
-                        });
-                    }
-                    if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
-                    }
-                    if (i === proExp.length) {
-                      resolve(treeItems);
-                    }
-                  }
-                });
+      if (this.resumeCode) {
+        this.resumeService.getProExp(
+          `?resume_code=${this.resumeCode}`)
+          .subscribe(async (proExp) => {
+            for (const pro of proExp) {
+              const index = proExp.indexOf(pro);
+              i++;
+              if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                treeItems.push(
+                  {
+                    title: pro.customer,
+                    children: await this.getProjectNode(pro),
+                    expanded: true,
+                    object: pro
+                  });
+              } else {
+                treeItems.push(
+                  {
+                    title: pro.customer,
+                    children: await this.getProjectNode(pro),
+                    expanded: false,
+                    object: pro,
+                  });
+              }
+              if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+              }
+              if (i === proExp.length) {
+                resolve(treeItems);
+              }
             }
           });
+      } else {
+        this.resumeService.getResume(
+          `?email_address=${this.userService.connectedUser$
+            .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+            .getValue().user[0]['company_email']}`)
+          .subscribe(
+            (response) => {
+              if (response['msg_code'] !== '0004') {
+                this.resumeCode = response[0].ResumeKey.resume_code.toString();
+                this.resumeService.getProExp(
+                  `?resume_code=${this.resumeCode}`)
+                  .subscribe(async (proExp) => {
+                    for (const pro of proExp) {
+                      const index = proExp.indexOf(pro);
+                      i++;
+                      if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                        treeItems.push(
+                          {
+                            title: pro.customer,
+                            children: await this.getProjectNode(pro),
+                            expanded: true,
+                            object: pro
+                          });
+                      } else {
+                        treeItems.push(
+                          {
+                            title: pro.customer,
+                            children: await this.getProjectNode(pro),
+                            expanded: false,
+                            object: pro,
+                          });
+                      }
+                      if (pro.ResumeProfessionalExperienceKey.professional_experience_code === this.professionalExperienceCode) {
+                      }
+                      if (i === proExp.length) {
+                        resolve(treeItems);
+                      }
+                    }
+                  });
+              }
+            });
+      }
     }).then((res: IMyTreeNode[]) => {
       this.treeItems = res;
       this.treeDataSource.data = res;
@@ -429,15 +465,15 @@ export class ProExpProjectsComponent implements OnInit {
 
   /*******************************************************************
    * @description Get the data of the projects of one professional experience
-   * @param pro the professional experience model
+   * @param projectNode the professional experience model
    *******************************************************************/
-  async getProjectNode(pro: IResumeProfessionalExperienceModel) {
+  async getProjectNode(projectNode: IResumeProfessionalExperienceModel) {
     let i = 0;
     let result = null;
     const proArray = [];
     await new Promise((resolve) => {
       this.resumeService.getProject(
-        `?professional_experience_code=${pro.ResumeProfessionalExperienceKey.professional_experience_code}`)
+        `?professional_experience_code=${projectNode.ResumeProfessionalExperienceKey.professional_experience_code}`)
         .subscribe(
           (resProject) => {
             if (resProject.length > 0) {
@@ -528,7 +564,7 @@ export class ProExpProjectsComponent implements OnInit {
    * @param event contains the data of the node object
    *******************************************************************/
   nodeSelect(event: any) {
-    if ((event.title !== this.customer) && (event.object.ResumeProfessionalExperienceKey !== undefined)) {
+    if ((event.title !== this.customer) && (event.object?.ResumeProfessionalExperienceKey !== undefined)) {
       this.professionalExperienceCode = event.object.ResumeProfessionalExperienceKey.professional_experience_code;
       this.customer = event.object.customer;
       this.position = event.object.position;
@@ -537,6 +573,30 @@ export class ProExpProjectsComponent implements OnInit {
       this.getProjectInfo();
       this.loadTree();
       this.openExpansion = false;
+    }
+  }
+  /**************************************************************************
+   * @description Route to professional experience  page
+   *************************************************************************/
+  routeToProfessionalExperience() {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      this.router.navigate(['/candidate/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/collaborator/resume/professionalExperience'], {
+        state: {
+          resumeCode: this.resumeCode
+        }
+      });
     }
   }
 }

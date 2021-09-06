@@ -13,4 +13,7 @@ export interface IResumeModel {
   company_email: string;
   resume_code: string;
   language_id: string;
+  resume_filename_pdf: string;
+  resume_filename_docx: string;
+
 }

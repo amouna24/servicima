@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-pro-exp',
@@ -19,7 +19,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp,
+    dataAppearance,
 
   ]
 })
@@ -59,13 +59,14 @@ export class ProExpComponent implements OnInit {
     public datePipe: DatePipe,
     private modalServices: ModalService
   ) {
-    this.checkedBox = false;
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.checkedBox = false;
     this.placeHolderEndDate = 'resume-end-date';
     this.button = 'Add';
     this.initBooleanVars();
@@ -79,6 +80,24 @@ export class ProExpComponent implements OnInit {
    * @description Get Professional Data from Resume Service
    *************************************************************************/
   getProExpInfo() {
+    if (this.resumeCode) {
+      this.resumeService.getProExp(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseProExp) => {
+            if (responseProExp['msg_code'] !== '0004') {
+              this.proExpArray =  responseProExp.sort( (val1, val2) => {
+                return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
+              });
+              this.filterDate();
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
     this.resumeService.getResume(
       `?email_address=${this.userService.connectedUser$.getValue()
         .user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$.getValue()
@@ -99,8 +118,6 @@ export class ProExpComponent implements OnInit {
                 }
               },
             );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
         }
       },
       (error) => {
@@ -108,7 +125,7 @@ export class ProExpComponent implements OnInit {
         }
       },
     );
-
+    }
   }
 
   /**************************************************************************
@@ -116,16 +133,44 @@ export class ProExpComponent implements OnInit {
    * @param professionalExp the professionalExperience model
    *************************************************************************/
   routeToProject(professionalExp: IResumeProfessionalExperienceModel) {
-    this.router.navigate(['/candidate/resume/projects'],
-      {
-        state: {
-          id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
-          customer: professionalExp.customer,
-          position: professionalExp.position,
-          start_date: professionalExp.start_date,
-          end_date: professionalExp.end_date,
-        }
-      });
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      this.router.navigate(['/candidate/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    } else {
+      this.router.navigate(['/collaborator/resume/projects'],
+        {
+          state: {
+            resumeCode: this.resumeCode,
+            id: professionalExp.ResumeProfessionalExperienceKey.professional_experience_code,
+            customer: professionalExp.customer,
+            position: professionalExp.position,
+            start_date: professionalExp.start_date,
+            end_date: professionalExp.end_date,
+          }
+        });
+    }
+
   }
 
   /*******************************************************************
@@ -176,7 +221,6 @@ export class ProExpComponent implements OnInit {
       this.proExpUpdate._id = this.id;
       if (this.sendProExp.valid) {
         this.resumeService.updateProExp(this.proExpUpdate).subscribe(data => {
-          console.log('Professional experience updated =', data);
           this.proExpArray.splice(this.indexUpdate, 0 , data);
           this.filterDate();
         });
@@ -218,9 +262,9 @@ export class ProExpComponent implements OnInit {
    * @description Delete Selected Functional Skilll
    * @param id the id of the deleted functionnal skill
    * @param pointIndex the index of the deleted functional skill
-   * @param professional_experience_code it contains te professional experience code
+   * @param professionalExperienceCode it contains te professional experience code
    *************************************************************************/
-  deleteProExp(id: string, pointIndex: number, professional_experience_code: string) {
+  deleteProExp(id: string, pointIndex: number, professionalExperienceCode: string) {
     const confirmation = {
       code: 'delete',
       title: 'resume-delete-pro-exp',
@@ -235,7 +279,7 @@ export class ProExpComponent implements OnInit {
               this.filterDate();
             });
             this.resumeService.getProject(
-              `?professional_experience_code=${professional_experience_code}`)
+              `?professional_experience_code=${professionalExperienceCode}`)
               .subscribe(
                 (response) => {
                   if (response['msg_code'] !== '0004') {
@@ -271,7 +315,6 @@ export class ProExpComponent implements OnInit {
                     }
                   });
                   this.filterDate();
-                  this.button = 'Add';
                 });
 
           }
@@ -374,5 +417,55 @@ export class ProExpComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/dynamicSection'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/candidate/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+        if (typeRoute === 'next') {
+          this.router.navigate(['/candidate/resume/dynamicSection'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        } else {
+          this.router.navigate(['/candidate/resume/intervention'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        }
+      } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/dynamicSection'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/intervention'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
   }
 }
