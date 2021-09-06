@@ -7,4 +7,6 @@ export interface ICompanyBankingInfoModel {
   iban: string;
   rib: string;
   factor_informations: string;
+  bank_name: string;
+  bank_domiciliation: string;
 }

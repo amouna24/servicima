@@ -23,7 +23,7 @@ export const environment = {
   /************************** SERVICIMA **********************************/
   contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
-  contractProjectApiUrl: 'http://192.168.1.22:8061/servicima/contractproject/v1',
+  contractProjectApiUrl: 'http://127.0.0.1:8061/servicima/contractproject/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
@@ -43,7 +43,12 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
+  projectCollaboratorApiUrl: 'http://127.0.0.1:8096/servicima/projectcollaborator/v1',
+  invoiceLineApiUrl: 'http://127.0.0.1:8105/servicima/invoiceline/v1',
+  invoiceHeaderApiUrl: 'http://127.0.0.1:8106/servicima/invoiceheader/v1',
+  invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
   docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
+  invoiceGenerateApiUrl: 'http://127.0.0.1:3000',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',

@@ -1,0 +1,110 @@
+table{
+    border-left: 5px solid #707070;
+    
+    border-collapse: collapse;
+  }
+  td:not(:last-child), th:not(:last-child) { 
+  
+    border-bottom: 5px solid #707070;
+    border-right: 5px solid #707070;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  td:last-child {
+    border-right: none;
+  }
+  td:last-child:hover{
+    background-color: #fc0f3b;
+  }
+  thead,
+  tfoot {
+    background-color: #2b2b2b;
+    color: #fff;
+  }
+  th{
+    font-size: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  
+  .container-action button {
+    margin: 4px;
+  }
+  #delete .mat-icon{
+    //height: 63px !important;
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    /* border-radius: 80px; */
+    border-bottom-right-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+  }
+  
+  tr:not(:first-child):hover  {
+    background-color: #e8f1f9;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  #delete .mat-icon {
+    visibility: hidden;
+  }
+  tr:hover #delete .mat-icon {
+    visibility: visible;
+    display: flex;
+    background: #e8f1f9;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  
+  td:hover .mat-icon {
+    background: red !important;
+  }
+   #colorsa:hover {
+    background: red !important;
+  }
+  .montant{
+    border-bottom: 5px solid #707070;
+    border-right: 5px solid #707070;
+  }
+  
+  td{
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+  
+  .edit .mat-icon{
+    height: 13px !important;
+  }
+  .eye-icon{
+    height: 28px !important;
+    color: #1bc5bd !important;
+    font-size: 30px !important;
+    margin-right: 0 !important;
+  }
+  
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+     padding: 0 !important ;
+  }
+  
+  textarea.mat-input-element.cdk-textarea-autosize {
+    box-sizing: content-box;
+  }
+  
+  .border-none{
+    border-top: none !important;
+  }
+  .width-15 {
+    width: 15% !important;
+  }
+  .width-12 {
+    width: 12% !important;
+  }
+  .width-25 {
+    width: 25% !important;
+  }
+
+  .btn-add-line{
+    height: 100px !important
+  }
