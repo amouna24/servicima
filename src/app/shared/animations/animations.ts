@@ -168,17 +168,3 @@ export let showBloc = trigger('showBloc', [
     animate(500, style({ height: 0})),
   ]),
 ]);
-export let waiting = trigger('waiting', [
-  state('true', style({
-    opacity: 1,
-  })),
-  state('false', style({
-    opacity: 0,
-  })),
-  transition('false => true',  [
-    animate(1000),
-  ]),
-  transition('true => false',  [
-    animate(1000),
-  ]),
-]);
