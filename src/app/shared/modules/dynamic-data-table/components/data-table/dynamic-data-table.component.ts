@@ -67,7 +67,6 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   dataSource: any;
   refData: { } = { };
   showAllText: boolean;
-  black: '#000000';
 
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
