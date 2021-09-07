@@ -2,7 +2,6 @@ table {
   tr{
     height: 50px;
     border-bottom: 1px solid #ebebeb;
-
   }
 
   th, td {
@@ -14,6 +13,7 @@ table {
   th {
     background-color: white;
   }
+
 }
 .dynamic-data-table-content {
   resize: both !important;
@@ -30,3 +30,83 @@ table {
     height: 25px !important;
   }
 }
+
+tr:hover {
+  background-color: #F3F6F9 !important;
+  cursor: pointer;
+}
+
+.mat-select{
+  width: 30% !important;
+  color: white;
+}
+
+.checkbox-width{
+  width: 40px !important;
+}
+
+.overwrite-btn-medium{
+  width: 105px !important;
+  z-index: 1;
+}
+
+/**************************************************************************
+ * accordion action
+ *************************************************************************/
+.mat-expansion-panel{
+  max-height: 66px !important;
+  position: relative !important;
+  z-index: 4 !important;
+  box-shadow: none !important;
+  border-radius: 15px !important;
+  padding-top: 8px !important;
+  overflow: inherit !important;
+  width:106px !important;
+}
+
+.mat-accordion-action {
+  ::ng-deep ::-webkit-scrollbar {
+    width: 0 !important;
+    overflow-y: scroll !important;
+    background: grey !important;
+    margin-right: -20 !important;
+    box-shadow: inset 0 0 4px #707070 !important;
+  }
+
+  ::ng-deep.mat-expansion-panel-body {
+    background: #1bc5bd !important;
+    border-bottom-left-radius: 15px !important;
+    overflow-y: auto !important;
+    max-height: 200px !important;
+    border-bottom-right-radius: 15px !important;
+  }
+}
+
+.accordion-list{
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+}
+.accordion-btn{
+  border-radius: 15px !important;
+}
+
+.mat-expansion-panel-header-btn{
+  mat-expansion-panel-header {
+    height: 34px!important;
+    padding-bottom: 5px !important;
+  }
+}
+
+.mat-expansion-panel-header-list{
+  mat-expansion-panel-header {
+    height: 34px!important;
+    padding-bottom: 0 !important;
+    padding-top: 11px !important;
+  }
+}
+
+.mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
+  margin-bottom: -34px!important;
+}
+
+

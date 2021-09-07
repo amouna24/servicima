@@ -17,7 +17,7 @@
   </div>
   <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-between center">
     <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
-      <div fxLayout="row" fxFlex="80" fxLayoutGap="20px">
+      <div fxLayout="row" fxFlex="80" fxLayoutGap="20px" class="m-t-10">
         <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
           <input matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
           <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
@@ -36,16 +36,37 @@
         </button>
       </div>
     </div>
-    <div fxLayout="row" fxFlex="30" fxLayoutAlign="space-evenly center" >
-      <div fxLayout="row" fxFlex="35">
-        <button  mat-raised-button  class="btn-small bg-topaz">
-          <span class="white">Export</span>
+    <div fxLayout="row" fxFlex="30" fxLayoutGap="2%"  fxLayoutAlign="center center">
+      <div fxLayout="row">
+        <button  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium">
+          <span class="white font-size-11">Export</span>
         </button>
       </div>
-      <div fxLayout="row" fxFlex="35">
-        <button  mat-raised-button  class="btn-small bg-topaz">
-          <span class="white">Import</span>
-        </button>
+      <div fxLayout="row">
+        <mat-accordion class="mat-accordion-action bg-topaz" #accordion="matAccordion"  [ngClass]="{
+    'accordion-list':panelOpenState === true,
+    'accordion-btn':panelOpenState === false
+  }">
+
+          <mat-expansion-panel [ngClass]="{
+    'mat-expansion-panel-header-list':panelOpenState === true,
+    'mat-expansion-panel-header-btn':panelOpenState === false
+  }" (opened)="panelOpenState = true"
+                               (closed)="panelOpenState = false" class="bg-topaz">
+            <mat-expansion-panel-header >
+              <mat-panel-title  (click)="open($event)">
+                <span class="white font-size-11">Actions</span>
+              </mat-panel-title>
+
+
+
+            </mat-expansion-panel-header>
+            <div class="white cursor-pointer font-size-11" (click)="actionRowData(book, listChecked)"  *ngFor="let book of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }"> {{ book }}
+            </div>
+          </mat-expansion-panel>
+
+
+        </mat-accordion>
       </div>
     </div>
   </div>
@@ -71,7 +92,7 @@
       </ng-container>
 
       <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
-        <table cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
+        <table BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -80,41 +101,13 @@
               <ng-container *ngSwitchCase="'rowItem'">
 
                 <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
-                  <th cdk-header-cell
-                      *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                  <th cdk-header-cell *cdkHeaderCellDef class="steel font-size-14 font-semi-bold">
+                    <mat-checkbox color="accent" (change)="selectAll($event)" [(ngModel)]="selectedAll"  color="accent"  [indeterminate]="isIndeterminate()"  class="example-margin checkbox-width" fxFlex="100" fxLayoutAlign="center">
+                    </mat-checkbox>
                   </th>
-                  <td cdk-cell
-                      *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
-                    <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
-                  </td>
-
-                </ng-container>
-
-              </ng-container>
-
-              <ng-container *ngSwitchCase="'Actions'">
-
-                <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
-
-                  <th cdk-header-cell
-                      *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                  </th>
-                  <td cdk-cell
-                      *cdkCellDef="let row" class="black-three font-size-12 font-light bg-white">
-                    <div fxLayout="row"
-                         fxFlex
-                         fxLayoutAlign="center">
-                      <button mat-icon-button (click)="actionRowData('update', row)" *ngIf="allowedActions.update">
-                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
-                      </button>
-                      <button mat-icon-button (click)="actionRowData('delete', row)" *ngIf="allowedActions.delete">
-                        <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
-                      </button>
-                      <button mat-icon-button (click)="actionRowData('show', row)" *ngIf="allowedActions.show">
-                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
-                      </button>
-
-                    </div>
+                  <td  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light" >
+                    <mat-checkbox  (change)="getChecked(row,$event)"  [ngModel]="row['checked']"  class="example-margin checkbox-width" color="accent" >
+                    </mat-checkbox>
                   </td>
 
                 </ng-container>
@@ -128,13 +121,21 @@
                       *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
                   </th>
                   <ng-container [ngSwitch]="col.type">
+                    <ng-container *ngSwitchCase="'image'">
+
+                      <td (click)="actionRowData('update', row)"  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light">
+
+                        <img [src]=  "row[col.prop] ? env + row[col.prop] : 'assets/img/default.jpg'" alt=""  [style]=" {'height':'40px', 'width':'45px','border-radius': '50%'}">
+                      </td>
+                    </ng-container>
+
                     <ng-container *ngSwitchCase="'date'">
-                      <td cdk-cell
+                      <td cdk-cell (click)="actionRowData('update', row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
-                      <td cdk-cell
+                      <td cdk-cell (click)="actionRowData('update', row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light" >
                         <div (mouseover)="showAllText=true"  (mouseout)="showAllText=false">
                           <ng-container *ngIf="row[col.prop] === null; else propNotNull">
@@ -173,7 +174,7 @@
           </ng-container>
 
           <tr cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></tr>
-          <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
+          <tr [style.background]="row['color']" cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
         </table>
       </ng-container>
