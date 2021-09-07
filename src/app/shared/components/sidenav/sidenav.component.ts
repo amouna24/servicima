@@ -8,7 +8,6 @@ import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { ISubChild } from '@shared/models/side-nav-menu/sub-child.model';
 
 import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
@@ -46,8 +45,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   pathName: string;
   menu: IMenu[];
   subMenu: IChildItem[] = [];
-  subMenuParent: string;
-  subChildMenu: ISubChild[] = [];
   parentMenu: string;
   year: number;
   image: string;
@@ -164,10 +161,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   toggleSubMenu(submenu: IChildItem[], parentMenu: string) {
     this.subMenu = submenu;
     this.parentMenu = parentMenu;
-  }
-  toggleSubChildMenu(subChildMenu: ISubChild[], subMenu: string) {
-    this.subMenuParent = subMenu;
-    this.subChildMenu = subChildMenu;
   }
 
   toggleAccordion(widExp: MatExpansionPanel) {
