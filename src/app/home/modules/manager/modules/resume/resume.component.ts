@@ -80,14 +80,21 @@ await this.getData();
    *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'):
+      case ('change status'):
         this.changeCandidateToCollaborator(rowAction.data);
         break;
       case ('update'):
         this.updateResume(rowAction.data);
         break;
-      case('delete'):
+      case('send email'):
         this.sendMail(rowAction.data);
+        break;
+      case('export PDF'):
+        this.sendMail(rowAction.data);
+        break;
+      case('download docx'):
+        this.sendMail(rowAction.data);
+        break;
     }
   }
   /**************************************************************************

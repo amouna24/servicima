@@ -174,7 +174,7 @@
           </ng-container>
 
           <tr cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></tr>
-          <tr [style.background]="row['color']" cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
+          <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
         </table>
       </ng-container>
