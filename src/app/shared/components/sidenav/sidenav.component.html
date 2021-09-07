@@ -43,7 +43,7 @@
               <span class="font-light font-size-14" [@labelAnimation]="sidebarState">{{ 'sidenav.go-back' | translate }}</span>
             </mat-list-item>
             <mat-accordion multi="false">
-              <ng-container *ngFor=" let subMenuItem of subMenu">
+              <ng-container *ngFor=" let subMenuItem of subMenu; let pointIndex=index">
                 <ng-container *ngIf=" subMenuItem.type === 'link'; else accordion">
                   <a mat-list-item routerLinkActive="active-list-item"
                      [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
@@ -55,7 +55,7 @@
                   </a>
                 </ng-container>
                 <ng-template #accordion>
-                  <mat-expansion-panel [@accordionAnimation]="sidebarState" #widExp (click)="toggleAccordion(widExp)"
+                  <mat-expansion-panel [@accordionAnimation]="sidebarState" [expanded]="expandExpansion(pointIndex)" #widExp (click)="toggleAccordion(widExp)"
                                        hideToggle>
                     <mat-expansion-panel-header [ngClass]="widExp.expanded?'active-list-item':'list-item'"
                                                 class="list-item" [@iconAnimation]="sidebarState">
