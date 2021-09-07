@@ -91,7 +91,6 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         },
       );
     this.showAllText = false;
-    console.log('columns =', this.columns);
   }
 
   getDataSource() {
