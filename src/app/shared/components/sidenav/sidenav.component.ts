@@ -8,6 +8,7 @@ import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { ISubChild } from '@shared/models/side-nav-menu/sub-child.model';
 
 import { IMenu } from '@shared/models/side-nav-menu/side-nav-menu.model';
 import { IChildItem } from '@shared/models/side-nav-menu/child-item.model';
@@ -45,6 +46,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   pathName: string;
   menu: IMenu[];
   subMenu: IChildItem[] = [];
+  subMenuParent: string;
+  subChildMenu: ISubChild[] = [];
   parentMenu: string;
   year: number;
   image: string;
@@ -60,6 +63,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
    * @description Module Name
    *************************************************************************/
   moduleName: string;
+  index: number;
+  expand = false;
   constructor(private sidenavService: SidenavService,
               private userService: UserService,
               private localStorageService: LocalStorageService,
@@ -70,7 +75,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    console.log('menu=', this.sidenavService.getMenu(this.moduleName));
     this.menu = this.sidenavService.getMenu(this.moduleName);
   }
 
@@ -83,7 +87,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.getLogo();
     this.getState();
     this.year = new Date().getFullYear();
-  }
+    this.checkCurrentRoute();
+}
 
   /**************************************************************************
    * @description get connected user
@@ -116,7 +121,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         (moduleName) => {
           if (!!moduleName) {
             this.moduleName = moduleName;
-            console.log('menu=', this.sidenavService.getMenu(moduleName), 'module name', moduleName);
             this.menu = this.sidenavService.getMenu(moduleName);
           }
         },
@@ -161,6 +165,10 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.subMenu = submenu;
     this.parentMenu = parentMenu;
   }
+  toggleSubChildMenu(subChildMenu: ISubChild[], subMenu: string) {
+    this.subMenuParent = subMenu;
+    this.subChildMenu = subChildMenu;
+  }
 
   toggleAccordion(widExp: MatExpansionPanel) {
     if (this.sidebarState === 'close') {
@@ -190,4 +198,27 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  expandExpansion(pointIndex: number) {
+    return pointIndex === this.index;
+  }
+  checkCurrentRoute() {
+    if (`/${this.moduleName}` !== this.currentUrl) {
+      this.menu.forEach( (oneMenu) => {
+        if (oneMenu.children) {
+          oneMenu.children.forEach((child, index) => {
+            if (`/${this.moduleName}/${oneMenu.state}/${child.state}` === this.currentUrl) {
+              this.toggleSubMenu(oneMenu.children, oneMenu.state);
+            } else if (child.child) {
+              child.child.forEach((childOfChild) => {
+                if (`/${this.moduleName}/${oneMenu.state}/${child.state}/${childOfChild.state}` === this.currentUrl) {
+                  this.toggleSubMenu(oneMenu.children, oneMenu.state);
+                  this.index = index;
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  }
 }
