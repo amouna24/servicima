@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
@@ -14,6 +23,8 @@ import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
 
+import { environment } from '../../../../../../environments/environment';
+
 @Component({
   selector: 'wid-dynamic-data-table',
   templateUrl: './dynamic-data-table.component.html',
@@ -22,7 +33,7 @@ import { dataAppearance } from '@shared/animations/animations';
     dataAppearance
   ]
 })
-export class DynamicDataTableComponent implements OnInit, OnDestroy {
+export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
@@ -33,11 +44,11 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
       { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
-  @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
+  @Input() allowedActions: string[];
   @Input() buttonAdd: boolean;
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
-
+  @Output() checked = new EventEmitter<{ }>();
   /**************************************************************************
    * @description Paginations
    *************************************************************************/
@@ -50,7 +61,11 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   limit: number;
   nbrPages: number[];
   currentPage = 1;
-
+  listChecked = [];
+  selectedAll = false;
+  indeterminate: boolean;
+  panelOpenState = false;
+  env = environment.uploadFileApiUrl + '/image/';
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -77,9 +92,12 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     private modalsServices: ModalService,
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
   }
-
+  ngAfterViewChecked(): void {
+    this.changeDetectorRef.detectChanges();
+  }
   async ngOnInit() {
     await this.getRefData();
     await this.getDataSource();
@@ -156,9 +174,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
               name: '',
               type: 'rowItem'
             }, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
-            this.columns.push({ prop: 'Actions', name: 'Actions', type: 'Actions'});
             this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
-            this.columnsList.push('Actions');
             this.localStorageService.setItem(this.tableCode,
               {
                 columns: this.columns,
@@ -170,6 +186,95 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         );
     }
 
+  }
+
+  /**************************************************************************
+   * @description change color and check row
+   * @param color: color of line
+   * @param checked: checked or not
+   *************************************************************************/
+  changeColorAndCheckRow(color: string, checked: boolean) {
+    this.tableData.getValue().map((data) => {
+      data['color'] = color;
+      data['checked'] = checked;
+    });
+  }
+
+  /**************************************************************************
+   * @description select all checkbox
+   * @param event: event
+   *************************************************************************/
+  selectAll(event) {
+    if (event.checked) {
+      if (this.listChecked.length === 0) {
+        this.listChecked = this.tableData.getValue();
+        this.changeColorAndCheckRow('#F3F6F9', true);
+        this.checked.emit(this.tableData.getValue());
+
+      } else if (this.listChecked.length < this.tableData.getValue().length && this.listChecked.length > 0) {
+        this.listChecked = [];
+        this.changeColorAndCheckRow('white', false);
+        this.checked.emit(this.listChecked);
+      }
+    } else {
+      this.listChecked = [];
+      this.changeColorAndCheckRow('white', false);
+      this.checked.emit(this.listChecked);
+    }
+  }
+
+  /**************************************************************************
+   * @description open panel
+   * @param event: event
+   *************************************************************************/
+  open(event) {
+    event.stopPropagation();
+  }
+
+  /**************************************************************************
+   * @description is indeterminate or not checkbox
+   *************************************************************************/
+  isIndeterminate(): boolean {
+    if (this.listChecked.length === this.tableData.getValue().length) {
+      this.selectedAll = true;
+      return this.indeterminate = false;
+    } else if (this.listChecked.length > 0 && this.listChecked.length < this.tableData.getValue().length) {
+      this.selectedAll = false;
+      return this.indeterminate = true;
+    } else {
+      this.selectedAll = false;
+      return this.indeterminate = false;
+    }
+  }
+
+  /**************************************************************************
+   * @description checked checkbox
+   * @param rowData: row selected
+   * @param event: event
+   *************************************************************************/
+  getChecked(rowData, event) {
+    if ( event.checked ) {
+      rowData['color'] = '#F3F6F9';
+      rowData['checked'] =  event.checked;
+      this.listChecked.push(rowData);
+      this.checked.emit(this.listChecked);
+      if (this.listChecked.length === this.tableData.getValue().length) {
+        this.selectedAll = true;
+      }
+    } else {
+      rowData['checked'] =  event.checked;
+      const filtered = this.listChecked.filter((value, index, arr) => {
+        return value['_id'] !== rowData['_id'];
+      });
+      this.listChecked = filtered;
+      if (filtered.length > 0) {
+        rowData['color'] = 'white';
+        this.checked.emit(filtered);
+      } else {
+        rowData['color'] = 'white';
+        this.checked.emit(filtered);
+      }
+    }
   }
 
   /**************************************************************************
@@ -189,9 +294,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
       (res) => {
         if (res.action === 'change') {
           this.columns = [{ prop: 'rowItem', name: '', type: 'rowItem'}, ...res.actualColumns];
-          this.columns.push({ prop: 'Actions', name: 'Actions', type: 'Actions'});
           this.columnsList = ['rowItem', ...res.columnsList];
-          this.columnsList.push('Actions');
           const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
           const listTable = getConfigTableFromLocalStorage.modalConfiguration;
           Object.values(listTable)
