@@ -52,7 +52,7 @@ await this.getData();
                if (resume['msg_code'] !== '0004') {
                     blocData.push({
                       resume_name: candidate.first_name + ' ' + candidate.last_name,
-                      resume_years_exp: resume[0].years_of_experience ? resume[0].years_of_experience : '0',
+                      resume_years_exp: resume[0].years_of_experience,
                       resume_position: resume[0].actual_job,
                       resume_status: candidate.user_type,
                       resume_email: candidate.user_type === 'CANDIDATE' ?
