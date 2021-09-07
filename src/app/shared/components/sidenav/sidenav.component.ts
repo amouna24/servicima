@@ -2,6 +2,7 @@ import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
@@ -49,6 +50,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   image: string;
   email: string;
   hideTheme: boolean;
+  currentUrl: string;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -62,9 +64,13 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
               private userService: UserService,
               private localStorageService: LocalStorageService,
               private utilService: UtilsService,
-  ) { }
+              private router: Router,
+  ) {
+    this.currentUrl = this.router.url;
+  }
 
   ngOnChanges() {
+    console.log('menu=', this.sidenavService.getMenu(this.moduleName));
     this.menu = this.sidenavService.getMenu(this.moduleName);
   }
 
@@ -110,6 +116,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         (moduleName) => {
           if (!!moduleName) {
             this.moduleName = moduleName;
+            console.log('menu=', this.sidenavService.getMenu(moduleName), 'module name', moduleName);
             this.menu = this.sidenavService.getMenu(moduleName);
           }
         },
