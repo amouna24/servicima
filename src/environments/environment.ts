@@ -28,7 +28,7 @@ export const environment = {
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
-  companyBankingInfoApiUrl: 'http://127.0.0.1:8108/servicima/companybankinginfo/v1',
+  companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
   resumeApiUrl: 'http://192.168.1.22:8068/servicima/resume/v1',
@@ -43,8 +43,13 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
+  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
+  projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
+  invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
+  invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
+  invoicePaymentApiUrl: 'http://192.168.1.22:8107/servicima/invoicepayment/v1',
+  invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
-  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
 
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
@@ -53,6 +58,8 @@ export const environment = {
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
+  collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
+  candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/

@@ -21,7 +21,7 @@
                   <h4 class="steel font-size-18 font-small">{{ 'resume-general-info' | translate }}</h4>
                 </div>
               </div>
-              <div fxLayout="row" fxFlex="80" @showProExp fxLayoutAlign="center" >
+              <div fxLayout="row" fxFlex="76" @dataAppearance fxLayoutAlign="center" >
                 <wid-scrollbar fxFlexFill >
                   <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around ">
                     <div   fxLayout="column" fxFlex="18"   fxLayoutGap="10px" fxLayoutAlign=" start" >
@@ -68,10 +68,10 @@
                         </section></div>
                       <div fxLayout="row" fxFlex class="full-width">
                        <div>
-                         <mat-label *ngIf="showYears" @showProExp class="black font-size-12">
+                         <mat-label *ngIf="showYears" @dataAppearance class="black font-size-12">
                            {{ 'resume-yrs-of-experience' | translate }}:
                          </mat-label>
-                         <mat-form-field *ngIf="showYears" @showProExp appearance="outline" class="full-width">
+                         <mat-form-field *ngIf="showYears" @dataAppearance appearance="outline" class="full-width">
                            <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder=" {{ 'resume-yrs-of-experience' | translate }}" >
                            <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
                              You should select a number between 0 and 31</mat-error>

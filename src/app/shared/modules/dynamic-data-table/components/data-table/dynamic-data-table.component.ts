@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
@@ -12,28 +21,35 @@ import * as _ from 'lodash';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
+import { dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
+
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-dynamic-data-table',
   templateUrl: './dynamic-data-table.component.html',
-  styleUrls: ['./dynamic-data-table.component.scss']
+  styleUrls: ['./dynamic-data-table.component.scss'],
+  animations: [
+    dataAppearance
+  ]
 })
-export class DynamicDataTableComponent implements OnInit, OnDestroy {
+export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
-  @Input() header: {  title: string, addActionURL?: string, addActionText?: string,
-                      type?: string,
-                      addActionDialog?:
-                        { modalName: string, modalComponent: string, data: object, width: string, height: string }
-                   };
+  @Input() header: {
+    title: string, addActionURL?: string, addActionText?: string,
+    type?: string,
+    addActionDialog?:
+      { modalName: string, modalComponent: string, data: object, width: string, height: string }
+  };
   @Input() isLoading = new BehaviorSubject<boolean>(false);
-  @Input() allowedActions: { update: boolean, delete: boolean, show: boolean };
-
-  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any}>();
+  @Input() allowedActions: string[];
+  @Input() buttonAdd: boolean;
+  @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
-
+  @Output() checked = new EventEmitter<{ }>();
   /**************************************************************************
    * @description Paginations
    *************************************************************************/
@@ -46,22 +62,28 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   limit: number;
   nbrPages: number[];
   currentPage = 1;
-
+  listChecked = [];
+  selectedAll = false;
+  indeterminate: boolean;
+  panelOpenState = false;
+  env = environment.uploadFileApiUrl + '/image/';
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   modalConfiguration: object[];
-  displayedColumns: IConfig[]  = [];
+  displayedColumns: IConfig[] = [];
   canBeDisplayedColumns: IConfig[] = [];
   canBeFilteredColumns: IConfig[] = [];
   columns: IConfig[] = [];
   temp: object[] = [];
   columnsList: string[] = [];
-  newConfig: IDataListModel[] =  [];
+  newConfig: IDataListModel[] = [];
   dataSource: any;
   refData: { } = { };
+  showAllText: boolean;
+
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -72,9 +94,12 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
   }
-
+  ngAfterViewChecked(): void {
+    this.changeDetectorRef.detectChanges();
+  }
   async ngOnInit() {
     await this.getRefData();
     await this.getDataSource();
@@ -85,9 +110,10 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
           this.pagination.emit({ limit: value, offset: 0});
         },
       );
+    this.showAllText = false;
   }
 
-   getDataSource() {
+  getDataSource() {
     this.tableData.subscribe((res) => {
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
@@ -119,47 +145,143 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         });
       });
       this.dataSource = dataList;
-     this.convertData();
+      this.convertData();
     });
   }
 
   /**************************************************************************
- * @description get data list
- *************************************************************************/
+   * @description get data list
+   *************************************************************************/
   getDataList() {
     this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
-                                            [...this.tableData?.getValue()];
+      [...this.tableData?.getValue()];
     this.modalService.registerModals(
-      { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent });
-      if (this.localStorageService.getItem(this.tableCode)) {
-        this.getConfigDatatable();
-      } else {
-    this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
-      .subscribe(
-        res => {
-          this.modalConfiguration = res;
-          this.displayedColumns = this.dynamicDataTableService.getDefaultDisplayedColumns(this.modalConfiguration);
-          this.canBeDisplayedColumns = this.dynamicDataTableService.generateColumns(
-            this.dynamicDataTableService.getCanBeDisplayedColumns(this.modalConfiguration)
-          );
-          this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
-            this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
-          );
-          this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
-          this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
-          this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
-          this.columnsList.push('Actions');
-          this.localStorageService.setItem(this.tableCode,
-            { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.modalConfiguration, actualColumn: this.columns });
-        }
-      );
-      }
+      { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent});
+    if (this.localStorageService.getItem(this.tableCode)) {
+      this.getConfigDatatable();
+    } else {
+      this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
+        .subscribe(
+          res => {
+            this.modalConfiguration = res;
+            this.displayedColumns = this.dynamicDataTableService.getDefaultDisplayedColumns(this.modalConfiguration);
+            this.canBeDisplayedColumns = this.dynamicDataTableService.generateColumns(
+              this.dynamicDataTableService.getCanBeDisplayedColumns(this.modalConfiguration)
+            );
+            this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
+              this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
+            );
+            this.columns = [{
+              prop: 'rowItem',
+              name: '',
+              type: 'rowItem'
+            }, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
+            this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+            this.localStorageService.setItem(this.tableCode,
+              {
+                columns: this.columns,
+                columnsList: this.columnsList,
+                modalConfiguration: this.modalConfiguration,
+                actualColumn: this.columns
+              });
+          }
+        );
+    }
 
   }
 
   /**************************************************************************
- * @description display table config
- *************************************************************************/
+   * @description change color and check row
+   * @param color: color of line
+   * @param checked: checked or not
+   *************************************************************************/
+  changeColorAndCheckRow(color: string, checked: boolean) {
+    this.tableData.getValue().map((data) => {
+      data['color'] = color;
+      data['checked'] = checked;
+    });
+  }
+
+  /**************************************************************************
+   * @description select all checkbox
+   * @param event: event
+   *************************************************************************/
+  selectAll(event) {
+    if (event.checked) {
+      if (this.listChecked.length === 0) {
+        this.listChecked = this.tableData.getValue();
+        this.changeColorAndCheckRow('#F3F6F9', true);
+        this.checked.emit(this.tableData.getValue());
+
+      } else if (this.listChecked.length < this.tableData.getValue().length && this.listChecked.length > 0) {
+        this.listChecked = [];
+        this.changeColorAndCheckRow('white', false);
+        this.checked.emit(this.listChecked);
+      }
+    } else {
+      this.listChecked = [];
+      this.changeColorAndCheckRow('white', false);
+      this.checked.emit(this.listChecked);
+    }
+  }
+
+  /**************************************************************************
+   * @description open panel
+   * @param event: event
+   *************************************************************************/
+  open(event) {
+    event.stopPropagation();
+  }
+
+  /**************************************************************************
+   * @description is indeterminate or not checkbox
+   *************************************************************************/
+  isIndeterminate(): boolean {
+    if (this.listChecked.length === this.tableData.getValue().length) {
+      this.selectedAll = true;
+      return this.indeterminate = false;
+    } else if (this.listChecked.length > 0 && this.listChecked.length < this.tableData.getValue().length) {
+      this.selectedAll = false;
+      return this.indeterminate = true;
+    } else {
+      this.selectedAll = false;
+      return this.indeterminate = false;
+    }
+  }
+
+  /**************************************************************************
+   * @description checked checkbox
+   * @param rowData: row selected
+   * @param event: event
+   *************************************************************************/
+  getChecked(rowData, event) {
+    if ( event.checked ) {
+      rowData['color'] = '#F3F6F9';
+      rowData['checked'] =  event.checked;
+      this.listChecked.push(rowData);
+      this.checked.emit(this.listChecked);
+      if (this.listChecked.length === this.tableData.getValue().length) {
+        this.selectedAll = true;
+      }
+    } else {
+      rowData['checked'] =  event.checked;
+      const filtered = this.listChecked.filter((value, index, arr) => {
+        return value['_id'] !== rowData['_id'];
+      });
+      this.listChecked = filtered;
+      if (filtered.length > 0) {
+        rowData['color'] = 'white';
+        this.checked.emit(filtered);
+      } else {
+        rowData['color'] = 'white';
+        this.checked.emit(filtered);
+      }
+    }
+  }
+
+  /**************************************************************************
+   * @description display table config
+   *************************************************************************/
   displayTableConfig() {
     this.newConfig = [];
     this.getConfigDatatable();
@@ -173,28 +295,31 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
     this.modalService.displayModal('dynamicTableConfig', data, '40%').subscribe(
       (res) => {
         if (res.action === 'change') {
-          this.columns = [{ prop: 'rowItem',  name: '', type: 'rowItem'}, ...res.actualColumns];
-          this.columns.push({ prop: 'Actions',  name: 'Actions', type: 'Actions' });
+          this.columns = [{ prop: 'rowItem', name: '', type: 'rowItem'}, ...res.actualColumns];
           this.columnsList = ['rowItem', ...res.columnsList];
-          this.columnsList.push('Actions');
           const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
           const listTable = getConfigTableFromLocalStorage.modalConfiguration;
           Object.values(listTable)
             .map((list: IDataListModel) => {
               if (this.columnsList.includes(list['dataListKey'].column_code)) {
                 list['displayed'] = 'Y';
-                list['colum_disp_index'] = res.newDisplayedColumns.find((result) => result.prop === list['dataListKey'].column_code ).index;
+                list['colum_disp_index'] = res.newDisplayedColumns.find((result) => result.prop === list['dataListKey'].column_code).index;
                 this.newConfig.push(list);
               } else if (list['can_be_displayed'] === 'Y') {
                 list['displayed'] = 'N';
-                list['colum_disp_index'] = res.newCanBeDisplayedColumns.find((result) => result.prop === list['dataListKey'].column_code ).index;
+                list['colum_disp_index'] = res.newCanBeDisplayedColumns.find((result) => result.prop === list['dataListKey'].column_code).index;
                 this.newConfig.push(list);
               }
             });
-            this.canBeDisplayedColumns = _.sortBy(this.canBeDisplayedColumns, 'index');
-            this.newConfig  = _.sortBy(this.newConfig , 'colum_disp_index');
-            this.localStorageService.setItem(this.tableCode,
-              { columns: this.columns, columnsList: this.columnsList, modalConfiguration: this.newConfig , actualColumn: this.columns});
+          this.canBeDisplayedColumns = _.sortBy(this.canBeDisplayedColumns, 'index');
+          this.newConfig = _.sortBy(this.newConfig, 'colum_disp_index');
+          this.localStorageService.setItem(this.tableCode,
+            {
+              columns: this.columns,
+              columnsList: this.columnsList,
+              modalConfiguration: this.newConfig,
+              actualColumn: this.columns
+            });
         }
       });
   }
@@ -219,7 +344,7 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.router.navigate([ this.header.addActionURL ], { state: { action: 'add' } });
+      this.router.navigate([this.header.addActionURL], { state: { action: 'add'}});
     }
 
   }
@@ -228,19 +353,23 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
    * @description get refData
    *************************************************************************/
   async getRefData() {
-  this.refData =  await this.refDataServices.getRefData(
-      this.utilService.getCompanyId(
-        this.userService.connectedUser$.getValue().user[0]['company_email'], this.localStorageService.getItem('userCredentials')['application_id']),
+this.userService.connectedUser$.subscribe(
+        async (data) => {
+    this.refData = await this.refDataServices.getRefData(
+        // @ts-ignore
+        this.utilService.getCompanyId(
+            data.user[0]['company_email'], this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
-    false
+      false
     );
+        });
   }
 
   /**************************************************************************
    * @description get config datatable
    *************************************************************************/
-   getConfigDatatable() {
+  getConfigDatatable() {
     const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
     this.columns = getConfigTableFromLocalStorage.columns ? getConfigTableFromLocalStorage.columns : this.columns;
     this.columnsList = getConfigTableFromLocalStorage.columnsList ? getConfigTableFromLocalStorage.columnsList : this.columnsList;
@@ -256,9 +385,9 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
 
   }
 
- /**************************************************************************
- * @description display description
- *************************************************************************/
+  /**************************************************************************
+   * @description display description
+   *************************************************************************/
   convertData() {
     this.dataSource.map((dataS) => {
       if (dataS.application_id) {
@@ -321,31 +450,43 @@ export class DynamicDataTableComponent implements OnInit, OnDestroy {
   getItemsPerPage(type: string, pageNumber?: number) {
     switch (type) {
       case 'first-page' : {
-        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0 });
+        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0});
         this.currentPage = this.nbrPages[0];
       }
-      break;
+        break;
       case 'previous-page' : {
-        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 - this.itemsPerPageControl.value });
+        this.pagination.emit({
+          limit: this.itemsPerPageControl.value,
+          offset: this.offset - 1 - this.itemsPerPageControl.value
+        });
         this.currentPage -= 1;
 
       }
-      break;
+        break;
       case 'specific-page' : {
         this.currentPage = pageNumber;
-        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.itemsPerPageControl.value * (pageNumber - 1) });
+        this.pagination.emit({
+          limit: this.itemsPerPageControl.value,
+          offset: this.itemsPerPageControl.value * (pageNumber - 1)
+        });
       }
-      break;
+        break;
       case 'next-page' : {
-        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: this.offset - 1 + this.itemsPerPageControl.value });
+        this.pagination.emit({
+          limit: this.itemsPerPageControl.value,
+          offset: this.offset - 1 + this.itemsPerPageControl.value
+        });
         this.currentPage += 1;
       }
-      break;
+        break;
       case 'last-page' : {
-        this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: (this.itemsPerPageControl.value * (this.nbrPages.length - 1))});
+        this.pagination.emit({
+          limit: this.itemsPerPageControl.value,
+          offset: (this.itemsPerPageControl.value * (this.nbrPages.length - 1))
+        });
         this.currentPage = this.nbrPages[this.nbrPages.length - 1];
       }
-      break;
+        break;
     }
   }
 

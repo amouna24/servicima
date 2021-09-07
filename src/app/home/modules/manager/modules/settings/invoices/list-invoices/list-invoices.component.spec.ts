@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmptyPageTimesheetComponent } from './empty-page-timesheet.component';
+import { ListInvoicesComponent } from './list-invoices.component';
 
-describe('EmptyPageTimesheetComponent', () => {
-  let component: EmptyPageTimesheetComponent;
-  let fixture: ComponentFixture<EmptyPageTimesheetComponent>;
+describe('ListInvoicesComponent', () => {
+  let component: ListInvoicesComponent;
+  let fixture: ComponentFixture<ListInvoicesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EmptyPageTimesheetComponent ]
+      declarations: [ ListInvoicesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EmptyPageTimesheetComponent);
+    fixture = TestBed.createComponent(ListInvoicesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

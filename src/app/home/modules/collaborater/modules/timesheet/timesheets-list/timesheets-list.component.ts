@@ -7,10 +7,6 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-
-const TIMESHEET_EXTRA = 'TIMESHEET_EXTRA';
-const TIMESHEET = 'TIMESHEET';
 
 @Component({
   selector: 'wid-timesheets-list',
@@ -21,8 +17,7 @@ const TIMESHEET = 'TIMESHEET';
 export class TimesheetsListComponent implements OnInit {
 
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
-
-  isLoading = new BehaviorSubject<boolean>(false);
+  isLoading = new BehaviorSubject<boolean>(true);
   companyEmail: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
@@ -51,9 +46,9 @@ export class TimesheetsListComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getUserInfo();
-    this.getTimesheetParams();
-    this.addNewTimesheet();
-    this.isLoading.next(true);
+        this.getTimesheetParams();
+        this.addNewTimesheet();
+        this.isLoading.next(false);
   }
 
   /**
@@ -69,7 +64,7 @@ getTimesheetParams(): void {
   /**
    * @description : get user Info
    */
-  getUserInfo() {
+ getUserInfo() {
     this.subscriptions = this.userService.connectedUser$.subscribe(
       (data) => {
         if (!!data) {
@@ -85,16 +80,11 @@ getTimesheetParams(): void {
   getAllTimesheet() {
       this.timesheetService.getTimesheet(
         `?application_id=${this.userService.applicationId}` +
-        `&email_address=${this.userService.emailAddress}` +
         `&company_email=${this.companyEmail}` +
+        `&email_address=${this.userService.emailAddress}` +
         `&type_timesheet=${this.typeTimesheet}`)
-        .subscribe((res) => {
-          if (!!res) {
-            this.ELEMENT_DATA.next(res);
-          } else {
-            this.ELEMENT_DATA.next([]);
-          }
-          this.isLoading.next(false);
+        .toPromise().then((res) => {
+          this.ELEMENT_DATA.next(res);
         });
   }
 
@@ -107,22 +97,33 @@ getTimesheetParams(): void {
   }
 
   /**
-   * @description : show timesheet
-   * @param data: object
-   */
-  showTimesheet(data: ITimesheetModel) { }
-
-  /**
    * @description : update timesheet
    * @param data: object
    */
   updateTimesheet(data) {
+    if (data.timesheet_status === 'Pending') {
+      const confirmation = {
+        code: 'message',
+        title: 'already submitted to the manager',
+        description: 'Your timesheet is already submitted to the manager !'
+      };
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
+    } else if (data.timesheet_status === 'Approved') {
+      const confirmation = {
+        code: 'message',
+        title: 'Approved Timesheet',
+        description: 'Your timesheet is already approved by the manager !'
+      };
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
+
+    } else {
       this.router.navigate(
         ['/collaborator/timesheet/edit', this.typeTimesheet], {
           queryParams: {
             'id': data._id.toString()
           }
         });
+    }
   }
 
   /**
@@ -158,30 +159,9 @@ getTimesheetParams(): void {
    */
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'):
-        this.showTimesheet(rowAction.data);
-        break;
       case ('update'):
-        if (rowAction.data.timesheet_status === 'Pending') {
-          const confirmation = {
-            code: 'message',
-            title: 'already submitted to the manager',
-            description: 'Your timesheet is already submitted to the manager !'
-          };
-          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
-          break;
-        } else if (rowAction.data.timesheet_status === 'Approved') {
-          const confirmation = {
-            code: 'message',
-            title: 'Approved Timesheet',
-            description: 'Your timesheet is already approved by the manager !'
-          };
-          this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '600px', '250px');
-          break;
-        }
         this.updateTimesheet(rowAction.data);
         break;
-      case('delete'): this.onChangeStatus(rowAction.data);
     }
   }
 

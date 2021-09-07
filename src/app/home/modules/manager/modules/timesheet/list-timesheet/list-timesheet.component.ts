@@ -23,14 +23,13 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
 })
 export class ListTimesheetComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
-  isLoading = new BehaviorSubject<boolean>(false);
+  isLoading = new BehaviorSubject<boolean>(true);
   companyEmail: string;
   title_id: string;
   subscriptions: Subscription;
   userInfo: IUserInfo;
   refData: { } = { };
   listStatus: string;
-  refdata: any;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -53,14 +52,13 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.getUserInfo();
-    this.refdata =  await this.getRefdata();
     this.modalsServices.registerModals({ modalName: 'showTimesheet', modalComponent: ShowTimesheetComponent });
     this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
-    this.isLoading.next(true);
     this.route.params.subscribe(params => {
       this.listStatus = params['status'];
       this.getAllTimesheet();
     });
+    this.isLoading.next(false);
   }
 
   /**
@@ -84,17 +82,6 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description : get ref data
-   */
-  async getRefdata() {
-    const list = ['TIMESHEET_STATE', 'TIMESHEET_PROJECT_CATEGORY', 'PROF_TITLES'];
-    this.refData =  await this.refDataService
-        .getRefData(this.utilService.getCompanyId(this.companyEmail, this.userService.applicationId) , this.userService.applicationId, list, false);
-
-    return this.refData;
-  }
-
-  /**
    * @description : get all timesheet
    */
 getAllTimesheet() {
@@ -103,24 +90,24 @@ getAllTimesheet() {
           `&company_email=${this.companyEmail}` +
           `&timesheet_status=${this.listStatus}`).toPromise().then(
          async (timesheetList) => {
-            await timesheetList.forEach(
-             (timsheet) => {
-                this.profileService.getUser(`?email_address=${timsheet.TimeSheetKey.email_address}`)
-                  .toPromise().then(
-                  (profile) => {
-                    console.log(profile.results[0]);
-                    timsheet['first_name'] = profile.results[0].first_name;
-                    timsheet['last_name'] = profile.results[0].last_name;
-                    timsheet['profile'] = `${profile.results[0].first_name} ${profile.results[0].last_name}`;
-                    timsheet['photo'] = profile.results[0].photo;
-                  }
-                );
-                this.contractService.getContractProject(`?project_code=${timsheet.TimeSheetKey.project_code}`).toPromise().then(
-                  (project) => timsheet['project_desc'] = project[0].project_desc
-                );
-              });
-           this.ELEMENT_DATA.next(timesheetList);
-           this.isLoading.next(false);
+           if (timesheetList) {
+             await timesheetList.map(
+               (timesheet) => {
+                 this.profileService.getUser(`?email_address=${timesheet.TimeSheetKey.email_address}`)
+                   .toPromise().then(
+                   (profile) => {
+                     timesheet['first_name'] = profile.results[0].first_name;
+                     timesheet['last_name'] = profile.results[0].last_name;
+                     timesheet['profile'] = `${profile.results[0].first_name} ${profile.results[0].last_name}`;
+                     timesheet['photo'] = profile.results[0].photo;
+                   }
+                 );
+                 this.contractService.getContractProject(`?project_code=${timesheet.TimeSheetKey.project_code}`).toPromise().then(
+                   (project) => timesheet['project_desc'] = project[0].project_desc
+                 );
+               });
+             this.ELEMENT_DATA.next(timesheetList);
+           }
           });
   }
 
@@ -155,11 +142,8 @@ getAllTimesheet() {
    */
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'): this.showTimesheet(rowAction.data);
-        break;
       case ('update'):
-        break;
-      case('delete'):
+        this.showTimesheet(rowAction.data);
         break;
     }
   }

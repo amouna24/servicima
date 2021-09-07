@@ -6,7 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
-import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/animations/animations';
+import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-resume-intervention',
@@ -17,7 +17,7 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, showProExp } from '@shared/
     GreyToBlue,
     downLine,
     showBloc,
-    showProExp,
+    dataAppearance,
   ]
 })
 export class ResumeInterventionComponent implements OnInit {
@@ -44,6 +44,7 @@ export class ResumeInterventionComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
   ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
   }
 
   /**************************************************************************
@@ -61,39 +62,61 @@ export class ResumeInterventionComponent implements OnInit {
    * @description Get Intervention Data from Resume Service
    *************************************************************************/
   getInterventionInfo() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-        if (response['msg_code'] !== '0004') {
-          this.resumeCode = response[0].ResumeKey.resume_code.toString();
-          this.resumeService.getIntervention(
-            `?resume_code=${this.resumeCode}`)
-            .subscribe(
-              (responseOne) => {
-                if (responseOne['msg_code'] !== '0004') {
-                  this.interventionArray = responseOne;
-                  this.interventionArray.forEach(
-                    (func) => {
-                      func.intervention_code = func.ResumeInterventionKey.intervention_code;
-                    }
-                  );
+    if (this.resumeCode) {
+      this.resumeService.getIntervention(
+        `?resume_code=${this.resumeCode}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.interventionArray = responseOne;
+              this.interventionArray.forEach(
+                (func) => {
+                  func.intervention_code = func.ResumeInterventionKey.intervention_code;
                 }
-              },
-              (error) => {
-                if (error.error.msg_code === '0004') {
-                }
-              },
-            );
-        } else {
-          this.router.navigate(['/candidate/resume/']);
-        }
-      },
-      (error) => {
-        if (error.error.msg_code === '0004') {
-        }
-      },
-    );
+              );
+            }
+          },
+          (error) => {
+            if (error.error.msg_code === '0004') {
+            }
+          },
+        );
+    } else {
+      this.resumeService.getResume(
+        `?email_address=${this.userService.connectedUser$
+          .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
+          .getValue().user[0]['company_email']}`).subscribe((response) => {
+          if (response['msg_code'] !== '0004') {
+            this.resumeCode = response[0].ResumeKey.resume_code.toString();
+            this.resumeService.getIntervention(
+              `?resume_code=${this.resumeCode}`)
+              .subscribe(
+                (responseOne) => {
+                  if (responseOne['msg_code'] !== '0004') {
+                    this.interventionArray = responseOne;
+                    this.interventionArray.forEach(
+                      (func) => {
+                        func.intervention_code = func.ResumeInterventionKey.intervention_code;
+                      }
+                    );
+                  }
+                },
+                (error) => {
+                  if (error.error.msg_code === '0004') {
+                  }
+                },
+              );
+          } else {
+            this.router.navigate(['/candidate/resume/']);
+          }
+        },
+        (error) => {
+          if (error.error.msg_code === '0004') {
+          }
+        },
+      );
+    }
+
   }
 
   /**************************************************************************
@@ -123,11 +146,12 @@ export class ResumeInterventionComponent implements OnInit {
                   this.interventionArray.push(responseOne[0]);
                 }});
         });
-      } else {
-        console.log('Form is not valid');
       }
       this.arrayInterventionCount++;
-    } else {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
+      this.router.navigate(['manager/resume/']);
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.interventionUpdate = this.sendIntervention.value;
       this.interventionUpdate.intervention_code = this.intervention_code;
       this.interventionUpdate.resume_code = this.resumeCode;
@@ -183,7 +207,6 @@ export class ResumeInterventionComponent implements OnInit {
                 this.interventionArray.splice(index, 1);
               }
             });
-            this.button = 'Add';
           }
           this.subscriptionModal.unsubscribe();
         }
@@ -198,5 +221,55 @@ export class ResumeInterventionComponent implements OnInit {
       indexationArray[i] = '0' + i.toString();
     }
     return(indexationArray);
+  }
+  /**************************************************************************
+   * @description Route to next page or to the previous page
+   * @param typeRoute type of route previous or next
+   *************************************************************************/
+  routeNextBack(typeRoute: string) {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/manager/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/manager/resume/functionnalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    } else  if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+        if (typeRoute === 'next') {
+          this.router.navigate(['/candidate/resume/professionalExperience'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        } else {
+          this.router.navigate(['/candidate/resume/functionalSkills'], {
+            state: {
+              resumeCode: this.resumeCode
+            }
+          });
+        }
+    } else {
+      if (typeRoute === 'next') {
+        this.router.navigate(['/collaborator/resume/professionalExperience'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      } else {
+        this.router.navigate(['/collaborator/resume/functionalSkills'], {
+          state: {
+            resumeCode: this.resumeCode
+          }
+        });
+      }
+    }
+
   }
 }

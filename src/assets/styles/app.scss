@@ -148,6 +148,9 @@ html, body{
 .oh{
     overflow: hidden;
 }
+.overflow-hidden{
+  overflow: hidden;
+}
 
 /*******************
 Paddings
@@ -571,9 +574,7 @@ html body {
 .white {
   color: $white !important;
 }
-.steel{
-  color: $steel;
-}
+
 .brownish-grey{
     color: $brownish-grey;
 }
@@ -603,6 +604,9 @@ html body {
 *******************/
 .bg-cool-grey {
   background-color: $cool-grey !important;
+}
+.bg-steel {
+  background-color: $steel;
 }
 .bg-primaryColor {
   background-color: $primaryColor !important;

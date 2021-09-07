@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 
@@ -13,6 +13,7 @@ import { IApplicationModel } from '@shared/models/application.model';
 import { ILanguageModel } from '@shared/models/language.model';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { ICountry } from '@shared/models/countries.model';
+import { IUserModel } from '@shared/models/user.model';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
@@ -202,4 +203,18 @@ export class UserService {
            this.isLoadingSubject.next(true);
         });
     }
-}
+  /**************************************************************************
+   * @description get list of user by company email
+   * @param company_email: email of the manager company
+   * @param user_type: type of the user
+
+   *************************************************************************/
+  getUsers(company_email: string, user_type: string) {
+    return this.httpClient.get(`${environment.userApiUrl}?company_email=${company_email}&user_type=${user_type}`);
+  }
+  getAllUsers(filter: string) {
+    return this.httpClient.get(`${environment.userApiUrl}/${filter}`);
+  }
+  updateUser(User: IUserModel): Observable<any> {
+    return this.httpClient.put<IUserModel>(`${environment.userApiUrl}`, User);
+  }}

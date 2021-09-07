@@ -198,4 +198,11 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
     },
+    {
+      state: 'resume',
+      name: 'Resume management',
+      type: 'link',
+      icon: 'wi-billings',
+      feature: 'CONTRACT_ACCESS',
+    }
 ];

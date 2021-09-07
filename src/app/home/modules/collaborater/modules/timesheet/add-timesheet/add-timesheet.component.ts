@@ -94,13 +94,13 @@ export class AddTimesheetComponent implements OnInit {
   getTimesheetById(id: string): Promise<ITimesheetModel> {
     let timesheet: ITimesheetModel;
     return new Promise(
-      (resolve => {
+      resolve => {
         this.timesheetService.getTimesheet(`?_id=${id}`).subscribe(
           (data) => {
             timesheet = data[0];
             resolve(timesheet);
           });
-      })
+      }
     );
   }
   /**

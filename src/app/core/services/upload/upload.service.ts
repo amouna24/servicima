@@ -17,10 +17,11 @@ export class UploadService {
   ) { }
 
   uploadImage(file: any) {
-    return this.http.post<{ }>(`${environment.uploadFileApiUrl}/`, file)
+    return this.http.post(`${environment.uploadFileApiUrl}/`, file)
       .pipe(
         catchError(error => throwError(error)),
         map((response: any) => {
+          console.log(response);
           return response;
         })
       );
@@ -29,7 +30,6 @@ export class UploadService {
   getFiles(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
   }
-
   getFilesByName(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/` + idFile)
       .pipe(
@@ -42,7 +42,6 @@ export class UploadService {
 
   getImages() {
     return this.http.get(`${environment.userApiUrl}/api/`);
-
   }
 
   /**
@@ -62,5 +61,4 @@ export class UploadService {
       )
     ).toPromise();
   }
-
 }

@@ -43,10 +43,6 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
-import { TitleSettingsComponent } from './components/title-settings/title-settings.component';
-import { TimesheetHeaderComponent } from './components/timesheet/timesheet-header/timesheet-header.component';
-import { TimesheetFilterComponent } from './components/timesheet/timesheet-filter/timesheet-filter.component';
-import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-empty-page/timesheet-empty-page.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +56,6 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     BreadcrumbComponent,
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
-    TitleSettingsComponent,
     StepperComponent,
     RightSidenaveComponent,
     /* Directives */
@@ -81,10 +76,6 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
-    TimesheetHeaderComponent,
-    TimesheetFilterComponent,
-    TimesheetEmptyPageComponent,
-
   ],
   imports: [
     CommonModule,
@@ -138,10 +129,6 @@ import { TimesheetEmptyPageComponent } from './components/timesheet/timesheet-em
     DisableControlDirective,
     ModalComponent,
     ProfileImageComponent,
-    TitleSettingsComponent,
-    TimesheetHeaderComponent,
-    TimesheetFilterComponent,
-    TimesheetEmptyPageComponent,
     ProfileImageComponent,
   ]
 })
