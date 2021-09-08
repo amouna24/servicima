@@ -48,13 +48,13 @@
     'accordion-btn':panelOpenState === false
   }">
 
-          <mat-expansion-panel [ngClass]="{
+          <mat-expansion-panel (click)="open($event)" [ngClass]="{
     'mat-expansion-panel-header-list':panelOpenState === true,
     'mat-expansion-panel-header-btn':panelOpenState === false
   }" (opened)="panelOpenState = true"
                                (closed)="panelOpenState = false" class="bg-topaz">
             <mat-expansion-panel-header >
-              <mat-panel-title  (click)="open($event)">
+              <mat-panel-title  >
                 <span class="white font-size-11">Actions</span>
               </mat-panel-title>
 
@@ -142,12 +142,12 @@
                             <span></span>
                           </ng-container>
                           <ng-template #propNotNull>
-                          <ng-container *ngIf="row[col.prop]['color']; else noColor">
+                          <ng-container *ngIf="row[col.prop]['cellColor']; else noColor">
                                 <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]['value']}}" [ngStyle]="{ 'color' : row[col.prop]['color']}" >
+                                      matTooltip="{{row[col.prop]['value']}}" [ngStyle]="{ 'color' : row[col.prop]['cellColor']}" >
                            {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText" [ngStyle]="{ 'color' : row[col.prop]['color']}">
+                            <span *ngIf="!showAllText" [ngStyle]="{ 'color' : row[col.prop]['cellColor']}">
                             {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
                           </ng-container>
@@ -174,7 +174,7 @@
           </ng-container>
 
           <tr cdk-header-row *cdkHeaderRowDef="columnsList; sticky: true"></tr>
-          <tr cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
+          <tr [style.background]="row['color']" cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
         </table>
       </ng-container>
