@@ -43,6 +43,7 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { TitleSettingsComponent } from './components/title-settings/title-settings.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     BreadcrumbComponent,
     ConfirmationModalComponent,
     SkeletonLoaderComponent,
+    TitleSettingsComponent,
     StepperComponent,
     RightSidenaveComponent,
     /* Directives */
@@ -76,6 +78,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
+
   ],
   imports: [
     CommonModule,
@@ -129,7 +132,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     DisableControlDirective,
     ModalComponent,
     ProfileImageComponent,
-    ProfileImageComponent,
+    TitleSettingsComponent,
   ]
 })
 export class SharedModule { }
