@@ -10,5 +10,5 @@ export interface ITimesheetSettingModel {
   sunday_rate: number;
   saturday_rate: number;
   holiday_rate: number;
-  status: string
+  status: string;
 }

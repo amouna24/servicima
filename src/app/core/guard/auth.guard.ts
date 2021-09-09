@@ -88,7 +88,7 @@ export class AuthGuard implements CanActivate {
                 this.userService.getUserInfo().then((data) => {
                   if (data) {
                     this.userService.redirectUser(data['user'][0].user_type, this.currentState);
-                    this.utilService.getCompanies();
+                    this.utilService.getCompanies(data['company'][0]['companyKey']['email_address']);
                     this.userService.getRoleFeature(data, data.userroles[0].userRolesKey.role_code);
                     this.resolveValue = true;
                   }

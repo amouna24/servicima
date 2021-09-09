@@ -22,6 +22,7 @@ import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
+import { UserService } from '@core/services/user/user.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -92,6 +93,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     private modalsServices: ModalService,
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
+    private userService: UserService,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
   }
@@ -351,13 +353,17 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description get refData
    *************************************************************************/
   async getRefData() {
+this.userService.connectedUser$.subscribe(
+        async (data) => {
     this.refData = await this.refDataServices.getRefData(
-      this.utilService.getCompanyId(
-        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
+        // @ts-ignore
+        this.utilService.getCompanyId(
+            data.user[0]['company_email'], this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
       false
     );
+        });
   }
 
   /**************************************************************************

@@ -9,6 +9,11 @@ const routes: Routes = [
     component: ManagerComponent,
     children: [
       {
+        path: 'timesheet',
+        loadChildren: () => import('./modules/timesheet/timesheet.module').then(m => m.TimesheetModule),
+      },
+
+      {
         path: '',
         loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
       },

@@ -3,7 +3,7 @@
 
 /* Default theme */
 
-$primary-default-theme: mat-palette((500: $topaz,contrast: ()));
+$primary-default-theme: mat-palette((500: $primaryColor,contrast: ()));
 $accent-default-theme: mat-palette((500: $topaz,contrast: ()));
 $warn-default-theme: mat-palette((500: $golden-yellow,contrast: ()));
 $theme: mat-light-theme($primary-default-theme, $accent-default-theme, $warn-default-theme);
