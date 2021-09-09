@@ -1,0 +1,43 @@
+
+  <div fxLayout="column" fxLayoutAlign="space-between center" class="full-height full-width p-25">
+    <!-- Close reject pop-up -->
+    <div fxLayout="row" fxFlex="20" fxLayoutAlign="end" class="full-width">
+        <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="onCloseClick()">
+          <mat-icon svgIcon="wi-close-normal"></mat-icon>
+        </button>
+    </div>
+    <div class="full-width" fxFlex="10" fxLayout="row" fxLayoutAlign="start start">
+      <p class="font-size-17 steel font-normal">
+        {{reject ? 'Reject timesheet' : 'Approve timesheet'}}
+      </p>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
+      <p class="font-size-19 black-three font-normal text-left">
+        Are you sure you want to {{reject ? ' reject ' : ' approve '}} this timesheet !
+      </p>
+      <div *ngIf="reject" fxLayout="row" fxLayoutAlign="center" fxFlex="40">
+            <div class="full-width full-height">
+              <mat-label class="black font-size-12">
+                leave your comment here
+              </mat-label>
+              <mat-form-field class="full-width" appearance="outline">
+              <textarea matInput placeholder="leave your comment here" rows="2"
+                        (change)="getComment($event)"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+    <div fxFlex="30" class="full-width" fxLayout="row" fxLayoutGap="25px" fxLayoutAlign="center center">
+      <button type="submit" mat-raised-button (click)="responseTimesheet()"
+              class="white btn-small" [ngClass]="reject ? 'bg-error-red' : 'bg-topaz'">
+        {{reject ? 'Reject' : 'Approve'}}
+      </button>
+      <button type="submit" mat-raised-button (click)="onCloseClick()"
+              class="black btn-small bg-pale-grey">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+
+

@@ -29,6 +29,29 @@ export const collaboraterMenu: IMenu[] = [
         icon: 'wi_dashboard',
         feature: 'HR_FOLDER_ACCESS',
     },
+  {
+    state: 'timesheet',
+    name: 'timesheet',
+    type: 'sub',
+    icon: 'wi_timesheet',
+    feature: 'HR_FOLDER_ACCESS',
+    children: [
+      {
+        state: 'TIMESHEET',
+        name: 'timesheet',
+        icon: 'wi_timesheet',
+        feature: 'HR_FOLDER_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'TIMESHEET_EXTRA',
+        name: 'timesheet extra',
+        icon: 'wi_timesheet',
+        feature: 'HR_FOLDER_ACCESS',
+        type: 'link',
+      },
+    ]
+  },
     {
         state: 'salary-slips',
         name: 'salary-slips',

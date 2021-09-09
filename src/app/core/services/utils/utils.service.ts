@@ -48,9 +48,9 @@ export class UtilsService {
    * @description Get companies
    * @return All companies
    *************************************************************************/
-   getCompanies() {
+   getCompanies(companyEmail: string) {
     return this.httpClient
-      .get<any>(`${environment.companyApiUrl}`).subscribe((company) => {
+      .get<any>(`${environment.companyApiUrl}?email_address=${companyEmail}&email_address=ALL`).subscribe((company) => {
         this.companiesList = company;
       });
   }

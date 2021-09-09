@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditUserComponent } from '@shared/components/settings/edit-user/edit-user.component';
 
 import { HomeComponent } from './home.component';
 
@@ -18,7 +17,10 @@ const routes: Routes = [
       },
       {
         path: 'collaborator',
-        loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule)
+        loadChildren: () => import('./modules/collaborater/collaborater.module').then(m => m.CollaboraterModule),
+        data: {
+          breadcrumb: 'Collaborator'
+        },
       },
       {
         path: 'candidate',
