@@ -84,7 +84,8 @@ getTimesheetParams(): void {
         `?application_id=${this.userService.applicationId}` +
         `&company_email=${this.companyEmail}` +
         `&email_address=${this.userService.emailAddress}` +
-        `&type_timesheet=${this.typeTimesheet}`)
+        `&type_timesheet=${this.typeTimesheet}` +
+        `&status=ACTIVE`)
         .toPromise().then((res) => {
           this.ELEMENT_DATA.next(res);
         });
@@ -132,7 +133,7 @@ getTimesheetParams(): void {
    * @description : delete timesheet
    */
   deleteTimesheet(data): void {
-    if (!!data && data.timesheet_status === 'Draft') {
+    if (!!data && data.timesheet_status !== 'Pending') {
       const confirmation = this.modalData('delete', 'delete timesheet', 'Are you sure you want to delete these timeseets?');
       this.subscriptionDeleteModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px')
         .pipe(
@@ -143,8 +144,13 @@ getTimesheetParams(): void {
             data.map(
               (row) => {
                 if (res === true) {
-                  this.timesheetService.deleteTimesheet(row._id)
-                    .subscribe((resp) => console.log(row._id, resp));
+                  if (row.timesheet_status === 'Draft') {
+                    this.timesheetService.deleteTimesheet(row._id).toPromise()
+                      .then((resp) => console.log(row._id, resp));
+                  } else {
+                    this.timesheetService.disableTimesheet(row._id).toPromise()
+                      .then((resp) => console.log(row._id, resp));
+                  }
                 }
               });
             this.subscriptionDeleteModal.unsubscribe();

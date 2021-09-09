@@ -11,10 +11,11 @@
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.last_name}}</p>
       </div>
       <div fxFlex>
-        <img class="img-rounded absolute m-t-30 avatar"  [src]=" avatar ? avatar : 'assets/img/default.jpg'">
+        <img class="img-rounded absolute m-t-30 avatar"  [src]=" avatar">
       </div>
-      <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
+      <div fxLayout="column" fxLayoutAlign="space-between start" fxFlex class="full-height p-15">
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.user_position}}</p>
+        <button *ngIf="timesheet.timesheet_status === 'Pending'" mat-button class="btn-small bg-pale-grey">Edit</button>
       </div>
     </div>
   </div>

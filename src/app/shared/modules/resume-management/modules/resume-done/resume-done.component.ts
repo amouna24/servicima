@@ -508,7 +508,7 @@ export class ResumeDoneComponent implements OnInit {
         phoneNum: this.phone.toString(),
         label: this.label,
         currentYear: this.dateNow,
-        imageUrl: this.imageUrl + this.generalInfoList[0].image,
+        imageUrl: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
         diplomas: this.diplomaList,
         certifications: this.certifList,
         company_name: this.companyName,

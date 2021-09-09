@@ -6,6 +6,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { SafeUrl } from '@angular/platform-browser';
 
 import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.component';
 
@@ -16,7 +17,7 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
 })
 export class ShowTimesheetComponent implements OnInit {
   timesheet: any;
-  avatar: any;
+  avatar: SafeUrl = 'assets/img/default.jpg';
   user: IUserModel;
   id: string;
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
@@ -61,12 +62,8 @@ export class ShowTimesheetComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.modalsServices.registerModals(
-      {
-        modalName: 'rejectTimesheet',
-        modalComponent: RejectTimesheetComponent
-      });
     this.timesheet = this.data;
+    console.log(this.timesheet);
     await this.getAvatar();
   }
 

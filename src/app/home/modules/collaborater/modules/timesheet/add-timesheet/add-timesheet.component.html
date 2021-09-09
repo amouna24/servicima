@@ -39,11 +39,14 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select [disabled]="!addForm" formControlName="project_code" placeholder="Project">
-               <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
-                 {{ project.project_desc}}
-               </mat-option>
+             <mat-select [disabled]="!addForm" formControlName="project_code" [placeholder]="projectsList ? 'Project' : 'No project found'">
+               <ng-container *ngIf="projectsList && contract">
+                 <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
+                   {{ project.project_desc}}
+                 </mat-option>
+               </ng-container>
              </mat-select>
+
              <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
                Required field
              </mat-error>
@@ -142,8 +145,8 @@
        <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
            <button mat-flat-button [type]="addForm ? 'reset' : 'button' " (click)="!addForm ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
          <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
-         <button mat-flat-button (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
-         <button mat-flat-button (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">{{addForm ? 'Save' : 'Edit'}}</button>
+         <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
+         <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">{{addForm ? 'Save' : 'Edit'}}</button>
          </div>
        </div>
      </form>

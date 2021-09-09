@@ -69,7 +69,9 @@ export class AddTimesheetComponent implements OnInit {
       () => {
         this.getFormType();
         this.isLoading.next(true);
-      });
+      }).catch(
+        err => console.log(err)
+    );
   }
   /**
    * @description : Get form type Add or Edit
@@ -116,10 +118,9 @@ export class AddTimesheetComponent implements OnInit {
         `&contract_end_date[$gte]=${new Date()}`
       ).subscribe(
         (data) => {
-          const res = data['results'][0];
-          resolve(res);
-        }
-      );
+            const res = data['results'][0];
+            resolve(res);
+        });
     });
   }
 
@@ -128,11 +129,13 @@ export class AddTimesheetComponent implements OnInit {
    */
   getProjects(contractCode?: string): void {
     if (!contractCode) {
-      this.contractService.getContractProject(`?contract_code=${this.contract.contractKey.contract_code}`).subscribe(
-        (res) => {
-          this.projectsList = res;
-        }
-      );
+      if (this.contract) {
+        this.contractService.getContractProject(`?contract_code=${this.contract.contractKey.contract_code}`).subscribe(
+          (res) => {
+            this.projectsList = res;
+          }
+        );
+      }
     } else {
       this.contractService.getContractProject(`?contract_code=${contractCode}`).subscribe(
         (res) => {
