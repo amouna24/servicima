@@ -16,6 +16,7 @@ import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
 
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
@@ -76,6 +77,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
+    TitleSettingsComponent
   ],
   imports: [
     CommonModule,
@@ -129,7 +131,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     DisableControlDirective,
     ModalComponent,
     ProfileImageComponent,
-    ProfileImageComponent,
+    TitleSettingsComponent
   ]
 })
 export class SharedModule { }
