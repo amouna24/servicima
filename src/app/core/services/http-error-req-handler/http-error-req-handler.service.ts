@@ -10,7 +10,7 @@ export class HttpErrorReqHandlerService implements ErrorHandler {
 
   constructor(
     private router: Router,
-    private utilService: UtilsService
+    private utilService: UtilsService,
   ) { }
 
   handleError(error: any): Observable<never> {

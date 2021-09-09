@@ -22,8 +22,8 @@ export class ContractsService {
    * @param filter search query like [ ?id=123 ]
    * @returns All Contracts Observable<IContract[]>
    *************************************************************************/
-  getContracts(filter: string): Observable<IContract[]> {
-    return this.httpClient.get<IContract[]>(`${environment.contractApiUrl}/${filter}`);
+  getContracts(filter: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${environment.contractApiUrl}${filter}`);
   }
 
   /**************************************************************************
@@ -57,8 +57,6 @@ export class ContractsService {
   disableContract(ID: string): Observable<any> {
     return this.httpClient.delete<IContract>(`${environment.contractApiUrl}/disable?_id=${ID}`);
   }
-
-  /*-------------------------------------------------------------------------------------*/
 
   /*------------------------------CONTRACT EXTENSIONS -----------------------------------*/
 
@@ -113,7 +111,7 @@ export class ContractsService {
    * @returns All ContractProject Observable<IContractProject[]>
    *************************************************************************/
   getContractProject(filter: string): Observable<IContractProject[]> {
-    return this.httpClient.get<IContractProject[]>(`${environment.contractProjectApiUrl}/${filter}` );
+    return this.httpClient.get<IContractProject[]>(`${environment.contractProjectApiUrl}${filter}` );
   }
 
   /**************************************************************************

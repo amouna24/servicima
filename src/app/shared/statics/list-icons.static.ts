@@ -2,6 +2,10 @@ import { IIcon } from '@shared/models/icon.model';
 
 export const iconsList: IIcon[] = [
   {
+    name: 'wi-clock',
+    path: 'assets/icons/clock.svg'
+  },
+  {
     name: 'wi-external-link',
     path: 'assets/icons/external-link.svg'
   },
@@ -21,6 +25,14 @@ export const iconsList: IIcon[] = [
   {
     name: 'wi-archive',
     path: 'assets/icons/user-slash-solid.svg'
+  },
+  {
+    name: 'wi-file-export',
+    path: 'assets/icons/file-export.svg'
+  },
+  {
+    name: 'wi_timesheet',
+    path: 'assets/icons/timesheet.svg'
   },
   {
     name: 'wi-marker',
@@ -69,6 +81,10 @@ export const iconsList: IIcon[] = [
     name: 'wi-three-dots',
     path: 'assets/icons/three-dots-ellipsis.svg'
   },
+  {
+    name: 'wi_timesheet',
+    path: 'assets/icons/timesheet.svg'
+  },
   /* Alert Icons */
   {
     name: 'wi_alert_error',
@@ -89,6 +105,10 @@ export const iconsList: IIcon[] = [
   {
     name: 'wi_alert_warning',
     path: 'assets/icons/warning.svg'
+  },
+  {
+    name: 'wi-close-normal',
+    path: 'assets/icons/close.svg',
   },
   {
     name: 'wi-close',

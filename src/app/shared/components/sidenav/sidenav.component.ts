@@ -2,6 +2,7 @@ import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
@@ -49,6 +50,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   image: string;
   email: string;
   hideTheme: boolean;
+  currentUrl: string;
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
@@ -58,11 +60,16 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
    * @description Module Name
    *************************************************************************/
   moduleName: string;
+  index: number;
+  expand = false;
   constructor(private sidenavService: SidenavService,
               private userService: UserService,
               private localStorageService: LocalStorageService,
               private utilService: UtilsService,
-  ) { }
+              private router: Router,
+  ) {
+    this.currentUrl = this.router.url;
+  }
 
   ngOnChanges() {
     this.menu = this.sidenavService.getMenu(this.moduleName);
@@ -77,7 +84,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.getLogo();
     this.getState();
     this.year = new Date().getFullYear();
-  }
+    this.checkCurrentRoute();
+}
 
   /**************************************************************************
    * @description get connected user
@@ -183,4 +191,27 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  expandExpansion(pointIndex: number) {
+    return pointIndex === this.index;
+  }
+  checkCurrentRoute() {
+    if (`/${this.moduleName}` !== this.currentUrl) {
+      this.menu.forEach( (oneMenu) => {
+        if (oneMenu.children) {
+          oneMenu.children.forEach((child, index) => {
+            if (`/${this.moduleName}/${oneMenu.state}/${child.state}` === this.currentUrl) {
+              this.toggleSubMenu(oneMenu.children, oneMenu.state);
+            } else if (child.child) {
+              child.child.forEach((childOfChild) => {
+                if (`/${this.moduleName}/${oneMenu.state}/${child.state}/${childOfChild.state}` === this.currentUrl) {
+                  this.toggleSubMenu(oneMenu.children, oneMenu.state);
+                  this.index = index;
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  }
 }
