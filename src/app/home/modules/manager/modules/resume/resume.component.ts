@@ -195,13 +195,7 @@ await this.getData();
       title: 'Send Email',
       description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
     };
-    console.log( 'mailing object', this.localStorageService.getItem('language').langId,
-      application_id,
-      this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-      this.clientEmailAddress,
-      'WIDIGITAL',
-      jobs,
-      attachments);
+
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
       .subscribe(
         (res) => {
