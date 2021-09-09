@@ -61,8 +61,8 @@ await this.getData();
                       resume_position: resume[0].actual_job,
                       resume_status: candidate.user_type,
                       resume_email: candidate.user_type === 'CANDIDATE' ?
-                        { value: candidate.userKey.email_address, cellColor: '#00FF00'} :
-                          { value: candidate.userKey.email_address, cellColor: '#FF0000'},
+                        { value: candidate.userKey.email_address, cellColor: 'topaz'} :
+                          { value: candidate.userKey.email_address, cellColor: 'red'},
                       resume_user_type: candidate.user_type,
                       resume_filename_docx: resume[0].resume_filename_docx,
                       resume_filename_pdf: resume[0].resume_filename_pdf,
