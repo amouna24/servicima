@@ -15,7 +15,7 @@
      </div>
    </div>
    <wid-scrollbar *ngIf="isLoading">
-     <form fxLayout="column" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
+     <form fxLayout="column" *ngIf="initialForm" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
        <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
        <!-- left column form -->
        <div fxFlex="28" fxLayout="column">
@@ -133,19 +133,14 @@
          <div fxLayout="column">
              <label class="font-size-12"> Total : </label>
              <mat-form-field appearance="outline" class="disabled">
-               <input disabled matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
+               <input [disabled]="true" matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
              </mat-form-field>
          </div>
          </div>
        </div>
        </div>
        <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
-         <ng-container *ngIf="addForm, else deleteBtn">
-           <button mat-flat-button type="reset" class="bg-pale-grey cool-grey btn-small">Cancel</button>
-         </ng-container>
-         <ng-template #deleteBtn>
-           <button mat-flat-button (click)="deleteTimesheet()" class="bg-error-red white btn-small">Delete</button>
-         </ng-template>
+           <button mat-flat-button [type]="addForm ? 'reset' : 'button' " (click)="!addForm ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
          <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
          <button mat-flat-button (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
          <button mat-flat-button (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">{{addForm ? 'Save' : 'Edit'}}</button>

@@ -7,6 +7,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-timesheets-list',
@@ -26,6 +27,7 @@ export class TimesheetsListComponent implements OnInit {
   flag: boolean;
   typeTimesheet: string;
   subscriptionModal: Subject<boolean>;
+  subscriptionDeleteModal: Subscription;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -127,30 +129,28 @@ getTimesheetParams(): void {
   }
 
   /**
-   * @description : change the status of the timesheet
-   * @param id: string
-   * @param status: string
+   * @description : delete timesheet
    */
-  onChangeStatus(id: string) {
-    const confirmation = {
-      code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
-    };
-
-    /*this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
-      if (value === true) {
-        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
-          async (res) => {
-            if (res) {
-              await this.getAllUsers();
-            }
-          },
-          (err) => console.error(err),
-        ));
-        this.subscriptionModal.unsubscribe();
-      }
-    });*/
+  deleteTimesheet(data): void {
+    if (!!data && data.timesheet_status === 'Draft') {
+      const confirmation = this.modalData('delete', 'delete timesheet', 'Are you sure you want to delete these timeseets?');
+      this.subscriptionDeleteModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px')
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(
+          (res) => {
+            data.map(
+              (row) => {
+                if (res === true) {
+                  this.timesheetService.deleteTimesheet(row._id)
+                    .subscribe((resp) => console.log(row._id, resp));
+                }
+              });
+            this.subscriptionDeleteModal.unsubscribe();
+          }
+        );
+    }
   }
 
   /**
@@ -162,7 +162,14 @@ getTimesheetParams(): void {
       case ('update'):
         this.updateTimesheet(rowAction.data);
         break;
+      case ('delete'):
+        this.deleteTimesheet(rowAction.data);
+        break;
     }
+  }
+
+  modalData(code: string, title: string, description: string): any {
+    return { code, title, description};
   }
 
 }

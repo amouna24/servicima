@@ -269,33 +269,6 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   /**
-   * @description : delete timesheet
-   */
-  deleteTimesheet(): void {
-    const confirmation = this.modalData('delete', 'delete timesheet', 'Are you sure you want to delete your timesheet?');
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(
-        (res) => {
-          if (res === true) {
-            this.timesheetService.deleteTimesheet(this.timesheet._id)
-              .pipe(
-                takeUntil(this.destroy$)
-              )
-              .subscribe(
-                (data) => {
-                  this.router.navigate(['/collaborator/timesheet/', this.typeTimesheet]);
-                }
-              );
-            this.subscriptionModal.unsubscribe();
-          }
-        }
-      );
-  }
-
-  /**
    * @description : calcul total hours of the week
    */
   totalWeekHours(): number {
