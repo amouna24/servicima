@@ -144,10 +144,10 @@
                           <ng-template #propNotNull>
                           <ng-container *ngIf="row[col.prop]['cellColor']; else noColor">
                                 <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]['value']}}" [ngStyle]="{ 'color' : row[col.prop]['cellColor']}" >
+                                      matTooltip="{{row[col.prop]['value']}}" [class]="row[col.prop]['cellColor']" >
                            {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText" [ngStyle]="{ 'color' : row[col.prop]['cellColor']}">
+                            <span *ngIf="!showAllText" [class]="row[col.prop]['cellColor']">
                             {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
                           </ng-container>
