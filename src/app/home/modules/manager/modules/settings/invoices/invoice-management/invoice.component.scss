@@ -48,6 +48,10 @@ table{
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
   }
+  .icon-trash {
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius:15px !important
+  }
 
   #delete .mat-icon {
     visibility: hidden;

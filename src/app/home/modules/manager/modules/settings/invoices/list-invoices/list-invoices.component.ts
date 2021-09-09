@@ -48,12 +48,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
  async ngOnInit() {
     this.applicationId = this.localStorageService.getItem('userCredentials');
     this.languageId = this.localStorageService.getItem('language').langId;
-
+    this.getConnectedUser();
     await this.getContractor();
     this.modalService.registerModals(
       { modalName: 'addTax', modalComponent: AddTaxCompanyComponent });
     this.isLoading.next(true);
-    this.getConnectedUser();
     this.getAllInvoices();
   }
 
@@ -66,6 +65,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         (userInfo) => {
           if (userInfo) {
             this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
+            this.companyEmail = 'amine.sboui.1@esprit.tn';
           }
         });
   }
@@ -109,7 +109,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param rowAction: object
    */
   switchAction(rowAction: any) {
-    console.log(rowAction.data, 'row');
     switch (rowAction.actionType) {
        case ('show'): this.showInvoice(rowAction.data);
         break;
@@ -175,7 +174,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         [{ filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
          path: environment.uploadFileApiUrl + '/show/' + data.attachment }]
       ).subscribe(() => {
-        this.getAllInvoices();
       });
     });
   }

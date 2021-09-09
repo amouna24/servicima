@@ -1,12 +1,12 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output, ViewChild
 } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
@@ -33,7 +33,7 @@ import { environment } from '../../../../../../environments/environment';
     dataAppearance
   ]
 })
-export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy, AfterViewInit {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
@@ -49,6 +49,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
   @Output() checked = new EventEmitter<{ }>();
+  @ViewChild('closePanel')
+  closePanel: any;
   /**************************************************************************
    * @description Paginations
    *************************************************************************/
@@ -97,6 +99,10 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
+  }
+  ngAfterViewInit() {
+    console.log('Values on ngAfterViewInit():');
+    console.log('primaryColorSample:', this.closePanel.close());
   }
   async ngOnInit() {
     await this.getRefData();
@@ -328,6 +334,12 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
 
   actionRowData(action: string, rowData: any) {
     this.rowActionData.emit({ actionType: action, data: rowData});
+    this.closePanel.close();
+    this.listChecked = [];
+    this.tableData.getValue().map((data) => {
+      data['color'] = 'white';
+      data['checked'] = false;
+    });
   }
 
   /**************************************************************************

@@ -1,10 +1,10 @@
 <div style="display: flex; flex-direction: column; height: 100%; border-radius: 15px;" class="font-size-12 container-show bg-white">
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
         <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-medium font-size-38">Billing</h1>
+          <h1 class="steel font-medium" style="font-size:32px">Billing</h1>
         </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-          <button mat-raised-button class="btn-small bg-pale-grey">
+          <button (click)="back()" mat-raised-button class="btn-small bg-pale-grey">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
             </mat-icon>
             <span class="cool-grey">back</span>
@@ -212,7 +212,7 @@
                     <td>
                      {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
                     </td>
-                    <td class="cursor-pointer" [ngStyle]="{'border-top-right-radius': '15px !important','border-bottom-right-radius':'15px !important'}" (click)='delete(i)' id="delete">
+                    <td class="cursor-pointer icon-trash"  (click)='delete(i)' id="delete">
                       <mat-icon svgIcon="wi-trash" class="icon">
                       </mat-icon>
                     </td>

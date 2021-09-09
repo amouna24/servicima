@@ -8,7 +8,7 @@
     , addActionText: 'New payment info'}"
     [title]="'Payment info list'"
     (rowActionData)="switchAction($event)"
-    [allowedActions]="{ update: true, delete: true, show: false }"
+    [allowedActions]="['delete']"
   >
   </wid-dynamic-data-table>
 </div>

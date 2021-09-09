@@ -66,12 +66,13 @@ export class SidenavSettingsComponent implements OnInit, OnDestroy {
   currentState(subMenu: IChildItem[]): boolean {
     const currentState: string = this.router.url;
     const activeState = subMenu.some((m) => {
-      return currentState.endsWith(m.state); });
+      return currentState.includes(m.state); });
     if (activeState) {
       this.subMenu = subMenu;
     } else if (currentState.endsWith('settings')) {
       this.subMenu = this.menu[0].children;
     }
+
     return activeState;
   }
   /**

@@ -6,7 +6,7 @@
     [header]="{ title: 'Payment Terms management',type:'dialog', addActionDialog: { modalName: 'addPaymentTermsMethode', modalComponent: 'AddPaymentMethodComponent', data: null, width: '657px', height: '270px' }, addActionText: 'New payment terms'}"
     [title]="'Payment terms list'"
     (rowActionData)="switchAction($event)"
-    [allowedActions]="{ update: true, delete: true, show: false }"
+    [allowedActions]="['delete']"
   >
   </wid-dynamic-data-table>
 </div>

@@ -68,7 +68,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
       this.profileService.getAllUser(this.emailAddress, limit, offset)
         .subscribe((res) => {
           res['results'] = this.getUserWithType(res['results'], this.typeUser);
-        this.ELEMENT_DATA.next(res);
+        this.ELEMENT_DATA.next(res['results']);
         this.isLoading.next(false);
     }));
   }
