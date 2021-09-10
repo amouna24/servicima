@@ -13,19 +13,57 @@ import { ResumeGuard } from '@core/guard/resume.guard';
 import { ResumeCertificationsComponent } from '@shared/modules/resume-management/modules/resume-certifications/resume-certifications.component';
 
 const routes: Routes = [
-  { path: '', component: ResumeGeneralInformationComponent},
+  { path: '', component: ResumeGeneralInformationComponent,
+    data: {
+      breadcrumb: 'General informations'
+    }},
   { path: '', canActivate: [ResumeGuard],
     loadChildren: () => import('../resume-management/modules/resume-professional-experiences/resume-pro-exp.module')
       .then(m => m.ResumeProExpModule),
+    data: {
+      breadcrumb: 'Professional experience'
+    },
   },
-  { path: 'language', canActivate: [ResumeGuard],  component: ResumeLanguageComponent},
-  { path: 'intervention', canActivate: [ResumeGuard], component: ResumeInterventionComponent},
-  { path: 'technicalSkills', canActivate: [ResumeGuard], component: ResumeTechSkillComponent},
-  { path: 'dynamicSection', canActivate: [ResumeGuard], component: ResumeDynamicSectionComponent},
-  { path: 'functionalSkills', canActivate: [ResumeGuard], component: ResumeFuncSkillComponent},
-  { path: 'certifDiploma', canActivate: [ResumeGuard], component: ResumeCertifDiplomaComponent},
-  { path: 'done', canActivate: [ResumeGuard], component: ResumeDoneComponent},
-  { path: 'certifications', canActivate: [ResumeGuard], component: ResumeCertificationsComponent},
+  { path: 'language', canActivate: [ResumeGuard],  component: ResumeLanguageComponent,
+    data: {
+      breadcrumb: 'Language'
+    }
+    },
+  { path: 'intervention', canActivate: [ResumeGuard], component: ResumeInterventionComponent,
+    data: {
+      breadcrumb: 'Level of intervention'
+    }
+    },
+  { path: 'technicalSkills', canActivate: [ResumeGuard], component: ResumeTechSkillComponent,
+    data: {
+      breadcrumb: 'Technical skills'
+    }
+  },
+  { path: 'dynamicSection', canActivate: [ResumeGuard], component: ResumeDynamicSectionComponent,
+    data: {
+      breadcrumb: 'Dynamic section'
+    }
+  },
+  { path: 'functionalSkills', canActivate: [ResumeGuard], component: ResumeFuncSkillComponent,
+    data: {
+      breadcrumb: 'Functional skills'
+    }
+  },
+  { path: 'certifDiploma', canActivate: [ResumeGuard], component: ResumeCertifDiplomaComponent,
+    data: {
+      breadcrumb: 'Diploma'
+    }
+    },
+  { path: 'done', canActivate: [ResumeGuard], component: ResumeDoneComponent,
+    data: {
+      breadcrumb: 'Preview'
+    }
+    },
+  { path: 'certifications', canActivate: [ResumeGuard], component: ResumeCertificationsComponent,
+    data: {
+      breadcrumb: 'Certfications'
+    }
+    },
 
 ];
 
