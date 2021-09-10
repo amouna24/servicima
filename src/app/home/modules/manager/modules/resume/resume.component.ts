@@ -277,7 +277,7 @@ await this.getData();
                 this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
                   this.userService.getAllUsers(`?email_address=${changeStatusData.user_info.ResumeKey.email_address}`)
                     .subscribe( (user: IUserModel[]) => {
-                    user['results'][0].user_type = 'CANDIDATE';
+                    user['results'][0].user_type = 'COLLABORATOR';
                     user['results'][0].application_id = user['results'][0].userKey.application_id;
                     user['results'][0].email_address = user['results'][0].userKey.email_address;
                     this.userService.updateUser(user['results'][0]).subscribe(async () => {
