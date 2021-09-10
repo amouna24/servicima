@@ -37,6 +37,7 @@ import { environment } from '../../../../../../environments/environment';
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
+  @Input() colorObject: object;
   @Input() tableCode: string;
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
@@ -111,6 +112,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         },
       );
     this.showAllText = false;
+    console.log('columns=', this.columns);
   }
 
   getDataSource() {
@@ -382,7 +384,6 @@ this.userService.connectedUser$.subscribe(
     this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
       this.dynamicDataTableService.getCanBeFiltredColumns(newModalConfig)
     );
-
   }
 
   /**************************************************************************
@@ -489,7 +490,17 @@ this.userService.connectedUser$.subscribe(
         break;
     }
   }
-
+  sendColors(columnCodeFixed, columns, condValue, listCond: string[], color: string[]): string {
+    let cellColor = 'black';
+    if ( columns === columnCodeFixed ) {
+        listCond.forEach( (Condition, index) => {
+          if (condValue === Condition) {
+            cellColor = color[index];
+          }
+        });
+    }
+      return cellColor;
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/

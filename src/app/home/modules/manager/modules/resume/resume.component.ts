@@ -60,9 +60,7 @@ await this.getData();
                       resume_years_exp: resume[0].years_of_experience,
                       resume_position: resume[0].actual_job,
                       resume_status: candidate.user_type,
-                      resume_email: candidate.user_type === 'CANDIDATE' ?
-                        { value: candidate.userKey.email_address, cellColor: 'topaz'} :
-                          { value: candidate.userKey.email_address, cellColor: 'red'},
+                      resume_email: candidate.userKey.email_address,
                       resume_user_type: candidate.user_type,
                       resume_filename_docx: resume[0].resume_filename_docx,
                       resume_filename_pdf: resume[0].resume_filename_pdf,
@@ -284,4 +282,17 @@ await this.getData();
           });
     });
     }
+  sendColorObject() {
+    return  {
+      columnCode: 'resume_status',
+      condValue: [
+        'COLLABORATOR',
+        'CANDIDATE',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    };
+  }
 }
