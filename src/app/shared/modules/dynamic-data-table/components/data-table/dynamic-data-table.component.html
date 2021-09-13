@@ -138,17 +138,13 @@
                       <td cdk-cell (click)="actionRowData('update', row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light" >
                         <div (mouseover)="showAllText=true"  (mouseout)="showAllText=false">
-                          <ng-container *ngIf="row[col.prop] === null; else propNotNull">
-                            <span></span>
-                          </ng-container>
-                          <ng-template #propNotNull>
-                          <ng-container *ngIf="row[col.prop]['cellColor']; else noColor">
+                          <ng-container *ngIf="colorObject; else noColor">
                                 <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]['value']}}" [class]="row[col.prop]['cellColor']" >
-                           {{ row[col.prop]['value'] | spliceText: 40 }}
+                                      matTooltip="{{row[col.prop]}}" [class]="sendColors(col.prop,row[col.prop])" >
+                           {{ row[col.prop] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText" [class]="row[col.prop]['cellColor']">
-                            {{ row[col.prop]['value'] | spliceText: 40 }}
+                            <span *ngIf="!showAllText"  [class]="sendColors(col.prop,row[col.prop])" >
+                            {{ row[col.prop] | spliceText: 40 }}
                           </span>
                           </ng-container>
                           <ng-template #noColor>
@@ -159,7 +155,6 @@
                             <span *ngIf="!showAllText" >
                             {{ row[col.prop] | spliceText: 40 }}
                           </span>
-                          </ng-template>
                           </ng-template>
                         </div>
                       </td>

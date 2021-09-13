@@ -37,6 +37,7 @@ import { environment } from '../../../../../../environments/environment';
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
+  @Input() colorObject: object[];
   @Input() tableCode: string;
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
@@ -382,7 +383,6 @@ this.userService.connectedUser$.subscribe(
     this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
       this.dynamicDataTableService.getCanBeFiltredColumns(newModalConfig)
     );
-
   }
 
   /**************************************************************************
@@ -490,6 +490,19 @@ this.userService.connectedUser$.subscribe(
     }
   }
 
+  sendColors(columns, condValue): string {
+    let cellColor = 'black';
+    this.colorObject.map ( (oneColumn) => {
+      if ( columns === oneColumn['columnCode']) {
+        oneColumn['condValue'].forEach( (Condition, index) => {
+          if (condValue === Condition) {
+            cellColor = oneColumn['color'][index];
+          }
+        });
+      }
+    });
+      return cellColor;
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
