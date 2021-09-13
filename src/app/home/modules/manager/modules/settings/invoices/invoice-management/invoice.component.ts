@@ -55,7 +55,7 @@ export class InvoiceComponent implements OnInit {
   contractorCode: string;
   contractCode: string;
   invoiceNbr: number;
-
+  statusInvoice: string;
   sousTotalHT = 0;
   vatMount = 0;
   totalTTC = 0;
@@ -175,6 +175,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.invoiceLine = this.invoices[2];
     this.contractCode = this.invoiceHeader['contract_code'];
     this.currencyCode = this.invoiceHeader['invoice_currency'];
+    this.statusInvoice = this.invoiceHeader['invoice_status'];
     this.editContractors = false;
     this.getContract(this.invoiceHeader['contractor_code']);
     this.getContractProject(this.invoiceHeader['contract_code']);

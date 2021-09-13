@@ -28,7 +28,8 @@
       "@core/*": [
         "src/app/core/*"
       ]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

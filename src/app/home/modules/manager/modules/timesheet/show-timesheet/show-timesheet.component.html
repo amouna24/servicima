@@ -1,0 +1,89 @@
+<div fxLayout="column" class="full-height full-width">
+  <div class="bg-pale-grey-four" fxFlex="22" fxLayout="column">
+    <div fxFlex="38" fxLayout="row" fxLayoutAlign="end" class="p-15">
+      <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
+        <mat-icon svgIcon="wi-close-normal"></mat-icon>
+      </button>
+    </div>
+    <div fxFlex="62" fxLayout="row">
+      <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
+        <p class="font-size-15 black-three font-normal m-0">{{timesheet.first_name}}</p>
+        <p class="font-size-15 black-three font-normal m-0">{{timesheet.last_name}}</p>
+      </div>
+      <div fxFlex>
+        <img class="img-rounded absolute m-t-30 avatar"  [src]=" avatar ? avatar : 'assets/img/default.jpg'">
+      </div>
+      <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
+        <p class="font-size-15 black-three font-normal m-0">{{timesheet.user_position}}</p>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="23" fxLayout="column" class="p-l-15 p-r-15"
+       fxFlexOffset="70px" fxLayoutAlign="start start" fxLayoutGap="15px">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
+      <div fxFlex>
+        <p class="font-size-12 m-0 font-normal black-three">Week start on:
+          <span class="steel font-light">{{timesheet.start_date | date: 'dd-MM-yyyy'}}</span>
+        </p>
+      </div>
+      <div fxFlex>
+        <p class="font-size-12 m-0 font-normal black-three">Type:
+          <span class="steel font-light">{{timesheet.type_timesheet}}</span>
+        </p>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between start" class="full-width">
+      <div fxFlex >
+        <p class="font-size-12 m-0 font-normal black-three">Week end on:
+          <span class="steel font-light">{{timesheet.end_date | date: 'dd-MM-yyyy'}}</span>
+        </p>
+      </div>
+      <div fxFlex >
+        <p class="font-size-12 m-0 font-normal black-three">Project:
+          <span class="steel font-light">{{timesheet.project_desc}}</span>
+        </p>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start start" class="full-width">
+      <p class="font-size-12 m-0 font-normal black-three">Comment:
+        <span class="steel font-light">{{timesheet.comment}}</span>
+      </p>
+    </div>
+  </div>
+  <div fxFlex fxLayout="row wrap" fxLayoutAlign="start start" class="full-width p-l-15">
+    <ng-container *ngIf="week, else loading">
+      <ng-container *ngFor="let day of week">
+        <div style="width: 85px; height: 65px" class="bg-pale-grey-four border-radius-10 m-r-10 m-b-10"
+             fxLayout="column" fxLayoutAlign="center center">
+          <p class="black font-light font-size-12 m-0" >{{day.day | uppercase}}:</p>
+          <p class="steel font-light font-size-10 m-0" >{{day.hours}}h00m</p>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #loading >
+      <wid-skeleton-loader
+        nbrColumn="4" nbrRow="2"
+        height="65" width="85"
+        marginTop="0" marginBottom="20" marginLeft="9"
+      ></wid-skeleton-loader>
+    </ng-template>
+
+    <div *ngIf="week" style="width: 85px; height: 65px" class="bg-pale-grey border-radius-10"
+         fxLayout="column" fxLayoutAlign="center center">
+     <p class="black font-light font-size-12 m-0" >Total:</p>
+      <p class="steel font-light font-size-10 m-0" >{{timesheet.total_week_hours}}h00m</p>
+    </div>
+  </div>
+  <div fxFlex="10" class="full-width" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="25px">
+    <ng-container *ngIf="timesheet.timesheet_status === 'Pending', else status">
+      <button mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">Reject</button>
+      <button mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">Approve</button>
+    </ng-container>
+    <ng-template #status>
+      <span *ngIf="timesheet.timesheet_status === 'Pending'" class="topaz font-light font-size-12">Approved</span>
+      <span *ngIf="timesheet.timesheet_status === 'Rejected'" class="red font-light font-size-12">Rejected</span>
+    </ng-template>
+
+  </div>
+</div>
+

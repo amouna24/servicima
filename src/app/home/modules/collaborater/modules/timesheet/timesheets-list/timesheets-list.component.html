@@ -1,0 +1,11 @@
+<wid-dynamic-data-table
+  [tableData]="ELEMENT_DATA"
+  [tableCode]="'TIMESHEET_COLLABORATOR'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Timesheet management', addActionURL: redirectUrl, addActionText: addButtonLabel}"
+  [title]="'Timesheet list'"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="['export']"
+>
+</wid-dynamic-data-table>
+

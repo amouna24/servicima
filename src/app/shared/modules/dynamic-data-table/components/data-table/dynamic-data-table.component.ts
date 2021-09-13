@@ -22,6 +22,7 @@ import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
+import { UserService } from '@core/services/user/user.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -33,7 +34,7 @@ import { environment } from '../../../../../../environments/environment';
     dataAppearance
   ]
 })
-export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy, AfterViewInit {
+export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() tableCode: string;
@@ -84,7 +85,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   dataSource: any;
   refData: { } = { };
   showAllText: boolean;
-
+  languageCode: string;
+  companyEmail: string;
+  languageId: string;
+  status = 'ACTIVE';
+  private defaultRes: any;
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -94,17 +99,18 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     private modalsServices: ModalService,
     private refDataServices: RefdataService,
     private localStorageService: LocalStorageService,
+    private userService: UserService,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
   }
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
   }
-  ngAfterViewInit() {
-    console.log('Values on ngAfterViewInit():');
-    console.log('primaryColorSample:', this.closePanel.close());
-  }
+
   async ngOnInit() {
+   this.languageCode = this.localStorageService.getItem('language').langCode;
+    this.languageId = this.localStorageService.getItem('language').langId;
+    await this.connectedUser();
     await this.getRefData();
     await this.getDataSource();
     await this.getDataList();
@@ -126,7 +132,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.totalCountedItems = res?.count ? res?.count === this.itemsPerPageControl.value ?
         this.currentPage * this.itemsPerPageControl.value :
         (this.currentPage - 1) * this.itemsPerPageControl.value + res['count'] : null;
-      console.log('res', res); // to be deleted
       this.nbrPages = res?.total ? Array(Math.ceil(Number(res['total']) / this.itemsPerPageControl.value))
         .fill(null)
         .map((x, i) => i + 1) : null;
@@ -151,6 +156,16 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.dataSource = dataList;
       this.convertData();
     });
+    this.defaultRes = { ...this.tableData.getValue() };
+  }
+
+  findColumnDescription(columns, res) {
+    columns.map((element) => {
+      if (element.prop !== 'rowItem') {
+        element['name'] = res.find((type) =>
+          type.dataListKey.column_code === element['prop'])?.column_desc;
+      }
+    });
   }
 
   /**************************************************************************
@@ -162,7 +177,29 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent});
     if (this.localStorageService.getItem(this.tableCode)) {
-      this.getConfigDatatable();
+      if (this.localStorageService.getItem(this.tableCode).languageCode === this.languageCode) {
+        this.getConfigDatatable();
+      } else {
+        this.dynamicDataTableService.getDefaultTableConfig(this.tableCode, this.languageId)
+          .subscribe(
+            res => {
+              const newColumns =  this.localStorageService.getItem(this.tableCode).columns;
+              const newActualColumns = this.localStorageService.getItem(this.tableCode).actualColumn;
+              this.findColumnDescription(newColumns, res);
+              this.findColumnDescription(newActualColumns, res);
+              this.localStorageService.setItem(this.tableCode,
+                {
+                  columns: newColumns,
+                  columnsList: this.localStorageService.getItem(this.tableCode).columnsList,
+                  modalConfiguration: this.localStorageService.getItem(this.tableCode).modalConfiguration ,
+                  actualColumn: newActualColumns,
+                  languageCode: this.languageCode
+                });
+              this.getConfigDatatable();
+            });
+
+      }
+
     } else {
       this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
         .subscribe(
@@ -186,7 +223,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
                 columns: this.columns,
                 columnsList: this.columnsList,
                 modalConfiguration: this.modalConfiguration,
-                actualColumn: this.columns
+                actualColumn: this.columns,
+                languageCode: this.languageCode
               });
           }
         );
@@ -204,6 +242,18 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       data['color'] = color;
       data['checked'] = checked;
     });
+  }
+
+  showWithStatus(status: string) {
+    if (this.status === 'ACTIVE') {
+      this.status = 'DISABLED';
+    } else {
+      this.status = 'ACTIVE';
+    }
+    const test2 =  Object.values(this.defaultRes).filter((data) => {
+     return data['status'] === status;
+   });
+  this.tableData.next(test2);
   }
 
   /**************************************************************************
@@ -322,7 +372,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
               columns: this.columns,
               columnsList: this.columnsList,
               modalConfiguration: this.newConfig,
-              actualColumn: this.columns
+              actualColumn: this.columns,
+              languageCode: this.languageCode,
             });
         }
       });
@@ -332,6 +383,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     return item._id;
   }
 
+  /**************************************************************************
+   * @description action
+   * @param action: name of action
+   * @param rowData: list of row to do action
+   *************************************************************************/
   actionRowData(action: string, rowData: any) {
     this.rowActionData.emit({ actionType: action, data: rowData});
     this.closePanel.close();
@@ -360,12 +416,27 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   /**************************************************************************
+   * @description Get connected user
+   *************************************************************************/
+ async connectedUser() {
+    return new Promise((resolve) => {
+      this.userService.connectedUser$.subscribe(
+        async (data) => {
+         this.companyEmail = data?.user[0]['company_email'];
+         resolve(this.companyEmail);
+        });
+    });
+
+  }
+
+  /**************************************************************************
    * @description get refData
    *************************************************************************/
   async getRefData() {
     this.refData = await this.refDataServices.getRefData(
-      this.utilService.getCompanyId(
-        this.localStorageService.getItem('userCredentials')['email_address'], this.localStorageService.getItem('userCredentials')['application_id']),
+        // @ts-ignore
+        this.utilService.getCompanyId(
+            this.companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
       false

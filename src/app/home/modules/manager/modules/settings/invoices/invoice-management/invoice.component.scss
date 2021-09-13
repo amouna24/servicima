@@ -28,6 +28,7 @@ table{
     font-size: 15px;
     padding-top: 15px;
     padding-bottom: 15px;
+    min-width: 100px !important;
   }
 
   .container-action button {
@@ -102,13 +103,13 @@ table{
     border-top: none !important;
   }
   .width-15 {
-    width: 15% !important;
+    max-width: 15% !important;
   }
   .width-12 {
-    width: 12% !important;
+    max-width: 12% !important;
   }
   .width-25 {
-    width: 25% !important;
+    max-width: 25% !important;
   }
 
   .btn-add-line{

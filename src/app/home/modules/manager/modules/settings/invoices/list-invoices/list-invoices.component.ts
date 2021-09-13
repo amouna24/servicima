@@ -87,16 +87,10 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    */
   getAllInvoices() {
     this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`).subscribe((data) => {
-      console.log(this.listContractor);
         data['results'].map((datas) => {
           datas['code'] = datas['contractor_code'];
         datas['contractor_code'] = this.listContractor
           .find(value => value.contractorKey.contractor_code === datas['contractor_code']).contractor_name;
-        if (datas['invoice_status'] === 'DRAFT') {
-          datas['action'] = { update: true, delete: true, show: false };
-          } else {
-          datas['action'] = { update: false, delete: true, show: true };
-          }
       });
       this.ELEMENT_DATA.next(data['results']);
       this.isLoading.next(false);
