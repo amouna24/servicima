@@ -211,7 +211,7 @@ await this.getData();
             this.resumeService
               .sendMail(
                 this.localStorageService.getItem('language').langId,
-                this.utilsService.getApplicationID('ALL'),
+                application_id,
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 this.clientEmailAddress,
                 'WIDIGITAL',
@@ -305,7 +305,6 @@ await this.getData();
       dataResume.user_info.email_address = dataResume.user_info.ResumeKey.email_address;
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
-      console.log(dataResume.user_info);
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
         console.log('resume archived');
         await this.getData();
