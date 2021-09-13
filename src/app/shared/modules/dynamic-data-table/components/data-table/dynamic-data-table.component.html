@@ -140,10 +140,10 @@
                         <div (mouseover)="showAllText=true"  (mouseout)="showAllText=false">
                           <ng-container *ngIf="colorObject; else noColor">
                                 <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]}}" [class]="sendColors(colorObject['columnCode'], col.prop, row[col.prop], colorObject['condValue'], colorObject['color'])" >
+                                      matTooltip="{{row[col.prop]}}" [class]="sendColors(col.prop,row[col.prop])" >
                            {{ row[col.prop] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText"  [class]="sendColors(colorObject['columnCode'], col.prop, row[col.prop], colorObject['condValue'], colorObject['color'])" >
+                            <span *ngIf="!showAllText"  [class]="sendColors(col.prop,row[col.prop])" >
                             {{ row[col.prop] | spliceText: 40 }}
                           </span>
                           </ng-container>

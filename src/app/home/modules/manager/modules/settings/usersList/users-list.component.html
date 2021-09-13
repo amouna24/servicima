@@ -5,7 +5,7 @@
   [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User'}"
   [title]="'Users list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="{ update: true, delete: true, show: true }"
+  [allowedActions]="[ 'delete', 'show' ]"
   (pagination)="loadMoreItems($event)"
 >
 </wid-dynamic-data-table>

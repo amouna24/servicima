@@ -105,6 +105,9 @@ await this.getData();
       case('download docx'):
         this.downloadDocx(rowAction.data);
         break;
+      case('Archive Resume'):
+        this.archiveUser(rowAction.data);
+        break;
     }
   }
   /**************************************************************************
@@ -310,8 +313,8 @@ await this.getData();
     });
     }
   sendColorObject() {
-    return  {
-      columnCode: 'resume_status',
+    return  [{
+      columnCode: 'resume_user_type',
       condValue: [
         'COLLABORATOR',
         'CANDIDATE',
@@ -320,6 +323,16 @@ await this.getData();
         'topaz',
         'red',
       ],
-    };
+    }, {
+      columnCode: 'resume_status',
+      condValue: [
+        'A',
+        'D',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    }];
   }
 }

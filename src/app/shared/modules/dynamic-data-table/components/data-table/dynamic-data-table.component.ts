@@ -37,7 +37,7 @@ import { environment } from '../../../../../../environments/environment';
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
-  @Input() colorObject: object;
+  @Input() colorObject: object[];
   @Input() tableCode: string;
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
@@ -490,15 +490,18 @@ this.userService.connectedUser$.subscribe(
         break;
     }
   }
-  sendColors(columnCodeFixed, columns, condValue, listCond: string[], color: string[]): string {
+
+  sendColors(columns, condValue): string {
     let cellColor = 'black';
-    if ( columns === columnCodeFixed ) {
-        listCond.forEach( (Condition, index) => {
+    this.colorObject.map ( (oneColumn) => {
+      if ( columns === oneColumn['columnCode']) {
+        oneColumn['condValue'].forEach( (Condition, index) => {
           if (condValue === Condition) {
-            cellColor = color[index];
+            cellColor = oneColumn['color'][index];
           }
         });
-    }
+      }
+    });
       return cellColor;
   }
   /**************************************************************************
