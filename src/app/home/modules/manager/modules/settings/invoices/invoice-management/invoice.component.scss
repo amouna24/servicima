@@ -25,10 +25,8 @@ table{
   }
 
   th{
-    font-size: 15px;
     padding-top: 15px;
     padding-bottom: 15px;
-    min-width: 100px !important;
   }
 
   .container-action button {
@@ -115,3 +113,22 @@ table{
   .btn-add-line{
     height: 100px !important
   }
+.small-col {
+  width: 8% !important;
+  min-width: 8% !important;
+}
+.large-col {
+  width:  30% !important;
+  min-width:  30% !important;
+}
+.medium-col {
+  width: 12% !important;
+  min-width: 12% !important;
+  max-width: 12% !important;
+}
+.vat_mount {
+  font-size: 12px !important;
+  max-width:100px;
+  white-space: pre-line !important;
+  overflow-wrap: break-word !important;
+}

@@ -1,7 +1,7 @@
-<div style="display: flex; flex-direction: column; height: 100%; border-radius: 15px;" class="font-size-12 container-show bg-white">
+<div fxLayout="column"  class="font-size-12 container-show bg-white border-radius-15 full-height">
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
         <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-medium" style="font-size:32px">Billing</h1>
+          <h1 class="steel font-medium font-size-28" >Billing</h1>
         </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
           <button (click)="back()" mat-raised-button class="btn-small bg-pale-grey">
@@ -151,7 +151,7 @@
                 <div fxFlex="40" class="font-bold">Description</div>
                 <div fxFlex="60">
                   <mat-form-field appearance="outline">
-                  <textarea name="description" id="description" cols="22" rows="5" matInput></textarea>
+                  <textarea class="overflow-hidden" name="description" id="description" cols="22" rows="5" matInput></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -164,15 +164,15 @@
             <div formArrayName='input'>
               <div>
                 <table class="full-width">
-                  <tr class="white full-width bg-steel text-center" style="  font-size: 12px !important;">
-                    <th style=" font-size: 12px !important;width: 10% !important;min-width: 10% !important;white-space: pre-line !important; overflow-wrap: break-word !important;max-width: 105px;" >Services/produits</th>
-                    <th style=" font-size: 12px !important;width: 30% !important;min-width: 30% !important;" >Description project</th>
-                    <th style=" font-size: 12px !important;width: 10% !important;min-width: 10% !important;" >prix</th>
-                    <th style=" font-size: 12px !important;width: 10% !important;min-width: 10% !important;">quantité</th>
-                    <th style=" font-size: 12px !important;width: 10% !important;min-width: 10% !important;">Tva%</th>
-                    <th style=" font-size: 12px !important;width: 12% !important;min-width: 12% !important;max-width: 90px !important;">Tva</th>
-                    <th style=" font-size: 12px !important;width: 10% !important;min-width: 10% !important;">Escompte</th>
-                    <th class="montant" style=" font-size: 12px !important;width: 90px !important;min-width: 90px !important;max-width: 90px !important;">Montant</th>
+                  <tr class="white full-width bg-steel text-center font-size-12">
+                    <th class="small-col"  >Services/produits</th>
+                    <th class="large-col" >Description project</th>
+                    <th class="medium-col" >prix</th>
+                    <th class="small-col" >quantité</th>
+                    <th class="small-col">Tva%</th>
+                    <th class="medium-col">Tva</th>
+                    <th class="small-col" >Escompte</th>
+                    <th class="medium-col montant">Montant</th>
                   <tr *ngFor="let roleListControl of getListRole().controls; let i = index" [formGroupName]="i">
                     <td >
                       <mat-select formControlName="project_code" placeholder="Services">
@@ -184,36 +184,36 @@
                       </mat-select>
                     </td>
                     <td>
-                      <textarea style=" font-size: 12px !important;" matInput name="Text1" class="overflow-hidden"  placeholder="description project" formControlName='project_desc' matInput
+                      <textarea class="overflow-hidden"  matInput name="Text1" class="overflow-hidden"  placeholder="description project" formControlName='project_desc' matInput
                       cdkTextareaAutosize
                       cdkAutosizeMinRows="1"
                       ></textarea>
                     </td>
                     <td>
-                        <textarea style=" font-size: 12px !important;" matInput name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
+                        <textarea class="overflow-hidden"  matInput name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
                         cdkTextareaAutosize
                         cdkAutosizeMinRows="1"
                         ></textarea>
                     </td>
                     <td>
-                        <textarea style=" font-size: 12px !important;" (blur)="getTvaOrMountInvoice(i)"  matInput name="Text1" placeholder="Days"  class="overflow-hidden"  required formControlName='days_nbr' matInput
+                        <textarea class="overflow-hidden"  (blur)="getTvaOrMountInvoice(i)"  matInput name="Text1" placeholder="Days"  class="overflow-hidden"  required formControlName='days_nbr' matInput
                         cdkTextareaAutosize
                         cdkAutosizeMinRows="1"
                         ></textarea>
                       </td>
-                    <td style=" font-size: 12px !important;">
+                    <td>
                       {{ form.value.input[i].vat_rate  ? form.value.input[i].vat_rate : 0   }} %
                     </td>
-                    <td style=" font-size: 12px !important;max-width:100px;white-space: pre-line !important; overflow-wrap: break-word !important;">
+                    <td class="vat_mount">
                       {{ form.value.input[i].vat_amount  ? form.value.input[i].vat_amount  : 0 }}
 
                     <td>
-                      <input style=" font-size: 12px !important;" class="black-three" type="number" (blur)="getTvaOrMountInvoice(i)" min="0" max="100" autocomplete="off" matInput required placeholder="discount"
+                      <input  class="black-three font-size-12" type="number" (blur)="getTvaOrMountInvoice(i)" min="0" max="100" autocomplete="off" matInput required placeholder="discount"
                         formControlName='discount'
                         type = "number"
                         maxlength = "3" />
                     </td>
-                    <td  style=" font-size: 12px !important;max-width:100px;white-space: pre-line !important; overflow-wrap: break-word !important;">
+                    <td  class="vat_mount">
                      {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
                     </td>
                     <td class="cursor-pointer icon-trash"  (click)='delete(i)' id="delete">

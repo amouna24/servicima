@@ -37,6 +37,7 @@ import { environment } from '../../../../../../environments/environment';
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
+  @Input() colorObject: object[];
   @Input() tableCode: string;
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
@@ -109,8 +110,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   async ngOnInit() {
-   this.languageCode = this.localStorageService.getItem('language').langCode;
-    this.languageId = this.localStorageService.getItem('language').langId;
     await this.connectedUser();
     await this.getRefData();
     await this.getDataSource();
@@ -173,6 +172,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description get data list
    *************************************************************************/
   getDataList() {
+    this.languageCode = this.localStorageService.getItem('language').langCode;
+    this.languageId = this.localStorageService.getItem('language').langId;
     this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
       [...this.tableData?.getValue()];
     this.modalService.registerModals(
@@ -184,16 +185,18 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         this.dynamicDataTableService.getDefaultTableConfig(this.tableCode, this.languageId)
           .subscribe(
             res => {
+              const newConfig = this.localStorageService.getItem(this.tableCode).modalConfiguration;
+              newConfig.map((er) => {
+                 er['column_desc'] = res.find((type) =>
+                  type.dataListKey.column_code === er['dataListKey']['column_code'])?.column_desc;
+              });
               const newColumns =  this.localStorageService.getItem(this.tableCode).columns;
-              const newActualColumns = this.localStorageService.getItem(this.tableCode).actualColumn;
               this.findColumnDescription(newColumns, res);
-              this.findColumnDescription(newActualColumns, res);
               this.localStorageService.setItem(this.tableCode,
                 {
                   columns: newColumns,
                   columnsList: this.localStorageService.getItem(this.tableCode).columnsList,
-                  modalConfiguration: this.localStorageService.getItem(this.tableCode).modalConfiguration ,
-                  actualColumn: newActualColumns,
+                  modalConfiguration: newConfig ,
                   languageCode: this.languageCode
                 });
               this.getConfigDatatable();
@@ -224,7 +227,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
                 columns: this.columns,
                 columnsList: this.columnsList,
                 modalConfiguration: this.modalConfiguration,
-                actualColumn: this.columns,
                 languageCode: this.languageCode
               });
           }
@@ -344,7 +346,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     const data = {
       displayedColumns: this.dynamicDataTableService.generateColumns(this.displayedColumns),
       canBeDisplayedColumns: this.canBeDisplayedColumns,
-      actualColumns: this.columns,
       columnsList: this.columnsList,
       tableCode: this.tableCode
     };
@@ -374,7 +375,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
               columns: this.columns,
               columnsList: this.columnsList,
               modalConfiguration: this.newConfig,
-              actualColumn: this.columns,
               languageCode: this.languageCode,
             });
         }
@@ -461,7 +461,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
       this.dynamicDataTableService.getCanBeFiltredColumns(newModalConfig)
     );
-
   }
 
   /**************************************************************************
@@ -569,6 +568,19 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     }
   }
 
+  sendColors(columns, condValue): string {
+    let cellColor = 'black';
+    this.colorObject.map ( (oneColumn) => {
+      if ( columns === oneColumn['columnCode']) {
+        oneColumn['condValue'].forEach( (Condition, index) => {
+          if (condValue === Condition) {
+            cellColor = oneColumn['color'][index];
+          }
+        });
+      }
+    });
+      return cellColor;
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
