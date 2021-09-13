@@ -196,7 +196,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
                       }
                     );
                   }
-                  this.isLoadingImage = false;
                   this.updateForm(generalInfo[0]);
                   this.update = true;
                 }

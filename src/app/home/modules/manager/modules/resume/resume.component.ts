@@ -186,15 +186,15 @@ await this.getData();
    * data: contains the data of resume
    *************************************************************************/
   private sendMail(data) {
-    const attachement: object[] = [];
+    const attachments: object[] = [];
     let jobs = '';
     let application_id = '';
     let company_email = '';
     data.map( (sendMailData) => {
        company_email = sendMailData.user_info.company_email;
-       jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
-       application_id = sendMailData.user_info.ResumeKey.application_id;
-       attachement.push({
+      jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
+      application_id = sendMailData.user_info.ResumeKey.application_id;
+      attachments.push({
         filename: sendMailData.user_info.init_name + '.docx',
         path: `${environment.uploadFileApiUrl}/show/${sendMailData.resume_filename_docx}` });
     });
@@ -203,6 +203,7 @@ await this.getData();
       title: 'Send Email',
       description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
     };
+
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
       .subscribe(
         (res) => {
@@ -215,7 +216,7 @@ await this.getData();
                 this.clientEmailAddress,
                 'WIDIGITAL',
                 jobs,
-                  attachement
+                  attachments
               ).subscribe((dataB) => {
               console.log(dataB);
             });
