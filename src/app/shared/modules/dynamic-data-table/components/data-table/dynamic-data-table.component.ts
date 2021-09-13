@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked, AfterViewInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -91,7 +91,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   companyEmail: string;
   languageId: string;
   status = 'DISABLED';
-  private defaultRes: any;
+  defaultRes: any;
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -159,6 +159,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     this.defaultRes = { ...this.tableData.getValue() };
   }
 
+  /**************************************************************************
+   * @description Find column by code and get your description
+   * @param columns: columns
+   * @param res: res
+   *************************************************************************/
   findColumnDescription(columns, res) {
     columns.map((element) => {
       if (element.prop !== 'rowItem') {
@@ -247,6 +252,10 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     });
   }
 
+  /**************************************************************************
+   * @description change status
+   * @param status: status
+   *************************************************************************/
   showWithStatus(status: string) {
     this.changeStatus.emit(status);
     if (this.status === 'ACTIVE') {
@@ -254,10 +263,10 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     } else {
       this.status = 'ACTIVE';
     }
-    const test2 =  Object.values(this.defaultRes).filter((data) => {
+    const newData =  Object.values(this.defaultRes).filter((data) => {
      return data['status'] === status;
    });
-  this.tableData.next(test2);
+  this.tableData.next(newData);
   }
 
   /**************************************************************************

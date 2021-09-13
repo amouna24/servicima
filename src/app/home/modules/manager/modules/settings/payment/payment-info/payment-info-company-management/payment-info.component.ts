@@ -104,7 +104,6 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   }
 
   getDataWithStatus(status) {
-    console.log(status, 'status');
     this.isLoading.next(true);
     this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, status).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
