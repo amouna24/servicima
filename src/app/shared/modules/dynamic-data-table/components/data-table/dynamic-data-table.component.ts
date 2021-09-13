@@ -112,7 +112,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         },
       );
     this.showAllText = false;
-    console.log('columns=', this.columns);
   }
 
   getDataSource() {
