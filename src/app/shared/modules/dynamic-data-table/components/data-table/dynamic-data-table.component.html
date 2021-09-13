@@ -92,7 +92,7 @@
       </ng-container>
 
       <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
-        <table BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
+        <table  BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -142,12 +142,12 @@
                             <span></span>
                           </ng-container>
                           <ng-template #propNotNull>
-                          <ng-container *ngIf="row[col.prop]['color']; else noColor">
+                          <ng-container *ngIf="row[col.prop]['cellColor']; else noColor">
                                 <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]['value']}}" [ngStyle]="{ 'color' : row[col.prop]['color']}" >
+                                      matTooltip="{{row[col.prop]['value']}}" [class]="row[col.prop]['cellColor']" >
                            {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText" [ngStyle]="{ 'color' : row[col.prop]['color']}">
+                            <span *ngIf="!showAllText" [class]="row[col.prop]['cellColor']">
                             {{ row[col.prop]['value'] | spliceText: 40 }}
                           </span>
                           </ng-container>
@@ -179,8 +179,8 @@
         </table>
       </ng-container>
 
-      <ng-container *ngIf="isLoading.getValue();" >
-        <div fxFlex="100" fxLayoutAlign="center center">
+      <ng-container *ngIf="isLoading.getValue();">
+        <div style="min-width: 100% !important;min-height: 100%" fxLayoutAlign="center center">
           <mat-progress-spinner
             color="primary"
             mode="indeterminate">

@@ -7,5 +7,6 @@
   (rowActionData)="switchAction($event)"
   [allowedActions]="['show','delete']"
   (pagination)="loadMoreItems($event)"
+  (changeStatus) = "getDataWithStatus($event)"
 >
 </wid-dynamic-data-table>

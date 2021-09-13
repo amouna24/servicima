@@ -59,6 +59,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
           }
         });
   }
+  getDataWithStatus(status) {
+  }
 
   /**
    * @description : get all users

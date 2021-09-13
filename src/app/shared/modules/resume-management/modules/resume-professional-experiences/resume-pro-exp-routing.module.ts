@@ -7,7 +7,11 @@ import { ProExpProjectsComponent } from '@shared/modules/resume-management/modul
 
 const routes: Routes = [
   { path: 'professionalExperience', component: ProExpComponent},
-  { path: 'projects', component: ProExpProjectsComponent},
+  { path: 'projects', component: ProExpProjectsComponent,
+    data: {
+      breadcrumb: 'Projects'
+    },
+  },
 ];
 
 @NgModule({

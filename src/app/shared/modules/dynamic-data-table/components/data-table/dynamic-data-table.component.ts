@@ -50,6 +50,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
   @Output() checked = new EventEmitter<{ }>();
+  @Output() changeStatus = new EventEmitter<{ }>();
   @ViewChild('closePanel')
   closePanel: any;
   /**************************************************************************
@@ -88,7 +89,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   languageCode: string;
   companyEmail: string;
   languageId: string;
-  status = 'ACTIVE';
+  status = 'DISABLED';
   private defaultRes: any;
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
@@ -245,6 +246,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   showWithStatus(status: string) {
+    this.changeStatus.emit(status);
     if (this.status === 'ACTIVE') {
       this.status = 'DISABLED';
     } else {
