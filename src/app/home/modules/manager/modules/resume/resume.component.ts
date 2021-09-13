@@ -188,15 +188,15 @@ await this.getData();
    * data: contains the data of resume
    *************************************************************************/
   private sendMail(data) {
-    const attachments: object[] = [];
+    const attachement: object[] = [];
     let jobs = '';
     let application_id = '';
     let company_email = '';
     data.map( (sendMailData) => {
        company_email = sendMailData.user_info.company_email;
-      jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
-      application_id = sendMailData.user_info.ResumeKey.application_id;
-      attachments.push({
+       jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
+       application_id = sendMailData.user_info.ResumeKey.application_id;
+       attachement.push({
         filename: sendMailData.user_info.init_name + '.docx',
         path: `${environment.uploadFileApiUrl}/show/${sendMailData.resume_filename_docx}` });
     });
@@ -205,7 +205,6 @@ await this.getData();
       title: 'Send Email',
       description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
     };
-
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
       .subscribe(
         (res) => {
@@ -213,12 +212,12 @@ await this.getData();
             this.resumeService
               .sendMail(
                 this.localStorageService.getItem('language').langId,
-                this.utilsService.getApplicationID('ALL'),
+                application_id,
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 this.clientEmailAddress,
                 'WIDIGITAL',
                 jobs,
-                  attachments
+                  attachement
               ).subscribe((dataB) => {
               console.log(dataB);
             });
@@ -307,7 +306,6 @@ await this.getData();
       dataResume.user_info.email_address = dataResume.user_info.ResumeKey.email_address;
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
-      console.log(dataResume.user_info);
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
         console.log('resume archived');
         await this.getData();

@@ -494,7 +494,15 @@ export class ResumeService {
 
   /*-------------------------------------------------------------------------------------*/
   sendMail(language_id, application_id, company_id, email_address, company_name, collaborator_position, attachement): Observable<any> {
-    console.log('resume service');
+    console.log('resume service', {
+      language_id,
+      application_id,
+      company_id,
+      email_address,
+      company_name,
+      collaborator_position,
+      attachement
+    });
     console.log(`${environment.resumeApiUrl}/mailing`);
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailing`, {
       language_id,
@@ -508,7 +516,15 @@ export class ResumeService {
   }
   /*-------------------------------------------------------------------------------------*/
   sendMailManager(language_id, application_id, company_id, email_address, company_name, candidate_name, attachement): Observable<any> {
-    console.log('resume service');
+    console.log('resume service', {
+      language_id,
+      application_id,
+      company_id,
+      email_address,
+      company_name,
+      candidate_name,
+      attachement
+    });
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailingmanager`, {
       language_id,
       application_id,
