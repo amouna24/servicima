@@ -17,12 +17,12 @@ export class DynamicDataTableService {
               private localStorageService: LocalStorageService, ) {
   }
 
-  getDefaultTableConfig(tableCode: string): Observable<any> {
+  getDefaultTableConfig(tableCode: string, languageId?: string): Observable<any> {
     const userCredentials = this.localStorageService.getItem('userCredentials');
     this.applicationId = userCredentials?.application_id;
     this.languageId = this.localStorageService.getItem('language').langId;
     return this.httpClient.get(`${environment.dataListsUrl}?application_id=${this.applicationId}&` +
-      `language_id=${this.languageId}&data_table_code=${tableCode}`);
+      `language_id=${languageId ? languageId : this.languageId}&data_table_code=${tableCode}`);
   }
 
   getDefaultDisplayedColumns(defaultConfigs: any[]): any[] {

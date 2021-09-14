@@ -1,7 +1,7 @@
 // Define palettes
-$mango-primary: mat-palette((500: #405e84, contrast: ()));
-$mango-accent: mat-palette((500: #314e73, contrast: ()));
-$mango-warn: mat-palette((500: #314e73, contrast: ()));
+$mango-primary: mat-palette((500: #405e84 !important, contrast: ()));
+$mango-accent: mat-palette((500: #314e73 !important, contrast: ()));
+$mango-warn: mat-palette((500: #314e73 !important, contrast: ()));
 
 // Create the theme object (a Sass map containing all of the palettes).
 $app-theme: mat-light-theme($mango-primary, $mango-accent, $mango-warn);

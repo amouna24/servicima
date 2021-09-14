@@ -52,7 +52,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   }
 
   getPaymentTerms() {
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress).subscribe((data) => {
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, 'ACTIVE').subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
@@ -102,6 +102,15 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
     this.getPaymentTerms();
   });
   }
+
+  getDataWithStatus(status) {
+    this.isLoading.next(true);
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, status).subscribe((data) => {
+      this.ELEMENT_DATA.next(data);
+      this.isLoading.next(false);
+    }));
+  }
+
   /**
    * @description destroy
    */

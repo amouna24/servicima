@@ -50,10 +50,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
-      if (this.i === 0 ) {
         this.currentState = state.url;
-        this.i ++;
-      }
     /* Call the backend to check fingerprint is OK */
     if (state.root.queryParams.rg && state.root.queryParams.auto === 'yes') {
       return new Promise<boolean>(resolve =>
