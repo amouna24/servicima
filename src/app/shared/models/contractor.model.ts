@@ -30,4 +30,5 @@ export interface IContractor {
   email_address: string;
   contractor_code: string;
   contractor_type: string;
+  template_resume?: string;
 }

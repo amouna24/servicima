@@ -44,6 +44,7 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SplashComponent,
     ErrorComponent,
     TitleSettingsComponent,
+    MailingModalComponent,
   ],
   imports: [
     CommonModule,

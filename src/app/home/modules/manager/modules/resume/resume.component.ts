@@ -10,6 +10,7 @@ import { ICollaborator } from '@shared/models/collaborator.model';
 import { IUserModel } from '@shared/models/user.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -22,6 +23,7 @@ export class ResumeComponent implements OnInit {
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   subscriptionModal: Subscription;
+  modals = { modalName: 'mailing', modalComponent: MailingModalComponent };
   clientEmailAddress: string;
   constructor(
     private userService: UserService,
@@ -32,12 +34,14 @@ export class ResumeComponent implements OnInit {
     private candidateService: CandidateService,
     private utilsService: UtilsService,
     private localStorageService: LocalStorageService,
+    private modalService: ModalService,
   ) {
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit(): Promise<void> {
+    this.modalService.registerModals(this.modals);
     this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
 await this.getData();
   }
@@ -194,6 +198,7 @@ await this.getData();
        company_email = sendMailData.user_info.company_email;
       jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
       application_id = sendMailData.user_info.ResumeKey.application_id;
+      console.log(sendMailData.user_info.ResumeKey.application_id);
       attachments.push({
         filename: sendMailData.user_info.init_name + '.docx',
         path: `${environment.uploadFileApiUrl}/show/${sendMailData.resume_filename_docx}` });
@@ -204,7 +209,7 @@ await this.getData();
       description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
     };
 
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+    this.subscriptionModal = this.modalServices.displayModal('mailing', null, '500px', '640px')
       .subscribe(
         (res) => {
           if (res === true) {

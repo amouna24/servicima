@@ -1,0 +1,98 @@
+<div  fxLayout="row" fxFlexFill fxLayoutAlign="end">
+  <form fxLayout="column" fxFlex="94">
+  <div fxLayout="row" fxFlex="10">
+      <div class="title" fxLayoutAlign=" center">Send by mail</div>
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="98">
+    <mat-label class="black font-size-12 required">
+      Choose a contact:
+    </mat-label>
+      <div style="font-size: 10px" class="full-width">
+      <mat-form-field appearance="outline" class="full-width">
+      <mat-select disableOptionCentering panelClass="panelColor" formControlName="contact"
+                  placeholder="contract name(email)" required>
+        <mat-option >WIDIGITAL(walidtenniche@widigital-group.com)</mat-option>
+      </mat-select>
+    </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="98">
+    <mat-label class="black font-size-12 required">
+      Send a copy to:
+    </mat-label>
+      <div style="font-size: 10px" class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
+      <input formControlName="copy" matInput placeholder="email" required>
+    </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="98">
+    <mat-label class="black font-size-12 required">
+      Send a hidden copy to:
+    </mat-label>
+      <div style="font-size: 10px" class="full-width">
+      <mat-form-field appearance="outline" class="full-width">
+      <input formControlName="hidden_copy" matInput placeholder="email" required>
+    </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="98">
+    <mat-label class="black font-size-12 required">
+      Subject:
+    </mat-label>
+      <div style="font-size: 10px" class="full-width">
+      <mat-form-field appearance="outline" class="full-width">
+      <input formControlName="subject" matInput placeholder="Subject" required>
+    </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="7" fxLayoutAlign=" center">
+    <ng-container *ngIf="invoice; else resume">
+      <div fxLayout="column" >
+        <section class="example-section">
+          <mat-checkbox class="check font-size-12 font-normal"  > Attach the invoice in PDF format</mat-checkbox>
+        </section>
+      </div>
+    </ng-container>
+    <ng-template #resume>
+      <div fxLayout="column" >
+        <div fxLayout="row">
+        <section class="example-section">
+          <mat-checkbox class="check font-size-12 font-normal"  > Attach the resume in PDF format</mat-checkbox>
+        </section>
+        </div>
+        <div fxLayout="row" >
+          <section class="example-section">
+            <mat-checkbox class="check font-size-12 font-normal"  > Attach the resume in DOCX format</mat-checkbox>
+          </section>
+        </div>
+      </div>
+
+    </ng-template>
+
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="98">
+    <mat-label class="black font-size-12 required">
+      Message:
+    </mat-label>
+    <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput formControlName="message" placeholder="Write your message here"
+                              rows="5" required></textarea>
+    </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
+    <button mat-raised-button type="submit" color="primary" class="white btn-small">Send</button>
+    <button mat-raised-button class="btn-small bg-pale-grey">Cancel</button>
+  </div>
+  </form>
+</div>
