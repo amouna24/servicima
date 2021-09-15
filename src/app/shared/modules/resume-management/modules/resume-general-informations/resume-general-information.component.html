@@ -83,17 +83,26 @@
                     <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" >
                       <div fxLayout="row"  fxFlex="45" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
                           <div  fxLayout="column" class="profile-image">
-                            <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
-                                               [haveImage]="haveImage"
-                                               [avatar]="avatar"
-                                               [modelObject]="user"
-                                               [singleUpload]="false"
-                                               [userType]="profileUserType"
-                                               [diameter]="140"
-                                               height="147"
-                                               width="122"
-                                               (newFile)="getFile($event)"
-                            ></wid-profile-image>
+                            <ng-template [ngIf]="!isLoadingImage">
+                              <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
+                                                 [haveImage]="haveImage"
+                                                 [avatar]="avatar"
+                                                 [modelObject]="user"
+                                                 [singleUpload]="false"
+                                                 [userType]="profileUserType"
+                                                 [diameter]="140"
+                                                 height="147"
+                                                 width="122"
+                                                 (newFile)="getFile($event)"
+                              ></wid-profile-image>
+                            </ng-template>
+                            <ng-template [ngIf]="isLoadingImage">
+                              <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+                                <mat-spinner color="primary"></mat-spinner>
+                                <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+                              </div>
+                            </ng-template>
+
                           </div>
                           <div fxLayout="column" fxLayoutAlign="start" fxFlex="55">
                             <div fxLayout="row">

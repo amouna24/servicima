@@ -6,7 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output, ViewChild
 } from '@angular/core';
 import { ModalService } from '@core/services/modal/modal.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
@@ -37,6 +37,7 @@ import { environment } from '../../../../../../environments/environment';
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() tableData = new BehaviorSubject<any>([]);
+  @Input() colorObject: object[];
   @Input() tableCode: string;
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
@@ -50,6 +51,9 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
   @Output() checked = new EventEmitter<{ }>();
+  @Output() changeStatus = new EventEmitter<{ }>();
+  @ViewChild('closePanel')
+  closePanel: any;
   /**************************************************************************
    * @description Paginations
    *************************************************************************/
@@ -83,7 +87,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   dataSource: any;
   refData: { } = { };
   showAllText: boolean;
-
+  languageCode: string;
+  companyEmail: string;
+  languageId: string;
+  status = 'DISABLED';
+  defaultRes: any;
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
     private modalService: ModalService,
@@ -100,7 +108,9 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
   }
+
   async ngOnInit() {
+    await this.connectedUser();
     await this.getRefData();
     await this.getDataSource();
     await this.getDataList();
@@ -122,7 +132,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.totalCountedItems = res?.count ? res?.count === this.itemsPerPageControl.value ?
         this.currentPage * this.itemsPerPageControl.value :
         (this.currentPage - 1) * this.itemsPerPageControl.value + res['count'] : null;
-      console.log('res', res); // to be deleted
       this.nbrPages = res?.total ? Array(Math.ceil(Number(res['total']) / this.itemsPerPageControl.value))
         .fill(null)
         .map((x, i) => i + 1) : null;
@@ -147,18 +156,59 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.dataSource = dataList;
       this.convertData();
     });
+    this.defaultRes = { ...this.tableData.getValue() };
+  }
+
+  /**************************************************************************
+   * @description Find column by code and get your description
+   * @param columns: columns
+   * @param res: res
+   *************************************************************************/
+  findColumnDescription(columns, res) {
+    columns.map((element) => {
+      if (element.prop !== 'rowItem') {
+        element['name'] = res.find((type) =>
+          type.dataListKey.column_code === element['prop'])?.column_desc;
+      }
+    });
   }
 
   /**************************************************************************
    * @description get data list
    *************************************************************************/
   getDataList() {
+    this.languageCode = this.localStorageService.getItem('language').langCode;
+    this.languageId = this.localStorageService.getItem('language').langId;
     this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
       [...this.tableData?.getValue()];
     this.modalService.registerModals(
       { modalName: 'dynamicTableConfig', modalComponent: DataTableConfigComponent});
     if (this.localStorageService.getItem(this.tableCode)) {
-      this.getConfigDatatable();
+      if (this.localStorageService.getItem(this.tableCode).languageCode === this.languageCode) {
+        this.getConfigDatatable();
+      } else {
+        this.dynamicDataTableService.getDefaultTableConfig(this.tableCode, this.languageId)
+          .subscribe(
+            res => {
+              const newConfig = this.localStorageService.getItem(this.tableCode).modalConfiguration;
+              newConfig.map((er) => {
+                 er['column_desc'] = res.find((type) =>
+                  type.dataListKey.column_code === er['dataListKey']['column_code'])?.column_desc;
+              });
+              const newColumns =  this.localStorageService.getItem(this.tableCode).columns;
+              this.findColumnDescription(newColumns, res);
+              this.localStorageService.setItem(this.tableCode,
+                {
+                  columns: newColumns,
+                  columnsList: this.localStorageService.getItem(this.tableCode).columnsList,
+                  modalConfiguration: newConfig ,
+                  languageCode: this.languageCode
+                });
+              this.getConfigDatatable();
+            });
+
+      }
+
     } else {
       this.dynamicDataTableService.getDefaultTableConfig(this.tableCode)
         .subscribe(
@@ -182,7 +232,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
                 columns: this.columns,
                 columnsList: this.columnsList,
                 modalConfiguration: this.modalConfiguration,
-                actualColumn: this.columns
+                languageCode: this.languageCode
               });
           }
         );
@@ -200,6 +250,23 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       data['color'] = color;
       data['checked'] = checked;
     });
+  }
+
+  /**************************************************************************
+   * @description change status
+   * @param status: status
+   *************************************************************************/
+  showWithStatus(status: string) {
+    this.changeStatus.emit(status);
+    if (this.status === 'ACTIVE') {
+      this.status = 'DISABLED';
+    } else {
+      this.status = 'ACTIVE';
+    }
+    const newData =  Object.values(this.defaultRes).filter((data) => {
+     return data['status'] === status;
+   });
+  this.tableData.next(newData);
   }
 
   /**************************************************************************
@@ -288,7 +355,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     const data = {
       displayedColumns: this.dynamicDataTableService.generateColumns(this.displayedColumns),
       canBeDisplayedColumns: this.canBeDisplayedColumns,
-      actualColumns: this.columns,
       columnsList: this.columnsList,
       tableCode: this.tableCode
     };
@@ -318,7 +384,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
               columns: this.columns,
               columnsList: this.columnsList,
               modalConfiguration: this.newConfig,
-              actualColumn: this.columns
+              languageCode: this.languageCode,
             });
         }
       });
@@ -328,8 +394,19 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     return item._id;
   }
 
+  /**************************************************************************
+   * @description action
+   * @param action: name of action
+   * @param rowData: list of row to do action
+   *************************************************************************/
   actionRowData(action: string, rowData: any) {
     this.rowActionData.emit({ actionType: action, data: rowData});
+    this.closePanel.close();
+    this.listChecked = [];
+    this.tableData.getValue().map((data) => {
+      data['color'] = 'white';
+      data['checked'] = false;
+    });
   }
 
   /**************************************************************************
@@ -350,20 +427,31 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   /**************************************************************************
+   * @description Get connected user
+   *************************************************************************/
+ async connectedUser() {
+    return new Promise((resolve) => {
+      this.userService.connectedUser$.subscribe(
+        async (data) => {
+         this.companyEmail = data?.user[0]['company_email'];
+         resolve(this.companyEmail);
+        });
+    });
+
+  }
+
+  /**************************************************************************
    * @description get refData
    *************************************************************************/
   async getRefData() {
-this.userService.connectedUser$.subscribe(
-        async (data) => {
     this.refData = await this.refDataServices.getRefData(
         // @ts-ignore
         this.utilService.getCompanyId(
-            data.user[0]['company_email'], this.localStorageService.getItem('userCredentials')['application_id']),
+            this.companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
       false
     );
-        });
   }
 
   /**************************************************************************
@@ -382,7 +470,6 @@ this.userService.connectedUser$.subscribe(
     this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
       this.dynamicDataTableService.getCanBeFiltredColumns(newModalConfig)
     );
-
   }
 
   /**************************************************************************
@@ -490,6 +577,19 @@ this.userService.connectedUser$.subscribe(
     }
   }
 
+  sendColors(columns, condValue): string {
+    let cellColor = 'black';
+    this.colorObject.map ( (oneColumn) => {
+      if ( columns === oneColumn['columnCode']) {
+        oneColumn['condValue'].forEach( (Condition, index) => {
+          if (condValue === Condition) {
+            cellColor = oneColumn['color'][index];
+          }
+        });
+      }
+    });
+      return cellColor;
+  }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/

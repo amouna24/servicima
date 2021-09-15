@@ -1,10 +1,10 @@
-<div style="display: flex; flex-direction: column; height: 100%; border-radius: 15px;" class="font-size-12 container-show bg-white">
+<div fxLayout="column"  class="font-size-12 container-show bg-white border-radius-15 full-height">
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
         <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-medium font-size-38">Billing</h1>
+          <h1 class="steel font-medium font-size-28" >Billing</h1>
         </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-          <button mat-raised-button class="btn-small bg-pale-grey">
+          <button (click)="back()" mat-raised-button class="btn-small bg-pale-grey">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
             </mat-icon>
             <span class="cool-grey">back</span>
@@ -99,7 +99,9 @@
                 <br>
                 <div *ngIf='contractCode'>
                   <div class="font-bold">Adressé A</div>
-                  <textarea name="" id="" cols="25" rows="7"></textarea>
+                  <mat-form-field appearance="outline">
+                  <textarea name="" id="" cols="25" rows="7" matInput></textarea>
+                    </mat-form-field>
                 </div>
 
               </div>
@@ -145,10 +147,12 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div fxLayout="row" fxLayoutAlign="flex-start center" fxLayoutGap="20px" fxFlex="20">
+              <div fxLayout="row" fxLayoutAlign="flex-start center" [fxFlex.gt-lg]="20" fxLayoutGap="20px" fxFlex="27">
                 <div fxFlex="40" class="font-bold">Description</div>
                 <div fxFlex="60">
-                  <textarea name="description" id="description" cols="22" rows="5"></textarea>
+                  <mat-form-field appearance="outline">
+                  <textarea class="overflow-hidden" name="description" id="description" cols="22" rows="5" matInput></textarea>
+                  </mat-form-field>
                 </div>
               </div>
             </div>
@@ -160,18 +164,18 @@
             <div formArrayName='input'>
               <div>
                 <table class="full-width">
-                  <tr class="white full-width bg-steel text-center">
-                    <th class="width-15">Services/produits</th>
-                    <th class="width-25" >Description</th>
-                    <th class="width-12">prix</th>
-                    <th class="width-12">quantité</th>
-                    <th class="width-12">Tva%</th>
-                    <th class="width-12">Tva</th>
-                    <th class="width-12">Escompte</th>
-                    <th class="montant width-12">Montant</th>
+                  <tr class="white full-width bg-steel text-center font-size-12">
+                    <th class="small-col"  >Services/produits</th>
+                    <th class="large-col" >Description project</th>
+                    <th class="medium-col" >prix</th>
+                    <th class="small-col" >quantité</th>
+                    <th class="small-col">Tva%</th>
+                    <th class="medium-col">Tva</th>
+                    <th class="small-col" >Escompte</th>
+                    <th class="medium-col montant">Montant</th>
                   <tr *ngFor="let roleListControl of getListRole().controls; let i = index" [formGroupName]="i">
-                    <td>
-                      <mat-select formControlName="project_code" placeholder="Services/produits">
+                    <td >
+                      <mat-select formControlName="project_code" placeholder="Services">
                         <ng-container *ngFor="let project of listProject">
                           <mat-option (click)="getProject(i, project)" [value]=project.ContractProjectKey.project_code>
                             {{ project.ContractProjectKey.project_code }}
@@ -180,19 +184,19 @@
                       </mat-select>
                     </td>
                     <td>
-                      <textarea matInput name="Text1" class="overflow-hidden"  placeholder="project_desc" formControlName='project_desc' matInput
+                      <textarea class="overflow-hidden"  matInput name="Text1" class="overflow-hidden"  placeholder="description project" formControlName='project_desc' matInput
                       cdkTextareaAutosize
                       cdkAutosizeMinRows="1"
                       ></textarea>
                     </td>
                     <td>
-                        <textarea matInput name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
+                        <textarea class="overflow-hidden"  matInput name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
                         cdkTextareaAutosize
                         cdkAutosizeMinRows="1"
                         ></textarea>
                     </td>
                     <td>
-                        <textarea (blur)="getTvaOrMountInvoice(i)"  matInput name="Text1" placeholder="Days number"  class="overflow-hidden"  required formControlName='days_nbr' matInput
+                        <textarea class="overflow-hidden"  (blur)="getTvaOrMountInvoice(i)"  matInput name="Text1" placeholder="Days"  class="overflow-hidden"  required formControlName='days_nbr' matInput
                         cdkTextareaAutosize
                         cdkAutosizeMinRows="1"
                         ></textarea>
@@ -200,19 +204,19 @@
                     <td>
                       {{ form.value.input[i].vat_rate  ? form.value.input[i].vat_rate : 0   }} %
                     </td>
-                    <td>
+                    <td class="vat_mount">
                       {{ form.value.input[i].vat_amount  ? form.value.input[i].vat_amount  : 0 }}
 
                     <td>
-                      <input class="black-three" type="number" (blur)="getTvaOrMountInvoice(i)" min="0" max="100" autocomplete="off" matInput required placeholder="discount"
+                      <input  class="black-three font-size-12" type="number" (blur)="getTvaOrMountInvoice(i)" min="0" max="100" autocomplete="off" matInput required placeholder="discount"
                         formControlName='discount'
                         type = "number"
                         maxlength = "3" />
                     </td>
-                    <td>
+                    <td  class="vat_mount">
                      {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
                     </td>
-                    <td class="cursor-pointer" [ngStyle]="{'border-top-right-radius': '15px !important','border-bottom-right-radius':'15px !important'}" (click)='delete(i)' id="delete">
+                    <td class="cursor-pointer icon-trash"  (click)='delete(i)' id="delete">
                       <mat-icon svgIcon="wi-trash" class="icon">
                       </mat-icon>
                     </td>
@@ -241,7 +245,7 @@
                 </div>
               </div>
             </div>
-            <br>
+
             <div fxLayout="row" class="p-20" flexLayoutGap="30px" [formGroup]="formCompanyBanking">
               <div fxFlex="50"> <span class="font-bold">Condition et modalité</span>
                 <div [ngStyle]="{'border': '1px solid #afb1b8','width': '98%','padding': '4px'}">
@@ -278,7 +282,7 @@
                 <div class="full-width">
                 <button mat-raised-button class="btn-small bg-pale-grey black-three">Cancel</button>
               </div>
-                <button [disabled] = "formHeader.invalid"  mat-raised-button class="btn-small bg-pale-grey black-three" (click)="generateInvoice('DRAFT')">Soumettre Draft</button>
+                <button [disabled] = "formHeader.invalid" *ngIf="!statusInvoice" mat-raised-button class="btn-small bg-pale-grey black-three" (click)="generateInvoice('DRAFT')">Soumettre Draft</button>
                 <button  [disabled] = "formHeader.invalid"  mat-raised-button class="btn-small bg-ocean-blue white"
                   (click)="generateInvoice('PENDING')">Confirm</button>
               </div>

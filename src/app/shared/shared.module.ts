@@ -35,6 +35,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { AddTimesheetComponent } from './components/add-timesheet/add-timesheet.component';
 import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
@@ -58,6 +59,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SkeletonLoaderComponent,
     StepperComponent,
     RightSidenaveComponent,
+    AddTimesheetComponent,
     /* Directives */
     CanBeDisplayedDirective,
     ClickOutsideDirective,
@@ -133,6 +135,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ProfileImageComponent,
     ProfileImageComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
   ]
 })
 export class SharedModule { }

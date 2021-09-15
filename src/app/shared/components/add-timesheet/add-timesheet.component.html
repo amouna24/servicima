@@ -3,7 +3,7 @@
    <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
      <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
           style="border-bottom: 1px solid #afb1b8">
-     <ng-container *ngIf="addForm else Edit">
+     <ng-container *ngIf="formType.add else Edit">
        <h2 class="steel font-medium font-size-24">Add timesheets</h2>
      </ng-container>
      <ng-template #Edit>
@@ -22,7 +22,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Week start on :</label>
            <mat-form-field appearance="outline">
-             <input matInput [disabled]="!addForm"
+             <input matInput [disabled]="formType.edit"
                     formControlName="start_date"
                     [matDatepickerFilter]="startDateFilter"
                     [matDatepicker]="datepicker"
@@ -39,7 +39,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select [disabled]="!addForm" formControlName="project_code" [placeholder]="projectsList ? 'Project' : 'No project found'">
+             <mat-select [disabled]="formType.edit" formControlName="project_code" [placeholder]="projectsList && contract? 'Project' : 'No project found'">
                <ng-container *ngIf="projectsList && contract">
                  <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
                    {{ project.project_desc}}
@@ -143,10 +143,18 @@
        </div>
        </div>
        <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
-           <button mat-flat-button [type]="addForm ? 'reset' : 'button' " (click)="!addForm ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
+           <button mat-flat-button [type]="formType.add ? 'reset' : 'button' " (click)="formType.edit ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
          <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
-         <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
-         <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">{{addForm ? 'Save' : 'Edit'}}</button>
+           <ng-container *ngIf="formType.managerMode else collaborator">
+             <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">Approve</button>
+           </ng-container>
+           <ng-template #collaborator>
+             <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
+             <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">
+               {{formType.add ? 'Save' : 'Edit'}}
+             </button>
+           </ng-template>
+
          </div>
        </div>
      </form>

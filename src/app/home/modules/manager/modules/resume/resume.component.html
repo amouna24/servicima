@@ -5,5 +5,6 @@
   [buttonAdd]="false"
   [header]="{ title: 'Resume management'}"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="['Change status', 'download docx', 'export PDF', 'Send email']">
+  [colorObject]="sendColorObject()"
+  [allowedActions]="['Change status', 'download docx', 'export PDF', 'Send email', 'Archive Resume']">
 </wid-dynamic-data-table>

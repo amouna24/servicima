@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 
 import { TranslateService } from '@ngx-translate/core';
 import { UploadService } from '@core/services/upload/upload.service';
@@ -46,7 +46,7 @@ export class InvoiceComponent implements OnInit {
   listContract: IContract[];
   invoices: Array<{ }>;
   invoiceLine: object;
-  invoiceHeader: object;
+  invoiceHeader: any;
   form: FormGroup;
   formFactor: FormGroup;
   formHeader: FormGroup;
@@ -55,7 +55,7 @@ export class InvoiceComponent implements OnInit {
   contractorCode: string;
   contractCode: string;
   invoiceNbr: number;
-
+  statusInvoice: string;
   sousTotalHT = 0;
   vatMount = 0;
   totalTTC = 0;
@@ -82,6 +82,7 @@ export class InvoiceComponent implements OnInit {
     private contractProjectService: ContractProjectService,
     private uploadService: UploadService,
     private router: Router,
+    private location: Location,
     private projectCollaboratorService: ProjectCollaboratorService,
     private translate: TranslateService,
     private paymentTermsService: CompanyPaymentTermsService,
@@ -101,7 +102,7 @@ export class InvoiceComponent implements OnInit {
       'invoice.priceLine', 'invoice.descriptionLine', 'invoice.invoiceTo', 'invoice.dateDeadLine',
       'invoice.dateStart', 'invoice.number', 'invoice.of', 'invoice.title'];
     this.initForm();
-    this.getConnectedUser();
+    await this.getConnectedUser();
     await this.getContractor();
     await this.getInvoiceNbr();
     this.getCompanyBankingInfo();
@@ -174,6 +175,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.invoiceLine = this.invoices[2];
     this.contractCode = this.invoiceHeader['contract_code'];
     this.currencyCode = this.invoiceHeader['invoice_currency'];
+    this.statusInvoice = this.invoiceHeader['invoice_status'];
     this.editContractors = false;
     this.getContract(this.invoiceHeader['contractor_code']);
     this.getContractProject(this.invoiceHeader['contract_code']);
@@ -217,16 +219,20 @@ RIB:${this.companyBankingInfos?.rib}`);
   /**************************************************************************
    * @description Get connected user
    *************************************************************************/
-  getConnectedUser(): void {
-    this.userService.connectedUser$
-      .subscribe(
-        async (userInfo) => {
-          if (userInfo) {
-            this.userInfo = userInfo['company'][0];
-            this.avatar = await this.uploadService.getImage(this.userInfo['photo']);
-            this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
-          }
-        });
+  async getConnectedUser() {
+    return new Promise((resolve) => {
+      this.userService.connectedUser$
+        .subscribe(
+          async (userInfo) => {
+            if (userInfo) {
+              this.userInfo = userInfo['company'][0];
+              this.avatar = await this.uploadService.getImage(this.userInfo['photo']);
+              // this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
+              this.companyEmail = 'amine.sboui.1@esprit.tn';
+              resolve(this.companyEmail);
+            }
+          });
+    });
   }
 
   /**************************************************************************
@@ -378,6 +384,9 @@ RIB:${this.companyBankingInfos?.rib}`);
   getCompanyBankingInfo(): void {
     this.companyBankingInfo.getCompanyBankingInfo(this.userInfo['companyKey'].email_address).subscribe((data) => {
       this.companyBankingInfos = data[0];
+      if ( this.invoiceHeader?.comment1) {
+        this.formCompanyBanking.controls['comment1'].setValue(this.invoiceHeader?.comment1);
+      } else {
       if (!this.formFactor.value.factorInvoice) {
         this.formCompanyBanking.controls['comment1'].setValue(`Bank domiciliation: ${this.companyBankingInfos?.bank_domiciliation}
 Name: ${this.companyBankingInfos?.bank_name}
@@ -388,7 +397,9 @@ RIB:${this.companyBankingInfos?.rib}`);
       } else {
         this.formCompanyBanking.controls['comment1'].setValue(`${this.companyBankingInfos?.factor_informations}`);
       }
+      }
     });
+
   }
 
   /**************************************************************************
@@ -558,8 +569,8 @@ RIB:${this.companyBankingInfos?.rib}`);
       } else {
         listLine = this.getListInvoiceLine();
 
-        dhaw = Object.values(this.mp).map(() => {
-          return data['_id'];
+        dhaw = Object.values(this.mp).map((res) => {
+          return res['_id'];
         });
 
         this.invoiceService.deleteManyInvoiceLine(dhaw).subscribe(() => {
@@ -625,7 +636,7 @@ RIB:${this.companyBankingInfos?.rib}`);
         invoiceDelay: this.datePipe.transform(this.formHeader.value.invoiceDelay),
         imageUrl: environment.uploadFileApiUrl + '/image/' + this.userInfo['photo'],
         detailsBanking: {
-          companyBanking: this.formHeader.value.comment1,
+          companyBanking: this.formCompanyBanking.value.comment1,
           isFactor: this.formFactor.value.factorInvoice
         }
       };
@@ -671,6 +682,13 @@ RIB:${this.companyBankingInfos?.rib}`);
         map(response => response.file.filename)
       )
       .toPromise();
+  }
+
+  /**************************************************************************
+   * @description Back
+   *************************************************************************/
+  back() {
+    this.location.back();
   }
 
 }

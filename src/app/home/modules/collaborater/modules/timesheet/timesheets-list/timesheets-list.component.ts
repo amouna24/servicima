@@ -123,7 +123,7 @@ getTimesheetParams(): void {
       this.router.navigate(
         ['/collaborator/timesheet/edit', this.typeTimesheet], {
           queryParams: {
-            'id': data._id.toString()
+            'id': btoa(data._id.toString())
           }
         });
     }
@@ -178,4 +178,7 @@ getTimesheetParams(): void {
     return { code, title, description};
   }
 
+  getDataWithStatus($event: unknown) {
+
+  }
 }

@@ -15,7 +15,7 @@
   </div>
   <div [formGroup]="form" class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
     <div fxFlex="100" class="full-height" fxLayout="column" fxLayoutAlign="start start"  fxLayoutGap="10px" >
-      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="100"
+      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="90"
            fxLayout="column" fxLayoutAlign="start start">
         <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
          <div fxLayout="row" >
@@ -49,7 +49,7 @@
             {{typeLicence | titlecase}} pack <sup class="denim font-size-8">({{periodicity}})</sup>
           </div>
           <div fxLayout="column" fxFlex="30">
-            <button mat-raised-button class="btn-medium bg-pale-grey denim font-size-11">Renew or edit subscription </button>
+            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn-renew">Renew or edit subscription </button>
           </div>
         </div>
 
@@ -82,7 +82,7 @@
 
           </div>
           <div fxLayout="column" fxFlex="30">
-            <button mat-raised-button class="btn-medium bg-pale-grey denim font-size-11">Users management
+            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn">Users management
             </button>
           </div>
         </div>
@@ -116,7 +116,7 @@
             </div>
           </div>
           <div  fxLayout="column" fxFlex="30" >
-            <button mat-raised-button class="btn-medium bg-pale-grey font-size-11 denim" >Edit credit card
+            <button mat-raised-button class="btn-small bg-pale-grey font-size-11 denim overwrite-btn" >Edit credit card
             </button>
           </div>
         </div>

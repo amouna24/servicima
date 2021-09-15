@@ -47,34 +47,39 @@ await this.getData();
   async getData() {
     this.isLoading.next(true);
     const blocData = [];
+    let index = 1;
     this.userService.connectedUser$
       .subscribe((userInfo) => {
         this.userService.getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}`)
           .subscribe(async (res) => {
-            await res['results'].forEach((candidate, index) => {
-              this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
-                .subscribe( (resume) => {
-               if (resume['msg_code'] !== '0004') {
-                    blocData.push({
-                      resume_name: candidate.first_name + ' ' + candidate.last_name,
-                      resume_years_exp: resume[0].years_of_experience,
-                      resume_position: resume[0].actual_job,
-                      resume_status: candidate.user_type,
-                      resume_email: candidate.user_type === 'CANDIDATE' ?
-                        { value: candidate.userKey.email_address, cellColor: 'topaz'} :
-                          { value: candidate.userKey.email_address, cellColor: 'red'},
-                      resume_user_type: candidate.user_type,
-                      resume_filename_docx: resume[0].resume_filename_docx,
-                      resume_filename_pdf: resume[0].resume_filename_pdf,
-                      user_info: resume[0],
-                      first_name: candidate.first_name,
-                      last_name: candidate.last_name,
-                    });
-                  }
-                  if (index + 1 >= res['results'].length) {
+            await res['results'].map(async (candidate) => {
+              await this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+                .subscribe((resume) => {
+                  return new Promise((resolve) => {
+                    if (resume['msg_code'] !== '0004') {
+                      blocData.push({
+                        resume_name: candidate.first_name + ' ' + candidate.last_name,
+                        resume_years_exp: resume[0].years_of_experience,
+                        resume_position: resume[0].actual_job,
+                        resume_status: resume[0].status,
+                        resume_email: candidate.userKey.email_address,
+                        resume_user_type: candidate.user_type,
+                        resume_filename_docx: resume[0].resume_filename_docx,
+                        resume_filename_pdf: resume[0].resume_filename_pdf,
+                        user_info: resume[0],
+                        first_name: candidate.first_name,
+                        last_name: candidate.last_name,
+                      });
+                    }
+                    index++;
+                    if (index > res['results'].length) {
+                      resolve(blocData);
+                    }
+                  }).then((result) => {
                     this.isLoading.next(false);
-                    this.tableData.next(blocData);
-                  }
+                    this.tableData.next(result);
+                  });
+
                 });
             });
           });
@@ -99,6 +104,9 @@ await this.getData();
         break;
       case('download docx'):
         this.downloadDocx(rowAction.data);
+        break;
+      case('Archive Resume'):
+        this.archiveUser(rowAction.data);
         break;
     }
   }
@@ -203,7 +211,7 @@ await this.getData();
             this.resumeService
               .sendMail(
                 this.localStorageService.getItem('language').langId,
-                this.utilsService.getApplicationID('ALL'),
+                application_id,
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 this.clientEmailAddress,
                 'WIDIGITAL',
@@ -222,17 +230,18 @@ await this.getData();
    * data: contains the data of user
    *************************************************************************/
   changeCandidateToCollaborator(data) {
-    data.map( (changeStatusData) => {
       const confirmation = {
         code: 'edit',
-        title: 'Change user type',
-        description: `Are you sure you want to change the candidate ${changeStatusData.resume_name} to collaborator`,
+        title: 'Change Candidate(s) to Collaborator(s)',
+        description: `Are you sure ?`,
       };
       this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
         .subscribe(
           (res) => {
             if (res === true) {
-              this.isLoading.next( true);
+              data.map( (changeStatusData) => {
+
+                this.isLoading.next( true);
               this.tableData.next([]);
               this.candidateService.getCandidate(`?email_address=${changeStatusData.user_info.ResumeKey.email_address}`)
                 .subscribe((candidateData) => {
@@ -279,9 +288,50 @@ await this.getData();
                   });
                 });
               });
+              });
             }
             this.subscriptionModal.unsubscribe();
-          });
     });
     }
+  /**************************************************************************
+   * @description Change User from Active to Archive
+   * data: contains the data of user
+   *************************************************************************/
+  archiveUser(data) {
+    data.map( (dataResume) => {
+      dataResume.user_info.resume_code = dataResume.user_info.ResumeKey.resume_code;
+      dataResume.user_info.language_id = dataResume.user_info.ResumeKey.language_id;
+      dataResume.user_info.company_email = dataResume.user_info.ResumeKey.company_email;
+      dataResume.user_info.email_address = dataResume.user_info.ResumeKey.email_address;
+      dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
+      dataResume.user_info.status = 'D';
+      this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
+        console.log('resume archived');
+        await this.getData();
+      });
+    });
+    }
+  sendColorObject() {
+    return  [{
+      columnCode: 'resume_user_type',
+      condValue: [
+        'COLLABORATOR',
+        'CANDIDATE',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    }, {
+      columnCode: 'resume_status',
+      condValue: [
+        'A',
+        'D',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    }];
+  }
 }

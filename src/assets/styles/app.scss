@@ -538,6 +538,9 @@ html body {
 /*******************
        Line height
 *******************/
+.line-height-0{
+  line-height: 0 !important;
+}
 .line-height-2{
   line-height: 2;
 }
@@ -697,6 +700,13 @@ html body {
 .min-full-screen-height {
   min-height: $screen-height !important;
 }
+
+.min-full-width {
+  min-width: 100% !important;
+}
+.min-full-height {
+  min-height: 100% !important;
+}
 .height-50{
   height: 50%;
 }
@@ -729,7 +739,7 @@ html body {
   height: 80vh !important;
   height: 78vh !important;
   background-color: $white;
-  margin: 0 25px 0 25px;
+  // margin: 0 25px 0 25px;
   // width: 88vw;
 }
 

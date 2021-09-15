@@ -88,7 +88,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
       });
       const obj = { data, list: listArray};
     this.modalService.displayModal('addRole', obj,
-      '657px', '520px').subscribe(async (res) => {
+      '657px', '527px').subscribe(async (res) => {
         if (res) {
        await this.getRole();
         }

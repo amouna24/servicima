@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { UserService } from '@core/services/user/user.service';
 import { CompanyBankingInfoService } from '@core/services/company-banking-info/company-banking-info.service';
 import { ICompanyBankingInfoModel } from '@shared/models/companyBankingInfo.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-company-banking-info',
@@ -18,6 +19,7 @@ export class CompanyBankingInfoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
               private router: Router,
+              private location: Location,
               private companyBankingInfoService: CompanyBankingInfoService) { }
 
   ngOnInit(): void {
@@ -111,5 +113,7 @@ export class CompanyBankingInfoComponent implements OnInit {
     });
 
   }
-
+  back() {
+    this.location.back();
+  }
 }

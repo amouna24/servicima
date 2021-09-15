@@ -52,6 +52,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   generalInfoManager: IResumeModel;
   firstNameManager: string;
   lastNameManager: string;
+  isLoadingImage = true;
   /**********************************************************************
    * @description Resume general information constructor
    *********************************************************************/
@@ -220,7 +221,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
             }
           );
       }
-    }
+    this.isLoadingImage = false;
+  }
   /**************************************************************************
    * @description set Existing data in the Resume Form
    * @param generalInformation: General information model

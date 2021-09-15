@@ -25,7 +25,6 @@ table{
   }
 
   th{
-    font-size: 15px;
     padding-top: 15px;
     padding-bottom: 15px;
   }
@@ -47,6 +46,10 @@ table{
     background-color: #e8f1f9;
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
+  }
+  .icon-trash {
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius:15px !important
   }
 
   #delete .mat-icon {
@@ -98,15 +101,34 @@ table{
     border-top: none !important;
   }
   .width-15 {
-    width: 15% !important;
+    max-width: 15% !important;
   }
   .width-12 {
-    width: 12% !important;
+    max-width: 12% !important;
   }
   .width-25 {
-    width: 25% !important;
+    max-width: 25% !important;
   }
 
   .btn-add-line{
     height: 100px !important
   }
+.small-col {
+  width: 8% !important;
+  min-width: 8% !important;
+}
+.large-col {
+  width:  30% !important;
+  min-width:  30% !important;
+}
+.medium-col {
+  width: 12% !important;
+  min-width: 12% !important;
+  max-width: 12% !important;
+}
+.vat_mount {
+  font-size: 12px !important;
+  max-width:100px;
+  white-space: pre-line !important;
+  overflow-wrap: break-word !important;
+}

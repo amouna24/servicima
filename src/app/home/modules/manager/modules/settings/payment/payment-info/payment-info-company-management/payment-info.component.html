@@ -1,5 +1,4 @@
 
-<div class="page-container">
   <wid-dynamic-data-table
     [tableData]="ELEMENT_DATA"
     [isLoading]="isLoading"
@@ -8,7 +7,7 @@
     , addActionText: 'New payment info'}"
     [title]="'Payment info list'"
     (rowActionData)="switchAction($event)"
-    [allowedActions]="{ update: true, delete: true, show: false }"
+    [allowedActions]="['delete']"
+    (changeStatus) = "getDataWithStatus($event)"
   >
   </wid-dynamic-data-table>
-</div>

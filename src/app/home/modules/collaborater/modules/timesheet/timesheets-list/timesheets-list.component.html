@@ -5,6 +5,7 @@
   [header]="{ title: 'Timesheet management', addActionURL: redirectUrl, addActionText: addButtonLabel}"
   [title]="'Timesheet list'"
   (rowActionData)="switchAction($event)"
+  (changeStatus) = "getDataWithStatus($event)"
   [allowedActions]="['export','delete']"
 >
 </wid-dynamic-data-table>

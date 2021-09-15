@@ -4,7 +4,7 @@
         <h1 class="steel font-size-24 font-medium">{{'company.banking.info.title' | translate}}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-        <button mat-raised-button class="btn-medium bg-pale-grey" >
+        <button (click)="back()" mat-raised-button class="btn-small bg-pale-grey"  >
           <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
           </mat-icon>
           <span class="cool-grey">{{'company.banking.info.back' | translate}}</span>
@@ -17,7 +17,7 @@
   <div fxLayout="column"  class="m-l-60" fxFlexOffset="50px" fxFlex="50"  [formGroup]="form">
     <wid-scrollbar >
 
-<div fxLayout="column" > 
+<div fxLayout="column" >
 
 
   <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
@@ -40,7 +40,7 @@
       </mat-form-field>
     </div>
   </div>
-  
+
   <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
     <div fxLayout="column" fxFlex="40" >
       <label class="font-size-12 black-three  required">{{'company.banking.info.bankname' | translate }} </label>
@@ -89,10 +89,10 @@
                     </textarea>
        <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
           {{ 'general.required' | translate }}</mat-error> -->
-  
+
       </mat-form-field>
     </div>
-  
+
     <div fxLayout="column" fxFlex="40">
       <label class="font-size-12 black-three">{{'company.banking.info.factorinformations'| translate }} : </label>
       <mat-form-field appearance="outline">
@@ -105,10 +105,10 @@
                     </textarea>
         <!-- <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
            {{ 'general.required' | translate }}</mat-error> -->
-  
+
       </mat-form-field>
     </div>
-  
+
 
   </div>
 </div>
@@ -118,6 +118,5 @@
       <button mat-raised-button class="btn-small bg-pale-grey black-three" >{{'company.banking.info.cancel'| translate }} : </button>
       <button mat-raised-button (click)="addOrEdit()" class="btn-small bg-ocean-blue white" >{{'company.banking.info.confirm'| translate }}</button>
     </div>
-  
+
   </div>
-  
