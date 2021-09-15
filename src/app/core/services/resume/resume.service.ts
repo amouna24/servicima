@@ -454,6 +454,7 @@ export class ResumeService {
 
   getResumePdf(filter: any, theme: string, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
+    console.log('cv=', filter);
     // @ts-ignore
     return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}&theme=${theme}`, filter,   { responseType: 'blob'});
   }
@@ -493,15 +494,28 @@ export class ResumeService {
   }
 
   /*-------------------------------------------------------------------------------------*/
-  sendMail(language_id, application_id, company_id, email_address, company_name, collaborator_position, attachement): Observable<any> {
+  sendMail(language_id, application_id, company_id, email_address, message, subject, attachement, emailcc, emailbcc): Observable<any> {
+    console.log({
+      language_id,
+      application_id,
+      company_id,
+      email_address,
+      message,
+      subject,
+      attachement,
+      emailcc,
+      emailbcc,
+    });
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailing`, {
       language_id,
       application_id,
       company_id,
       email_address,
-      company_name,
-      collaborator_position,
-      attachement
+      message,
+      subject,
+      attachement,
+      emailcc,
+      emailbcc
     });
   }
   /*-------------------------------------------------------------------------------------*/

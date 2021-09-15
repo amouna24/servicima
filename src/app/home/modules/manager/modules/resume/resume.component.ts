@@ -190,45 +190,11 @@ await this.getData();
    * data: contains the data of resume
    *************************************************************************/
   private sendMail(data) {
-    const attachments: object[] = [];
-    let jobs = '';
-    let application_id = '';
-    let company_email = '';
-    data.map( (sendMailData) => {
-       company_email = sendMailData.user_info.company_email;
-      jobs = jobs + sendMailData.user_info.actual_job + ' //  ';
-      application_id = sendMailData.user_info.ResumeKey.application_id;
-      console.log(sendMailData.user_info.ResumeKey.application_id);
-      attachments.push({
-        filename: sendMailData.user_info.init_name + '.docx',
-        path: `${environment.uploadFileApiUrl}/show/${sendMailData.resume_filename_docx}` });
-    });
-    const confirmation = {
-      code: 'edit',
-      title: 'Send Email',
-      description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
-    };
-
-    this.subscriptionModal = this.modalServices.displayModal('mailing', null, '500px', '640px')
+    this.subscriptionModal = this.modalServices.displayModal('mailing', data, '500px', '640px')
       .subscribe(
         (res) => {
-          if (res === true) {
-            this.resumeService
-              .sendMail(
-                this.localStorageService.getItem('language').langId,
-                application_id,
-                this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                this.clientEmailAddress,
-                'WIDIGITAL',
-                jobs,
-                  attachments
-              ).subscribe((dataB) => {
-              console.log(dataB);
-            });
-          }
-          this.subscriptionModal.unsubscribe();
-        }
-      );
+          console.log('mailing dialog', res);
+        });
   }
   /**************************************************************************
    * @description Change status of candidate to collaborator

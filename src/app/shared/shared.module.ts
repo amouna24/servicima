@@ -6,14 +6,14 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
-import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
+
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
@@ -97,6 +97,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     MaterialModule,
@@ -135,6 +136,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     ProfileImageComponent,
     ProfileImageComponent,
     TitleSettingsComponent,
+    NgMultiSelectDropDownModule,
   ]
 })
 export class SharedModule { }

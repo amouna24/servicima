@@ -172,6 +172,7 @@ export class ProjectSectionComponent implements OnInit {
       this.ProDetails.project_details_code = this.projectDetailsCode;
       this.ProDetails.project_code = this.projectCode;
       if (this.sendProDetails.valid) {
+        console.log('pro details=', this.ProDetails);
         this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
           this.resumeService.getProjectDetails(
             `?project_details_code=${this.ProDetails.project_details_code}`)

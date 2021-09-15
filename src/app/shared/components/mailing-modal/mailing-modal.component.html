@@ -1,5 +1,5 @@
 <div  fxLayout="row" fxFlexFill fxLayoutAlign="end">
-  <form fxLayout="column" fxFlex="94">
+  <form fxLayout="column" [formGroup]="mailingForm"  fxFlex="94">
   <div fxLayout="row" fxFlex="10">
       <div class="title" fxLayoutAlign=" center">Send by mail</div>
   </div>
@@ -8,16 +8,18 @@
     <mat-label class="black font-size-12 required">
       Choose a contact:
     </mat-label>
-      <div style="font-size: 10px" class="full-width">
-      <mat-form-field appearance="outline" class="full-width">
-      <mat-select disableOptionCentering panelClass="panelColor" formControlName="contact"
-                  placeholder="contract name(email)" required>
-        <mat-option >WIDIGITAL(walidtenniche@widigital-group.com)</mat-option>
-      </mat-select>
-    </mat-form-field>
+        <ng-multiselect-dropdown
+          [placeholder]="'custom placeholder'"
+          [settings]="dropdownSettings"
+          [data]="dropdownList"
+          formControlName="contact"
+          (onSelect)="onItemSelect($event)"
+          (onSelectAll)="onSelectAll($event)"
+        >
+        </ng-multiselect-dropdown>
       </div>
     </div>
-  </div>
+
   <div fxLayout="row">
     <div fxLayout="column" fxFlex="98">
     <mat-label class="black font-size-12 required">
@@ -25,7 +27,7 @@
     </mat-label>
       <div style="font-size: 10px" class="full-width">
     <mat-form-field appearance="outline" class="full-width">
-      <input formControlName="copy" matInput placeholder="email" required>
+      <input formControlName="copy" matInput placeholder="email" >
     </mat-form-field>
       </div>
     </div>
@@ -37,7 +39,7 @@
     </mat-label>
       <div style="font-size: 10px" class="full-width">
       <mat-form-field appearance="outline" class="full-width">
-      <input formControlName="hidden_copy" matInput placeholder="email" required>
+      <input formControlName="hidden_copy" matInput placeholder="email" >
     </mat-form-field>
       </div>
     </div>
@@ -49,35 +51,17 @@
     </mat-label>
       <div style="font-size: 10px" class="full-width">
       <mat-form-field appearance="outline" class="full-width">
-      <input formControlName="subject" matInput placeholder="Subject" required>
+      <input formControlName="subject" matInput placeholder="Subject" >
     </mat-form-field>
       </div>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="7" fxLayoutAlign=" center">
-    <ng-container *ngIf="invoice; else resume">
+  <div fxLayout="row" fxFlex="7" *ngIf="invoice" fxLayoutAlign=" center">
       <div fxLayout="column" >
         <section class="example-section">
-          <mat-checkbox class="check font-size-12 font-normal"  > Attach the invoice in PDF format</mat-checkbox>
+          <mat-checkbox class="check font-size-12 font-normal"  formControlName="format"> Attach the invoice in PDF format</mat-checkbox>
         </section>
       </div>
-    </ng-container>
-    <ng-template #resume>
-      <div fxLayout="column" >
-        <div fxLayout="row">
-        <section class="example-section">
-          <mat-checkbox class="check font-size-12 font-normal"  > Attach the resume in PDF format</mat-checkbox>
-        </section>
-        </div>
-        <div fxLayout="row" >
-          <section class="example-section">
-            <mat-checkbox class="check font-size-12 font-normal"  > Attach the resume in DOCX format</mat-checkbox>
-          </section>
-        </div>
-      </div>
-
-    </ng-template>
-
   </div>
   <div fxLayout="row">
     <div fxLayout="column" fxFlex="98">
@@ -90,9 +74,27 @@
     </mat-form-field>
     </div>
   </div>
+    <div fxLayout="row" *ngIf="!invoice"  fxLayoutGap="3px" style="max-width: 98%; justify-content: flex-end">
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-label class="black font-size-12 p-b-10">
+              Format:
+            </mat-label>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="end" fxFlex="20">
+            <div style="font-size: 10px" class="full-width">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-select disableOptionCentering panelClass="panelColor" value="DOCX" formControlName="format"
+                            placeholder="Format" required>
+                  <mat-option value="PDF" >PDF</mat-option>
+                  <mat-option value="DOCX">DOCX</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+    </div>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
-    <button mat-raised-button type="submit" color="primary" class="white btn-small">Send</button>
-    <button mat-raised-button class="btn-small bg-pale-grey">Cancel</button>
+    <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="sendMail()" mat-dialog-close [disabled]="mailingForm.invalid">Send</button>
+    <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>Cancel</button>
   </div>
   </form>
 </div>
