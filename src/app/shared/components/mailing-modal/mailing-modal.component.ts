@@ -1,12 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResumeService } from '@core/services/resume/resume.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { UserService } from '@core/services/user/user.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
@@ -18,11 +21,20 @@ import { environment } from '../../../../environments/environment';
 export class MailingModalComponent implements OnInit {
   invoice = true;
   mailingForm: FormGroup;
-  clientList: object[] = [];
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = { };
-  title = 'multiselectdropdown';
+  clientList: unknown = [];
+  clientListSettings = { };
+  selectable = true;
+  removable = true;
+  copyCtrl = new FormControl();
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  copies: string[] = [];
+  filteredCopies: Observable<string[]>;
+  hiddenCopies: string[] = [];
+
+  @ViewChild('copyInput') copyInput: ElementRef<HTMLInputElement>;
+  @ViewChild('hiddenCopyInput') hiddenCopyInput: ElementRef<HTMLInputElement>;
+
+  private hiddenCopyCtrl = new FormControl();
 
   constructor(
     private router: Router,
@@ -33,31 +45,19 @@ export class MailingModalComponent implements OnInit {
     private clientService: ContractorsService,
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  ) {
+  }
 
    async ngOnInit(): Promise<void> {
      this.invoice = this.router.url !== '/manager/resume';
      this.initializeForm();
-     await this.getClients();
-     this.dropdownList = [
-       { item_id: 1, item_text: 'Mumbai'},
-       { item_id: 2, item_text: 'Bangaluru'},
-       { item_id: 3, item_text: 'Pune'},
-       { item_id: 4, item_text: 'Navsari'},
-       { item_id: 5, item_text: 'New Delhi'}
-     ];
-     console.log(this.clientList, this.dropdownList);
-     this.selectedItems = [
-       { item_id: 3, item_text: 'Pune'},
-       { item_id: 4, item_text: 'Navsari'}
-     ];
-     this.dropdownSettings = {
+     this.clientList = await this.getClients();
+     this.clientListSettings = {
        singleSelection: false,
        idField: 'item_id',
        textField: 'item_text',
-       selectAllText: 'Select All',
-       unSelectAllText: 'UnSelect All',
-       itemsShowLimit: 3,
+       selectAllText: 'All',
+       unSelectAllText: 'All',
        allowSearchFilter: true
      };
    }
@@ -71,20 +71,35 @@ export class MailingModalComponent implements OnInit {
       format: ['', [Validators.required]],
     });
   }
-  getClients() {
-    this.clientService.getContractors(`?email_address=${this.userService.connectedUser$
-      .getValue().user[0]['company_email']}`).subscribe( (dataContractor) => {
-      dataContractor['results'].forEach( (oneData, index) => {
-          this.clientList.push({
-            item_id: index + 1,
-            item_text: oneData.contact_email,
+  async getClients() {
+    const clientList = [];
+    return new Promise( (resolve) => {
+      this.clientService.getContractors(`?email_address=${this.userService.connectedUser$
+        .getValue().user[0]['company_email']}`).subscribe((dataContractor) => {
+        dataContractor['results'].forEach((oneData, index) => {
+          clientList.push({
+            item_id: oneData.contact_email,
+            item_text: oneData.contractor_name + '(' + oneData.contact_email + ')',
           });
+          if (index + 1 >= dataContractor['results'].length) {
+            clientList.push({
+              item_id: 'dhia.othmen@widigital-group.com',
+              item_text: 'DBCOMPANY(dhia.othmen@widigital-group.com)',
+            });
+            resolve(clientList);
+          }
         });
+      });
+    }).then( (res) => {
+      return res;
     });
   }
   sendMail() {
     const mailingObject = this.mailingForm.value;
-    console.log(mailingObject);
+    const contacts = [];
+    mailingObject.contact.forEach( (contact) => {
+      contacts.push(contact.item_id);
+    });
     if (!this.invoice) {
       const attachments: object[] = [];
       let application_id = '';
@@ -105,21 +120,51 @@ export class MailingModalComponent implements OnInit {
                   this.localStorageService.getItem('language').langId,
                   application_id,
                   this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                  mailingObject.contact,
+                  contacts,
                   mailingObject.subject,
                   mailingObject.message,
                   attachments,
-                  mailingObject.copy,
-                  mailingObject.hidden_copy,
+                  this.copies,
+                  this.hiddenCopies,
                 ).subscribe((dataB) => {
                 console.log(dataB);
               });
     }
   }
-  onItemSelect(item: any) {
-    console.log(item);
+  addCopy(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      this.copies.push(value);
+    }
+    this.mailingForm.controls.copy.setValue('');
+    this.copyCtrl.setValue(null);
   }
-  onSelectAll(items: any) {
-    console.log(items);
+
+  removeCopy(fruit: string): void {
+    const index = this.copies.indexOf(fruit);
+
+    if (index >= 0) {
+      this.copies.splice(index, 1);
+    }
+  }
+
+  addHiddenCopy(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      this.hiddenCopies.push(value);
+    }
+    this.mailingForm.controls.hidden_copy.setValue('');
+
+    this.hiddenCopyCtrl.setValue(null);
+  }
+
+  removeHiddenCopy(fruit: string): void {
+    const index = this.hiddenCopies.indexOf(fruit);
+
+    if (index >= 0) {
+      this.hiddenCopies.splice(index, 1);
+    }
   }
 }

@@ -1,51 +1,88 @@
 <div  fxLayout="row" fxFlexFill fxLayoutAlign="end">
   <form fxLayout="column" [formGroup]="mailingForm"  fxFlex="94">
-  <div fxLayout="row" fxFlex="10">
+    <wid-scrollbar fxLayout="row" fxFlex="92" >
+      <div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="15">
       <div class="title" fxLayoutAlign=" center">Send by mail</div>
   </div>
   <div fxLayout="row">
-    <div fxLayout="column" fxFlex="98">
+    <div fxLayout="column" fxFlex="94">
     <mat-label class="black font-size-12 required">
       Choose a contact:
     </mat-label>
-        <ng-multiselect-dropdown
-          [placeholder]="'custom placeholder'"
-          [settings]="dropdownSettings"
-          [data]="dropdownList"
+        <ng-multiselect-dropdown style="font-size: 12px; font-style: normal; color: #d6d7da; margin-bottom: 10px" class="selected-item"
+          [placeholder]="'contact(email)'"
+          [settings]="clientListSettings"
+          [data]="clientList"
           formControlName="contact"
-          (onSelect)="onItemSelect($event)"
-          (onSelectAll)="onSelectAll($event)"
         >
         </ng-multiselect-dropdown>
       </div>
     </div>
 
   <div fxLayout="row">
-    <div fxLayout="column" fxFlex="98">
+    <div fxLayout="column" fxFlex="94">
     <mat-label class="black font-size-12 required">
       Send a copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
-    <mat-form-field appearance="outline" class="full-width">
-      <input formControlName="copy" matInput placeholder="email" >
-    </mat-form-field>
+        <mat-form-field class="example-chip-list full-width" appearance="outline" >
+          <mat-chip-list #copiesList aria-label="Fruit selection">
+            <mat-chip
+              *ngFor="let copy of copies"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="removeCopy(copy)"
+              class="font-normal font-size-12 black">
+              {{copy}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              matInput
+              placeholder="Copy"
+              #copyInput
+              formControlName="copy"
+              [matChipInputFor]="copiesList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addCopy($event)"
+              >
+          </mat-chip-list>
+        </mat-form-field>
       </div>
     </div>
   </div>
   <div fxLayout="row">
-    <div fxLayout="column" fxFlex="98">
+    <div fxLayout="column" fxFlex="94">
     <mat-label class="black font-size-12 required">
       Send a hidden copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
-      <mat-form-field appearance="outline" class="full-width">
-      <input formControlName="hidden_copy" matInput placeholder="email" >
-    </mat-form-field>
+        <mat-form-field class="example-chip-list full-width" appearance="outline" >
+          <mat-chip-list #hiddenCopiesList aria-label="Fruit selection">
+            <mat-chip
+              *ngFor="let hiddenCopy of hiddenCopies"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="removeHiddenCopy(hiddenCopy)"
+              class="font-normal font-size-12 black">
+              {{hiddenCopy}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              matInput
+              placeholder="Hidden copy"
+              #hiddenCopyInput
+              formControlName="hidden_copy"
+              [matChipInputFor]="hiddenCopiesList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addHiddenCopy($event)">
+          </mat-chip-list>
+        </mat-form-field>
       </div>
     </div>
   </div>
   <div fxLayout="row">
-    <div fxLayout="column" fxFlex="98">
+    <div fxLayout="column" fxFlex="94">
     <mat-label class="black font-size-12 required">
       Subject:
     </mat-label>
@@ -64,17 +101,17 @@
       </div>
   </div>
   <div fxLayout="row">
-    <div fxLayout="column" fxFlex="98">
+    <div fxLayout="column" fxFlex="94">
     <mat-label class="black font-size-12 required">
       Message:
     </mat-label>
     <mat-form-field appearance="outline" class="full-width">
-                    <textarea matInput formControlName="message" placeholder="Write your message here"
+                    <textarea class="textarea" matInput formControlName="message" placeholder="Write your message here"
                               rows="5" required></textarea>
     </mat-form-field>
     </div>
   </div>
-    <div fxLayout="row" *ngIf="!invoice"  fxLayoutGap="3px" style="max-width: 98%; justify-content: flex-end">
+    <div fxLayout="row" *ngIf="!invoice"  fxLayoutGap="3px" style="max-width: 94%; justify-content: flex-end">
           <div fxLayout="column" fxLayoutAlign="center">
             <mat-label class="black font-size-12 p-b-10">
               Format:
@@ -82,6 +119,7 @@
           </div>
           <div fxLayout="column" fxLayoutAlign="end" fxFlex="20">
             <div style="font-size: 10px" class="full-width">
+              <div style="font-size: 10px" class="full-width">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-select disableOptionCentering panelClass="panelColor" value="DOCX" formControlName="format"
                             placeholder="Format" required>
@@ -89,12 +127,15 @@
                   <mat-option value="DOCX">DOCX</mat-option>
                 </mat-select>
               </mat-form-field>
+              </div>
             </div>
           </div>
     </div>
-  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
-    <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="sendMail()" mat-dialog-close [disabled]="mailingForm.invalid">Send</button>
-    <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>Cancel</button>
-  </div>
+      </div>
+    </wid-scrollbar>
+    <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8px">
+      <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="sendMail()" mat-dialog-close [disabled]="mailingForm.invalid">Send</button>
+      <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>Cancel</button>
+    </div>
   </form>
 </div>
