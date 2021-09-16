@@ -48,7 +48,31 @@ export class DynamicComponent implements OnInit, OnDestroy {
   valueOfSelectedItem = '';
   attachmentList = [];
   randomSubParent: any;
-
+  listOfObject = [ {
+    image: 'assets/icons/done-resume.svg',
+    value: 'Green',
+  },
+    {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Orange',
+    },
+    {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Red',
+    }, {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Orange',
+    }, {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Orange',
+    }, {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Orange',
+    }, {
+      image: 'assets/icons/done-resume.svg',
+      value: 'Orange',
+    },
+  ];
   constructor(
     private sheetService: SheetService,
     private location: Location,

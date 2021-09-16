@@ -352,7 +352,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         {
           label: 'Resume template',
           placeholder: 'Resume template',
-          type: FieldsType.SELECT,
+          type: FieldsType.THEME_RADIO_GROUP,
           selectFieldList: this.resumeTemplate,
           formControlName: 'resume_template',
         },

@@ -913,6 +913,23 @@
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
                             <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
+                          <div *ngIf="sf.type === 'themeRadioGroup'" fxLayout="column" fxFlex="87">
+                            <mat-label fxLayout="row">
+                              Models:
+                            </mat-label>
+                            <wid-scrollbar style=" border-color:#afb1b8; min-height: 250px; min-width: 100px; border-radius: 4px; border-style: solid">
+                             <div fxLayout="row" fxFlexFill fxLayoutGap="10px" >
+                               <div fxLayout="column"  *ngFor="let oneObject of listOfObject" style="min-width: 20%" fxLayoutAlign=" center">
+                                 <div fxLayout="row" fxFlex="70">
+                                   <img src="{{oneObject.image}}">
+                                 </div>
+                                 <div fxLayout="row" fxFlex="30">
+                                   {{oneObject.value}}
+                                 </div>
+                               </div>
+                             </div>
+                            </wid-scrollbar>
+                            </div>
                         </ng-container>
                       </div>
                     </ng-container>
