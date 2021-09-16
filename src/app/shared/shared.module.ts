@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -16,6 +16,8 @@ import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
@@ -60,6 +62,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     SkeletonLoaderComponent,
     StepperComponent,
     RightSidenaveComponent,
+    AddTimesheetComponent,
     /* Directives */
     CanBeDisplayedDirective,
     ClickOutsideDirective,
@@ -79,6 +82,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     SplashComponent,
     ErrorComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
     MailingModalComponent,
   ],
   imports: [
