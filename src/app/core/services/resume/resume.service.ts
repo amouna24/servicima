@@ -454,7 +454,6 @@ export class ResumeService {
 
   getResumePdf(filter: any, theme: string, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
-    console.log('cv=', filter);
     // @ts-ignore
     return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}&theme=${theme}`, filter,   { responseType: 'blob'});
   }
