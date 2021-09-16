@@ -22,11 +22,13 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Week start on :</label>
            <mat-form-field appearance="outline">
-             <input matInput [disabled]="formType.edit"
+             <input matInput
                     formControlName="start_date"
                     [matDatepickerFilter]="startDateFilter"
                     [matDatepicker]="datepicker"
-                    placeholder="dd/mm/yyyy">
+                    placeholder="dd/mm/yyyy"
+                    (dateChange)="getMonthHoliday()"
+             >
              <mat-datepicker-toggle matSuffix [for]="datepicker">
                <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
              </mat-datepicker-toggle>
@@ -39,7 +41,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select [disabled]="formType.edit" formControlName="project_code" [placeholder]="projectsList && contract? 'Project' : 'No project found'">
+             <mat-select  formControlName="project_code" [placeholder]="projectsList && contract? 'Project' : 'No project found'">
                <ng-container *ngIf="projectsList && contract">
                  <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
                    {{ project.project_desc}}
@@ -63,80 +65,24 @@
        <!-- right column form -->
        <div fxFlex="50" >
          <div fxFlex="56" fxLayout="column">
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Monday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="monday">
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.monday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Tuesday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="tuesday" >
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.tuesday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Wednesday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="wednesday" >
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.wednesday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Thursday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="thursday" >
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.thursday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Friday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="friday" >
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.friday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Saturday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="saturday" >
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.saturday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
-         <div fxLayout="column">
-           <label class="font-size-12 required"> Sunday : </label>
-           <mat-form-field appearance="outline">
-             <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-             <input matInput placeholder="00h 00m" type="number" min="0" max="24" formControlName="sunday">
-             <mat-error class="wid-error-messages">
-               {{dayValidator(initialForm.controls.sunday)}}
-             </mat-error>
-           </mat-form-field>
-         </div>
+           <ng-container *ngFor="let day of weekDays; let index = index" >
+             <div fxLayout="column">
+               <label class="font-size-12 required"> {{day.desc}} : </label>
+               <mat-form-field appearance="outline">
+                 <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                 <input matInput placeholder="00h 00m" type="number"  min="0" max="24"
+                        [formControlName]="day.formControlName">
+                 <mat-error class="wid-error-messages">
+                   {{dayValidator(day.formControlName)}}
+                 </mat-error>
+                 <mat-hint *ngIf="day.hasHoliday" >{{day.holiday.name}}</mat-hint>
+               </mat-form-field>
+             </div>
+           </ng-container>
          <div fxLayout="column">
              <label class="font-size-12"> Total : </label>
              <mat-form-field appearance="outline" class="disabled">
-               <input [disabled]="true" matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
+               <input matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
              </mat-form-field>
          </div>
          </div>
