@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { TimesheetsListComponent } from './timesheets-list/timesheets-list.component';
-import { AddTimesheetComponent } from './add-timesheet/add-timesheet.component';
+import { AddEditTimesheetComponent } from './add-edit-timesheet/add-edit-timesheet.component';
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
 
   {
     path: ':action/:type',
-    component: AddTimesheetComponent,
+    component: AddEditTimesheetComponent,
     data: {
       breadcrumb: 'add-timesheet'
     },

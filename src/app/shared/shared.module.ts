@@ -13,13 +13,12 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
-
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
-import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
-
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
+import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -36,6 +35,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { AddTimesheetComponent } from './components/add-timesheet/add-timesheet.component';
 import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
@@ -136,6 +136,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     ProfileImageComponent,
     ProfileImageComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
     NgMultiSelectDropDownModule,
   ]
 })

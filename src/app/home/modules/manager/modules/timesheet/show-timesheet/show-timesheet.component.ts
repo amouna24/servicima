@@ -2,12 +2,11 @@ import { IUserModel } from '@shared/models/user.model';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
-import { ModalService } from '@core/services/modal/modal.service';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
-
-import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.component';
+import { SafeUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-show-timesheet',
@@ -16,7 +15,7 @@ import { RejectTimesheetComponent } from '../reject-timesheet/reject-timesheet.c
 })
 export class ShowTimesheetComponent implements OnInit {
   timesheet: any;
-  avatar: any;
+  avatar: SafeUrl = 'assets/img/default.jpg';
   user: IUserModel;
   id: string;
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
@@ -56,16 +55,11 @@ export class ShowTimesheetComponent implements OnInit {
               private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) private data: any,
               private uploadService: UploadService,
-              private modalsServices: ModalService,
+              private router: Router
   ) {
   }
 
   async ngOnInit() {
-    this.modalsServices.registerModals(
-      {
-        modalName: 'rejectTimesheet',
-        modalComponent: RejectTimesheetComponent
-      });
     this.timesheet = this.data;
     await this.getAvatar();
   }
@@ -73,7 +67,9 @@ export class ShowTimesheetComponent implements OnInit {
   getAvatar(): void {
     this.uploadService.getImage(this.timesheet.photo)
       .then((data) => {
-        this.avatar = data;
+        if (data) {
+          this.avatar = data;
+        }
       });
   }
 
@@ -83,5 +79,14 @@ export class ShowTimesheetComponent implements OnInit {
     } else {
       this.dialogRef.close();
     }
+  }
+  updateTimesheet() {
+    this.modalActions();
+    this.router.navigate(
+      ['/manager/timesheet/edit', this.timesheet.type_timesheet], {
+        queryParams: {
+          'id': btoa(this.timesheet._id.toString())
+  }
+});
   }
 }
