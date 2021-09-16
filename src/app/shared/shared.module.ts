@@ -6,14 +6,14 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
-
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
@@ -44,7 +44,6 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
-import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
 
 @NgModule({
   declarations: [
@@ -78,8 +77,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
-    TitleSettingsComponent,
-    MailingModalComponent,
+    TitleSettingsComponent
   ],
   imports: [
     CommonModule,
@@ -136,6 +134,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     ProfileImageComponent,
     ProfileImageComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
     NgMultiSelectDropDownModule,
   ]
 })
