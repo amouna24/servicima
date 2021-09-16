@@ -13,10 +13,12 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
+import { AddTimesheetComponent } from '@shared/components/add-timesheet/add-timesheet.component';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
@@ -44,7 +46,6 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
-
 @NgModule({
   declarations: [
     /* Components */
@@ -77,7 +78,8 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
-    TitleSettingsComponent
+    TitleSettingsComponent,
+    AddTimesheetComponent
   ],
   imports: [
     CommonModule,
