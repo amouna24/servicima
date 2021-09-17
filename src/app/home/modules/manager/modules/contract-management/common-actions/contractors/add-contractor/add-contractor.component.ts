@@ -83,15 +83,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  resumeTemplate: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
-    {
-    value: 'temp-green',
-    viewValue: 'Green'
-    },
-    {
-      value: 'temp-orange',
-      viewValue: 'Orange'
-    }]);
+
   companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contactList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractorContactInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -116,7 +108,58 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
+  /**************************************************************************
+   * @description Resume models List
+   *************************************************************************/
+  resumeModels: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
+    {
+    icon: 'assets/img/peter-river-icon.jpg',
+    viewValue: 'Default',
+    value: 'DEFAULT',
+  },
+    {
+      icon: 'assets/img/Emerald-icon.jpg',
+      viewValue: 'Emerald',
+      value: 'EMERALD',
 
+    },
+    {
+      icon: 'assets/img/amethyst-icon.jpg',
+      viewValue: 'Amethyst',
+      value: 'AMETHYST',
+
+    },
+    {
+      icon: 'assets/img/orange-icon.jpg',
+      viewValue: 'Orange',
+      value: 'ORANGE',
+    },
+    {
+      icon: 'assets/img/sun-flower-icon.jpg',
+      viewValue: 'Sun Flower',
+      value: 'SUN_FLOWER',
+    },
+    {
+      icon: 'assets/img/silver-icon.jpg',
+      viewValue: 'Silver',
+      value: 'SILVER',
+    },
+    {
+      icon: 'assets/img/midnight-blue-icon.jpg',
+      viewValue: 'Midnight Blue',
+      value: 'MIDNIGHT_BLUE',
+    },
+    {
+      icon: 'assets/img/Green-icon.jpg',
+      viewValue: 'Green',
+      value: 'GREEN',
+    },
+    {
+      icon: 'assets/img/Alizarin-icon.jpg',
+      viewValue: 'Alizarin',
+      value: 'ALIZARIN',
+    },
+  ]);
   /**************************************************************************
    * @description Menu Items List
    *************************************************************************/
@@ -350,10 +393,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.one_item_at_center,
       fields: [
         {
-          label: 'Resume template',
-          placeholder: 'Resume template',
+          label: 'Models',
           type: FieldsType.THEME_RADIO_GROUP,
-          selectFieldList: this.resumeTemplate,
+          selectFieldList: this.resumeModels,
           formControlName: 'resume_template',
         },
       ],
@@ -588,7 +630,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         tax_cd: [''],
       }),
       RESUME_TEMPLATE: this.formBuilder.group( {
-        resume_template: [''],
+        resume_template: ['DEFAULT'],
       }),
       CONTACT: this.formBuilder.group({
         first_name: [''],
@@ -724,7 +766,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.genderList.next(this.refDataService.refData['GENDER']);
     this.profileTitleList.next(this.refDataService.refData['PROF_TITLES']);
     this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
-    this.resumeTemplate.next(this.refDataService.refData['RESUM_TEMP']);
+    /****************************** RESUME MODELS ***********************************/
   }
 
   /**************************************************************************
