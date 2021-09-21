@@ -41,7 +41,7 @@
          <div fxLayout="column">
            <label class="font-size-12 required"> Project : </label>
            <mat-form-field appearance="outline">
-             <mat-select  formControlName="project_code" [placeholder]="projectsList && contract? 'Project' : 'No project found'">
+             <mat-select  formControlName="project_code"  [placeholder]="projectsList && contract? 'Project' : 'No project found'">
                <ng-container *ngIf="projectsList && contract">
                  <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
                    {{ project.project_desc}}
@@ -64,16 +64,17 @@
        </div>
        <!-- right column form -->
        <div fxFlex="50" >
-         <div fxFlex="56" fxLayout="column">
+         <div fxFlex="56" fxLayout="column" *ngIf="weekDays">
            <ng-container *ngFor="let day of weekDays; let index = index" >
              <div fxLayout="column">
                <label class="font-size-12 required"> {{day.desc}} : </label>
                <mat-form-field appearance="outline">
                  <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
-                 <input matInput placeholder="00h 00m" type="number"  min="0" max="24"
-                        [formControlName]="day.formControlName">
+                 <input matInput placeholder="00h" type="number"  min="0"
+                        [max]="!!contract ? contract.working_hour_day : 24"
+                        [formControlName]="day.name">
                  <mat-error class="wid-error-messages">
-                   {{dayValidator(day.formControlName)}}
+                   {{dayValidator(day.name)}}
                  </mat-error>
                  <mat-hint *ngIf="day.hasHoliday" >{{day.holiday.name}}</mat-hint>
                </mat-form-field>

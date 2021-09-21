@@ -87,8 +87,10 @@ getTimesheetParams(): void {
         `&type_timesheet=${this.typeTimesheet}` +
         `&status=ACTIVE`)
         .toPromise().then((res) => {
-          this.ELEMENT_DATA.next(res);
-        });
+          if (res) {
+            this.ELEMENT_DATA.next(res);
+          }
+      });
   }
 
   /**
@@ -176,9 +178,5 @@ getTimesheetParams(): void {
 
   modalData(code: string, title: string, description: string): any {
     return { code, title, description};
-  }
-
-  getDataWithStatus($event: unknown) {
-
   }
 }

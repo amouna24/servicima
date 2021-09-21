@@ -16,6 +16,8 @@ import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
@@ -44,6 +46,7 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
 
 @NgModule({
   declarations: [
@@ -78,8 +81,9 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
-    TitleSettingsComponent
-
+    TitleSettingsComponent,
+    AddTimesheetComponent,
+    MailingModalComponent,
   ],
   imports: [
     CommonModule,
@@ -97,6 +101,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     MaterialModule,
@@ -136,6 +141,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ProfileImageComponent,
     TitleSettingsComponent,
     AddTimesheetComponent,
+    NgMultiSelectDropDownModule,
   ]
 })
 export class SharedModule { }

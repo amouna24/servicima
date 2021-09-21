@@ -92,7 +92,7 @@ export const collaboraterMenu: IMenu[] = [
     name: 'cand.menu.static.res-mng',
     type: 'sub',
     icon: 'wi_dashboard',
-    feature: 'SOURCING_CAND_FILE_ACCESS',
+    feature: 'HR_FOLDER_ACCESS',
     children: [
       {
         state: '',
