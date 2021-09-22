@@ -27,6 +27,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+import { UploadResumeService } from '@core/services/upload-resume/upload-resume.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -47,7 +48,7 @@ export class ResumeDoneComponent implements OnInit {
     private resumeService: ResumeService,
     private userService: UserService,
     private datePipe: DatePipe,
-    private uploadService: UploadService,
+    private uploadResumeService: UploadResumeService,
     private dialog: MatDialog,
     private translate: TranslateService,
     private router: Router,
@@ -399,9 +400,9 @@ export class ResumeDoneComponent implements OnInit {
    * @return res return the image uploaded
    *************************************************************************/
   async uploadFile(formData) {
-    return await this.uploadService.uploadImage(formData)
+    return await this.uploadResumeService.uploadResume(formData)
       .pipe(
-         map(response => response.file.filename)
+         map(response => response.filename)
       )
       .toPromise();
   }
@@ -523,15 +524,14 @@ export class ResumeDoneComponent implements OnInit {
         section: this.sectionList,
       }
     };
-    await this.downloadDocs(data, action, 'widigital');
+    await this.downloadDocs(data, action);
   }
   /**************************************************************************
    * @description generate Resume in docx format or in PDF format
    * @param action which differs between the generation in pdf or docx format
-   * @param theme choose the theme of the resume
    * @param data it contains the necessary data for the Resume
    *************************************************************************/
-  downloadDocs(data: object, action: string, theme: string) {
+  downloadDocs(data: object, action: string) {
     if (action === 'generate') {
       if (this.userService.connectedUser$.getValue().user[0].user_type !== 'COMPANY') {
         const confirmation = {
@@ -544,7 +544,7 @@ export class ResumeDoneComponent implements OnInit {
             (resMail) => {
               if (resMail === true) {
                 this.showWaiting = true;
-                this.resumeService.getResumePdf(data, theme, action).subscribe(
+                this.resumeService.getResumePdf(data, action).subscribe(
                   async res => {
                     saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
                     const file = new File([res], `${this.generalInfoList[0].init_name}.docx`,
@@ -552,8 +552,13 @@ export class ResumeDoneComponent implements OnInit {
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
                     formData.append('caption', file.name);
+                    formData.append('application_id', '1234567');
+                    formData.append('contractor_code', '7896');
+                    formData.append('company_email', '564646');
+                    formData.append('collaborator_email', 'hello');
                     await this.uploadFile(formData).then(async (filename) => {
-                      this.generalInfoList[0].resume_filename_docx = filename;
+                      console.log('filename object', filename);
+                      this.generalInfoList[0].resume_filename_docx = filename.filename;
                       this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
                       this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
                       this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
@@ -583,7 +588,7 @@ export class ResumeDoneComponent implements OnInit {
             });
       } else {
         this.showWaiting = true;
-        this.resumeService.getResumePdf(data, theme, action).subscribe(
+        this.resumeService.getResumePdf(data, action).subscribe(
           async res => {
             saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
             const file = new File([res], `${this.generalInfoList[0].init_name}.docx`,
@@ -607,7 +612,7 @@ export class ResumeDoneComponent implements OnInit {
       }
     } else if (action === 'preview') {
       this.showWaitingPreview = true;
-      this.resumeService.getResumePdf(data, theme, action).subscribe(
+      this.resumeService.getResumePdf(data, action).subscribe(
       async res => {
           const fileURL = URL.createObjectURL(res);
           window.open(fileURL, '_blank');

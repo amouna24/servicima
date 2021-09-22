@@ -262,7 +262,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDate();
     this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
+    this.maxEndDate = new Date(currentYear + 3, 0, 1);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }

@@ -92,7 +92,7 @@
                                   <input  formControlName="date" matInput [matDatepicker]="datepicker"    #date1
                                           placeholder="Date"   required>
                                   <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
-                                  <mat-datepicker #datepicker color="primary" ></mat-datepicker>
+                                  <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
                                   <mat-error class="red" >
                                     {{ 'general.required' | translate }}</mat-error>
                                 </mat-form-field>
@@ -105,7 +105,7 @@
                                 <mat-form-field appearance="outline">
                                   <input formControlName="expiring_date" matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  >
                                   <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
-                                  <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
+                                  <mat-datepicker  startView="year" #datepickerend color="primary" ></mat-datepicker>
                                   <mat-error class="red" >
                                     {{ 'general.required' | translate }}</mat-error>
                                 </mat-form-field>
@@ -117,7 +117,7 @@
                                   {{ 'resume-certif-ref' | translate}}:
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_ref" matInput placeholder="{{ 'resume-position' | translate }}" >
+                                  <input  formControlName="certif_ref" matInput placeholder="Certification reference" >
                                 </mat-form-field>
                               </div>
                               <div fxLayout="column" fxFlex="15"></div>
@@ -126,7 +126,7 @@
                                   {{ 'resume-certif-url' | translate}}:
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_url" matInput placeholder="{{ 'resume-position' | translate }}" >
+                                  <input  formControlName="certif_url" matInput placeholder="Certification url" >
                                 </mat-form-field>
                               </div>
                             </div>

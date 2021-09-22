@@ -447,15 +447,14 @@ export class ResumeService {
   /**************************************************************************
    * @description Get Project Details Section List
    * @param filter search query like [ ?id=123 ]
-   * @param theme set the theme design of the resume
    * @param type type format of the resume PDF or DOCX
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
 
-  getResumePdf(filter: any, theme: string, type: string): Observable<any> {
+  getResumePdf(filter: any, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}&theme=${theme}`, filter,   { responseType: 'blob'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}`, filter,   { responseType: 'blob'});
   }
   /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
 

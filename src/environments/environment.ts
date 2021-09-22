@@ -65,7 +65,8 @@ export const environment = {
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
-
+  /************************* UPLOAD RESUME FILE ************************/
+  uploadResumeFileApiUrl: 'http://127.0.0.1:8021/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',
