@@ -16,6 +16,7 @@ import { IContract } from '@shared/models/contract.model';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { holidaysList } from '@shared/statics/holidays-list.static';
 import { IHoliday } from '@shared/models/holiday.model';
+import { HolidayService } from '@core/services/holiday/holiday.service';
 const TIMESHEET_EXTRA = 'TIMESHEET_EXTRA';
 @Component({
   selector: 'wid-add-timesheet',
@@ -55,13 +56,13 @@ export class AddTimesheetComponent implements OnInit {
               private router: Router,
               private activeRoute: ActivatedRoute,
               private modalServices: ModalService,
-              private contractService: ContractsService
+              private contractService: ContractsService,
+              private holidayServices: HolidayService
   ) {
   }
 
   async ngOnInit() {
-    this.holidays = holidaysList.find(row => row.country === 'FR');
-    this.initWeekDay();
+    this.weekDays = this.holidayServices.initWeekDay();
     this.getData();
   }
   getData() {
@@ -344,77 +345,13 @@ export class AddTimesheetComponent implements OnInit {
     return { code, title, description};
 }
 
-  initWeekDay() {
-    this.weekDays = [
-      {
-        name: 'monday',
-        desc: 'Monday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'tuesday',
-        desc: 'Tuesday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'wednesday',
-        desc: 'Wednesday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'thursday',
-        desc: 'Thursday',
-        holiday: { },
-        hasHoliday: false,
-      },
-      {
-        name: 'friday',
-        desc: 'Friday',
-        holiday: { },
-        hasHoliday: false,
-      },
-      {
-        name: 'saturday',
-        desc: 'Saturday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'sunday',
-        desc: 'Sunday',
-        holiday: null,
-        hasHoliday: false,
-      }
-    ];
-  }
-
   getMonthHoliday() {
       const date = this.formType.add ? this.initialForm.value.start_date : this.timesheet.TimeSheetKey.start_date;
-      const firstDay = new Date(date);
-      const lastDay = new Date(date);
-      this.initWeekDay();
-      lastDay.setDate(firstDay.getDate() + 6);
-      const monthHolidays = this.holidays.holidays.filter(
-        (day) => {
-          return (Number(day.month) === (firstDay.getMonth() + 1) ||
-            Number(day.month) === (lastDay.getMonth() + 1));
-        }
-      );
-      let dd: any;
-      for (let i = 0; i < 7; i++) {
-        const dateDay = new Date(date);
-        dateDay.setDate(dateDay.getDate() + i);
-        dd = monthHolidays.find((res) => Number(res.day) === dateDay.getDate());
-        this.weekDays[i].holiday = dd ? dd : null;
-        this.weekDays[i].hasHoliday = !!dd;
-      }
+      this.weekDays = this.holidayServices.getWeekHoliday('FR', date);
       this.disableHolidayInput();
   }
 
-  checkDay(day, i): number {
+  verif(day, i): number {
     if (this.weekDays[i].hasHoliday) {
       if (this.formType.type !== TIMESHEET_EXTRA) {
         this.initialForm.controls[day].disable();
@@ -431,13 +368,13 @@ export class AddTimesheetComponent implements OnInit {
   disableHolidayInput() {
     if (this.formType.type !== TIMESHEET_EXTRA) {
       this.initialForm.patchValue({
-        monday: this.checkDay('monday', 0),
-        tuesday: this.checkDay('tuesday', 1),
-        wednesday: this.checkDay('wednesday', 2),
-        thursday: this.checkDay('thursday', 3),
-        friday: this.checkDay('friday', 4),
-        saturday: this.checkDay('saturday', 5),
-        sunday: this.checkDay('sunday', 6),
+        monday: this.verif('monday', 0),
+        tuesday: this.verif('tuesday', 1),
+        wednesday: this.verif('wednesday', 2),
+        thursday: this.verif('thursday', 3),
+        friday: this.verif('friday', 4),
+        saturday: this.verif('saturday', 5),
+        sunday: this.verif('sunday', 6),
       });
     }
   }
