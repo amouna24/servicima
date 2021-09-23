@@ -451,10 +451,17 @@ export class ResumeService {
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
 
-  getResumePdf(filter: any, type: string): Observable<any> {
+  generateResumeContractors(filter: any, type: string, contractorsList): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}`, filter,   { responseType: 'blob'});
+    // tslint:disable-next-line:max-line-length
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/contractors/?type=${type}`, { data: filter, contractorsList}, { responseType: 'blob'});
+  }
+  generateResumeCompany(filter: any, type: string): Observable<any> {
+    filter = JSON.parse(JSON.stringify(filter));
+    // @ts-ignore
+    // tslint:disable-next-line:max-line-length
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/company/?type=${type}`, { data: filter}, { responseType: 'blob'});
   }
   /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
 

@@ -44,7 +44,7 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
-  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
+  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
 
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
