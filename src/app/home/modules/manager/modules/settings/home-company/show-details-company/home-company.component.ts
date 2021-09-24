@@ -59,6 +59,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /** subscription */
   subscription: Subscription;
   showList: INetworkSocial[] = [];
+  isLoadingImage = true;
   /** subscription */
   private subscriptions: Subscription[] = [];
   /**
@@ -84,6 +85,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
         this.company = info['company'][0];
         const ava = await this.uploadService.getImage(this.company['photo']);
         this.avatar = ava;
+        this.isLoadingImage = false;
         this.user = info['user'][0];
         this.getListNetworkSocial(this.company, 'company');
         this.companyId = this.company['_id'];

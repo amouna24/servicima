@@ -29,6 +29,7 @@ export const environment = {
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
+  companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
@@ -49,8 +50,9 @@ export const environment = {
 
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
   invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
-  invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
+  invoiceHeaderApiUrl: 'http://127.0.0.1:8106/servicima/invoiceheader/v1',
   invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
+  invoiceAttachmentApiUrl: 'http://127.0.0.1:9005/servicima/invoiceattachment/v1',
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',

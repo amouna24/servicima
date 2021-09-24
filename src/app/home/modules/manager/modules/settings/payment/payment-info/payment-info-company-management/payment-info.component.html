@@ -8,6 +8,7 @@
     [title]="'Payment info list'"
     (rowActionData)="switchAction($event)"
     [allowedActions]="['delete']"
+    [security] = false
     (changeStatus) = "getDataWithStatus($event)"
   >
   </wid-dynamic-data-table>
