@@ -30,6 +30,7 @@ import { saveAs } from 'file-saver';
 import { UploadResumeService } from '@core/services/upload-resume/upload-resume.service';
 import { IContractor } from '@shared/models/contractor.model';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
+import { IResumeDataModel } from '@shared/models/resumeData.model';
 
 import { environment } from '../../../../../../environments/environment';
 @Component({
@@ -521,7 +522,7 @@ export class ResumeDoneComponent implements OnInit {
         proj.end_date = this.datePipe.transform(proj.end_date, 'yyyy-MM-dd');
       });
     }
-    const data = {
+    const dataCompany = {
       person: {
         application_id: this.generalInfoList[0].ResumeKey.application_id,
         collaborator_email: this.generalInfoList[0].ResumeKey.email_address,
@@ -536,7 +537,7 @@ export class ResumeDoneComponent implements OnInit {
         certifications: this.certifList,
         company_name: this.companyName,
         company_email: this.companyEmail,
-        company_logo: this.imageUrl + this.companyLogo,
+        company_logo: this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ? this.imageUrl + this.companyLogo : '',
         contact_email: this.contactEmail,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -546,17 +547,66 @@ export class ResumeDoneComponent implements OnInit {
         section: this.sectionList,
       }
     };
-    await this.downloadDocs(data, action);
+    const dataCollaborator: IResumeDataModel = {
+      ResumeDataKey: {
+        application_id: this.generalInfoList[0].ResumeKey.application_id,
+        resume_code: this.generalInfoList[0].ResumeKey.resume_code,
+        collaborator_email: this.generalInfoList[0].ResumeKey.email_address,
+        company_email: this.generalInfoList[0].ResumeKey.company_email,
+      },
+      name: this.generalInfoList[0].init_name,
+      role: this.generalInfoList[0].actual_job,
+      experience: this.generalInfoList[0].years_of_experience || 0,
+      image_url: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
+      diplomas: this.diplomaList,
+      certifications: this.certifList,
+      technical_skills: this.techSkillList,
+      functional_skills: this.funcSkillList,
+      intervention: this.interventionList,
+      professional_experiences: await this.organizeDataProExp(),
+      languages: this.languageList,
+      sections: this.sectionList,
+      update: true,
+      application_id: this.generalInfoList[0].ResumeKey.application_id,
+      resume_code: this.generalInfoList[0].ResumeKey.resume_code,
+      collaborator_email: this.generalInfoList[0].ResumeKey.email_address,
+      company_email: this.generalInfoList[0].ResumeKey.company_email,
+    };
+    await this.downloadDocs(dataCompany,  action, dataCollaborator);
   }
   /**************************************************************************
    * @description generate Resume in docx format or in PDF format
+   * @param dataCollaborator it contains the collaborator data
    * @param action which differs between the generation in pdf or docx format
    * @param data it contains the necessary data for the Resume
    *************************************************************************/
-  downloadDocs(data: object, action: string) {
+  downloadDocs(data: object,  action: string, dataCollaborator?: IResumeDataModel) {
     console.log('info list', this.generalInfoList[0]);
     if (action === 'generate') {
-      if (this.userService.connectedUser$.getValue().user[0].user_type !== 'COMPANY') {
+      if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+        const confirmation = {
+          code: 'edit',
+          title: 'Send Email',
+          description: `Are you sure you want to save your resume`,
+        };
+        this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+          .subscribe(
+            (resMail) => {
+              if (resMail === true) {
+                this.showWaiting = true;
+                            this.resumeService.generateResumeContractors(dataCollaborator, action).subscribe( (res) => {
+                              console.log('generator contractors is running', res);
+                              this.showWaiting = false;
+                              this.router.navigate(['/candidate/']);
+                            });
+                console.log(dataCollaborator);
+/*                            this.resumeService.addResumeData(dataCollaborator).subscribe( (resumeData) => {
+                              console.log('resume Data added', resumeData);
+                            });*/
+                this.subscriptionModal.unsubscribe();
+              }
+            });
+      } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
         const confirmation = {
           code: 'edit',
           title: 'Send Email',
@@ -567,42 +617,38 @@ export class ResumeDoneComponent implements OnInit {
             (resMail) => {
               if (resMail === true) {
                 this.showWaiting = true;
-
-                    this.resumeService.generateResumeCompany(data, action).subscribe( async (result) => {
-                      saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
-                      const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
-                        { lastModified: new Date().getTime(), type: 'docx'});
-                      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-                      formData.append('file', file);
-                      formData.append('caption', file.name);
-                      await this.uploadCompanyFile(formData).then(async (filename) => {
-                        this.generalInfoList[0].resume_filename_docx = filename;
-                        this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-                        this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-                        this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-                        this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-                        this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-                        this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                          this.resumeService
-                            .sendMailManager('5eac544ad4cb666637fe1354',
-                              this.generalInfoList[0].application_id,
-                              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                              this.companyEmail,
-                              this.companyName,
-                              this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
-                              this.userService.connectedUser$.getValue().user[0]['last_name'],
-                              [{ filename: this.generalInfoList[0].init_name + '.docx',
-                                path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
-                            ).subscribe((dataB) => {
-                            this.resumeService.generateResumeContractors(data, action, this.contractorsList).subscribe( (res) => {
-                              console.log('generator contractors is running', res);
-                            });
-                            this.showWaiting = false;
-                            this.router.navigate(['/candidate/']);
-                          });
-                        });
+                this.resumeService.generateResumeCompany(data, action).subscribe( async (result) => {
+                  saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
+                  const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
+                    { lastModified: new Date().getTime(), type: 'docx'});
+                  const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+                  formData.append('file', file);
+                  formData.append('caption', file.name);
+                  await this.uploadCompanyFile(formData).then(async (filename) => {
+                    this.generalInfoList[0].resume_filename_docx = filename;
+                    this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+                    this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+                    this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+                    this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+                    this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+                    this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                      this.resumeService
+                        .sendMailManager('5eac544ad4cb666637fe1354',
+                          this.generalInfoList[0].application_id,
+                          this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                          this.companyEmail,
+                          this.companyName,
+                          this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
+                          this.userService.connectedUser$.getValue().user[0]['last_name'],
+                          [{ filename: this.generalInfoList[0].init_name + '.docx',
+                            path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
+                        ).subscribe((dataB) => {
+                        this.showWaiting = false;
+                        this.router.navigate(['/candidate/']);
                       });
                     });
+                  });
+                });
 
                 this.subscriptionModal.unsubscribe();
               }
@@ -786,6 +832,7 @@ export class ResumeDoneComponent implements OnInit {
         expert: res['resume-expert'],
       };
     });
+    console.log(this.label);
   }
   /**************************************************************************
    * @description verify the type of the connected user

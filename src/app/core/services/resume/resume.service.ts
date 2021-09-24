@@ -12,6 +12,7 @@ import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
+import { IResumeDataModel } from '@shared/models/resumeData.model';
 
 import { Observable, throwError } from 'rxjs';
 
@@ -451,11 +452,11 @@ export class ResumeService {
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
 
-  generateResumeContractors(filter: any, type: string, contractorsList): Observable<any> {
+  generateResumeContractors(filter: any, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/contractors/?type=${type}`, { data: filter, contractorsList}, { responseType: 'blob'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/contractors/?type=${type}`, filter, { responseType: 'blob'});
   }
   generateResumeCompany(filter: any, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
@@ -535,4 +536,40 @@ export class ResumeService {
       attachement
     });
   }
+  /*------------------------------------ RESUME-DATA--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get RESUME DATA List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IResumeCertificationModel[]>
+   *************************************************************************/
+  getResumeData(filter: string): Observable<IResumeDataModel[]> {
+    return this.httpClient.get<IResumeDataModel[]>(`${environment.resumeDataApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description Add new ResumeData
+   * @param resumeData : IResumeDataModel  model
+   *************************************************************************/
+  addResumeData(resumeData: IResumeDataModel): Observable<any> {
+    return this.httpClient.post<IResumeDataModel>(`${environment.resumeDataApiUrl}`, resumeData);
+  }
+
+  /**************************************************************************
+   * @description Update ResumeData Status
+   * @param resumeData: updated  ResumeData Object
+   *************************************************************************/
+  updateResumeData(resumeData: IResumeDataModel): Observable<any> {
+    return this.httpClient.put<IResumeDataModel>(`${environment.resumeDataApiUrl}`, resumeData);
+  }
+
+  /**************************************************************************
+   * @description Delete ResumeData Status
+   * @param id: Delete ResumeData Object
+   *************************************************************************/
+  deleteResumeData(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeDataModel>(`${environment.resumeDataApiUrl}/?_id=${id}`);
+  }
+
+  /*-------------------------------------------------------------------------------------*/
 }
