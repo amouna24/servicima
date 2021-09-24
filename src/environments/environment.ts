@@ -52,7 +52,7 @@ export const environment = {
   invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
   invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
-  timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
+  timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',

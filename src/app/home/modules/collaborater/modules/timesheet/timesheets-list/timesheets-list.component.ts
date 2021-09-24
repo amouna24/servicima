@@ -79,7 +79,7 @@ getTimesheetParams(): void {
   /**
    * @description : get all timesheet of collaborator
    */
-  getAllTimesheet() {
+  getAllTimesheet(): void {
       this.timesheetService.getTimesheet(
         `?application_id=${this.userService.applicationId}` +
         `&company_email=${this.companyEmail}` +
@@ -96,7 +96,7 @@ getTimesheetParams(): void {
   /**
    * @description Navigate to ADD NEW TIMESHEET Component
    */
-  addNewTimesheet() {
+  addNewTimesheet(): void {
     this.redirectUrl = '/collaborator/timesheet/add/' + this.typeTimesheet;
     this.addButtonLabel = 'New';
   }
@@ -155,6 +155,7 @@ getTimesheetParams(): void {
                   }
                 }
               });
+            this.getAllTimesheet();
             this.subscriptionDeleteModal.unsubscribe();
           }
         );
@@ -174,6 +175,23 @@ getTimesheetParams(): void {
         this.deleteTimesheet(rowAction.data);
         break;
     }
+  }
+  sendColorObject(): any[] {
+    return  [{
+      columnCode: 'timesheet_status',
+      condValue: [
+        'Pending',
+        'Rejected',
+        'Approved',
+        'Draft',
+      ],
+      color: [
+        'warning-yellow font-semi-bold',
+        'red font-semi-bold',
+        'topaz font-semi-bold',
+        'brownish-grey font-semi-bold',
+      ],
+    }];
   }
 
   modalData(code: string, title: string, description: string): any {

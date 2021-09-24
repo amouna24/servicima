@@ -6,6 +6,7 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { HolidayService } from '@core/services/holiday/holiday.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -14,7 +15,6 @@ import { IContractProject } from '@shared/models/contractProject.model';
 import { ContractsService } from '@core/services/contracts/contracts.service';
 import { IContract } from '@shared/models/contract.model';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
-import { holidaysList } from '@shared/statics/holidays-list.static';
 import { IHoliday } from '@shared/models/holiday.model';
 const TIMESHEET_EXTRA = 'TIMESHEET_EXTRA';
 @Component({
@@ -55,42 +55,53 @@ export class AddTimesheetComponent implements OnInit {
               private router: Router,
               private activeRoute: ActivatedRoute,
               private modalServices: ModalService,
-              private contractService: ContractsService
+              private contractService: ContractsService,
+              private holidayServices: HolidayService
   ) {
   }
 
   async ngOnInit() {
-    this.holidays = holidaysList.find(row => row.country === 'FR');
-    this.initWeekDay();
-    this.getData();
+    this.weekDays = this.holidayServices.initWeekDay();
+    this.getData().then((res) => this.isLoading.next(res));
   }
-  getData() {
-    try {
-      if (this.formType.add) {
-        this.getUserInfo();
-        this.getContracts().then((res) => {
-          this.contract = res;
-          this.getProjects();
-          this.createForm();
-        });
-      } else if (this.formType.edit) {
-        this.getTimesheetById(atob(this.activeRoute.snapshot.queryParams.id)).then(
-          (data) => {
-            this.timesheet = data;
-            this.companyEmail = data.TimeSheetKey.company_email;
-            this.collaboratorEmail = data.TimeSheetKey.email_address;
+  /**
+   * @description: Get the needed data for the form
+   */
+  getData(): Promise<boolean> {
+    let done = false;
+    return new Promise(
+      resolve => {
+        try {
+          if (this.formType.add) {
+            this.getUserInfo();
             this.getContracts().then((res) => {
               this.contract = res;
-              this.getProjects(res.contractKey.contract_code);
+              this.getProjects();
               this.createForm();
-              this.updateForm();
+              done = true;
+              resolve(done);
             });
+          } else if (this.formType.edit) {
+            this.getTimesheetById(atob(this.activeRoute.snapshot.queryParams.id)).then(
+              (data) => {
+                this.timesheet = data;
+                this.companyEmail = data.TimeSheetKey.company_email;
+                this.collaboratorEmail = data.TimeSheetKey.email_address;
+                this.getContracts().then((res) => {
+                  this.contract = res;
+                  this.getProjects(res.contractKey.contract_code);
+                  this.createForm();
+                  this.updateForm();
+                  done = true;
+                  resolve(done);
+                });
+              }
+            );
           }
-        );
-      }
-    } catch (e) {
-      console.error(e);
-    }
+        } catch (e) {
+          console.error(e);
+        }
+      });
   }
   /**
    * @description: get Timesheet by id
@@ -163,7 +174,7 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   /**
-   * @description : create empty form
+   * @description : initialize empty form
    */
   createForm() {
     const dayValidator = [
@@ -218,11 +229,11 @@ export class AddTimesheetComponent implements OnInit {
       type_timesheet: this.formType.type,
       total_week_hours: this.timesheet.total_week_hours,
     });
-    this.getMonthHoliday();
+    this.getWeekHoliday();
   }
 
   /**
-   * @description : submit timesheet or save as draft
+   * @description : submit timesheet, save as draft or approve
    * @param value: 'submit' or 'save'
    */
   async submitTimesheet(value) {
@@ -237,7 +248,7 @@ export class AddTimesheetComponent implements OnInit {
           return 'Pending';
         } else if (value === 'save') {
           return 'Draft';
-        } else if (value === 'approve') {
+        } else if (value === 'approve' && this.formType.managerMode) {
           return 'Approved';
         }
       };
@@ -334,89 +345,43 @@ export class AddTimesheetComponent implements OnInit {
     if (this.initialForm.controls[formControlName]?.errors?.required) {
       return 'Required field';
     } else if (this.initialForm.controls[formControlName]?.errors?.max) {
-      return `maximum value is ${this.contract.working_hour_day}`;
+      return `The number of hours must be ${this.contract.working_hour_day} or less`;
     } else if (this.initialForm.controls[formControlName]?.errors?.min) {
-      return 'maximum value is 0';
+      return 'The number of hours must be at least 0 ';
     }
   }
-
+  /**
+   * @description: Set modal data
+   * @param: modal code, modal title and modal description
+   * @return: any
+   */
   modalData(code: string, title: string, description: string): any {
     return { code, title, description};
 }
-
-  initWeekDay() {
-    this.weekDays = [
-      {
-        name: 'monday',
-        desc: 'Monday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'tuesday',
-        desc: 'Tuesday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'wednesday',
-        desc: 'Wednesday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'thursday',
-        desc: 'Thursday',
-        holiday: { },
-        hasHoliday: false,
-      },
-      {
-        name: 'friday',
-        desc: 'Friday',
-        holiday: { },
-        hasHoliday: false,
-      },
-      {
-        name: 'saturday',
-        desc: 'Saturday',
-        holiday: null,
-        hasHoliday: false,
-      },
-      {
-        name: 'sunday',
-        desc: 'Sunday',
-        holiday: null,
-        hasHoliday: false,
-      }
-    ];
-  }
-
-  getMonthHoliday() {
-      const date = this.formType.add ? this.initialForm.value.start_date : this.timesheet.TimeSheetKey.start_date;
-      const firstDay = new Date(date);
-      const lastDay = new Date(date);
-      this.initWeekDay();
-      lastDay.setDate(firstDay.getDate() + 6);
-      const monthHolidays = this.holidays.holidays.filter(
-        (day) => {
-          return (Number(day.month) === (firstDay.getMonth() + 1) ||
-            Number(day.month) === (lastDay.getMonth() + 1));
+  /**
+   * @description: Get timesheet week holidays
+   * @return: void
+   */
+  getWeekHoliday(): void {
+      this.holidayServices.getWeekHoliday(
+        'FR',
+        this.formType.add ? this.initialForm.value.start_date : this.timesheet.TimeSheetKey.start_date
+      ).then(
+        (res) => {
+          this.weekDays = res;
+          this.disableHolidayInput();
         }
       );
-      let dd: any;
-      for (let i = 0; i < 7; i++) {
-        const dateDay = new Date(date);
-        dateDay.setDate(dateDay.getDate() + i);
-        dd = monthHolidays.find((res) => Number(res.day) === dateDay.getDate());
-        this.weekDays[i].holiday = dd ? dd : null;
-        this.weekDays[i].hasHoliday = !!dd;
-      }
-      this.disableHolidayInput();
   }
-
-  checkDay(day, i): number {
+  /**
+   * @description: check if the day is holiday
+   * * @param: day number (the week start with monday = 0)
+   * @return: void
+   */
+  checkDay(i: number): number {
+    const day = this.weekDays[i].name;
     if (this.weekDays[i].hasHoliday) {
-      if (this.formType.type !== TIMESHEET_EXTRA) {
+      if (this.initialForm.controls[day].enabled) {
         this.initialForm.controls[day].disable();
       }
       return 0;
@@ -427,17 +392,19 @@ export class AddTimesheetComponent implements OnInit {
       return !!this.initialForm.value[day] ? this.initialForm.value[day] : '';
     }
   }
-
-  disableHolidayInput() {
+  /**
+   * @description: Disable the input holidays
+   */
+  disableHolidayInput(): void {
     if (this.formType.type !== TIMESHEET_EXTRA) {
       this.initialForm.patchValue({
-        monday: this.checkDay('monday', 0),
-        tuesday: this.checkDay('tuesday', 1),
-        wednesday: this.checkDay('wednesday', 2),
-        thursday: this.checkDay('thursday', 3),
-        friday: this.checkDay('friday', 4),
-        saturday: this.checkDay('saturday', 5),
-        sunday: this.checkDay('sunday', 6),
+        monday: this.checkDay( 0),
+        tuesday: this.checkDay(1),
+        wednesday: this.checkDay(2),
+        thursday: this.checkDay( 3),
+        friday: this.checkDay(4),
+        saturday: this.checkDay( 5),
+        sunday: this.checkDay( 6),
       });
     }
   }

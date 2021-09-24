@@ -6,6 +6,7 @@
   [title]="'Timesheet list'"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['export','delete']"
+  [colorObject]="sendColorObject()"
 >
 </wid-dynamic-data-table>
 
