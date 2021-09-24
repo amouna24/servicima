@@ -35,6 +35,7 @@ import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
+import { BehaviorSubject } from 'rxjs';
 
 import { environment } from '../../../../../../../environments/environment';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
@@ -96,7 +97,7 @@ export class InvoiceManagementComponent implements OnInit {
   factorInvoice = false;
   currencyCode: string;
   totalPayments = 0;
-
+  leftToPay: number;
   showPayment = false;
   showAttachmentFile = false;
   iconVisible: boolean;
@@ -109,6 +110,8 @@ export class InvoiceManagementComponent implements OnInit {
   tableColumns1: string[] = ['File Title', 'Size', 'Date', 'Action'];
   data: MatTableDataSource<any> = new MatTableDataSource([]);
   data1: MatTableDataSource<any> = new MatTableDataSource([]);
+
+  isLoading = new BehaviorSubject<boolean>(false);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -138,6 +141,7 @@ export class InvoiceManagementComponent implements OnInit {
    *  @description Loaded when component in init state
    *************************************************************************/
   async ngOnInit() {
+    this.isLoading.next(true);
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.translateKey = ['invoice.siteWeb', 'invoice.email', 'invoice.phone', 'invoice.accountsPayable',
       'invoice.totalTTC', 'invoice.Subtotal', 'invoice.BicCode', 'invoice.RIB', 'invoice.IBAN', 'invoice.address',
@@ -275,7 +279,6 @@ export class InvoiceManagementComponent implements OnInit {
   refreshPayment() {
     this.data = new MatTableDataSource<any>(this.invoicePayment);
     this.data.sortingDataAccessor = (item, property) => {
-
       switch (property) {
         case 'Entered By': {
           return item.project_code.toLowerCase();
@@ -344,10 +347,19 @@ export class InvoiceManagementComponent implements OnInit {
    * @description : count  payment
    */
   countPayment() {
+    this.leftToPay = this.totalTTC;
     this.totalPayments = 0;
     this.invoicePayment.map((data) => {
       this.totalPayments =  this.totalPayments + parseInt(data['invoice_line_unit_amount'], 10);
     });
+    this.countLeftToPay();
+  }
+
+  /**************************************************************************
+   *  @description : count left to pay
+   *************************************************************************/
+  countLeftToPay() {
+    this.leftToPay = this.totalTTC - this.totalPayments;
   }
 
   /**************************************************************************
@@ -395,18 +407,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.getContractProject(this.invoiceHeader['contract_code']);
     // this.getTimesheet(this.invoiceHeader['contract_code']);
     this.invoicePayment = this.invoices[1] as IInvoicePaymentModel[];
-
-    // default data
-    this.refreshPayment();
-    if (this.invoicePayment) {
-      this.sort.sortChange.subscribe((sort: Sort) => {
-        this.refreshPayment();
-      });
-
-    }
-    this.sort1.sortChange.subscribe((sort: Sort) => {
-      this.refreshInvoiceAttachment();
-    });
     this.countPayment();
     this.formFactor.controls['factorInvoice'].setValue(this.invoiceHeader ['factor_involved'] === 'Y');
     this.mp = { ...this.invoiceLine };
@@ -434,7 +434,13 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.sousTotalHT = this.getSum('invoice_line_total_amount');
     this.vatMount = this.getSum('vat_amount');
     this.totalTTC = this.getSum('vat_amount') + this.getSum('invoice_line_total_amount');
+    this.countLeftToPay();
+    this.refreshPayment();
 
+    this.refreshInvoiceAttachment();
+    // default data
+
+      this.isLoading.next(false);
   }
 
   /**************************************************************************
@@ -467,15 +473,16 @@ RIB:${this.companyBankingInfos?.rib}`);
    *  @description : get invoice number
    *************************************************************************/
   async getInvoiceNbr(): Promise<void> {
+
     if (this.invoiceNbr) {
       this.action = 'update';
       await this.getInvoice();
       await this.getAttachmentInvoice();
-      this.refreshInvoiceAttachment();
       this.setForm();
       this.formHeader.get('invoiceNbr').disable();
       this.formHeader.patchValue({ invoiceNbr: this.invoiceNbr });
     } else {
+      this.isLoading.next(false);
       this.action = 'add';
       const maxInvoiceNbr = await this.getMaxHeaderInvoiceNbr() as string;
       this.invoiceNbr = maxInvoiceNbr ? parseInt(maxInvoiceNbr, 10) + 1 : 1;
@@ -549,6 +556,7 @@ RIB:${this.companyBankingInfos?.rib}`);
       this.sousTotalHT = this.getSum('invoice_line_total_amount');
       this.vatMount = this.getSum('vat_amount');
       this.totalTTC = this.getSum('vat_amount') + this.getSum('invoice_line_total_amount');
+      this.countLeftToPay();
     }
   }
 
@@ -682,7 +690,7 @@ RIB:${this.companyBankingInfos?.rib}`);
           }
         };
         this.invoicePayment.push(listLine);
-        this.invoicePayment = this.mapInvoiceAttachment(this.invoicePayment);
+        this.mapInvoiceAttachment(this.invoicePayment);
         this.refreshPayment();
         this.countPayment();
       }
@@ -704,10 +712,12 @@ RIB:${this.companyBankingInfos?.rib}`);
 
     const promise2 = new Promise((resolve) => {
       this.invoiceService.getInvoicePayment(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((invoicePayment) => {
-        invoicePayment = this.mapInvoiceAttachment(invoicePayment);
-        invoicePayment.map((data) => {
-          this.listToRemovePayment.push(data['_id']);
-        });
+        this.mapInvoiceAttachment(invoicePayment);
+        if (invoicePayment.length > 0 ) {
+          invoicePayment.map((data) => {
+            this.listToRemovePayment.push(data['_id']);
+          });
+        }
         resolve(invoicePayment);
       }, () => {
         resolve([]);
@@ -729,13 +739,13 @@ RIB:${this.companyBankingInfos?.rib}`);
   }
 
   mapInvoiceAttachment(invoicePayment) {
-   return  invoicePayment.map((invoicePay) => {
+    invoicePayment.map((invoicePay) => {
       const firstName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).first_name;
       const lastName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).last_name;
       invoicePay['Entred'] = firstName + '   ' + lastName;
       invoicePay['payment_mode_desc'] = this.paymentMethodsList.find(value => value.value
         === invoicePay['payment_mode']).viewValue;
-    });
+   });
   }
 
   /**************************************************************************

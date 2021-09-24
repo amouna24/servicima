@@ -73,7 +73,7 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div fxLayout="row" class="border-radius-15 full-width" fxFlex="100">
-                  <wid-project-section [projectCode]="item.project_code" (refreshTree)="refreshTreeHandler($event,item)"
+                  <wid-project-section [projectCode]="item.project_code ? item.project_code : item.ResumeProjectKey.project_code" (refreshTree)="refreshTreeHandler($event,item)"
                                        class="full-width full-height"></wid-project-section>
                 </div>
               </mat-expansion-panel>

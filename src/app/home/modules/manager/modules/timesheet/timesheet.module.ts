@@ -14,9 +14,10 @@ import { RejectTimesheetComponent } from './reject-timesheet/reject-timesheet.co
 import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { TimesheetComponent } from './timesheet.component';
 import { ListTimesheetComponent } from './list-timesheet/list-timesheet.component';
+import { EditTimesheetComponent } from './edit-timesheet/edit-timesheet.component';
 
 @NgModule({
-  declarations: [TimesheetComponent, ListTimesheetComponent, ShowTimesheetComponent, RejectTimesheetComponent],
+  declarations: [TimesheetComponent, ListTimesheetComponent, ShowTimesheetComponent, RejectTimesheetComponent, EditTimesheetComponent],
     imports: [
         CommonModule,
         TimesheetRoutingModule,

@@ -16,10 +16,11 @@ import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
-import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
+import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -36,6 +37,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { AddTimesheetComponent } from './components/add-timesheet/add-timesheet.component';
 import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
@@ -44,6 +46,7 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SkeletonLoaderComponent,
     StepperComponent,
     RightSidenaveComponent,
+    AddTimesheetComponent,
     /* Directives */
     CanBeDisplayedDirective,
     ClickOutsideDirective,
@@ -78,6 +82,8 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SplashComponent,
     ErrorComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
+    MailingModalComponent,
   ],
   imports: [
     CommonModule,
@@ -95,6 +101,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     MaterialModule,
@@ -133,6 +140,8 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ProfileImageComponent,
     ProfileImageComponent,
     TitleSettingsComponent,
+    AddTimesheetComponent,
+    NgMultiSelectDropDownModule,
   ]
 })
 export class SharedModule { }

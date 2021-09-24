@@ -177,14 +177,14 @@ export class InvoiceService {
    * @param attachment: attachment
    *************************************************************************/
   sendInvoiceMail(languageId: string, applicationId: string, companyId: string, emailAddress: string,
-                  companyName: string, collaboratorPosition: string, resumeUrl: string, attachment: any): Observable<any> {
+                  companyName: string, collaboratorPosition: string, resumeUrl: string, attachement: any, emailcc, emailbcc): Observable<any> {
     return this.httpClient.post(`${environment.invoiceHeaderApiUrl}/mailing`, { languageId,
       applicationId,
       companyId,
       emailAddress,
       companyName,
       collaboratorPosition,
-      resumeUrl, attachment });
+      resumeUrl, attachement, emailcc, emailbcc });
   }
 
   /**

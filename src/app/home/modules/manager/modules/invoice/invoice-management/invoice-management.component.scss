@@ -206,3 +206,10 @@
     padding: 0 !important;
   }
 }
+
+.adress{
+  ::ng-deep.mat-form-field-appearance-outline .mat-form-field-flex {
+    height: 160px !important;
+    width: 350px !important;
+}
+ }

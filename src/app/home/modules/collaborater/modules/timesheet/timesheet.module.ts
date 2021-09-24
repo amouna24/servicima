@@ -7,13 +7,13 @@ import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { TimesheetComponent } from './timesheet.component';
 import { TimesheetsListComponent } from './timesheets-list/timesheets-list.component';
 import { ContractManagementModule } from '../../../manager/modules/contract-management/contract-management.module';
-import { AddTimesheetComponent } from './add-timesheet/add-timesheet.component';
 import { DynamicDataTableModule } from '../../../../../shared/modules/dynamic-data-table/dynamic-data-table.module';
+import { AddEditTimesheetComponent } from './add-edit-timesheet/add-edit-timesheet.component';
 @NgModule({
   declarations: [
     TimesheetComponent,
     TimesheetsListComponent,
-    AddTimesheetComponent
+    AddEditTimesheetComponent
   ],
   imports: [
     CommonModule,

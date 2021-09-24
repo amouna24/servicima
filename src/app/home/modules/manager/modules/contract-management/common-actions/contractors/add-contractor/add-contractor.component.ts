@@ -83,6 +83,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+
   companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contactList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractorContactInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -107,7 +108,58 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
+  /**************************************************************************
+   * @description Resume models List
+   *************************************************************************/
+  resumeModels: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
+    {
+    icon: 'assets/img/peter-river-icon.jpg',
+    viewValue: 'Default',
+    value: 'DEFAULT',
+  },
+    {
+      icon: 'assets/img/Emerald-icon.jpg',
+      viewValue: 'Emerald',
+      value: 'EMERALD',
 
+    },
+    {
+      icon: 'assets/img/amethyst-icon.jpg',
+      viewValue: 'Amethyst',
+      value: 'AMETHYST',
+
+    },
+    {
+      icon: 'assets/img/orange-icon.jpg',
+      viewValue: 'Orange',
+      value: 'ORANGE',
+    },
+    {
+      icon: 'assets/img/sun-flower-icon.jpg',
+      viewValue: 'Sun Flower',
+      value: 'SUN_FLOWER',
+    },
+    {
+      icon: 'assets/img/silver-icon.jpg',
+      viewValue: 'Silver',
+      value: 'SILVER',
+    },
+    {
+      icon: 'assets/img/midnight-blue-icon.jpg',
+      viewValue: 'Midnight Blue',
+      value: 'MIDNIGHT_BLUE',
+    },
+    {
+      icon: 'assets/img/Green-icon.jpg',
+      viewValue: 'Green',
+      value: 'GREEN',
+    },
+    {
+      icon: 'assets/img/Alizarin-icon.jpg',
+      viewValue: 'Alizarin',
+      value: 'ALIZARIN',
+    },
+  ]);
   /**************************************************************************
    * @description Menu Items List
    *************************************************************************/
@@ -133,6 +185,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           titleKey: 'ORGANISATION',
         },
       ]
+    },
+    { title: 'Resume template',
+      titleKey: 'RESUME_TEMPLATE',
+      child: [],
     },
     {
       title: 'Contact',
@@ -333,6 +389,18 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       ],
     },
     {
+      titleRef: 'RESUME_TEMPLATE',
+      fieldsLayout: FieldsAlignment.one_item_at_center,
+      fields: [
+        {
+          label: 'Models',
+          type: FieldsType.THEME_RADIO_GROUP,
+          selectFieldList: this.resumeModels,
+          formControlName: 'resume_template',
+        },
+      ],
+    },
+    {
       titleRef: 'CONTACT',
       fieldsLayout: FieldsAlignment.one_item_stretch,
       fields: [
@@ -468,7 +536,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         },
       ],
     },
+
   ]);
+  private refData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -559,6 +629,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         legal_form: [''],
         tax_cd: [''],
       }),
+      RESUME_TEMPLATE: this.formBuilder.group( {
+        resume_template: ['DEFAULT'],
+      }),
       CONTACT: this.formBuilder.group({
         first_name: [''],
         last_name: [''],
@@ -573,7 +646,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       }),
     });
   }
-
   updateForms(contractor: IContractor) {
     this.contractorForm.patchValue({
       PERSONAL_INFORMATION : {
@@ -603,6 +675,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         vat_nbr: contractor.vat_nbr,
         legal_form: contractor.legal_form,
         tax_cd: contractor.tax_cd,
+      },
+      RESUME_TEMPLATE: {
+        resume_template: '',
       },
       CONTACT: {
         first_name: '',
@@ -678,7 +753,12 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE']
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'RESUM_TEMP']
+    );
+    await this.refDataService.getRefData(
+      this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+      this.applicationId,
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'RESUM_TEMP']
     );
     /******************************** ACTIVITY CODE *******************************/
     this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
@@ -686,6 +766,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.genderList.next(this.refDataService.refData['GENDER']);
     this.profileTitleList.next(this.refDataService.refData['PROF_TITLES']);
     this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
+    /****************************** RESUME MODELS ***********************************/
   }
 
   /**************************************************************************
@@ -801,6 +882,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       vat_nbr: '',
       web_site: '',
       zip_code: '',
+      template_resume: '',
     };
     if (this.canUpdate(this.contractorId)) {
       /*** CONTRACTOR KEY ***/
@@ -833,7 +915,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
       Contractor.update_date = Date.now();
       Contractor.creation_date = this.contractorInfo.creation_date;
-
+      /*** RESUME TEMPLATE ***/
+      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
       this.contractorService.updateContractor(Contractor)
         .pipe(
           takeUntil(this.destroy$)
@@ -932,7 +1015,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vat_nbr.value;
       Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
       Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
-
+      /*** RESUME TEMPLATE ***/
+      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
       Contractor.creation_date = Date.now();
       this.contractorService.addContractor(Contractor)
         .pipe(

@@ -10,6 +10,7 @@ import { ContractorsService } from '@core/services/contractors/contractors.servi
 import { UploadService } from '@core/services/upload/upload.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 
 import { environment } from '../../../../../../../environments/environment';
 import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invoice.component';
@@ -35,13 +36,14 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   applicationId: string;
   languageId: string;
   private subscriptions: Subscription[] = [];
-
+  subscriptionModal: Subscription;
   constructor(private userService: UserService,
               private modalService: ModalService,
               private invoiceService: InvoiceService,
               private contractorsService: ContractorsService,
               private uploadService: UploadService,
               private router: Router,
+              private modalServices: ModalService,
               private utilsService: UtilsService,
               private localStorageService: LocalStorageService) { }
   /**
@@ -52,6 +54,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       { modalName: 'protectInvoice', modalComponent: ChangePwdInvoiceComponent });
     this.modalService.registerModals(
       { modalName: 'setPwdInvoice', modalComponent: SetPwdInvoiceComponent });
+    this.modalService.registerModals({ modalName: 'mailing', modalComponent: MailingModalComponent });
     this.applicationId = this.localStorageService.getItem('userCredentials');
     this.languageId = this.localStorageService.getItem('language').langId;
     this.getConnectedUser();
@@ -145,7 +148,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param data: object to update
    */
   updateInvoice(data) {
-    if (data.password) {
+  /*  if (data.password) {
       this.modalService.displayModal('setPwdInvoice', data,
         '500px', '255px').subscribe(async (res) => {
         if (res) {
@@ -156,11 +159,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
           console.log('error');
         }
       });
-    } else {
+    } else {*/
       this.router.navigate(['/manager/invoices/add-invoice'],
         { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
         });
-    }
+   // }
   }
 
   /**
@@ -191,7 +194,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param row: list invoices to send
    */
   sendMailing(row) {
-    row.map((data) => {
+  /*  row.map((data) => {
       this.invoiceService.sendInvoiceMail(this.languageId,
         this.applicationId,
         this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
@@ -203,7 +206,15 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
           path: environment.uploadFileApiUrl + '/show/' + data.attachment }]
       ).subscribe(() => {
       });
-    });
+    });*/
+
+    this.subscriptionModal = this.modalServices.displayModal('mailing', row, '500px', '640px')
+      .subscribe(
+        (res) => {
+          console.log('mailing dialog', res);
+          this.subscriptionModal.unsubscribe();
+        });
+
   }
 
   archiver(data) {
