@@ -25,6 +25,7 @@ import { dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 
 import { environment } from '../../../../../../environments/environment';
+import {UploadService} from "@core/services/upload/upload.service";
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -48,6 +49,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: string[];
   @Input() buttonAdd: boolean;
+  @Input() setAvatar: { columnCode: string, imgSrc: string};
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
   @Output() checked = new EventEmitter<{ }>();
@@ -103,6 +105,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private readonly changeDetectorRef: ChangeDetectorRef,
+    private uploadService: UploadService,
   ) {
   }
   ngAfterViewChecked(): void {
@@ -589,6 +592,36 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       }
     });
       return cellColor;
+  }
+
+  /**************************************************************************
+   * @description Add avatar to column
+   *************************************************************************/
+  showAvatar(col, rowVal?) {
+    let imgSrc = null;
+    const haveImg = !!this.setAvatar && this.setAvatar.columnCode === col;
+    if (haveImg) {
+      if (!!rowVal && rowVal[this.setAvatar.imgSrc]) {
+        if (typeof rowVal[this.setAvatar.imgSrc] !== 'object') {
+          this.uploadService.getImage(rowVal[this.setAvatar.imgSrc])
+            .then((data) => {
+              if (data) {
+                const photo = {
+                  src : rowVal[this.setAvatar.imgSrc],
+                  url : data
+                };
+                rowVal[this.setAvatar.imgSrc] = photo;
+                imgSrc = data;
+              }
+            });
+        } else {
+          imgSrc = rowVal[this.setAvatar.imgSrc].url;
+        }
+      } else {
+        imgSrc = 'assets/img/default.jpg';
+      }
+    }
+    return { haveImg, imgSrc};
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
