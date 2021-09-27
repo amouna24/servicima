@@ -596,13 +596,32 @@ export class ResumeDoneComponent implements OnInit {
                 this.showWaiting = true;
                             this.resumeService.generateResumeContractors(dataCollaborator, action).subscribe( (res) => {
                               console.log('generator contractors is running', res);
-                              this.showWaiting = false;
-                              this.router.navigate(['/candidate/']);
                             });
                 console.log(dataCollaborator);
-/*                            this.resumeService.addResumeData(dataCollaborator).subscribe( (resumeData) => {
-                              console.log('resume Data added', resumeData);
-                            });*/
+                this.resumeService.getResumeData(
+                  `?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`
+                ).subscribe( (resumeData) => {
+                  console.log('resume data', resumeData['msg_code']);
+                  if (resumeData['msg_code'] === '0004') {
+                    console.log('hello add');
+                    this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
+                      console.log('resume Data added', resume);
+                      this.router.navigate(['/collaborator/']);
+                    });
+                  } else {
+                    console.log('hello update');
+                    dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
+                    dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
+                    dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
+                    dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
+                    this.resumeService.updateResumeData(dataCollaborator).subscribe( (resume) => {
+                      console.log('resume Data updated', resume);
+                      this.showWaiting = false;
+                      this.router.navigate(['/collaborator/']);
+
+                    });
+                  }
+                });
                 this.subscriptionModal.unsubscribe();
               }
             });
