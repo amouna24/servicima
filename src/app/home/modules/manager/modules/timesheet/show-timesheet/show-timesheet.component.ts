@@ -7,6 +7,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-show-timesheet',
@@ -15,12 +17,13 @@ import { Router } from '@angular/router';
 })
 export class ShowTimesheetComponent implements OnInit {
   timesheet: any;
-  avatar: SafeUrl = 'assets/img/default.jpg';
+  avatar: SafeUrl;
   user: IUserModel;
   id: string;
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   subscriptions: Subscription;
   userInfo: IUserInfo;
+  userPosition = '';
   week: any[] = [
     {
       day: 'MON',
@@ -55,22 +58,27 @@ export class ShowTimesheetComponent implements OnInit {
               private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) private data: any,
               private uploadService: UploadService,
-              private router: Router
+              private router: Router,
+              private refData: RefdataService,
+              private userService: UserService,
   ) {
   }
 
   async ngOnInit() {
     this.timesheet = this.data;
     await this.getAvatar();
+    this.getJobTitle();
   }
 
   getAvatar(): void {
-    this.uploadService.getImage(this.timesheet.photo)
-      .then((data) => {
-        if (data) {
-          this.avatar = data;
-        }
-      });
+    if (this.timesheet.photo) {
+      this.uploadService.getImage(this.timesheet.photo)
+        .then((data) => {
+          if (data) {
+            this.avatar = data;
+          }
+        });
+    }
   }
 
   modalActions(action?: string) {
@@ -88,5 +96,16 @@ export class ShowTimesheetComponent implements OnInit {
           'id': btoa(this.timesheet._id.toString())
   }
 });
+  }
+
+  getJobTitle() {
+    this.userService.connectedUser$.subscribe(
+      (data) => {
+          this.refData.getRefData(data.company._id, this.userService.applicationId, ['PROF_TITLES']).then(
+            (res) => {
+              this.userPosition = res['PROF_TITLES'].find( (col) => col.value === this.timesheet.user_position).viewValue;
+            }
+          );
+  });
   }
 }
