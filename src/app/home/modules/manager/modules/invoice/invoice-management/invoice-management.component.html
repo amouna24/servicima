@@ -21,26 +21,26 @@
 
     <div fxLayout="column" fxFlex="100">
       <div fxLayout="row" fxLayoutAlign="center center" class="m-l-15" fxLayoutGap="10px">
-        <div fxLayout="row" fxFlex="12"> <img style="border-radius: 50%" width="115px" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
+        <div fxLayout="row" fxFlex="12"> <img [ngStyle]="{'border-radius': '50%', 'width':'115px'}" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
         <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">Invoice</h1> </div>
-        <div fxLayout="row" fxFlex="65" style=" align-items: flex-end; display: flex;justify-content: flex-end;gap: 6px;" class="m-r-40 m-b-15 min-full-height" >
+        <div fxLayout="row" fxFlex="65" fxLayoutAlign="flex-end flex-end" fxLayoutGap="6px" class="m-r-40 m-b-15 min-full-height" >
           <div>
             <button mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> Attach file</button>
           </div>
           <div>
-            <button mat-raised-button  class="btn-small bg-pale-grey-four "  style="color: #67809f"> Send</button>
+            <button mat-raised-button  class="btn-small bg-pale-grey-four help-blue"> Send</button>
           </div>
           <div>
-            <button mat-raised-button class="btn-small bg-pale-grey-four" style="color: #67809f"  (click)="toPay()"> Enter payment</button>
+            <button mat-raised-button class="btn-small bg-pale-grey-four help-blue" (click)="toPay()"> Enter payment</button>
           </div>
           <div>
-            <button mat-raised-button class="btn-small bg-pale-grey-four" style="color: #67809f" > Status</button>
+            <button mat-raised-button class="btn-small bg-pale-grey-four help-blue"> Status</button>
           </div>
 
-          <div fxLayout="row"  fxLayoutGap="4px" style="width: 150px !important;">
+          <div fxLayout="row"  fxLayoutGap="4px" class="width-150">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi-credit-card">
             </mat-icon>
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" style="cursor: pointer"> Payment
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" class="cursor-pointer"> Payment
               {{totalPayments}}$
 
               <span *ngIf="showPayment" class="material-icons">keyboard_arrow_down</span>
@@ -52,7 +52,7 @@
       <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%' , 'color':'#f3f6f9'}"></mat-divider>
 
 
-      <div [hidden]="!showAttachmentFile"  class="container-tab" style="margin-left: 4px" >
+      <div [hidden]="!showAttachmentFile"  class="container-tab m-l-5">
         <div class="mat-elevation-z8">
 
           <div [hidden]="invoiceAttachment.length > 0">
@@ -68,7 +68,7 @@
             </div>
           </div>
 
-          <table  [hidden]="invoiceAttachment.length ==0" matSort  style="width: 93%; box-shadow: none !important; margin-left: 2%" mat-table  [dataSource]="data1" class="mat-elevation-z8">
+          <table  #table2 [hidden]="invoiceAttachment.length ==0" matSort  [ngStyle]=" {'width': '93%', 'box-shadow': 'none !important,','margin-left': '2%'}" mat-table  [dataSource]="data1" class="mat-elevation-z8">
 
             <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
@@ -76,7 +76,7 @@
             <!-- Position Column -->
             <ng-container matColumnDef="File Title">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> File title: </th>
-              <td (click)="showAttachment(element)" style="width: 125px;" mat-cell *matCellDef="let element"> {{element.file_title}}</td>
+              <td (click)="showAttachment(element)" class="width-125" mat-cell *matCellDef="let element"> {{element.file_title}}</td>
             </ng-container>
 
             <!-- Name Column -->
@@ -88,7 +88,7 @@
             <!-- Weight Column -->
             <ng-container matColumnDef="Date">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-              <td (click)="showAttachment(element)" style=" width: 40% !important;" mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+              <td (click)="showAttachment(element)" class="width-40" mat-cell *matCellDef="let element"> {{element.date | date}} </td>
             </ng-container>
 
 
@@ -115,15 +115,15 @@
       </div>
       <div fxFlex="50" [ngStyle]="{'padding-right': '7%','height': '140px','line-height': 2}" class="m-t-10" fxLayout="column"
            fxLayoutAlign="flex-start" >
-        <div  style="width: 210px" *ngIf="showAttachmentFile && invoiceAttachment.length > 0">
-          <div fxLayout="row" class="flex-wrap" style="margin-left: 30px"  >
+        <div  class="width-210" *ngIf="showAttachmentFile && invoiceAttachment.length > 0">
+          <div fxLayout="row" class="flex-wrap m-l-30">
              <button  (click)="viewData()" mat-raised-button class="btn-small bg-cerulean-blue white">Add file</button>
 
           </div>
         </div>
       </div>
 
-      <div  [hidden]="!showPayment" class="container-tab" style="margin-left: 4px" >
+      <div  [hidden]="!showPayment" class="container-tab m-l-5" >
         <div class="mat-elevation-z8">
           <div [hidden]="invoicePayment.length > 0">
             <div fxLayout="row" fxLayoutAlign="center start">
@@ -139,10 +139,10 @@
           </div>
 
 
-          <table [hidden]="invoicePayment.length == 0"    style="width: 93%; box-shadow: none !important; margin-left: 2%" mat-table  [dataSource]="data" class="mat-elevation-z8" matSort>
+          <table #table1 [hidden]="invoicePayment.length == 0"    [ngStyle]="{'width': '93%', 'box-shadow': 'none !important', 'margin-left': '2%'}" mat-table  [dataSource]="data" class="mat-elevation-z8" matSort>
             <ng-container matColumnDef="Entered By">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Entered By </th>
-              <td style="width: 125px;" mat-cell *matCellDef="let element"> {{element.Entred}} </td>
+              <td  class="width-125" mat-cell *matCellDef="let element"> {{element.Entred}} </td>
 
             </ng-container>
             <ng-container matColumnDef="Type">
@@ -152,7 +152,7 @@
 
             <ng-container matColumnDef="Notes">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Notes </th>
-              <td style=" width: 40% !important;" mat-cell *matCellDef="let element"> {{element.note}} </td>
+              <td class="width-40" mat-cell *matCellDef="let element"> {{element.note}} </td>
             </ng-container>
 
             <ng-container matColumnDef="Date">
@@ -182,13 +182,13 @@
       </div>
       <div fxFlex="50"  [ngStyle.gt-lg]="{'padding-right': '7%','height': '140px','line-height': 2}" fxLayout="column"
            fxLayoutAlign="flex-end flex-end" >
-        <div style="width: 250px;" class="m-t-10" *ngIf="showPayment && invoicePayment.length > 0">
-          <div fxLayout="row" class="flex-wrap" style="margin-left: 30px">
-            <div style="max-width: 110px; min-width: 110px">Total Payments: </div>
+        <div  class="m-t-10 width-250" *ngIf="showPayment && invoicePayment.length > 0">
+          <div fxLayout="row" class="flex-wrap m-l-30">
+            <div class="width-100">Total Payments: </div>
             <div> {{totalPayments}}$</div>
           </div>
-          <div fxLayout="row" class="flex-wrap" style="margin-left: 30px">
-            <div style="max-width: 110px; min-width: 110px"> pay: </div>
+          <div fxLayout="row" class="flex-wrap m-l-30">
+            <div class="width-100"> pay: </div>
             <div> {{leftToPay}}$ </div>
           </div>
         </div>
@@ -350,7 +350,7 @@
       <div [formGroup]="form" [ngStyle]="{ 'padding-top': '10px', 'margin-left': '2%','width': '96%'}" *ngIf="contractorName && contractCode && !editContractors">
         <div formArrayName='input'>
           <div class="dhia">
-            <table class="full-width ">
+            <table  class="full-width ">
               <tr  class="white full-width bg-steel text-center font-size-12">
                 <th class="small-col"  >Services/produits</th>
                 <th class="large-col" >Description project</th>
@@ -425,9 +425,9 @@
             <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center" class="border-none"
                  [ngStyle]="{border: 'solid 3px #e8f1f9',  height: '200px','border-top': 'none'}" >
               <div fxLayout="column" fxLayoutAlign="center center">
-                <div style="font-size: 24px;color: #707070; line-height: 3"> This Invoice has no row</div>
+                <div class="font-size-24 line-height-3 gray"> This Invoice has no row</div>
                 <button mat-raised-button class="btn-medium bg-cerulean-blue">
-                  <span class="white font-normal" (click)="onAddAnotherLine()">Add  new line Invoice</span>
+                  <span class="white font-normal" (click)="onAddAnotherLine()">Add  new line</span>
                 </button>
               </div>
             </div>
@@ -436,12 +436,12 @@
         <br>
         <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
 
-        <div fxLayout="row" style="padding-top:20px" flexLayoutGap="30px" [formGroup]="formCompanyBanking">
-          <div style="display: flex">
+        <div fxLayout="row" class="p-t-20" flexLayoutGap="30px" [formGroup]="formCompanyBanking">
+          <div fxFlex="100">
             <div fxFlex="50"> <span>Condition et modalité</span>
               <div class="container-factor">
-                <mat-form-field  appearance="outline" style=" min-width: 435px !important;padding: 0 !important;" >
-                    <textarea style="line-height: 1.4; overflow: hidden" matInput name="Text1"  rows="8"  class="overflow-hidden" formControlName='comment1' matInput
+                <mat-form-field  appearance="outline" class="width-435 p-0" >
+                    <textarea matInput name="Text1"  rows="8"  class="overflow-hidden line-height-1-4" formControlName='comment1' matInput
                     ></textarea>
                 </mat-form-field>
               </div>
@@ -456,49 +456,49 @@
                fxLayoutAlign="center center" fxLayoutAlign.gt-lg="center flex-end" >
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
-              <div style="max-width: 100px; min-width: 100px"> Sous-total: </div>
+              <div class="width-100"> Sous-total: </div>
               <div> {{sousTotalHT}}$ </div>
             </div>
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
-              <div style="max-width: 100px; min-width: 100px"> TVA: </div>
+              <div class="width-100"> TVA: </div>
               <div> {{vatMount}}$ </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
-              <div style="max-width: 100px; min-width: 100px"> Total: </div>
+              <div class="width-100"> Total: </div>
               <div> {{totalTTC}}$ </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
-              <div style="max-width: 100px; min-width: 100px"> Paiement(s): </div>
+              <div class="width-100"> Paiement(s): </div>
               <div> {{totalTTC}}$ </div>
             </div>
 
-            <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}" style="font-weight: bold;">
-              <div style="max-width: 100px; min-width: 100px"> Solde à payer: </div>
+            <div fxLayout="row" class="flex-wrap font-bold" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}" >
+              <div class="width-100"> Solde à payer: </div>
               <div> {{totalTTC}}$ </div>
             </div>
           </div>
         </div>
 
-        <div fxLayout="column" style="min-height: 25% !important;">
-          <div fxFlex="55" >
+        <div fxLayout="column" class="min-height-25">
+          <div fxFlex="55" class="p-b-5">
             <div fxLayout="row" class="flex-wrap">
-              <div style="max-width: 100px; min-width: 100px"> Tel: </div>
+              <div class="width-100"> Tel: </div>
               <div> {{this.userInfo['phone_nbr1']}} </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap">
-              <div style="max-width: 100px; min-width: 100px"> Email: </div>
+              <div class="width-100"> Email: </div>
               <div> <a class="cerulean-blue">{{this.userInfo['contact_email']}} </a> </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap">
-              <div style="max-width: 100px; min-width: 100px"> Site web: </div>
+              <div class="width-100"> Site web: </div>
               <div> <a class="cerulean-blue">{{this.userInfo['web_site']}}</a></div>
             </div>
           </div>
-          <div class="modal-footer"  fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px"
+          <div   fxFlex="35"  fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px"
                class="m-r-10">
             <div class="full-width">
               <button mat-raised-button class="btn-small bg-pale-grey black-three">Cancel</button>

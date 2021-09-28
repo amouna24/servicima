@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { UserService } from '@core/services/user/user.service';
-import { Router } from '@angular/router';
-import { IUserInfo } from '@shared/models/userInfo.model';
+
+const REJECTED = 'Rejected';
 
 @Component({
   selector: 'wid-reject-timesheet',
@@ -21,7 +19,7 @@ export class RejectTimesheetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.reject = this.data.action === 'Rejected';
+    this.reject = this.data.action === REJECTED;
   }
 
   /**
