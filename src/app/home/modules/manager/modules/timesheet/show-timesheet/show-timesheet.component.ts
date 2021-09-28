@@ -71,13 +71,20 @@ export class ShowTimesheetComponent implements OnInit {
   }
 
   getAvatar(): void {
-    if (this.timesheet.photo) {
-      this.uploadService.getImage(this.timesheet.photo)
+    const getPic = (id) => {
+      this.uploadService.getImage(id)
         .then((data) => {
           if (data) {
             this.avatar = data;
           }
         });
+    };
+    if (typeof this.timesheet.photo !== 'object' && this.timesheet.photo) {
+      getPic(this.timesheet.photo);
+    } else if (this.timesheet.photo.url) {
+        this.avatar = this.timesheet.photo.url;
+      } else if (this.timesheet.photo.src) {
+      getPic(this.timesheet.photo.src);
     }
   }
 
