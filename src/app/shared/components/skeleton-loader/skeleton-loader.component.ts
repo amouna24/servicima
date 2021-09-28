@@ -15,6 +15,7 @@ export class SkeletonLoaderComponent implements OnInit {
   @Input() nbrColumn;
   @Input() circle: boolean;
   @Input() marginLeft;
+  @Input() marginRight;
   @Input() marginTop;
   @Input() marginBottom;
 
@@ -32,6 +33,7 @@ export class SkeletonLoaderComponent implements OnInit {
       'border-radius': this.circle ? '50%' : '',
       'margin-top': this.marginTop ? this.marginTop + 'px' : '20px',
       'margin-left': this.marginLeft ? this.marginLeft + 'px' : '',
+      'margin-right': this.marginRight ? this.marginRight + 'px' : '',
       'margin-bottom': this.marginBottom ? this.marginBottom + 'px' : ''
     };
     return myStyles;

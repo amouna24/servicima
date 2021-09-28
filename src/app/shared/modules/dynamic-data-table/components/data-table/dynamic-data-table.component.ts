@@ -23,6 +23,7 @@ import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -48,6 +49,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: string[];
   @Input() buttonAdd: boolean;
+  @Input() setAvatar: { columnCode: string, imgSrc: string};
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number }>();
   @Output() checked = new EventEmitter<{ }>();
@@ -589,6 +591,22 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       }
     });
       return cellColor;
+  }
+
+  /**************************************************************************
+   * @description Add avatar to column
+   *************************************************************************/
+  showAvatar(col, rowVal?) {
+    let imgSrc = null;
+    const haveImg = !!this.setAvatar && this.setAvatar.columnCode === col;
+    if (haveImg) {
+      if (!!rowVal && rowVal[this.setAvatar.imgSrc]) {
+        imgSrc = this.env + rowVal[this.setAvatar.imgSrc];
+      }
+    } else {
+        imgSrc = 'assets/img/default.jpg';
+      }
+    return { haveImg, imgSrc};
   }
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
