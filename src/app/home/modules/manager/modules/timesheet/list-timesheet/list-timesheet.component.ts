@@ -126,7 +126,7 @@ getAllTimesheet() {
                 'rejectTimesheet',
                 { timesheet: data, action: res},
                 '607px',
-                '350px')
+                '353px')
                 .subscribe((result) => {
                   if (result) {
                     this.getAllTimesheet();
@@ -154,7 +154,6 @@ getAllTimesheet() {
         break;
     }
   }
-
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/
