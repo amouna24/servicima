@@ -13,6 +13,7 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
 import { IResumeDataModel } from '@shared/models/resumeData.model';
+import { IResumeListModel } from '@shared/models/resumeList.model';
 
 import { Observable, throwError } from 'rxjs';
 
@@ -572,4 +573,10 @@ export class ResumeService {
   }
 
   /*-------------------------------------------------------------------------------------*/
+  getResumeList(filter: string): Observable<IResumeListModel[]> {
+    return this.httpClient.get<IResumeListModel[]>(`${environment.uploadResumeFileApiUrl}/${filter}`);
+  }
+  addResumeList(resumeList: IResumeListModel): Observable<any> {
+    return this.httpClient.post<IResumeListModel>(`${environment.uploadResumeFileApiUrl}`, resumeList);
+  }
 }
