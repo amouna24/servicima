@@ -416,7 +416,7 @@ export class ResumeDoneComponent implements OnInit {
   async uploadCompanyFile(formData) {
     return await this.uploadService.uploadImage(formData)
       .pipe(
-        map(response => response.filename)
+        map(response => response.file.filename)
       )
       .toPromise();
   }
@@ -636,7 +636,7 @@ export class ResumeDoneComponent implements OnInit {
             (resMail) => {
               if (resMail === true) {
                 this.showWaiting = true;
-                this.resumeService.generateResumeCompany(data, action).subscribe( async (result) => {
+                this.resumeService.generateResumeCompany(data, action).subscribe(async (result) => {
                   saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
                   const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
                     { lastModified: new Date().getTime(), type: 'docx'});
@@ -644,32 +644,46 @@ export class ResumeDoneComponent implements OnInit {
                   formData.append('file', file);
                   formData.append('caption', file.name);
                   await this.uploadCompanyFile(formData).then(async (filename) => {
-                    this.generalInfoList[0].resume_filename_docx = filename;
-                    this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-                    this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-                    this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-                    this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-                    this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-                    this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                      this.resumeService
-                        .sendMailManager('5eac544ad4cb666637fe1354',
-                          this.generalInfoList[0].application_id,
-                          this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                          this.companyEmail,
-                          this.companyName,
-                          this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
-                          this.userService.connectedUser$.getValue().user[0]['last_name'],
-                          [{ filename: this.generalInfoList[0].init_name + '.docx',
-                            path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}` }, ]
-                        ).subscribe((dataB) => {
-                        this.showWaiting = false;
-                        this.router.navigate(['/candidate/']);
+                    this.resumeService.generateResumeCompany(data, 'preview').subscribe(
+                      async res => {
+                        const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
+                          { lastModified: new Date().getTime(), type: 'pdf'});
+                        const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
+                        formDataPdf.append('file', filePdf);
+                        formDataPdf.append('caption', filePdf.name);
+                        await this.uploadCompanyFile(formDataPdf).then((filenamePdf) => {
+                          console.log('filename PDF', filenamePdf, filename);
+                          this.generalInfoList[0].resume_filename_docx = filename;
+                          this.generalInfoList[0].resume_filename_pdf = filenamePdf;
+                          this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+                          this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+                          this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+                          this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+                          this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+                          this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                            console.log('aaa', generalInfo);
+                            this.resumeService
+                              .sendMailManager('5eac544ad4cb666637fe1354',
+                                this.generalInfoList[0].application_id,
+                                this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                                this.companyEmail,
+                                this.companyName,
+                                this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
+                                this.userService.connectedUser$.getValue().user[0]['last_name'],
+                                [{
+                                  filename: this.generalInfoList[0].init_name + '.docx',
+                                  path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
+                                }, ]
+                              ).subscribe((dataB) => {
+                              this.showWaiting = false;
+                              this.router.navigate(['/candidate/']);
+                            });
+                          });
+                        });
                       });
-                    });
                   });
+                  this.subscriptionModal.unsubscribe();
                 });
-
-                this.subscriptionModal.unsubscribe();
               }
             });
       } else {
@@ -701,24 +715,8 @@ export class ResumeDoneComponent implements OnInit {
       this.resumeService.generateResumeCompany(data, action).subscribe(
       async res => {
           const fileURL = URL.createObjectURL(res);
+          this.showWaitingPreview = false;
           window.open(fileURL, '_blank');
-          const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
-            { lastModified: new Date().getTime(), type: 'pdf'});
-          const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
-          formDataPdf.append('file', filePdf);
-          formDataPdf.append('caption', filePdf.name);
-          await this.uploadFile(formDataPdf).then((filenamePdf) => {
-            this.generalInfoList[0].resume_filename_pdf = filenamePdf;
-            this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-            this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-            this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-            this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-            this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-            this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-              console.log( 'updated', generalInfo);
-              this.showWaitingPreview = false;
-            });
-          });
         });
       }
   }

@@ -23,9 +23,9 @@ import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { environment } from '../../../../../../environments/environment';
-import {UploadService} from "@core/services/upload/upload.service";
 
 @Component({
   selector: 'wid-dynamic-data-table',
