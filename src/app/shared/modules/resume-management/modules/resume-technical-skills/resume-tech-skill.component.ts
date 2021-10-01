@@ -34,6 +34,7 @@ export class ResumeTechSkillComponent implements OnInit {
   subscriptionModal: Subscription;
   showNumberError: boolean;
   skillIndex: string;
+  companyUserType: string;
   /**********************************************************************
    * @description Resume Technical skills constructor
    *********************************************************************/
@@ -45,6 +46,7 @@ export class ResumeTechSkillComponent implements OnInit {
     private router: Router,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -224,13 +226,15 @@ this.button = 'Add'; }
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/functionnalSkills'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/certifications'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }

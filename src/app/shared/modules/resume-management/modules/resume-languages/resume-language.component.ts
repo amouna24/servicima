@@ -45,7 +45,7 @@ export class ResumeLanguageComponent implements OnInit {
   langListRes: IViewParam[];
   subscriptionModal: Subscription;
   button: string;
-
+  companyUserType: string;
   constructor(
     private utilService: UtilsService,
     private fb: FormBuilder,
@@ -59,6 +59,7 @@ export class ResumeLanguageComponent implements OnInit {
     private router: Router,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -325,13 +326,15 @@ export class ResumeLanguageComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/done'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/dynamicSection'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }

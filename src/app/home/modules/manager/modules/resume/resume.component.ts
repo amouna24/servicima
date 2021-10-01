@@ -120,8 +120,12 @@ await this.getData();
    *************************************************************************/
   exportPdf(data) {
     data.map( (exportPdfData) => {
-      if (exportPdfData.resume_filename_pdf !== undefined && exportPdfData.resume_filename_pdf !== null) {
-        window.open(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_pdf, '_blank');
+      if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
+        this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+          console.log(pdf);
+          const fileURL = URL.createObjectURL(pdf);
+          window.open(fileURL, '_blank');
+        });
       } else {
         const confirmation = {
           code: 'info',
@@ -145,6 +149,7 @@ await this.getData();
    * @param data contain the resume resume date of the user
    *************************************************************************/
   private updateResume(data) {
+    console.log('user type', data.resume_user_type);
     data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
     data.user_info.language_id = data.user_info.ResumeKey.language_id;
     data.user_info.company_email = data.user_info.ResumeKey.company_email;
@@ -156,6 +161,7 @@ await this.getData();
           generalInformation: data.user_info,
           firstName: data.first_name,
           lastName: data.last_name,
+          user_type: data.resume_user_type,
         }
       });
   }

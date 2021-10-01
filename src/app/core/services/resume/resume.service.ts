@@ -579,4 +579,8 @@ export class ResumeService {
   addResumeList(resumeList: IResumeListModel): Observable<any> {
     return this.httpClient.post<IResumeListModel>(`${environment.uploadResumeFileApiUrl}`, resumeList);
   }
+  convertResumeToPdf(docxUrl: string) {
+    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'blob'});
+
+  }
 }

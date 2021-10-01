@@ -60,7 +60,10 @@ export class ResumeDoneComponent implements OnInit {
     private uploadService: UploadService,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    console.log(this.router.getCurrentNavigation()?.extras?.state?.companyUserType);
+    this.companyuserType   = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
+  companyuserType: string;
   count = 0;
   resumeCode: string;
   generalInfoList: IResumeModel[];
@@ -537,7 +540,7 @@ export class ResumeDoneComponent implements OnInit {
         certifications: this.certifList,
         company_name: this.companyName,
         company_email: this.companyEmail,
-        company_logo: this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ? this.imageUrl + this.companyLogo : '',
+        company_logo:  this.imageUrl + this.companyLogo,
         contact_email: this.contactEmail,
         technicalSkills: this.techSkillList,
         functionnalSkills: this.funcSkillList,
@@ -578,12 +581,12 @@ export class ResumeDoneComponent implements OnInit {
    * @description generate Resume in docx format or in PDF format
    * @param dataCollaborator it contains the collaborator data
    * @param action which differs between the generation in pdf or docx format
-   * @param data it contains the necessary data for the Resume
+   * @param dataCompany it contains the necessary data for the Resume
    *************************************************************************/
-  downloadDocs(data: object,  action: string, dataCollaborator?: IResumeDataModel) {
+  downloadDocs(dataCompany: object,  action: string, dataCollaborator?: IResumeDataModel) {
     console.log('info list', this.generalInfoList[0]);
     if (action === 'generate') {
-      if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+      if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR' || this.companyuserType === 'COLLABORATOR') {
         const confirmation = {
           code: 'edit',
           title: 'Send Email',
@@ -594,38 +597,70 @@ export class ResumeDoneComponent implements OnInit {
             (resMail) => {
               if (resMail === true) {
                 this.showWaiting = true;
-                            this.resumeService.generateResumeContractors(dataCollaborator, action).subscribe( (res) => {
+                this.resumeService.generateResumeCompany(dataCompany, action)
+                  .subscribe(async (result) => {
+                    saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
+                    const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
+                      { lastModified: new Date().getTime(), type: 'docx'});
+                    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+                    formData.append('file', file);
+                    formData.append('caption', file.name);
+                    await this.uploadCompanyFile(formData).then(async (filename) => {
+                      this.generalInfoList[0].resume_filename_docx = filename;
+                      this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+                      this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+                      this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+                      this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+                      this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+                      this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                        if (!this.companyuserType) {
+                          this.resumeService
+                            .sendMailManager('5eac544ad4cb666637fe1354',
+                              this.generalInfoList[0].application_id,
+                              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                              this.companyEmail,
+                              this.companyName,
+                              this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
+                              this.userService.connectedUser$.getValue().user[0]['last_name'],
+                              [{
+                                filename: this.generalInfoList[0].init_name + '.docx',
+                                path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
+                              }, ]
+                            ).subscribe((dataB) => {
+                            console.log('mail sended');
+                          });
+                        }
+                          this.showWaiting = false;
+                          this.resumeService.generateResumeContractors(dataCollaborator, action)
+                            .subscribe( (res) => {
                               console.log('generator contractors is running', res);
                             });
-                console.log(dataCollaborator);
-                this.resumeService.getResumeData(
-                  `?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`
-                ).subscribe( (resumeData) => {
-                  console.log('resume data', resumeData['msg_code']);
-                  if (resumeData['msg_code'] === '0004') {
-                    console.log('hello add');
-                    this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
-                      console.log('resume Data added', resume);
-                      this.router.navigate(['/collaborator/']);
-                    });
-                  } else {
-                    console.log('hello update');
-                    dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
-                    dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
-                    dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
-                    dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
-                    this.resumeService.updateResumeData(dataCollaborator).subscribe( (resume) => {
-                      console.log('resume Data updated', resume);
-                      this.showWaiting = false;
-                      this.router.navigate(['/collaborator/']);
-
-                    });
-                  }
-                });
+                          this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
+                            .subscribe( (resumeData) => {
+                              console.log('resume data', resumeData['msg_code']);
+                              if (resumeData['msg_code'] === '0004') {
+                                this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
+                                  console.log('resume Data added', resume);
+                                });
+                              } else {
+                                dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
+                                dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
+                                dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
+                                dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
+                                this.resumeService.updateResumeData(dataCollaborator).subscribe( (resume) => {
+                                  console.log('resume Data updated', resume);
+                                });
+                              }
+                            });
+                          this.router.navigate(['/candidate/']);
+                        });
+                      });
+                    this.subscriptionModal.unsubscribe();
+                  });
                 this.subscriptionModal.unsubscribe();
               }
             });
-      } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' || this.companyuserType === 'CANDIDATE') {
         const confirmation = {
           code: 'edit',
           title: 'Send Email',
@@ -636,7 +671,7 @@ export class ResumeDoneComponent implements OnInit {
             (resMail) => {
               if (resMail === true) {
                 this.showWaiting = true;
-                this.resumeService.generateResumeCompany(data, action).subscribe(async (result) => {
+                this.resumeService.generateResumeCompany(dataCompany, action).subscribe(async (result) => {
                   saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
                   const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
                     { lastModified: new Date().getTime(), type: 'docx'});
@@ -644,75 +679,44 @@ export class ResumeDoneComponent implements OnInit {
                   formData.append('file', file);
                   formData.append('caption', file.name);
                   await this.uploadCompanyFile(formData).then(async (filename) => {
-                    this.resumeService.generateResumeCompany(data, 'preview').subscribe(
-                      async res => {
-                        const filePdf = new File([res], `${this.generalInfoList[0].init_name}.pdf`,
-                          { lastModified: new Date().getTime(), type: 'pdf'});
-                        const formDataPdf = new FormData(); // CONVERT IMAGE TO FORMDATA
-                        formDataPdf.append('file', filePdf);
-                        formDataPdf.append('caption', filePdf.name);
-                        await this.uploadCompanyFile(formDataPdf).then((filenamePdf) => {
-                          console.log('filename PDF', filenamePdf, filename);
-                          this.generalInfoList[0].resume_filename_docx = filename;
-                          this.generalInfoList[0].resume_filename_pdf = filenamePdf;
-                          this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-                          this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-                          this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-                          this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-                          this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-                          this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                            console.log('aaa', generalInfo);
-                            this.resumeService
-                              .sendMailManager('5eac544ad4cb666637fe1354',
-                                this.generalInfoList[0].application_id,
-                                this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                                this.companyEmail,
-                                this.companyName,
-                                this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
-                                this.userService.connectedUser$.getValue().user[0]['last_name'],
-                                [{
-                                  filename: this.generalInfoList[0].init_name + '.docx',
-                                  path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
-                                }, ]
-                              ).subscribe((dataB) => {
-                              this.showWaiting = false;
-                              this.router.navigate(['/candidate/']);
-                            });
+                      this.generalInfoList[0].resume_filename_docx = filename;
+                      this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+                      this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+                      this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+                      this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+                      this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+                      this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                        console.log('aaa', generalInfo);
+                        if (!this.companyuserType) {
+                          this.resumeService
+                            .sendMailManager('5eac544ad4cb666637fe1354',
+                              this.generalInfoList[0].application_id,
+                              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                              this.companyEmail,
+                              this.companyName,
+                              this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
+                              this.userService.connectedUser$.getValue().user[0]['last_name'],
+                              [{
+                                filename: this.generalInfoList[0].init_name + '.docx',
+                                path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
+                              }, ]
+                            ).subscribe((dataB) => {
+                            console.log('email sended');
                           });
-                        });
+                        }
+                          this.showWaiting = false;
+                          this.router.navigate(['/candidate/']);
                       });
-                  });
+                    });
+
                   this.subscriptionModal.unsubscribe();
                 });
               }
             });
-      } else {
-        this.showWaiting = true;
-        this.resumeService.generateResumeCompany(data, action).subscribe(
-          async res => {
-            saveAs(res, `${this.generalInfoList[0].init_name}.docx`);
-            const file = new File([res], `${this.generalInfoList[0].init_name}.docx`,
-              { lastModified: new Date().getTime(), type: 'docx'});
-            const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-            formData.append('file', file);
-            formData.append('caption', file.name);
-            await this.uploadFile(formData).then(async (filename) => {
-              this.generalInfoList[0].resume_filename_docx = filename;
-              this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-              this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-              this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-              this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-              this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-              this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                  this.showWaiting = false;
-                  this.router.navigate(['/manager/resume/']);
-              });
-            });
-          });
       }
     } else if (action === 'preview') {
       this.showWaitingPreview = true;
-      this.resumeService.generateResumeCompany(data, action).subscribe(
+      this.resumeService.generateResumeCompany(dataCompany, action).subscribe(
       async res => {
           const fileURL = URL.createObjectURL(res);
           this.showWaitingPreview = false;

@@ -31,6 +31,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   minStartDate: Date;
   maxStartDate: Date;
   minEndDate: Date;
+  companyUserType: string;
   maxEndDate: Date;
   showDateError: boolean;
   certifDiplomaCode: string;
@@ -52,6 +53,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    console.log(this.router.getCurrentNavigation()?.extras?.state?.companyUserType);
+
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
     this.router.events
       .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
       .subscribe(event => {
@@ -285,13 +289,15 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/certifications'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/generalInformation'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }
