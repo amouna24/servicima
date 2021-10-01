@@ -23,9 +23,9 @@ import { IDataListModel  } from '@shared/models/dataList.model';
 import { FormControl } from '@angular/forms';
 import { dataAppearance } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { environment } from '../../../../../../environments/environment';
-import {UploadService} from "@core/services/upload/upload.service";
 
 @Component({
   selector: 'wid-dynamic-data-table',
@@ -105,7 +105,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private uploadService: UploadService,
   ) {
   }
   ngAfterViewChecked(): void {
@@ -602,25 +601,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     const haveImg = !!this.setAvatar && this.setAvatar.columnCode === col;
     if (haveImg) {
       if (!!rowVal && rowVal[this.setAvatar.imgSrc]) {
-        if (typeof rowVal[this.setAvatar.imgSrc] !== 'object') {
-          this.uploadService.getImage(rowVal[this.setAvatar.imgSrc])
-            .then((data) => {
-              if (data) {
-                const photo = {
-                  src : rowVal[this.setAvatar.imgSrc],
-                  url : data
-                };
-                rowVal[this.setAvatar.imgSrc] = photo;
-                imgSrc = data;
-              }
-            });
-        } else {
-          imgSrc = rowVal[this.setAvatar.imgSrc].url;
-        }
-      } else {
+        imgSrc = this.env + rowVal[this.setAvatar.imgSrc];
+      }
+    } else {
         imgSrc = 'assets/img/default.jpg';
       }
-    }
     return { haveImg, imgSrc};
   }
   /**************************************************************************

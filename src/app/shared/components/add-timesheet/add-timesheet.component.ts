@@ -376,7 +376,7 @@ export class AddTimesheetComponent implements OnInit {
   /**
    * @description: check if the day is holiday
    * * @param: day number (the week start with monday = 0)
-   * @return: void
+   * @return: number
    */
   checkDay(i: number): number {
     const day = this.weekDays[i].name;
@@ -384,7 +384,7 @@ export class AddTimesheetComponent implements OnInit {
       if (this.initialForm.controls[day].enabled) {
         this.initialForm.controls[day].disable();
       }
-      return 0;
+      return Number(this.contract.working_hour_day);
     } else {
       if (this.initialForm.controls[day].disabled) {
         this.initialForm.controls[day].enable();
