@@ -122,6 +122,7 @@ await this.getData();
     data.map( (exportPdfData) => {
       if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
         this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+          console.log('pdf =', pdf);
           const fileURL = URL.createObjectURL(pdf);
           window.open(fileURL, '_blank');
         });

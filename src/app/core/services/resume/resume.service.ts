@@ -580,7 +580,7 @@ export class ResumeService {
     return this.httpClient.post<IResumeListModel>(`${environment.uploadResumeFileApiUrl}`, resumeList);
   }
   convertResumeToPdf(docxUrl: string) {
-    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'text'});
+    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'blob'});
 
   }
 }

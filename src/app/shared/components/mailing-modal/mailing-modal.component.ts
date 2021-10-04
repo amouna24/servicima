@@ -121,6 +121,9 @@ export class MailingModalComponent implements OnInit {
                     filename: sendMailData.user_info.init_name + '.docx',
                     path: `${environment.uploadResumeFileApiUrl}/show/${response[0].file_name}`
                   });
+                  if (attachments.length === contacts.length * this.data.length) {
+                    resolveMail(attachments);
+                  }
                 });
             });
           } else {
@@ -140,11 +143,7 @@ export class MailingModalComponent implements OnInit {
                 });
             });
           }
-          console.log(attachments);
         });
-        console.log(attachments.length, contacts.length * this.data.length);
-
-        console.log(this.utilsService.getApplicationID('SERVICIMA'), 'app id');
       }).then( (attach) => {
         this.resumeService
           .sendMail(
