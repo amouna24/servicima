@@ -463,7 +463,7 @@ export class ResumeService {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/company/?type=${type}`, { data: filter}, { responseType: 'blob'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}`, { data: filter}, { responseType: 'blob'});
   }
   /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
 
@@ -580,7 +580,7 @@ export class ResumeService {
     return this.httpClient.post<IResumeListModel>(`${environment.uploadResumeFileApiUrl}`, resumeList);
   }
   convertResumeToPdf(docxUrl: string) {
-    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'blob'});
+    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'text'});
 
   }
 }

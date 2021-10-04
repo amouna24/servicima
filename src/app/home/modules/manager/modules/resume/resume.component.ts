@@ -122,7 +122,6 @@ await this.getData();
     data.map( (exportPdfData) => {
       if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
         this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
-          console.log(pdf);
           const fileURL = URL.createObjectURL(pdf);
           window.open(fileURL, '_blank');
         });
@@ -149,7 +148,6 @@ await this.getData();
    * @param data contain the resume resume date of the user
    *************************************************************************/
   private updateResume(data) {
-    console.log('user type', data.resume_user_type);
     data.user_info.resume_code = data.user_info.ResumeKey.resume_code;
     data.user_info.language_id = data.user_info.ResumeKey.language_id;
     data.user_info.company_email = data.user_info.ResumeKey.company_email;
@@ -283,7 +281,6 @@ await this.getData();
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
-        console.log('resume archived');
         await this.getData();
       });
     });

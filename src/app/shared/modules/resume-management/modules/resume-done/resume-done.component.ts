@@ -60,7 +60,6 @@ export class ResumeDoneComponent implements OnInit {
     private uploadService: UploadService,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    console.log(this.router.getCurrentNavigation()?.extras?.state?.companyUserType);
     this.companyuserType   = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   companyuserType: string;
@@ -259,7 +258,6 @@ export class ResumeDoneComponent implements OnInit {
               return +new Date(val1.date) - +new Date(val2.date);
             });
           }
-          this.countResume();
           this.getProjectInfo();
           this.contractorsService.getContractors(
             `?email_address=${this.userService.connectedUser$}`);
@@ -584,7 +582,6 @@ export class ResumeDoneComponent implements OnInit {
    * @param dataCompany it contains the necessary data for the Resume
    *************************************************************************/
   downloadDocs(dataCompany: object,  action: string, dataCollaborator?: IResumeDataModel) {
-    console.log('info list', this.generalInfoList[0]);
     if (action === 'generate') {
       if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR' || this.companyuserType === 'COLLABORATOR') {
         const confirmation = {
@@ -637,7 +634,6 @@ export class ResumeDoneComponent implements OnInit {
                             });
                           this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
                             .subscribe( (resumeData) => {
-                              console.log('resume data', resumeData['msg_code']);
                               if (resumeData['msg_code'] === '0004') {
                                 this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
                                   console.log('resume Data added', resume);
@@ -686,7 +682,6 @@ export class ResumeDoneComponent implements OnInit {
                       this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
                       this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                        console.log('aaa', generalInfo);
                         if (!this.companyuserType) {
                           this.resumeService
                             .sendMailManager('5eac544ad4cb666637fe1354',
@@ -853,7 +848,6 @@ export class ResumeDoneComponent implements OnInit {
         expert: res['resume-expert'],
       };
     });
-    console.log(this.label);
   }
   /**************************************************************************
    * @description verify the type of the connected user
@@ -865,7 +859,6 @@ export class ResumeDoneComponent implements OnInit {
     this.contractorsService.getContractors(
       `?email_address=${filter.ResumeKey.company_email}`).subscribe( (res) => {
         this.contractorsList = res['results'];
-      console.log('contractor list', res['results']);
     });
   }
 }
