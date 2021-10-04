@@ -463,7 +463,7 @@ export class ResumeService {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}`, { data: filter}, { responseType: 'blob'});
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/company/?type=${type}`, { data: filter}, { responseType: 'blob'});
   }
   /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
 
