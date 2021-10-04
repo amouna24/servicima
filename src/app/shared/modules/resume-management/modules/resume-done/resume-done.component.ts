@@ -258,9 +258,8 @@ export class ResumeDoneComponent implements OnInit {
               return +new Date(val1.date) - +new Date(val2.date);
             });
           }
+          this.countResume();
           this.getProjectInfo();
-          this.contractorsService.getContractors(
-            `?email_address=${this.userService.connectedUser$}`);
         });
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);

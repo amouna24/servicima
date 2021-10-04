@@ -406,7 +406,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
     this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
     this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
-    console.log('user_type', this.router.getCurrentNavigation()?.extras?.state?.user_type);
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.user_type;
   }
 }

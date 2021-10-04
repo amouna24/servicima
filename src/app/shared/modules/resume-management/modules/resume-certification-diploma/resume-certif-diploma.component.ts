@@ -53,7 +53,6 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    console.log(this.router.getCurrentNavigation()?.extras?.state?.companyUserType);
 
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
     this.router.events
