@@ -33,7 +33,7 @@ export class ResumeInterventionComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
-
+  companyUserType: string;
   /**********************************************************************
    * @description Resume Level of intervention constructor
    *********************************************************************/
@@ -45,6 +45,7 @@ export class ResumeInterventionComponent implements OnInit {
     private router: Router,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
 
   /**************************************************************************
@@ -231,13 +232,15 @@ export class ResumeInterventionComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/professionalExperience'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/functionnalSkills'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }

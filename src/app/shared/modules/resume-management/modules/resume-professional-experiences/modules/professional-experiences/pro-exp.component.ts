@@ -48,6 +48,7 @@ export class ProExpComponent implements OnInit {
   endDAteUpdate: string;
   myDisabledDayFilter;
  placeHolderEndDate: string;
+  companyUserType: string;
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -60,6 +61,8 @@ export class ProExpComponent implements OnInit {
     private modalServices: ModalService
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
+
   }
 
   /**************************************************************************
@@ -428,13 +431,17 @@ export class ProExpComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/dynamicSection'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
+
           }
         });
       } else {
-        this.router.navigate(['/candidate/resume/intervention'], {
+        this.router.navigate(['/manager/resume/intervention'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
+
           }
         });
       } } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {

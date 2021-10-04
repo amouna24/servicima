@@ -120,8 +120,12 @@ await this.getData();
    *************************************************************************/
   exportPdf(data) {
     data.map( (exportPdfData) => {
-      if (exportPdfData.resume_filename_pdf !== undefined && exportPdfData.resume_filename_pdf !== null) {
-        window.open(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_pdf, '_blank');
+      if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
+        this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+          console.log('pdf =', pdf);
+          const fileURL = URL.createObjectURL(pdf);
+          window.open(fileURL, '_blank');
+        });
       } else {
         const confirmation = {
           code: 'info',
@@ -156,6 +160,7 @@ await this.getData();
           generalInformation: data.user_info,
           firstName: data.first_name,
           lastName: data.last_name,
+          user_type: data.resume_user_type,
         }
       });
   }
@@ -277,7 +282,6 @@ await this.getData();
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
-        console.log('resume archived');
         await this.getData();
       });
     });

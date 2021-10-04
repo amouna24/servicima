@@ -32,6 +32,7 @@ indexUpdate = 0;
 expire: boolean;
 subscriptionModal: Subscription;
 id: string;
+companyUserType: string;
 certificationCode: string;
 button: string;
   /**********************************************************************
@@ -45,6 +46,7 @@ button: string;
     private router: Router,
 ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -254,13 +256,15 @@ button: string;
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/technicalSkills'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType
           }
         });
       } else {
         this.router.navigate(['/manager/resume/diploma'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType
           }
         });
       }

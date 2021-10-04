@@ -47,6 +47,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   update = false;
   photo: FormData;
   resumeCode: string;
+  companyUserType: string;
   years = 0;
   showNumberError = false;
   generalInfoManager: IResumeModel;
@@ -302,7 +303,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+                companyUserType: this.companyUserType,
               }
             });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
@@ -334,7 +336,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+                companyUserType: this.companyUserType,
+
               }
             });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
@@ -402,5 +406,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
     this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
     this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.user_type;
   }
 }

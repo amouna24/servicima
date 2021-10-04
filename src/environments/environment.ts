@@ -44,6 +44,7 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
+  resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
   docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
 
@@ -66,7 +67,8 @@ export const environment = {
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
-
+  /************************* UPLOAD RESUME FILE ************************/
+  uploadResumeFileApiUrl: 'http://192.168.1.22:8121/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',

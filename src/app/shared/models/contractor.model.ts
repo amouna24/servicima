@@ -31,4 +31,5 @@ export interface IContractor {
   contractor_code: string;
   contractor_type: string;
   template_resume?: string;
+  update: boolean;
 }
