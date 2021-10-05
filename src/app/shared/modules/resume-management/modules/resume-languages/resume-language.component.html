@@ -61,7 +61,7 @@
                 </div>
                 <div fxLayout="column" fxFlex="30" >
                   <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
-                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)">
                       <img src="{{showIcon(i)}}">
                     </button>
                   </div>

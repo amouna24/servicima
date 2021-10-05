@@ -33,7 +33,7 @@
                     </div>
                     <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
                       <p class="font-extra-light font-size-10 help-blue">
-                        {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date: "longDate"}}
+                        {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date === 'Current Date' ? ' Today' : item.end_date  | date: "longDate"}}
                       </p>
                     </div>
                   </div>
@@ -102,7 +102,7 @@
                           {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend"   [min]="minEndDate" [max]="maxEndDate"   [matDatepickerFilter]="myDisabledDayFilter" #date2
+                          <input matInput [matDatepicker]="datepickerend"   [min]="minEndDate" [max]="maxEndDate"  #date2
                                  formControlName="end_date" placeholder=" {{ placeHolderEndDate | translate }}" (dateChange)="onChangeEndDate(date2.value)"  required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
                           <mat-datepicker startView="multi-year" #datepickerend color="primary" ></mat-datepicker>

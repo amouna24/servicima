@@ -107,35 +107,9 @@ export class ResumeDoneComponent implements OnInit {
     this.verifyUserType();
     this.initSectionLists();
     this.translateDocs();
-    await this.yearsOfExpAuto();
     this.getResumeInfo();
   }
-  /**************************************************************************
-   * @description Calculate years of experience from professional experience section
-   *************************************************************************/
-  yearsOfExpAuto() {
-    this.resumeService.getResume(
-      `?email_address=${this.userService.connectedUser$
-        .getValue().user[0]['userKey']['email_address']}&company_email=${this.userService.connectedUser$
-        .getValue().user[0]['company_email']}`).subscribe((response) => {
-      if (response['msg_code'] !== '0004') {
-        this.resumeCode = response[0].ResumeKey.resume_code.toString();
-        this.resumeService.getProExp(
-          `?resume_code=${this.resumeCode}`)
-          .subscribe(
-            (responseProExp) => {
-              if (responseProExp['msg_code'] !== '0004') {
-                responseProExp.forEach((proExp) => {
-                  const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
-                    new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                  this.years = difference + this.years;
-                });
 
-              }
-            });
-      }
-    });
-  }
   /**************************************************************************
    * @description Count the percentage of the resume
    * @return count returns the percentage reached of the resume
@@ -495,11 +469,8 @@ export class ResumeDoneComponent implements OnInit {
   async getDocument(action: string) {
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-        if (this.testDateDiploma === undefined) {
           diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
           diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
-          this.testDateDiploma = 'Done';
-        }
       });
     }
     if (this.certifList.length > 0) {
@@ -510,10 +481,11 @@ export class ResumeDoneComponent implements OnInit {
     if (this.proExpList.length > 0) {
       this.proExpList.forEach((pro) => {
         if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
-          pro.ResumeProfessionalExperienceKey.end_date = new Date().toString();
+          pro.ResumeProfessionalExperienceKey.end_date = 'Today';
         }
         pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
-        pro.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
+        pro.ResumeProfessionalExperienceKey.end_date = pro.ResumeProfessionalExperienceKey.end_date === 'Today' ?
+          'Today' : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
       });
     }
     if (this.projectList.length > 0) {
@@ -528,8 +500,10 @@ export class ResumeDoneComponent implements OnInit {
         collaborator_email: this.generalInfoList[0].ResumeKey.email_address,
         name: this.generalInfoList[0].init_name,
         role: this.generalInfoList[0].actual_job,
-        experience: this.generalInfoList[0].years_of_experience || 0,
-        phoneNum: this.phone?.toString(),
+        experience: this.generalInfoList[0].years_of_experience ?
+          this.generalInfoList[0].years_of_experience : this.calculateYearsOfExperience() ?
+            this.calculateYearsOfExperience() : 0,
+        phoneNum: this.phone?.toString() ? this.phone?.toString() : '',
         label: this.label,
         currentYear: this.dateNow,
         imageUrl: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
@@ -556,10 +530,10 @@ export class ResumeDoneComponent implements OnInit {
       },
       name: this.generalInfoList[0].init_name,
       role: this.generalInfoList[0].actual_job,
-      experience: this.generalInfoList[0].years_of_experience || 0,
+      experience: this.generalInfoList[0].years_of_experience || this.calculateYearsOfExperience() || 0,
       image_url: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
-      diplomas: this.diplomaList,
-      certifications: this.certifList,
+      diplomas: this.diplomaList.reverse(),
+      certifications: this.certifList.reverse(),
       technical_skills: this.techSkillList,
       functional_skills: this.funcSkillList,
       intervention: this.interventionList,
@@ -715,7 +689,10 @@ export class ResumeDoneComponent implements OnInit {
           const fileURL = URL.createObjectURL(res);
           this.showWaitingPreview = false;
           window.open(fileURL, '_blank');
-        });
+          this.count = 0;
+        this.initSectionLists();
+        this.getResumeInfo();
+      });
       }
   }
   /**************************************************************************
@@ -737,7 +714,7 @@ export class ResumeDoneComponent implements OnInit {
         projects: await this.getProjectData(oneProExp),
       });
     }
-    return (proExpData);
+    return (proExpData.reverse());
   }
   /**************************************************************************
    * @description get organized Project data in JSON object
@@ -760,7 +737,7 @@ export class ResumeDoneComponent implements OnInit {
         });
       }
     }
-    return (project);
+    return (project.reverse());
   }
   /**************************************************************************
    * @description get organized Project details data in JSON object
@@ -782,7 +759,7 @@ export class ResumeDoneComponent implements OnInit {
         });
       }
     }
-    return (projectDetails);
+    return (projectDetails.reverse());
   }
   /**************************************************************************
    * @description get organized Project details section data in JSON object
@@ -859,5 +836,19 @@ export class ResumeDoneComponent implements OnInit {
       `?email_address=${filter.ResumeKey.company_email}`).subscribe( (res) => {
         this.contractorsList = res['results'];
     });
+  }
+  calculateYearsOfExperience() {
+    const maxDate = new Date(Math.max.apply(null, this.proExpList.map (proExp => {
+      if (proExp.ResumeProfessionalExperienceKey.end_date === 'Today') {
+        return new Date();
+      } else {
+        return new Date(proExp.ResumeProfessionalExperienceKey.end_date);
+      }
+    })));
+    const minDate = new Date(Math.min.apply(null, this.proExpList.map (proExp => {
+      return new Date(proExp.ResumeProfessionalExperienceKey.start_date);
+    })));
+    return(maxDate.getFullYear() - minDate.getFullYear());
+
   }
 }

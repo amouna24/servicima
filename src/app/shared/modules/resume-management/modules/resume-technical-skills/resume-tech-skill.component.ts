@@ -124,7 +124,7 @@ export class ResumeTechSkillComponent implements OnInit {
   createForm() {
     this.sendTechSkill = this.fb.group({
       technical_skill_desc :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      technologies:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      technologies:  ['', [Validators.required]],
       });
   }
   /**************************************************************************

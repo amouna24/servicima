@@ -163,12 +163,12 @@ export class ResumeLanguageComponent implements OnInit {
     if (this.sendLanguage.valid && this.rating > 0) {
       this.resumeService.addLanguage(this.language).subscribe(data => {
         this.resumeService.getLanguage(
-          `?resume_language_code=${this.language.resume_language_code}`)
+          `?resume_language_code=${this.language.resume_language_code}&resume_code=${this.resumeCode}`)
           .subscribe(
             (responseOne) => {
               if (responseOne['msg_code'] !== '0004') {
                 responseOne[0].resume_language_code = responseOne[0].ResumeLanguageKey.resume_language_code;
-                this.ratingEdit.push(+responseOne[0].level);
+                this.ratingEdit.push(+this.language.level);
                 this.langList.forEach((value, index) => {
                   if (value.value === responseOne[0].resume_language_code) {
                     this.langListRes.push(value);
@@ -198,7 +198,7 @@ export class ResumeLanguageComponent implements OnInit {
       level: rating.toString(),
       resume_code: this.resumeCode,
     });
-    this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('functional skill updated =', data));
+    this.resumeService.updateLanguage(this.languageUpdate).subscribe(data => console.log('language updated =', data));
     return false;
   }
   /**************************************************************************
@@ -290,17 +290,19 @@ export class ResumeLanguageComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res === true) {
-            this.resumeService.deleteLanguage(id).subscribe(data => console.log('Deleted'));
-            this.languageArray.forEach((lang, indexLang) => {
-              if (indexLang === pointIndex) {
-                this.languageArray.splice(indexLang, 1);
-                this.langListRes.forEach((value, index) => {
-                  if (value.value === lang.resume_language_code) {
-                    this.langList.push(value);
-                    this.langListRes.splice(index, 1);
-                  }
-                });
-              }
+            this.resumeService.deleteLanguage(id).subscribe(data => {
+              console.log('Deleted', data);
+              this.languageArray.forEach((lang, indexLang) => {
+                if (indexLang === pointIndex) {
+                  this.languageArray.splice(indexLang, 1);
+                  this.langListRes.forEach((value, index) => {
+                    if (value.value === lang.resume_language_code) {
+                      this.langList.push(value);
+                      this.langListRes.splice(index, 1);
+                    }
+                  });
+                }
+              });
             });
           }
           this.subscriptionModal.unsubscribe();

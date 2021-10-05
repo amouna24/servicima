@@ -123,7 +123,6 @@ export class ProExpProjectsComponent implements OnInit {
                 const time = d.getTime();
                 return !disabledDates.find(x => x.getTime() === time);
               };
-              this.filterDate();
             } else {
               this.showProject = false;
               this.showForm = false;
@@ -165,9 +164,9 @@ export class ProExpProjectsComponent implements OnInit {
       this.Project.professional_experience_code = this.professionalExperienceCode;
       this.Project.project_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-PE-P`;
       if (this.sendProject.valid) {
-        this.resumeService.addProject(this.Project).subscribe(data => {
+        this.resumeService.addProject(this.Project).subscribe( (data: IResumeProjectModel) => {
           this.resumeService.getProject(
-            `?professional_experience_code=${this.Project.professional_experience_code}`)
+            `?project_code=${data['ResumeProject'].ResumeProjectKey.project_code}`)
             .subscribe(
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
@@ -196,7 +195,6 @@ export class ProExpProjectsComponent implements OnInit {
     }
     this.createForm();
     this.initDates();
-    this.filterDate();
     this.loadTree();
   }
 
@@ -300,7 +298,6 @@ export class ProExpProjectsComponent implements OnInit {
                       this.ProjectArray.splice(index, 1);
                     }
                   });
-                  this.filterDate();
                   this.createForm();
                 });
           }
@@ -323,32 +320,19 @@ export class ProExpProjectsComponent implements OnInit {
   onChangeEndDate(date: string) {
     this.maxStartDate = new Date(date);
   }
-
-  /*******************************************************************
-   * @description Filter Dates that are already taken by other project
-   *******************************************************************/
-  filterDate() {
-    const disabledDates = [];
-    this.ProjectArray.forEach(
-      (project) => {
-        for (const date = new Date(project.start_date); date <= new Date(project.end_date); date.setDate(date.getDate() + 1)) {
-          disabledDates.push(new Date(date));
-        }
-      });
-    this.myDisabledDayFilter = (d: Date): boolean => {
-      const time = d.getTime();
-      return !disabledDates.find(x => x.getTime() === time);
-    };
-  }
-
   /*******************************************************************
    * @description Initialize Max end Min Dates
    *******************************************************************/
   initDates() {
+    if (this.endDateProExp.toString() === 'Current Date') {
+      this.maxEndDate = new Date();
+      this.maxStartDate = new Date();
+    } else {
+      this.maxEndDate = this.endDateProExp;
+      this.maxStartDate = this.endDateProExp;
+    }
     this.minEndDate = this.startDateProExp;
-    this.maxEndDate = this.endDateProExp;
     this.minStartDate = this.startDateProExp;
-    this.maxStartDate = this.endDateProExp;
   }
 
   /*******************************************************************
