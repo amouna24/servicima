@@ -422,7 +422,7 @@ export class ResumeDoneComponent implements OnInit {
                     }
                   );
                   i = i + 1;
-                  if (this.projectList.length === i) {
+                  if (this.projectList.length === i + 1) {
                     projectFinalList = this.projectDetailsList;
                     resolve(projectFinalList);
                   }
@@ -759,7 +759,7 @@ export class ResumeDoneComponent implements OnInit {
         });
       }
     }
-    return (projectDetails.reverse());
+    return (projectDetails);
   }
   /**************************************************************************
    * @description get organized Project details section data in JSON object
