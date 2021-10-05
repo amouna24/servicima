@@ -344,9 +344,8 @@ export class ResumeDoneComponent implements OnInit {
     let projectFinalList = [];
     new Promise((resolve, reject) => {
       if (this.proExpList.length > 0) {
-        let i = 0;
         this.proExpList.forEach(
-          (proExpData) => {
+          (proExpData, index) => {
             this.resumeService.getProject(
               `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
             ).subscribe(
@@ -357,8 +356,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.projectList.push(responseProjectData);
                     }
                   );
-                  i = i + 1;
-                  if (this.proExpList.length === i) {
+                  if (this.proExpList.length === index + 1) {
                     this.projectList = this.projectList.sort( (val1, val2) => {
                       return +new Date(val1.start_date) - +new Date(val2.start_date);
                     });
@@ -408,9 +406,8 @@ export class ResumeDoneComponent implements OnInit {
     let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
       if (this.projectList.length > 0) {
-        let i = 0;
         this.projectList.forEach(
-          (projectData) => {
+          (projectData, index) => {
             this.resumeService.getProjectDetails(
               `?project_code=${projectData.ResumeProjectKey.project_code}`
             ).subscribe(
@@ -421,8 +418,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.projectDetailsList.push(responseProjectDetailsData);
                     }
                   );
-                  i = i + 1;
-                  if (this.projectList.length === i + 1) {
+                  if (this.projectList.length === index + 1) {
                     projectFinalList = this.projectDetailsList;
                     resolve(projectFinalList);
                   }
