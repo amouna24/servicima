@@ -72,6 +72,7 @@ export class ProjectSectionComponent implements OnInit {
     await this.getSectionRefData();
     this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
     this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
+      console.log('selected value =', selectedValue);
       this.select = selectedValue;
     });
   }
@@ -173,6 +174,9 @@ export class ProjectSectionComponent implements OnInit {
       this.ProDetails.project_code = this.projectCode;
       if (this.sendProDetails.valid) {
         this.resumeService.addProjectDetails(this.ProDetails).subscribe((dataProDeta) => {
+          this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
+            this.select = selectedValue;
+          });
           this.resumeService.getProjectDetails(
             `?project_details_code=${this.ProDetails.project_details_code}`)
             .subscribe(
@@ -213,9 +217,6 @@ export class ProjectSectionComponent implements OnInit {
       this.arrayProDetailsCount++;
       this.showDesc = true;
       this.showSec = false;
-      this.sendProDetails.get('select').valueChanges.subscribe(selectedValue => {
-        this.select = selectedValue;
-      });
       this.projectDetailsCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-R-PE-P-D`;
       this.proSectionArray = [];
       this.refreshTree.emit(true);

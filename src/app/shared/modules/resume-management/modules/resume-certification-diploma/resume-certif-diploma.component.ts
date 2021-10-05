@@ -53,18 +53,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
-    this.router.events
-      .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
-      .subscribe(event => {
-        if (
-          event.id === 1 &&
-          event.url === event.urlAfterRedirects
-        ) {
-          this.router.navigate(['resume/candidate']);
-        }
-      });
   }
 
   /**************************************************************************

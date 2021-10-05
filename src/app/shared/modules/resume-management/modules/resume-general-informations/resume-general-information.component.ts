@@ -245,17 +245,30 @@ export class ResumeGeneralInformationComponent implements OnInit {
               this.resumeService.getProExp(
                 `?resume_code=${generalInformation.ResumeKey.resume_code}`)
                 .subscribe(
-                  (responseProExp) => {
+                  async (responseProExp) => {
                     if (responseProExp['msg_code'] !== '0004') {
-                      responseProExp.forEach((proExp) => {
-                        const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
-                          new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                        this.years = difference + this.years;
+                      new Promise((resolve) => {
+                        const maxDate = new Date(Math.max.apply(null, responseProExp.map (proExp => {
+                          if (proExp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
+                            return new Date();
+                          } else {
+                            return new Date(proExp.ResumeProfessionalExperienceKey.end_date);
+                          }
+                        })));
+                        const minDate = new Date(Math.min.apply(null, responseProExp.map (proExp => {
+                            return new Date(proExp.ResumeProfessionalExperienceKey.start_date);
+                        })));
+                        console.log(minDate.getFullYear());
+                        resolve(+maxDate.getFullYear() - +minDate.getFullYear());
+
+                      }).then((yearsOfExperience) => {
+                        console.log(yearsOfExperience);
+                        this.CreationForm.patchValue({
+                          years_of_experience: yearsOfExperience,
+                        });
+                        this.showHideYears();
                       });
-                      this.CreationForm.patchValue({
-                        years_of_experience: this.years,
-                      });
-                      this.showHideYears();
+
                     }
                   });
             }
