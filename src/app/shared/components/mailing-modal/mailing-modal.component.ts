@@ -84,10 +84,6 @@ export class MailingModalComponent implements OnInit {
             item_email: oneData.contact_email,
           });
           if (index + 1 >= dataContractor['results'].length) {
-            clientList.push({
-              item_id: 'dhia.othmen@widigital-group.com',
-              item_text: 'DBCOMPANY(dhia.othmen@widigital-group.com)',
-            });
             resolve(clientList);
           }
         });
@@ -98,77 +94,77 @@ export class MailingModalComponent implements OnInit {
   }
   async sendMail() {
     const mailingObject = this.mailingForm.value;
-    const contacts = [];
-    const emails = [];
+
     mailingObject.contact.forEach((contact) => {
-      contacts.push(contact.item_id);
-    });
-    this.clientList.forEach( (client) => {
-      emails.push(client.item_email);
-    });
-    if (!this.invoice) {
-      const attachments: object[] = [];
-      let application_id = '';
-      new Promise (async resolveMail => {
-        await this.data.map((sendMailData) => {
-          application_id = sendMailData.user_info.ResumeKey.application_id;
-          if (mailingObject.format === 'DOCX') {
-            contacts.forEach((contact) => {
-              this.resumeService
-                .getResumeList(`?collaborator_email=${sendMailData.user_info.ResumeKey.email_address}&contractor_code=${contact}&file_type=docx`)
-                .subscribe((response) => {
-                  attachments.push({
-                    filename: sendMailData.user_info.init_name + '.docx',
-                    path: `${environment.uploadResumeFileApiUrl}/show/${response[0].file_name}`
-                  });
-                  if (attachments.length === contacts.length * this.data.length) {
-                    resolveMail(attachments);
-                  }
-                });
-            });
-          } else {
-            contacts.forEach((contact) => {
-              console.log(contact);
-              this.resumeService
-                .getResumeList(`?collaborator_email=${sendMailData.user_info.ResumeKey.email_address}&contractor_code=${contact}&file_type=pdf`)
-                .subscribe((response) => {
-                  console.log('responses=', response);
-                  attachments.push({
-                    filename: sendMailData.user_info.init_name + '.pdf',
-                    path: `${environment.uploadResumeFileApiUrl}/show/${response[0].file_name}`
-                  });
-                  if (attachments.length === contacts.length * this.data.length) {
-                    resolveMail(attachments);
-                  }
-                });
-            });
+      new Promise( (resolveMail) => {
+        this.clientList.forEach( (client) => {
+          if (client.item_id === contact.item_id) {
+            resolveMail(client.item_email);
           }
         });
-      }).then( (attach) => {
-        this.resumeService
-          .sendMail(
-            this.localStorageService.getItem('language').langId,
-            this.utilsService.getApplicationID('SERVICIMA'),
-            this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-            emails,
-            mailingObject.subject,
-            mailingObject.message,
-            attach,
-            this.copies,
-            this.hiddenCopies,
-          ).subscribe((dataB) => {
-          console.log('email send', this.localStorageService.getItem('language').langId,
-            this.utilsService.getApplicationID('SERVICIMA'),
-            this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-            emails,
-            mailingObject.subject,
-            mailingObject.message,
-            attachments,
-            this.copies,
-            this.hiddenCopies);
-        });
+      }).then( (email) => {
+        if (!this.invoice) {
+          const attachments: object[] = [];
+          let application_id = '';
+          new Promise (async resolveMail => {
+            await this.data.map((sendMailData) => {
+              application_id = sendMailData.user_info.ResumeKey.application_id;
+              if (mailingObject.format === 'DOCX') {
+                this.resumeService
+                  .getResumeList(
+                    `?collaborator_email=${sendMailData.user_info.ResumeKey.email_address}&contractor_code=${contact.item_id}&file_type=docx`)
+                  .subscribe((response) => {
+                    attachments.push({
+                      filename: sendMailData.user_info.init_name + '.docx',
+                      path: `${environment.uploadResumeFileApiUrl}/show/${response[0].file_name}`
+                    });
+                    if (attachments.length ===  this.data.length) {
+                      resolveMail(attachments);
+                    }
+                  });
+              } else {
+                this.resumeService
+                  .getResumeList(
+                    `?collaborator_email=${sendMailData.user_info.ResumeKey.email_address}&contractor_code=${contact.item_id}&file_type=pdf`)
+                  .subscribe((response) => {
+                    attachments.push({
+                      filename: sendMailData.user_info.init_name + '.pdf',
+                      path: `${environment.uploadResumeFileApiUrl}/show/${response[0].file_name}`
+                    });
+                    if (attachments.length === this.data.length) {
+                      resolveMail(attachments);
+                    }
+                  });
+              }
+            });
+          }).then( (attach) => {
+            this.resumeService
+              .sendMail(
+                this.localStorageService.getItem('language').langId,
+                this.utilsService.getApplicationID('SERVICIMA'),
+                this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                [email],
+                mailingObject.subject,
+                mailingObject.message,
+                attach,
+                this.copies,
+                this.hiddenCopies,
+              ).subscribe((dataB) => {
+              console.log('email send', this.localStorageService.getItem('language').langId,
+                this.utilsService.getApplicationID('SERVICIMA'),
+                this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                [email],
+                mailingObject.subject,
+                mailingObject.message,
+                attach,
+                this.copies,
+                this.hiddenCopies);
+            });
+          });
+        }
       });
-    }
+    });
+
   }
   addCopy(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();

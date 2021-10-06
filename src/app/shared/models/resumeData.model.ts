@@ -2,6 +2,7 @@ import { IResumeDataKeyModel } from '@shared/models/resumeDataKey.model';
 
 export interface IResumeDataModel {
   ResumeDataKey: IResumeDataKeyModel;
+  user_type: string;
   name: string;
   role: string;
   experience: number;

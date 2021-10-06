@@ -258,6 +258,17 @@ await this.getData();
                       await this.getData();
                       this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
                         console.log('candidate deleted', deleteCandidate);
+                        this.resumeService.getResumeData(`?resume_code=${changeStatusData.user_info.ResumeKey.resume_code}`)
+                          .subscribe((resumeData) => {
+                          resumeData[0].user_type = 'COLLABORATOR';
+                          resumeData[0].resume_code = resumeData[0].ResumeDataKey.resume_code;
+                          resumeData[0].application_id = resumeData[0].ResumeDataKey.application_id;
+                          resumeData[0].collaborator_email = resumeData[0].ResumeDataKey.collaborator_email;
+                          resumeData[0].company_email = resumeData[0].ResumeDataKey.company_email;
+                          this.resumeService.updateResumeData(resumeData[0]).subscribe( (updateResumeData) => {
+                            console.log('resume data updated');
+                          });
+                        });
                       });
 
                     });

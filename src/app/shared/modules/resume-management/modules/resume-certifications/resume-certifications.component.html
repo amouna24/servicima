@@ -47,7 +47,7 @@
           </div>
           <div  fxLayout="row" fxLayoutAlign="center" fxFlexFill>
             <div fxLayout="column" fxFlex="80" >
-              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center" class="border-radius-15 pale-grey border-solid">
+              <div fxLayout="row" fxFlex="92" fxLayoutAlign="center" class="border-radius-15 pale-grey border-solid">
                   <div fxLayout="column" fxFlex="96" fxLayoutAlign="center">
                     <div fxLayout="row" fxFlex="90" fxLayoutAlign="center center">
                           <form  [formGroup]="certifForm" fxLayout="column"  class="full-width full-height">
@@ -77,13 +77,13 @@
                               </mat-form-field>
                             </div>
                           </div>
-                          <div fxLayout="row" fxFlex="16" class="full-width" >
+                          <div fxLayout="row" fxFlex="10" class="full-width" >
                               <div fxLayout="column" >
                                   <mat-checkbox formControlName="expire" class="black font-size-12 " (change)="verifyExpired($event)" >
                                     {{ 'resume-certif-expire' | translate}}</mat-checkbox>
                               </div>
                             </div>
-                          <div fxLayout="row" fxFlex="28" class="full-width" >
+                          <div fxLayout="row" fxFlex="30" class="full-width" >
                               <div fxLayout="column" fxFlex="35">
                                 <mat-label class="black font-size-12 required">
                                   {{ 'resume-ach-date' | translate}}:
@@ -111,7 +111,7 @@
                                 </mat-form-field>
                               </div>
                             </div>
-                          <div fxLayout="row" fxFlex="28" class="full-width" >
+                          <div fxLayout="row" fxFlex="30" class="full-width" >
                               <div fxLayout="column" fxFlex="35">
                                 <mat-label class="black font-size-12 ">
                                   {{ 'resume-certif-ref' | translate}}:
@@ -157,12 +157,12 @@
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  (click)="routeNextBack('next')">
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>
