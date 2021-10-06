@@ -268,5 +268,31 @@ this.button = 'Add'; }
       }
     }
   }
+  checkFormValues(typeRoute: string) {
+    let notEmptyForm = false;
+    Object.values(this.sendTechSkill.controls).some(({ value }) => {
+      if (value) {
+        notEmptyForm = true;
+      }
+    });
+    if (!notEmptyForm) {
+      this.routeNextBack(typeRoute);
+    } else {
+      const confirmation = {
+        code: 'confirmation',
+        title: 'Data is not saved',
+        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.routeNextBack(typeRoute);
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
+  }
 
 }

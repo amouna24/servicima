@@ -403,7 +403,6 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Project Details Data from Resume Service
    *************************************************************************/
   getProjectDetailsInfo() {
-    let projectFinalList = [];
     const ProDet = new Promise((resolve, reject) => {
       if (this.projectList.length > 0) {
         this.projectList.forEach(
@@ -419,11 +418,8 @@ export class ResumeDoneComponent implements OnInit {
                     }
                   );
                   if (this.projectList.length === index + 1) {
-                    projectFinalList = this.projectDetailsList;
-                    resolve(projectFinalList);
+                    resolve(this.projectDetailsList);
                   }
-                  projectFinalList = [];
-                  projectFinalList = this.projectDetailsList;
                 }
               });
           }
@@ -436,25 +432,21 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-  getProjectDetailsSectionInfo(projectDetailsList: IResumeProjectDetailsModel[]) {
+  async getProjectDetailsSectionInfo(projectDetailsList: IResumeProjectDetailsModel[]) {
     if (projectDetailsList.length > 0) {
       for (const projectDetailsData of projectDetailsList) {
-        new Promise((resolve) => {
-          this.resumeService.getProjectDetailsSection(
-            `?project_details_code=${projectDetailsData.ResumeProjectDetailsKey.project_details_code}`
-          ).subscribe(
-            (responseProjectDetailsSection) => {
-              if (responseProjectDetailsSection.length > 0) {
-                resolve(responseProjectDetailsSection);
-              }
-            });
-        }).then((res: IResumeProjectDetailsSectionModel[]) => {
-          res.forEach(
-            (responseProjectDetailsSectionData) => {
-              this.projectDetailsSectionList.push(responseProjectDetailsSectionData);
+        await this.resumeService.getProjectDetailsSection(
+          `?project_details_code=${projectDetailsData.ResumeProjectDetailsKey.project_details_code}`
+        ).subscribe(
+          (responseProjectDetailsSection) => {
+            if (responseProjectDetailsSection.length > 0) {
+              responseProjectDetailsSection.forEach(
+                (responseProjectDetailsSectionData, index) => {
+                  this.projectDetailsSectionList.push(responseProjectDetailsSectionData);
+                }
+              );
             }
-          );
-        });
+          });
       }
     }
   }
@@ -537,6 +529,7 @@ export class ResumeDoneComponent implements OnInit {
       languages: this.languageList,
       sections: this.sectionList,
       update: true,
+      user_type: 'COLLABORATOR',
       application_id: this.generalInfoList[0].ResumeKey.application_id,
       resume_code: this.generalInfoList[0].ResumeKey.resume_code,
       collaborator_email: this.generalInfoList[0].ResumeKey.email_address,
@@ -597,10 +590,6 @@ export class ResumeDoneComponent implements OnInit {
                           });
                         }
                           this.showWaiting = false;
-                          this.resumeService.generateResumeContractors(dataCollaborator, action)
-                            .subscribe( (res) => {
-                              console.log('generator contractors is running', res);
-                            });
                           this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
                             .subscribe( (resumeData) => {
                               if (resumeData['msg_code'] === '0004') {
@@ -668,6 +657,23 @@ export class ResumeDoneComponent implements OnInit {
                             console.log('email sended');
                           });
                         }
+                        this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
+                          .subscribe( (resumeData) => {
+                            dataCollaborator.user_type = 'CANDIDATE';
+                            if (resumeData['msg_code'] === '0004') {
+                              this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
+                                console.log('resume Data added', resume);
+                              });
+                            } else {
+                              dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
+                              dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
+                              dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
+                              dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
+                              this.resumeService.updateResumeData(dataCollaborator).subscribe( (resume) => {
+                                console.log('resume Data updated', resume);
+                              });
+                            }
+                          });
                           this.showWaiting = false;
                           this.router.navigate(['/candidate/']);
                       });

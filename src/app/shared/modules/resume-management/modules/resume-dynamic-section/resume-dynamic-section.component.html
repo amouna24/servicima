@@ -105,13 +105,13 @@
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  (click)="routeNextBack('next')">
+                  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

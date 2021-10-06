@@ -226,6 +226,29 @@ export class ConfirmationModalComponent implements OnInit {
         };
         break;
       }
+      case 'confirmation': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'Yes',
+              color: ' #f3f6f9',
+              background: '#0459bc',
+              nextValue: true,
+            },
+            buttonRight: {
+              visible: true,
+              name: 'No',
+              color: '#232323',
+              background: '#f3f6f9',
+              nextValue: false,
+            },
+          },
+          style: { }
+        };
+        break;
+      }
       default: {
       }
     }
