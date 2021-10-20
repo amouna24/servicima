@@ -26,14 +26,14 @@
       Send a copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
-        <mat-form-field class="example-chip-list full-width" appearance="outline" >
+        <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline" appearance="outline">
           <mat-chip-list #copiesList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let copy of copies"
               [selectable]="selectable"
               [removable]="removable"
               (removed)="removeCopy(copy)"
-              class="font-normal font-size-12 black">
+              class="margin-mat-chip font-normal font-size-12 black">
               {{copy}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
@@ -44,6 +44,7 @@
               formControlName="copy"
               [matChipInputFor]="copiesList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
               (matChipInputTokenEnd)="addCopy($event)"
               >
           </mat-chip-list>
@@ -57,14 +58,14 @@
       Send a hidden copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
-        <mat-form-field class="example-chip-list full-width" appearance="outline" >
+        <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline" appearance="outline" >
           <mat-chip-list #hiddenCopiesList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let hiddenCopy of hiddenCopies"
               [selectable]="selectable"
               [removable]="removable"
               (removed)="removeHiddenCopy(hiddenCopy)"
-              class="font-normal font-size-12 black">
+              class="margin-mat-chip font-normal font-size-12 black">
               {{hiddenCopy}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
@@ -75,6 +76,7 @@
               formControlName="hidden_copy"
               [matChipInputFor]="hiddenCopiesList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
               (matChipInputTokenEnd)="addHiddenCopy($event)">
           </mat-chip-list>
         </mat-form-field>
