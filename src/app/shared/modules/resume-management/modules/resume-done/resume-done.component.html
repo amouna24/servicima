@@ -26,7 +26,7 @@
       </div>
     </div>
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
-  <ng-template [ngIf]="true">
+  <ng-template [ngIf]="showPage">
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlexAlign="center">
         <ng-template [ngIf]="userType === 'candidate'">
@@ -61,7 +61,7 @@
       </div>
       <div fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
 
-        <button mat-raised-button type="submit" color="primary" class="white  btn-large"  (click)="getDocument('preview')" [style]="{marginRight: '4%'}">
+        <button mat-raised-button type="submit" color="primary" class="white  btn-large"  (click)="showLanguage()" [style]="{marginRight: '4%'}">
      <span>
  <ng-template [ngIf]="!showWaitingPreview">
             {{ 'resume-preview' | translate }}
@@ -95,7 +95,14 @@
       </div>
     </div>
   </ng-template>
-  <ng-template [ngIf]="false">
+      <ng-template [ngIf]="!showPage">
+        <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+          <mat-spinner color="primary"></mat-spinner>
+          <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+        </div>
+      </ng-template>
+
+      <ng-template [ngIf]="false">
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlexAlign="center">
         <ng-template [ngIf]="userType === 'candidate'">
