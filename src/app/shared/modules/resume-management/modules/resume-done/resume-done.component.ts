@@ -16,7 +16,7 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IResumeProfessionalExperienceDoneModel } from '@shared/models/professionalExperienceDone.model';
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
@@ -33,6 +33,7 @@ import { ContractorsService } from '@core/services/contractors/contractors.servi
 import { IResumeDataModel } from '@shared/models/resumeData.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { IViewParam } from '@shared/models/view.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -101,6 +102,7 @@ export class ResumeDoneComponent implements OnInit {
     private contractorsService: ContractorsService,
     private utilService: UtilsService,
     private uploadService: UploadService,
+    private localStorageService: LocalStorageService,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
     this.companyuserType   = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
@@ -524,9 +526,16 @@ export class ResumeDoneComponent implements OnInit {
             pro.ResumeProfessionalExperienceKey.end_date = data;
           });
         } else {
-          pro.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
+          console.log(this.localStorageService.getItem('language').langCode === 'EN');
+            pro.ResumeProfessionalExperienceKey.end_date = this.localStorageService.getItem('language').langCode === 'FR' ?
+              formatDate(pro.ResumeProfessionalExperienceKey.end_date
+            .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')
+            : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
         }
-        pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
+        pro.ResumeProfessionalExperienceKey.start_date = this.localStorageService.getItem('language').langCode === 'FR' ?
+          formatDate(pro.ResumeProfessionalExperienceKey.start_date
+          .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')
+          : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
       });
     }
     if (this.projectList.length > 0) {
@@ -613,7 +622,7 @@ export class ResumeDoneComponent implements OnInit {
                 this.resumeService.generateResumeCompany(dataCompany, action)
                   .subscribe(async (result) => {
                     saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
-                  const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
+                  /*const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
                       { lastModified: new Date().getTime(), type: 'docx'});
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
@@ -662,7 +671,7 @@ export class ResumeDoneComponent implements OnInit {
                             });
                           this.router.navigate(['/candidate/']);
                         });
-                      });
+                      });*/
                     this.subscriptionModal.unsubscribe();
                   });
                 this.subscriptionModal.unsubscribe();
@@ -787,6 +796,8 @@ export class ResumeDoneComponent implements OnInit {
           start_date: oneProject.start_date,
           end_date: oneProject.end_date,
           project_title: oneProject.project_title,
+          client: oneProject.client,
+          position: oneProject.position,
           project_code: oneProject.ResumeProjectKey.project_code,
           professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
           projectDetails:  await this.getProjectDetailsData(oneProject),
