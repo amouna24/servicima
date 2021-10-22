@@ -501,17 +501,17 @@ export class ResumeService {
   }
 
   /*-------------------------------------------------------------------------------------*/
-  sendMail(language_id, application_id, company_id, email_address, message, subject, attachement, emailcc, emailbcc): Observable<any> {
+  sendMail(language_id, application_id, company_id, email_address, message, attachement, emailcc, emailbcc, subject): Observable<any> {
     console.log({
       language_id,
       application_id,
       company_id,
       email_address,
       message,
-      subject,
       attachement,
       emailcc,
       emailbcc,
+      subject,
     });
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailing`, {
       language_id,
@@ -519,10 +519,10 @@ export class ResumeService {
       company_id,
       email_address,
       message,
-      subject,
       attachement,
       emailcc,
-      emailbcc
+      emailbcc,
+      subject,
     });
   }
   /*-------------------------------------------------------------------------------------*/
