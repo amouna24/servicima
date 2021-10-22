@@ -526,22 +526,15 @@ export class ResumeDoneComponent implements OnInit {
             pro.ResumeProfessionalExperienceKey.end_date = data;
           });
         } else {
-          console.log(this.localStorageService.getItem('language').langCode === 'EN');
-            pro.ResumeProfessionalExperienceKey.end_date = this.localStorageService.getItem('language').langCode === 'FR' ?
-              formatDate(pro.ResumeProfessionalExperienceKey.end_date
-            .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')
-            : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
+            pro.ResumeProfessionalExperienceKey.end_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.end_date);
         }
-        pro.ResumeProfessionalExperienceKey.start_date = this.localStorageService.getItem('language').langCode === 'FR' ?
-          formatDate(pro.ResumeProfessionalExperienceKey.start_date
-          .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')
-          : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
+        pro.ResumeProfessionalExperienceKey.start_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.start_date);
       });
     }
     if (this.projectList.length > 0) {
       this.projectList.forEach((proj) => {
-        proj.start_date = this.datePipe.transform(proj.start_date, 'yyyy-MM-dd');
-        proj.end_date = this.datePipe.transform(proj.end_date, 'yyyy-MM-dd');
+        proj.start_date = this.changeDateFormat(proj.start_date);
+        proj.end_date = this.changeDateFormat(proj.end_date);
       });
     }
     const dataCompany = {
@@ -636,7 +629,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
                         if (!this.companyuserType) {
-                          this.resumeService
+                          this.resumeServicegit
                             .sendMailManager('5eac544ad4cb666637fe1354',
                               this.generalInfoList[0].application_id,
                               this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
@@ -672,6 +665,8 @@ export class ResumeDoneComponent implements OnInit {
                           this.router.navigate(['/candidate/']);
                         });
                       });*/
+                    this.getResumeInfo();
+                    this.router.navigate(['/candidate/']);
                     this.subscriptionModal.unsubscribe();
                   });
                 this.subscriptionModal.unsubscribe();
@@ -945,5 +940,13 @@ export class ResumeDoneComponent implements OnInit {
           .getCompanyId(companyEmail, this.userService.applicationId), this.userService.applicationId,
         list, false);
     return this.refData;
+  }
+  changeDateFormat(date) {
+    return this.localStorageService.getItem('language').langCode === 'FR' ?
+      formatDate(date
+        .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')[0].toUpperCase() + formatDate(date
+        .replace('/', '-'), 'MMMM yyyy' , 'fr-CA').substr(1)
+      : this.datePipe.transform(date, 'MMMM yyyy')[0]
+      .toUpperCase() + this.datePipe.transform(date, 'MMMM yyyy').substr(1);
   }
 }
