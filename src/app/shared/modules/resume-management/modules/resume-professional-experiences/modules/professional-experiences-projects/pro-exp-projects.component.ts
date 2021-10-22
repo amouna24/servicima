@@ -148,6 +148,8 @@ export class ProExpProjectsComponent implements OnInit {
       project_title: ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
+      client: ['', Validators.required],
+      position: ['', Validators.required]
     });
   }
 
@@ -224,6 +226,8 @@ export class ProExpProjectsComponent implements OnInit {
       project_title: oneProject.project_title,
       start_date: oneProject.start_date,
       end_date: oneProject.end_date,
+      client: oneProject.client,
+      position: oneProject.position,
     });
     this.myDisabledDayFilter = null;
     this.projectCode = oneProject.ResumeProjectKey.project_code;

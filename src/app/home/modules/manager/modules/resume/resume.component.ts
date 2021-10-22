@@ -297,6 +297,9 @@ await this.getData();
       });
     });
     }
+  /**************************************************************************
+   * @description Send color Object to the resume data table
+   *************************************************************************/
   sendColorObject() {
     return  [{
       columnCode: 'resume_user_type',

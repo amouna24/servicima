@@ -97,7 +97,7 @@
                 <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey"
                      style="border-style: solid ; justify-content: center">
                   <div fxLayout="column" fxFlex="95" fxLayoutGap="30px" class="p-t-20" fxLayoutAlign="center">
-                    <div fxLayout="row" fxFlex="36">
+                    <div fxLayout="row" fxFlex="20">
                       <div fxLayout="column" fxFlex="80">
                         <mat-label class="black font-size-12 required">
                           {{ 'resume-project-title' | translate }}:
@@ -111,7 +111,7 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div fxLayout="row" fxFlex="25">
+                    <div fxLayout="row" fxFlex="30">
                       <div fxLayout="column" fxFlex="30">
                         <mat-label class="black font-size-12 required">
                           {{ 'resume-start-date' | translate }}:
@@ -143,7 +143,33 @@
                         </div>
                       </div>
                     </div>
-                    <div fxLayout="row" fxFlex="30" fxLayoutAlign="end">
+                    <div fxLayout="row" fxFlex="30">
+                      <div fxLayout="column" fxFlex="30">
+                        <mat-label class="black font-size-12 required">
+                          Client:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input  matInput formControlName="client" placeholder="Client" required>
+                          <mat-error class="red" *ngIf="sendProject.controls.start_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row" fxLayoutAlign="end end">
+                          <div fxLayout="column" fxFlex="60">
+                            <mat-label class="black font-size-12 required">
+                              Position:
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput  formControlName="position" placeholder="Position"  required>
+                              <mat-error class="red" *ngIf="sendProject.controls.end_date.errors?.required">
+                                {{ 'general.required' | translate }}</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="20" fxLayoutAlign="end">
                       <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-small"
                               style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="sendProject.invalid">
                         <div *ngIf="button === 'Add';then add else save"></div>

@@ -144,11 +144,11 @@ export class MailingModalComponent implements OnInit {
                 this.utilsService.getApplicationID('SERVICIMA'),
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 [email],
-                mailingObject.subject,
                 mailingObject.message,
                 attach,
                 this.copies,
                 this.hiddenCopies,
+                mailingObject.subject,
               ).subscribe((dataB) => {
               console.log('email send', this.localStorageService.getItem('language').langId,
                 this.utilsService.getApplicationID('SERVICIMA'),
