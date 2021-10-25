@@ -113,8 +113,8 @@ imageFile: File;
       this.certificationUpdate._id = this.id;
       this.certificationUpdate.display_image = this.display_image;
       this.certificationUpdate.expire = this.expire;
-      if ( this.certificationUpdate.image && this.certificationUpdate.image !== this.oldImage) {
-        const file = this.certificationUpdate.image['_files'][0];
+      if ( this.imageFile) {
+        const file = this.imageFile;
         formData = new FormData(); // CONVERT IMAGE TO FORMDATA
         formData.append('file', file);
         formData.append('caption', file.name);
@@ -393,7 +393,7 @@ imageFile: File;
         this.dispayedImagesSum ++;
       }
     });
-    return this.dispayedImagesSum >= 3;
+    return this.dispayedImagesSum >= 2;
   }
   verifyExpired(expire) {
     if (expire === true) {
