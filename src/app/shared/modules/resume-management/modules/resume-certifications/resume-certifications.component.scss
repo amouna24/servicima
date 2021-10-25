@@ -1,3 +1,16 @@
+@import "src/assets/styles/variables";
 .border-solid {
   border-style: solid;
+}
+.buttonImage {
+  position: absolute;
+  top: -7px;
+  border-radius: 0 5px 5px 0;
+  right: 0;
+  border: none;
+  width: 120px;
+  height: 43px;
+  color: white;
+  background-color: $topaz;
+  transform: translateX(8px);
 }
