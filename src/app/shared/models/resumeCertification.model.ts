@@ -12,4 +12,6 @@ export interface IResumeCertificationModel {
   certif_url: string;
   resume_code: string;
   certification_code: string;
+  image?: string;
+  display_image?: boolean;
 }
