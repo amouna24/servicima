@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -40,7 +39,6 @@ import { ResumeCertificationsComponent } from './modules/resume-certifications/r
     ScrollbarModule,
     SharedModule,
     ReactiveFormsModule,
-    MaterialFileInputModule,
   ],
   exports: [
     ResumeGeneralInformationComponent,
