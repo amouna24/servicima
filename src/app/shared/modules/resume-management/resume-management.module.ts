@@ -5,11 +5,7 @@ import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
 import { LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
 
-import localeFr from '@angular/common/locales/fr';
-
-registerLocaleData(localeFr);
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 

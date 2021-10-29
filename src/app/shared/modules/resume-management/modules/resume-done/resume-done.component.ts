@@ -119,7 +119,6 @@ export class ResumeDoneComponent implements OnInit {
     this.initSectionLists();
     this.translateDocs();
     this.getResumeInfo();
-
   }
 
   /**************************************************************************
@@ -212,6 +211,11 @@ export class ResumeDoneComponent implements OnInit {
             this.proExpList = data[1].sort( (val1, val2) => {
               return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
             });
+            // @ts-ignore
+            this.getProjectInfo(this.proExpList);
+          } else {
+            this.proExpList = [];
+            this.showPage = true;
           }
           if (data[2].length > 0) {
             // @ts-ignore
@@ -219,14 +223,21 @@ export class ResumeDoneComponent implements OnInit {
           }
           if (data[3].length > 0) {
             // @ts-ignore
-            this.languageList =  data[3].map( (language: IResumeLanguageModel) => {
-              this.langList.map( (languageRefData) => {
-                if (language.ResumeLanguageKey.resume_language_code === languageRefData.value) {
-                  language.ResumeLanguageKey.resume_language_code = languageRefData.viewValue;
-                }
+            this.resumeService.getResume(`?resume_code=${data[3][0]['ResumeLanguageKey'].resume_code}`).subscribe( async (companyEmail) => {
+              await this.getLanguageRefData(companyEmail[0].ResumeKey.company_email).then( (res) => {
+                // @ts-ignore
+                this.languageList =  data[3].map( (language: IResumeLanguageModel) => {
+                  this.langList.map( (languageRefData) => {
+                    if (language.ResumeLanguageKey.resume_language_code === languageRefData.value) {
+                      language.ResumeLanguageKey.resume_language_code = languageRefData.viewValue;
+                    }
+                  });
+                  return language;
+                });
               });
-              return language;
-            });          }
+
+            });
+          }
           if (data[4].length > 0) {
             // @ts-ignore
             this.interventionList = data[4];
@@ -253,12 +264,11 @@ export class ResumeDoneComponent implements OnInit {
           }
           this.countResume();
           // @ts-ignore
-          await this.getProjectInfo(data[1]);
         });
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
-      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+    } else if ((this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') && !this.resumeCode) {
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
@@ -317,7 +327,7 @@ export class ResumeDoneComponent implements OnInit {
                 return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
               });
               // @ts-ignore
-               this.getProjectInfo(data[1]);
+              this.getProjectInfo(this.proExpList);
             } else {
               this.proExpList = [];
               this.showPage = true;
@@ -378,9 +388,8 @@ export class ResumeDoneComponent implements OnInit {
    * @description Get Project Data from Resume Service
    *************************************************************************/
   getProjectInfo(professionalExperienceData: IResumeProfessionalExperienceModel[]) {
-    let projectFinalList = [];
     new Promise((resolve, reject) => {
-      if (this.proExpList.length > 0) {
+      if (professionalExperienceData.length > 0) {
         professionalExperienceData.forEach(
           (proExpData, index) => {
             this.resumeService.getProject(
@@ -388,20 +397,18 @@ export class ResumeDoneComponent implements OnInit {
             ).subscribe(
               (responseProject) => {
                 if (responseProject['msg_code'] !== '0004') {
-                  responseProject.forEach(
-                    (responseProjectData) => {
-                      this.projectList.push(responseProjectData);
-                    }
-                  );
-                  if (this.proExpList.length === index + 1) {
+                    responseProject.forEach(
+                      (responseProjectData) => {
+                        this.projectList.push(responseProjectData);
+                      }
+                    );
+                }
+                  if (professionalExperienceData.length === index + 1) {
                     this.projectList = this.projectList.sort( (val1, val2) => {
                       return +new Date(val1.start_date) - +new Date(val2.start_date);
                     });
                     resolve(this.projectList);
                   }
-                  projectFinalList = [];
-                  projectFinalList = this.projectList;
-                }
               });
           }
         );
@@ -521,14 +528,14 @@ export class ResumeDoneComponent implements OnInit {
     }
     if (this.proExpList.length > 0) {
       this.proExpList.forEach((pro) => {
-        if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
-          this.translate.get(`resume-today`).subscribe( (data) => {
+        this.translate.get(`resume-today`).subscribe( (data) => {
+          if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date' ||  pro.ResumeProfessionalExperienceKey.end_date === data) {
             pro.ResumeProfessionalExperienceKey.end_date = data;
-          });
         } else {
             pro.ResumeProfessionalExperienceKey.end_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.end_date);
         }
         pro.ResumeProfessionalExperienceKey.start_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.start_date);
+      });
       });
     }
     if (this.projectList.length > 0) {
@@ -615,7 +622,7 @@ export class ResumeDoneComponent implements OnInit {
                 this.resumeService.generateResumeCompany(dataCompany, action)
                   .subscribe(async (result) => {
                     saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
-                  /*const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
+                  const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
                       { lastModified: new Date().getTime(), type: 'docx'});
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
@@ -629,7 +636,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
                         if (!this.companyuserType) {
-                          this.resumeServicegit
+                          this.resumeService
                             .sendMailManager('5eac544ad4cb666637fe1354',
                               this.generalInfoList[0].application_id,
                               this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
@@ -664,9 +671,7 @@ export class ResumeDoneComponent implements OnInit {
                             });
                           this.router.navigate(['/candidate/']);
                         });
-                      });*/
-                    this.getResumeInfo();
-                    this.router.navigate(['/candidate/']);
+                      });
                     this.subscriptionModal.unsubscribe();
                   });
                 this.subscriptionModal.unsubscribe();
@@ -750,8 +755,6 @@ export class ResumeDoneComponent implements OnInit {
           this.showWaitingPreview = false;
           window.open(fileURL, '_blank');
           this.count = 0;
-        this.initSectionLists();
-        this.getResumeInfo();
       });
       }
   }

@@ -393,7 +393,7 @@ imageFile: File;
         this.dispayedImagesSum ++;
       }
     });
-    return this.dispayedImagesSum >= 2;
+    return this.dispayedImagesSum >= 3;
   }
   verifyExpired(expire) {
     if (expire === true) {

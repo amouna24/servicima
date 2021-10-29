@@ -460,6 +460,7 @@ export class ResumeService {
     return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/contractors/?type=${type}`, filter, { responseType: 'blob'});
   }
   generateResumeCompany(filter: any, type: string): Observable<any> {
+    console.log(filter);
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
@@ -561,6 +562,7 @@ export class ResumeService {
    * @param resumeData: updated  ResumeData Object
    *************************************************************************/
   updateResumeData(resumeData: IResumeDataModel): Observable<any> {
+    console.log(resumeData);
     return this.httpClient.put<IResumeDataModel>(`${environment.resumeDataApiUrl}`, resumeData);
   }
 
