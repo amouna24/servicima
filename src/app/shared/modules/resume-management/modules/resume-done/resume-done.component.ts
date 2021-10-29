@@ -517,13 +517,13 @@ export class ResumeDoneComponent implements OnInit {
   async getDocument(action: string) {
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-          diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
-          diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
+          diploma.start_date = +diploma.start_date  ? diploma.start_date : this.datePipe.transform(diploma.start_date, 'yyyy');
+          diploma.end_date = +diploma.end_date ? diploma.end_date :  this.datePipe.transform(diploma.end_date, 'yyyy');
       });
     }
     if (this.certifList.length > 0) {
       this.certifList.forEach((certif) => {
-        certif.date = this.datePipe.transform(certif.date, 'yyyy');
+        certif.date = +certif.date ? certif.date : this.datePipe.transform(certif.date, 'yyyy');
       });
     }
     if (this.proExpList.length > 0) {
