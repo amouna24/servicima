@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MaterialModule } from '@shared/modules/material/material.module';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { SharedModule } from '@shared/shared.module';
-import { LOCALE_ID } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -53,7 +52,6 @@ import { ResumeCertificationsComponent } from './modules/resume-certifications/r
   ],
   providers: [
     DatePipe,
-    { provide: LOCALE_ID, useValue: 'fr-CA' }
   ],
 
 })
