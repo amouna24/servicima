@@ -277,6 +277,7 @@ export class ResumeDoneComponent implements OnInit {
               this.companyLogo = userInfo['company'][0]['photo'];
               this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
               this.phone = userInfo['company'][0]['phone_nbr1'];
+              this.mobile = userInfo['company'][0]['phone_nbr2'];
               this.contactEmail = userInfo['company'][0]['contact_email'];
             }
           });
@@ -555,7 +556,7 @@ export class ResumeDoneComponent implements OnInit {
             this.calculateYearsOfExperience() : 0,
         phoneNum: this.phone?.toString() ? this.phone?.toString() : '',
         label: this.label,
-        mobile: this.mobile?.toString() ? this.mobile?.toString() : '',
+        mobile: this.mobile ? this.mobile.toString() : '',
         currentYear: this.dateNow,
         imageUrl: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
         diplomas: this.diplomaList,
