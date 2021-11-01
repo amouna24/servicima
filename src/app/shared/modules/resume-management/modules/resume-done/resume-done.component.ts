@@ -636,23 +636,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
                       this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                        if (!this.companyuserType) {
-                          this.resumeService
-                            .sendMailManager('5eac544ad4cb666637fe1354',
-                              this.generalInfoList[0].application_id,
-                              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                              this.companyEmail,
-                              this.companyName,
-                              this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
-                              this.userService.connectedUser$.getValue().user[0]['last_name'],
-                              [{
-                                filename: this.generalInfoList[0].init_name + '.docx',
-                                path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
-                              }, ]
-                            ).subscribe((dataB) => {
-                            console.log('mail sended');
-                          });
-                        }
+
                           this.showWaiting = false;
                           this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
                             .subscribe( (resumeData) => {
@@ -706,10 +690,10 @@ export class ResumeDoneComponent implements OnInit {
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
                         if (!this.companyuserType) {
                           this.resumeService
-                            .sendMailManager('5eac544ad4cb666637fe1354',
+                            .sendMailManager(this.localStorageService.getItem('language').langId,
                               this.generalInfoList[0].application_id,
                               this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                              this.companyEmail,
+                              [this.companyEmail],
                               this.companyName,
                               this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
                               this.userService.connectedUser$.getValue().user[0]['last_name'],
