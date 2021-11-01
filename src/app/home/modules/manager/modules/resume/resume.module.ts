@@ -4,9 +4,10 @@ import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynam
 
 import { ResumeRoutingModule } from './resume-routing.module';
 import { ResumeComponent } from './resume.component';
+import { MailingHistoryComponent } from './mailing-history/mailing-history.component';
 
 @NgModule({
-  declarations: [ResumeComponent],
+  declarations: [ResumeComponent, MailingHistoryComponent],
   imports: [
     CommonModule,
     ResumeRoutingModule,

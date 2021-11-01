@@ -198,11 +198,26 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
     },
-    {
-      state: 'resume',
-      name: 'Resume management',
-      type: 'link',
-      icon: 'wi-billings',
-      feature: 'CONTRACT_ACCESS',
-    }
+  {
+    state: 'resume',
+    name: 'Resume management',
+    type: 'sub',
+    icon: 'wi-billings',
+    feature: 'CONTRACT_ACCESS',
+    children: [
+      {
+        state: '',
+        name: 'Resume List',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'history',
+        name: 'Mailing history',
+        icon: 'wi-user',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+  }
+]}
 ];
