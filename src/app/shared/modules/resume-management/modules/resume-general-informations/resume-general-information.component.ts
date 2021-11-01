@@ -239,6 +239,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_filename_docx: generalInformation.resume_filename_docx,
       resume_filename_pdf: generalInformation.resume_filename_pdf,
     });
+    this.CreationForm.controls.language_id.disable();
     if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
@@ -258,11 +259,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
                         const minDate = new Date(Math.min.apply(null, responseProExp.map (proExp => {
                             return new Date(proExp.ResumeProfessionalExperienceKey.start_date);
                         })));
-                        console.log(minDate.getFullYear());
                         resolve(+maxDate.getFullYear() - +minDate.getFullYear());
 
                       }).then((yearsOfExperience) => {
-                        console.log(yearsOfExperience);
                         this.CreationForm.patchValue({
                           years_of_experience: yearsOfExperience,
                         });
@@ -336,7 +335,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
       }
     } else {
-      this.generalInfo = this.CreationForm.value;
+      this.generalInfo = this.CreationForm.getRawValue();
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }

@@ -9,5 +9,7 @@ export interface IResumeProjectDoneModel {
   project_title: string;
   project_code: string;
   professional_experience_code: string;
+  position: string;
+  client: string;
   projectDetails: IResumeProjectDetailsDoneModel[];
 }

@@ -16,7 +16,7 @@ import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeProfessionalExperienceModel } from '@shared/models/resumeProfessionalExperience.model';
 import { IResumeProfessionalExperienceDoneModel } from '@shared/models/professionalExperienceDone.model';
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { UploadService } from '@core/services/upload/upload.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
@@ -31,8 +31,12 @@ import { UploadResumeService } from '@core/services/upload-resume/upload-resume.
 import { IContractor } from '@shared/models/contractor.model';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { IResumeDataModel } from '@shared/models/resumeData.model';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { IViewParam } from '@shared/models/view.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { environment } from '../../../../../../environments/environment';
+
 @Component({
   selector: 'wid-resume-done',
   templateUrl: './resume-done.component.html',
@@ -43,25 +47,6 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class ResumeDoneComponent implements OnInit {
 
-  /**********************************************************************
-   * @description Resume Preview constructor
-   *********************************************************************/
-  constructor(
-    private resumeService: ResumeService,
-    private userService: UserService,
-    private datePipe: DatePipe,
-    private uploadResumeService: UploadResumeService,
-    private dialog: MatDialog,
-    private translate: TranslateService,
-    private router: Router,
-    private modalServices: ModalService,
-    private utilsService: UtilsService,
-    private contractorsService: ContractorsService,
-    private uploadService: UploadService,
-  ) {
-    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    this.companyuserType   = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
-  }
   companyuserType: string;
   count = 0;
   resumeCode: string;
@@ -96,6 +81,32 @@ export class ResumeDoneComponent implements OnInit {
   subscriptionModal: Subscription;
   showWaiting: boolean;
   showWaitingPreview: boolean;
+  showPage = false;
+  mobile: string;
+  refData: { } = { };
+  langList: IViewParam[];
+  /**********************************************************************
+   * @description Resume Preview constructor
+   *********************************************************************/
+  constructor(
+    private resumeService: ResumeService,
+    private userService: UserService,
+    private datePipe: DatePipe,
+    private uploadResumeService: UploadResumeService,
+    private dialog: MatDialog,
+    private translate: TranslateService,
+    private router: Router,
+    private modalServices: ModalService,
+    private refDataService: RefdataService,
+    private utilsService: UtilsService,
+    private contractorsService: ContractorsService,
+    private utilService: UtilsService,
+    private uploadService: UploadService,
+    private localStorageService: LocalStorageService,
+  ) {
+    this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyuserType   = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -155,6 +166,7 @@ export class ResumeDoneComponent implements OnInit {
               this.companyLogo = userInfo['company'][0]['photo'];
               this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
               this.phone = userInfo['company'][0]['phone_nbr1'];
+              this.mobile = userInfo['company'][0]['phone_nbr2'];
               this.contactEmail = userInfo['company'][0]['contact_email'];
             }
           });
@@ -186,7 +198,7 @@ export class ResumeDoneComponent implements OnInit {
           `?resume_code=${this.resumeCode}`
         )
       ]).toPromise().then(
-        (data) => {
+        async (data) => {
           if (data[0].length > 0) {
             if (data[0][0]['years_of_experience'] === null) {
               data[0][0]['years_of_experience'] = this.years;
@@ -199,6 +211,11 @@ export class ResumeDoneComponent implements OnInit {
             this.proExpList = data[1].sort( (val1, val2) => {
               return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
             });
+            // @ts-ignore
+            this.getProjectInfo(this.proExpList);
+          } else {
+            this.proExpList = [];
+            this.showPage = true;
           }
           if (data[2].length > 0) {
             // @ts-ignore
@@ -206,7 +223,20 @@ export class ResumeDoneComponent implements OnInit {
           }
           if (data[3].length > 0) {
             // @ts-ignore
-            this.languageList = data[3];
+            this.resumeService.getResume(`?resume_code=${data[3][0]['ResumeLanguageKey'].resume_code}`).subscribe( async (companyEmail) => {
+              await this.getLanguageRefData(companyEmail[0].ResumeKey.company_email).then( (res) => {
+                // @ts-ignore
+                this.languageList =  data[3].map( (language: IResumeLanguageModel) => {
+                  this.langList.map( (languageRefData) => {
+                    if (language.ResumeLanguageKey.resume_language_code === languageRefData.value) {
+                      language.ResumeLanguageKey.resume_language_code = languageRefData.viewValue;
+                    }
+                  });
+                  return language;
+                });
+              });
+
+            });
           }
           if (data[4].length > 0) {
             // @ts-ignore
@@ -233,12 +263,12 @@ export class ResumeDoneComponent implements OnInit {
             });
           }
           this.countResume();
-          this.getProjectInfo();
+          // @ts-ignore
         });
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
       this.router.navigate(['manager/resume/']);
-    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
-      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+    } else if ((this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+      this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') && !this.resumeCode) {
       this.userService.connectedUser$
         .subscribe(
           (userInfo) => {
@@ -247,6 +277,7 @@ export class ResumeDoneComponent implements OnInit {
               this.companyLogo = userInfo['company'][0]['photo'];
               this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
               this.phone = userInfo['company'][0]['phone_nbr1'];
+              this.mobile = userInfo['company'][0]['phone_nbr2'];
               this.contactEmail = userInfo['company'][0]['contact_email'];
             }
           });
@@ -296,14 +327,31 @@ export class ResumeDoneComponent implements OnInit {
               this.proExpList = data[1].sort( (val1, val2) => {
                 return +new Date(val1.ResumeProfessionalExperienceKey.start_date) - +new Date(val2.ResumeProfessionalExperienceKey.start_date);
               });
+              // @ts-ignore
+              this.getProjectInfo(this.proExpList);
+            } else {
+              this.proExpList = [];
+              this.showPage = true;
             }
             if (data[2].length > 0) {
               // @ts-ignore
               this.techSkillList = data[2];
             }
             if (data[3].length > 0) {
-              // @ts-ignore
-              this.languageList = data[3];
+              this.resumeService.getResume(`?resume_code=${data[3][0]['ResumeLanguageKey'].resume_code}`).subscribe( async (companyEmail) => {
+                await this.getLanguageRefData(companyEmail[0].ResumeKey.company_email).then( (res) => {
+                  // @ts-ignore
+                  this.languageList =  data[3].map( (language: IResumeLanguageModel) => {
+                    this.langList.map( (languageRefData) => {
+                      if (language.ResumeLanguageKey.resume_language_code === languageRefData.value) {
+                        language.ResumeLanguageKey.resume_language_code = languageRefData.viewValue;
+                      }
+                    });
+                    return language;
+                });
+              });
+
+              });
             }
             if (data[4].length > 0) {
               // @ts-ignore
@@ -330,8 +378,8 @@ export class ResumeDoneComponent implements OnInit {
               });
             }
             this.countResume();
-            this.getProjectInfo();
-            this.getContractorsList(this.generalInfoList[0]);
+            // @ts-ignore
+            this.getContractorsList(this.generalInfoList[0].ResumeKey.company_email);
           });
       });
     }
@@ -340,41 +388,42 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Get Project Data from Resume Service
    *************************************************************************/
-  getProjectInfo() {
-    let projectFinalList = [];
+  getProjectInfo(professionalExperienceData: IResumeProfessionalExperienceModel[]) {
     new Promise((resolve, reject) => {
-      if (this.proExpList.length > 0) {
-        this.proExpList.forEach(
+      if (professionalExperienceData.length > 0) {
+        professionalExperienceData.forEach(
           (proExpData, index) => {
             this.resumeService.getProject(
               `?professional_experience_code=${proExpData.ResumeProfessionalExperienceKey.professional_experience_code}`
             ).subscribe(
               (responseProject) => {
                 if (responseProject['msg_code'] !== '0004') {
-                  responseProject.forEach(
-                    (responseProjectData) => {
-                      this.projectList.push(responseProjectData);
-                    }
-                  );
-                  if (this.proExpList.length === index + 1) {
+                    responseProject.forEach(
+                      (responseProjectData) => {
+                        this.projectList.push(responseProjectData);
+                      }
+                    );
+                }
+                  if (professionalExperienceData.length === index + 1) {
                     this.projectList = this.projectList.sort( (val1, val2) => {
                       return +new Date(val1.start_date) - +new Date(val2.start_date);
                     });
                     resolve(this.projectList);
                   }
-                  projectFinalList = [];
-                  projectFinalList = this.projectList;
-                }
               });
           }
         );
       }
-    }).then(() => {
-      this.getProjectDetailsInfo();
+    }).then((result: IResumeProjectModel[]) => {
+      if (result.length > 0 ) {
+        this.getProjectDetailsInfo(result);
+      } else {
+        this.showPage = true;
+      }
     });
   }
   /**************************************************************************
-   * @description Upload Image to Server  with async to promise
+   * @description Upload Image to Upload api  with async to promise
    * @param formData It contains the resume in docx format
    * @return res return the image uploaded
    *************************************************************************/
@@ -392,6 +441,11 @@ export class ResumeDoneComponent implements OnInit {
       )
       .toPromise();
   }
+  /**************************************************************************
+   * @description Upload Image to Resume list api  with async to promise
+   * @param formData It contains the resume in docx format
+   * @return res return the image uploaded
+   *************************************************************************/
   async updateUploadFile(formData) {
     return await this.uploadResumeService.updateResume(formData)
       .pipe(
@@ -402,10 +456,10 @@ export class ResumeDoneComponent implements OnInit {
   /**************************************************************************
    * @description Get Project Details Data from Resume Service
    *************************************************************************/
-  getProjectDetailsInfo() {
+  getProjectDetailsInfo(projectListData: IResumeProjectModel[]) {
     const ProDet = new Promise((resolve, reject) => {
-      if (this.projectList.length > 0) {
-        this.projectList.forEach(
+      if (projectListData.length > 0) {
+        projectListData.forEach(
           (projectData, index) => {
             this.resumeService.getProjectDetails(
               `?project_code=${projectData.ResumeProjectKey.project_code}`
@@ -425,8 +479,12 @@ export class ResumeDoneComponent implements OnInit {
           }
         );
       }
-    }).then((res: IResumeProjectDetailsModel[]) => {
-      this.getProjectDetailsSectionInfo(res);
+    }).then(async (res: IResumeProjectDetailsModel[]) => {
+      if (res.length > 0) {
+        await this.getProjectDetailsSectionInfo(res);
+      } else {
+        this.showPage = false;
+      }
     });
   }
   /**************************************************************************
@@ -434,14 +492,16 @@ export class ResumeDoneComponent implements OnInit {
    *************************************************************************/
   async getProjectDetailsSectionInfo(projectDetailsList: IResumeProjectDetailsModel[]) {
     if (projectDetailsList.length > 0) {
+      let index = 0;
       for (const projectDetailsData of projectDetailsList) {
+        index ++;
         await this.resumeService.getProjectDetailsSection(
           `?project_details_code=${projectDetailsData.ResumeProjectDetailsKey.project_details_code}`
         ).subscribe(
           (responseProjectDetailsSection) => {
             if (responseProjectDetailsSection.length > 0) {
               responseProjectDetailsSection.forEach(
-                (responseProjectDetailsSectionData, index) => {
+                (responseProjectDetailsSectionData) => {
                   this.projectDetailsSectionList.push(responseProjectDetailsSectionData);
                 }
               );
@@ -449,6 +509,7 @@ export class ResumeDoneComponent implements OnInit {
           });
       }
     }
+    this.showPage = true;
   }
   /**************************************************************************
    * @description Get All resume Data
@@ -457,29 +518,31 @@ export class ResumeDoneComponent implements OnInit {
   async getDocument(action: string) {
     if (this.diplomaList.length > 0) {
       this.diplomaList.forEach((diploma) => {
-          diploma.start_date = this.datePipe.transform(diploma.start_date, 'yyyy');
-          diploma.end_date = this.datePipe.transform(diploma.end_date, 'yyyy');
+          diploma.start_date = +diploma.start_date  ? diploma.start_date : this.datePipe.transform(diploma.start_date, 'yyyy');
+          diploma.end_date = +diploma.end_date ? diploma.end_date :  this.datePipe.transform(diploma.end_date, 'yyyy');
       });
     }
     if (this.certifList.length > 0) {
       this.certifList.forEach((certif) => {
-        certif.date = this.datePipe.transform(certif.date, 'MMMM yyyy');
+        certif.date = +certif.date ? certif.date : this.datePipe.transform(certif.date, 'yyyy');
       });
     }
     if (this.proExpList.length > 0) {
       this.proExpList.forEach((pro) => {
-        if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
-          pro.ResumeProfessionalExperienceKey.end_date = 'Today';
+        this.translate.get(`resume-today`).subscribe( (data) => {
+          if (pro.ResumeProfessionalExperienceKey.end_date === 'Current Date' ||  pro.ResumeProfessionalExperienceKey.end_date === data) {
+            pro.ResumeProfessionalExperienceKey.end_date = data;
+        } else {
+            pro.ResumeProfessionalExperienceKey.end_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.end_date);
         }
-        pro.ResumeProfessionalExperienceKey.start_date = this.datePipe.transform(pro.ResumeProfessionalExperienceKey.start_date, 'MMMM yyyy');
-        pro.ResumeProfessionalExperienceKey.end_date = pro.ResumeProfessionalExperienceKey.end_date === 'Today' ?
-          'Today' : this.datePipe.transform(pro.ResumeProfessionalExperienceKey.end_date, 'MMMM yyyy');
+        pro.ResumeProfessionalExperienceKey.start_date = this.changeDateFormat(pro.ResumeProfessionalExperienceKey.start_date);
+      });
       });
     }
     if (this.projectList.length > 0) {
       this.projectList.forEach((proj) => {
-        proj.start_date = this.datePipe.transform(proj.start_date, 'yyyy-MM-dd');
-        proj.end_date = this.datePipe.transform(proj.end_date, 'yyyy-MM-dd');
+        proj.start_date = this.changeDateFormat(proj.start_date);
+        proj.end_date = this.changeDateFormat(proj.end_date);
       });
     }
     const dataCompany = {
@@ -493,6 +556,7 @@ export class ResumeDoneComponent implements OnInit {
             this.calculateYearsOfExperience() : 0,
         phoneNum: this.phone?.toString() ? this.phone?.toString() : '',
         label: this.label,
+        mobile: this.mobile ? this.mobile.toString() : '',
         currentYear: this.dateNow,
         imageUrl: this.generalInfoList[0].image ? this.imageUrl + this.generalInfoList[0].image : null ,
         diplomas: this.diplomaList,
@@ -559,7 +623,7 @@ export class ResumeDoneComponent implements OnInit {
                 this.resumeService.generateResumeCompany(dataCompany, action)
                   .subscribe(async (result) => {
                     saveAs(result, `${this.generalInfoList[0].init_name}.docx`);
-                    const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
+                  const file = new File([result], `${this.generalInfoList[0].init_name}.docx`,
                       { lastModified: new Date().getTime(), type: 'docx'});
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
@@ -572,23 +636,7 @@ export class ResumeDoneComponent implements OnInit {
                       this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
                       this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-                        if (!this.companyuserType) {
-                          this.resumeService
-                            .sendMailManager('5eac544ad4cb666637fe1354',
-                              this.generalInfoList[0].application_id,
-                              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                              this.companyEmail,
-                              this.companyName,
-                              this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
-                              this.userService.connectedUser$.getValue().user[0]['last_name'],
-                              [{
-                                filename: this.generalInfoList[0].init_name + '.docx',
-                                path: `${environment.uploadFileApiUrl}/show/${this.generalInfoList[0].resume_filename_docx}`
-                              }, ]
-                            ).subscribe((dataB) => {
-                            console.log('mail sended');
-                          });
-                        }
+
                           this.showWaiting = false;
                           this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
                             .subscribe( (resumeData) => {
@@ -642,10 +690,10 @@ export class ResumeDoneComponent implements OnInit {
                       this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
                         if (!this.companyuserType) {
                           this.resumeService
-                            .sendMailManager('5eac544ad4cb666637fe1354',
+                            .sendMailManager(this.localStorageService.getItem('language').langId,
                               this.generalInfoList[0].application_id,
                               this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-                              this.companyEmail,
+                              [this.companyEmail],
                               this.companyName,
                               this.userService.connectedUser$.getValue().user[0]['first_name'] + ' ' +
                               this.userService.connectedUser$.getValue().user[0]['last_name'],
@@ -692,8 +740,6 @@ export class ResumeDoneComponent implements OnInit {
           this.showWaitingPreview = false;
           window.open(fileURL, '_blank');
           this.count = 0;
-        this.initSectionLists();
-        this.getResumeInfo();
       });
       }
   }
@@ -733,9 +779,11 @@ export class ResumeDoneComponent implements OnInit {
           start_date: oneProject.start_date,
           end_date: oneProject.end_date,
           project_title: oneProject.project_title,
+          client: oneProject.client,
+          position: oneProject.position,
           project_code: oneProject.ResumeProjectKey.project_code,
           professional_experience_code: oneProject.ResumeProjectKey.professional_experience_code,
-          projectDetails:  this.getProjectDetailsData(oneProject),
+          projectDetails:  await this.getProjectDetailsData(oneProject),
         });
       }
     }
@@ -746,7 +794,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param oneProject It contains the project relating to these project details
    * @return projectDetails returns the project details relating to one Project
    *************************************************************************/
-  getProjectDetailsData(oneProject: IResumeProjectModel): IResumeProjectDetailsDoneModel[] {
+  async getProjectDetailsData(oneProject: IResumeProjectModel): Promise<IResumeProjectDetailsDoneModel[]> {
     const projectDetails: IResumeProjectDetailsDoneModel[] = [];
     for (const oneProjectDetails of this.projectDetailsList) {
       if (oneProjectDetails.ResumeProjectDetailsKey.project_code === oneProject.ResumeProjectKey.project_code) {
@@ -757,7 +805,7 @@ export class ResumeDoneComponent implements OnInit {
           project_detail_desc: oneProjectDetails.project_detail_desc,
           project_details_code: oneProjectDetails.ResumeProjectDetailsKey.project_details_code,
           project_code: oneProjectDetails.ResumeProjectDetailsKey.project_code,
-          projectDetailsSection: this.getProjectDetailsSectionData(oneProjectDetails),
+          projectDetailsSection: await this.getProjectDetailsSectionData(oneProjectDetails),
         });
       }
     }
@@ -768,7 +816,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param projectDetail it contains the project detail relating to these project details section
    * @return projectDetailsSection return the project details section of one project detail
    *************************************************************************/
-  getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel): IResumeProjectDetailsSectionModel[] {
+  async getProjectDetailsSectionData(projectDetail: IResumeProjectDetailsModel): Promise<IResumeProjectDetailsSectionModel[]> {
     const projectDetailsSection: IResumeProjectDetailsSectionModel[] = [];
     for (const oneProjectDetailsSection of this.projectDetailsSectionList) {
       if (oneProjectDetailsSection.ResumeProjectDetailsSectionKey.project_details_code ===
@@ -807,7 +855,8 @@ export class ResumeDoneComponent implements OnInit {
   translateDocs() {
     this.translateKey = ['resume-yrs-of-experience', 'resume-pro-exp', 'resume-certif-diploma'
       , 'resume-functional-skills', 'resume-technical-skills', 'resume-lvl-intervention', 'resume-language'
-      , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate', 'resume-advanced', 'resume-expert'];
+      , 'resume-phone', 'resume-email', 'resume-beginner', 'resume-elementary', 'resume-intermediate',
+      'resume-advanced', 'resume-expert', 'resume-until'];
     this.translate.get(this.translateKey).subscribe(res => {
       this.label = {
         yearsOfExperience: res['resume-yrs-of-experience'],
@@ -824,6 +873,7 @@ export class ResumeDoneComponent implements OnInit {
         intermediate: res['resume-intermediate'],
         advanced: res['resume-advanced'],
         expert: res['resume-expert'],
+        until: res['resume-until'],
       };
     });
   }
@@ -833,13 +883,20 @@ export class ResumeDoneComponent implements OnInit {
   verifyUserType() {
     this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' ? this.userType = 'manager' : this.userType = 'candidate';
   }
-  getContractorsList(filter: IResumeModel) {
+  /**************************************************************************
+   * @description Get list of contractors
+   * @param company_email: The company email of the user
+   *************************************************************************/
+  getContractorsList(company_email: string) {
     this.contractorsService.getContractors(
-      `?email_address=${filter.ResumeKey.company_email}`).subscribe( (res) => {
-        this.contractorsList = res['results'];
+      `?email_address=${company_email}`).subscribe((res) => {
+      this.contractorsList = res['results'];
     });
   }
-  calculateYearsOfExperience() {
+    /**************************************************************************
+     * @description Calculate the sum of the years of experiences
+     *************************************************************************/
+    calculateYearsOfExperience() {
     const maxDate = new Date(Math.max.apply(null, this.proExpList.map (proExp => {
       if (proExp.ResumeProfessionalExperienceKey.end_date === 'Today') {
         return new Date();
@@ -852,5 +909,32 @@ export class ResumeDoneComponent implements OnInit {
     })));
     return(maxDate.getFullYear() - minDate.getFullYear());
 
+  }
+  /**************************************************************************
+   * @description set Language RefData in a language List
+   *************************************************************************/
+  async getLanguageRefData(companyEmail) {
+    const data = await this.getRefData(companyEmail);
+    this.langList = data['LANGUAGE'];
+  }
+  /**************************************************************************
+   * @description Get Languages from Ref Data
+   * @return refData return language refData
+   *************************************************************************/
+  async getRefData(companyEmail) {
+    const list = ['LANGUAGE'];
+    this.refData = await this.refDataService
+      .getRefData(this.utilService
+          .getCompanyId(companyEmail, this.userService.applicationId), this.userService.applicationId,
+        list, false);
+    return this.refData;
+  }
+  changeDateFormat(date) {
+    return this.localStorageService.getItem('language').langCode === 'FR' ?
+      formatDate(date
+        .replace('/', '-'), 'MMMM yyyy' , 'fr-CA')[0].toUpperCase() + formatDate(date
+        .replace('/', '-'), 'MMMM yyyy' , 'fr-CA').substr(1)
+      : this.datePipe.transform(date, 'MMMM yyyy')[0]
+      .toUpperCase() + this.datePipe.transform(date, 'MMMM yyyy').substr(1);
   }
 }
