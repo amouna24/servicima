@@ -14,6 +14,7 @@ import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectD
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
 import { IResumeDataModel } from '@shared/models/resumeData.model';
 import { IResumeListModel } from '@shared/models/resumeList.model';
+import { IResumeMailingHistoryModel } from '@shared/models/mailingHistory.model';
 
 import { Observable, throwError } from 'rxjs';
 
@@ -582,5 +583,37 @@ export class ResumeService {
   convertResumeToPdf(docxUrl: string) {
     return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'blob'});
 
+  }
+  /*------------------------------------ RESUME-MAILING-HISTORY--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Mailing History List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IResumeMailingHistoryModel[]>
+   *************************************************************************/
+  getMailingHistory(filter: string): Observable<IResumeMailingHistoryModel[]> {
+    return this.httpClient.get<IResumeMailingHistoryModel[]>(`${environment.resumeMailingHistoryApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new Mailing history
+   * @param mailingHistory : IResumeMailingHistoryModel model
+   *************************************************************************/
+  addMailingHistory(mailingHistory: IResumeMailingHistoryModel): Observable<any> {
+    return this.httpClient.post<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}`, mailingHistory);
+  }
+
+  /**************************************************************************
+   * @description Update Mailing history Status
+   * @param mailingHistory: updated  Mailing history Object
+   *************************************************************************/
+  updateMailingHistory(mailingHistory: IResumeMailingHistoryModel): Observable<any> {
+    return this.httpClient.put<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}`, mailingHistory);
+  }
+  /**************************************************************************
+   * @description Delete Mailing History Status
+   * @param id: Delete Mailing History Object
+   *************************************************************************/
+  deleteMailingHistory(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}/?_id=${id}`);
   }
 }

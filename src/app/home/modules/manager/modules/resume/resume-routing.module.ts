@@ -69,7 +69,8 @@ const routes: Routes = [
   },
   {
     path: 'history',
-    component: MailingHistoryComponent
+    loadChildren: () => import('./mailing-history/mailing-history.module')
+      .then(m => m.MailingHistoryModule),
   }
 ];
 

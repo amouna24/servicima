@@ -1,0 +1,132 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Mailing history</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88">
+            <wid-scrollbar  fxFlexFill >
+            <div fxLayout="column" fxFlexFill fxLayoutAlign=" center">
+              <div fxLayout="row" fxFlex="10" fxLayoutAlign=" center" class="min-width-86 p-b-10">
+                <div  fxLayout="column" fxFlex>
+                  <span class="font-size-24 black font-normal">{{subject}}</span></div>
+                <div  fxLayout="column" fxFlex fxLayoutAlign=" end">
+                  <span class="font-size-12 warm-grey font-light">{{send_time | date: 'medium'}}</span>
+                </div>
+              </div>
+              <div fxLayout="row" fxFlex="12" class="min-width-86">
+                <div fxLayout="column" fxFlexFill fxLayoutGap="5px">
+                  <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="4">
+                      <span class="font-light steel font-light">c:</span>
+                    </div>
+                    <div fxLayout="column" >
+                      <div fxLayout="row" fxFlexFill fxLayoutGap="3px" >
+                        <div fxLayout="column" fxFlex="100" class="mail-grey-border" *ngFor="let copy of copies" fxLayoutAlign=" center">
+                          <div  fxLayout="row" fxFlex="100" fxLayoutAlign=" center" >
+                            <div fxLayout="column">
+                              <span class="font-light font-size-8 black-three p-l-10 p-r-10"> {{copy}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="4">
+                      <span class="font-light steel font-light">cc:</span>
+                    </div>
+                    <div fxLayout="column" >
+                      <div fxLayout="row" fxFlexFill fxLayoutGap="3px" >
+                        <div fxLayout="column" fxFlex="100" class="mail-grey-border" *ngFor="let hiddenCopy of hiddenCopies" fxLayoutAlign=" center">
+                          <div  fxLayout="row" fxFlex="100" fxLayoutAlign=" center" >
+                            <span class="font-light font-size-8 black-three p-l-10 p-r-10"> {{hiddenCopy}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" class="full-width">
+                <div fxLayout="column" fxFlex="82">
+                  <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                    <div fxLayout="column" fxFlex="81">
+                      <p class="black font-light font-size-12">
+                        <span class="font-size-12 font-medium black">Message: </span>{{message}}</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div fxLayout="row" class="full-width">
+                <div fxLayout="column" fxFlex="82">
+                  <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                    <div fxLayout="column" fxFlex="81" >
+                      <div fxLayout="row" class="p-b-10">
+                        <span class="font-size-12 font-medium black">Attachments: </span>
+                      </div>
+                      <div fxLayout="row" fxFlexFill >
+                        <div fxLayout="column" fxFlexFill fxLayoutGap="4px" >
+                          <div fxLayout="row" class="bg-pale-grey" *ngFor="let attachment of attachments" style="border-radius: 5px;" >
+                            <div fxLayout="column" style="margin: 10px 0" fxFlex="100">
+                              <div fxLayout="row" fxFlexFill>
+                                <div fxLayout="column" fxFlex="6" fxLayoutAlign="center">
+                                  <div fxLayout="row" fxLayoutAlign="center center">
+                                    <img src="assets/icons/icon-pdf.svg" width="11.7" height="15">
+                                  </div>
+                                </div>
+                                <div fxLayout="column" fxFlex="77" fxLayoutAlign="center">
+                                  <span class="font-light black font-size-12">{{attachment.filename}}</span>
+                                </div>
+                                <div fxLayout="column" fxFlex="17">
+                                  <div fxLayout="row" fxFlex="70">
+                                    <div fxLayout="column" >
+                                      <button fxLayout="row" fxLayoutAlign=" center" class="mat-button-toggle-group mat-icon" mat-raised-button color="white" (click)="downloadDoc(attachment)">
+                                          <img src="assets/icons/icon-download.svg"> <span class="black font-size-11  p-l-5">Download</span>
+                                      </button>
+                                    </div>
+
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div fxLayout="row"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            </wid-scrollbar>
+          </div>
+          <div fxLayout="row" fxFlex="7" fxLayoutGap="7px">
+            <div fxLayout="column" fxFlex="96" fxLayoutAlign=" end">
+              <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="column">
+                  <button  class="btn-small" style="background-color: #e8f1f9 ;border: none" (click)="resendMail()">
+                    <span class="cerulean-blue font-size-11">Resend</span>
+                  </button></div>
+                <div fxLayout="column" >
+                  <button  class="btn-small" style="background-color: #e8f1f9 ;border: none" (click)="backButton()">
+                    <span class="cerulean-blue font-size-11">Back</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+

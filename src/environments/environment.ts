@@ -47,7 +47,7 @@ export const environment = {
   resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
   docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
-
+  resumeMailingHistoryApiUrl: 'http://192.168.1.22:8130/servicima/mailinghistory/v1',
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
   invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
   invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',

@@ -4,7 +4,7 @@ $disable-background-color: #eceeef;
 .multiselect-dropdown {
   position: relative;
   width: 100%;
-  font-size: inherit;
+  font-size: 12px !important;
   font-family: inherit;
   .dropdown-btn {
     display: inline-block;
@@ -36,12 +36,16 @@ $disable-background-color: #eceeef;
         border-radius: 50% !important;
         background-color: $black !important;
         opacity: 0.4 !important;
+        margin-left: 9px;
+      }
+      a:hover {
+        opacity: 0.6 !important;
       }
     }
     .selected-item:hover {
       outline: none !important;
       box-shadow: none !important;
-      background: $steel-two !important;
+      background: #c9c9c9 !important;
     }
     .dropdown-down {
       display: inline-block;
@@ -118,7 +122,7 @@ $disable-background-color: #eceeef;
 .multiselect-item-checkbox input[type='checkbox']:focus + div:before,
 .multiselect-item-checkbox input[type='checkbox']:hover + div:before {
   border-color: $base-color;
-  background-color: #f2f2f2;
+  background-color: #f0f0f0;
 }
 
 .multiselect-item-checkbox input[type='checkbox']:active + div:before {

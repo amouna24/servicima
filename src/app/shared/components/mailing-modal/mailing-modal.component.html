@@ -22,11 +22,11 @@
 
   <div fxLayout="row">
     <div fxLayout="column" fxFlex="94">
-    <mat-label class="black font-size-12 required">
+    <mat-label class="black font-size-12 ">
       Send a copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
-        <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline" appearance="outline">
+        <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline mat-form-field-wrapper" appearance="outline">
           <mat-chip-list #copiesList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let copy of copies"
@@ -41,6 +41,7 @@
               matInput
               placeholder="Copy"
               #copyInput
+              type="email"
               formControlName="copy"
               [matChipInputFor]="copiesList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -48,13 +49,14 @@
               (matChipInputTokenEnd)="addCopy($event)"
               >
           </mat-chip-list>
+          <mat-error>You should set a valid email</mat-error>
         </mat-form-field>
       </div>
     </div>
   </div>
   <div fxLayout="row">
     <div fxLayout="column" fxFlex="94">
-    <mat-label class="black font-size-12 required">
+    <mat-label class="black font-size-12 ">
       Send a hidden copy to:
     </mat-label>
       <div style="font-size: 10px" class="full-width">
@@ -79,6 +81,7 @@
               [matChipInputAddOnBlur]="true"
               (matChipInputTokenEnd)="addHiddenCopy($event)">
           </mat-chip-list>
+          <mat-error>You should set a valid email</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -91,6 +94,8 @@
       <div style="font-size: 10px" class="full-width">
       <mat-form-field appearance="outline" class="full-width">
       <input formControlName="subject" matInput placeholder="Subject" >
+        <mat-error class="red font-size-8" *ngIf="mailingForm.controls.subject.errors?.required">
+          {{ 'general.required' | translate }}</mat-error>
     </mat-form-field>
       </div>
     </div>
@@ -110,6 +115,8 @@
     <mat-form-field appearance="outline" class="full-width">
                     <textarea class="textarea" matInput formControlName="message" placeholder="Write your message here"
                               rows="5" required></textarea>
+      <mat-error class="red" *ngIf="mailingForm.controls.message.errors?.required">
+        {{ 'general.required' | translate }}</mat-error>
     </mat-form-field>
     </div>
   </div>
@@ -128,6 +135,8 @@
                   <mat-option value="PDF" >PDF</mat-option>
                   <mat-option value="DOCX">DOCX</mat-option>
                 </mat-select>
+                <mat-error class="red" *ngIf="mailingForm.controls.format.errors?.required">
+                  {{ 'general.required' | translate }}</mat-error>
               </mat-form-field>
               </div>
             </div>

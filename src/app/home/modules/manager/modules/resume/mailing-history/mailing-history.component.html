@@ -1,1 +1,11 @@
-<p>mailing-history works!</p>
+<wid-dynamic-data-table
+  [tableData]="this.tableData"
+  [tableCode]="'MAILING_HISTORY'"
+  [isLoading]="isLoading"
+  [buttonAdd]="false"
+  [header]="{ title: 'Mailing history'}"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="['Resend', 'Delete']">
+
+</wid-dynamic-data-table>
+
