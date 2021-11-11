@@ -35,6 +35,14 @@ body {
   margin: 0 30px;
   height: 100%;
 }
+.button-paginator{
+  width: 32px!important;
+  min-width: unset!important;
+  text-align: center!important;
+  padding: 0 !important;
+  pointer-events: auto;
+
+}
 $custom-typography: mat-typography-config(
   $font-family: 'Poppins'
 );

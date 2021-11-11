@@ -24,14 +24,13 @@ export class ProfileService {
     return this.httpClient
       .get<IUserModel>(`${environment.userApiUrl}?_id=${id}`);
   }
-
   /**
    * @description: http request get to get all users registered in the same company
    * @params company_email, limit, offset
    */
-  getAllUser(companyEmail: string, limit?, offset?): Observable<IUserModel[]> {
+  getAllUser(companyEmail: string, userType? , limit?, offset?): Observable<IUserModel[]> {
     return this.httpClient
-      .get<IUserModel[]>(`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}`);
+      .get<IUserModel[]>(`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}&user_type=${userType}`);
   }
   /**
    * @description: http request get to get all users registered in the same company and has the same type
@@ -96,5 +95,15 @@ export class ProfileService {
   changePassword(user: object): Observable<IMessageCodeModel> {
     return this.httpClient
       .put<IMessageCodeModel>(`${environment.credentialsApiUrl}/updatepassword` , user);
+  }
+  /**
+   * @description get number of collaborator
+   * @param companyEmail: string
+   */
+  countCollaborator(companyEmail: string) {
+    return this.httpClient
+      .get<IUserModel[]>(`${environment.userApiUrl}?company_email=${companyEmail}&user_type=COLLABORATOR`).toPromise().then((list) => {
+        return list['total'];
+      });
   }
 }

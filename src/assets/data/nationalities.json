@@ -1,0 +1,32 @@
+[
+  {
+    "LANGUAGE_CODE": "FR",
+    "NATIONALITY_CODE": "FRA",
+    "NATIONALITY_DESC": "Français(e)"
+  },
+  {
+    "LANGUAGE_CODE": "EN",
+    "NATIONALITY_CODE": "FRA",
+    "NATIONALITY_DESC": "French"
+  },
+  {
+    "LANGUAGE_CODE": "FR",
+    "NATIONALITY_CODE": "TUN",
+    "NATIONALITY_DESC": "Tunisien(ne)"
+  },
+  {
+    "LANGUAGE_CODE": "EN",
+    "NATIONALITY_CODE": "TUN",
+    "NATIONALITY_DESC": "Tunisian"
+  },
+  {
+    "LANGUAGE_CODE": "FR",
+    "NATIONALITY_CODE": "DZA",
+    "NATIONALITY_DESC": "Algerien(ne)"
+  },
+  {
+    "LANGUAGE_CODE": "EN",
+    "NATIONALITY_CODE": "TUN",
+    "NATIONALITY_DESC": "Algerian"
+  }
+]
