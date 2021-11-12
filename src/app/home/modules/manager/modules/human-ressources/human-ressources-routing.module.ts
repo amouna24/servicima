@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HumanRessourcesComponent } from './human-ressources.component';
 import { CollaboratorListComponent } from './collaborator-list/collaborator-list.component';
 import { CertificationListComponent } from './certification-list/certification-list.component';
+import { CollaboratorComponent } from './collaborator/collaborator.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'work-certificate',
     component: CertificationListComponent
+  },
+  {
+    path: 'collaborator',
+    component: CollaboratorComponent
   },
 ];
 

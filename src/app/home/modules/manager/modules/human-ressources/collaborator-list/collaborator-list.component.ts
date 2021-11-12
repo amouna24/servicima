@@ -115,7 +115,7 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
             .subscribe(async collaborator => {
               this.collaborator = collaborator[0];
               await  this.router.navigate(
-                ['/manager/contract-management/suppliers-contracts/collaborators'],
+                ['/manager/human-ressources/collaborator'],
                 { state: {
                     _id: id,
                     contract: this.contract,
