@@ -131,4 +131,11 @@ export class TranslationCustomLoaderService implements TranslateLoader {
     }
     return languages.find((lang: IAppLanguage) => lang.LanguageKey.language_code === 'EN');
   }
+  /**
+   * Get All language stored
+   */
+  getAllLanguages() {
+    return this.http.get<any>(`${environment.languageApiUrl}`);
+
+  }
 }
