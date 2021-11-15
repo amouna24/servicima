@@ -29,7 +29,6 @@ export class MailingHistoryDetailsComponent implements OnInit {
     private utilsService: UtilsService,
     private modalService: ModalService,
   ) {
-    console.log(this.router.getCurrentNavigation());
     if (this.router.getCurrentNavigation()) {
       this.getDataFromPreviousRoute();
     } else {

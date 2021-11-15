@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class MailingHistoryComponent implements OnInit {
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
+  Archive = 'Disable';
 
   constructor(
     private userService: UserService,
@@ -25,17 +26,22 @@ export class MailingHistoryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getData();
+    await this.getData('ACTIVE');
   }
 
   /**************************************************************************
    * @description Get Users Data  from user service and resume service
    *************************************************************************/
-  async getData() {
+  async getData(status) {
+    if (status === 'ACTIVE') {
+      this.Archive = 'Disable';
+    } else {
+      this.Archive = 'Enable';
+    }
     this.isLoading.next(true);
     this.userService.connectedUser$
       .subscribe((userInfo) => {
-        this.resumeService.getMailingHistory(`?company_email=${userInfo?.company[0].companyKey.email_address}&status=ACTIVE`)
+        this.resumeService.getMailingHistory(`?company_email=${userInfo?.company[0].companyKey.email_address}&status=${status}`)
           .subscribe(async (mailingList) => {
             return new Promise((resolve) => {
               if (mailingList['msg_code'] !== '0004') {
@@ -49,13 +55,13 @@ export class MailingHistoryComponent implements OnInit {
                     send_to: mailing.send_to,
                     send_time: mailing.MailingHistoryKey.send_time
                   });
-                    return {
-                      send_time: sendTime,
-                      send_to: sendTo,
-                      attachment: mailing.attachment.length,
-                      message: mailing.message,
-                      subject: mailing.subject,
-                    };
+                  return {
+                    send_time: sendTime,
+                    send_to: sendTo,
+                    attachment: mailing.attachment.length,
+                    message: mailing.message,
+                    subject: mailing.subject,
+                  };
                 }));
               } else {
                 resolve([]);
@@ -77,8 +83,8 @@ export class MailingHistoryComponent implements OnInit {
       case ('update'):
         this.showMailDetails(rowAction.data);
         break;
-      case('Delete'):
-        this.DisableMail(rowAction.data);
+      case(this.Archive):
+        this.DisableEnableMail(rowAction.data, this.Archive);
         break;
     }
   }
@@ -125,7 +131,7 @@ export class MailingHistoryComponent implements OnInit {
     });
   }
 
-  private DisableMail(data) {
+  private DisableEnableMail(data, action) {
     console.log('data=', data, 'table data=', this.tableData);
     data.map((mailHistory) => {
       console.log(`?send_to=${mailHistory.send_to}&send_time=${mailHistory.send_time}`);
@@ -136,11 +142,20 @@ export class MailingHistoryComponent implements OnInit {
           historyData[0].send_to = historyData[0].MailingHistoryKey.send_to;
           historyData[0].send_time = historyData[0].MailingHistoryKey.send_time;
           historyData[0].company_email = historyData[0].MailingHistoryKey.company_email;
-          historyData[0].status = 'DISABLED';
-         this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
-           console.log('history disabled', mailingUpdate);
-           await this.getData();
-         });
+          if (action === 'Disable') {
+            historyData[0].status = 'DISABLED' ;
+            this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
+              console.log('history disabled', mailingUpdate);
+              await this.getData('ACTIVE');
+            });
+          } else {
+            historyData[0].status = 'ACTIVE' ;
+            this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
+              console.log('history enabled', mailingUpdate);
+              await this.getData('DISABLED');
+            });
+          }
+
         });
     });
   }

@@ -53,20 +53,20 @@ export class MailingModalComponent implements OnInit {
   ) {
   }
 
-   async ngOnInit(): Promise<void> {
-     this.invoice = this.router.url !== '/manager/resume';
-     this.initializeForm();
-     // @ts-ignore
-     this.clientList = await this.getClients();
-     this.clientListSettings = {
-       singleSelection: false,
-       idField: 'item_id',
-       textField: 'item_text',
-       selectAllText: 'All',
-       unSelectAllText: 'All',
-       allowSearchFilter: true
-     };
-   }
+  async ngOnInit(): Promise<void> {
+    this.invoice = this.router.url !== '/manager/resume';
+    this.initializeForm();
+    // @ts-ignore
+    this.clientList = await this.getClients();
+    this.clientListSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'All',
+      unSelectAllText: 'All',
+      allowSearchFilter: true
+    };
+  }
   initializeForm() {
     this.mailingForm = this.fb.group( {
       contact: ['', [Validators.required]],
