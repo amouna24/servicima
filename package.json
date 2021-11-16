@@ -44,6 +44,7 @@
     "@swimlane/ngx-datatable": "17.0.0",
     "@widigital-group/auth-npm-front": "^0.2.25",
     "angular-password-strength-meter": "2.0.0",
+    "angular2-signaturepad": "^3.0.4",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.15",
     "ng-multiselect-dropdown": "^0.3.4",
