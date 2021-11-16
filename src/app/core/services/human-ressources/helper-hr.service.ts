@@ -180,9 +180,8 @@ export class HelperHrService {
    *************************************************************************/
   addOrUpdateContract(contractCheck: boolean, contract: any, applicationId: string, email_address: any, collaboratorEmail: any, contract_type: any) {
     contract['contract_type'] =  contract.contract_type ? contract_type : contract.HRContractKey?.contract_type;
-    console.log('contract check ', contractCheck);
     // tslint:disable-next-line:max-line-length
-    if (contractCheck === true && contract['_id'] !== '') {
+    if (contractCheck === true && contract._id !== '') {
       this.hrService.updateContract(contract)
         .pipe(takeUntil(this.destroy$))
         .subscribe(
