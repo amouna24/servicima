@@ -1760,15 +1760,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     if (Contract.contract_start_date !== '') {
       this.contractCheck = true;
     }
-    if (this.hrHelper.checkDate(Contract['contract_start_date'], Contract['contract_end_date'])) {
       const contract_type = this.profileForm.controls.CONTRACT['controls'].contract_type?.value;
       // tslint:disable-next-line:max-line-length
       this.contract !== null ? Contract['contract_code'] = this.contract.HRContractKey.contract_code : Contract['contract_code'] = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CONTRACT` ;
       Contract['email_address'] = this.userInfo.company_email;
       Contract['application_id'] = this.applicationId;
       Contract['collaborator_email'] = this.collaborator.collaboratorKey.email_address;
-      this.contract ? Contract['_id'] = this.contract._id : Contract['_id'] = '';
-      if (!this.contract || !Contract['contract_code']) {
+       Contract['_id'] =  this.contract ? this.contract._id : '';
+    if (this.contract && Contract['contract_code']) {
         if (this.selectedContractFile.name !== '') {
           Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
         } else {
@@ -1830,14 +1829,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
       }
       this.router.navigate(
-        ['/manager/contract-management/suppliers-contracts/collaborators-list'],
+        ['/manager/human-ressources/collaborator-list'],
       );
       this.utilsService.openSnackBar('Collaborator updated successfully', 'close');
 
-    } else {
-      this.utilsService.openSnackBar('Date contract invalide', 'close');
-
-    }
   }
 
   getData() {
