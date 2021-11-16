@@ -219,7 +219,7 @@ Paddings
 }
 
 .p-r-15 {
-  padding-right: 20px;
+  padding-right: 15px;
 }
 
 .p-r-20 {
@@ -581,6 +581,9 @@ html body {
 }
 .black {
     color: $black;
+}
+.warm-grey {
+  color: $warm-grey;
 }
 .white {
   color: $white !important;
