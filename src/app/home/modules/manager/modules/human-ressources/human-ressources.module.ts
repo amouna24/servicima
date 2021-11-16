@@ -8,13 +8,19 @@ import { CollaboratorListComponent } from './collaborator-list/collaborator-list
 import { CollaboratorComponent } from './collaborator/collaborator.component';
 // tslint:disable-next-line:origin-ordered-imports
 import { SharedModule } from '@shared/shared.module';
+// tslint:disable-next-line:origin-ordered-imports
+import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 
 @NgModule({
-  declarations: [HumanRessourcesComponent, CertificationListComponent, CollaboratorListComponent, CollaboratorComponent],
-    imports: [
-        CommonModule,
-        HumanRessourcesRoutingModule,
-        SharedModule
-    ]
+    declarations: [HumanRessourcesComponent, CertificationListComponent, CollaboratorListComponent, CollaboratorComponent],
+    exports: [
+        CertificationListComponent
+    ],
+  imports: [
+    CommonModule,
+    HumanRessourcesRoutingModule,
+    SharedModule,
+    DynamicDataTableModule,
+  ]
 })
 export class HumanRessourcesModule { }

@@ -92,8 +92,7 @@ getAllTimesheet() {
           `&status=ACTIVE`).toPromise().then(
          async (timesheetList) => {
            if (timesheetList) {
-             await timesheetList.map(
-               (timesheet) => {
+             timesheetList.map((timesheet) => {
                  this.profileService.getUser(`?email_address=${timesheet.TimeSheetKey.email_address}`)
                    .toPromise().then(
                    (profile) => {

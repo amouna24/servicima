@@ -78,6 +78,14 @@ export class ProfileService {
       return this.httpClient.put<IMessageCodeModel>(`${environment.userApiUrl}/enable?_id=${id}&updated_by=${updatedBy}`, null);
     }
   }
+  /**
+   * @description update company credentials
+   * @param company: company object to update
+   */
+  getCompany(email: string): Observable<IMessageCodeModel>  {
+    return this.httpClient
+      .get<any>(`${environment.companyApiUrl}?email_address=${email}`);
+  }
 
   /**
    * @description update company credentials
@@ -86,6 +94,14 @@ export class ProfileService {
   updateCompany(company: object): Observable<IMessageCodeModel>  {
     return this.httpClient
       .put<IMessageCodeModel>(environment.companyApiUrl, company);
+  }
+  /**
+   * @description: http request get to get the user by his email
+   * @param email: string
+   */
+  getUserByEmail(email: string): Observable<IUserModel> {
+    return this.httpClient
+      .get<IUserModel>(`${environment.userApiUrl}?email_address=${email}`);
   }
 
   /**

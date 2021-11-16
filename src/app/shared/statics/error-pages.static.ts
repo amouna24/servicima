@@ -12,7 +12,7 @@ export  const errorPages: IError[] = [
   {
     code: '500',
     title: 'ERROR 500',
-    subtitle: 'Internal server Server Error',
+    subtitle: 'Internal Server Error',
     description: 'The server has been deserted for a while. Please be patient or try again',
     img: '500illustration.png',
     backBtn: true

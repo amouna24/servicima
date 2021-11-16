@@ -9,6 +9,12 @@ import { ProjectsListComponent } from '../common-actions/projects/projects-list/
 import { AddProjectComponent } from '../common-actions/projects/add-project/add-project.component';
 import { AffectCollaboratorComponent } from '../common-actions/collaborators/affect-collaborator/affect-collaborator.component';
 import { CollaboratorsListComponent } from '../common-actions/collaborators/collaborators-list/collaborators-list.component';
+// tslint:disable-next-line:origin-ordered-imports
+import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
+import { ShowWorkCertificateComponent } from '@shared/modules/work-certificates/show-work-certificate/show-work-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
+import { EditWorkCertificateComponent } from '@shared/modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
 
 const routes: Routes = [
       {
@@ -24,6 +30,18 @@ const routes: Routes = [
         data: {
           breadcrumb: 'contracts'
         },
+      },
+      {
+        path: 'addCertif',
+        component: RequestWorkCertificateComponent
+      },
+      {
+        path: 'editCertif',
+        component: EditWorkCertificateComponent
+      },
+      {
+        path: 'showCertif',
+        component : ShowWorkCertificateComponent
       },
       {
         path: 'projects',

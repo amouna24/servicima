@@ -5,10 +5,12 @@ import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynam
 
 import { PayslipRoutingModule } from './payslip-routing.module';
 import { PayslipListComponent } from './payslip-list/payslip-list.component';
+import { PayslipImportComponent } from './payslip-import/payslip-import.component';
 
 @NgModule({
   declarations: [
     PayslipListComponent,
+    PayslipImportComponent,
   ],
   imports: [
     CommonModule,
