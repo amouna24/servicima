@@ -68,6 +68,15 @@ export class UtilsService {
       )._id;
   }
 
+  /**
+   * @description get country
+   * @params lang: language code
+   */
+  getNationality(lang: string) {
+    return this.appInitializerService.nationalitiesList.filter(
+      element => element['LANGUAGE_CODE'] === lang);
+  }
+
   /**************************************************************************
    * @description Get Application NAME
    * @param applicationId the application id

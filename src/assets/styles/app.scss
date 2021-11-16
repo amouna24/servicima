@@ -757,6 +757,14 @@ html body {
   // width: 88vw;
 }
 
+/*    Component list Collaborator  */
+.list-collaborator-component  {
+  @include get-page(servicima);
+  margin: 0px 20px 20px;
+  height: 81vh !important;
+  background-color: $white;
+}
+
 .dynamic-component-content {
   resize: both !important;
   scroll-behavior: smooth !important;

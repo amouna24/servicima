@@ -37,6 +37,7 @@ export function setupApp(
     AppComponent,
     NotFoundComponent,
     ServerErrorComponent,
+
   ],
   imports: [
     CommonModule,
