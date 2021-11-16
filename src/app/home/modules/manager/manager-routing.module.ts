@@ -12,7 +12,10 @@ const routes: Routes = [
         path: 'timesheet',
         loadChildren: () => import('./modules/timesheet/timesheet.module').then(m => m.TimesheetModule),
       },
-
+      {
+        path: 'payslip',
+        loadChildren: () => import('./modules/payslip/payslip.module').then(m => m.PayslipModule),
+      },
       {
         path: '',
         loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),

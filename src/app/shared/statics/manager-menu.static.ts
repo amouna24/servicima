@@ -1,8 +1,28 @@
 import { IMenu } from '../models/side-nav-menu/side-nav-menu.model';
 
 export const managerMenu: IMenu[] = [
-
     {
+        state: 'dashboard',
+        name: 'manager.menu.static.dashboard',
+        type: 'link',
+        icon: 'wi_dashboard',
+        feature: 'DASHBOARD',
+    },
+    {
+        state: 'recruitment',
+        name: 'manager.menu.static.recruitment',
+        type: 'link',
+        icon: 'wi-recruitment',
+        feature: 'SOURCING_ACCESS',
+    },
+  {
+    state: 'payslip',
+    name: 'Payslip',
+    type: 'link',
+    icon: 'wi-recruitment',
+    feature: 'SOURCING_ACCESS',
+  },
+  {
     state: 'timesheet',
     name: 'timesheet',
     type: 'sub',
@@ -32,21 +52,6 @@ export const managerMenu: IMenu[] = [
       },
     ]
   },
-
-    {
-        state: 'dashboard',
-        name: 'manager.menu.static.dashboard',
-        type: 'link',
-        icon: 'wi_dashboard',
-        feature: 'DASHBOARD',
-    },
-    {
-        state: 'recruitment',
-        name: 'manager.menu.static.recruitment',
-        type: 'link',
-        icon: 'wi-recruitment',
-        feature: 'SOURCING_ACCESS',
-    },
   {
     state: 'human-ressources',
     name: 'manager.menu.static.human.ressources',

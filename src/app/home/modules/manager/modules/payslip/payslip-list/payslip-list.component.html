@@ -1,0 +1,9 @@
+ <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'PAYSLIP_MANAGER'"
+    [isLoading]="isLoading"
+    [header]="{ title: 'Payslip list', addActionURL: '#', addActionText: 'Import'}"
+    (rowActionData)="switchAction($event)"
+    [allowedActions]="['Download', 'Delete']"
+  >
+  </wid-dynamic-data-table>>
