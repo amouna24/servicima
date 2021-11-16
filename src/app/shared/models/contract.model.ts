@@ -5,6 +5,7 @@ export interface IContract {
   _id: string;
   contractKey: IContractKey;
   contractor_code: string;
+  collaborator_email: string;
   contract_start_date?: Date;
   contract_end_date?: Date;
   contract_date: Date;

@@ -13,7 +13,6 @@ export interface IContractProject {
   vat_nbr?: string;
   project_status?: string;
   comment: string;
-
   application_id: string;
   company_email: string;
   contract_code: string;

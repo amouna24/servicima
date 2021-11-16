@@ -55,7 +55,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
   staffList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorContacts: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractExtensionInfo = [];
+  contractProjectInfo = [];
   extensionsList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
+  contractProjectList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractProjectInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   canUpdateContractProjectAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -822,7 +824,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
     console.log('my params ', params);
     forkJoin([
       this.contractsService.getContracts(`?_id=${atob(params.id)}`),
-      this.contractsService.getContractExtension(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}`)
+      this.contractsService.getContractExtension(`?contract_code=${atob(params.cc)}&email_address=${atob(params.ea)}`),
+      // this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}`)
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -830,11 +833,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .subscribe(
         async (res) => {
           this.contractInfo = res[0]['results'][0];
-          console.log('contract info ', this.contractInfo);
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
-            this.contractExtensionInfo = res[1];
+            console.log('la contract extention resultats ', res[1]);
+            this.contractExtensionInfo = res[1]['results'];
             this.contractExtensionInfo.map(
               async (extension) => {
                 extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
@@ -847,10 +850,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             );
           }
+         /* if (res[2]['msg_code'] === '0004') {
+            this.contractProjectInfo = [];
+          } else {
+            this.contractProjectInfo = res[2]['results'];
+          }*/
+
           await this.initContractForm(this.contractInfo);
           console.log('contract form for updating ', this.contractForm);
-          this.extensionsList.next(this.contractExtensionInfo.slice()
-          );
+          this.extensionsList.next(this.contractExtensionInfo.slice());
           this.isLoading.next(false);
         },
         (error) => {
