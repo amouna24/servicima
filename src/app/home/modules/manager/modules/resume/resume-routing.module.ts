@@ -16,6 +16,7 @@ import { ProExpComponent } from '@shared/modules/resume-management/modules/resum
 import { ProExpProjectsComponent } from '@shared/modules/resume-management/modules/resume-professional-experiences/modules/professional-experiences-projects/pro-exp-projects.component';
 
 import { ResumeComponent } from './resume.component';
+import { MailingHistoryComponent } from './mailing-history/mailing-history.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,11 @@ const routes: Routes = [
     path: 'done',
     component: ResumeDoneComponent
   },
+  {
+    path: 'history',
+    loadChildren: () => import('./mailing-history/mailing-history.module')
+      .then(m => m.MailingHistoryModule),
+  }
 ];
 
 @NgModule({

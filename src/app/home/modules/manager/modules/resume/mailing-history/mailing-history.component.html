@@ -1,0 +1,13 @@
+<wid-dynamic-data-table
+  [tableData]="this.tableData"
+  [tableCode]="'MAILING_HISTORY'"
+  [isLoading]="isLoading"
+  [buttonAdd]="false"
+  (changeStatus) = "getData($event)"
+  [header]="{ title: 'Mailing history'}"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="['Resend', Archive]">
+
+</wid-dynamic-data-table>
+
+
