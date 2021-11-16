@@ -17,7 +17,6 @@ import { IBanking } from '@shared/models/banking.model';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ICollaborator } from '@shared/models/collaborator.model';
 import { IUserModel } from '@shared/models/user.model';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
 @Component({
   selector: 'wid-collaborator-list',
   templateUrl: './collaborator-list.component.html',
@@ -41,7 +40,6 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
   length = 0;
   lengthPage = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  mediaSub: Subscription;
   device: string;
   constructor( private hrService: HumanRessourcesService,
                private localStorageService: LocalStorageService,
@@ -52,13 +50,9 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
                private appInitializerService: AppInitializerService,
                private utilsService: UtilsService,
                private refDataService: RefdataService,
-               public  mediaObserver: MediaObserver
   ) {
   }
   async ngOnInit(): Promise<void> {
-    this.mediaSub = this.mediaObserver.media$.subscribe((result: MediaChange) => {
-      this.device = result.mqAlias;
-    });
     await this.getCollaboratorList();
   }
   /**************************************************************************
@@ -139,7 +133,6 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
     this.location.back();
   }
   ngOnDestroy() {
-    this.mediaSub.unsubscribe();
   }
 
   /**

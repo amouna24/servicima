@@ -13,9 +13,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ProfileService } from '@core/services/profile/profile.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslationCustomLoaderService } from '@core/services/translation/translation-custom-loader.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'wid-certification-list',
   templateUrl: './certification-list.component.html',
@@ -87,7 +86,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
     private modalService: ModalService,
     private utilsService: UtilsService,
     private translate: TranslateService,
-    private translationCustomLoaderService: TranslationCustomLoaderService,
     private refDataService: RefdataService,
 
   ) {
@@ -99,9 +97,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
   async ngOnInit(): Promise<void> {
     this.type = 'Certification';
     this.title = 'Certificates List';
-    this.translationCustomLoaderService.getAllLanguages().subscribe((res) => {
-      this.languages = res;
-    });
+
     // tslint:disable-next-line:max-line-length
     this.collaboratorAction ? this.header = { title: this.title, addActionURL: this.redirectUrl, addActionText: this.addButtonLabel} : this.header = { title: this.title} ;
     await this.getConnectedUser();
@@ -148,12 +144,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
               });
           });
           this.isLoading.next(false);
-          res.map((c, index) => {
-            this.language.push({
-              _id: c._id,
-              language: c.language
-            });
-          });
           this.isLoading.next(false);
 
           resolve(res);
@@ -398,7 +388,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    *************************************************************************/
 
   async pdf(certificate: any) {
-    const lang = this.language.filter(x => x._id === certificate._id)[0];
     certificate['data'] = this.currentCompany;
     certificate['label'] = this.label;
 
@@ -413,7 +402,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
               (item) =>  item.value === certificate.title_id
             ).viewValue;
             certificate['companyName'] = this.companyName;
-            certificate['lang'] = lang;
             certificate['positionManager'] = postionManager;
             certificate['position'] = position;
             await this.hrService.generateCertif(certificate).subscribe(async (data) => {
