@@ -21,7 +21,8 @@ export const environment = {
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
-  contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
+ // contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
+  contractApiUrl: 'http://localhost:8060/servicima/contracts/v1',
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
   contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',

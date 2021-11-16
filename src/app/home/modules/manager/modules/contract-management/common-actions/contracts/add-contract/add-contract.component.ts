@@ -632,7 +632,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
  async ngOnInit() {
-   this.initContractForm(null);
+   await this.initContractForm(null);
    await this.getInitialData();
     this.route.queryParams
       .pipe(
@@ -684,12 +684,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
    *************************************************************************/
  async getInitialData() {
   const cred = this.localStorageService.getItem('userCredentials');
-  this.applicationId = cred['application_id'];
-    /************ get currencies List and next the value to the subject ************/
-    /********************************** CURRENCY **********************************/
-    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
-      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
-    }));
     this.subscriptions.push(
       await this.userService.connectedUser$.subscribe((data) => {
         if (!!data) {
@@ -699,23 +693,34 @@ export class AddContractComponent implements OnInit, OnDestroy {
           this.getTimeSheetSettings();
         }
       }),
-      await this.profileService.getAllUser(this.companyEmail)
-        .subscribe((res) => {
-          this.collaboratorList.next(
-            res['results'].filter(value => value.user_type === 'COLLABORATOR').map(
-              (obj) => {
-                return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
-              }
-            )
-          );
-          this.staffList.next(res['results'].filter(value => value.user_type === 'STAFF').map(
+
+    );
+  this.applicationId = cred['application_id'];
+    /************ get currencies List and next the value to the subject ************/
+    /********************************** CURRENCY **********************************/
+    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
+      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
+    }));
+    await this.profileService.getAllUser(this.companyEmail, 'STAFF')
+      .subscribe((res) => {
+        this.staffList.next(res['results'].map(
             (obj) => {
               return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
             }
-            )
-          );
-        })
-    );
+          )
+        );
+      });
+    await this.profileService.getAllUser(this.companyEmail, 'COLLABORATOR')
+      .subscribe((res) => {
+         this.collaboratorList.next(
+           res['results'].map(
+             (obj) => {
+               console.log(obj);
+               return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
+             }
+           )
+         );
+      });
     /*---------------------------------------------------------------*/
    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
@@ -753,8 +758,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   async initContractForm(contract: IContract) {
     this.contractForm = this.formBuilder.group({
       INFORMATION: this.formBuilder.group({
-        contractor_code: [contract === null ? '' : contract.contractor_code, Validators.required],
-        collaborator_email: [contract === null ? '' : contract.collaborator_email, [Validators.required, Validators.email]],
+        contractor_code: [contract === null ? null : contract.contractor_code],
         contract_date: [contract === null ? '' : contract.contract_date],
         contract_start_date: [contract === null ? '' : contract.contract_start_date],
         contract_end_date: [contract === null ? '' : contract.contract_end_date],
@@ -768,7 +772,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         signature_contractor_date: [contract === null ? '' : contract.signature_contractor_date],
       }),
       RATE: this.formBuilder.group({
-        contract_rate: [contract === null ? '' : contract.contract_rate, Validators.required],
+        contract_rate: [contract === null ? '' : contract.contract_rate],
         currency_cd: [contract === null ? '' : contract.currency_cd],
         payment_terms: [contract === null ? '' : contract.payment_terms],
         filterCurrencyControl: [''],
@@ -785,28 +789,28 @@ export class AddContractComponent implements OnInit, OnDestroy {
         extension_start_date: [''],
         extension_end_date: [''],
         extension_status: [''],
-        extension_rate: ['', Validators.required],
+        extension_rate: [''],
         extension_currency_cd: [''],
         attachments: [''],
       }),
       CONTRACT_PROJECT: this.formBuilder.group({
         category_code: [''],
-        project_desc: ['', Validators.required],
-        start_date: ['', Validators.required],
-        end_date: ['', Validators.required],
-        project_rate: ['', Validators.required],
+        project_desc: [''],
+        start_date: [''],
+        end_date: [''],
+        project_rate: [''],
         rate_currency: [''],
-        vat_nbr: ['', Validators.required],
+        vat_nbr: [''],
         project_status: [''],
         comment: [''],
       }),
       PROJECT_COLLABORATOR: this.formBuilder.group({
-        contract_project_code: ['', Validators.required],
+        contract_project_code: [''],
         projectCodeFilterCtrl: [''],
-        email_address: ['', Validators.required],
+        email_address: [''],
         emailAddressFilterCtrl: [''],
-        start_date: ['', Validators.required],
-        end_date: ['', Validators.required],
+        start_date: [''],
+        end_date: [''],
       }),
     });
   }
@@ -815,6 +819,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Get Contractor to be updated
    *************************************************************************/
   getContractByID(params) {
+    console.log('my params ', params);
     forkJoin([
       this.contractsService.getContracts(`?_id=${atob(params.id)}`),
       this.contractsService.getContractExtension(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}`)
@@ -823,8 +828,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(
-        (res) => {
+        async (res) => {
           this.contractInfo = res[0]['results'][0];
+          console.log('contract info ', this.contractInfo);
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
@@ -841,7 +847,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             );
           }
-          this.initContractForm(this.contractInfo);
+          await this.initContractForm(this.contractInfo);
+          console.log('contract form for updating ', this.contractForm);
           this.extensionsList.next(this.contractExtensionInfo.slice()
           );
           this.isLoading.next(false);
@@ -947,6 +954,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ...this.contractForm.controls.RATE.value,
       ...this.contractForm.controls.TIMESHEET.value,
     };
+    console.log('my contract form', this.contractForm.value);
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
     Contract.contract_code = this.canUpdate(this.contractId) ?
@@ -963,6 +971,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       } else {
         Contract.attachments = this.contractInfo.attachments;
       }
+      console.log('contrat for updateddddddddddddd ', Contract);
       this.contractsService.updateContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
@@ -1040,6 +1049,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       } else {
         Contract.attachments = '';
       }
+      console.log(Contract);
       this.contractsService.addContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
