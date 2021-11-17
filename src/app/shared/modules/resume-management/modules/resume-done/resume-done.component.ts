@@ -476,6 +476,8 @@ export class ResumeDoneComponent implements OnInit {
                   if (this.projectList.length === index + 1) {
                     resolve(this.projectDetailsList);
                   }
+                } else {
+                  resolve([]);
                 }
               });
           }
@@ -485,7 +487,7 @@ export class ResumeDoneComponent implements OnInit {
       if (res.length > 0) {
         await this.getProjectDetailsSectionInfo(res);
       } else {
-        this.showPage = false;
+        this.showPage = true;
       }
     });
   }
