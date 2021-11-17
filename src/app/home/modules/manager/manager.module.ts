@@ -5,9 +5,10 @@ import { DataTableModule } from '@dataTable/data-table.module';
 
 import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerComponent } from './manager.component';
+import { ShareOnLinkedinComponent } from './modules/share-on-linkedin/share-on-linkedin.component';
 
 @NgModule({
-  declarations: [ManagerComponent],
+  declarations: [ManagerComponent, ShareOnLinkedinComponent],
   imports: [
     ManagerRoutingModule,
     SharedModule,

@@ -45,7 +45,7 @@ export const environment = {
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
   resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
-  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
+  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   resumeMailingHistoryApiUrl: 'http://192.168.1.22:8130/servicima/mailinghistory/v1',
   bankingApiUrl: 'http://192.168.1.22:8083/servicima/hrbanking/v1',
@@ -68,6 +68,8 @@ export const environment = {
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
   timesheetHolidayApiUrl: 'http://192.168.1.22:8110/servicima/timesheetholiday/v1',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
+  linkedInOauthApiUrl: 'http://127.0.0.1:8500/',
+
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',

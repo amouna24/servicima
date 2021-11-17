@@ -236,5 +236,12 @@ export const managerMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
   }
-]}
+]},
+  {
+    state: 'linkedin',
+    name: 'Share on linkedin',
+    icon: 'wi_dashboard',
+    feature: 'CONTRACT_ACCESS',
+    type: 'link',
+  }
 ];
