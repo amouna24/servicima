@@ -295,13 +295,12 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
           ))
         .toPromise();
     }
+    let fileName = null;
     if (this.selectedFile) {
-      const fileName = await this.uploadService.uploadImage(this.selectedFile.file).pipe(map(
+      fileName = await this.uploadService.uploadImage(this.selectedFile.file).pipe(map(
         response => response.file.filename
 
       )).toPromise();
-      console.log('file uploaded');
-      this.form.controls['stamp'].setValue(fileName);
 
     }
 
@@ -323,7 +322,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       country_id: this.form.value.countryCtrl,
       city: this.form.value.city,
       employee_nbr: this.form.value.employeeNum,
-      stamp: this.form.value.stamp,
+      stamp: fileName ? fileName : this.form.value.stamp,
       web_site: this.form.value.webSite,
       contact_email: this.form.value.contactEmail,
       linkedin_url: this.form.value.linkedinAccount,
