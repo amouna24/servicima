@@ -440,7 +440,7 @@ export class HumanRessourcesService {
   }
 
   generateCertif(certificate: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.pdfFile}`, certificate);
+    return this.httpClient.post<any>(`${environment.pdfFileUrl}`, certificate);
   }
   /**************************************************************************
    * @description Delete workcertificate
