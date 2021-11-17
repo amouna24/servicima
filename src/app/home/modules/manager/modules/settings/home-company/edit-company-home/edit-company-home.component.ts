@@ -183,7 +183,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       instagramAccount: [''],
       viberAccount: [''],
       legalFormCtrl: [''],
-      stamp: [''],
+      stamp: ['', [Validators.required]],
       activityCodeCtrl: [''],
       currencyCtrl: [''],
       vatCtrl: [''],
