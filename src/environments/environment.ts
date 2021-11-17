@@ -80,7 +80,7 @@ export const environment = {
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
   /************************* GENERATE CERTIFICATION ******************************/
-  pdfFile: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
+  pdfFileUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
   /************************* UPLOAD RESUME FILE ************************/
   uploadResumeFileApiUrl: 'http://192.168.1.22:8121/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/
