@@ -16,12 +16,12 @@
   </div>
   <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
     <div fxLayout="column" fxFlex="94">
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{ 'resume-lvl-intervention' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxFlex="76" @dataAppearance class="full-width">
+      <wid-scrollbar fxFlex="84" @dataAppearance class="full-width">
         <div fxLayout="column" fxFlexFill fxLayoutAlign=" center" fxLayoutGap="10px">
           <div *ngFor="let item of interventionArray let pointIndex=index" @showBloc class="p-l-65 full-width">
             <div fxLayout="row" class="bg-pale-grey border-radius-15 width-90">
@@ -65,15 +65,15 @@
           </form>
         </div>
       </wid-scrollbar>
-      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  (click)="routeNextBack('next')">
+                  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

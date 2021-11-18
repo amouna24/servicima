@@ -631,6 +631,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       }),
       RESUME_TEMPLATE: this.formBuilder.group( {
         resume_template: ['DEFAULT'],
+        update: true,
       }),
       CONTACT: this.formBuilder.group({
         first_name: [''],
@@ -678,6 +679,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       },
       RESUME_TEMPLATE: {
         resume_template: '',
+        update: true,
       },
       CONTACT: {
         first_name: '',
@@ -883,6 +885,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       web_site: '',
       zip_code: '',
       template_resume: '',
+      update: true,
     };
     if (this.canUpdate(this.contractorId)) {
       /*** CONTRACTOR KEY ***/
@@ -917,6 +920,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.creation_date = this.contractorInfo.creation_date;
       /*** RESUME TEMPLATE ***/
       Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
+      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update;
+
       this.contractorService.updateContractor(Contractor)
         .pipe(
           takeUntil(this.destroy$)
@@ -1017,6 +1022,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
       /*** RESUME TEMPLATE ***/
       Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
+      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update;
+
       Contractor.creation_date = Date.now();
       this.contractorService.addContractor(Contractor)
         .pipe(

@@ -27,6 +27,8 @@ import { ChangePwdComponent } from './components/settings/changepwd/changepwd.co
 import { UserComponent } from './components/settings/user/user.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
+import { PaginationDirective } from './directives/pagination.directive';
+
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
@@ -47,6 +49,16 @@ import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
 import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
+import { ShowWorkCertificateComponent } from './modules/work-certificates/show-work-certificate/show-work-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
+import { SignaturePadModule } from 'angular2-signaturepad';
+// tslint:disable-next-line:origin-ordered-imports
+import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
+import { TitleCertifComponent } from './modules/work-certificates/title-certif/title-certif.component';
+import { EditWorkCertificateComponent } from './modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
+import { SignatureComponent } from './components/signature/signature.component';
+import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
 
 @NgModule({
   declarations: [
@@ -54,6 +66,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     SidenavComponent,
     HeaderComponent,
     ChangePwdComponent,
+    TitleSettingsComponent,
     UserComponent,
     HomeCompanyComponent,
     ConfirmationModalComponent,
@@ -65,6 +78,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     AddTimesheetComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    PaginationDirective,
     ClickOutsideDirective,
     DisableControlDirective,
     CapitalizeFirstLetter,
@@ -84,6 +98,12 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     TitleSettingsComponent,
     AddTimesheetComponent,
     MailingModalComponent,
+    ShowWorkCertificateComponent,
+    RequestWorkCertificateComponent,
+    TitleCertifComponent,
+    EditWorkCertificateComponent,
+    SignatureComponent,
+    SignatureCertificateComponent,
   ],
   imports: [
     CommonModule,
@@ -98,6 +118,7 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     FormsModule,
     NgxDatatableModule,
     FormsModule,
+    SignaturePadModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
@@ -112,10 +133,12 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     SidenavComponent,
     UserComponent,
     ChangePwdComponent,
+    TitleSettingsComponent,
     HomeCompanyComponent,
     TranslateModule,
     NgxDatatableModule,
     FlexLayoutModule,
+    SignaturePadModule,
     FormsModule,
     SkeletonLoaderComponent,
     BreadcrumbComponent,
@@ -142,6 +165,8 @@ import { MailingModalComponent } from './components/mailing-modal/mailing-modal.
     TitleSettingsComponent,
     AddTimesheetComponent,
     NgMultiSelectDropDownModule,
+    RequestWorkCertificateComponent,
+    PaginationDirective,
   ]
 })
 export class SharedModule { }

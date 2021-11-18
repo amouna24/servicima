@@ -16,53 +16,53 @@
   </div>
   <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
     <div fxLayout="column" fxFlex="94">
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{'resume-certif' | translate }}</h4>
         </div>
       </div>
-      <wid-scrollbar fxFlex ="76" fxLayout="row" @dataAppearance class="full-width">
+      <wid-scrollbar fxFlex ="84" fxLayout="row" @dataAppearance class="full-width">
         <div fxLayout="column" fxFlexFill >
           <div fxLayout="row" fxLayoutAlign="center"  *ngFor="let item of certificationArray let pointIndex=index" @showBloc>
             <div fxLayout="column" fxFlex="80"  >
-            <div fxLayout="row" fxFlex="80" class="bg-pale-grey border-radius-15 full-width">
-              <div fxLayout="column" fxFlex="80" class="p-l-20" fxLayoutAlign="center">
-                <div fxLayout="row" fxFlex="35">
-                  <p class="font-normal font-size-15">{{item.name}}</p>
+              <div fxLayout="row" fxFlex="80" class="bg-pale-grey border-radius-15 full-width">
+                <div fxLayout="column" fxFlex="80" class="p-l-20" fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="35">
+                    <p class="font-normal font-size-15">{{item.name}}</p>
+                  </div>
+                  <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
+                    <p class="font-extra-light font-size-10 help-blue">
+                      {{item.organization}}-{{item.date | date:"longDate"}}
+                    </p>
+                  </div>
                 </div>
-                <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
-                  <p class="font-extra-light font-size-10 help-blue">
-                    {{item.organization}}-{{item.date | date:"longDate"}}
-                  </p>
+                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"   fxFlex>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item, pointIndex)">{{ 'resume-edit' | translate }}</button>
                 </div>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"   fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item, pointIndex)">{{ 'resume-edit' | translate }}</button>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteCertification(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
+                  <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteCertification(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                </div>
               </div>
             </div>
           </div>
-          </div>
           <div  fxLayout="row" fxLayoutAlign="center" fxFlexFill>
             <div fxLayout="column" fxFlex="80" >
-              <div fxLayout="row" fxFlex="80" fxLayoutAlign="center" class="border-radius-15 pale-grey border-solid">
-                  <div fxLayout="column" fxFlex="96" fxLayoutAlign="center">
-                    <div fxLayout="row" fxFlex="90" fxLayoutAlign="center center">
-                          <form  [formGroup]="certifForm" fxLayout="column"  class="full-width full-height">
-                            <div fxLayout="row" fxFlex="90" class="full-width">
-                              <div fxLayout="column"  fxFlexFill >
-                          <div fxLayout="row" fxFlex="30" class="full-width" >
+              <div fxLayout="row" fxFlex="92" fxLayoutAlign="center" class="border-radius-15 pale-grey border-solid">
+                <div fxLayout="column" fxFlex="96" fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="90" fxLayoutAlign="center center">
+                    <form  [formGroup]="certifForm" fxLayout="column"  class="full-width full-height">
+                      <div fxLayout="row" fxFlex="90" class="full-width">
+                        <div fxLayout="column"  fxFlexFill fxLayoutGap="5px">
+                          <div fxLayout="row" fxFlex="23" class="full-width" >
                             <div fxLayout="column" fxFlex="35">
                               <mat-label class="black font-size-12 required">
                                 {{ 'resume-certif-title' | translate }}:
                               </mat-label>
-                            <mat-form-field appearance="outline">
-                              <input  formControlName="name" matInput placeholder="Certification title" required>
-                              <mat-error class="red" >
-                                {{ 'general.required' | translate }}</mat-error>
-                            </mat-form-field>
+                              <mat-form-field appearance="outline">
+                                <input  formControlName="name" matInput placeholder="Certification title" required>
+                                <mat-error class="red" >
+                                  {{ 'general.required' | translate }}</mat-error>
+                              </mat-form-field>
                             </div>
                             <div fxLayout="column" fxFlex="15"></div>
                             <div fxLayout="column" fxFlex="35">
@@ -77,92 +77,125 @@
                               </mat-form-field>
                             </div>
                           </div>
-                          <div fxLayout="row" fxFlex="16" class="full-width" >
-                              <div fxLayout="column" >
-                                  <mat-checkbox formControlName="expire" class="black font-size-12 " (change)="verifyExpired($event)" >
-                                    {{ 'resume-certif-expire' | translate}}</mat-checkbox>
-                              </div>
+                          <div fxLayout="row" fxFlex="8" class="full-width" >
+                            <div fxLayout="column" fxFlex="50">
+                              <mat-checkbox  class="black font-size-12 "  [checked]="verifyExpired(expire)" (change)="verifyCheckedExpired($event)" >
+                                {{ 'resume-certif-expire' | translate}}</mat-checkbox>
                             </div>
-                          <div fxLayout="row" fxFlex="28" class="full-width" >
-                              <div fxLayout="column" fxFlex="35">
-                                <mat-label class="black font-size-12 required">
-                                  {{ 'resume-ach-date' | translate}}:
-                                </mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input  formControlName="date" matInput [matDatepicker]="datepicker"    #date1
-                                          placeholder="Date"   required>
-                                  <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
-                                  <mat-datepicker #datepicker color="primary" ></mat-datepicker>
-                                  <mat-error class="red" >
-                                    {{ 'general.required' | translate }}</mat-error>
-                                </mat-form-field>
-                              </div>
-                              <div fxLayout="column" fxFlex="15"></div>
-                              <div fxLayout="column" fxFlex="35">
-                                <mat-label class="black font-size-12 ">
-                                  {{ 'resume-date-expire' | translate}}:
-                                </mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input formControlName="expiring_date" matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  >
-                                  <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
-                                  <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
-                                  <mat-error class="red" >
-                                    {{ 'general.required' | translate }}</mat-error>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                          <div fxLayout="row" fxFlex="28" class="full-width" >
-                              <div fxLayout="column" fxFlex="35">
-                                <mat-label class="black font-size-12 ">
-                                  {{ 'resume-certif-ref' | translate}}:
-                                </mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_ref" matInput placeholder="{{ 'resume-position' | translate }}" >
-                                </mat-form-field>
-                              </div>
-                              <div fxLayout="column" fxFlex="15"></div>
-                              <div fxLayout="column" fxFlex="35">
-                                <mat-label class="black font-size-12 ">
-                                  {{ 'resume-certif-url' | translate}}:
-                                </mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input  formControlName="certif_url" matInput placeholder="{{ 'resume-position' | translate }}" >
-                                </mat-form-field>
-                              </div>
-                            </div>
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10" fxLayoutAlign="end end">
-                              <div fxLayout="column" fxLayoutAlign=" start" fxFlex="12">
-                                <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                        (click)="createCertification()" [disabled]="certifForm.invalid">
-                                  <div *ngIf="button === 'Add';then add else save"></div>
-                                  <ng-template #add>
-                                    {{ 'resume-add' | translate }}
-                                  </ng-template>
-                                  <ng-template #save>
-                                    {{ 'resume-save' | translate }}
-                                  </ng-template>
-                                </button>
-                              </div>
-                            </div>
-                          </form>
-                          </div>
-                        </div>
-                    </div>
+                            <div fxLayout="column" fxFlex="35">
 
+
+
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxFlex="23" class="full-width" >
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 required">
+                                {{ 'resume-ach-date' | translate}}:
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input  formControlName="date" matInput [matDatepicker]="datepicker"    #date1
+                                        placeholder="Date"   required>
+                                <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
+                                <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
+                                <mat-error class="red" >
+                                  {{ 'general.required' | translate }}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxLayout="column" fxFlex="15"></div>
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 ">
+                                {{ 'resume-date-expire' | translate}}:
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input formControlName="expiring_date" matInput [matDatepicker]="datepickerend"    #date2 placeholder="Expired date"  >
+                                <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
+                                <mat-datepicker  startView="year" #datepickerend color="primary" ></mat-datepicker>
+                                <mat-error class="red" >
+                                  {{ 'general.required' | translate }}</mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxFlex="22" class="full-width" >
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 ">
+                                {{ 'resume-certif-ref' | translate}}:
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input  formControlName="certif_ref" matInput placeholder="Certification reference" >
+                              </mat-form-field>
+                            </div>
+                            <div fxLayout="column" fxFlex="15"></div>
+                            <div fxLayout="column" fxFlex="35">
+                              <mat-label class="black font-size-12 ">
+                                {{ 'resume-certif-url' | translate}}:
+                              </mat-label>
+                              <mat-form-field appearance="outline">
+                                <input  formControlName="certif_url" matInput placeholder="Certification url" >
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxFlex="18" class="full-width" >
+                            <div fxLayout="column" fxFlex="35">
+                              <div fxLayout="row">
+                                <mat-label class="black font-size-12 ">
+                                  Image:
+                                </mat-label>
+                              </div>
+                              <div fxLayout="row">
+                                <mat-form-field appearance="outline"  >
+                                  <div >
+                                    <input matInput matSuffix formControlName="image" placeholder="Image"  >
+                                    <button  class="buttonImage" type="button">
+                                      <input type="file"
+                                             id="upload"
+                                             accept="image/png, image/gif, image/jpeg"
+                                             (change)="setValueToImageField($event)"
+                                             hidden/>
+                                      <label for="upload">Upload</label></button>
+                                  </div>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div fxLayout="column" fxFlex="15"></div>
+                            <div fxLayout="column" fxFlex="35" fxLayoutAlign="center">
+                              <mat-checkbox  class="black font-size-12 " [checked]="display_image" [disabled]="verifyDisplayed()"  (change)="verifyCheckedDisplayImage($event)" > Display image on your resume</mat-checkbox>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end end">
+                        <div fxLayout="column" fxLayoutAlign=" start" fxFlex="12">
+                          <button mat-raised-button type="button" class="btn-small bg-pale-grey"
+                                  (click)="createCertification()" [disabled]="certifForm.invalid">
+                            <div *ngIf="button === 'Add';then add else save"></div>
+                            <ng-template #add>
+                              {{ 'resume-add' | translate }}
+                            </ng-template>
+                            <ng-template #save>
+                              {{ 'resume-save' | translate }}
+                            </ng-template>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
+                </div>
               </div>
+
             </div>
+          </div>
+        </div>
       </wid-scrollbar>
-      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  (click)="routeNextBack('next')">
+          <button mat-raised-button type="button" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

@@ -1,0 +1,121 @@
+<div class="list-collaborator-component border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium" >Collaborators List</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
+        <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-between center"    >
+    <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
+      <div fxLayout="row" fxFlex="80" fxLayoutGap="20px">
+        <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '60%', 'fontSize': '5px'}" appearance="outline">
+          <input matInput (keyup)="applyFilter($event)" type="search" placeholder="Search ..." class="font-extra-light font-size-12">
+          <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
+        </mat-form-field>
+        <mat-form-field appearance="outline"  [style]="{'width': '40%', 'height': '60%' ,'fontSize': '10px'}"
+        >
+          <mat-select disableOptionCentering panelClass="panelColor"
+                      placeholder="Sorted By"
+                      (selectionChange)="sortedBy($event)"
+                      [formControl]="sortedby"
+                      class="sortedby"
+          >
+            <mat-option value="full_name" >
+              Full Name
+            </mat-option>
+            <mat-option value="job_title" >
+              Job Title
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div  fxLayoutAlign="center center"  fxFlex="100" fxLayoutGap="20px" fxLayoutGap.lg="8px" *ngIf="this.filterArray.length!==0">
+    <div fxLayout="row wrap " fxFlex="80" fxFlexOffset="5">
+      <div *ngFor="let collaborator of this.filterArray"
+           class="center"  fxFlex="25%"   >
+        <mat-card class="Rectangle-281" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="8px">
+          <mat-card-content fxLayout="column" fxLayoutAlign="center" fxLayoutGap="4px" fxLayoutGap.lg="2px" fxLayoutGap.sm="2px"  fxLayoutGap.md="2px">
+            <div class="profile-image line-height-4"  fxLayout="row" fxLayoutAlign="center">
+              <img [src]="(collaborator.photo) ? uploadURL+collaborator.photo: 'assets/img/default.jpg'" width="40" height="40"
+                   [ngStyle.xl]="{ 'width.px': 120 , 'height.px': 120 }"
+                   class="show-img-collab"
+                   [ngStyle.xs]="{ 'width.px': 20, 'height.px': 20 }"   alt="collaborator" />
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayoutGap.lg="4px" fxLayoutGap.sm="4px" fxLayoutGap.md="4px"  >
+              <p class="full-name">{{collaborator.full_name}}</p>
+              <p class="job-title">{{collaborator.job_title}}</p>
+
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions
+            style="padding-bottom: .8rem;"
+            fxLayout.xs="column"
+            fxLayoutAlign="center center" >
+            <button class="btn-small bg-pale-grey-four btn-details" mat-raised-button (click)="collaboratorDetails(collaborator._id,collaborator.email_address)">Details</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+  </div>
+  <div fxLayout="row" fxFlex="80" fxLayoutGap="20px" *ngIf="this.filterArray.length===0">
+    <div *ngFor="let number of [0,1,2,3]" fxFlex="25%" fxFlex.sm="100%" fxFlex.sm="33%" >
+      <mat-card class="Rectangle-281" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="12px">
+        <mat-card-content fxLayout="column" fxLayoutAlign="center" fxLayoutGap="16px" fxLayoutGap.lg="8px" >
+          <div class="profile-image line-height-4"  fxLayout="row" fxLayoutAlign="center">
+            <wid-skeleton-loader [circle]="true" [nbrRow]="1" [nbrColumn]="1" width="80" height="80"
+                                 [ngStyle.xl]="{ 'width.px': 120 , 'height.px': 120 }"
+                                 [ngStyle.xs]="{ 'width.px': 50, 'height.px': 50 }"
+            ></wid-skeleton-loader>
+          </div>
+          <p>
+            <wid-skeleton-loader
+              height="25"
+              width="100"
+              marginBottom="4"
+              [nbrRow]="2" [nbrColumn]="1"
+            ></wid-skeleton-loader>
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+
+  <div fxLayout="row" fxLayoutAlign="end end" style="margin-right: 3rem;" [ngStyle.lg]="{ 'margin-bottom.px': 24 }"   *ngIf="this.filterArray.length!==0 ">
+    <mat-paginator
+      widPagination
+      showFirstLastButtons
+      [_showTotalPages]="lengthPage"
+      [length]="lengthPage"
+      (page)="onPaginateChange($event)"
+      (loadData)="loadData($event)"
+      [pageSizeOptions]="[8, 16]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="end end" style="margin-right: 3rem; padding-bottom: 6rem;"  *ngIf="this.filterArray.length===0">
+    <wid-skeleton-loader
+      height="25"
+      width="100"
+      marginBottom="4"
+      [nbrRow]="1" [nbrColumn]="1"
+    ></wid-skeleton-loader>
+  </div>
+</div>

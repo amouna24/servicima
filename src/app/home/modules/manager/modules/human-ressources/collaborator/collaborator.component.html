@@ -1,0 +1,13 @@
+<wid-dynamic-component
+  [menuItems]="profileItems"
+  [dynamicForm]="dynamicForm"
+  [formData]="profileForm"
+  [isLoading]="isLoading"
+  [title]="title"
+  (selectedDoc)="getFile($event)"
+  (rowActionData)="switchAction($event)"
+  (listOfObjects)="addInfo($event)"
+  [allowedTableActions]="{ update: true, delete: true, show: false }"
+  (dynamicFormGroup)="newCollaboratorInfo($event)"
+>
+</wid-dynamic-component>

@@ -16,12 +16,12 @@
   </div>
   <div fxLayout="row" fxFlex="88">
     <div fxLayout="column" fxFlex="94">
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{ 'resume-diplomas' | translate }}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="76" fxLayoutAlign="space-around" @dataAppearance>
+      <div fxLayout="row" fxFlex="84" fxLayoutAlign="space-around" @dataAppearance>
         <wid-scrollbar fxFlexFill fxLayout="column">
           <div fxLayout="row" fxFlex="55" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
@@ -127,15 +127,15 @@
           </div>
         </wid-scrollbar>
       </div>
-      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  (click)="routeNextBack('next')">
+                  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>

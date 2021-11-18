@@ -120,8 +120,12 @@ await this.getData();
    *************************************************************************/
   exportPdf(data) {
     data.map( (exportPdfData) => {
-      if (exportPdfData.resume_filename_pdf !== undefined && exportPdfData.resume_filename_pdf !== null) {
-        window.open(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_pdf, '_blank');
+      if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
+        this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+          console.log('pdf =', pdf);
+          const fileURL = URL.createObjectURL(pdf);
+          window.open(fileURL, '_blank');
+        });
       } else {
         const confirmation = {
           code: 'info',
@@ -156,6 +160,7 @@ await this.getData();
           generalInformation: data.user_info,
           firstName: data.first_name,
           lastName: data.last_name,
+          user_type: data.resume_user_type,
         }
       });
   }
@@ -253,6 +258,17 @@ await this.getData();
                       await this.getData();
                       this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
                         console.log('candidate deleted', deleteCandidate);
+                        this.resumeService.getResumeData(`?resume_code=${changeStatusData.user_info.ResumeKey.resume_code}`)
+                          .subscribe((resumeData) => {
+                          resumeData[0].user_type = 'COLLABORATOR';
+                          resumeData[0].resume_code = resumeData[0].ResumeDataKey.resume_code;
+                          resumeData[0].application_id = resumeData[0].ResumeDataKey.application_id;
+                          resumeData[0].collaborator_email = resumeData[0].ResumeDataKey.collaborator_email;
+                          resumeData[0].company_email = resumeData[0].ResumeDataKey.company_email;
+                          this.resumeService.updateResumeData(resumeData[0]).subscribe( (updateResumeData) => {
+                            console.log('resume data updated');
+                          });
+                        });
                       });
 
                     });
@@ -277,11 +293,13 @@ await this.getData();
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
-        console.log('resume archived');
         await this.getData();
       });
     });
     }
+  /**************************************************************************
+   * @description Send color Object to the resume data table
+   *************************************************************************/
   sendColorObject() {
     return  [{
       columnCode: 'resume_user_type',

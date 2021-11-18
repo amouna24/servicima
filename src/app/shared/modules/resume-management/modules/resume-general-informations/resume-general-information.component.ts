@@ -47,6 +47,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   update = false;
   photo: FormData;
   resumeCode: string;
+  companyUserType: string;
   years = 0;
   showNumberError = false;
   generalInfoManager: IResumeModel;
@@ -238,23 +239,35 @@ export class ResumeGeneralInformationComponent implements OnInit {
       resume_filename_docx: generalInformation.resume_filename_docx,
       resume_filename_pdf: generalInformation.resume_filename_pdf,
     });
+    this.CreationForm.controls.language_id.disable();
     if (this.CreationForm.controls.years_of_experience.value !== null) {
       this.showHideYears();
     } else {
               this.resumeService.getProExp(
                 `?resume_code=${generalInformation.ResumeKey.resume_code}`)
                 .subscribe(
-                  (responseProExp) => {
+                  async (responseProExp) => {
                     if (responseProExp['msg_code'] !== '0004') {
-                      responseProExp.forEach((proExp) => {
-                        const difference = new Date(proExp.ResumeProfessionalExperienceKey.end_date).getFullYear() -
-                          new Date(proExp.ResumeProfessionalExperienceKey.start_date).getFullYear();
-                        this.years = difference + this.years;
+                      new Promise((resolve) => {
+                        const maxDate = new Date(Math.max.apply(null, responseProExp.map (proExp => {
+                          if (proExp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
+                            return new Date();
+                          } else {
+                            return new Date(proExp.ResumeProfessionalExperienceKey.end_date);
+                          }
+                        })));
+                        const minDate = new Date(Math.min.apply(null, responseProExp.map (proExp => {
+                            return new Date(proExp.ResumeProfessionalExperienceKey.start_date);
+                        })));
+                        resolve(+maxDate.getFullYear() - +minDate.getFullYear());
+
+                      }).then((yearsOfExperience) => {
+                        this.CreationForm.patchValue({
+                          years_of_experience: yearsOfExperience,
+                        });
+                        this.showHideYears();
                       });
-                      this.CreationForm.patchValue({
-                        years_of_experience: this.years,
-                      });
-                      this.showHideYears();
+
                     }
                   });
             }
@@ -302,7 +315,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+                companyUserType: this.companyUserType,
               }
             });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
@@ -321,7 +335,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
       } else {
       }
     } else {
-      this.generalInfo = this.CreationForm.value;
+      this.generalInfo = this.CreationForm.getRawValue();
       if (filename === null) {
         filename = this.CreationForm.controls.image.value;
       }
@@ -334,7 +348,9 @@ export class ResumeGeneralInformationComponent implements OnInit {
           if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
             this.router.navigate(['/manager/resume/diploma'], {
               state: {
-                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+                resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+                companyUserType: this.companyUserType,
+
               }
             });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
@@ -402,5 +418,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
     this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
     this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.user_type;
   }
 }

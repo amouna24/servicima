@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
@@ -24,6 +25,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { SheetService } from '@core/services/sheet/sheet.service';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
+import { HolidayService } from '@core/services/holiday/holiday.service';
 
 import { IContractProject } from '@shared/models/contractProject.model';
 import { IContractor } from '@shared/models/contractor.model';
@@ -36,8 +38,6 @@ import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
-import { BehaviorSubject } from 'rxjs';
-import { HolidayService } from '@core/services/holiday/holiday.service';
 
 import { environment } from '../../../../../../../environments/environment';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
@@ -323,7 +323,7 @@ export class InvoiceManagementComponent implements OnInit {
           return item.size.toLowerCase();
         }
         case 'Date': {
-          return item.date.toLowerCase();
+          return item.date;
         }
         default: {
           return item[property];
@@ -331,6 +331,7 @@ export class InvoiceManagementComponent implements OnInit {
       }
     };
     this.data1.sort = this.sort1;
+    console.log(this.sort1, 'sort1');
   }
 
   /**
@@ -866,7 +867,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     if (this.invoiceAttachment.length > 0 ) {
       this.invoiceService.deleteManyInvoiceAttachment(this.listToRemoveAttachment).subscribe((res) => {
         if (res) {
-          this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe((resp) => {
+          this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
           });
         }
       });
@@ -980,7 +981,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     };
 
     const final = { company, data, contractor, total, label, upload: true };
-    console.log(final, 'final');
     if (type === 'PENDING') {
       this.invoiceService.generateInvoice(final).subscribe(async (res) => {
           const file = new File([res], `invoice${company.invoiceNbr}.pdf`, { lastModified: new Date().getTime(), type: res.type });

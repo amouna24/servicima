@@ -63,7 +63,6 @@ export class ChangePwdInvoiceComponent implements OnInit , OnDestroy {
    */
   ngOnInit(): void {
     this.initForm();
-    console.log(this.data, 'change ');
   }
 
   /**

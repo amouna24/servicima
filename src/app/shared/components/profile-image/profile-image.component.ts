@@ -53,7 +53,6 @@ export class ProfileImageComponent implements OnInit {
    */
   previewFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
-    console.log(file.size , 'size');
     if (file.size > 43056) {
       this.snackBarAction();
     } else {

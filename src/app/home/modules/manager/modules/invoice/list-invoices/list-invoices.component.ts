@@ -130,18 +130,16 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         break;
       case('sendMailing'): this.sendMailing(rowAction.data);
         break;
-      case('protect your invoice'): this.protectInvoice(rowAction.data);
-        break;
     }
   }
 
-  protectInvoice(data) {
+ /* protectInvoice(data) {
     this.modalService.displayModal('protectInvoice', data,
       '500px', '344px').subscribe(async (res) => {
       if (res) {
       }
     });
-  }
+  } */
 
   /**
    * @description : update invoice

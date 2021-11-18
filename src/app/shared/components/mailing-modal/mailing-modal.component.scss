@@ -7,3 +7,11 @@
 .textarea {
   font-size: 10px !important;
 }
+.mat-form-field-appearance-outline {
+  .mat-form-field-infix {
+    padding: 0 0 1em 0 !important;
+  }
+}
+.margin-mat-chip {
+  margin: 0 !important;
+}

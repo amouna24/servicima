@@ -16,12 +16,12 @@
   </div>
   <div fxLayout="row" fxFlex="88"  fxLayoutAlign="space-around">
     <div fxLayout="column" fxFlexFill>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small">{{position}}-{{customer}}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="76"  @dataAppearance fxLayoutAlign="space-around">
+      <div fxLayout="row" fxFlex="84"  @dataAppearance fxLayoutAlign="space-around">
         <wid-scrollbar fxFlex="87" class="full-height">
           <div fxLayout="column" fxFlex="100" fxFlexAlign="10px">
             <div fxLayout="row" *ngIf="!showProject"  class="height-50"  fxLayoutAlign="center">
@@ -97,7 +97,7 @@
                 <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey"
                      style="border-style: solid ; justify-content: center">
                   <div fxLayout="column" fxFlex="95" fxLayoutGap="30px" class="p-t-20" fxLayoutAlign="center">
-                    <div fxLayout="row" fxFlex="36">
+                    <div fxLayout="row" fxFlex="20">
                       <div fxLayout="column" fxFlex="80">
                         <mat-label class="black font-size-12 required">
                           {{ 'resume-project-title' | translate }}:
@@ -111,13 +111,13 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div fxLayout="row" fxFlex="25">
+                    <div fxLayout="row" fxFlex="30">
                       <div fxLayout="column" fxFlex="30">
                         <mat-label class="black font-size-12 required">
                           {{ 'resume-start-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1 formControlName="start_date"
+                          <input matInput [matDatepicker]="datepicker" [min]="minStartDate" [max]="maxStartDate" #date1 formControlName="start_date"
                                  placeholder="Start date" (dateChange)="onChangeStartDate(date1.value)" required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                           <mat-datepicker #datepicker color="primary"></mat-datepicker>
@@ -132,7 +132,7 @@
                               {{ 'resume-end-date' | translate }}:
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate" [matDatepickerFilter]="myDisabledDayFilter" #date2  formControlName="end_date"
+                              <input matInput [matDatepicker]="datepickerend" [min]="minEndDate" [max]="maxEndDate"  #date2  formControlName="end_date"
                                      placeholder="End date" (dateChange)="onChangeEndDate(date2.value)" required>
                               <mat-datepicker-toggle matSuffix [for]="datepickerend"></mat-datepicker-toggle>
                               <mat-datepicker #datepickerend color="primary"></mat-datepicker>
@@ -143,7 +143,33 @@
                         </div>
                       </div>
                     </div>
-                    <div fxLayout="row" fxFlex="30" fxLayoutAlign="end">
+                    <div fxLayout="row" fxFlex="30">
+                      <div fxLayout="column" fxFlex="30">
+                        <mat-label class="black font-size-12 required">
+                          Client:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <input  matInput formControlName="client" placeholder="Client" required>
+                          <mat-error class="red" *ngIf="sendProject.controls.start_date.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row" fxLayoutAlign="end end">
+                          <div fxLayout="column" fxFlex="60">
+                            <mat-label class="black font-size-12 required">
+                              Position:
+                            </mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput  formControlName="position" placeholder="Position"  required>
+                              <mat-error class="red" *ngIf="sendProject.controls.end_date.errors?.required">
+                                {{ 'general.required' | translate }}</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="20" fxLayoutAlign="end">
                       <button mat-raised-button type="button" class="steel-two bg-pale-grey btn-small"
                               style="width: 30%" (click)="createUpdateProject(date1.value,date2.value)" [disabled]="sendProject.invalid">
                         <div *ngIf="button === 'Add';then add else save"></div>
@@ -214,7 +240,7 @@
       </div>
         </wid-scrollbar>
       </div>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/candidate/resume/professionalExperience">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">

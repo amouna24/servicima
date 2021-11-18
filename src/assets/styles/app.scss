@@ -219,7 +219,7 @@ Paddings
 }
 
 .p-r-15 {
-  padding-right: 20px;
+  padding-right: 15px;
 }
 
 .p-r-20 {
@@ -582,6 +582,9 @@ html body {
 .black {
     color: $black;
 }
+.warm-grey {
+  color: $warm-grey;
+}
 .white {
   color: $white !important;
 }
@@ -756,6 +759,14 @@ html body {
   background-color: $white;
   // margin: 0 25px 0 25px;
   // width: 88vw;
+}
+
+/*    Component list Collaborator  */
+.list-collaborator-component  {
+  @include get-page(servicima);
+  margin: 0px 20px 20px;
+  height: 81vh !important;
+  background-color: $white;
 }
 
 .dynamic-component-content {

@@ -45,12 +45,25 @@ export const environment = {
   resumeTechnicalSkillsApiUrl: 'http://192.168.1.22:8073/servicima/resumetechnicalskills/v1',
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
+  resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
   docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
+  resumeMailingHistoryApiUrl: 'http://192.168.1.22:8130/servicima/mailinghistory/v1',
+  bankingApiUrl: 'http://192.168.1.22:8083/servicima/hrbanking/v1',
+  childApiUrl: 'http://192.168.1.22:8089/servicima/hrchild/v1',
+  emergencyContactApiUrl: 'http://192.168.1.22:8087/servicima/hremergencycontact/v1',
+  equipmentApiUrl: 'http://192.168.1.22:8084/servicima/hrequipment/v1',
+  evaluationApiUrl: 'http://192.168.1.22:8085/servicima/hrevaluation/v1',
+  evaluationGoalApiUrl: 'http://192.168.1.22:8086/servicima/hrevaluationgoals/v1',
+  identityDocumentApiUrl: 'http://192.168.1.22:8088/servicima/hridentitydocument/v1',
+  payslipApiUrl: 'http://192.168.1.22:8090/servicima/hrpayslip/v1',
+  hrContractApiUrl: 'http://192.168.1.22:8092/servicima/hrcontract/v1',
+  hrContractExtension: 'http://192.168.1.22:8093/servicima/hrcontractextension/v1',
+  workCertificateUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/v1',
 
   invoiceGenerateApiUrl: 'http://127.0.0.1:3000',
-  invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
-  invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
+  invoiceLineApiUrl: 'http://127.0.0.1:8105/servicima/invoiceline/v1',
+  invoiceHeaderApiUrl: 'http://127.0.0.1:8106/servicima/invoiceheader/v1',
   invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
   invoiceAttachmentApiUrl: 'http://127.0.0.1:9005/servicima/invoiceattachment/v1',
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
@@ -67,7 +80,10 @@ export const environment = {
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
-
+  /************************* GENERATE CERTIFICATION ******************************/
+  pdfFileUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
+  /************************* UPLOAD RESUME FILE ************************/
+  uploadResumeFileApiUrl: 'http://192.168.1.22:8121/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',

@@ -7,6 +7,8 @@ import { ICurrency } from '@shared/models/currency.model';
 import { ICities } from '@shared/models/cities.model';
 
 import { environment } from '../../../../environments/environment';
+// tslint:disable-next-line:origin-ordered-imports
+import { INationality } from '@shared/models/nationality.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class AssetsDataService {
   allCountries: string;
   activityCode: string;
   allCurrencies: string;
+  allNationalities: string;
   zipCode: string;
 
   citiesList: ICities[] = [];
@@ -33,6 +36,7 @@ export class AssetsDataService {
     this.allCountries = 'assets/data/countries.json';
     this.allCurrencies = 'assets/data/currencies.json';
     this.activityCode = 'assets/data/activityCode.json';
+    this.allNationalities = 'assets/data/nationalities.json';
     this.zipCode = environment.zipCodeApiUrl;
   }
 
@@ -68,4 +72,12 @@ export class AssetsDataService {
   getAllActivityCode(): Observable<IActivity[]> {
     return this.httpClient.get<IActivity[]>(this.activityCode);
   }
+  /**************************************************************************
+   * @description Get all nationalities
+   * @return all  nationality code
+   *************************************************************************/
+  getAllNationalities(): Observable<INationality[]>  {
+    return this.httpClient.get<INationality[]>(this.allNationalities);
+  }
+
 }

@@ -8,4 +8,6 @@ export interface IResumeProjectModel {
   project_title: string;
   project_code: string;
   professional_experience_code: string;
+  client: string;
+  position: string;
 }

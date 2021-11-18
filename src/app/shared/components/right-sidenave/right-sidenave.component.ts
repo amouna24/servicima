@@ -119,19 +119,6 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     );
   }
 
- /* test(collback) {
-      this.userService.connectedUser$.subscribe((data) => {
-        if (!!data) {
-          this.haveImage = data['user'][0]['photo'];
-        collback(this.haveImage)
-        }
-    });
-  }*/
-
- /* WriteName(haveImage) {
-    return haveImage
-  } */
-
   /**
    * @description get module name
    */

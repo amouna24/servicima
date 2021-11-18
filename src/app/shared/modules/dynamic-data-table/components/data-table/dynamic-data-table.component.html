@@ -122,12 +122,10 @@
                     Security
                   </th>
                   <td  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light">
-                      <span *ngIf="row['password']" class="material-icons-outlined">
-              https
+                      <span  class="material-icons-outlined">
+               {{row['password'] ? 'https' : 'lock_open'}}
               </span>
-                    <span  *ngIf="!row['password']" class="material-icons-outlined">
-lock_open
-</span>
+
                   </td>
                 </ng-container>
 

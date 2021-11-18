@@ -1,0 +1,112 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <wid-title-certif
+    certificate="certificate"
+  >
+    <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100">
+
+      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;"  >
+        <div fxLayout="row">
+          <h1 class="steel font-size-18">{{role}} information </h1>
+        </div>
+        <div fxLayout="row" fxFlex="100">
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+            <mat-list role="list"    >
+              <mat-list-item role="listitem" class="black font-size-12">Contract start on: {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Contract end on: {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
+            </mat-list>
+          </div>
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="black font-size-12">Address: {{ certificate.address ? certificate.address : 'No Address For collaborator' }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Nationality: {{ certificate.nationality_id ? certificate.nationality_id : 'No nationality' }}</mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+      </section>
+      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;" >
+        <div fxLayout="row">
+          <h1 class="steel font-size-18">Request information: </h1>
+        </div>
+        <div fxLayout="row" fxFlex="100">
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+            <mat-list role="list" >
+              <mat-list-item role="listitem" class="black font-size-12">Request date: {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">Request Response : {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
+            </mat-list>
+          </div>
+          <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+            <div  fxLayout="column" fxFlex="40" *ngIf="!collaborator">
+              <div class="black font-size-12">
+                Language  {{ certificate.language }}
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column wrap"  fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
+          <mat-list role="list">
+            <mat-list-item role="listitem" class="black font-size-12">Comment: {{ certificate.comment }}</mat-list-item>
+
+          </mat-list>
+
+        </div>
+      </section>
+
+      <section  [ngSwitch]="certificate.request_status" fxFlex="80">
+        <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Pending'" >
+          <div  fxLayout="row" fxLayoutGap="16px" *ngIf="!collaborator">
+            <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
+              <button mat-raised-button  class="white btn-small bg-error-red"
+                      (click)="reject()"
+              >
+                {{ 'rh_rejected_certif' | translate}}
+              </button>
+            </div>
+            <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
+              <button  mat-raised-button  class="white btn-small bg-topaz"
+                       (click)="confirm()"
+              >
+                {{ 'rh_confirmed_certif' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Rejected'" >
+          <div  fxLayout="row" fxLayoutGap="16px">
+            <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
+              <button mat-raised-button disabled class="white btn-small bg-error-red">
+                {{ 'rh_rejected_certif' | translate}}</button>
+            </div>
+          </div>
+        </div>
+        <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Confirmed'" >
+          <div  fxLayout="row" fxLayoutGap="16px">
+            <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50"  >
+              <button mat-raised-button disabled class="topaz font-size-11 bg-white">
+
+                <div fxLayout="row" fxLayoutGap="24px" style="margin-top: 1rem;" *ngIf="!certificate.signature">
+                  <button  mat-raised-button  class="white btn-small bg-topaz"
+                           (click)="sign($event)"
+                  >
+                    sign
+                  </button>
+
+                </div>
+                <div fxLayout="row" fxLayoutGap="24px" style="margin-top: 1rem;" *ngIf="certificate.signature">
+                  <button mat-raised-button disabled class="topaz font-size-11 bg-white">
+                    <mat-icon  class="mat-icon icon material-icons-outlined mat-icon-no-color">
+                    </mat-icon>
+                    <span style="padding-top: 1rem">Signed and Confirmed</span></button>
+
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </wid-title-certif>
+</div>

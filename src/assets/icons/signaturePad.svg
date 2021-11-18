@@ -1,0 +1,13 @@
+<svg id="Group_101" data-name="Group 101" xmlns="http://www.w3.org/2000/svg" width="130" height="17" viewBox="0 0 130 17">
+    <defs>
+        <style>
+            .cls-3{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round}
+        </style>
+    </defs>
+    <g id="tabler-icon-writing">
+        <path id="Path_1311" data-name="Path 1311" d="M0 0h16.635v16.635H0z" style="fill:none"/>
+        <path id="Path_1312" data-name="Path 1312" class="cls-3" d="M18.772 12.7V4.386a1.386 1.386 0 0 0-2.772 0V12.7l1.386 1.386z" transform="translate(-4.91 -.921)"/>
+        <path id="Path_1313" data-name="Path 1313" class="cls-3" d="M16 7h2.772" transform="translate(-4.91 -2.148)"/>
+        <path id="Path_1314" data-name="Path 1314" class="cls-3" d="M13.4 16.545H4.386a1.386 1.386 0 0 1 0-2.772h2.773a1.386 1.386 0 0 0 0-2.772h-2.08" transform="translate(-.921 -3.376)"/>
+    </g>
+</svg>

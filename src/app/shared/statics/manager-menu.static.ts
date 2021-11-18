@@ -47,13 +47,30 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-recruitment',
         feature: 'SOURCING_ACCESS',
     },
-    {
-        state: 'human-ressources',
-        name: 'manager.menu.static.human.ressources',
-        type: 'link',
-        icon: 'wi-HR',
+  {
+    state: 'human-ressources',
+    name: 'manager.menu.static.human.ressources',
+    type: 'sub',
+    icon: 'wi-HR',
+    feature: 'HR_ACCESS',
+    children: [
+      {
+        state: 'collaborator-list',
+        name: 'Collaborator List',
+        icon: '',
         feature: 'HR_ACCESS',
-    },
+        type: 'link',
+      },
+      {
+        state: 'work-certificate',
+        name: 'Work Certificate',
+        icon: '',
+        feature: 'HR_ACCESS',
+        type: 'link',
+      },
+    ]
+  },
+
     {
         state: 'placements',
         name: 'manager.menu.static.placements',
@@ -198,11 +215,26 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
     },
-    {
-      state: 'resume',
-      name: 'Resume management',
-      type: 'link',
-      icon: 'wi-billings',
-      feature: 'CONTRACT_ACCESS',
-    }
+  {
+    state: 'resume',
+    name: 'Resume management',
+    type: 'sub',
+    icon: 'wi-billings',
+    feature: 'CONTRACT_ACCESS',
+    children: [
+      {
+        state: '',
+        name: 'Resume List',
+        icon: 'wi_dashboard',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'history',
+        name: 'Mailing history',
+        icon: 'wi-user',
+        feature: 'CONTRACT_ACCESS',
+        type: 'link',
+  }
+]}
 ];

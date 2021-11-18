@@ -25,10 +25,18 @@ export class UploadService {
       );
   }
 
+  /**
+   * @description : Get files
+   * @param idFile: id file
+   */
   getFiles(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
   }
 
+  /**
+   * @description : Get files by name
+   * @param idFile: id file
+   */
   getFilesByName(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/` + idFile)
       .pipe(
@@ -39,6 +47,10 @@ export class UploadService {
       );
   }
 
+  /**
+   * @description : Get images
+   *  return image
+   */
   getImages() {
     return this.http.get(`${environment.userApiUrl}/api/`);
   }
@@ -61,6 +73,10 @@ export class UploadService {
     ).toPromise();
   }
 
+  /**
+   * @description : delete file
+   *  @param idFile: id file
+   */
   deleteFile(idFile) {
     return this.http.delete(`${environment.uploadFileApiUrl}/delete/` + idFile);
   }

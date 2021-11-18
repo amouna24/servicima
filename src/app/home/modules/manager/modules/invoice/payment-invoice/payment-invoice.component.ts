@@ -78,11 +78,6 @@ export class PaymentInvoiceComponent implements OnInit {
    * @description : send mail
    */
   sendMail() {
-    console.log(this.mailingForm.value.message, 'massage' ,
-      this.mailingForm.value.amount, 'amount' ,
-      this.mailingForm.value.paymentDate, 'paymentDate' ,
-      this.mailingForm.value.bankAccount, 'bankAccount' ,
-      this.mailingForm.value.paymentMethodsCtrl, 'paymentMethodsCtrl' );
   }
 
   /**
@@ -94,7 +89,6 @@ export class PaymentInvoiceComponent implements OnInit {
   }
 
   addInvoicepayment() {
-    console.log(this.data, '7777');
     const invoicePayment = {
       application_id           : this.applicationId,
       company_email            : this.companyEmail,
@@ -106,7 +100,6 @@ export class PaymentInvoiceComponent implements OnInit {
       note                     : this.mailingForm.value.message,
       entered_by               : this.emailAddress,
     };
-    console.log(invoicePayment, 'nnnnnn');
    this.dialogRef.close(invoicePayment);
 
   }
