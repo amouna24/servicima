@@ -149,7 +149,7 @@ lock_open
 
                     <ng-container *ngSwitchCase="'date'">
                       <td cdk-cell (click)="actionRowData('update', row)"
-                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date: 'dd/MM/yyyy' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>

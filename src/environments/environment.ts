@@ -48,13 +48,14 @@ export const environment = {
   docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
 
-  invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
+  invoiceGenerateApiUrl: 'http://127.0.0.1:3000',
   invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
-  invoiceHeaderApiUrl: 'http://127.0.0.1:8106/servicima/invoiceheader/v1',
+  invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
   invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
   invoiceAttachmentApiUrl: 'http://127.0.0.1:9005/servicima/invoiceattachment/v1',
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
-  timesheetApiUrl: 'http://127.0.0.1:8079/servicima/timesheet/v1',
+  timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
+  timesheetHolidayApiUrl: 'http://192.168.1.22:8110/servicima/timesheetholiday/v1',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',

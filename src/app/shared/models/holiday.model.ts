@@ -1,10 +1,8 @@
 export interface IHoliday {
   country: string;
-  holidays: Array<{
-    name: string;
-    day: string;
-    month: string;
-    observed: string;
-    public: boolean;
-  }>;
+  name: string;
+  day: number;
+  month: number;
+  observed: string;
+  public: boolean;
 }

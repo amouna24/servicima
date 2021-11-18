@@ -1,6 +1,6 @@
 /* Angular core imports */
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 /* RxJs imports */
 import { UserService } from '@core/services/user/user.service';
 import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
@@ -37,6 +37,7 @@ export class AuthGuard implements CanActivate {
               private userService: UserService,
               private authService: AuthService,
               private utilService: UtilsService,
+              private route: ActivatedRoute,
   ) {
   }
 
@@ -51,6 +52,9 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
         this.currentState = state.url;
+    console.log(this.currentState );
+    console.log(state.root.queryParams, 'state');
+    const qp = state.root.queryParams;
     /* Call the backend to check fingerprint is OK */
     if (state.root.queryParams.rg && state.root.queryParams.auto === 'yes') {
       return new Promise<boolean>(resolve =>
@@ -84,6 +88,10 @@ export class AuthGuard implements CanActivate {
               if (! this.userService.userInfo || (this.userService.refresh && this.userService.userInfo))  {
                 this.userService.getUserInfo().then((data) => {
                   if (data) {
+                   const keyu = Object.keys(qp)[0];
+                    const val = Object.values(qp)[0];
+                    console.log(keyu, 'key', val, 'val');
+                    console.log(this.currentState);
                     this.userService.redirectUser(data['user'][0].user_type, this.currentState);
                     this.utilService.getCompanies(data['company'][0]['companyKey']['email_address']);
                     this.userService.getRoleFeature(data, data.userroles[0].userRolesKey.role_code);

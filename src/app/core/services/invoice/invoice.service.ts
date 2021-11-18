@@ -100,6 +100,7 @@ export class InvoiceService {
   addInvoiceAttachment(invoiceAttachment): Observable<any> {
     return this.httpClient.post(`${environment.invoiceAttachmentApiUrl}`, invoiceAttachment);
   }
+
   /**************************************************************************
    * @description update many invoice line
    * @param invoiceLine: update invoice line

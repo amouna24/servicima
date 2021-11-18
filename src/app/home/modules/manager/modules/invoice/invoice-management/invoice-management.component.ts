@@ -37,6 +37,7 @@ import { IUserModel } from '@shared/models/user.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
 import { BehaviorSubject } from 'rxjs';
+import { HolidayService } from '@core/services/holiday/holiday.service';
 
 import { environment } from '../../../../../../../environments/environment';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
@@ -64,12 +65,7 @@ export class InvoiceManagementComponent implements OnInit {
   listProject: IContractProject[];
   listContractor: IContractor[];
   listContract: IContract[];
-  listTimesheet = [];
   companyBankingInfos: ICompanyBankingInfoModel;
-  dayToAdded;
-  dayToAddedExtra;
-  dayToDeleted;
-  dayToDeletedExtra;
   paymentTerms: number;
   avatar: any;
   listDayToDeleteInNextMonth = [];
@@ -108,7 +104,6 @@ export class InvoiceManagementComponent implements OnInit {
   iconVisible: boolean;
 
   paymentMethodsList: IViewParam[];
-
   listToRemovePayment: string[] = [];
   listToRemoveAttachment: string[] = [];
   tableColumns: string[] = ['Entered By', 'Type', 'Notes', 'Date', 'Amount', 'Action'];
@@ -117,7 +112,6 @@ export class InvoiceManagementComponent implements OnInit {
   data1: MatTableDataSource<any> = new MatTableDataSource([]);
   contractRate: number;
   isLoading = new BehaviorSubject<boolean>(false);
-  listTimesheetExtra = [];
   sundayRate: string;
   holidayRate: string;
   saturdayRate: string;
@@ -142,7 +136,9 @@ export class InvoiceManagementComponent implements OnInit {
               private translate: TranslateService,
               private timesheetService: TimesheetService,
               private paymentTermsService: CompanyPaymentTermsService,
+              private holidayService: HolidayService,
               private contractorsService: ContractorsService,
+              private timesheetHoliday: HolidayService,
               private localStorageService: LocalStorageService) {
     this.invoiceNbr = this.router.getCurrentNavigation()?.extras?.state?.nbrInvoice;
   }
@@ -417,8 +413,6 @@ RIB:${this.companyBankingInfos?.rib}`);
 
     this.getContractProject(this.invoiceHeader['contract_code']);
 
-    console.log(this.listContract, 'avant', this.invoiceHeader['contractor_code']);
-    // this.getTimesheet(this.invoiceHeader['contract_code']);
     this.invoicePayment = this.invoices[1] as IInvoicePaymentModel[];
     this.countPayment();
     this.formFactor.controls['factorInvoice'].setValue(this.invoiceHeader ['factor_involved'] === 'Y');
@@ -454,117 +448,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     await this.getContract(this.invoiceHeader['contractor_code']);
     // default data
     this.contract = this.listContract.find(value => value.contractKey.contract_code === this.contractCode);
-
-    this.contractRate = this.contract['contract_rate'];
-    this.sundayRate = this.contract['sunday_rate'];
-    this.holidayRate = this.contract['holiday_rate'];
-    this.saturdayRate = this.contract['saturday_rate'];
-    this.overtimePerDayRate = this.contract['overtime_per_day_rate'];
-
-    // tslint:disable-next-line:max-line-length
-    const getDaysInMonth = (month, year) => (new Array(31)).fill('').map((v, i) => new Date(year, month - 1, i + 1)).filter(v => v.getMonth() === month - 1);
-    const allDateByMonth = getDaysInMonth(9, 2021);
-    const allDateByMonthAfter = getDaysInMonth(10, 2021);
-
-    const allDateByMonthBefore = getDaysInMonth(8, 2021);
-
-    // All week in current month
-    const getFirstDay = [];
-    allDateByMonth.filter((data) => {
-       if (data.getDay() === 1) {
-         return getFirstDay.push(data);
-       }
-     });
-
-// All week in previous month
-    const allWeekInPreviewMonth = allDateByMonthBefore.filter((data) => {
-      if (data.getDay() === 1) {
-        return data;
-      }
-    });
-
-// All week in next month
-    const allWeekInNextMonth = allDateByMonthAfter.filter((data) => {
-      if (data.getDay() === 1) {
-          return data;
-      }
-    });
-// last week in preview month
-   const lastWeekInPreviewMonth = new Date(Math.max.apply(null, allWeekInPreviewMonth));
-    // last week in current month
-   const lastWeekInCurrentMonth = new Date(Math.max.apply(null, getFirstDay));
-    // first week in next month
-    const firstWeekInNextMonth = new Date(Math.min.apply(null, allWeekInNextMonth));
-
-    // List date to remove in previous month
-   const listDateToAdded = allDateByMonthBefore.filter((data) => {
-      if (data >= lastWeekInPreviewMonth) {
-        return data;
-      }
-    });
-
-    // List date to remove in next month
-   const listDateToRemove = allDateByMonthAfter.filter((data) => {
-      if (data < firstWeekInNextMonth) {
-        return data;
-      }
-    });
-
-// List week in current month without last week
-   const listWeekInCurrentDateWithoutLastWeek = getFirstDay.filter((data) => {
-     if ( data.getTime() !== lastWeekInCurrentMonth.getTime()) {
-       return data;
-     }
-   });
-
-    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    listDateToAdded.map((day) => {
-      const dayName = days[day.getDay()];
-      this.listDayToDeleteInPreviousMonth.push(dayName);
-    });
-
-    listDateToRemove.map((day) => {
-      const dayName = days[day.getDay()];
-      this.listDayToDeleteInNextMonth.push(dayName);
-    });
-
-    console.log(this.listDayToDeleteInPreviousMonth, 'listDayToDeleteInPreviousMonth', this.listDayToDeleteInNextMonth, 'listDayToDeleteInNextMonth');
-    await this.getTimesheet(this.companyEmail, 'project0001', 'jitak80239@u461.com', listWeekInCurrentDateWithoutLastWeek, 'TIMESHEET');
-    await this.getTimesheetWithAfter(this.companyEmail, 'project0001', 'jitak80239@u461.com', lastWeekInCurrentMonth.toISOString(), 'TIMESHEET');
-    await this.getTimesheetWithPreview(this.companyEmail, 'project0001', 'jitak80239@u461.com', lastWeekInPreviewMonth.toISOString(), 'TIMESHEET');
-    await this.getTimesheet(this.companyEmail, 'project0001', 'jitak80239@u461.com', listWeekInCurrentDateWithoutLastWeek, 'TIMESHEET_EXTRA');
-    // tslint:disable-next-line:max-line-length
-    await this.getTimesheetWithAfter(this.companyEmail, 'project0001', 'jitak80239@u461.com', lastWeekInCurrentMonth.toISOString(), 'TIMESHEET_EXTRA');
-    // tslint:disable-next-line:max-line-length
-    await this.getTimesheetWithPreview(this.companyEmail, 'project0001', 'jitak80239@u461.com', lastWeekInPreviewMonth.toISOString(), 'TIMESHEET_EXTRA');
-    console.log(this.dayToDeleted, 'dayipppppp');
-    let totalFirstWeek = this.dayToDeleted['total_week_hours'];
-    this.listDayToDeleteInPreviousMonth.map((deleted) => {
-     totalFirstWeek = totalFirstWeek - this.dayToDeleted[deleted];
-    });
-    let totalSecondWeek =  this.dayToAdded['total_week_hours'];
-    this.listDayToDeleteInNextMonth.map((deleted) => {
-      totalSecondWeek = totalSecondWeek - this.dayToAdded[deleted];
-    });
-
-   const totalHour = this.countTimesheetHour();
-    const total = (totalHour + totalFirstWeek + totalSecondWeek) * this.contractRate;
-    this.countTimeSheetExtra();
     this.isLoading.next(false);
-  }
-
-  countTimeSheetExtra() {
-    let sum = 0;
-    this.listTimesheetExtra.map((data) => {
-      console.log(data, 'list timesheet extra');
-      sum = sum + (( parseInt(data['monday'], 10)) * ( parseInt(this.overtimePerDayRate, 10)  ) +
-        ( parseInt(data['tuesday'], 10)) * ( parseInt(this.overtimePerDayRate, 10)) +
-          ( parseInt(data['wednesday'], 10)) * ( parseInt(this.overtimePerDayRate, 10)) +
-            ( parseInt(data['thursday'], 10)) * ( parseInt(this.overtimePerDayRate, 10)) +
-              ( parseInt(data['friday'], 10)) * ( parseInt(this.overtimePerDayRate, 10)) +
-              ( parseInt(data['saturday'], 10)) * ( parseInt(this.saturdayRate, 10)) +
-                ( parseInt(data['sunday'], 10)) * ( parseInt(this.sundayRate, 10)));
-    });
   }
 
   /**************************************************************************
@@ -697,7 +581,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.contractCode = contractCode;
     this.currencyCode = this.contract['currency_cd'];
     this.contractRate = this.contract['contract_rate'];
-    console.log(this.contractRate, 'contract rare ');
     this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`, 'ACTIVE').subscribe((data) => {
       this.paymentTerms = data.find(value => value.companyPaymentTermsKey.payment_terms_code === this.contract['payment_terms']).delay;
       this.formHeader.controls['invoiceDelay'].
@@ -709,102 +592,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.sousTotalHT = 0;
     this.totalTTC = 0;
     this.vatMount = 0;
-    //  this.getTimesheet(this.companyEmail,);
-  }
-
-  /**************************************************************************
-   *  @description Get Timesheet
-   *************************************************************************/
-  getTimesheet(companyEmail: string, contractCode: string, emailAddress: string, week?, type?: string) {
-    let i = 0;
-    return new Promise((resolve) => {
-      week.map((data) => {
-        i++;
-        this.timesheetService
-          // tslint:disable-next-line:max-line-length
-          .getTimesheet(`?company_email=${companyEmail}&email_address=${emailAddress}&project_code=${contractCode}&start_date=${data.toISOString()}&type_timesheet=${type}`)
-          .subscribe((res) => {
-            if (type === 'TIMESHEET') {
-              if (i === week.length) {
-                this.listTimesheet.push(res[0]);
-                console.log(this.listTimesheet, 'timesheet');
-                resolve(this.listTimesheet);
-              } else {
-                this.listTimesheet.push(res[0]);
-              }
-            } else {
-              if (i === week.length) {
-                this.listTimesheetExtra.push(res[0]);
-                console.log(this.listTimesheetExtra, 'timesheet extra');
-                resolve(this.listTimesheetExtra);
-              } else {
-                this.listTimesheetExtra.push(res[0]);
-              }
-            }
-          });
-    });
-});
-  }
-
-  countTimesheetHour() {
-    let count = 0;
-    this.listTimesheet.map((fa) => {
-      count = count + fa['total_week_hours'];
-      console.log(count, 'count');
-    });
-    return count;
-  }
-
-  /**************************************************************************
-   *  @description Get Timesheet
-   *************************************************************************/
-  getTimesheetWithPreview(companyEmail: string, contractCode: string, emailAddress: string, week?, type?: string) {
-    console.log(week, 'week1', type);
-    return new Promise((resolve) => {
-        this.timesheetService
-          // tslint:disable-next-line:max-line-length
-          .getTimesheet(`?company_email=${companyEmail}&email_address=${emailAddress}&project_code=${contractCode}&start_date=${week}&type_timesheet=${type}`)
-          .subscribe((res) => {
-            if (type === 'TIMESHEET') {
-              this.dayToDeleted = res[0];
-              console.log(this.dayToDeleted, 'day to deleted');
-              resolve(this.dayToDeleted);
-            } else {
-              this.dayToDeletedExtra = res[0];
-              console.log(this.dayToDeletedExtra, 'day to deleted extra');
-              resolve(this.dayToDeletedExtra);
-            }
-
-      });
-
-    });
-  }
-
-  /**************************************************************************
-   *  @description Get Timesheet
-   *************************************************************************/
-  getTimesheetWithAfter(companyEmail: string, contractCode: string, emailAddress: string, week?, type?: string) {
-    console.log(week, 'week');
-    return new Promise((resolve) => {
-      this.timesheetService
-        // tslint:disable-next-line:max-line-length
-        .getTimesheet(`?company_email=${companyEmail}&email_address=${emailAddress}&project_code=${contractCode}&start_date=${week}&type_timesheet=${type}`)
-        .subscribe((res) => {
-          console.log(res, 'resp');
-          if (type === 'TIMESHEET') {
-            this.dayToAdded = res[0];
-            console.log(this.dayToAdded, 'list to added ');
-            resolve(this.dayToAdded);
-          } else {
-            this.dayToAddedExtra = res[0];
-            console.log(this.dayToAddedExtra, 'list to added extra ');
-
-            resolve(this.dayToAddedExtra);
-          }
-
-        });
-
-    });
   }
 
   /**************************************************************************
@@ -819,20 +606,6 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   mouseLeave() {
     this.iconVisible = false;
-  }
-
-  /**************************************************************************
-   *  @description Get Contract Project
-   *************************************************************************/
-  getProjectCollab(contractCode: string): void {
-    this.projectCollaboratorService.getProjectCollaborator(`${this.companyEmail}`, contractCode).subscribe((projectCollab) => {
-      const listCollaborator = projectCollab.map((data) => {
-        return data.ProjectCollaboratorKey.email_address;
-      });
-      listCollaborator.map((data) => {
-        // this.getTimesheet(this.companyEmail, this.contractCode, data, '2021-05-31T23:00:00.000Z');
-      });
-    });
   }
 
   /**************************************************************************
@@ -971,7 +744,7 @@ RIB:${this.companyBankingInfos?.rib}`);
       this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`).subscribe((invoiceHeader) => {
         this.maxInvoiceHeader = invoiceHeader['max'];
         resolve(this.maxInvoiceHeader);
-      }, error => {
+      }, () => {
         resolve(null);
       });
     });
@@ -1206,7 +979,8 @@ RIB:${this.companyBankingInfos?.rib}`);
       totalTTC: this.totalTTC,
     };
 
-    const final = { company, data, contractor, total, label };
+    const final = { company, data, contractor, total, label, upload: true };
+    console.log(final, 'final');
     if (type === 'PENDING') {
       this.invoiceService.generateInvoice(final).subscribe(async (res) => {
           const file = new File([res], `invoice${company.invoiceNbr}.pdf`, { lastModified: new Date().getTime(), type: res.type });

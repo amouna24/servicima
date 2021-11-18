@@ -42,7 +42,6 @@
             </mat-icon>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" class="cursor-pointer"> Payment
               {{totalPayments}}$
-
               <span *ngIf="showPayment" class="material-icons">keyboard_arrow_down</span>
               <span *ngIf="!showPayment" class="material-icons">keyboard_arrow_up</span>
             </div>
@@ -91,9 +90,7 @@
               <td (click)="showAttachment(element)" class="width-40" mat-cell *matCellDef="let element"> {{element.date | date}} </td>
             </ng-container>
 
-
             <!-- Weight Column -->
-
             <!-- Actions Column -->
             <ng-container matColumnDef="Action">
               <th mat-header-cell *matHeaderCellDef></th>
@@ -104,9 +101,6 @@
                 </button>
               </td>
             </ng-container>
-
-
-
             <tr mat-header-row *matHeaderRowDef="tableColumns1"></tr>
             <tr mat-row *matRowDef="let row; columns: tableColumns1;"></tr>
           </table>
@@ -118,7 +112,6 @@
         <div  class="width-210" *ngIf="showAttachmentFile && invoiceAttachment.length > 0">
           <div fxLayout="row" class="flex-wrap m-l-30">
              <button  (click)="viewData()" mat-raised-button class="btn-small bg-cerulean-blue white">Add file</button>
-
           </div>
         </div>
       </div>
@@ -137,7 +130,6 @@
               </div>
             </div>
           </div>
-
 
           <table #table1 [hidden]="invoicePayment.length == 0"    [ngStyle]="{'width': '93%', 'box-shadow': 'none !important', 'margin-left': '2%'}" mat-table  [dataSource]="data" class="mat-elevation-z8" matSort>
             <ng-container matColumnDef="Entered By">
@@ -192,24 +184,18 @@
             <div> {{leftToPay}}$ </div>
           </div>
         </div>
-
-
       </div>
-
-
-
       <br>
-
-      <ng-container *ngIf="isLoading.getValue();">
+     <!-- <ng-container *ngIf="isLoading.getValue();">
         <div class="min-full-width min-full-height" fxLayoutAlign="center center">
           <mat-progress-spinner
             color="primary"
             mode="indeterminate">
           </mat-progress-spinner>
         </div>
-      </ng-container>
+      </ng-container> -->
 
-      <div *ngIf="!isLoading.getValue();" [formGroup]="formHeader" fxLayout="row" fxFlex="87" fxLayoutGap="50px" class="p-20">
+      <div  [formGroup]="formHeader" fxLayout="row" fxFlex="87" fxLayoutGap="50px" class="p-20">
         <div fxLayout="column" fxFlex.gt-lg="28" fxFlex="20">
           <div class="font-bold">De</div>
           <div class="font-bold"> {{userInfo['company_name']}}</div>

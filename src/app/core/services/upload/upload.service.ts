@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { id } from '@swimlane/ngx-datatable';
+import { Subject, throwError } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-
+  imageSubject$ = new Subject<string>();
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -21,7 +20,6 @@ export class UploadService {
       .pipe(
         catchError(error => throwError(error)),
         map((response: any) => {
-          console.log(response);
           return response;
         })
       );
@@ -30,6 +28,7 @@ export class UploadService {
   getFiles(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
   }
+
   getFilesByName(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/` + idFile)
       .pipe(
@@ -61,4 +60,17 @@ export class UploadService {
       )
     ).toPromise();
   }
+
+  deleteFile(idFile) {
+    return this.http.delete(`${environment.uploadFileApiUrl}/delete/` + idFile);
+  }
+
+  /**************************************************************************
+   * @description Emit color
+   * @param image
+   *************************************************************************/
+  emitImage(image: string): void {
+    this.imageSubject$.next(image);
+  }
+
 }

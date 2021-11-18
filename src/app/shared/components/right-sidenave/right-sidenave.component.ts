@@ -29,6 +29,7 @@ import {
   nameAnimation,
   sidebarAnimation
 } from '@shared/animations/animations';
+import { UploadService } from '@core/services/upload/upload.service';
 @Component({
   selector: 'wid-right-sidenave',
   templateUrl: './right-sidenave.component.html',
@@ -73,6 +74,8 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private utilService: UtilsService,
     private themeService: ThemeService,
+    private uploadService: UploadService,
+
   ) {
     this.menu = sidenavRightMenu;
   }
@@ -88,6 +91,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     this.sidenavService.hideTheme$.subscribe((data) => {
       this.hideTheme = data;
     });
+
    this.getModuleName();
    this.getSelectedTheme();
    this.listColor = this.themeService.listColor;
@@ -96,6 +100,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
       if (!!data) {
         this.user = data['user'][0];
         this.haveImage = data['user'][0]['photo'];
+        this.uploadService.imageSubject$.subscribe((datas) => {
+          this.haveImage = datas ? datas : data['user'][0]['photo'];
+        });
+
         if (!this.haveImage) {
           this.userService.haveImage$.subscribe((res) => {
               this.haveImage = res;
@@ -110,6 +118,19 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+ /* test(collback) {
+      this.userService.connectedUser$.subscribe((data) => {
+        if (!!data) {
+          this.haveImage = data['user'][0]['photo'];
+        collback(this.haveImage)
+        }
+    });
+  }*/
+
+ /* WriteName(haveImage) {
+    return haveImage
+  } */
 
   /**
    * @description get module name

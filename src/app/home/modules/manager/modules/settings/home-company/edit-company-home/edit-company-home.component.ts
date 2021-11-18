@@ -52,6 +52,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
+  ancienPhoto: string;
   applicationId: string;
   languageId: string;
   user: IUserModel;
@@ -105,6 +106,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         this.haveImage = this.company.photo;
         const av = await this.uploadService.getImage(this.company.photo);
         this.avatar = av;
+        console.log(this.company['photo'], 'avatar');
         this.user = info['user'][0];
         this.companyId = this.company['_id'];
         this.applicationId = this.company['companyKey']['application_id'];
@@ -260,6 +262,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    * @description : update or edit company profile
    */
   async addOrUpdate() {
+    this.ancienPhoto =  this.company['photo'];
       let filename = null;
       if (this.photo) {
         filename = await this.uploadService.uploadImage(this.photo)
@@ -299,6 +302,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         phone_nbr1: this.form.value.phoneNbr1,
         phone_nbr2: this.form.value.phoneNbr2,
         fax_nbr: this.form.value.faxNbr,
+        stamp: 'ssss'
       };
       const confirmation = {
         code: 'edit',
@@ -309,6 +313,16 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
         if (value === true) {
           this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
             this.userInfo['company'][0] = res;
+       // if (this.ancienPhoto && this.ancienPhoto !== companyProfile.photo) {
+              /// add code
+
+            console.log(this.ancienPhoto , 'ancien', this.company.photo , 'vompaanu');
+            if (this.ancienPhoto && companyProfile.photo !== this.ancienPhoto) {
+              this.uploadService.deleteFile(this.ancienPhoto).subscribe(() => {
+                console.log('file deleted');
+              });
+            }
+           // }
             this.userService.connectedUser$.next(this.userInfo);
             this.router.navigate(['/manager/settings/home-company']);
           }, (err) => console.error(err)));

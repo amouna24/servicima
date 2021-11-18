@@ -35,7 +35,7 @@ export class CompanyPaymentTermsService {
 
   /**************************************************************************
    * @description add payment terms by Company
-   * @apram paymentTerms object to add
+   * @param paymentTerms object to add
    * @returns message code
    *************************************************************************/
   addCompanyPaymentTerms(paymentTerms: object) {

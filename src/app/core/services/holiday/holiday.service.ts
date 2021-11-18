@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
-import { holidaysList } from '@shared/statics/holidays-list.static';
 import { IHoliday } from '@shared/models/holiday.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class HolidayService {
-  private weekDays: any[] = [];
-  constructor() {
+  private weekDays: Array<{
+    name: string,
+    desc: string,
+    holiday: IHoliday,
+    hasHoliday: boolean,
+  }> = [];
+  constructor(
+    private httpClient: HttpClient,
+  ) {
     this.weekDays = this.initWeekDay();
   }
   /**
@@ -18,19 +28,19 @@ export class HolidayService {
       {
         name: 'monday',
         desc: 'Monday',
-        holiday: null,
+        holiday: { },
         hasHoliday: false,
       },
       {
         name: 'tuesday',
         desc: 'Tuesday',
-        holiday: null,
+        holiday: { },
         hasHoliday: false,
       },
       {
         name: 'wednesday',
         desc: 'Wednesday',
-        holiday: null,
+        holiday: { },
         hasHoliday: false,
       },
       {
@@ -48,24 +58,32 @@ export class HolidayService {
       {
         name: 'saturday',
         desc: 'Saturday',
-        holiday: null,
+        holiday: { },
         hasHoliday: false,
       },
       {
         name: 'sunday',
         desc: 'Sunday',
-        holiday: null,
+        holiday: { },
         hasHoliday: false,
       }
     ];
   }
   /**
    * @description: Get holidays list by country
-   * @param: code country
+   * @param: conuntryCode code country
    * @return: IHoliday
    */
-  getHolidaysByCountry(countryCode: string): IHoliday {
-   return  holidaysList.find(row => row.country === countryCode);
+  getHolidaysByCountry(countryCode: string): Observable<IHoliday[]> {
+    return this.httpClient.get<IHoliday[]>(`${environment.timesheetHolidayApiUrl}?country=${countryCode}`);
+  }
+  /**************************************************************************
+   * @description Get Timesheet List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Timesheet Observable<ITimesheet[]>
+   *************************************************************************/
+  getHolidays(filter: string): Observable<IHoliday[]> {
+    return this.httpClient.get<IHoliday[]>(`${environment.timesheetHolidayApiUrl}${filter}`);
   }
   /**
    * @description: Get holidays of the chosen week
@@ -77,22 +95,22 @@ export class HolidayService {
       (resolve => {
         const firstDay = new Date(startDate);
         const lastDay = new Date(startDate);
+        let monthHolidays;
         lastDay.setDate(firstDay.getDate() + 7);
-        const monthHolidays = this.getHolidaysByCountry(countryCode).holidays.filter(
-          (day) => {
-            return (Number(day.month) === (firstDay.getMonth() + 1) ||
-              Number(day.month) === (lastDay.getMonth() + 1));
+        this.getHolidays(`?country=${countryCode}&month=${(firstDay.getMonth() + 1)}&month=${(firstDay.getMonth() + 1)}`)
+          .toPromise().then((data) => {
+          monthHolidays = data;
+        }).finally(() => {
+          let dd: any;
+          for (let i = 0; i < 7; i++) {
+            const dateDay = new Date(startDate);
+            dateDay.setDate(dateDay.getDate() + i);
+            dd = monthHolidays.find((res) => Number(res.day) === dateDay.getDate());
+            this.weekDays[i].holiday = dd ? dd : null;
+            this.weekDays[i].hasHoliday = !!dd;
           }
-        );
-        let dd: any;
-        for (let i = 0; i < 7; i++) {
-          const dateDay = new Date(startDate);
-          dateDay.setDate(dateDay.getDate() + i);
-          dd = monthHolidays.find((res) => Number(res.day) === dateDay.getDate());
-          this.weekDays[i].holiday = dd ? dd : null;
-          this.weekDays[i].hasHoliday = !!dd;
-        }
-        resolve(this.weekDays);
+          resolve(this.weekDays);
+        });
       })
     );
   }
