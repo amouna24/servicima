@@ -4,10 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PostLinkedinService } from '@core/services/share-on-linkedin/shareonlinkedin.service';
 import { ILinkedinPostModel } from '@shared/models/postLinkedin.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ResumeService } from '@core/services/resume/resume.service';
-
-import { environment } from '../../../../../../environments/environment';
+import { Subscription } from 'rxjs';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-share-on-linkedin',
@@ -20,13 +18,14 @@ export class ShareOnLinkedinComponent implements OnInit {
   id: any;
   text: string;
   access_token: string;
-  file: File;
+  selectedFile: File = null;
+  subscriptionModal: Subscription;
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private linkedInService: PostLinkedinService,
     private localStorageService: LocalStorageService,
-    private resumeService: ResumeService,
+    private modalServices: ModalService
   ) {
     this.getLinkedinId();
   }
@@ -40,13 +39,34 @@ export class ShareOnLinkedinComponent implements OnInit {
       title: '',
       text: '',
       file: '',
+      fileName: '',
     });
   }
   publishOnLinkedin() {
     const linkedinObject: ILinkedinPostModel = this.linkedinForm.value;
-
-          this.linkedInService.postOnLinkedin(linkedinObject, this.access_token, this.id).subscribe((res) => {
+          this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedinObject).subscribe((res) => {
             console.log('res=', res);
+            if (res.status === 401) {
+              localStorage.removeItem('linkedin_access_token');
+              this.linkedInService.getLinkedinAuthLink().subscribe( (resAuth) => {
+                window.location.href = resAuth.url;
+              });
+            } else if (res.status === 200) {
+              this.initForm();
+              const confirmation = {
+                code: 'info',
+                title: 'Share post on linkedin',
+                description: `Your post is shared successfully`,
+              };
+              this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+                .subscribe(
+                  (resModal) => {
+                    if (res === true) {
+                    }
+                    this.subscriptionModal.unsubscribe();
+                  }
+                );
+            }
           });
   }
   getLinkedinId() {
@@ -73,17 +93,22 @@ export class ShareOnLinkedinComponent implements OnInit {
         );
     }
   }
-  getLinkedinAuthData() {
-  }
   backButton() {
   }
-  setValueToImageField(event) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    console.log('file list =', fileList);
-    if (fileList) {
-      this.linkedinForm.controls.file.setValue(fileList[0].name);
-      this.file = fileList[0];
-      console.log('this.file =', this.file);
-    }  }
+
+setValueToImageField(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      this.selectedFile = event.target.files[0].name;
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        this.linkedinForm.patchValue({
+          file: reader.result,
+          fileName: event.target.files[0].name,
+        });
+      };
+    }
+  }
 }
