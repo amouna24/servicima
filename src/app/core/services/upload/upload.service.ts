@@ -61,4 +61,9 @@ export class UploadService {
       )
     ).toPromise();
   }
+  getImageData(idFile) {
+    return this.http.get(`${environment.uploadFileApiUrl}/image/` + idFile, {
+      responseType: 'blob',
+    });
+  }
 }
