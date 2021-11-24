@@ -4,12 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
 import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
-
+import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { ProjectCollaboratorService } from '@core/services/project-collaborator/project-collaborator.service';
@@ -75,25 +73,23 @@ export class InvoiceManagementComponent implements OnInit {
   invoiceHeader: IInvoiceHeaderModel;
   invoicePayment: IInvoicePaymentModel[] = [];
   invoiceAttachment: IInvoiceAttachmentModel[] = [];
-
   maxInvoiceHeader: number;
+  isLoading = new BehaviorSubject<boolean>(true);
+  isLoad = new BehaviorSubject<boolean>(false);
 
   form: FormGroup;
   formFactor: FormGroup;
   formHeader: FormGroup;
   formCompanyBanking: FormGroup;
-
   invoiceNbr: number;
   statusInvoice: string;
-
   sousTotalHT = 0;
   vatMount = 0;
   totalTTC = 0;
   vat: number;
-
   mp: object;
   translateKey: string[];
-
+  public xmlItems: any;
   action: string;
   factorInvoice = false;
   currencyCode: string;
@@ -102,7 +98,6 @@ export class InvoiceManagementComponent implements OnInit {
   showPayment = false;
   showAttachmentFile = false;
   iconVisible: boolean;
-
   paymentMethodsList: IViewParam[];
   listToRemovePayment: string[] = [];
   listToRemoveAttachment: string[] = [];
@@ -111,14 +106,14 @@ export class InvoiceManagementComponent implements OnInit {
   data: MatTableDataSource<any> = new MatTableDataSource([]);
   data1: MatTableDataSource<any> = new MatTableDataSource([]);
   contractRate: number;
-  isLoading = new BehaviorSubject<boolean>(false);
   sundayRate: string;
   holidayRate: string;
   saturdayRate: string;
   overtimePerDayRate: string;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('table1', { read: MatSort, static: true }) sort: MatSort;
-  @ViewChild('table2', { read: MatSort, static: true }) sort1: MatSort;
+  listToRemoveAttachmentFromUpload = [];
+  emailAddress: string;
+  @ViewChild('table1', { read: MatSort, static: false }) sort: MatSort;
+  @ViewChild('table2', { read: MatSort, static: false }) sort1: MatSort;
   constructor(private invoiceService: InvoiceService,
               private datePipe: DatePipe,
               private formBuilder: FormBuilder,
@@ -139,6 +134,7 @@ export class InvoiceManagementComponent implements OnInit {
               private holidayService: HolidayService,
               private contractorsService: ContractorsService,
               private timesheetHoliday: HolidayService,
+              private http: HttpClient,
               private localStorageService: LocalStorageService) {
     this.invoiceNbr = this.router.getCurrentNavigation()?.extras?.state?.nbrInvoice;
   }
@@ -147,8 +143,8 @@ export class InvoiceManagementComponent implements OnInit {
    *  @description Loaded when component in init state
    *************************************************************************/
   async ngOnInit() {
-    this.isLoading.next(true);
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.emailAddress = this.localStorageService.getItem('userCredentials').email_address;
     this.translateKey = ['invoice.siteWeb', 'invoice.email', 'invoice.phone', 'invoice.accountsPayable',
       'invoice.totalTTC', 'invoice.Subtotal', 'invoice.BicCode', 'invoice.RIB', 'invoice.IBAN', 'invoice.address',
       'invoice.ConditionAndModality', 'invoice.amountLine', 'invoice.vatLine', 'invoice.quantity',
@@ -161,12 +157,25 @@ export class InvoiceManagementComponent implements OnInit {
     await this.getContractor();
     await this.getInvoiceNbr();
     this.getCompanyBankingInfo();
+
     this.modalService.registerModals(
       { modalName: 'PayInvoice', modalComponent: PaymentInvoiceComponent });
     this.sheetService.registerSheets(
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
+
+    /*const xml =
+      '<?xml version="1.0" encoding="utf-8"?>' +
+      '<note importance="high" logged="true">' +
+      '    <title>Happy</title>' +
+      '    <todo>Work</todo>' +
+      '    <todo>Play</todo>' +
+      '</note>';
+    const result1 = convert.xml2json(xml, { compact: true, spaces: 4});
+    const result2 = convert.xml2json(xml, { compact: false, spaces: 4});
+    console.log(result1, '\n', result2);*/
+
   }
 
   /**************************************************************************
@@ -213,8 +222,7 @@ export class InvoiceManagementComponent implements OnInit {
            });
            formData.append('file', file1);
            formData.append('caption', file1.name);
-           const fileName = await this.uploadFile(formData);
-           this.data1 = new MatTableDataSource(this.invoiceAttachment);
+          // const fileName = await this.uploadFile(formData);
            const invoiceAttachment = {
              application_id: this.applicationId,
              company_email: this.companyEmail,
@@ -223,9 +231,11 @@ export class InvoiceManagementComponent implements OnInit {
              file_title: file.name,
              size: this.formatBytes(file.size),
              date: new Date(),
-             attachment: fileName,
+             attachment: '',
+             formData
            };
            this.invoiceAttachment.push(invoiceAttachment as any);
+           this.data1 = new MatTableDataSource(this.invoiceAttachment);
          }
        });
  }
@@ -244,7 +254,6 @@ export class InvoiceManagementComponent implements OnInit {
       bytes /= factor;
       index++;
     }
-
     return `${parseFloat(bytes.toFixed(2))} ${UNITS[index]}`;
   }
 
@@ -331,21 +340,43 @@ export class InvoiceManagementComponent implements OnInit {
       }
     };
     this.data1.sort = this.sort1;
-    console.log(this.sort1, 'sort1');
+    console.log(this.sort1, 'hn');
   }
 
   /**
    * @description : Enter payment
    */
   enterPayment() {
+    this.refreshPayment();
     this.showAttachmentFile = false;
     this.showPayment = !this.showPayment;
+  }
+
+  deleteAttachment(row, attachment) {
+
+    this.listToRemoveAttachmentFromUpload.push(attachment);
+    if (attachment) {
+      this.invoiceAttachment = this.invoiceAttachment.filter((data) => {
+       if ( data.InvoiceAttachmentKey?.code_attachment  !== row.InvoiceAttachmentKey?.code_attachment) {
+       return data;
+       }
+     });
+    } else {
+      this.invoiceAttachment =  this.invoiceAttachment.filter((data) => {
+        if ( data['code_attachment']  !== row.code_attachment) {
+          return data;
+        }
+      });
+    }
+
+    this.data1 = new MatTableDataSource<any>(this.invoiceAttachment);
   }
 
   /**
    * @description : show attachment
    */
   showAttach() {
+    this.refreshInvoiceAttachment();
     this.showPayment = false;
     this.showAttachmentFile = !this.showAttachmentFile;
   }
@@ -414,7 +445,6 @@ RIB:${this.companyBankingInfos?.rib}`);
 
     this.getContractProject(this.invoiceHeader['contract_code']);
 
-    this.invoicePayment = this.invoices[1] as IInvoicePaymentModel[];
     this.countPayment();
     this.formFactor.controls['factorInvoice'].setValue(this.invoiceHeader ['factor_involved'] === 'Y');
     this.mp = { ...this.invoiceLine };
@@ -443,13 +473,11 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.vatMount = this.getSum('vat_amount');
     this.totalTTC = this.getSum('vat_amount') + this.getSum('invoice_line_total_amount');
     this.countLeftToPay();
-    this.refreshPayment();
 
-    this.refreshInvoiceAttachment();
     await this.getContract(this.invoiceHeader['contractor_code']);
     // default data
     this.contract = this.listContract.find(value => value.contractKey.contract_code === this.contractCode);
-    this.isLoading.next(false);
+
   }
 
   /**************************************************************************
@@ -486,10 +514,14 @@ RIB:${this.companyBankingInfos?.rib}`);
     if (this.invoiceNbr) {
       this.action = 'update';
       await this.getInvoice();
+      this.invoicePayment = this.invoices[1] as IInvoicePaymentModel[];
+      this.refreshPayment();
       await this.getAttachmentInvoice();
-     await this.setForm();
+      this.refreshInvoiceAttachment();
+      await this.setForm();
       this.formHeader.get('invoiceNbr').disable();
       this.formHeader.patchValue({ invoiceNbr: this.invoiceNbr });
+      this.isLoading.next(false);
     } else {
       this.isLoading.next(false);
       this.action = 'add';
@@ -507,8 +539,10 @@ RIB:${this.companyBankingInfos?.rib}`);
     return   new Promise((resolve) => {
       this.invoiceService.getInvoiceAttachment(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((data) => {
         this.invoiceAttachment = data;
+        console.log(this.invoiceAttachment, 'cx');
         this.invoiceAttachment.map((res) => {
             this.listToRemoveAttachment.push(res['_id']);
+
         });
         resolve(this.invoiceAttachment);
       });
@@ -850,8 +884,8 @@ RIB:${this.companyBankingInfos?.rib}`);
   /**************************************************************************
    * @description Generate Invoice
    *************************************************************************/
-  generateInvoice(type: string): void {
-
+  async generateInvoice(type: string) {
+  this.isLoad.next(true);
     const listAttachment = this.invoiceAttachment.map((res) => {
       return {
         ...res,
@@ -864,143 +898,197 @@ RIB:${this.companyBankingInfos?.rib}`);
       };
     });
 
-    if (this.invoiceAttachment.length > 0 ) {
-      this.invoiceService.deleteManyInvoiceAttachment(this.listToRemoveAttachment).subscribe((res) => {
+    if (this.listToRemoveAttachment.length > 0) {
+      this.invoiceService.deleteManyInvoiceAttachment(this.listToRemoveAttachment).subscribe(async (res) => {
         if (res) {
-          this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
-          });
-        }
-      });
-    } else {
-      this.invoiceService.addManyInvoicePayment(this.invoicePayment).subscribe((res) => {
-      });
-    }
-
-  if (this.invoicePayment.length > 0 ) {
-      this.invoiceService.deleteManyInvoicePayment(this.listToRemovePayment).subscribe((res) => {
-        if (res) {
-          this.invoiceService.addManyInvoicePayment(this.invoicePayment).subscribe((resp) => {
-          });
-        }
-      });
-    } else {
-      this.invoiceService.addManyInvoicePayment(this.invoicePayment).subscribe((res) => {
-      });
-    }
-
-    let listToRemove = [];
-    let listLine = [];
-    if (this.mp === { } || !this.mp) {
-      listLine = this.getListInvoiceLine();
-      this.invoiceService.addManyInvoiceLine(listLine).subscribe(() => {
-      });
-    } else {
-      listLine = this.getListInvoiceLine();
-
-      listToRemove = Object.values(this.mp).map((res) => {
-        return res['_id'];
-      });
-
-      this.invoiceService.deleteManyInvoiceLine(listToRemove).subscribe(() => {
-        this.invoiceService.addManyInvoiceLine(listLine).subscribe(() => {
-          this.invoiceService.getInvoiceLine(`?company_email=${this.companyEmail}&invoice_nbr=${this.formHeader.value.invoiceNbr}`)
-            .subscribe((invoice) => {
-              if (invoice) {
-                this.mp = invoice;
-              }
+          this.listToRemoveAttachmentFromUpload.map((removeFromUpload) => {
+            this.uploadService.deleteFile(removeFromUpload).subscribe((deleted) => {
+              console.log('file deleted', deleted);
             });
+          });
+          await Promise.all(
+            listAttachment.map(async resp => {
+              if (resp.attachment === '') {
+                const fileNames = await this.uploadFile(resp['formData']);
+                resp.attachment = fileNames;
+              }
+            })
+          ).then(() => {
+            this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
+            });
+          });
+
+          // Promise.all(listAttachment).then((results) => {
+          /*  this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
+            }); */
+        }
+      });
+    } else {
+      await Promise.all(
+        listAttachment.map(async resp => {
+          const fileNames = await this.uploadFile(resp['formData']);
+          resp.attachment = fileNames;
+        })
+      ).then(() => {
+        this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
         });
+        /*  this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe((res) => {
+          });*/
       });
     }
 
-    let label: object;
-    const data = Object.values(this.form.value.input).map((invoice) => {
-      return {
-        description: invoice['project_desc'],
-        unit: invoice['invoice_line_unit_amount'],
-        quantity: invoice['days_nbr'],
-        //   price: invoice['invoice_amount'],
-        amount: invoice['invoice_line_total_amount'],
-        code: invoice['project_code'],
-        vat: invoice['vat_amount'],
-      };
-    });
-
-    this.translate.get(this.translateKey).subscribe(res => {
-      label = {
-        title: res['invoice.title'],
-        of: res['invoice.of'],
-        number: res['invoice.number'],
-        dateStart: res['invoice.dateStart'],
-        dateDeadLine: res['invoice.dateDeadLine'],
-        invoiceTo: res['invoice.invoiceTo'],
-        description: res['invoice.descriptionLine'],
-        price: res['invoice.priceLine'],
-        quantity: res['invoice.quantity'],
-        vat: res['invoice.vatLine'],
-        amount: res['invoice.amountLine'],
-        ConditionAndModality: res['invoice.ConditionAndModality'],
-        address: res['invoice.address'],
-        IBAN: res['invoice.IBAN'],
-        RIB: res['invoice.RIB'],
-        BicCode: res['invoice.BicCode'],
-        Subtotal: res['invoice.Subtotal'],
-        TotalTTC: res['invoice.totalTTC'],
-        accountsPayable: res['invoice.accountsPayable'],
-        phone: res['invoice.phone'],
-        Email: res['invoice.email'],
-        SiteWeb: res['invoice.siteWeb'],
-      };
-    });
-
-    const company = {
-      invoiceNbr: this.action === 'update' ? this.invoiceNbr : this.formHeader.value.invoiceNbr,
-      name: this.userInfo['company_name'],
-      address: this.userInfo['adress'],
-      email: this.userInfo['contact_email'],
-      phone: this.userInfo['phone_nbr1'],
-      siteWeb: this.userInfo['web_site'],
-      date: this.datePipe.transform(this.formHeader.value.invoiceDate),
-      invoiceDelay: this.datePipe.transform(this.formHeader.value.invoiceDelay),
-      imageUrl: environment.uploadFileApiUrl + '/image/' + this.userInfo['photo'],
-      detailsBanking: {
-        companyBanking: this.formCompanyBanking.value.comment1,
-        isFactor: this.formFactor.value.factorInvoice
-      }
-    };
-
-    const contractor = {
-      contractorName: this.contractorName,
-      contractorAddress: this.contractorAddress,
-    };
-
-    const total = {
-      sousTotalHT: this.sousTotalHT,
-      vatMount: this.vatMount,
-      totalTTC: this.totalTTC,
-    };
-
-    const final = { company, data, contractor, total, label, upload: true };
-    if (type === 'PENDING') {
-      this.invoiceService.generateInvoice(final).subscribe(async (res) => {
-          const file = new File([res], `invoice${company.invoiceNbr}.pdf`, { lastModified: new Date().getTime(), type: res.type });
-          const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-          formData.append('file', file);
-          formData.append('caption', file.name);
-          const fileName = await this.uploadFile(formData);
-          this.addInvoiceHeader(type, fileName);
-          const path = { path: file.name };
-          this.invoiceService.deleteInvoice(path).subscribe(() => {
+      if (this.invoicePayment.length > 0 ) {
+          this.invoiceService.deleteManyInvoicePayment(this.listToRemovePayment).subscribe((res) => {
+            if (res) {
+              this.invoiceService.addManyInvoicePayment(this.invoicePayment).subscribe((resp) => {
+              });
+            }
           });
+        } else {
+          this.invoiceService.addManyInvoicePayment(this.invoicePayment).subscribe((res) => {
+          });
+        }
+
+        let listToRemove = [];
+        let listLine = [];
+        if (this.mp === { } || !this.mp) {
+          listLine = this.getListInvoiceLine();
+          this.invoiceService.addManyInvoiceLine(listLine).subscribe(() => {
+          });
+        } else {
+          listLine = this.getListInvoiceLine();
+
+          listToRemove = Object.values(this.mp).map((res) => {
+            return res['_id'];
+          });
+
+          this.invoiceService.deleteManyInvoiceLine(listToRemove).subscribe(() => {
+            this.invoiceService.addManyInvoiceLine(listLine).subscribe(() => {
+              this.invoiceService.getInvoiceLine(`?company_email=${this.companyEmail}&invoice_nbr=${this.formHeader.value.invoiceNbr}`)
+                .subscribe((invoice) => {
+                  if (invoice) {
+                    this.mp = invoice;
+                  }
+                });
+            });
+          });
+        }
+
+        let label: object;
+        const data = Object.values(this.form.value.input).map((invoice) => {
+          return {
+            description: invoice['project_desc'],
+            unit: invoice['invoice_line_unit_amount'],
+            quantity: invoice['days_nbr'],
+            //   price: invoice['invoice_amount'],
+            amount: invoice['invoice_line_total_amount'],
+            code: invoice['project_code'],
+            vat: invoice['vat_amount'],
+          };
+        });
+
+        this.translate.get(this.translateKey).subscribe(res => {
+          label = {
+            title: res['invoice.title'],
+            of: res['invoice.of'],
+            number: res['invoice.number'],
+            dateStart: res['invoice.dateStart'],
+            dateDeadLine: res['invoice.dateDeadLine'],
+            invoiceTo: res['invoice.invoiceTo'],
+            description: res['invoice.descriptionLine'],
+            price: res['invoice.priceLine'],
+            quantity: res['invoice.quantity'],
+            vat: res['invoice.vatLine'],
+            amount: res['invoice.amountLine'],
+            ConditionAndModality: res['invoice.ConditionAndModality'],
+            address: res['invoice.address'],
+            IBAN: res['invoice.IBAN'],
+            RIB: res['invoice.RIB'],
+            BicCode: res['invoice.BicCode'],
+            Subtotal: res['invoice.Subtotal'],
+            TotalTTC: res['invoice.totalTTC'],
+            accountsPayable: res['invoice.accountsPayable'],
+            phone: res['invoice.phone'],
+            Email: res['invoice.email'],
+            SiteWeb: res['invoice.siteWeb'],
+          };
+        });
+
+        const company = {
+          invoiceNbr: this.action === 'update' ? this.invoiceNbr : this.formHeader.value.invoiceNbr,
+          name: this.userInfo['company_name'],
+          address: this.userInfo['adress'],
+          email: this.userInfo['contact_email'],
+          phone: this.userInfo['phone_nbr1'],
+          siteWeb: this.userInfo['web_site'],
+          date: this.datePipe.transform(this.formHeader.value.invoiceDate),
+          invoiceDelay: this.datePipe.transform(this.formHeader.value.invoiceDelay),
+          imageUrl: environment.uploadFileApiUrl + '/image/' + this.userInfo['photo'],
+          detailsBanking: {
+            companyBanking: this.formCompanyBanking.value.comment1,
+            isFactor: this.formFactor.value.factorInvoice
+          }
+        };
+
+        const contractor = {
+          contractorName: this.contractorName,
+          contractorAddress: this.contractorAddress,
+        };
+
+        const total = {
+          sousTotalHT: this.sousTotalHT,
+          vatMount: this.vatMount,
+          totalTTC: this.totalTTC,
+        };
+
+        const final = { company, data, contractor, total, label, upload: true };
+        if (type === 'PENDING') {
+          this.invoiceService.generateInvoice(final).subscribe(async (res) => {
+              const file = new File([res], `invoice${company.invoiceNbr}.pdf`, { lastModified: new Date().getTime(), type: res.type });
+              const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+              formData.append('file', file);
+              formData.append('caption', file.name);
+              const fileName = await this.uploadFile(formData);
+              this.addInvoiceHeader(type, fileName);
+              const path = { path: file.name };
+              this.invoiceService.deleteInvoice(path).subscribe(() => {
+              });
+              this.router.navigate(['/manager/invoices']);
+            }
+          );
+        } else if (type === 'DRAFT') {
+          this.addInvoiceHeader(type);
           this.router.navigate(['/manager/invoices']);
         }
-      );
-    } else if (type === 'DRAFT') {
-      this.addInvoiceHeader(type);
-      this.router.navigate(['/manager/invoices']);
-    }
+
   }
 
+  /**************************************************************************
+   * @description Delete payment
+   * @param row: row of payment invoice
+   *************************************************************************/
+  deletePayment(row) {
+    row.disabled = true;
+    const listLine = {
+      InvoicePaymentKey: {
+        application_id: row.InvoicePaymentKey.application_id,
+        company_email: row.InvoicePaymentKey.company_email,
+        invoice_nbr: row.InvoicePaymentKey.invoice_nbr,
+        payment_date: new Date(),
+      },
+      bank_account: row.bank_account,
+      entered_by: this.emailAddress,
+      invoice_line_unit_amount: - row.invoice_line_unit_amount,
+      note: row.note,
+      payment_mode: row.payment_mode,
+      payment_mode_desc: row.payment_mode_desc,
+      disabled: true
+    };
+    this.invoicePayment.push(listLine as any);
+    this.mapInvoiceAttachment(this.invoicePayment);
+    this.refreshPayment();
+    this.countPayment();
+  }
   /**************************************************************************
    * @description Upload Image to Server
    *************************************************************************/

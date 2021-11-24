@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import xml2js from 'xml2js';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ICompanyTaxModel } from '@shared/models/companyTax.model';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -11,6 +13,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
+import { FileSaver } from 'file-saver';
 
 import { environment } from '../../../../../../../environments/environment';
 import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invoice.component';
@@ -18,8 +21,6 @@ import { SetPwdInvoiceComponent } from '../set-pwd-invoice/set-pwd-invoice.compo
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 
 declare var require: any;
-// tslint:disable-next-line:no-var-requires
-const FileSaver = require ('file-saver');
 @Component({
   selector: 'wid-list-invoices',
   templateUrl: './list-invoices.component.html',
@@ -35,6 +36,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   allowedActions = [];
   applicationId: string;
   languageId: string;
+  public xmlItems: any;
   private subscriptions: Subscription[] = [];
   subscriptionModal: Subscription;
   constructor(private userService: UserService,
@@ -45,7 +47,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
               private router: Router,
               private modalServices: ModalService,
               private utilsService: UtilsService,
-              private localStorageService: LocalStorageService) { }
+              private localStorageService: LocalStorageService,
+              private http: HttpClient) { }
   /**
    * @description Loaded when component in init state
    */
@@ -129,6 +132,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       case('archiver'): this.archiver(rowAction.data);
         break;
       case('sendMailing'): this.sendMailing(rowAction.data);
+        break;
+      case('import'): this.loadXML();
         break;
     }
   }
@@ -275,6 +280,82 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
 
     });
     this.getAllInvoices();
+  }
+
+  /**
+   * @description load xml
+   */
+  loadXML() {
+    /*Read Data*/
+    this.http.get(`${environment.uploadFileApiUrl}/show/7df3fa951f52f59e92b064406c57e387`,
+      {
+        headers: new HttpHeaders(),
+        responseType: 'text'
+      })
+      .subscribe((data) => {
+        this.parseXML(data)
+          .then((xml) => {
+            this.xmlItems = xml;
+          });
+      });
+    /*Read Data*/
+  }
+
+  /**
+   * @description parse xml
+   */
+  parseXML(data) {
+    const applicationId = this.applicationId;
+    const companyEmail = this.companyEmail;
+    const listContractor = this.listContractor;
+    return new Promise(resolve => {
+      const  arr = [];
+      const  parser = new xml2js.Parser({
+        trim: true,
+        explicitArray: true
+      });
+      parser.parseString(data, (err, result) => {
+        result.invoices.invoice.map((resp) => {
+          console.log(resp);
+        });
+
+        const contractorCode =  listContractor.find(value => value.contractor_name  === 'Adele Willis').contractorKey.contractor_code;
+        const invoiceHeader = {
+          application_id: applicationId,
+          company_email: companyEmail,
+          invoice_nbr: result.invoices.invoice[0].no[0],
+          invoice_status: result.invoices.invoice[0].status[0],
+          factor_involved: 'N',
+          invoice_date: new Date(),
+          invoice_delay: new Date(),
+          contractor_code: contractorCode,
+          contract_code: 'AZE21T8',
+          vat_amount: 'this.vatMount',
+          invoice_total_amount: result.invoices.invoice[0].status[0],
+          invoice_currency: 'this.currencyCode',
+          invoice_amount: 'this.sousTotalHT',
+          comment1: 'this.formCompanyBanking.value.comment1',
+          comment2: '',
+          attachment: '',
+          password: '12345',
+          old_password: '12345'
+        };
+
+        /*result.invoices.invoice.map((p) => {
+        } ) */
+        /* let obj = result.Employee;
+         for (k in obj.emp) {
+           let item = obj.emp[k];
+           arr.push({
+             id: item.id[0],
+             name: item.name[0],
+             email: item.email[0],
+
+           });
+         }*/
+        resolve(arr);
+      });
+    });
   }
 
   /**

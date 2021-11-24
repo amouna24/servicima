@@ -77,6 +77,14 @@ export class InvoiceService {
   deleteManyInvoiceAttachment(InvoiceAttachment: object): Observable<any> {
     return this.httpClient.put(`${environment.invoiceAttachmentApiUrl}/many`, InvoiceAttachment);
   }
+
+  /**
+   * @description delete  invoice attachment
+   * @param idAttachment: idAttachment
+   */
+  deleteInvoiceAttachment(idAttachment: string): Observable<any> {
+    return this.httpClient.delete(`${environment.invoiceAttachmentApiUrl}?_id=${idAttachment}`);
+  }
   /**************************************************************************
    * @description Aad new Invoice Line
    * @param invoiceLine: invoiceLine

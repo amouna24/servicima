@@ -37,8 +37,6 @@
     padding-bottom: 15px;
   }
 
-
-
   #delete .mat-icon{
     display: flex;
     color: white;
@@ -53,6 +51,7 @@
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
   }
+
   .icon-trash {
     border-top-right-radius: 15px !important;
     border-bottom-right-radius:15px !important
@@ -62,6 +61,8 @@
     visibility: hidden;
   }
 
+
+
   tr:hover #delete .mat-icon {
     visibility: visible;
     display: flex;
@@ -69,7 +70,6 @@
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
   }
-
 
   td:hover .mat-icon {
     background: red !important;
@@ -84,8 +84,6 @@
     padding-top: 15px !important;
     padding-bottom: 15px !important;
   }
-
-
 
   .mat-form-field-appearance-outline .mat-form-field-infix {
     padding: 0 !important ;
@@ -200,6 +198,10 @@
     background-color: #e8f1f9 !important;
     cursor: pointer;
   }
+}
+
+.mat-icon-button:hover {
+  color: red !important;
 }
 .container-factor {
   ::ng-deep.mat-form-field-appearance-outline .mat-form-field-wrapper {
