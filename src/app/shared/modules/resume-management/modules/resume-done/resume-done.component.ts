@@ -640,7 +640,6 @@ export class ResumeDoneComponent implements OnInit {
                         this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
                         this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
                         this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-
                           this.showWaiting = false;
                           this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
                             .subscribe((resumeDataModel) => {
