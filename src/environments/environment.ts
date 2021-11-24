@@ -69,7 +69,7 @@ export const environment = {
   timesheetHolidayApiUrl: 'http://192.168.1.22:8110/servicima/timesheetholiday/v1',
   projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
   linkedInOauthApiUrl: 'http://127.0.0.1:8126/servicima/shareonsocialnetwork/v1',
-
+  servicmaUrl: 'http://localhost:4200',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',

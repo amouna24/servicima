@@ -9,8 +9,10 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { IShareOnSocialNetworkModel } from '@shared/models/shareOnSocialNetwork.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { UserService } from '@core/services/user/user.service';
-import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
+import { map } from 'rxjs/internal/operators/map';
+
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-share-on-linkedin',
@@ -40,8 +42,13 @@ export class ShareOnLinkedinComponent implements OnInit {
     private utilsService: UtilsService,
     private userService: UserService,
     private uploadService: UploadService,
+    private router: Router,
   ) {
-     this.getLinkedinId();
+     if (window.opener) {
+       this.redirectToParentPage();
+     } else {
+       this.getLinkedinId();
+     }
   }
   url: string;
   async ngOnInit(): Promise<void> {
@@ -57,7 +64,6 @@ export class ShareOnLinkedinComponent implements OnInit {
   }
   async publishOnLinkedin() {
     if (this.localStorageService.getItem('linkedin_access_token')) {
-      console.log('email linkedin', this.linkedinEmailAddress);
       const linkedinObject: IShareOnSocialNetworkModel = this.linkedinForm.value;
       // @ts-ignore
       linkedinObject.company_email = await this.getCompanyEmail();
@@ -65,45 +71,23 @@ export class ShareOnLinkedinComponent implements OnInit {
       linkedinObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
       linkedinObject.date = new Date();
       linkedinObject.published = true;
-      console.log('form before publish', linkedinObject);
-      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-      // @ts-ignore
-      formData.append('file', this.file);
-      formData.append('caption', this.imageObject.fileName);
-      this.uploadLinkedinImage(formData).then(filename => {
-        console.log('image uploaded to local db');
-        linkedinObject.image = filename;
-        console.log(linkedinObject);
-        this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedinObject, this.imageObject).subscribe((resPost) => {
-          if (resPost.status === 401) {
-            localStorage.removeItem('linkedin_access_token');
-            this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
-              window.location.href = resAuth.url;
-            });
-          } else if (resPost.status === 200) {
-            this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
-              console.log('linkedin Object added to db', addPostResult);
-              this.initForm();
-              const confirmation = {
-                code: 'info',
-                title: 'Share post on linkedin',
-                description: `Your post is shared successfully`,
-              };
-              this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-                .subscribe(
-                  (resModal) => {
-                    if (resModal === true) {
-                    }
-                    this.subscriptionModal.unsubscribe();
-                  }
-                );
-            });
-          }
+      if (linkedinObject.image) {
+        const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+        // @ts-ignore
+        formData.append('file', this.file);
+        formData.append('caption', this.imageObject.fileName);
+        this.uploadLinkedinImage(formData).then(filename => {
+          linkedinObject.image = filename;
+          this.postOnLinkedin(linkedinObject, this.imageObject);
         });
-      });
-
+      } else {
+        this.postOnLinkedin(linkedinObject, {
+          file: '',
+          fileName: '',
+          }
+        );
+      }
     } else {
-      console.log('email linkedin', this.linkedinEmailAddress);
       const linkedinObject: IShareOnSocialNetworkModel = this.linkedinForm.value;
       // @ts-ignore
       linkedinObject.company_email = await this.getCompanyEmail();
@@ -111,20 +95,18 @@ export class ShareOnLinkedinComponent implements OnInit {
       linkedinObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
       linkedinObject.date = new Date();
       linkedinObject.published = false;
-      console.log('form before publish', linkedinObject);
-      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-      // @ts-ignore
-      formData.append('file', this.file);
-      formData.append('caption', this.imageObject.fileName);
-      this.uploadLinkedinImage(formData).then(filename => {
-        console.log('image uploaded to local db');
-        linkedinObject.image = filename;
-        this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
-          this.linkedInService.getLinkedinAuthLink().subscribe( (res) => {
-            window.location.href = res.url;
-          });
+      if (this.file) {
+        const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+        formData.append('file', this.file);
+        formData.append('caption', this.imageObject.fileName);
+        this.uploadLinkedinImage(formData).then(filename => {
+          linkedinObject.image = filename;
+          this.addPostAndRedirect(linkedinObject);
         });
-      });
+      } else {
+        this.addPostAndRedirect(linkedinObject);
+      }
+
     }
 
   }
@@ -146,57 +128,21 @@ export class ShareOnLinkedinComponent implements OnInit {
                 this.access_token = res.access_token;
                 this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
                 this.linkedInService.getPosts(
-                  `?published=false`
+                  `?published=false&company_email=${await this.getCompanyEmail()}`
                 ).subscribe((resSocial) => {
                   const linkedInObject: IShareOnSocialNetworkModel = resSocial[0];
-                  console.log('linkedin Object =', linkedInObject);
-                  this.uploadService.getImageData(linkedInObject.image).subscribe( (resImage) => {
-                    console.log(' result image', resImage);
-                    const reader = new FileReader();
-                    reader.readAsDataURL(resImage);
-                    reader.onloadend = (() => {
-                      const base64data = reader.result;
-                      console.log(base64data);
-                      this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
-                        {
-                          file: base64data,
-                          fileName: linkedInObject.image,
-                        }).subscribe((resPost) => {
-                        if (resPost.status === 401) {
-                          localStorage.removeItem('linkedin_access_token');
-                          this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
-                            window.location.href = resAuth.url;
-                          });
-                        } else if (resPost.status === 200) {
-                          linkedInObject.published = true;
-                          linkedInObject.ShareOnSocialNetworkKey.linkedin_email = this.linkedinEmailAddress;
-                          linkedInObject.linkedin_email = linkedInObject.ShareOnSocialNetworkKey.linkedin_email;
-                          linkedInObject.application_id = linkedInObject.ShareOnSocialNetworkKey.application_id;
-                          linkedInObject.company_email = linkedInObject.ShareOnSocialNetworkKey.company_email;
-                          linkedInObject.date = linkedInObject.ShareOnSocialNetworkKey.date;
-                          this.linkedInService.updatePosts(linkedInObject).subscribe( (resPostUpdate) => {
-                            this.linkedInService.deletePosts(linkedInObject._id).subscribe( (deleteOldPost) => {
-                              const confirmation = {
-                                code: 'info',
-                                title: 'Share post on linkedin',
-                                description: `Your post is shared successfully`,
-                              };
-                              this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-                                .subscribe(
-                                  (resModal) => {
-                                    if (resModal === true) {
-                                    }
-                                    this.subscriptionModal.unsubscribe();
-                                  }
-                                );
-                            });
-
-                          });
-                        }
+                  if (linkedInObject.image !== '') {
+                    this.uploadService.getImageData(linkedInObject.image).subscribe((resImage) => {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(resImage);
+                      reader.onloadend = (() => {
+                        const base64data = reader.result;
+                        this.latePostOnLinkedin(linkedInObject, base64data);
                       });
                     });
-
-                  });
+                  } else {
+                    this.latePostOnLinkedin(linkedInObject, '');
+                  }
                 });
               });
             }
@@ -209,11 +155,15 @@ export class ShareOnLinkedinComponent implements OnInit {
   getLinkedinEmail(linkedin_access_token): Promise<string> {
     return new Promise( (resolve) => {
       this.linkedInService.getLinkedinEmail(linkedin_access_token).subscribe( (res) => {
-        resolve(res.data.elements[0]['handle~']['emailAddress']);
+        if (res.data.elements) {
+          resolve(res.data.elements[0]['handle~']['emailAddress']);
+        } else {
+localStorage.removeItem('linkedin_access_token');
+        }
       });
     });
   }
-setValueToImageField(event) {
+  setValueToImageField(event) {
     const reader = new FileReader();
   const element = event.currentTarget as HTMLInputElement;
   const fileList: FileList | null = element.files;
@@ -251,5 +201,87 @@ setValueToImageField(event) {
         map(response => response.file.filename)
       )
       .toPromise();
+  }
+  postOnLinkedin(linkedinObject, imageObject) {
+    this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedinObject, imageObject).subscribe((resPost) => {
+      if (resPost.status === 401) {
+        localStorage.removeItem('linkedin_access_token');
+        this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
+          window.location.href = resAuth.url;
+        });
+      } else if (resPost.status === 200) {
+        this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
+          this.initForm();
+          const confirmation = {
+            code: 'info',
+            title: 'Share post on linkedin',
+            description: `Your post is shared successfully`,
+          };
+          this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+            .subscribe(
+              (resModal) => {
+                if (resModal === true) {
+                }
+                this.subscriptionModal.unsubscribe();
+              }
+            );
+        });
+      }
+    });
+  }
+  addPostAndRedirect(linkedinObject) {
+    this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
+      this.linkedInService.getLinkedinAuthLink().subscribe( (res) => {
+        window.open(res.url , '', 'width=600, height=500, left=700,top=700').focus();
+      });
+    });
+  }
+  latePostOnLinkedin(linkedInObject, base64data) {
+    this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
+      {
+        file: base64data,
+        fileName: linkedInObject.image,
+      }).subscribe((resPost) => {
+      if (resPost.status === 401) {
+        localStorage.removeItem('linkedin_access_token');
+        this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
+          window.open(resAuth.url , '_blank').focus();
+        });
+      } else if (resPost.status === 200) {
+        linkedInObject.published = true;
+        linkedInObject.ShareOnSocialNetworkKey.linkedin_email = this.linkedinEmailAddress;
+        linkedInObject.linkedin_email = linkedInObject.ShareOnSocialNetworkKey.linkedin_email;
+        linkedInObject.application_id = linkedInObject.ShareOnSocialNetworkKey.application_id;
+        linkedInObject.company_email = linkedInObject.ShareOnSocialNetworkKey.company_email;
+        linkedInObject.date = linkedInObject.ShareOnSocialNetworkKey.date;
+        this.linkedInService.updatePosts(linkedInObject).subscribe( (resPostUpdate) => {
+          this.linkedInService.deletePosts(linkedInObject._id).subscribe( (deleteOldPost) => {
+            const confirmation = {
+              code: 'info',
+              title: 'Share post on linkedin',
+              description: `Your post is shared successfully`,
+            };
+            this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+              .subscribe(
+                (resModal) => {
+                  if (resModal === true) {
+                  }
+                  this.subscriptionModal.unsubscribe();
+                }
+              );
+          });
+
+        });
+      }
+    });
+  }
+  redirectToParentPage() {
+    this.route.queryParams
+      .subscribe(params => {
+        if (params['code']) {
+          window.opener.location.href = `${environment.servicmaUrl}${this.router.url.split('?')[0]}?code=${params['code']}`;
+        }
+      });
+    window.close();
   }
 }
