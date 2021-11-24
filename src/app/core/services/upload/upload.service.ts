@@ -61,6 +61,9 @@ export class UploadService {
       )
     ).toPromise();
   }
+  deleteImage(idFile) {
+    return this.http.delete(`${environment.uploadFileApiUrl}/delete/${idFile}`);
+  }
   getImageData(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/image/` + idFile, {
       responseType: 'blob',
