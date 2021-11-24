@@ -61,4 +61,7 @@ export class UploadService {
       )
     ).toPromise();
   }
+  deleteImage(idFile) {
+    return this.http.delete(`${environment.uploadFileApiUrl}/delete/${idFile}`);
+  }
 }

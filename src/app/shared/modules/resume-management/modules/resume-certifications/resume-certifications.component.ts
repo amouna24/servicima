@@ -114,6 +114,9 @@ imageFile: File;
       this.certificationUpdate.display_image = this.display_image;
       this.certificationUpdate.expire = this.expire;
       if ( this.imageFile) {
+        this.uploadService.deleteImage(this.oldImage).subscribe( (deleteOldImage) => {
+          console.log('old image delted', deleteOldImage);
+        });
         const file = this.imageFile;
         formData = new FormData(); // CONVERT IMAGE TO FORMDATA
         formData.append('file', file);
@@ -411,5 +414,6 @@ imageFile: File;
     if (fileList) {
       this.certifForm.controls.image.setValue(fileList[0].name);
       this.imageFile = fileList[0];
-    }  }
+    }
+  }
 }

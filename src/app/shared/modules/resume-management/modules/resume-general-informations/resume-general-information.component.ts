@@ -54,6 +54,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   firstNameManager: string;
   lastNameManager: string;
   isLoadingImage = true;
+  generalInfoCandidate: IResumeModel;
   /**********************************************************************
    * @description Resume general information constructor
    *********************************************************************/
@@ -197,6 +198,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                       }
                     );
                   }
+                  this.generalInfoCandidate = generalInfo[0];
                   this.updateForm(generalInfo[0]);
                   this.update = true;
                 }
@@ -298,7 +300,10 @@ export class ResumeGeneralInformationComponent implements OnInit {
    ***************************************************/
   async createUpdateResume() {
     let filename = null;
-    if (this.photo) {
+    if (this.photo && this.update === true) {
+      this.uploadService.deleteImage(this.generalInfoCandidate.image).subscribe( async (resDelete) => {
+        console.log('deleted', resDelete);
+      });
       filename = await this.uploadService.uploadImage(this.photo)
         .pipe(
           map(
