@@ -301,9 +301,18 @@ export class ResumeGeneralInformationComponent implements OnInit {
   async createUpdateResume() {
     let filename = null;
     if (this.photo && this.update === true) {
-      this.uploadService.deleteImage(this.generalInfoCandidate.image).subscribe( async (resDelete) => {
-        console.log('deleted', resDelete);
-      });
+      if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
+        this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
+        const deleteImage = this.uploadService.deleteImage(this.generalInfoCandidate.image).subscribe( async (resDelete) => {
+          console.log('deleted', resDelete);
+          deleteImage.unsubscribe();
+        });
+      } else {
+        const deleteImage = this.uploadService.deleteImage(this.generalInfoManager.image).subscribe( async (resDelete) => {
+          console.log('deleted', resDelete);
+          deleteImage.unsubscribe();
+        });
+      }
       filename = await this.uploadService.uploadImage(this.photo)
         .pipe(
           map(
