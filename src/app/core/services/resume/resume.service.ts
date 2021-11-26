@@ -502,7 +502,7 @@ export class ResumeService {
   }
 
   /*-------------------------------------------------------------------------------------*/
-  sendMail(language_id, application_id, company_id, email_address, message, attachement, emailcc, emailbcc, subject, text): Observable<any> {
+  sendMail(language_id, application_id, company_id, email_address, attachement, emailcc, emailbcc, subject, text): Observable<any> {
     console.log({
       language_id,
       application_id,
