@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PostLinkedinService } from '@core/services/share-on-linkedin/shareonlinkedin.service';
-import { ILinkedinPostModel } from '@shared/models/postLinkedin.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -12,6 +11,7 @@ import { UserService } from '@core/services/user/user.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 
+import { ShareOnLinkedinModalComponent } from './share-on-linkedin-modal/share-on-linkedin-modal.component';
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -29,6 +29,8 @@ export class ShareOnLinkedinComponent implements OnInit {
   subscriptionModal: Subscription;
   linkedinEmailAddress: string;
   file: File;
+  modals = { modalName: 'shareOnSocialNetwork', modalComponent: ShareOnLinkedinModalComponent };
+
   imageObject: {
     file: string | ArrayBuffer;
     fileName: string;
@@ -52,6 +54,7 @@ export class ShareOnLinkedinComponent implements OnInit {
   }
   url: string;
   async ngOnInit(): Promise<void> {
+    this.modalServices.registerModals(this.modals);
     this.initForm();
 
   }
@@ -62,60 +65,13 @@ export class ShareOnLinkedinComponent implements OnInit {
       image: '',
     });
   }
-  async publishOnLinkedin() {
-    if (this.localStorageService.getItem('linkedin_access_token')) {
-      const linkedinObject: IShareOnSocialNetworkModel = this.linkedinForm.value;
-      // @ts-ignore
-      linkedinObject.company_email = await this.getCompanyEmail();
-      linkedinObject.linkedin_email = this.linkedinEmailAddress;
-      linkedinObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
-      linkedinObject.date = new Date();
-      linkedinObject.published = true;
-      if (linkedinObject.image) {
-        const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-        // @ts-ignore
-        formData.append('file', this.file);
-        formData.append('caption', this.imageObject.fileName);
-        this.uploadLinkedinImage(formData).then(filename => {
-          linkedinObject.image = filename;
-          this.postOnLinkedin(linkedinObject, this.imageObject);
-        });
-      } else {
-        this.postOnLinkedin(linkedinObject, {
-          file: '',
-          fileName: '',
-          }
-        );
-      }
-    } else {
-      const linkedinObject: IShareOnSocialNetworkModel = this.linkedinForm.value;
-      // @ts-ignore
-      linkedinObject.company_email = await this.getCompanyEmail();
-      linkedinObject.linkedin_email = 'not available';
-      linkedinObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
-      linkedinObject.date = new Date();
-      linkedinObject.published = false;
-      if (this.file) {
-        const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-        formData.append('file', this.file);
-        formData.append('caption', this.imageObject.fileName);
-        this.uploadLinkedinImage(formData).then(filename => {
-          linkedinObject.image = filename;
-          this.addPostAndRedirect(linkedinObject);
-        });
-      } else {
-        this.addPostAndRedirect(linkedinObject);
-      }
-
-    }
-
-  }
   async getLinkedinId() {
     if (this.localStorageService.getItem('linkedin_access_token')) {
-      this.linkedinEmailAddress = await this.getLinkedinEmail(this.localStorageService.getItem('linkedin_access_token'));
-      this.linkedInService.getLinkedinId(this.localStorageService.getItem('linkedin_access_token')).subscribe(async (res) => {
+      this.linkedinEmailAddress = await this.getLinkedinEmail( atob(this.localStorageService.getItem('linkedin_access_token')));
+      this.linkedInService.getLinkedinId(atob(this.localStorageService.getItem('linkedin_access_token'))).subscribe(async (res) => {
         this.id = res.id;
         this.access_token = res.access_token;
+        console.log('access token =', res.access_token);
         this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
       });
     } else {
@@ -123,7 +79,7 @@ export class ShareOnLinkedinComponent implements OnInit {
         .subscribe(params => {
             if (params['code']) {
               this.linkedInService.getLinkedInAccessToken(params['code']).subscribe(async (res) => {
-                this.localStorageService.setItem('linkedin_access_token', res.access_token);
+                this.localStorageService.setItem('linkedin_access_token', btoa(res.access_token));
                 this.id = res.id;
                 this.access_token = res.access_token;
                 this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
@@ -195,47 +151,6 @@ localStorage.removeItem('linkedin_access_token');
         });
     });
   }
-  async uploadLinkedinImage(formData) {
-    return await this.uploadService.uploadImage(formData)
-      .pipe(
-        map(response => response.file.filename)
-      )
-      .toPromise();
-  }
-  postOnLinkedin(linkedinObject, imageObject) {
-    this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedinObject, imageObject).subscribe((resPost) => {
-      if (resPost.status === 401) {
-        localStorage.removeItem('linkedin_access_token');
-        this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
-          window.location.href = resAuth.url;
-        });
-      } else if (resPost.status === 200) {
-        this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
-          this.initForm();
-          const confirmation = {
-            code: 'info',
-            title: 'Share post on linkedin',
-            description: `Your post is shared successfully`,
-          };
-          this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-            .subscribe(
-              (resModal) => {
-                if (resModal === true) {
-                }
-                this.subscriptionModal.unsubscribe();
-              }
-            );
-        });
-      }
-    });
-  }
-  addPostAndRedirect(linkedinObject) {
-    this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
-      this.linkedInService.getLinkedinAuthLink().subscribe( (res) => {
-        window.open(res.url , '', 'width=600, height=500, left=700,top=700').focus();
-      });
-    });
-  }
   latePostOnLinkedin(linkedInObject, base64data) {
     this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
       {
@@ -283,5 +198,21 @@ localStorage.removeItem('linkedin_access_token');
         }
       });
     window.close();
+  }
+  async routeToShareDialog() {
+    this.subscriptionModal = this.modalServices.displayModal('shareOnSocialNetwork',
+      {
+        form: this.linkedinForm.value,
+        companyEmail: await this.getCompanyEmail(),
+        linkedinEmail: this.access_token ? await this.getLinkedinEmail(this.access_token) : 'not Available',
+        fileData: this.file,
+        access_token: this.access_token,
+        id: this.id,
+        imageObject: this.imageObject,
+      }, '704px', '500px')
+      .subscribe(
+        (res) => {
+          this.initForm();
+        });
   }
 }

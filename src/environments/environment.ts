@@ -45,7 +45,7 @@ export const environment = {
   resumeInterventionApiUrl: 'http://192.168.1.22:8070/servicima/resumeintervention/v1',
   resumeCertificationApiUrl: 'http://192.168.1.22:8109/servicima/resumecertification/v1',
   resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
-  docxTemplateApiUrl: 'http://127.0.0.1:8094/generate',
+  docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
   resumeMailingHistoryApiUrl: 'http://192.168.1.22:8125/servicima/mailinghistory/v1',
   bankingApiUrl: 'http://192.168.1.22:8083/servicima/hrbanking/v1',

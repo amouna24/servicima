@@ -1,0 +1,160 @@
+<div fxLayout="row" fxFlexFill fxLayoutAlign="end" xmlns="">
+  <div fxLayout="column"   fxFlex="94">
+    <div fxLayout="row" fxFlex="92" >
+      <div fxLayout="column" fxFlexFill>
+        <div fxLayout="row" fxFlex="15">
+          <div fxLayout="column" fxLayoutAlign="center">
+            <div class="steel font-size-15" fxLayoutAlign=" center">Publish an offer</div>
+          </div>
+          <div fxLayout="column" fxFlex="76" class="p-r-15 p-t-10 " fxLayoutAlign=" end">
+            <button style="border-radius: 5px; background-color: #f2f3f8; color: gray; border: none" mat-dialog-close>X</button>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="80">
+          <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" fxFlexFill  style="border-radius: 5px; border: solid 2px #e8f1f9;box-shadow: 3px 3px 3px #e8f1f9">
+                  <div fxLayout="column" fxFlexFill>
+                    <div fxLayout="row" fxFlexFill>
+                      <wid-scrollbar class="full-height full-width">
+                        <div fxLayout="column" fxFlexFill>
+                          <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                            <div fxLayout="column" fxFlex="90">
+                              <div fxLayout="row" fxFlex="15" fxLayoutAlign=" center">
+                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center">
+                                  <div fxLayout="row" >
+                                    <div fxLayout="column" style="border: solid 2px #e8f1f9; border-radius: 5px">
+                                      <div fxLayout="row" style="margin: 3px;">
+                                        <img src="assets/img/logoServicima.@2x.png" width="15" height="17.9" alt="servicima logo">
+                                      </div>
+                                    </div>
+                                    <div fxLayout="column" fxFlex="33" fxLayoutAlign="center center">
+                                      <span class="font-size-12 black font-medium">Offer title :</span>
+                                    </div>
+                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
+                                      <span class="black font-size-12 font-light"> {{data.form.title}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div fxLayout="column">
+                                </div>
+                                <div fxLayout="column">
+
+                                </div>
+                              </div>
+                              <div fxLayout="row" fxFlex="80">
+                                <div fxLayout="column" fxFlexFill>
+                                  <div fxLayout="row">
+                                    <span class="font-size-12 black font-medium">Description:</span>
+                                  </div>
+                                  <div fxLayout="row">
+                                    <p class="font-size-12 font-light black">
+                                      {{data.form.text}}
+                                    </p>
+                                  </div>
+                                  <div fxLayout="row">
+                                    <ng-template [ngIf]="data.imageObject?.file">
+                                      <img [src]="data.imageObject.file" width="314px" height="180px" alt="Post image">
+                                    </ng-template>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </wid-scrollbar>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" fxLayoutAlign="center">
+            <div fxLayout="row" fxLayoutAlign="center" >
+              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
+                <button style="width: 200px; height: 30px; border-radius: 5px; background-color: #0065b3; color: white; border: none" (click)="publishOnLinkedin()">
+                  <div fxLayout="row" >
+                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
+                      <img src="assets/icons/linkedin.svg" width="12" alt="LinkedinLogo">
+                    </div>
+                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
+                      <ng-template [ngIf]="!loadingLabel">
+                        <span class="font-size-12 white font-light"> Share on linkedin</span>
+                      </ng-template>
+                      <ng-template [ngIf]="loadingLabel">
+                        <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
+                          <div fxLayout="column" style="padding-right: 19px">
+                            {{'resume-loading' | translate}}
+                          </div>
+                          <div fxLayout="column" style="padding-top: 8px">
+                            <div  class="dot-elastic">
+                            </div></div>
+                        </div>                      </ng-template>
+                    </div>
+                  </div>
+
+
+                </button>
+              </div>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center" >
+              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
+                <button style="width: 200px; height: 30px; border-radius: 5px; background-color: white; color: #003a9b; border: 1px solid #003a9b;" >
+                  <div fxLayout="row" >
+                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
+                      <img src="assets/icons/Indeed_logo small.svg" width="12" alt="LinkedinLogo">
+                    </div>
+                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
+                      <span class="font-size-12 font-light" style="color: #003a9b"> Share on indeed</span>
+                    </div>
+                  </div>
+
+
+                </button>
+              </div>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center" >
+              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
+                <button style="width: 200px; height: 30px; border-radius: 5px; background-color: #6e46ae; color: white; border: none;" >
+                  <div fxLayout="row" >
+                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
+                      <img src="assets/icons/-Monster.com_Logo_2019%20small.svg" width="12" alt="LinkedinLogo">
+                    </div>
+                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
+                      <span class="font-size-12 font-light" style="color: white"> Share on Monster jobs</span>
+                    </div>
+                  </div>
+
+
+                </button>
+              </div>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center" >
+              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
+                <button style="width: 200px; height: 30px; border-radius: 5px; background-color: white; color: #691f74; border: 1px solid #691f74;" >
+                  <div fxLayout="row" >
+                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
+                      <img src="assets/icons/talent.svg" width="12" alt="LinkedinLogo">
+                    </div>
+                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
+                      <span class="font-size-12 font-light" style="color: #691f74"> Share on Talent</span>
+                    </div>
+                  </div>
+
+
+                </button>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+

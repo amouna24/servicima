@@ -70,13 +70,13 @@
     <div fxLayout="column" fxFlex="96" fxLayoutAlign=" end">
       <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="column" >
-            <button mat-raised-button type="button" color="primary" class="white  btn-small"(click)="publishOnLinkedin()">
+            <button mat-raised-button type="button" color="primary" class="white  btn-small"(click)="routeToShareDialog()" [disabled]="linkedinForm.invalid">
               <span class="white font-size-11">Publish</span>
             </button></div>
 
         <div fxLayout="column" >
           <button  class="btn-small" style="background-color: #e8f1f9 ;border: none" >
-            <span class="cerulean-be font-size-11" >Back</span>
+            <span class="cerulean-blue font-size-11" [routerLink]="'/manager'">Back</span>
           </button>
         </div>
       </div>
