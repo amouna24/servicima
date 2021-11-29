@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import xml2js from 'xml2js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ICompanyTaxModel } from '@shared/models/companyTax.model';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { InvoiceService } from '@core/services/invoice/invoice.service';
@@ -14,6 +13,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UtilsService } from '@core/services/utils/utils.service';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 import { FileSaver } from 'file-saver';
+import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
 
 import { environment } from '../../../../../../../environments/environment';
 import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invoice.component';
@@ -28,7 +28,7 @@ declare var require: any;
 })
 export class ListInvoicesComponent implements OnInit, OnDestroy {
 
-  ELEMENT_DATA = new BehaviorSubject<ICompanyTaxModel[]>([]);
+  ELEMENT_DATA = new BehaviorSubject<IInvoiceHeaderModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   listContractor: any;
   companyEmail: string;

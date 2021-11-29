@@ -120,14 +120,14 @@ export class ChangePwdInvoiceComponent implements OnInit , OnDestroy {
       attachment: this.data[0].attachment,
       password: this.form.value.password,
     };
-    this.invoiceService.updatePwdInvoiceHeader(invoiceHeader).subscribe((data) => {
+   /* this.invoiceService.updatePwdInvoiceHeader(invoiceHeader).subscribe((data) => {
         this.dialogRef.close();
       }, error => {
         alert('error , try it later');
         console.error(error);
         this.dialogRef.close();
       }
-    );
+    );*/
   }
 
   onNotify(res: boolean): void {

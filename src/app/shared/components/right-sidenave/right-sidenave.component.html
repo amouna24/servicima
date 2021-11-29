@@ -10,7 +10,7 @@
         </div>
       </div>
       <div fxFlex="30"  fxLayout="column"  fxLayoutAlign="center center" class="profile-image">
-        <wid-profile-image [ancienPhoto]="haveImage" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="true" [userType]="profileUserType" ></wid-profile-image>
+        <wid-profile-image [oldImage]="haveImage" [haveImage]="haveImage"  [avatar]="avatar" [modelObject]="user" [singleUpload]="true" [userType]="profileUserType" ></wid-profile-image>
       </div>
       <div fxFlex="55" fxLayout="column" fxLayoutAlign="center start">
           <span class="brownish-grey font-size-14">{{user.first_name | spliceText: 15}} {{ user.last_name | spliceText: 15}} </span>

@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
+import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
+import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
+import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
+
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -15,9 +20,9 @@ export class InvoiceService {
    * @description get invoice Header
    * @param filter: filter
    */
-  getInvoiceHeader(filter?): Observable<any> {
+  getInvoiceHeader(filter?): Observable<IInvoiceHeaderModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoiceHeaderApiUrl}/${filter}`);
+      .get<IInvoiceHeaderModel[]>(`${environment.invoiceHeaderApiUrl}/${filter}`);
   }
 
   /**************************************************************************
@@ -36,30 +41,22 @@ export class InvoiceService {
     return this.httpClient.put(`${environment.invoiceHeaderApiUrl}`, invoiceHeader);
   }
 
-  /**************************************************************************
-   * @description Update invoice header
-   * @param invoiceHeader: new invoice header
-   *************************************************************************/
-  updatePwdInvoiceHeader(invoiceHeader): Observable<any> {
-    return this.httpClient.put(`${environment.invoiceHeaderApiUrl}/updatePwd`, invoiceHeader);
-  }
-
   /**
    * @description get invoice line
    * @param filter: filter
    */
-  getInvoiceLine(filter): Observable<any> {
+  getInvoiceLine(filter): Observable<IInvoiceLineModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoiceLineApiUrl}/${filter}`);
+      .get<IInvoiceLineModel[]>(`${environment.invoiceLineApiUrl}/${filter}`);
   }
 
   /**
    * @description get invoice attachment
    * @param filter: filter
    */
-  getInvoiceAttachment(filter): Observable<any> {
+  getInvoiceAttachment(filter): Observable<IInvoiceAttachmentModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoiceAttachmentApiUrl}/${filter}`);
+      .get<IInvoiceAttachmentModel[]>(`${environment.invoiceAttachmentApiUrl}/${filter}`);
   }
 
   /**************************************************************************
@@ -145,9 +142,9 @@ export class InvoiceService {
    * @description get invoice payment
    * @param filter: filter
    */
-  getInvoicePayment(filter?): Observable<any> {
+  getInvoicePayment(filter?): Observable<IInvoicePaymentModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoicePaymentApiUrl}/${filter}`);
+      .get<IInvoicePaymentModel[]>(`${environment.invoicePaymentApiUrl}/${filter}`);
   }
 
   /**************************************************************************

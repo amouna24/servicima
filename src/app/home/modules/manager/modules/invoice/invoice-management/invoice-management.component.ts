@@ -340,7 +340,6 @@ export class InvoiceManagementComponent implements OnInit {
       }
     };
     this.data1.sort = this.sort1;
-    console.log(this.sort1, 'hn');
   }
 
   /**
@@ -539,7 +538,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     return   new Promise((resolve) => {
       this.invoiceService.getInvoiceAttachment(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((data) => {
         this.invoiceAttachment = data;
-        console.log(this.invoiceAttachment, 'cx');
         this.invoiceAttachment.map((res) => {
             this.listToRemoveAttachment.push(res['_id']);
 
@@ -814,7 +812,7 @@ RIB:${this.companyBankingInfos?.rib}`);
         this.invoiceHeader = data[0];
       });
     } else {
-      this.invoiceService.updatePwdInvoiceHeader(invoiceHeader).subscribe((data) => {
+      this.invoiceService.updateInvoiceHeader(invoiceHeader).subscribe((data) => {
         this.invoiceHeader = data[0];
       });
     }

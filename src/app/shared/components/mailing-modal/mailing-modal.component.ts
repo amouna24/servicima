@@ -153,7 +153,6 @@ export class MailingModalComponent implements OnInit {
                 this.utilsService.getApplicationID('SERVICIMA'),
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 [email],
-                mailingObject.message,
                 attach,
                 this.copies,
                 this.hiddenCopies,

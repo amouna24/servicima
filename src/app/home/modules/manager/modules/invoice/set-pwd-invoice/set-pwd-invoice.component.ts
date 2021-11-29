@@ -90,7 +90,7 @@ export class SetPwdInvoiceComponent implements OnInit , OnDestroy {
       password: this.form.value.password,
       old_password: this.form.value.password,
     };
-    this.invoiceService.updatePwdInvoiceHeader(invoiceHeader).subscribe((data) => {
+   /* this.invoiceService.updatePwdInvoiceHeader(invoiceHeader).subscribe((data) => {
         this.dialogRef.close(true);
       }, error => {
         console.error(error);
@@ -101,7 +101,7 @@ export class SetPwdInvoiceComponent implements OnInit , OnDestroy {
           this.dialogRef.close(false);
         }
       }
-    );
+    );*/
   }
   focusFunction() {
     this.errorPwd = '';

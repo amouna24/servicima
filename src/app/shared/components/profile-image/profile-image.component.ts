@@ -8,7 +8,6 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { userType } from '@shared/models/userProfileType.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
@@ -27,7 +26,7 @@ export class ProfileImageComponent implements OnInit {
   @Input() diameter: any;
   @Input() height: any;
   @Input() width: any;
-  @Input() ancienPhoto: any;
+  @Input() oldImage: any;
   @Output() newFile = new EventEmitter<FormData>();
 
   page = Math.random();
@@ -53,15 +52,11 @@ export class ProfileImageComponent implements OnInit {
    */
   previewFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
-    if (file.size > 43056) {
-      this.snackBarAction();
-    } else {
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
      this.avatar = reader.result as string;
      this.haveImage = 'have image';
-    };
 
    reader.readAsDataURL(file);
      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
@@ -70,7 +65,7 @@ export class ProfileImageComponent implements OnInit {
      this.selectedFile.file = formData;
      this.selectedFile.name = file.name;
      this.newFile.emit(formData);
-  }
+  };
   }
 
   /**
@@ -95,8 +90,8 @@ export class ProfileImageComponent implements OnInit {
         () => {
           this.userService.haveImage('have image');
           this.uploadService.emitImage(this.modelObject.photo);
-          if (this.ancienPhoto) {
-            this.uploadService.deleteFile(this.ancienPhoto).subscribe(() => {
+          if (this.oldImage) {
+            this.uploadService.deleteFile(this.oldImage).subscribe(() => {
               console.log('file deleted');
             });
           }
