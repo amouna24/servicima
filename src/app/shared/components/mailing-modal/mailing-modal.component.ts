@@ -158,6 +158,7 @@ export class MailingModalComponent implements OnInit {
                 this.copies,
                 this.hiddenCopies,
                 mailingObject.subject,
+                mailingObject.message,
               ).subscribe((dataB) => {
               const mailingHistoryObject: IResumeMailingHistoryModel = {
                 MailingHistoryKey: {
