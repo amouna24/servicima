@@ -129,8 +129,8 @@ export class UserService {
         const value = currentState.split('?')[1].split('=')[1];
         queryParamObject[key] = value;
       }
-      this.router.navigate([currentState.split('?')[0]], { queryParams: queryParamObject} );    } else {
-
+      this.router.navigate([currentState.split('?')[0]], { queryParams: queryParamObject} );
+    } else {
       this.router.navigate([`/${startUrl}`]);
     }
   }

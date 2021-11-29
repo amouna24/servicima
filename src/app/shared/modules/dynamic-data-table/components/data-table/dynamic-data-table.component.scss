@@ -103,7 +103,20 @@ tr:hover {
     padding-bottom: 0 !important;
     padding-top: 11px !important;
   }
+
+  mat-expansion-panel-header:hover {
+    background-color: #1bc5bd !important;
+  }
+
 }
+.disable_ripple:hover{
+  background:  #1bc5bd !important;
+}
+
+.disable_ripple  .mat-expansion-indicator, .mat-expansion-indicator:after {
+  color: red !important;
+}
+
 
 .mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
   margin-bottom: -34px!important;
@@ -114,4 +127,8 @@ tr:hover {
   min-height: 90% !important;
   min-width: 99% !important;
   max-width: 99% !important;
+}
+
+::ng-deep .setting .mat-expansion-panel-header-description, .setting .mat-expansion-indicator::after {
+  color: red !important;
 }

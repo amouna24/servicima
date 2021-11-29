@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
+import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
+import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
+import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
+
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -15,9 +20,9 @@ export class InvoiceService {
    * @description get invoice Header
    * @param filter: filter
    */
-  getInvoiceHeader(filter?): Observable<any> {
+  getInvoiceHeader(filter?): Observable<IInvoiceHeaderModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoiceHeaderApiUrl}/${filter}`);
+      .get<IInvoiceHeaderModel[]>(`${environment.invoiceHeaderApiUrl}/${filter}`);
   }
 
   /**************************************************************************
@@ -40,11 +45,43 @@ export class InvoiceService {
    * @description get invoice line
    * @param filter: filter
    */
-  getInvoiceLine(filter): Observable<any> {
+  getInvoiceLine(filter): Observable<IInvoiceLineModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoiceLineApiUrl}/${filter}`);
+      .get<IInvoiceLineModel[]>(`${environment.invoiceLineApiUrl}/${filter}`);
   }
 
+  /**
+   * @description get invoice attachment
+   * @param filter: filter
+   */
+  getInvoiceAttachment(filter): Observable<IInvoiceAttachmentModel[]> {
+    return this.httpClient
+      .get<IInvoiceAttachmentModel[]>(`${environment.invoiceAttachmentApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description add many invoice Attachment
+   * @param invoiceLine: invoiceAttachment
+   *************************************************************************/
+  addManyInvoiceAttachment(invoiceAttachment): Observable<any> {
+    return this.httpClient.post(`${environment.invoiceAttachmentApiUrl}/many`, invoiceAttachment);
+  }
+
+  /**
+   * @description delete many invoice attachment
+   * @param list: list
+   */
+  deleteManyInvoiceAttachment(InvoiceAttachment: object): Observable<any> {
+    return this.httpClient.put(`${environment.invoiceAttachmentApiUrl}/many`, InvoiceAttachment);
+  }
+
+  /**
+   * @description delete  invoice attachment
+   * @param idAttachment: idAttachment
+   */
+  deleteInvoiceAttachment(idAttachment: string): Observable<any> {
+    return this.httpClient.delete(`${environment.invoiceAttachmentApiUrl}?_id=${idAttachment}`);
+  }
   /**************************************************************************
    * @description Aad new Invoice Line
    * @param invoiceLine: invoiceLine
@@ -59,6 +96,14 @@ export class InvoiceService {
    *************************************************************************/
   addManyInvoiceLine(invoiceLine): Observable<any> {
     return this.httpClient.post(`${environment.invoiceLineApiUrl}/many`, invoiceLine);
+  }
+
+  /**************************************************************************
+   * @description Aad new Invoice attachment
+   * @param invoiceAttachment: invoiceAttachment
+   *************************************************************************/
+  addInvoiceAttachment(invoiceAttachment): Observable<any> {
+    return this.httpClient.post(`${environment.invoiceAttachmentApiUrl}`, invoiceAttachment);
   }
 
   /**************************************************************************
@@ -97,9 +142,33 @@ export class InvoiceService {
    * @description get invoice payment
    * @param filter: filter
    */
-  getInvoicePayment(filter?): Observable<any> {
+  getInvoicePayment(filter?): Observable<IInvoicePaymentModel[]> {
     return this.httpClient
-      .get<any>(`${environment.invoicePaymentApiUrl}/${filter}`);
+      .get<IInvoicePaymentModel[]>(`${environment.invoicePaymentApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description Aad new Invoice payment
+   * @param invoicePayment: invoicePayment
+   *************************************************************************/
+  addNewInvoicePayment(invoicePayment): Observable<any> {
+    return this.httpClient.post(`${environment.invoicePaymentApiUrl}`, invoicePayment);
+  }
+
+  /**************************************************************************
+   * @description add many invoice payment
+   * @param InvoicePayment: InvoicePayment
+   *************************************************************************/
+  addManyInvoicePayment(InvoicePayment): Observable<any> {
+    return this.httpClient.post(`${environment.invoicePaymentApiUrl}/many`, InvoicePayment);
+  }
+
+  /**
+   * @description delete many invoice payment
+   * @param list: list
+   */
+  deleteManyInvoicePayment(InvoicePayment: object): Observable<any> {
+    return this.httpClient.put(`${environment.invoicePaymentApiUrl}/many`, InvoicePayment);
   }
 
   /**************************************************************************
@@ -114,14 +183,14 @@ export class InvoiceService {
    * @param attachment: attachment
    *************************************************************************/
   sendInvoiceMail(languageId: string, applicationId: string, companyId: string, emailAddress: string,
-                  companyName: string, collaboratorPosition: string, resumeUrl: string, attachment: any): Observable<any> {
+                  companyName: string, collaboratorPosition: string, resumeUrl: string, attachement: any, emailcc, emailbcc): Observable<any> {
     return this.httpClient.post(`${environment.invoiceHeaderApiUrl}/mailing`, { languageId,
       applicationId,
       companyId,
       emailAddress,
       companyName,
       collaboratorPosition,
-      resumeUrl, attachment });
+      resumeUrl, attachement, emailcc, emailbcc });
   }
 
   /**

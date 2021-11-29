@@ -23,9 +23,11 @@ const routes: Routes = [
         loadChildren: () => import('./modules/activity-reports/activity-reports.module').then(m => m.ActivityReportsModule)
       },
       {
-        path: 'billings',
-        loadChildren: () => import('./modules/billings/billings.module').then(m => m.BillingsModule),
-
+        path: 'invoices',
+        loadChildren: () => import('./modules/invoice/invoice.module').then(m => m.InvoiceModule),
+        data: {
+          breadcrumb: 'invoices'
+        },
       },
       {
         path: 'contract-management',

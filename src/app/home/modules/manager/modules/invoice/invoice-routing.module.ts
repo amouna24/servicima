@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { InvoiceComponent } from './invoice-management/invoice.component';
+import { InvoiceManagementComponent } from './invoice-management/invoice-management.component';
 import { ListInvoicesComponent } from './list-invoices/list-invoices.component';
 
 const routes: Routes = [
   {
     path: 'add-invoice',
-    component: InvoiceComponent,
+    component: InvoiceManagementComponent,
   },
   {
     path: '',
