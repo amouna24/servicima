@@ -30,7 +30,7 @@ export class ShareOnLinkedinComponent implements OnInit {
   linkedinEmailAddress: string;
   file: File;
   modals = { modalName: 'shareOnSocialNetwork', modalComponent: ShareOnLinkedinModalComponent };
-
+  url: string;
   imageObject: {
     file: string | ArrayBuffer;
     fileName: string;
@@ -52,7 +52,6 @@ export class ShareOnLinkedinComponent implements OnInit {
        this.getLinkedinId();
      }
   }
-  url: string;
   async ngOnInit(): Promise<void> {
     this.modalServices.registerModals(this.modals);
     this.initForm();
@@ -71,7 +70,6 @@ export class ShareOnLinkedinComponent implements OnInit {
       this.linkedInService.getLinkedinId(atob(this.localStorageService.getItem('linkedin_access_token'))).subscribe(async (res) => {
         this.id = res.id;
         this.access_token = res.access_token;
-        console.log('access token =', res.access_token);
         this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
       });
     } else {
@@ -105,8 +103,6 @@ export class ShareOnLinkedinComponent implements OnInit {
           }
         );
     }
-  }
-  backButton() {
   }
   getLinkedinEmail(linkedin_access_token): Promise<string> {
     return new Promise( (resolve) => {

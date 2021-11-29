@@ -239,7 +239,7 @@ export const managerMenu: IMenu[] = [
 ]},
   {
     state: 'linkedin',
-    name: 'Share on linkedin',
+    name: 'Share on Social Network',
     icon: 'wi_dashboard',
     feature: 'CONTRACT_ACCESS',
     type: 'link',
