@@ -106,7 +106,7 @@ export class CompanyBankingInfoComponent implements OnInit {
    */
   getCompanyBankingInfo() {
     this.companyBankingInfoService.getCompanyBankingInfo(this.companyEmail).subscribe((data) => {
-   if (data) {
+   if (data.length > 0) {
       this.companyBankingInfo = data[0];
       this.setForm();
 }

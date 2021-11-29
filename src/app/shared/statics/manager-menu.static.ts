@@ -209,7 +209,7 @@ export const managerMenu: IMenu[] = [
         ]
     },
     {
-        state: 'billings',
+        state: 'invoices',
         name: 'manager.menu.static.billings',
         type: 'link',
         icon: 'wi-billings',

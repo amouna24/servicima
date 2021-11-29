@@ -355,6 +355,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.subscriptions.push(this.profileService.updateUser(updateUser).subscribe(
             res => {
               if (res) {
+
+                if (this.user['photo'] && updateUser.photo !== this.user['photo']) {
+                  console.log(this.user['photo'], ',,,,');
+                  this.uploadService.deleteFile(this.user['photo'] ).subscribe(() => {
+                    console.log('file deleted');
+                  });
+                }
                 const userRoleObject = {
                   _id: this.idRole,
                   application_id: this.applicationId,

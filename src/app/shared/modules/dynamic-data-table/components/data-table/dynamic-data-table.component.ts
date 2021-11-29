@@ -46,6 +46,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     addActionDialog?:
       { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
+  @Input() security: boolean;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: string[];
   @Input() buttonAdd: boolean;
@@ -168,7 +169,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    *************************************************************************/
   findColumnDescription(columns, res) {
     columns.map((element) => {
-      if (element.prop !== 'rowItem') {
+      if (element.prop !== 'rowItem' || element.prop !== 'rowItem1') {
         element['name'] = res.find((type) =>
           type.dataListKey.column_code === element['prop'])?.column_desc;
       }
@@ -223,12 +224,26 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
             this.canBeFilteredColumns = this.dynamicDataTableService.generateColumns(
               this.dynamicDataTableService.getCanBeFiltredColumns(this.modalConfiguration)
             );
-            this.columns = [{
-              prop: 'rowItem',
-              name: '',
-              type: 'rowItem'
-            }, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
-            this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+            if (this.security) {
+              this.columns = [{
+                prop: 'rowItem',
+                name: '',
+                type: 'rowItem'
+              }, {
+                prop: 'rowItem1',
+                name: '',
+                type: 'rowItem1'
+              }, ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
+              this.columnsList = ['rowItem', 'rowItem1', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+            } else {
+              this.columns = [{
+                prop: 'rowItem',
+                name: '',
+                type: 'rowItem'
+              },  ...this.dynamicDataTableService.generateColumns(this.displayedColumns)];
+              this.columnsList = ['rowItem', ...this.dynamicDataTableService.generateColumnsList(this.displayedColumns)];
+            }
+
             this.localStorageService.setItem(this.tableCode,
               {
                 columns: this.columns,
@@ -360,11 +375,16 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       columnsList: this.columnsList,
       tableCode: this.tableCode
     };
-    this.modalService.displayModal('dynamicTableConfig', data, '40%').subscribe(
+    this.modalService.displayModal('dynamicTableConfig', data, '50%', '500px').subscribe(
       (res) => {
         if (res.action === 'change') {
-          this.columns = [{ prop: 'rowItem', name: '', type: 'rowItem'}, ...res.actualColumns];
-          this.columnsList = ['rowItem', ...res.columnsList];
+          if (this.security) {
+            this.columns = [{ prop: 'rowItem', name: '', type: 'rowItem'}, { prop: 'rowItem1', name: '', type: 'rowItem1'}, ...res.actualColumns];
+            this.columnsList = ['rowItem', 'rowItem1', ...res.columnsList];
+          } else {
+            this.columns = [{ prop: 'rowItem', name: '', type: 'rowItem'}, ...res.actualColumns];
+            this.columnsList = ['rowItem', ...res.columnsList];
+          }
           const getConfigTableFromLocalStorage = this.localStorageService.getItem(this.tableCode);
           const listTable = getConfigTableFromLocalStorage.modalConfiguration;
           Object.values(listTable)

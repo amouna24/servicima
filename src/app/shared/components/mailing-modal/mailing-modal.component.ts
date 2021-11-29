@@ -9,6 +9,8 @@ import { ContractorsService } from '@core/services/contractors/contractors.servi
 import { UserService } from '@core/services/user/user.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
+import { InvoiceService } from '@core/services/invoice/invoice.service';
+
 import { Observable } from 'rxjs';
 import { IResumeMailingHistoryModel } from '@shared/models/mailingHistory.model';
 
@@ -49,6 +51,7 @@ export class MailingModalComponent implements OnInit {
     private utilsService: UtilsService,
     private clientService: ContractorsService,
     private userService: UserService,
+    private invoiceService: InvoiceService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
@@ -187,10 +190,26 @@ export class MailingModalComponent implements OnInit {
                 this.hiddenCopies);
             });
           });
+        } else {
+
+          this.data.map((data) => {
+            this.invoiceService.sendInvoiceMail(this.localStorageService.getItem('language').langId,
+              this.localStorageService.getItem('userCredentials').application_id,
+              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+              'dhia.othmen@widigital-group.com',
+              data.contractor_code,
+              'data.user_info.actual_job',
+              '${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}',
+              [{ filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
+                path: environment.uploadFileApiUrl + '/show/' + data.attachment },
+              ], this.copies,
+              this.hiddenCopies,
+            ).subscribe(() => {
+            });
+          });
         }
       });
     });
-
   }
   addCopy(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -237,4 +256,5 @@ export class MailingModalComponent implements OnInit {
       this.hiddenCopies.splice(index, 1);
     }
   }
+
 }
