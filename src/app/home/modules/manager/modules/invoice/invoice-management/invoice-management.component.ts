@@ -8,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
 import { HttpClient } from '@angular/common/http';
+
 import { TranslateService } from '@ngx-translate/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { ProjectCollaboratorService } from '@core/services/project-collaborator/project-collaborator.service';
@@ -37,8 +38,9 @@ import { IUserModel } from '@shared/models/user.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
 
-import { environment } from '../../../../../../../environments/environment';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
+
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
   selector: 'wid-invoice-management',
@@ -66,8 +68,6 @@ export class InvoiceManagementComponent implements OnInit {
   companyBankingInfos: ICompanyBankingInfoModel;
   paymentTerms: number;
   avatar: any;
-  listDayToDeleteInNextMonth = [];
-  listDayToDeleteInPreviousMonth = [];
   invoices: Array<{ }>;
   invoiceLine: IInvoiceLineModel;
   invoiceHeader: IInvoiceHeaderModel;
@@ -76,7 +76,6 @@ export class InvoiceManagementComponent implements OnInit {
   maxInvoiceHeader: number;
   isLoading = new BehaviorSubject<boolean>(true);
   isLoad = new BehaviorSubject<boolean>(false);
-
   form: FormGroup;
   formFactor: FormGroup;
   formHeader: FormGroup;
@@ -89,7 +88,6 @@ export class InvoiceManagementComponent implements OnInit {
   vat: number;
   mp: object;
   translateKey: string[];
-  public xmlItems: any;
   action: string;
   factorInvoice = false;
   currencyCode: string;
@@ -110,7 +108,7 @@ export class InvoiceManagementComponent implements OnInit {
   holidayRate: string;
   saturdayRate: string;
   overtimePerDayRate: string;
-  listToRemoveAttachmentFromUpload = [];
+  listToRemoveAttachmentFromUpload: string[] = [];
   emailAddress: string;
   @ViewChild('table1', { read: MatSort, static: false }) sort: MatSort;
   @ViewChild('table2', { read: MatSort, static: false }) sort1: MatSort;
@@ -164,18 +162,6 @@ export class InvoiceManagementComponent implements OnInit {
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
-
-    /*const xml =
-      '<?xml version="1.0" encoding="utf-8"?>' +
-      '<note importance="high" logged="true">' +
-      '    <title>Happy</title>' +
-      '    <todo>Work</todo>' +
-      '    <todo>Play</todo>' +
-      '</note>';
-    const result1 = convert.xml2json(xml, { compact: true, spaces: 4});
-    const result2 = convert.xml2json(xml, { compact: false, spaces: 4});
-    console.log(result1, '\n', result2);*/
-
   }
 
   /**************************************************************************
@@ -216,13 +202,12 @@ export class InvoiceManagementComponent implements OnInit {
          if (!!res) {
            const file = res['selectedFiles'][0];
            const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-           const file1 = new File([res['selectedFiles'][0]], `file1`, {
+           const file1 = new File([res['selectedFiles'][0]], res.name, {
              lastModified: new Date().getTime(),
              type: res['selectedFiles'][0].type
            });
            formData.append('file', file1);
            formData.append('caption', file1.name);
-          // const fileName = await this.uploadFile(formData);
            const invoiceAttachment = {
              application_id: this.applicationId,
              company_email: this.companyEmail,
@@ -351,7 +336,10 @@ export class InvoiceManagementComponent implements OnInit {
     this.showPayment = !this.showPayment;
   }
 
-  deleteAttachment(row, attachment) {
+  /**
+   * @description : delete attachment
+   */
+  deleteAttachment(row, attachment: string) {
 
     this.listToRemoveAttachmentFromUpload.push(attachment);
     if (attachment) {
@@ -440,7 +428,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.currencyCode = this.invoiceHeader['invoice_currency'];
     this.statusInvoice = this.invoiceHeader['invoice_status'];
     this.editContractors = false;
-    this.getContract(this.invoiceHeader['contractor_code']);
+    await this.getContract(this.invoiceHeader['contractor_code']);
 
     this.getContractProject(this.invoiceHeader['contract_code']);
 
@@ -455,6 +443,7 @@ RIB:${this.companyBankingInfos?.rib}`);
       invoiceDate: this.invoiceHeader['invoice_date'],
       invoiceDelay: this.invoiceHeader['invoice_delay'],
     });
+
     this.form = this.formBuilder.group({
       input: this.formBuilder.array(this.invoiceLine ? Object.values(this.invoiceLine).map(data => this.formBuilder.group({
         project_code: [data.project_code ? data.project_code : null],
@@ -474,7 +463,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.countLeftToPay();
 
     await this.getContract(this.invoiceHeader['contractor_code']);
-    // default data
     this.contract = this.listContract.find(value => value.contractKey.contract_code === this.contractCode);
 
   }
@@ -661,12 +649,13 @@ RIB:${this.companyBankingInfos?.rib}`);
         this.formCompanyBanking.controls['comment1'].setValue(this.invoiceHeader?.comment1);
       } else {
         if (!this.formFactor.value.factorInvoice) {
-          this.formCompanyBanking.controls['comment1'].setValue(`Bank domiciliation: ${this.companyBankingInfos?.bank_domiciliation}
-Name: ${this.companyBankingInfos?.bank_name}
-Adresse: ${this.companyBankingInfos?.bank_address}
-BIC CODE: ${this.companyBankingInfos?.bic_code}
+         const bankingInfo = `Bank domiciliation: ${this.companyBankingInfos?.bank_domiciliation}
+Name: ${this.companyBankingInfos?.bank_name.trim()}
+Adresse: ${this.companyBankingInfos?.bank_address.trim()}
+BIC CODE: ${this.companyBankingInfos?.bic_code.trim()}
 BAN: ${this.companyBankingInfos?.iban}
-RIB:${this.companyBankingInfos?.rib}`);
+RIB:${this.companyBankingInfos?.rib}`;
+          this.formCompanyBanking.controls['comment1'].setValue(bankingInfo);
         } else {
           this.formCompanyBanking.controls['comment1'].setValue(`${this.companyBankingInfos?.factor_informations}`);
         }
@@ -688,8 +677,7 @@ RIB:${this.companyBankingInfos?.rib}`);
   }
 
   /**************************************************************************
-   *  @description Get sum
-   *  @param code: string
+   *  @description to pay
    *************************************************************************/
   toPay() {
     this.showAttachmentFile = false;
@@ -711,7 +699,7 @@ RIB:${this.companyBankingInfos?.rib}`);
           }
         };
         this.invoicePayment.push(listLine);
-        this.mapInvoiceAttachment(this.invoicePayment);
+        this.mapInvoicePayment(this.invoicePayment);
         this.refreshPayment();
         this.countPayment();
       }
@@ -733,7 +721,7 @@ RIB:${this.companyBankingInfos?.rib}`);
 
     const promise2 = new Promise((resolve) => {
       this.invoiceService.getInvoicePayment(`?company_email=${this.companyEmail}&invoice_nbr=` + this.invoiceNbr).subscribe((invoicePayment) => {
-        this.mapInvoiceAttachment(invoicePayment);
+        this.mapInvoicePayment(invoicePayment);
         if (invoicePayment.length > 0 ) {
           invoicePayment.map((data) => {
             this.listToRemovePayment.push(data['_id']);
@@ -759,7 +747,10 @@ RIB:${this.companyBankingInfos?.rib}`);
 
   }
 
-  mapInvoiceAttachment(invoicePayment) {
+  /**************************************************************************
+   *  @description map invoice payment
+   *************************************************************************/
+  mapInvoicePayment(invoicePayment: IInvoicePaymentModel[]) {
     invoicePayment.map((invoicePay) => {
       const firstName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).first_name;
       const lastName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).last_name;
@@ -833,7 +824,6 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   getProject(index: number, project: IContractProject): void {
     const formArr = this.form.controls['input'] as FormArray;
-    // this.getProjectCollab(project['ContractProjectKey']['project_code']);
     formArr.controls[index].patchValue({ project_desc: project.project_desc });
   }
 
@@ -915,10 +905,6 @@ RIB:${this.companyBankingInfos?.rib}`);
             this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
             });
           });
-
-          // Promise.all(listAttachment).then((results) => {
-          /*  this.invoiceService.addManyInvoiceAttachment(listAttachment).subscribe(() => {
-            }); */
         }
       });
     } else {
@@ -1051,6 +1037,9 @@ RIB:${this.companyBankingInfos?.rib}`);
               const path = { path: file.name };
               this.invoiceService.deleteInvoice(path).subscribe(() => {
               });
+              this.uploadService.deleteImage(this.invoiceHeader.attachment).subscribe((resp) => {
+                console.log('deleted pdf', resp);
+              });
               this.router.navigate(['/manager/invoices']);
             }
           );
@@ -1065,7 +1054,7 @@ RIB:${this.companyBankingInfos?.rib}`);
    * @description Delete payment
    * @param row: row of payment invoice
    *************************************************************************/
-  deletePayment(row) {
+  deletePayment(row: IInvoicePaymentModel) {
     row.disabled = true;
     const listLine = {
       InvoicePaymentKey: {
@@ -1083,10 +1072,11 @@ RIB:${this.companyBankingInfos?.rib}`);
       disabled: true
     };
     this.invoicePayment.push(listLine as any);
-    this.mapInvoiceAttachment(this.invoicePayment);
+    this.mapInvoicePayment(this.invoicePayment);
     this.refreshPayment();
     this.countPayment();
   }
+
   /**************************************************************************
    * @description Upload Image to Server
    *************************************************************************/

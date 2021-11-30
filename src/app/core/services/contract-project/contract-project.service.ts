@@ -12,7 +12,7 @@ export class ContractProjectService {
 
   /**************************************************************************
    * @description Get banking information by Company
-   * @apram company company Email
+   * @param company company Email
    * @returns: banking information
    *************************************************************************/
   getContractProject(company: string, contractCode: string): Observable<any> {

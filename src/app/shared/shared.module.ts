@@ -13,7 +13,6 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { StepperComponent } from '@shared/stepper/stepper.component';
 import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
-import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -21,6 +20,9 @@ import { TitleSettingsComponent } from '@shared/components/title-settings/title-
 
 import { SpliceText } from '@core/services/pipe/splice-text';
 import { DisableControlDirective } from '@shared/directives/disabled.directive';
+
+import { SignaturePadModule } from 'angular2-signaturepad';
+import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
 
 import { HeaderComponent } from './components/header/header.component';
 import { ChangePwdComponent } from './components/settings/changepwd/changepwd.component';
@@ -47,18 +49,13 @@ import { EditCompanyHomeComponent } from '../home/modules/manager/modules/settin
 import { SidenavSettingsComponent } from './components/settings/sidenav-settings/sidenav-settings.component';
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
-import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
 import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
 import { ShowWorkCertificateComponent } from './modules/work-certificates/show-work-certificate/show-work-certificate.component';
-// tslint:disable-next-line:origin-ordered-imports
-import { SignaturePadModule } from 'angular2-signaturepad';
-// tslint:disable-next-line:origin-ordered-imports
-import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
+
 import { TitleCertifComponent } from './modules/work-certificates/title-certif/title-certif.component';
 import { EditWorkCertificateComponent } from './modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
 import { SignatureComponent } from './components/signature/signature.component';
 import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
-// tslint:disable-next-line:origin-ordered-imports
 
 @NgModule({
   declarations: [
@@ -66,23 +63,14 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     SidenavComponent,
     HeaderComponent,
     ChangePwdComponent,
-    TitleSettingsComponent,
     UserComponent,
     HomeCompanyComponent,
     ConfirmationModalComponent,
     BreadcrumbComponent,
-    ConfirmationModalComponent,
     SkeletonLoaderComponent,
     StepperComponent,
     RightSidenaveComponent,
     AddTimesheetComponent,
-    /* Directives */
-    CanBeDisplayedDirective,
-    PaginationDirective,
-    ClickOutsideDirective,
-    DisableControlDirective,
-    CapitalizeFirstLetter,
-    SpliceText,
     UploadSheetComponent,
     AlertComponent,
     DynamicComponent,
@@ -94,9 +82,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     SidenavSettingsComponent,
     ErrorComponent,
     SplashComponent,
-    ErrorComponent,
     TitleSettingsComponent,
-    AddTimesheetComponent,
     MailingModalComponent,
     ShowWorkCertificateComponent,
     RequestWorkCertificateComponent,
@@ -104,6 +90,13 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     EditWorkCertificateComponent,
     SignatureComponent,
     SignatureCertificateComponent,
+    /* Directives */
+    CanBeDisplayedDirective,
+    PaginationDirective,
+    ClickOutsideDirective,
+    DisableControlDirective,
+    CapitalizeFirstLetter,
+    SpliceText,
   ],
   imports: [
     CommonModule,
@@ -117,13 +110,13 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     NgxMatSelectSearchModule,
     FormsModule,
     NgxDatatableModule,
-    FormsModule,
     SignaturePadModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
     NgMultiSelectDropDownModule.forRoot()
   ],
+
   exports: [
     MaterialModule,
     CommonModule,
@@ -137,7 +130,6 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     HomeCompanyComponent,
     TranslateModule,
     NgxDatatableModule,
-    FlexLayoutModule,
     SignaturePadModule,
     FormsModule,
     SkeletonLoaderComponent,
@@ -150,7 +142,6 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     RightSidenaveComponent,
     ScrollbarModule,
     SidenavSettingsComponent,
-    ScrollbarModule,
     DynamicComponent,
     EditCompanyHomeComponent,
     ErrorComponent,
@@ -160,7 +151,6 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     SpliceText,
     DisableControlDirective,
     ModalComponent,
-    ProfileImageComponent,
     ProfileImageComponent,
     AddTimesheetComponent,
     NgMultiSelectDropDownModule,
