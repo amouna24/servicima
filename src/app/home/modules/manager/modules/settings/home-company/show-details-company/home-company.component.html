@@ -2,10 +2,18 @@
   <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
     <div fxLayout="column" fxFlex="30" fxLayoutAlign="start center" fxFill
       class="bg-white border-radius-20">
+
       <div fxLayout="column" fxFlex="50" fxLayoutAlign="center start" class="profile-image">
+        <ng-template [ngIf]="!isLoadingImage">
         <img [src]="this.company['photo'] ? avatar : 'assets/img/default.jpg'" width="80" height="80" class="show-img"
           [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" alt="company" />
+        </ng-template>
+        <ng-template [ngIf]="isLoadingImage">
+            <mat-spinner color="primary"></mat-spinner>
+            <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+        </ng-template>
       </div>
+
       <wid-skeleton-loader
         height="25" width="250"
         *ngIf="isLoading" nbrRow=2

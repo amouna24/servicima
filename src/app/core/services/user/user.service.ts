@@ -93,6 +93,7 @@ export class UserService {
           resolve(this.userInfo);
         }));
   }
+
   /**************************************************************************
    * @description Redirect User to specific route and set SideNav items
    * @param userRole Role of connected User
@@ -125,12 +126,15 @@ export class UserService {
     if (currentState.startsWith(`/${startUrl}`)) {
       const queryParamObject = { };
       if (currentState.split('?')[1]) {
-        const key = currentState.split('?')[1].split('=')[0];
-        const value = currentState.split('?')[1].split('=')[1];
-        queryParamObject[key] = value;
+       const listKey = currentState.split('?')[1].split('&');
+       listKey.map((element) => {
+         const key = element.split('=')[0];
+         const value = element.split('=')[1];
+         queryParamObject[key] = value;
+       });
       }
-      this.router.navigate([currentState.split('?')[0]], { queryParams: queryParamObject} );    } else {
-
+      this.router.navigate([currentState.split('?')[0]], { queryParams: queryParamObject} );
+    } else {
       this.router.navigate([`/${startUrl}`]);
     }
   }

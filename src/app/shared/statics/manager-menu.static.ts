@@ -214,7 +214,7 @@ export const managerMenu: IMenu[] = [
         ]
     },
     {
-        state: 'billings',
+        state: 'invoices',
         name: 'manager.menu.static.billings',
         type: 'link',
         icon: 'wi-billings',
@@ -241,5 +241,12 @@ export const managerMenu: IMenu[] = [
         feature: 'CONTRACT_ACCESS',
         type: 'link',
   }
-]}
+]},
+  {
+    state: 'linkedin',
+    name: 'Share on Social Network',
+    icon: 'wi_dashboard',
+    feature: 'CONTRACT_ACCESS',
+    type: 'link',
+  }
 ];

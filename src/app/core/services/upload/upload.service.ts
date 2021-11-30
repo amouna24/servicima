@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { id } from '@swimlane/ngx-datatable';
+import { Subject, throwError } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-
+  imageSubject$ = new Subject<string>();
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -21,15 +20,23 @@ export class UploadService {
       .pipe(
         catchError(error => throwError(error)),
         map((response: any) => {
-          console.log(response);
           return response;
         })
       );
   }
 
+  /**
+   * @description : Get files
+   * @param idFile: id file
+   */
   getFiles(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/file/` + idFile);
   }
+
+  /**
+   * @description : Get files by name
+   * @param idFile: id file
+   */
   getFilesByName(idFile) {
     return this.http.get(`${environment.uploadFileApiUrl}/` + idFile)
       .pipe(
@@ -40,6 +47,10 @@ export class UploadService {
       );
   }
 
+  /**
+   * @description : Get images
+   *  return image
+   */
   getImages() {
     return this.http.get(`${environment.userApiUrl}/api/`);
   }
@@ -61,4 +72,29 @@ export class UploadService {
       )
     ).toPromise();
   }
+  deleteImage(idFile) {
+    return this.http.delete(`${environment.uploadFileApiUrl}/delete/${idFile}`);
+  }
+  getImageData(idFile) {
+    return this.http.get(`${environment.uploadFileApiUrl}/image/` + idFile, {
+      responseType: 'blob',
+    });
+  }
+
+  /**
+   * @description : delete file
+   *  @param idFile: id file
+   */
+  deleteFile(idFile) {
+    return this.http.delete(`${environment.uploadFileApiUrl}/delete/` + idFile);
+  }
+
+  /**************************************************************************
+   * @description Emit color
+   * @param image
+   *************************************************************************/
+  emitImage(image: string): void {
+    this.imageSubject$.next(image);
+  }
+
 }

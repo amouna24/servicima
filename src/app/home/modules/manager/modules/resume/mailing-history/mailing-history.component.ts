@@ -48,13 +48,6 @@ export class MailingHistoryComponent implements OnInit {
                 resolve(mailingList.map((mailing, index) => {
                   const sendTime = mailing.MailingHistoryKey.send_time;
                   const sendTo = mailing.MailingHistoryKey.send_to;
-                  console.log({
-                    attachment: mailing.attachment.length,
-                    message: mailing.message,
-                    subject: mailing.subject,
-                    send_to: mailing.send_to,
-                    send_time: mailing.MailingHistoryKey.send_time
-                  });
                   return {
                     send_time: sendTime,
                     send_to: sendTo,
@@ -67,7 +60,6 @@ export class MailingHistoryComponent implements OnInit {
                 resolve([]);
               }
             }).then((result) => {
-              console.log('table data=', this.tableData);
               this.isLoading.next(false);
               this.tableData.next(result);
             });

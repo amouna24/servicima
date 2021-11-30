@@ -476,6 +476,8 @@ export class ResumeDoneComponent implements OnInit {
                   if (this.projectList.length === index + 1) {
                     resolve(this.projectDetailsList);
                   }
+                } else {
+                  resolve([]);
                 }
               });
           }
@@ -485,7 +487,7 @@ export class ResumeDoneComponent implements OnInit {
       if (res.length > 0) {
         await this.getProjectDetailsSectionInfo(res);
       } else {
-        this.showPage = false;
+        this.showPage = true;
       }
     });
   }
@@ -629,35 +631,37 @@ export class ResumeDoneComponent implements OnInit {
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
                     formData.append('caption', file.name);
-                    await this.uploadCompanyFile(formData).then(async (filename) => {
-                      this.generalInfoList[0].resume_filename_docx = filename;
-                      this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
-                      this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
-                      this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
-                      this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
-                      this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
-                      this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
-
-                        this.showWaiting = false;
-                        this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
-                          .subscribe( (resumeDataModel) => {
-                            if (resumeDataModel['msg_code'] === '0004') {
-                              this.resumeService.addResumeData(dataCollaborator).subscribe( (resume) => {
-                                console.log('resume Data added', resume);
-                              });
-                            } else {
-                              dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
-                              dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
-                              dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
-                              dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
-                              this.resumeService.updateResumeData(dataCollaborator).subscribe( (resume) => {
-                                console.log('resume Data updated', resume);
-                              });
-                            }
-                          });
-                        this.router.navigate(['/candidate/']);
+                    this.uploadService.deleteImage(this.generalInfoList[0].resume_filename_docx).subscribe( async (resDelete) => {
+                      await this.uploadCompanyFile(formData).then(async (filename) => {
+                        this.generalInfoList[0].resume_filename_docx = filename;
+                        this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
+                        this.generalInfoList[0].application_id = this.generalInfoList[0].ResumeKey.application_id;
+                        this.generalInfoList[0].company_email = this.generalInfoList[0].ResumeKey.company_email;
+                        this.generalInfoList[0].language_id = this.generalInfoList[0].ResumeKey.language_id;
+                        this.generalInfoList[0].resume_code = this.generalInfoList[0].ResumeKey.resume_code;
+                        this.resumeService.updateResume(this.generalInfoList[0]).subscribe((generalInfo) => {
+                          this.showWaiting = false;
+                          this.resumeService.getResumeData(`?resume_code=${dataCollaborator.ResumeDataKey.resume_code}`)
+                            .subscribe((resumeDataModel) => {
+                              if (resumeDataModel['msg_code'] === '0004') {
+                                this.resumeService.addResumeData(dataCollaborator).subscribe((resume) => {
+                                  console.log('resume Data added', resume);
+                                });
+                              } else {
+                                dataCollaborator.application_id = dataCollaborator.ResumeDataKey.application_id;
+                                dataCollaborator.resume_code = dataCollaborator.ResumeDataKey.resume_code;
+                                dataCollaborator.collaborator_email = dataCollaborator.ResumeDataKey.collaborator_email;
+                                dataCollaborator.company_email = dataCollaborator.ResumeDataKey.company_email;
+                                this.resumeService.updateResumeData(dataCollaborator).subscribe((resume) => {
+                                  console.log('resume Data updated', resume);
+                                });
+                              }
+                            });
+                          this.router.navigate(['/candidate/']);
+                        });
                       });
                     });
+
                     this.subscriptionModal.unsubscribe();
                   });
                 this.subscriptionModal.unsubscribe();

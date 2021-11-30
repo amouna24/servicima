@@ -35,7 +35,7 @@ export class ShowCompanyBankingInfoComponent implements OnInit {
     */
   getCompanyBankingInfo() {
     this.companyBankingInfoService.getCompanyBankingInfo(this.companyEmail).subscribe((data) => {
-      if (data) {
+      if (data.length > 0) {
         this.companyBankingInfoExist = 'company Banking Info';
         this.companyBankingInfo = data[0];
         this.setForm();
@@ -63,7 +63,6 @@ export class ShowCompanyBankingInfoComponent implements OnInit {
    * @description : set the value of the form if it was an update user
    */
   setForm() {
-
     this.bicCode = this.companyBankingInfo['bic_code'];
     this.iban = this.companyBankingInfo['iban'];
     this.rib = this.companyBankingInfo['rib'];
