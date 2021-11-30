@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PostLinkedinService } from '@core/services/share-on-linkedin/shareonlinkedin.service';
+import { ShareOnSocialNetworkService } from '@core/services/share-on-social-network/shareonsocialnetwork.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -15,7 +15,7 @@ import { ShareOnLinkedinModalComponent } from './share-on-linkedin-modal/share-o
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
-  selector: 'wid-share-on-linkedin',
+  selector: 'wid-share-on-social-network',
   templateUrl: './share-on-linkedin.component.html',
   styleUrls: ['./share-on-linkedin.component.scss']
 })
@@ -38,7 +38,7 @@ export class ShareOnLinkedinComponent implements OnInit {
    constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private linkedInService: PostLinkedinService,
+    private linkedInService: ShareOnSocialNetworkService,
     private localStorageService: LocalStorageService,
     private modalServices: ModalService,
     private utilsService: UtilsService,
@@ -46,6 +46,13 @@ export class ShareOnLinkedinComponent implements OnInit {
     private uploadService: UploadService,
     private router: Router,
   ) {
+     this.route.queryParams
+       .subscribe(params => {
+         console.log('params =', params);
+         this.linkedInService.getIndeedAccessToken(params['code']).subscribe(async (res) => {
+           console.log('access token=', res);
+         });
+         });
      if (window.opener) {
        this.redirectToParentPage();
      } else {
@@ -75,6 +82,7 @@ export class ShareOnLinkedinComponent implements OnInit {
     } else {
       this.route.queryParams
         .subscribe(params => {
+          console.log('params =', params);
             if (params['code']) {
               this.linkedInService.getLinkedInAccessToken(params['code']).subscribe(async (res) => {
                 this.localStorageService.setItem('linkedin_access_token', btoa(res.access_token));

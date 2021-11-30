@@ -5,12 +5,12 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UtilsService } from '@core/services/utils/utils.service';
 import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PostLinkedinService } from '@core/services/share-on-linkedin/shareonlinkedin.service';
+import { ShareOnSocialNetworkService } from '@core/services/share-on-social-network/shareonsocialnetwork.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
-  selector: 'wid-share-on-linkedin-modal',
+  selector: 'wid-share-on-social-network-modal',
   templateUrl: './share-on-linkedin-modal.component.html',
   styleUrls: ['./share-on-linkedin-modal.component.scss']
 })
@@ -23,7 +23,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     private  localStorageService: LocalStorageService,
     private  utilsService: UtilsService,
     private  uploadService: UploadService,
-    private  linkedInService: PostLinkedinService,
+    private  socialNetworkService: ShareOnSocialNetworkService,
     private  modalServices: ModalService,
     private dialogRef: MatDialogRef<ShareOnLinkedinModalComponent>
 
@@ -88,14 +88,14 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       .toPromise();
   }
   postOnLinkedin(linkedinObject, imageObject) {
-    this.linkedInService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
+    this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');
-        this.linkedInService.getLinkedinAuthLink().subscribe((resAuth) => {
+        this.socialNetworkService.getLinkedinAuthLink().subscribe((resAuth) => {
           window.location.href = resAuth.url;
         });
       } else if (resPost.status === 200) {
-        this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
+        this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'info',
             title: 'Share post on linkedin',
@@ -116,10 +116,17 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     });
   }
   addPostAndRedirect(linkedinObject) {
-    this.linkedInService.addPosts(linkedinObject).subscribe( (addPostResult) => {
-      this.linkedInService.getLinkedinAuthLink().subscribe( (res) => {
+    this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
+      this.socialNetworkService.getLinkedinAuthLink().subscribe( (res) => {
         window.open(res.url , '', 'width=600, height=500, left=700,top=700').focus();
       });
     });
+  }
+
+  shareOnIndeed() {
+    this.socialNetworkService.getIndeedAuthLink().subscribe( (res) => {
+      window.location.href = res.url;
+      console.log('indeed =', res);
+    } );
   }
 }

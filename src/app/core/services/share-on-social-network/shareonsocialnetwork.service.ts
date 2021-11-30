@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class PostLinkedinService {
+export class ShareOnSocialNetworkService {
 
   constructor(
     private httpClient: HttpClient,
@@ -72,5 +72,18 @@ export class PostLinkedinService {
    *************************************************************************/
   deletePosts(id: string): Observable<any> {
     return this.httpClient.delete<IShareOnSocialNetworkModel>(`${environment.linkedInOauthApiUrl}/?_id=${id}`);
+  }
+  /**************************************************************************
+   * @description Get linkedin Authentication link
+   *************************************************************************/
+  getIndeedAuthLink(): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/indeedAuth`);
+  }
+  /**************************************************************************
+   * @description Get linkedinAccess token
+   * @param code : code auth given by linkedin
+   *************************************************************************/
+  getIndeedAccessToken(code: string): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/indeedAccessToken?code=${code}`);
   }
 }
