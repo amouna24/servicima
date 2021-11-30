@@ -20,7 +20,6 @@ import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invo
 import { SetPwdInvoiceComponent } from '../set-pwd-invoice/set-pwd-invoice.component';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 
-declare var require: any;
 @Component({
   selector: 'wid-list-invoices',
   templateUrl: './list-invoices.component.html',
