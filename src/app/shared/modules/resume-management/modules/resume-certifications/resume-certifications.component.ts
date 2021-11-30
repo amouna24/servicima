@@ -8,6 +8,9 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { blueToGrey, GreyToBlue, downLine, showBloc, dataAppearance } from '@shared/animations/animations';
 import { Router } from '@angular/router';
+import { UploadService } from '@core/services/upload/upload.service';
+import { map } from 'rxjs/internal/operators/map';
+
 @Component({
   selector: 'wid-resume-certifications',
   templateUrl: './resume-certifications.component.html',
@@ -32,8 +35,13 @@ indexUpdate = 0;
 expire: boolean;
 subscriptionModal: Subscription;
 id: string;
+companyUserType: string;
 certificationCode: string;
 button: string;
+oldImage: string;
+display_image: boolean;
+dispayedImagesSum = 0;
+imageFile: File;
   /**********************************************************************
    * @description Resume Certification constructor
    *********************************************************************/
@@ -43,19 +51,22 @@ button: string;
     private userService: UserService,
     private modalServices: ModalService,
     private router: Router,
-) {
+    private uploadService: UploadService,
+  ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    this.expire = true;
     this.button = 'Add';
     this.certificationArray = [];
     this.showExpireDatePicker = true;
     this.getCertificationInfo();
     this.createCertifForm();
+    this.display_image = false;
+    this.expire = false;
   }
   /**************************************************************************
    * @description Initialize the Certification form
@@ -64,45 +75,64 @@ button: string;
     this.certifForm = this.fb.group( {
       name: ['', [Validators.required]],
       organization: ['', [Validators.required]],
-      expire: [false],
+      expiring_date: [''],
       date: ['', [Validators.required]],
-      expiring_date: '',
       certif_ref: '',
       certif_url: '',
+      image: '',
     });
   }
   /**************************************************************************
    * @description Create or Update Certification
    *************************************************************************/
-  createCertification() {
+  async createCertification() {
+    let formData: FormData;
     if (this.button === 'Add') {
       this.certification = this.certifForm.value;
       this.certification.resume_code = this.resumeCode;
+      this.certification.expire = this.expire;
       this.certification.certification_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-RES-CERTIF`;
-      this.resumeService.addCertification(this.certification).subscribe(data => {
-        this.createCertifForm();
-        this.certificationArrayCount++;
-        this.resumeService.getCertification(
-          `?certification_code=${this.certification.certification_code}`)
-          .subscribe(
-            (responseOne) => {
-              if (responseOne['msg_code'] !== '0004') {
-                this.certificationArray.push(responseOne[0]);
-              }});      });
-      this.certifForm.controls.expiring_date.enable();
-      this.expire = true;
+      if (this.imageFile) {
+        const file = this.imageFile;
+        formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+        formData.append('file', file);
+        formData.append('caption', file.name);
+
+        this.certification.image = await this.uploadFile(formData);
+        this.certification.display_image = this.display_image;
+        this.addCertification(this.certification);
+
+      } else {
+        this.addCertification(this.certification);
+      }
+      this.verifyDisplayed();
     } else if (this.button === 'Save') {
       this.certificationUpdate = this.certifForm.value;
       this.certificationUpdate.certification_code = this.certificationCode;
       this.certificationUpdate.resume_code = this.resumeCode;
       this.certificationUpdate._id = this.id;
-        this.resumeService.updateCertification(this.certificationUpdate).subscribe(data => {
-          this.createCertifForm();
-          this.certificationArray.splice(this.indexUpdate, 0, data);
+      this.certificationUpdate.display_image = this.display_image;
+      this.certificationUpdate.expire = this.expire;
+      if ( this.imageFile) {
+        this.uploadService.deleteImage(this.oldImage).subscribe( (deleteOldImage) => {
+          console.log('old image delted', deleteOldImage);
         });
-        this.button = 'Add';
+        const file = this.imageFile;
+        formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+        formData.append('file', file);
+        formData.append('caption', file.name);
+        this.certificationUpdate.image = await this.uploadFile(formData);
+        this.updateCertification(this.certificationUpdate).then( (res) => {
+        });
+      } else {
+        this.updateCertification(this.certificationUpdate).then( (res) => {
+        });
+      }
+      this.display_image = false;
+      this.button = 'Add';
     }
   }
+  /*********
   /**************************************************************************
    * @description Get Certification data from Resume Service
    *************************************************************************/
@@ -118,6 +148,8 @@ button: string;
               this.certificationArray.forEach(
                 (certif) => {
                   certif.certification_code = certif.ResumeCertificationKey.certification_code;
+                  this.dispayedImagesSum = certif.display_image === true ? this.dispayedImagesSum + 1 : this.dispayedImagesSum;
+                  this.verifyDisplayed();
                 }
               );
             }
@@ -152,6 +184,7 @@ button: string;
                         certif.certification_code = certif.ResumeCertificationKey.certification_code;
                       }
                     );
+                    this.verifyDisplayed();
                   }
                 },
                 (error) => {
@@ -172,14 +205,16 @@ button: string;
    * @description Action on checkbox of the expired certificate
    * @param event event of the checkbox
    *******************************************************************/
-  verifyExpired(event: MatCheckboxChange) {
+  verifyCheckedExpired(event: MatCheckboxChange) {
     if (event.checked) {
       this.certifForm.controls.expiring_date.disable();
-      this.expire = false;
     } else {
       this.certifForm.controls.expiring_date.enable();
-      this.expire = true;
     }
+    this.expire = event.checked;
+  }
+  verifyCheckedDisplayImage(event: MatCheckboxChange) {
+    this.display_image = event.checked;
   }
   /**************************************************************************
    * @description Delete Selected Certification
@@ -200,6 +235,7 @@ button: string;
             this.certificationArray.forEach((value, index) => {
               if (index === pointIndex) {
                 this.certificationArray.splice(index, 1);
+                this.verifyDisplayed();
               }
             });
           }
@@ -216,23 +252,22 @@ button: string;
     this.certifForm.patchValue({
       name: certification.name,
       organization: certification.organization,
-      expire: certification.expire,
       date: certification.date,
       expiring_date: certification.expiring_date,
       certif_ref: certification.certif_ref,
       certif_url: certification.certif_url,
+      image: certification.image,
     });
+    this.display_image = certification.display_image;
+    this.oldImage = this.certifForm.controls.image.value;
     this.id = certification._id;
     this.certificationCode = certification.ResumeCertificationKey.certification_code;
     this.indexUpdate = index;
     this.certificationArray.splice( index, 1);
-    if (certification.expiring_date !== undefined) {
-      this.certifForm.controls.expiring_date.enable();
-      this.certifForm.controls.expire.setValue(false);
-    } else {
-      this.certifForm.controls.expiring_date.disable();
-      this.certifForm.controls.expire.setValue(true);
-    }
+    this.verifyDisplayed();
+    this.expire = certification.expire.toString() === 'true';
+    this.verifyExpired(certification.expire === true);
+
     this.button = 'Save';
   }
   /**************************************************************************
@@ -254,13 +289,15 @@ button: string;
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/technicalSkills'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType
           }
         });
       } else {
         this.router.navigate(['/manager/resume/diploma'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType
           }
         });
       }
@@ -294,5 +331,89 @@ button: string;
       }
     }
 
+  }
+  checkFormValues(typeRoute: string) {
+    let notEmptyForm = false;
+    Object.values(this.certifForm.controls).some(({ value }) => {
+      if (value) {
+        notEmptyForm = true;
+      }
+    });
+    if (!notEmptyForm) {
+      this.routeNextBack(typeRoute);
+    } else {
+      const confirmation = {
+        code: 'confirmation',
+        title: 'Data is not saved',
+        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.routeNextBack(typeRoute);
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
+  }
+  async uploadFile(formData) {
+    return await this.uploadService.uploadImage(formData)
+      .pipe(
+        map(response => response.file.filename)
+      )
+      .toPromise();
+  }
+  addCertification(certification) {
+    this.resumeService.addCertification(certification).subscribe((certifData) => {
+      this.createCertifForm();
+      this.certificationArrayCount++;
+      this.resumeService.getCertification(
+        `?certification_code=${this.certification.certification_code}`)
+        .subscribe(
+          (responseOne) => {
+            if (responseOne['msg_code'] !== '0004') {
+              this.certificationArray.push(responseOne[0]);
+              this.expire = false;
+              this.certifForm.controls.expiring_date.enable();
+            }
+          });
+    });
+  }
+  async updateCertification(certification) {
+    await this.resumeService.updateCertification(certification).subscribe(data => {
+      this.createCertifForm();
+      this.certificationArray.splice(this.indexUpdate, 0, data);
+      this.verifyDisplayed();
+      this.expire = false;
+    });
+  }
+  verifyDisplayed() {
+    this.dispayedImagesSum = 0;
+    this.certificationArray.forEach( (certif) => {
+      if (certif.display_image === true) {
+        this.dispayedImagesSum ++;
+      }
+    });
+    return this.dispayedImagesSum >= 3;
+  }
+  verifyExpired(expire) {
+    if (expire === true) {
+      this.certifForm.controls.expiring_date.disable();
+      this.certifForm.controls.expiring_date.setValidators([]);
+    } else {
+      this.certifForm.controls.expiring_date.enable();
+      this.certifForm.controls.expiring_date.setValidators([Validators.required]);
+    }
+    return expire;
+  }
+  setValueToImageField(event) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      this.certifForm.controls.image.setValue(fileList[0].name);
+      this.imageFile = fileList[0];
+    }
   }
 }

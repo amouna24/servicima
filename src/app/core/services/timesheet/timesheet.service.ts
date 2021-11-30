@@ -42,6 +42,14 @@ export class TimesheetService {
   }
 
   /**************************************************************************
+   * @description disable Timesheet (change status to DISABLE)
+   * @param ID : of the timesheet
+   *************************************************************************/
+  disableTimesheet(id: string): Observable<any> {
+    return this.httpClient.delete<ITimesheetModel>(`${environment.timesheetApiUrl}/disable?_id=${id}`);
+  }
+
+  /**************************************************************************
    * @description Delete Timesheet
    * @param ID : of the timesheet
    *************************************************************************/

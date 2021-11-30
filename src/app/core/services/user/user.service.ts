@@ -123,7 +123,13 @@ export class UserService {
   getUrl(startUrl: string, currentState: string) {
     this.moduleName$.next(startUrl);
     if (currentState.startsWith(`/${startUrl}`)) {
-      this.router.navigate([currentState]);
+      const queryParamObject = { };
+      if (currentState.split('?')[1]) {
+        const key = currentState.split('?')[1].split('=')[0];
+        const value = currentState.split('?')[1].split('=')[1];
+        queryParamObject[key] = value;
+      }
+      this.router.navigate([currentState.split('?')[0]], { queryParams: queryParamObject} );
     } else {
       this.router.navigate([`/${startUrl}`]);
     }

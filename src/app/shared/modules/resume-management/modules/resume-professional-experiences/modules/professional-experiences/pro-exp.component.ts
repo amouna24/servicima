@@ -48,6 +48,7 @@ export class ProExpComponent implements OnInit {
   endDAteUpdate: string;
   myDisabledDayFilter;
  placeHolderEndDate: string;
+  companyUserType: string;
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -60,6 +61,8 @@ export class ProExpComponent implements OnInit {
     private modalServices: ModalService
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
+
   }
 
   /**************************************************************************
@@ -342,29 +345,13 @@ export class ProExpComponent implements OnInit {
    * @description Filter Dates that are already taken by other experiences
    *******************************************************************/
   filterDate() {
-    const disabledDates = [];
     this.proExpArray.forEach(
       (exp) => {
-        if (exp.ResumeProfessionalExperienceKey.end_date === 'Current Date') {
-          exp.ResumeProfessionalExperienceKey.end_date = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-        }
         exp.start_date = exp.ResumeProfessionalExperienceKey.start_date;
         exp.end_date = exp.ResumeProfessionalExperienceKey.end_date;
         exp.professional_experience_code = exp.ResumeProfessionalExperienceKey.professional_experience_code;
-        for (const date = new Date(exp.start_date); date <= new Date(exp.end_date); date.setDate(date.getDate() + 1)) {
-          disabledDates.push(new Date(date));
-        }
-        if (this.datePipe.transform(exp.ResumeProfessionalExperienceKey.end_date, 'yyyy-MM-dd') === this.datePipe
-          .transform(new Date(), 'yyyy-MM-dd')) {
-          this.checkedBox = false;
-          this.disableCheckBox = true;
-        }
       }
     );
-    this.myDisabledDayFilter = (d: Date): boolean => {
-      const time = d.getTime();
-      return !disabledDates.find(x => x.getTime() === time);
-    };
   }
 
   /*******************************************************************
@@ -428,13 +415,17 @@ export class ProExpComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/dynamicSection'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
+
           }
         });
       } else {
-        this.router.navigate(['/candidate/resume/intervention'], {
+        this.router.navigate(['/manager/resume/intervention'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
+
           }
         });
       } } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
@@ -468,4 +459,31 @@ export class ProExpComponent implements OnInit {
     }
 
   }
+  checkFormValues(typeRoute: string) {
+    let notEmptyForm = false;
+    Object.values(this.sendProExp.controls).some(({ value }) => {
+      if (value) {
+        notEmptyForm = true;
+      }
+    });
+    if (!notEmptyForm) {
+      this.routeNextBack(typeRoute);
+    } else {
+      const confirmation = {
+        code: 'confirmation',
+        title: 'Data is not saved',
+        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.routeNextBack(typeRoute);
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
+  }
+
 }

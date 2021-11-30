@@ -210,6 +210,7 @@ export class ModalSocialWebsiteComponent implements OnInit, OnDestroy {
           phone_nbr1: this.data.phone_nbr1,
           phone_nbr2: this.data.phone_nbr2,
           reg_nbr: this.data.reg_nbr,
+          stamp: this.data.stamp,
           registry_country: this.data.registry_country,
           zip_code: this.data.zip_code,
           updated_by: this.data.updated_by,

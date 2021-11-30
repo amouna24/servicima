@@ -206,5 +206,4 @@ export class DynamicComponent implements OnInit, OnDestroy {
     // Unsubscribe from the subject
     this.destroy$.unsubscribe();
   }
-
 }

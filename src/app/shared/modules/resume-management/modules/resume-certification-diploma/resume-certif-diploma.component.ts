@@ -31,6 +31,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   minStartDate: Date;
   maxStartDate: Date;
   minEndDate: Date;
+  companyUserType: string;
   maxEndDate: Date;
   showDateError: boolean;
   certifDiplomaCode: string;
@@ -52,22 +53,13 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     private router: Router
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
-    this.router.events
-      .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
-      .subscribe(event => {
-        if (
-          event.id === 1 &&
-          event.url === event.urlAfterRedirects
-        ) {
-          this.router.navigate(['resume/candidate']);
-        }
-      });
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
 
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
-   ngOnInit() {
+  ngOnInit() {
     this.showDateError = false;
     this.showNumberError = false;
     this.button = 'Add';
@@ -102,7 +94,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
           },
         );
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY' && !this.resumeCode) {
-       this.router.navigate(['manager/resume/']);
+      this.router.navigate(['manager/resume/']);
     } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' ||
       this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR') {
       this.resumeService.getResume(
@@ -116,7 +108,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
               .subscribe(
                 (responseOne) => {
                   if (responseOne['msg_code'] !== '0004') {
-                    this.certifDiplomaArray = responseOne.sort( (val1, val2) => {
+                    this.certifDiplomaArray = responseOne.sort((val1, val2) => {
                       return +new Date(val1.start_date) - +new Date(val2.start_date);
                     });
                     this.certifDiplomaArray.forEach(
@@ -140,6 +132,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       );
     }
   }
+
   /**************************************************************************
    * @description Initialization of Certification and diploma Form
    *************************************************************************/
@@ -152,6 +145,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       certif_diploma_desc: '',
     });
   }
+
   /**************************************************************************
    * @description Create or Update Certification/Diploma
    *************************************************************************/
@@ -168,7 +162,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
               (responseOne) => {
                 if (responseOne['msg_code'] !== '0004') {
                   this.certifDiplomaArray.push(responseOne[0]);
-                }});        });
+                }
+              });
+        });
       } else {
         this.showDateError = false;
         this.showNumberError = false;
@@ -190,6 +186,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.sendCertifDiploma.reset();
     this.showNumberError = false;
   }
+
   /**************************************************************************
    * @description get data from a selected certification/Diploma and set it in the current form
    * @param certifDiploma Certifications and diploma Model
@@ -262,10 +259,11 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     const currentMonth = new Date().getMonth();
     const currentDay = new Date().getDate();
     this.minEndDate = new Date(currentYear - 20, 0, 1);
-    this.maxEndDate = new Date(currentYear, currentMonth, currentDay);
+    this.maxEndDate = new Date(currentYear + 3, 0, 1);
     this.minStartDate = new Date(currentYear - 20, 0, 1);
     this.maxStartDate = new Date(currentYear, currentMonth, currentDay);
   }
+
   /**************************************************************************
    * @description Show indexation
    *************************************************************************/
@@ -274,8 +272,9 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     for (let i = 1; i < 10; i++) {
       indexationArray[i] = '0' + i.toString();
     }
-    return(indexationArray);
+    return (indexationArray);
   }
+
   /**************************************************************************
    * @description Route to next page or to the previous page
    * @param typeRoute type of route previous or next
@@ -285,17 +284,19 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/certifications'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/generalInformation'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }
-    } else   if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+    } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
       if (typeRoute === 'next') {
         this.router.navigate(['/candidate/resume/certifications'], {
           state: {
@@ -325,5 +326,32 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       }
     }
 
+  }
+
+  checkFormValues(typeRoute: string) {
+    let notEmptyForm = false;
+    Object.values(this.sendCertifDiploma.controls).some(({ value }) => {
+      if (value) {
+        notEmptyForm = true;
+      }
+    });
+    if (!notEmptyForm) {
+      this.routeNextBack(typeRoute);
+    } else {
+      const confirmation = {
+        code: 'confirmation',
+        title: 'Data is not saved',
+        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.routeNextBack(typeRoute);
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
+    }
   }
 }

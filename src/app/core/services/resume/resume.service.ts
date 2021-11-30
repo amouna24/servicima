@@ -12,6 +12,9 @@ import { IResumeProjectModel } from '@shared/models/resumeProject.model';
 import { IResumeProjectDetailsModel } from '@shared/models/resumeProjectDetails.model';
 import { IResumeProjectDetailsSectionModel } from '@shared/models/resumeProjectDetailsSection.model';
 import { IResumeCertificationModel } from '@shared/models/resumeCertification.model';
+import { IResumeDataModel } from '@shared/models/resumeData.model';
+import { IResumeListModel } from '@shared/models/resumeList.model';
+import { IResumeMailingHistoryModel } from '@shared/models/mailingHistory.model';
 
 import { Observable, throwError } from 'rxjs';
 
@@ -447,15 +450,21 @@ export class ResumeService {
   /**************************************************************************
    * @description Get Project Details Section List
    * @param filter search query like [ ?id=123 ]
-   * @param theme set the theme design of the resume
    * @param type type format of the resume PDF or DOCX
    * @returns All Project Observable<IProjectDetailsSection[]>
    *************************************************************************/
 
-  getResumePdf(filter: any, theme: string, type: string): Observable<any> {
+  generateResumeContractors(filter: any, type: string): Observable<any> {
     filter = JSON.parse(JSON.stringify(filter));
     // @ts-ignore
-    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/?type=${type}&theme=${theme}`, filter,   { responseType: 'blob'});
+    // tslint:disable-next-line:max-line-length
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/contractors/?type=${type}`, filter, { responseType: 'blob'});
+  }
+  generateResumeCompany(filter: any, type: string): Observable<any> {
+    filter = JSON.parse(JSON.stringify(filter));
+    // @ts-ignore
+    // tslint:disable-next-line:max-line-length
+    return this.httpClient.post<any>(`${environment.docxTemplateApiUrl}/company/?type=${type}`, { data: filter}, { responseType: 'blob'});
   }
   /*------------------------------------ RESUME-CERTIFICATION--------------------------------------*/
 
@@ -493,22 +502,32 @@ export class ResumeService {
   }
 
   /*-------------------------------------------------------------------------------------*/
-  sendMail(language_id, application_id, company_id, email_address, company_name, collaborator_position, attachement): Observable<any> {
-    console.log('resume service');
-    console.log(`${environment.resumeApiUrl}/mailing`);
+  sendMail(language_id, application_id, company_id, email_address, attachement, emailcc, emailbcc, subject, text): Observable<any> {
+    console.log({
+      language_id,
+      application_id,
+      company_id,
+      email_address,
+      attachement,
+      emailcc,
+      emailbcc,
+      subject,
+      text,
+    });
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailing`, {
       language_id,
       application_id,
       company_id,
       email_address,
-      company_name,
-      collaborator_position,
-      attachement
+      attachement,
+      emailcc,
+      emailbcc,
+      subject,
+      text,
     });
   }
   /*-------------------------------------------------------------------------------------*/
   sendMailManager(language_id, application_id, company_id, email_address, company_name, candidate_name, attachement): Observable<any> {
-    console.log('resume service');
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailingmanager`, {
       language_id,
       application_id,
@@ -518,5 +537,83 @@ export class ResumeService {
       candidate_name,
       attachement
     });
+  }
+  /*------------------------------------ RESUME-DATA--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get RESUME DATA List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IResumeCertificationModel[]>
+   *************************************************************************/
+  getResumeData(filter: string): Observable<IResumeDataModel[]> {
+    return this.httpClient.get<IResumeDataModel[]>(`${environment.resumeDataApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description Add new ResumeData
+   * @param resumeData : IResumeDataModel  model
+   *************************************************************************/
+  addResumeData(resumeData: IResumeDataModel): Observable<any> {
+    return this.httpClient.post<IResumeDataModel>(`${environment.resumeDataApiUrl}`, resumeData);
+  }
+
+  /**************************************************************************
+   * @description Update ResumeData Status
+   * @param resumeData: updated  ResumeData Object
+   *************************************************************************/
+  updateResumeData(resumeData: IResumeDataModel): Observable<any> {
+    return this.httpClient.put<IResumeDataModel>(`${environment.resumeDataApiUrl}`, resumeData);
+  }
+
+  /**************************************************************************
+   * @description Delete ResumeData Status
+   * @param id: Delete ResumeData Object
+   *************************************************************************/
+  deleteResumeData(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeDataModel>(`${environment.resumeDataApiUrl}/?_id=${id}`);
+  }
+
+  /*-------------------------------------------------------------------------------------*/
+  getResumeList(filter: string): Observable<IResumeListModel[]> {
+    return this.httpClient.get<IResumeListModel[]>(`${environment.uploadResumeFileApiUrl}/${filter}`);
+  }
+  addResumeList(resumeList: IResumeListModel): Observable<any> {
+    return this.httpClient.post<IResumeListModel>(`${environment.uploadResumeFileApiUrl}`, resumeList);
+  }
+  convertResumeToPdf(docxUrl: string) {
+    return this.httpClient.post(`${environment.docxTemplateApiUrl}/convert`, { url: docxUrl}, { responseType: 'blob'});
+
+  }
+  /*------------------------------------ RESUME-MAILING-HISTORY--------------------------------------*/
+
+  /**************************************************************************
+   * @description Get Mailing History List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Project Observable<IResumeMailingHistoryModel[]>
+   *************************************************************************/
+  getMailingHistory(filter: string): Observable<IResumeMailingHistoryModel[]> {
+    return this.httpClient.get<IResumeMailingHistoryModel[]>(`${environment.resumeMailingHistoryApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new Mailing history
+   * @param mailingHistory : IResumeMailingHistoryModel model
+   *************************************************************************/
+  addMailingHistory(mailingHistory: IResumeMailingHistoryModel): Observable<any> {
+    return this.httpClient.post<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}`, mailingHistory);
+  }
+
+  /**************************************************************************
+   * @description Update Mailing history Status
+   * @param mailingHistory: updated  Mailing history Object
+   *************************************************************************/
+  updateMailingHistory(mailingHistory: IResumeMailingHistoryModel): Observable<any> {
+    return this.httpClient.put<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}`, mailingHistory);
+  }
+  /**************************************************************************
+   * @description Delete Mailing History Status
+   * @param id: Delete Mailing History Object
+   *************************************************************************/
+  deleteMailingHistory(id: string): Observable<any> {
+    return this.httpClient.delete<IResumeMailingHistoryModel>(`${environment.resumeMailingHistoryApiUrl}/?_id=${id}`);
   }
 }

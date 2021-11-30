@@ -18,6 +18,8 @@ import { IActivity } from '@shared/models/activity.model';
 import { environment } from '../../../../environments/environment';
 import { TranslationCustomLoaderService } from '../translation/translation-custom-loader.service';
 import { LocalStorageService } from '../storage/local-storage.service';
+// tslint:disable-next-line:origin-ordered-imports
+import { INationality } from '@shared/models/nationality.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,7 @@ export class AppInitializerService {
   countriesList: ICountry[] = [];
   currenciesList: ICurrency[] = [];
   licencesList: ILicenceModel[] = [];
+  nationalitiesList: INationality[];
 
   constructor(
     private httpClient: HttpClient,
@@ -65,11 +68,15 @@ export class AppInitializerService {
       this.assetsDataService.getAllActivityCode(),
       this.assetsDataService.getAllCountries(),
       this.assetsDataService.getAllCurrencies(),
+      this.assetsDataService.getAllNationalities(),
+
     ]).toPromise().then(
       (data) => {
         this.activityCodeList = data[0];
         this.countriesList = data[1];
         this.currenciesList = data[2];
+        this.nationalitiesList = data[3];
+
       });
   }
 }

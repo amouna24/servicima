@@ -1,0 +1,254 @@
+.container-tab {
+  th {
+    color: #7b7e8a !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+}
+.form-container {
+  table{
+    border-left: 2px solid #707070;
+    border-collapse: collapse;
+  }
+
+  td:not(:last-child), th:not(:last-child) {
+    border-bottom: 2px solid #707070;
+    border-right: 2px solid #707070;
+    text-align: center;
+    border-collapse: collapse;
+  }
+
+  td:last-child {
+    border-right: none;
+  }
+
+  td:last-child:hover{
+    background-color: #fc0f3b;
+  }
+
+  thead,
+  tfoot {
+    background-color: #2b2b2b;
+    color: #fff;
+  }
+
+  th{
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #delete .mat-icon{
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border-bottom-right-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+  }
+
+  tr:not(:first-child):hover  {
+    background-color: #e8f1f9;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .icon-trash {
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius:15px !important
+  }
+
+  #delete .mat-icon {
+    visibility: hidden;
+  }
+
+
+
+  tr:hover #delete .mat-icon {
+    visibility: visible;
+    display: flex;
+    background: #e8f1f9;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  td:hover .mat-icon {
+    background: red !important;
+  }
+
+  .montant{
+    border-bottom: 2px solid #707070;
+    border-right: 2px solid #707070;
+  }
+
+  td{
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0 !important ;
+  }
+
+  textarea.mat-input-element.cdk-textarea-autosize {
+    box-sizing: content-box;
+  }
+
+  .border-none{
+    border-top: none !important;
+  }
+  .width-15 {
+    max-width: 15% !important;
+  }
+  .width-12 {
+    max-width: 12% !important;
+  }
+  .width-25 {
+    max-width: 25% !important;
+  }
+
+
+  .small-col {
+    width: 8% !important;
+    min-width: 8% !important;
+  }
+  .large-col {
+    width:  30% !important;
+    min-width:  30% !important;
+  }
+  .medium-col {
+    width: 12% !important;
+    min-width: 12% !important;
+    max-width: 12% !important;
+  }
+  .vat_mount {
+    font-size: 12px !important;
+    max-width:100px;
+    white-space: pre-line !important;
+    overflow-wrap: break-word !important;
+  }
+
+}
+.edit .mat-icon{
+  height: 13px !important;
+}
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+.btn-add-line{
+  height: 100px !important
+}
+
+.eye-icon{
+  height: 28px !important;
+  color: #1bc5bd !important;
+  font-size: 30px !important;
+  margin-right: 0 !important;
+}
+.container-action button {
+  margin: 4px;
+}
+
+::ng-deep.setting .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+.container-tab {
+
+  tr:first-child {
+    border: none !important;
+  }
+  tr:first-child th {
+    border: none !important;
+  }
+  ::ng-deep.mat-sort-header-container {
+    justify-content: center !important;
+  }
+  ::ng-deep td {
+    text-align: center !important;
+  }
+  th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+
+    padding: 0 !important;
+  }
+
+  td {
+    font-size: 12px !important;
+    padding: 0px !important;
+  }
+}
+
+
+.btn-active {
+  background: #67809f;
+  color: #e8f1f9;
+}
+
+.btn-no-active {
+  background: #e8f1f9 ;
+  color: #67809f;
+}
+.btn-small {
+  width: 100px !important;
+}
+.container-tab{
+  ::ng-deep.mat-table tbody tr:hover  {
+    background-color: #e8f1f9 !important;
+    cursor: pointer;
+  }
+}
+
+.mat-icon-button:hover {
+  color: red !important;
+}
+.container-factor {
+  ::ng-deep.mat-form-field-appearance-outline .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
+}
+
+.adress{
+  ::ng-deep.mat-form-field-appearance-outline .mat-form-field-flex {
+    height: 160px !important;
+    width: 350px !important;
+}
+ }
+
+.width-100{
+  max-width: 100px !important;
+  min-width: 100px !important
+}
+
+.width-125{
+  width: 125px !important;
+}
+
+.width-150{
+  width: 150px !important;
+}
+
+.width-210{
+  width: 210px !important
+}
+
+.width-250{
+  width: 250px !important;
+}
+
+.width-435 {
+  min-width :435px !important;
+}
+
+.min-height-25 {
+  min-height: 25% !important;
+}
+
+.width-40{
+   width: 40% !important;
+}
+
+.line-height-1-4{
+  line-height: 1.4 !important;
+}

@@ -88,7 +88,8 @@ getAllTimesheet() {
   this.timesheetService.getTimesheet(
           `?application_id=${this.userService.applicationId}` +
           `&company_email=${this.companyEmail}` +
-          `&timesheet_status=${this.listStatus}`).toPromise().then(
+          `&timesheet_status=${this.listStatus}` +
+          `&status=ACTIVE`).toPromise().then(
          async (timesheetList) => {
            if (timesheetList) {
              await timesheetList.map(
@@ -100,6 +101,7 @@ getAllTimesheet() {
                      timesheet['last_name'] = profile.results[0].last_name;
                      timesheet['profile'] = `${profile.results[0].first_name} ${profile.results[0].last_name}`;
                      timesheet['photo'] = profile.results[0].photo;
+                     timesheet['user_position'] = profile.results[0].title_id;
                    }
                  );
                  this.contractService.getContractProject(`?project_code=${timesheet.TimeSheetKey.project_code}`).toPromise().then(
@@ -119,16 +121,18 @@ getAllTimesheet() {
     this.modalsServices.displayModal('showTimesheet', data, '400px', '600px')
         .subscribe(
           (res) => {
+            if (res) {
               this.modalsServices.displayModal(
                 'rejectTimesheet',
                 { timesheet: data, action: res},
                 '607px',
-                '350px')
-                  .subscribe((result) => {
-                    if (result) {
-                      this.getAllTimesheet();
-                    }
-                  });
+                '353px')
+                .subscribe((result) => {
+                  if (result) {
+                    this.getAllTimesheet();
+                  }
+                });
+            }
               },
     error => {
           console.log(error);
@@ -145,9 +149,11 @@ getAllTimesheet() {
       case ('update'):
         this.showTimesheet(rowAction.data);
         break;
+      case ('Delete'):
+        this.showTimesheet(rowAction.data);
+        break;
     }
   }
-
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/

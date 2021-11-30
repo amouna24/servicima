@@ -219,11 +219,15 @@ Paddings
 }
 
 .p-r-15 {
-  padding-right: 20px;
+  padding-right: 15px;
 }
 
 .p-r-20 {
     padding-right: 20px;
+}
+
+.p-r-25 {
+  padding-right: 25px;
 }
 
 .p-r-30 {
@@ -243,6 +247,10 @@ Paddings
     padding-top: 0;
 }
 
+.p-t-5 {
+  padding-top: 5px;
+}
+
 .p-t-10 {
     padding-top: 10px;
 }
@@ -259,7 +267,7 @@ Paddings
     padding-top: 30px;
 }
 .p-b-0 {
-    padding-bottom: 0;
+    padding-bottom: 0 !important;
 }
 
 .p-b-5 {
@@ -538,6 +546,9 @@ html body {
 /*******************
        Line height
 *******************/
+.line-height-0{
+  line-height: 0 !important;
+}
 .line-height-2{
   line-height: 2;
 }
@@ -571,8 +582,15 @@ html body {
 .black {
     color: $black;
 }
+.warm-grey {
+  color: $warm-grey;
+}
 .white {
   color: $white !important;
+}
+
+.gray {
+  color: #707070 !important;
 }
 
 .brownish-grey{
@@ -582,7 +600,7 @@ html body {
   color: $cerulean-blue !important;
 }
 .steel{
-  color: $steel;
+  color: $steel !important;
 }
 .topaz{
   color: $topaz !important;
@@ -598,6 +616,9 @@ html body {
 }
 .steel-two {
   color: $steel-two;
+}
+.warning-yellow{
+  color: $warning-yellow !important;
 }
 /*******************
  background colors
@@ -697,6 +718,13 @@ html body {
 .min-full-screen-height {
   min-height: $screen-height !important;
 }
+
+.min-full-width {
+  min-width: 100% !important;
+}
+.min-full-height {
+  min-height: 100% !important;
+}
 .height-50{
   height: 50%;
 }
@@ -729,8 +757,16 @@ html body {
   height: 80vh !important;
   height: 78vh !important;
   background-color: $white;
-  margin: 0 25px 0 25px;
+  // margin: 0 25px 0 25px;
   // width: 88vw;
+}
+
+/*    Component list Collaborator  */
+.list-collaborator-component  {
+  @include get-page(servicima);
+  margin: 0px 20px 20px;
+  height: 81vh !important;
+  background-color: $white;
 }
 
 .dynamic-component-content {

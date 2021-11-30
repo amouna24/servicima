@@ -913,6 +913,25 @@
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
                             <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
+                          <div *ngIf="sf.type === 'themeRadioGroup'" fxLayout="column" fxFlex="87">
+                            <mat-label fxLayout="row">
+                              {{sf.label }}:
+                            </mat-label>
+                            <div fxLayout="row" fxFlex="100">
+                            <wid-scrollbar   class="full-width resume-container">
+                             <mat-radio-group fxLayout="row" fxFlexFill fxLayoutGap="10px"  formControlName="{{sf.formControlName}}">
+                               <div fxLayout="column"  *ngFor="let oneObject of sf.selectFieldList.getValue()" class="resume-container-column" fxLayoutAlign=" center">
+                                 <div fxLayout="row" fxFlex="70" >
+                                   <img class="resume-icon" width="84.5x" height="120px" src="{{oneObject.icon}}">
+                                 </div>
+                                 <mat-radio-button fxLayout="row" fxFlex="30" [value]="oneObject.value" [checked]="oneObject.value === 'DEFAULT'"  class="black font-size-8 font-normal">
+                                   {{oneObject.viewValue}}
+                                 </mat-radio-button>
+                               </div>
+                               </mat-radio-group>
+                            </wid-scrollbar>
+                            </div>
+                            </div>
                         </ng-container>
                       </div>
                     </ng-container>

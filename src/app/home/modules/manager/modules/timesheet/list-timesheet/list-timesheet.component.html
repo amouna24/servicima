@@ -3,8 +3,9 @@
   [tableCode]="'TIMESHEET'"
   [isLoading]="isLoading"
   [header]="{ title: 'Timesheet management', addActionURL: '#', addActionText: ''}"
-  [title]="'Timesheet list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="['export']"
+  [allowedActions]="['Approve', 'Reject', 'Delete']"
+  [buttonAdd]="false"
+  [setAvatar]="{columnCode:'profile', imgSrc: 'photo' }"
 >
 </wid-dynamic-data-table>

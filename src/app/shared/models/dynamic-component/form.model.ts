@@ -33,7 +33,8 @@ export enum FieldsType {
   UPLOAD_FILE = 'uploadFile',
   DATE_PICKER = 'datePicker',
   DATA_TABLE = 'dataTable',
-  ADD_MORE_OR_UPDATE = 'addMore'
+  ADD_MORE_OR_UPDATE = 'addMore',
+  THEME_RADIO_GROUP = 'themeRadioGroup',
 }
 
 export interface IColumnsDef {

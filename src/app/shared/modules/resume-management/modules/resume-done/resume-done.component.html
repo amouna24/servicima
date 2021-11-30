@@ -20,13 +20,13 @@
     <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
-    <div fxLayout="row" fxFlex="9" fxLayoutAlign="space-around center ">
+    <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
       <div fxLayout="column" fxFlex="86">
         <h4 class="steel font-size-18 font-small">Preview</h4>
       </div>
     </div>
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
-  <ng-template [ngIf]="count === 100 && !showEmpty">
+  <ng-template [ngIf]="showPage">
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlexAlign="center">
         <ng-template [ngIf]="userType === 'candidate'">
@@ -77,7 +77,7 @@
             </div>
           </ng-template>     </span>
         </button>
-        <button mat-raised-button type="submit" color="primary" class="white btn-large" *ngIf="count===100" (click)="getDocument('generate')"  [style]="{marginRight: '4%'}">
+        <button mat-raised-button type="submit" color="primary" class="white btn-large"  (click)="getDocument('generate')"  [style]="{marginRight: '4%'}">
           <ng-template [ngIf]="!showWaiting">
             {{ 'resume-save' | translate }}
           </ng-template>
@@ -95,7 +95,14 @@
       </div>
     </div>
   </ng-template>
-  <ng-template [ngIf]="count< 100 && !showEmpty">
+      <ng-template [ngIf]="!showPage">
+        <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+          <mat-spinner color="primary"></mat-spinner>
+          <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+        </div>
+      </ng-template>
+
+      <ng-template [ngIf]="false">
     <div fxLayout="column" fxFlexFill>
       <div fxLayout="row" fxFlexAlign="center">
         <ng-template [ngIf]="userType === 'candidate'">

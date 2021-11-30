@@ -16,6 +16,7 @@ import { ScrollbarModule } from '@shared/scrollbar/scrollbar.module';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { CapitalizeFirstLetter } from '@core/services/pipe/capialize-first-letter';
 import { ClickOutsideDirective } from '@shared/directives/ClickOutsideDirective';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TitleSettingsComponent } from '@shared/components/title-settings/title-settings.component';
 
 import { SpliceText } from '@core/services/pipe/splice-text';
@@ -26,6 +27,8 @@ import { ChangePwdComponent } from './components/settings/changepwd/changepwd.co
 import { UserComponent } from './components/settings/user/user.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { CanBeDisplayedDirective } from './directives/can-be-displayed.directive';
+import { PaginationDirective } from './directives/pagination.directive';
+
 import { MaterialModule } from './modules/material/material.module';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
@@ -36,6 +39,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { RightSidenaveComponent } from './components/right-sidenave/right-sidenave.component';
 import { DynamicComponent } from './components/dynamic-component/dynamic.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { AddTimesheetComponent } from './components/add-timesheet/add-timesheet.component';
 import { EditUserComponent } from './components/settings/edit-user/edit-user.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ModalSocialWebsiteComponent } from './components/modal-social-website/modal-social-website.component';
@@ -44,6 +48,17 @@ import { SidenavSettingsComponent } from './components/settings/sidenav-settings
 import { SplashComponent } from './components/splash/splash.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ResumeManagementModule } from './modules/resume-management/resume-management.module';
+import { MailingModalComponent } from './components/mailing-modal/mailing-modal.component';
+import { ShowWorkCertificateComponent } from './modules/work-certificates/show-work-certificate/show-work-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
+import { SignaturePadModule } from 'angular2-signaturepad';
+// tslint:disable-next-line:origin-ordered-imports
+import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
+import { TitleCertifComponent } from './modules/work-certificates/title-certif/title-certif.component';
+import { EditWorkCertificateComponent } from './modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
+import { SignatureComponent } from './components/signature/signature.component';
+import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
+// tslint:disable-next-line:origin-ordered-imports
 
 @NgModule({
   declarations: [
@@ -51,6 +66,7 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SidenavComponent,
     HeaderComponent,
     ChangePwdComponent,
+    TitleSettingsComponent,
     UserComponent,
     HomeCompanyComponent,
     ConfirmationModalComponent,
@@ -59,8 +75,10 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SkeletonLoaderComponent,
     StepperComponent,
     RightSidenaveComponent,
+    AddTimesheetComponent,
     /* Directives */
     CanBeDisplayedDirective,
+    PaginationDirective,
     ClickOutsideDirective,
     DisableControlDirective,
     CapitalizeFirstLetter,
@@ -77,7 +95,15 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     ErrorComponent,
     SplashComponent,
     ErrorComponent,
-    TitleSettingsComponent
+    TitleSettingsComponent,
+    AddTimesheetComponent,
+    MailingModalComponent,
+    ShowWorkCertificateComponent,
+    RequestWorkCertificateComponent,
+    TitleCertifComponent,
+    EditWorkCertificateComponent,
+    SignatureComponent,
+    SignatureCertificateComponent,
   ],
   imports: [
     CommonModule,
@@ -92,9 +118,11 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     FormsModule,
     NgxDatatableModule,
     FormsModule,
+    SignaturePadModule,
     MatIconModule,
     MatBottomSheetModule,
     ScrollbarModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     MaterialModule,
@@ -105,10 +133,12 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     SidenavComponent,
     UserComponent,
     ChangePwdComponent,
+    TitleSettingsComponent,
     HomeCompanyComponent,
     TranslateModule,
     NgxDatatableModule,
     FlexLayoutModule,
+    SignaturePadModule,
     FormsModule,
     SkeletonLoaderComponent,
     BreadcrumbComponent,
@@ -131,7 +161,11 @@ import { ResumeManagementModule } from './modules/resume-management/resume-manag
     DisableControlDirective,
     ModalComponent,
     ProfileImageComponent,
-    TitleSettingsComponent
+    ProfileImageComponent,
+    AddTimesheetComponent,
+    NgMultiSelectDropDownModule,
+    RequestWorkCertificateComponent,
+    PaginationDirective,
   ]
 })
 export class SharedModule { }

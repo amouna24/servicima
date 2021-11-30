@@ -1,0 +1,135 @@
+ <div  fxLayout="column"
+        class="dynamic-component-container bg-white border-radius-20 p-b-5">
+   <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+     <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
+          style="border-bottom: 1px solid #afb1b8">
+     <ng-container *ngIf="formType.add else Edit">
+       <h2 class="steel font-medium font-size-24">Add timesheets</h2>
+     </ng-container>
+     <ng-template #Edit>
+       <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
+     </ng-template>
+     <button mat-flat-button class="btn-small bg-pale-grey cool-grey" (click)="backClicked()">
+       Back
+     </button>
+     </div>
+   </div>
+     <wid-scrollbar>
+       <ng-container *ngIf="isLoading.value else loading">
+       <form fxLayout="column" *ngIf="initialForm" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
+         <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
+           <!-- left column form -->
+           <div fxFlex="28" fxLayout="column">
+             <div fxLayout="column">
+               <label class="font-size-12 required"> Week start on :</label>
+               <mat-form-field appearance="outline">
+                 <input matInput
+                        formControlName="start_date"
+                        [matDatepickerFilter]="startDateFilter"
+                        [matDatepicker]="datepicker"
+                        placeholder="dd/mm/yyyy"
+                        (dateChange)="getWeekHoliday()"
+                 >
+                 <mat-datepicker-toggle matSuffix [for]="datepicker">
+                   <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon>
+                 </mat-datepicker-toggle>
+                 <mat-datepicker #datepicker></mat-datepicker>
+                 <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
+                   Required field
+                 </mat-error>
+               </mat-form-field>
+             </div>
+             <div fxLayout="column">
+               <label class="font-size-12 required"> Project : </label>
+               <mat-form-field appearance="outline">
+                 <mat-select  formControlName="project_code"  [placeholder]="projectsList && contract? 'Project' : 'No project found'">
+                   <ng-container *ngIf="projectsList && contract">
+                     <mat-option *ngFor="let project of projectsList" [value]="project.ContractProjectKey.project_code">
+                       {{ project.project_desc}}
+                     </mat-option>
+                   </ng-container>
+                 </mat-select>
+
+                 <mat-error class="wid-error-messages" *ngIf="initialForm.controls.start_date?.errors?.required">
+                   Required field
+                 </mat-error>
+               </mat-form-field>
+             </div>
+             <div fxLayout="column">
+               <label class="font-size-12 required"> Comment : </label>
+               <mat-form-field appearance="outline">
+                 <textarea rows="3" placeholder="comment ..." matInput formControlName="comment"></textarea>
+               </mat-form-field>
+             </div>
+
+           </div>
+           <!-- right column form -->
+           <div fxFlex="50" >
+             <div fxFlex="56" fxLayout="column" *ngIf="weekDays">
+               <ng-container *ngFor="let day of weekDays; let index = index" >
+                 <div fxLayout="column">
+                   <label class="font-size-12 required"> {{day.desc}} : </label>
+                   <mat-form-field appearance="outline">
+                     <mat-icon matSuffix svgIcon="wi-clock"></mat-icon>
+                     <input matInput placeholder="00h" type="number"  min="0"
+                            [max]="!!contract ? contract.working_hour_day : 24"
+                            [formControlName]="day.name">
+                     <mat-error class="wid-error-messages">
+                       {{dayValidator(day.name)}}
+                     </mat-error>
+                     <mat-hint *ngIf="day.hasHoliday" >{{day.holiday.name}}</mat-hint>
+                   </mat-form-field>
+                 </div>
+               </ng-container>
+               <div fxLayout="column">
+                 <label class="font-size-12"> Total : </label>
+                 <mat-form-field appearance="outline" class="disabled">
+                   <input matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
+                 </mat-form-field>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
+           <button mat-flat-button [type]="formType.add ? 'reset' : 'button' " (click)="formType.edit ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
+           <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
+             <ng-container *ngIf="formType.managerMode else collaborator">
+               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">Approve</button>
+             </ng-container>
+             <ng-template #collaborator>
+               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
+               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">
+                 {{formType.add ? 'Save' : 'Edit'}}
+               </button>
+             </ng-template>
+
+           </div>
+         </div>
+       </form>
+       </ng-container>
+       <ng-template #loading>
+         <div class="full-width p-l-40 p-r-40 p-t-10" fxLayout="row" fxLayoutAlign="space-between start">
+           <wid-skeleton-loader fxFlex="28"
+                                [nbrColumn]="1"
+                                [nbrRow]="4"
+                                [marginTop]="0"
+                                [marginBottom]="35"
+                                [width]="295"
+                                [height]="35"
+           >
+           </wid-skeleton-loader>
+           <wid-skeleton-loader fxFlex="50"
+                                [nbrColumn]="1"
+                                [nbrRow]="7"
+                                [marginTop]="25"
+                                [marginBottom]="15"
+                                [width]="295"
+                                [height]="35"
+           >
+           </wid-skeleton-loader>
+         </div>
+       </ng-template>
+     </wid-scrollbar>
+
+ </div>
+

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 import { UtilsService } from '@core/services/utils/utils.service';
@@ -22,6 +22,9 @@ import { userType } from '@shared/models/userProfileType.model';
 import { SocialNetwork } from '@core/services/utils/social-network';
 import { INetworkSocial } from '@shared/models/social-network.model';
 import { RefdataService } from '@core/services/refdata/refdata.service';
+import { SheetService } from '@core/services/sheet/sheet.service';
+import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-edit-company-home',
@@ -42,6 +45,8 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
               private router: Router,
               private socialNetwork: SocialNetwork,
               private refdataService: RefdataService,
+              private sheetService: SheetService,
+
   ) {
   }
   avatar: any;
@@ -52,6 +57,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
+  ancienPhoto: string;
   applicationId: string;
   languageId: string;
   user: IUserModel;
@@ -64,8 +70,11 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   activityCodeList: IViewParam[] = [];
   currenciesList: IViewParam[] = [];
   showList: INetworkSocial[] = [];
+  selectedFile: any;
+
   /** subscription */
   subscription: Subscription;
+  destroy$: Subject<boolean> = new Subject<boolean>();
   private subscriptions: Subscription[] = [];
   /** list filtered by search keyword */
   public filteredLegalForm = new ReplaySubject(1);
@@ -82,6 +91,10 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     this.InitializeData();
     this.initForm();
     this.getCompany();
+    this.sheetService.registerSheets(
+      [
+        { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
+      ]);
   }
   /**
    * @description Initialize data
@@ -133,6 +146,18 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       list);
   }
 
+  /**************************************************************************
+   * @description Upload Image to Server  with async to promise
+   *************************************************************************/
+  async uploadFile(formData) {
+    return await this.uploadService.uploadImage(formData)
+      .pipe(
+        takeUntil(this.destroy$),
+        map(response => response.file.filename)
+      )
+      .toPromise();
+  }
+
   /**
    * @description : init from
    */
@@ -159,6 +184,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       instagramAccount: [''],
       viberAccount: [''],
       legalFormCtrl: [''],
+      stamp: ['', [Validators.required]],
       activityCodeCtrl: [''],
       currencyCtrl: [''],
       vatCtrl: [''],
@@ -192,6 +218,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       address: this.company['adress'],
       city: this.company['city'],
       zipCode: this.company['zip_code'],
+      stamp: this.company['stamp'] ? this.company['stamp'] : ' ' ,
       registrationNumber: this.company['reg_nbr'],
       activityDescription: this.company['activity_desc'],
       capital: this.company['capital'],
@@ -235,9 +262,9 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   /**
    * @description get currencies and countries data from json
    */
- async getJsonData() {
+  async getJsonData() {
     this.mapData();
-   await this.getRefData();
+    await this.getRefData();
     /* load the initial  list */
     this.filteredLegalForm.next(this.legalFormList.slice());
     this.filteredActivityCode.next(this.activityCodeList.slice());
@@ -260,61 +287,78 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    * @description : update or edit company profile
    */
   async addOrUpdate() {
-      let filename = null;
-      if (this.photo) {
-        filename = await this.uploadService.uploadImage(this.photo)
-          .pipe(
-            map(
-              response => response.file.filename
-            ))
-          .toPromise();
+    let filename = null;
+    if (this.photo) {
+      filename = await this.uploadService.uploadImage(this.photo)
+        .pipe(
+          map(
+            response => response.file.filename
+          ))
+        .toPromise();
+    }
+    let fileName = null;
+    if (this.selectedFile) {
+      fileName = await this.uploadService.uploadImage(this.selectedFile.file).pipe(map(
+        response => response.file.filename
+
+      )).toPromise();
+
+    }
+    const companyProfile = {
+      _id: this.company._id,
+      application_id: this.company.companyKey['application_id'],
+      email_address: this.company.companyKey.email_address,
+      company_name: this.company['company_name'],
+      registry_country: this.form.value.registryCountryCtrl,
+      reg_nbr: this.form.value.registrationNumber,
+      activity_desc: this.form.value.activityDescription,
+      activity_code: this.form.value.activityCodeCtrl,
+      currency_id: this.form.value.currencyCtrl,
+      legal_form: this.form.value.legalFormCtrl,
+      capital: this.form.value.capital,
+      vat_nbr: this.form.value.vatCtrl,
+      adress: this.form.value.address,
+      zip_code: this.form.value.zipCode,
+      country_id: this.form.value.countryCtrl,
+      city: this.form.value.city,
+      employee_nbr: this.form.value.employeeNum,
+      stamp:  fileName ? fileName : this.form.value.stamp,
+      web_site: this.form.value.webSite,
+      contact_email: this.form.value.contactEmail,
+      linkedin_url: this.form.value.linkedinAccount,
+      twitter_url: this.form.value.twitterAccount,
+      youtube_url: this.form.value.youtubeAccount,
+      status: this.company.status,
+      facebook_url: this.company['facebook_url'],
+      phone_nbr: this.company['phone_nbr'],
+      photo: filename ? filename : this.company.photo,
+      phone_nbr1: this.form.value.phoneNbr1,
+      phone_nbr2: this.form.value.phoneNbr2,
+      fax_nbr: this.form.value.faxNbr,
+    };
+
+    const confirmation = {
+      code: 'edit',
+      title: 'user.back',
+      description: 'user.back',
+    };
+    this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe(async (value) => {
+      if (value === true) {
+        this.ancienPhoto =  this.company['photo'];
+        this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
+          this.userInfo['company'][0] = res;
+          if (this.ancienPhoto && companyProfile.photo !== this.ancienPhoto) {
+            this.uploadService.deleteFile(this.ancienPhoto).subscribe(() => {
+              console.log('file deleted');
+            });
+          }
+          this.userService.connectedUser$.next(this.userInfo);
+          this.router.navigate(['/manager/settings/home-company']);
+        }, (err) => console.error(err)));
       }
-      const companyProfile = {
-        _id: this.company._id,
-        application_id: this.company.companyKey['application_id'],
-        email_address: this.company.companyKey.email_address,
-        company_name: this.company['company_name'],
-        registry_country: this.form.value.registryCountryCtrl,
-        reg_nbr: this.form.value.registrationNumber,
-        activity_desc: this.form.value.activityDescription,
-        activity_code: this.form.value.activityCodeCtrl,
-        currency_id: this.form.value.currencyCtrl,
-        legal_form: this.form.value.legalFormCtrl,
-        capital: this.form.value.capital,
-        vat_nbr: this.form.value.vatCtrl,
-        adress: this.form.value.address,
-        zip_code: this.form.value.zipCode,
-        country_id: this.form.value.countryCtrl,
-        city: this.form.value.city,
-        employee_nbr: this.form.value.employeeNum,
-        web_site: this.form.value.webSite,
-        contact_email: this.form.value.contactEmail,
-        linkedin_url: this.form.value.linkedinAccount,
-        twitter_url: this.form.value.twitterAccount,
-        youtube_url: this.form.value.youtubeAccount,
-        status: this.company.status,
-        facebook_url: this.company['facebook_url'],
-        phone_nbr: this.company['phone_nbr'],
-        photo: filename ? filename : this.company.photo,
-        phone_nbr1: this.form.value.phoneNbr1,
-        phone_nbr2: this.form.value.phoneNbr2,
-        fax_nbr: this.form.value.faxNbr,
-      };
-      const confirmation = {
-        code: 'edit',
-        title: 'user.back',
-        description: 'user.back',
-      };
-      this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
-        if (value === true) {
-          this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
-            this.userInfo['company'][0] = res;
-            this.userService.connectedUser$.next(this.userInfo);
-            this.router.navigate(['/manager/settings/home-company']);
-          }, (err) => console.error(err)));
-        }
-        this.subscription.unsubscribe();
-      });
+      this.subscription.unsubscribe();
+    });
+
   }
 
   /**
@@ -390,6 +434,29 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+  /**************************************************************************
+   * @description Open Dialog Panel
+   *************************************************************************/
+  openUploadSheet() {
+    this.sheetService.displaySheet('uploadSheetComponent', null)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (res) => {
+          if (!!res) {
+            console.log(res);
+            this.selectedFile = res;
+            console.log(' this selected file ', this.selectedFile);
+            this.form.controls['stamp'].setValue(this.selectedFile.name);
+
+          }
+          /*
+                    this.selectedDocName.next({ name: res.name, formGroupName});
+          */
+        }
+      );
   }
 
 }

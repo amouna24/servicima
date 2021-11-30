@@ -1,24 +1,37 @@
 <div fxLayout="column" class="full-height full-width">
-  <div class="bg-pale-grey-four" fxFlex="22" fxLayout="column">
-    <div fxFlex="38" fxLayout="row" fxLayoutAlign="end" class="p-15">
+  <div class="bg-pale-grey-four" fxFlex="24" fxLayout="column">
+    <div fxFlex="30" fxLayout="row" fxLayoutAlign="end" class="p-15 p-b-0">
       <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
         <mat-icon svgIcon="wi-close-normal"></mat-icon>
       </button>
     </div>
-    <div fxFlex="62" fxLayout="row">
+    <div fxFlex="65" fxLayout="row">
       <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.first_name}}</p>
         <p class="font-size-15 black-three font-normal m-0">{{timesheet.last_name}}</p>
       </div>
       <div fxFlex>
-        <img class="img-rounded absolute m-t-30 avatar"  [src]=" avatar ? avatar : 'assets/img/default.jpg'">
+        <ng-container *ngIf="timesheet.photo && !avatar else showAvatar">
+          <wid-skeleton-loader class="absolute"
+                               [width]="114"
+                               [height]="114"
+                               [nbrRow]="1"
+                               [marginTop]="40"
+                               [nbrColumn]="1"
+                               [circle]="true"
+          ></wid-skeleton-loader>
+        </ng-container>
+        <ng-template #showAvatar >
+          <img class="img-rounded absolute m-t-40 avatar"   [src]="timesheet.photo ? avatar : 'assets/img/default.jpg'">
+        </ng-template>
       </div>
-      <div fxLayout="column" fxFlex class="full-height p-15" fxLayoutAlign="start start">
-        <p class="font-size-15 black-three font-normal m-0">{{timesheet.user_position}}</p>
+      <div fxLayout="column" fxLayoutAlign="space-between start" fxFlex class="full-height p-15 p-b-0">
+        <p class="font-size-15 black-three font-normal m-0">{{userPosition}}</p>
+        <button *ngIf="timesheet.timesheet_status === 'Pending'" mat-button (click)="updateTimesheet()" class="btn-small bg-pale-grey">Edit</button>
       </div>
     </div>
   </div>
-  <div fxFlex="23" fxLayout="column" class="p-l-15 p-r-15"
+  <div fxFlex="22" fxLayout="column" class="p-l-15 p-r-15"
        fxFlexOffset="70px" fxLayoutAlign="start start" fxLayoutGap="15px">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
       <div fxFlex>
@@ -80,7 +93,7 @@
       <button mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">Approve</button>
     </ng-container>
     <ng-template #status>
-      <span *ngIf="timesheet.timesheet_status === 'Pending'" class="topaz font-light font-size-12">Approved</span>
+      <span *ngIf="timesheet.timesheet_status === 'Approved'" class="topaz font-light font-size-12">Approved</span>
       <span *ngIf="timesheet.timesheet_status === 'Rejected'" class="red font-light font-size-12">Rejected</span>
     </ng-template>
 

@@ -38,8 +38,8 @@
     </div>
     <div fxLayout="row" fxFlex="30" fxLayoutGap="2%"  fxLayoutAlign="center center">
       <div fxLayout="row">
-        <button  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium">
-          <span class="white font-size-11">Export</span>
+        <button  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="showWithStatus(status)">
+          <span class="white font-size-11">{{status}}</span>
         </button>
       </div>
       <div fxLayout="row">
@@ -48,20 +48,20 @@
     'accordion-btn':panelOpenState === false
   }">
 
-          <mat-expansion-panel [ngClass]="{
+          <mat-expansion-panel #closePanel  (click)="open($event)" [ngClass]="{
     'mat-expansion-panel-header-list':panelOpenState === true,
     'mat-expansion-panel-header-btn':panelOpenState === false
   }" (opened)="panelOpenState = true"
                                (closed)="panelOpenState = false" class="bg-topaz">
-            <mat-expansion-panel-header >
-              <mat-panel-title  (click)="open($event)">
+            <mat-expansion-panel-header  class="disable_ripple" >
+              <mat-panel-title >
                 <span class="white font-size-11">Actions</span>
               </mat-panel-title>
 
 
 
-            </mat-expansion-panel-header>
-            <div class="white cursor-pointer font-size-11" (click)="actionRowData(book, listChecked)"  *ngFor="let book of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }"> {{ book }}
+            </mat-expansion-panel-header >
+            <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }"> {{ listAction }}
             </div>
           </mat-expansion-panel>
 
@@ -75,8 +75,8 @@
     <wid-scrollbar class="dynamic-data-table-content" style="width: 100%" >
 
       <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
-        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center start">
-          <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}">
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+          <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
             <div  fxFlex="15" fxLayout="row">
               <span class="cool-grey font-size-18">No Data Found</span>
             </div>
@@ -92,7 +92,7 @@
       </ng-container>
 
       <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
-        <table BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
+        <table  BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
 
           <ng-container *ngFor="let col of columns;" >
 
@@ -101,10 +101,12 @@
               <ng-container *ngSwitchCase="'rowItem'">
 
                 <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
+
                   <th cdk-header-cell *cdkHeaderCellDef class="steel font-size-14 font-semi-bold">
                     <mat-checkbox color="accent" (change)="selectAll($event)" [(ngModel)]="selectedAll"  color="accent"  [indeterminate]="isIndeterminate()"  class="example-margin checkbox-width" fxFlex="100" fxLayoutAlign="center">
                     </mat-checkbox>
                   </th>
+
                   <td  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light" >
                     <mat-checkbox  (change)="getChecked(row,$event)"  [ngModel]="row['checked']"  class="example-margin checkbox-width" color="accent" >
                     </mat-checkbox>
@@ -113,7 +115,21 @@
                 </ng-container>
 
               </ng-container>
+              <ng-container *ngSwitchCase="'rowItem1'" >
 
+                <ng-container cdkColumnDef="{{ col.prop }}" >
+                  <th cdk-header-cell *cdkHeaderCellDef class="steel font-size-14 font-semi-bold">
+                    Security
+                  </th>
+                  <td  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                      <span  class="material-icons-outlined">
+               {{row['password'] ? 'https' : 'lock_open'}}
+              </span>
+
+                  </td>
+                </ng-container>
+
+              </ng-container>
               <ng-container *ngSwitchDefault >
 
                 <ng-container cdkColumnDef="{{ col.prop }}">
@@ -131,36 +147,30 @@
 
                     <ng-container *ngSwitchCase="'date'">
                       <td cdk-cell (click)="actionRowData('update', row)"
-                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'short' }}
+                          *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date: 'dd/MM/yyyy' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <td cdk-cell (click)="actionRowData('update', row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light" >
                         <div (mouseover)="showAllText=true"  (mouseout)="showAllText=false">
-                          <ng-container *ngIf="row[col.prop] === null; else propNotNull">
-                            <span></span>
-                          </ng-container>
-                          <ng-template #propNotNull>
-                          <ng-container *ngIf="row[col.prop]['color']; else noColor">
-                                <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]['value']}}" [ngStyle]="{ 'color' : row[col.prop]['color']}" >
-                           {{ row[col.prop]['value'] | spliceText: 40 }}
-                          </span>
-                            <span *ngIf="!showAllText" [ngStyle]="{ 'color' : row[col.prop]['color']}">
-                            {{ row[col.prop]['value'] | spliceText: 40 }}
-                          </span>
-                          </ng-container>
-                          <ng-template #noColor>
-                                <span *ngIf="showAllText"
-                                      matTooltip="{{row[col.prop]}}"  >
+                                <span matTooltip="{{showAllText ? row[col.prop] : ''}}"
+                                      [class]="colorObject ? sendColors(col.prop,row[col.prop]) : ''" fxLayoutAlign="center center" >
+                                  <ng-container *ngIf="showAvatar(col.prop).haveImg && showAvatar(col.prop, row).imgSrc, else avatarLoading">
+                                    <img class="img-rounded m-r-5" width="25px" height="25px" [src]="showAvatar(col.prop, row).imgSrc">
+                                  </ng-container>
+                                  <ng-template #avatarLoading>
+                                    <wid-skeleton-loader
+                                      *ngIf="showAvatar(col.prop).haveImg"
+                                      [circle]="true"
+                                      marginTop="0" marginRight="5"
+                                      width="25" height="25"
+                                      nbrRow="1" nbrColumn="1"
+                                    ></wid-skeleton-loader>
+                                  </ng-template>
+
                            {{ row[col.prop] | spliceText: 40 }}
                           </span>
-                            <span *ngIf="!showAllText" >
-                            {{ row[col.prop] | spliceText: 40 }}
-                          </span>
-                          </ng-template>
-                          </ng-template>
                         </div>
                       </td>
                     </ng-container>
@@ -179,8 +189,8 @@
         </table>
       </ng-container>
 
-      <ng-container *ngIf="isLoading.getValue();" >
-        <div fxFlex="100" fxLayoutAlign="center center">
+      <ng-container *ngIf="isLoading.getValue();">
+        <div class="min-full-width min-full-height" fxLayoutAlign="center center">
           <mat-progress-spinner
             color="primary"
             mode="indeterminate">

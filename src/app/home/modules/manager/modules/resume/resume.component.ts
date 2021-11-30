@@ -8,8 +8,12 @@ import { CollaboratorService } from '@core/services/collaborator/collaborator.se
 import { CandidateService } from '@core/services/candidate/candidate.service';
 import { ICollaborator } from '@shared/models/collaborator.model';
 import { IUserModel } from '@shared/models/user.model';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 
 import { environment } from '../../../../../../environments/environment';
+
 @Component({
   selector: 'wid-resume',
   templateUrl: './resume.component.html',
@@ -19,6 +23,7 @@ export class ResumeComponent implements OnInit {
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   subscriptionModal: Subscription;
+  modals = { modalName: 'mailing', modalComponent: MailingModalComponent };
   clientEmailAddress: string;
   constructor(
     private userService: UserService,
@@ -27,12 +32,16 @@ export class ResumeComponent implements OnInit {
     private modalServices: ModalService,
     private collaboratorService: CollaboratorService,
     private candidateService: CandidateService,
+    private utilsService: UtilsService,
+    private localStorageService: LocalStorageService,
+    private modalService: ModalService,
   ) {
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit(): Promise<void> {
+    this.modalService.registerModals(this.modals);
     this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
 await this.getData();
   }
@@ -42,34 +51,39 @@ await this.getData();
   async getData() {
     this.isLoading.next(true);
     const blocData = [];
+    let index = 1;
     this.userService.connectedUser$
       .subscribe((userInfo) => {
         this.userService.getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}`)
           .subscribe(async (res) => {
-            await res['results'].forEach((candidate, index) => {
-              this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
-                .subscribe( (resume) => {
-               if (resume['msg_code'] !== '0004') {
-                    blocData.push({
-                      resume_name: candidate.first_name + ' ' + candidate.last_name,
-                      resume_years_exp: resume[0].years_of_experience,
-                      resume_position: resume[0].actual_job,
-                      resume_status: candidate.user_type,
-                      resume_email: candidate.user_type === 'CANDIDATE' ?
-                        { value: candidate.userKey.email_address, color: '#00FF00'} :
-                          { value: candidate.userKey.email_address, color: '#FF0000'},
-                      resume_user_type: candidate.user_type,
-                      resume_filename_docx: resume[0].resume_filename_docx,
-                      resume_filename_pdf: resume[0].resume_filename_pdf,
-                      user_info: resume[0],
-                      first_name: candidate.first_name,
-                      last_name: candidate.last_name,
-                    });
-                  }
-                  if (index + 1 >= res['results'].length) {
+            await res['results'].map(async (candidate) => {
+              await this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+                .subscribe((resume) => {
+                  return new Promise((resolve) => {
+                    if (resume['msg_code'] !== '0004') {
+                      blocData.push({
+                        resume_name: candidate.first_name + ' ' + candidate.last_name,
+                        resume_years_exp: resume[0].years_of_experience,
+                        resume_position: resume[0].actual_job,
+                        resume_status: resume[0].status,
+                        resume_email: candidate.userKey.email_address,
+                        resume_user_type: candidate.user_type,
+                        resume_filename_docx: resume[0].resume_filename_docx,
+                        resume_filename_pdf: resume[0].resume_filename_pdf,
+                        user_info: resume[0],
+                        first_name: candidate.first_name,
+                        last_name: candidate.last_name,
+                      });
+                    }
+                    index++;
+                    if (index > res['results'].length) {
+                      resolve(blocData);
+                    }
+                  }).then((result) => {
                     this.isLoading.next(false);
-                    this.tableData.next(blocData);
-                  }
+                    this.tableData.next(result);
+                  });
+
                 });
             });
           });
@@ -80,14 +94,24 @@ await this.getData();
    *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'):
+      case ('Change status'):
         this.changeCandidateToCollaborator(rowAction.data);
         break;
       case ('update'):
         this.updateResume(rowAction.data);
         break;
-      case('delete'):
+      case('Send email'):
         this.sendMail(rowAction.data);
+        break;
+      case('export PDF'):
+        this.exportPdf(rowAction.data);
+        break;
+      case('download docx'):
+        this.downloadDocx(rowAction.data);
+        break;
+      case('Archive Resume'):
+        this.archiveUser(rowAction.data);
+        break;
     }
   }
   /**************************************************************************
@@ -95,23 +119,30 @@ await this.getData();
    * @param data: contains the data of resume
    *************************************************************************/
   exportPdf(data) {
-    if (data.resume_filename_pdf !== undefined && data.resume_filename_pdf !== null) {
-      window.open(environment.uploadFileApiUrl + '/show/' + data.resume_filename_pdf, '_blank');
-    } else {
-      const confirmation = {
-        code: 'info',
-        title: 'Export Resume',
-        description: `You cant export this resume because it doesnt exist`,
-      };
-      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-        .subscribe(
-          (res) => {
-            if (res === true) {
+    data.map( (exportPdfData) => {
+      if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
+        this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+          console.log('pdf =', pdf);
+          const fileURL = URL.createObjectURL(pdf);
+          window.open(fileURL, '_blank');
+        });
+      } else {
+        const confirmation = {
+          code: 'info',
+          title: 'Export Resume',
+          description: `You cant export the resume of ${exportPdfData.first_name} ${exportPdfData.last_name} because it doesnt exist`,
+        };
+        this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+          .subscribe(
+            (res) => {
+              if (res === true) {
+              }
+              this.subscriptionModal.unsubscribe();
             }
-            this.subscriptionModal.unsubscribe();
-          }
-        );
-    }
+          );
+      }
+    });
+
   }
   /**************************************************************************
    * @description Update the resume of user
@@ -129,6 +160,7 @@ await this.getData();
           generalInformation: data.user_info,
           firstName: data.first_name,
           lastName: data.last_name,
+          user_type: data.resume_user_type,
         }
       });
   }
@@ -137,115 +169,158 @@ await this.getData();
    * @param data: contains the data of resume
    *************************************************************************/
   private downloadDocx(data) {
-    if (data.resume_filename_docx !== undefined && data.resume_filename_docx !== null) {
-      window.location.href = environment.uploadFileApiUrl + '/show/' + data.resume_filename_docx;
-    } else {
-      const confirmation = {
-        code: 'info',
-        title: 'Export Resume',
-        description: `You cant export this resume because it doesnt exist`,
-      };
-      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-        .subscribe(
-          (res) => {
-            if (res === true) {
+    data.map ( (downloadDocxData) => {
+      if (downloadDocxData.resume_filename_docx !== undefined && downloadDocxData.resume_filename_docx !== null) {
+        window.location.href = environment.uploadFileApiUrl + '/show/' + downloadDocxData.resume_filename_docx;
+      } else {
+        const confirmation = {
+          code: 'info',
+          title: 'Export Resume',
+          description: `You cant download the resume of ${downloadDocxData.first_name} ${downloadDocxData.last_name}  because it doesnt exist`,
+        };
+        this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+          .subscribe(
+            (res) => {
+              if (res === true) {
+              }
+              this.subscriptionModal.unsubscribe();
             }
-            this.subscriptionModal.unsubscribe();
-          }
-        );
-    }
+          );
+      }
+    });
+
   }
   /**************************************************************************
    * @description Send mail contains the resume of the collaborator to client
    * data: contains the data of resume
    *************************************************************************/
   private sendMail(data) {
-    const confirmation = {
-      code: 'edit',
-      title: 'Send Email',
-      description: `Are you sure you want to send mail to ${this.clientEmailAddress}`,
-    };
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+    this.subscriptionModal = this.modalServices.displayModal('mailing', data, '500px', '640px')
       .subscribe(
         (res) => {
-          if (res === true) {
-            this.resumeService
-              .sendMail('5eac544ad4cb666637fe1354',
-                data.user_info.ResumeKey.application_id,
-                '5ee69e061d291480d44f4cf2',
-                this.clientEmailAddress,
-                'WIDIGITAL',
-                data.user_info.actual_job,
-                  [{ filename: data.user_info.init_name + '.docx',
-                  path: `${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}` }, ]
-              ).subscribe((dataB) => {
-              console.log(dataB);
-            });
-          }
-          this.subscriptionModal.unsubscribe();
-        }
-      );
+          console.log('mailing dialog', res);
+        });
   }
   /**************************************************************************
    * @description Change status of candidate to collaborator
    * data: contains the data of user
    *************************************************************************/
   changeCandidateToCollaborator(data) {
-    const confirmation = {
-      code: 'edit',
-      title: 'Change user type',
-      description: `Are you sure you want to change the candidate ${data.resume_name} to collaborator`,
-    };
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
-      .subscribe(
-        (res) => {
-          if (res === true) {
-            this.isLoading.next( true);
-            this.tableData.next([]);
-            this.candidateService.getCandidate(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe((candidateData) => {
-              const collaborator: ICollaborator = {
-                collaboratorKey: {
+      const confirmation = {
+        code: 'edit',
+        title: 'Change Candidate(s) to Collaborator(s)',
+        description: `Are you sure ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              data.map( (changeStatusData) => {
+
+                this.isLoading.next( true);
+              this.tableData.next([]);
+              this.candidateService.getCandidate(`?email_address=${changeStatusData.user_info.ResumeKey.email_address}`)
+                .subscribe((candidateData) => {
+                const collaborator: ICollaborator = {
+                  collaboratorKey: {
+                    application_id: candidateData[0].candidateKey.application_id,
+                    email_address: candidateData[0].candidateKey.email_address,
+                  },
+                  adress: candidateData[0].adress ? candidateData[0].adress : null,
+                  zip_code: candidateData[0].zip_code ? candidateData[0].zip_code : null,
+                  country_id: candidateData[0].country_code ? candidateData[0].country_code : null,
+                  family_situation_id: null,
+                  nationality_id: candidateData[0].nationality_id ? candidateData[0].nationality_id : null,
+                  birth_date: candidateData[0].birth_date ? candidateData[0].birth_date : null,
+                  birth_city: candidateData[0].birth_city ? candidateData[0].birth_city : null,
+                  birth_country_id: candidateData[0].birth_country_id ? candidateData[0].birth_country_id : null,
+                  birth_name: null,
+                  manager_email: null,
+                  calendar_id: null,
+                  departement_id: null,
+                  emergency_contact_name: null,
+                  emergency_contact_phone: null,
+                  bank_name: null,
+                  bank_iban: null,
+                  rib_key: null,
+                  medical_exam_date: null,
+                  status: 'A',
                   application_id: candidateData[0].candidateKey.application_id,
                   email_address: candidateData[0].candidateKey.email_address,
-                },
-                adress: candidateData[0].adress ? candidateData[0].adress : null,
-                zip_code: candidateData[0].zip_code ? candidateData[0].zip_code : null,
-                country_id: candidateData[0].country_code ? candidateData[0].country_code : null,
-                family_situation_id: null,
-                nationality_id: candidateData[0].nationality_id ? candidateData[0].nationality_id : null,
-                birth_date: candidateData[0].birth_date ? candidateData[0].birth_date : null,
-                birth_city: candidateData[0].birth_city ? candidateData[0].birth_city : null,
-                birth_country_id: candidateData[0].birth_country_id ? candidateData[0].birth_country_id : null,
-                birth_name: null,
-                manager_email: null,
-                calendar_id: null,
-                departement_id: null,
-                emergency_contact_name: null,
-                emergency_contact_phone: null,
-                bank_name: null,
-                bank_iban: null,
-                rib_key: null,
-                medical_exam_date: null,
-                status: 'A',
-                application_id: candidateData[0].candidateKey.application_id,
-                email_address: candidateData[0].candidateKey.email_address,
-              };
-              this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
-                this.userService.getAllUsers(`?email_address=${data.user_info.ResumeKey.email_address}`).subscribe( (user: IUserModel[]) => {
-                  user['results'][0].user_type = 'CANDIDATE';
-                  user['results'][0].application_id = user['results'][0].userKey.application_id;
-                  user['results'][0].email_address = user['results'][0].userKey.email_address;
-                  this.userService.updateUser(user['results'][0]).subscribe(async () => {
-                    await this.getData();
-                this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
-                      console.log('candidate deleted', deleteCandidate);
+                };
+                this.collaboratorService.addCollaborator(collaborator).subscribe(() => {
+                  this.userService.getAllUsers(`?email_address=${changeStatusData.user_info.ResumeKey.email_address}`)
+                    .subscribe( (user: IUserModel[]) => {
+                    user['results'][0].user_type = 'COLLABORATOR';
+                    user['results'][0].application_id = user['results'][0].userKey.application_id;
+                    user['results'][0].email_address = user['results'][0].userKey.email_address;
+                    this.userService.updateUser(user['results'][0]).subscribe(async () => {
+                      await this.getData();
+                      this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
+                        console.log('candidate deleted', deleteCandidate);
+                        this.resumeService.getResumeData(`?resume_code=${changeStatusData.user_info.ResumeKey.resume_code}`)
+                          .subscribe((resumeData) => {
+                          resumeData[0].user_type = 'COLLABORATOR';
+                          resumeData[0].resume_code = resumeData[0].ResumeDataKey.resume_code;
+                          resumeData[0].application_id = resumeData[0].ResumeDataKey.application_id;
+                          resumeData[0].collaborator_email = resumeData[0].ResumeDataKey.collaborator_email;
+                          resumeData[0].company_email = resumeData[0].ResumeDataKey.company_email;
+                          this.resumeService.updateResumeData(resumeData[0]).subscribe( (updateResumeData) => {
+                            console.log('resume data updated');
+                          });
+                        });
+                      });
+
                     });
                   });
                 });
               });
-            });
-          }
-          this.subscriptionModal.unsubscribe();
-        });
+              });
+            }
+            this.subscriptionModal.unsubscribe();
+    });
+    }
+  /**************************************************************************
+   * @description Change User from Active to Archive
+   * data: contains the data of user
+   *************************************************************************/
+  archiveUser(data) {
+    data.map( (dataResume) => {
+      dataResume.user_info.resume_code = dataResume.user_info.ResumeKey.resume_code;
+      dataResume.user_info.language_id = dataResume.user_info.ResumeKey.language_id;
+      dataResume.user_info.company_email = dataResume.user_info.ResumeKey.company_email;
+      dataResume.user_info.email_address = dataResume.user_info.ResumeKey.email_address;
+      dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
+      dataResume.user_info.status = 'D';
+      this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
+        await this.getData();
+      });
+    });
+    }
+  /**************************************************************************
+   * @description Send color Object to the resume data table
+   *************************************************************************/
+  sendColorObject() {
+    return  [{
+      columnCode: 'resume_user_type',
+      condValue: [
+        'COLLABORATOR',
+        'CANDIDATE',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    }, {
+      columnCode: 'resume_status',
+      condValue: [
+        'A',
+        'D',
+      ],
+      color: [
+        'topaz',
+        'red',
+      ],
+    }];
   }
 }

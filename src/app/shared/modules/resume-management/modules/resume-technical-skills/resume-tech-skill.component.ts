@@ -34,6 +34,7 @@ export class ResumeTechSkillComponent implements OnInit {
   subscriptionModal: Subscription;
   showNumberError: boolean;
   skillIndex: string;
+  companyUserType: string;
   /**********************************************************************
    * @description Resume Technical skills constructor
    *********************************************************************/
@@ -45,6 +46,7 @@ export class ResumeTechSkillComponent implements OnInit {
     private router: Router,
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
+    this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
   }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
@@ -122,7 +124,7 @@ export class ResumeTechSkillComponent implements OnInit {
   createForm() {
     this.sendTechSkill = this.fb.group({
       technical_skill_desc :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
-      technologies:  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
+      technologies:  ['', [Validators.required]],
       });
   }
   /**************************************************************************
@@ -224,13 +226,15 @@ this.button = 'Add'; }
       if (typeRoute === 'next') {
         this.router.navigate(['/manager/resume/functionnalSkills'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       } else {
         this.router.navigate(['/manager/resume/certifications'], {
           state: {
-            resumeCode: this.resumeCode
+            resumeCode: this.resumeCode,
+            companyUserType: this.companyUserType,
           }
         });
       }
@@ -262,6 +266,32 @@ this.button = 'Add'; }
           }
         });
       }
+    }
+  }
+  checkFormValues(typeRoute: string) {
+    let notEmptyForm = false;
+    Object.values(this.sendTechSkill.controls).some(({ value }) => {
+      if (value) {
+        notEmptyForm = true;
+      }
+    });
+    if (!notEmptyForm) {
+      this.routeNextBack(typeRoute);
+    } else {
+      const confirmation = {
+        code: 'confirmation',
+        title: 'Data is not saved',
+        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.routeNextBack(typeRoute);
+            }
+            this.subscriptionModal.unsubscribe();
+          }
+        );
     }
   }
 

@@ -16,12 +16,12 @@
   </div>
   <div fxLayout="row" fxFlex="88">
     <div fxLayout="column" fxFlex="96">
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
         <div fxLayout="column" fxFlex="86">
           <h4 class="steel font-size-18 font-small"> {{ 'resume-pro-exp' | translate }}</h4>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="76" fxLayoutAlign="space-around">
+      <div fxLayout="row" fxFlex="84" fxLayoutAlign="space-around">
         <wid-scrollbar fxFlexFill @dataAppearance fxLayout="column">
           <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
             <div fxLayout="column" fxFlex="85" fxFlexAlign="center center" class="full-height">
@@ -33,7 +33,7 @@
                     </div>
                     <div fxLayout="row" fxFlexAlign=" start" fxFlex="50">
                       <p class="font-extra-light font-size-10 help-blue">
-                        {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date | date: "longDate"}}
+                        {{item.customer}}   {{item.start_date | date:"longDate"}}-{{item.end_date === 'Current Date' ? ' Today' : item.end_date  | date: "longDate"}}
                       </p>
                     </div>
                   </div>
@@ -90,7 +90,7 @@
                           <input matInput [matDatepicker]="datepicker"  [min]="minStartDate" [max]="maxStartDate" [matDatepickerFilter]="myDisabledDayFilter" #date1
                                  formControlName="start_date" placeholder="{{ 'resume-start-date' | translate }}" (dateChange)="onChangeStartDate(date1.value)"  required>
                           <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
-                          <mat-datepicker #datepicker color="primary" ></mat-datepicker>
+                          <mat-datepicker startView="multi-year" #datepicker color="primary" ></mat-datepicker>
                           <mat-error class="red" *ngIf="sendProExp.controls.start_date.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
@@ -102,10 +102,10 @@
                           {{ 'resume-end-date' | translate }}:
                         </mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput [matDatepicker]="datepickerend"   [min]="minEndDate" [max]="maxEndDate"   [matDatepickerFilter]="myDisabledDayFilter" #date2
+                          <input matInput [matDatepicker]="datepickerend"   [min]="minEndDate" [max]="maxEndDate"  #date2
                                  formControlName="end_date" placeholder=" {{ placeHolderEndDate | translate }}" (dateChange)="onChangeEndDate(date2.value)"  required>
                           <mat-datepicker-toggle matSuffix [for]="datepickerend" ></mat-datepicker-toggle>
-                          <mat-datepicker #datepickerend color="primary" ></mat-datepicker>
+                          <mat-datepicker startView="multi-year" #datepickerend color="primary" ></mat-datepicker>
                           <mat-error class="red" *ngIf="sendProExp.controls.end_date.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
@@ -132,15 +132,15 @@
           </div>
         </wid-scrollbar>
       </div>
-      <div fxLayout="row" fxFlex="14" fxLayoutAlign="center ">
+      <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
         <div fxLayout="column" fxFlex="46" fxLayoutAlign=" start" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="routeNextBack('back')">
+          <button mat-raised-button class="btn-medium bg-pale-grey" (click)="checkFormValues('previous')">
             <span class="cool-grey"> {{ 'resume-previous' | translate }}</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
-                  (click)="routeNextBack('next')">
+                  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>
         </div>
