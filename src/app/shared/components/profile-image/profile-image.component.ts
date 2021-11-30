@@ -55,17 +55,17 @@ export class ProfileImageComponent implements OnInit {
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-     this.avatar = reader.result as string;
-     this.haveImage = 'have image';
+      this.avatar = reader.result as string;
+      this.haveImage = 'have image';
+    };
+    reader.readAsDataURL(file);
+    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+    formData.append('file', file);
+    formData.append('caption', file.name);
+    this.selectedFile.file = formData;
+    this.selectedFile.name = file.name;
+    this.newFile.emit(formData);
 
-   reader.readAsDataURL(file);
-     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-     formData.append('file', file);
-     formData.append('caption', file.name);
-     this.selectedFile.file = formData;
-     this.selectedFile.name = file.name;
-     this.newFile.emit(formData);
-  };
   }
 
   /**
