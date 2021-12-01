@@ -29,11 +29,8 @@ export class PayslipListComponent implements OnInit, OnDestroy {
               private modalServices: ModalService) {
   }
 
-  ngOnInit(): void {
-    this.fillDataTable().then( (res) => {
-      this.ELEMENT_DATA.next(res);
-      this.isLoading.next(false);
-    });
+  async ngOnInit(): Promise<void> {
+    await this.getData('ACTIVE');
     this.sheetService.registerSheets([{ sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent}]);
     this.modalServices.registerModals({ modalName: 'importPayslip', modalComponent: PayslipImportComponent});
   }
@@ -51,20 +48,20 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       }
     );
   }
-
-  fillDataTable(): Promise<any[]> {
+  fillDataTable(status): Promise<any[]> {
     if (!this.companyEmail) {
       this.getUserInfo();
     }
     return new Promise(
       resolve => {
-        this.uploadPayslipService.getAssociatedPayslip('').toPromise().then(
+        this.uploadPayslipService.getAssociatedPayslip(`?status=${status}`).toPromise().then(
           (res) => {
             const result = [];
             res.map(data => {
               this.getCollaboratorName(data.payslipKey.email_address).then(
                 (collaboratorName) => {
                   result.push({
+                    _id: data._id,
                     full_name: collaboratorName,
                     email_address: data.payslipKey.email_address,
                     month: data.month,
@@ -109,7 +106,8 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       },
       '62vw',
       '80vh').subscribe(
-      (res) => {
+      async (res) => {
+        await this.getData('ACTIVE');
       }
     );
   }
@@ -121,12 +119,23 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       });
   }
 
-  async switchAction(rowAction: any) {
+  deletePayslip(data): void {
+    this.isLoading.next(true);
+    data.map((row) => {
+      this.uploadPayslipService.disableAssociatedPayslip(row._id).toPromise().then(
+        async res => {
+          await this.getData('ACTIVE');
+        });
+    });
+    this.isLoading.next(false);
+  }
+
+  async switchAction(rowAction) {
     switch (rowAction.actionType) {
       case ('update'):
         break;
       case ('Delete'):
-        console.log('Delete');
+        this.deletePayslip(rowAction.data);
         break;
       case ('Download'):
         console.log('Download');
@@ -139,5 +148,13 @@ export class PayslipListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+  }
+
+  async getData(event) {
+    this.isLoading.next(true);
+    this.fillDataTable(event).then( (res) => {
+      this.ELEMENT_DATA.next(res);
+      this.isLoading.next(false);
+    });
   }
 }

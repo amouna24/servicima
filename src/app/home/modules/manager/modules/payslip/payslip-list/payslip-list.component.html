@@ -4,6 +4,7 @@
     [isLoading]="isLoading"
     [header]="{ title: 'Payslip list', addActionURL: '#', addActionText: 'Import'}"
     (rowActionData)="switchAction($event)"
-    [allowedActions]="['Import', 'Download', 'Delete']"
+    (changeStatus) = "getData($event)"
+    [allowedActions]="['Import', 'Delete', 'Download']"
   >
   </wid-dynamic-data-table>>

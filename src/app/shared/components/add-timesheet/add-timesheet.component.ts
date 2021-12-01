@@ -147,14 +147,14 @@ export class AddTimesheetComponent implements OnInit {
       if (this.contract) {
         this.contractService.getContractProject(`?contract_code=${this.contract.contractKey.contract_code}`).subscribe(
           (res) => {
-            this.projectsList = res;
+            this.projectsList = res['results'];
           }
         );
       }
     } else {
       this.contractService.getContractProject(`?contract_code=${contractCode}`).toPromise().then(
         (res) => {
-          this.projectsList = res ;
+          this.projectsList = res['results'] ;
         }
       );
     }

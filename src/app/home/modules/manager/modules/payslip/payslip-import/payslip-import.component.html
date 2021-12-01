@@ -1,13 +1,15 @@
 <div fxLayout="column" class="full-height full-width">
-  <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-between center" class="p-10 p-b-0">
-    <p class="font-size-17 steel">
-      Import Payslip
-    </p>
-    <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
+  <div fxLayout="row" fxLayoutAlign="end start" class="p-10 p-b-0">
+    <button mat-button class="m-r-10 btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
       <mat-icon svgIcon="wi-close-normal"></mat-icon>
     </button>
   </div>
-  <div fxLayout="column" class="p-10" fxFlex>
+  <div fxLayout="row" fxLayoutAlign="start start" class="p-0 p-l-15">
+    <p class="font-size-17 steel m-0">
+      Import Payslip
+    </p>
+    </div>
+  <div fxLayout="column" class="p-10 p-t-0" fxFlex>
     <ng-container *ngIf="selectedFiles.length<1 else loaded">
       <wid-skeleton-loader fxFlex="100"
                            [nbrColumn]="3"
@@ -20,6 +22,13 @@
       </wid-skeleton-loader>
     </ng-container>
     <ng-template #loaded>
+      <div fxLayout="row" class="p-t-15 p-b-15" *ngIf="associateAllBtn">
+        <div fxLayout="row" fxLayoutAlign="end center" fxFlex="98" class="full-height">
+          <button (click)="associateAll()" type="submit" class="btn-small pale-grey-four cursor-pointer bg-cerulean-blue m-b-10">
+            Associate all
+          </button>
+        </div>
+      </div>
       <ng-container *ngFor="let file of selectedFiles">
         <form fxLayout="row" fxLayoutAlign="space-around center"
               style="border-bottom: 1px solid #ebebeb" class="p-t-15 p-b-15"

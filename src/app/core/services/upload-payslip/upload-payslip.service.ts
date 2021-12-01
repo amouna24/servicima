@@ -20,4 +20,7 @@ export class UploadPayslipService {
   getAssociatedPayslip(filter) {
     return this.http.get<any>(`${environment.payslipAssociateApiUrl}${filter}`);
   }
+  disableAssociatedPayslip(ID: string) {
+    return this.http.delete<any>(`${environment.payslipAssociateApiUrl}?_id=${ID}`);
+  }
 }

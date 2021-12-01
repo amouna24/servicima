@@ -13,9 +13,11 @@ import { UploadPayslipService } from '@core/services/upload-payslip/upload-paysl
 export class PayslipImportComponent implements OnInit {
   collaboratorList: IUserModel[];
   selectedFiles: any[] = [];
+  unknownFiles: any[] = [];
   totalFiles: number;
   isLoading = new BehaviorSubject<boolean>(true);
   selectedCollaborator: string;
+  associateAllBtn = true;
   constructor(
     public dialogRef: MatDialogRef<PayslipImportComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { files: any[], application_id: string, company_email: string},
@@ -29,7 +31,6 @@ export class PayslipImportComponent implements OnInit {
       async (res) => {
         this.collaboratorList = res;
         await this.getFileData(Object.values(this.data.files));
-        this.selectedFiles.sort((a, b) => (a.collaboraterName < b.collaboraterName ? 1 : -1));
       }
     ).finally( () => { this.isLoading.next(false); });
   }
@@ -49,8 +50,13 @@ export class PayslipImportComponent implements OnInit {
             res['collaboraterName'] = res.email_address ? this.getCollabName(res) : null;
             res['associated'] = false;
             res['form_data'] = row.file;
-            res['file_type'] = row.type,
-            this.selectedFiles.push(res);
+            res['file_type'] = row.type;
+            if (res.email_address) {
+              this.selectedFiles.push(res);
+            } else {
+              this.unknownFiles.push(res);
+            }
+
           });
       }
     );
@@ -97,7 +103,15 @@ export class PayslipImportComponent implements OnInit {
   }
 
   openFile(file) {
-    const data64 = file.file.toString().replace('data:application/pdf;base64,', '');
-    window.open(btoa(data64));
+    //
+  }
+
+  associateAll() {
+    this.selectedFiles.map(
+      (row) => {
+        if (!row.associated && row.email_address) {
+          this.associate(row);
+        }
+      });
   }
 }

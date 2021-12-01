@@ -8,13 +8,13 @@ import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bott
 })
 export class UploadSheetComponent implements OnInit {
 
-  selectedFiles: any[];
   selectedFilesList: any[] = [];
   file: FormData;
   object: any;
   fileType: string;
   multiple: boolean;
   acceptedFormat: string;
+  totalFiles = 0;
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<UploadSheetComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {
@@ -58,6 +58,7 @@ export class UploadSheetComponent implements OnInit {
           };
       }
     );
+    this.totalFiles = Object.values(event.target.files).length;
     event.preventDefault();
   }
   confirm(): void {

@@ -16,7 +16,9 @@
     <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center" (click)="fileInput.click()">
       <mat-icon class="icon material-icons-outlined">computer
       </mat-icon>
-      <span class="black-three" fxFlexOffset="5">From your computer</span>
+      <span class="black-three" fxFlexOffset="5">
+        From your computer<span class="steel font-size-10 cool-grey font-medium" *ngIf="totalFiles > 0">({{totalFiles}})</span>
+        </span>
       <input hidden (change)="selectFile($event)" type="file" [accept]="acceptedFormat" id="file" [multiple]="multiple" #fileInput >
     </button>
     <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center">
@@ -56,33 +58,3 @@
     </button>
   </div>
 </div>
-
-<!--
-
-<mat-nav-list>
-  <a (click)="fileInput.click()" mat-list-item>
-    <span mat-line>From Local Path</span>
-    <mat-form-field mat-line>
-      <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
-      <ng-template #newFile>
-        <mat-label>Choose file</mat-label>
-      </ng-template>
-      <input matInput disabled>
-      <button mat-icon-button matSuffix>
-        <mat-icon>attach_file</mat-icon>
-      </button>
-      <input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
-    </mat-form-field>
-  </a>
-
-  <a href="https://plus.google.com/" mat-list-item (click)="openLink($event)">
-    <span mat-line>Google Drive</span>
-    <span mat-line>Share with your friends</span>
-  </a>
-
-  <a href="https://plus.google.com/" mat-list-item (click)="openLink($event)">
-    <span mat-line>URL</span>
-    <span mat-line>Share with your friends</span>
-  </a>
-</mat-nav-list>
--->
