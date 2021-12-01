@@ -190,11 +190,11 @@ Paddings
 }
 
 .p-l-10 {
-    padding-left: 10px;
+    padding-left: 10px !important;
 }
 
 .p-l-15 {
-    padding-left: 15px;
+    padding-left: 15px !important;
 }
 
 .p-l-20 {
@@ -493,7 +493,7 @@ html body {
     font size
 *******************/
 .font-size-8 {
-    font-size: 8px;
+    font-size: 8px !important;
 }
 .font-size-9 {
     font-size: 9px;
@@ -896,7 +896,9 @@ wid-upload-sheet {
 .border {
   border: solid 2px $pale-grey;
 }
-
+.border-0{
+  border: 0 !important;
+}
 .border-pale-gray-four {
   border: solid 1px $pale-grey-four;
 }

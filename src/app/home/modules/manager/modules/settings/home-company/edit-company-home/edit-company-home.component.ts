@@ -452,9 +452,6 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
             this.form.controls['stamp'].setValue(this.selectedFile.name);
 
           }
-          /*
-                    this.selectedDocName.next({ name: res.name, formGroupName});
-          */
         }
       );
   }

@@ -92,8 +92,7 @@ getAllTimesheet() {
           `&status=ACTIVE`).toPromise().then(
          async (timesheetList) => {
            if (timesheetList) {
-             await timesheetList.map(
-               (timesheet) => {
+             timesheetList.map((timesheet) => {
                  this.profileService.getUser(`?email_address=${timesheet.TimeSheetKey.email_address}`)
                    .toPromise().then(
                    (profile) => {
@@ -105,7 +104,7 @@ getAllTimesheet() {
                    }
                  );
                  this.contractService.getContractProject(`?project_code=${timesheet.TimeSheetKey.project_code}`).toPromise().then(
-                   (project) => timesheet['project_desc'] = project[0].project_desc
+                   (project) => timesheet['project_desc'] = project['results'][0].project_desc
                  );
                });
              this.ELEMENT_DATA.next(timesheetList);
