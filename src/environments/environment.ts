@@ -23,7 +23,8 @@ export const environment = {
   /************************** SERVICIMA **********************************/
  // contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
   contractApiUrl: 'http://localhost:8060/servicima/contracts/v1',
-  contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
+  // contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
+  contractExtensionApiUrl: 'http://localhost:8061/servicima/contractextensions/v1',
   // contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
   contractProjectApiUrl: 'http://localhost:8095/servicima/contractproject/v1',
 
@@ -70,7 +71,8 @@ export const environment = {
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
   timesheetHolidayApiUrl: 'http://192.168.1.22:8110/servicima/timesheetholiday/v1',
-  projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
+  // projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
+  projectCollaboratorApiUrl: 'http://localhost:8097/servicima/projectcollaborator/v1',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',

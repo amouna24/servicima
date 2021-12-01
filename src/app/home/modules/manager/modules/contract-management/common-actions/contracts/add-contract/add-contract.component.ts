@@ -27,6 +27,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { ProfileService } from '@core/services/profile/profile.service';
 import { TimesheetSettingService } from '@core/services/timesheet-setting/timesheet-setting.service';
 import { ICompanyTimesheetSettingModel } from '@shared/models/CompanyTimesheetSetting.model';
+import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-add-contract',
@@ -52,12 +53,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
   paymentTermsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   collaboratorList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  projectList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   staffList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorContacts: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractExtensionInfo = [];
   contractProjectInfo = [];
+  projectCollaboratorInfo = [];
   extensionsList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
   contractProjectList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractProjectInfo);
+  projectCollaboratorList: BehaviorSubject<any> = new BehaviorSubject<any>(this.projectCollaboratorInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   canUpdateContractProjectAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -65,6 +69,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   canUpdateProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   companyTimesheet: ICompanyTimesheetSettingModel;
+
   /**************************************************************************
    * @description Declaring Form Group
    *************************************************************************/
@@ -96,6 +101,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
   private subscriptions: Subscription[] = [];
+  private subscriptionModal: Subscription;
 
   /**************************************************************************
    * @description list of Data filtered by search keyword
@@ -418,18 +424,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
           dataTable: {
             displayedColumns: [
               'rowItem',
-              'category_code', 'project_desc',
+              'project_rate',
               'start_date', 'end_date',
               'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'Category', prop: 'category_code', type: InputType.DATE},
-              { name: 'Description', prop: 'project_desc', type: InputType.DATE},
-              { name: 'Start Date', prop: 'start_date', type: InputType.TEXT},
-              { name: 'End date', prop: 'end_date', type: InputType.TEXT},
+              { name: 'Project rate', prop: 'project_rate', type: InputType.TEXT},
+              { name: 'Start Date', prop: 'start_date', type: InputType.DATE},
+              { name: 'End date', prop: 'end_date', type: InputType.DATE},
               { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
             ],
-            dataSource: this.extensionsList
+            dataSource: this.contractProjectList
           }
         },
       ],
@@ -538,18 +543,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
           dataTable: {
             displayedColumns: [
               'rowItem',
-              'contract_project_code', 'email_address',
+              'project_code', 'email_address',
               'start_date', 'end_date',
               'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'Code', prop: 'contract_project_code', type: InputType.DATE},
-              { name: 'Collaborator Email', prop: 'email_address', type: InputType.DATE},
-              { name: 'Start Date', prop: 'start_date', type: InputType.TEXT},
-              { name: 'End date', prop: 'end_date', type: InputType.TEXT},
+              { name: 'Code', prop: 'project_code', type: InputType.TEXT},
+              { name: 'Collaborator Email', prop: 'email_address', type: InputType.EMAIL},
+              { name: 'Start Date', prop: 'start_date', type: InputType.DATE},
+              { name: 'End date', prop: 'end_date', type: InputType.DATE},
               { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
             ],
-            dataSource: this.extensionsList
+            dataSource: this.projectCollaboratorList
           }
         },
       ],
@@ -561,16 +566,16 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Project Code',
           placeholder: 'Project Code',
-          type: FieldsType.SELECT_WITH_SEARCH,
-          filteredList: this.filteredCurrencies,
+          type: FieldsType.SELECT,
+          selectFieldList: this.projectList,
           searchControlName: 'projectCodeFilterCtrl',
-          formControlName: 'contract_project_code',
+          formControlName: 'project_code',
         },
         {
           label: 'Collaborator',
           placeholder: 'Collaborator',
-          type: FieldsType.SELECT_WITH_SEARCH,
-          filteredList: this.filteredCurrencies,
+          type: FieldsType.SELECT,
+          selectFieldList: this.collaboratorList,
           searchControlName: 'emailAddressFilterCtrl',
           formControlName: 'email_address',
         },
@@ -626,6 +631,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private profileService: ProfileService,
     private companyTimeSheetService: TimesheetSettingService,
+    private modalServices: ModalService,
+
   ) {
     this.contractForm = new FormGroup({ });
   }
@@ -717,7 +724,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
          this.collaboratorList.next(
            res['results'].map(
              (obj) => {
-               console.log(obj);
                return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
              }
            )
@@ -797,6 +803,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       }),
       CONTRACT_PROJECT: this.formBuilder.group({
         category_code: [''],
+        project_code: [''],
         project_desc: [''],
         start_date: [''],
         end_date: [''],
@@ -807,7 +814,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         comment: [''],
       }),
       PROJECT_COLLABORATOR: this.formBuilder.group({
-        contract_project_code: [''],
+        project_code: [''],
         projectCodeFilterCtrl: [''],
         email_address: [''],
         emailAddressFilterCtrl: [''],
@@ -821,11 +828,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description Get Contractor to be updated
    *************************************************************************/
   getContractByID(params) {
-    console.log('my params ', params);
     forkJoin([
       this.contractsService.getContracts(`?_id=${atob(params.id)}`),
       this.contractsService.getContractExtension(`?contract_code=${atob(params.cc)}&email_address=${atob(params.ea)}`),
-      // this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}`)
+      this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}&project_status=ACTIVE`),
+      this.contractsService.getCollaboratorProject(`?contract_code=${atob(params.cc)}&status=ACTIVE`)
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -836,7 +843,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
-            console.log('la contract extention resultats ', res[1]);
             this.contractExtensionInfo = res[1]['results'];
             this.contractExtensionInfo.map(
               async (extension) => {
@@ -850,15 +856,35 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             );
           }
-         /* if (res[2]['msg_code'] === '0004') {
+         if (res[2]['msg_code'] === '0004') {
             this.contractProjectInfo = [];
           } else {
             this.contractProjectInfo = res[2]['results'];
-          }*/
+           this.projectList.next(
+             this.contractProjectInfo.map(
+               (obj) => {
+                 return { value: obj.ContractProjectKey.project_code, viewValue: obj.ContractProjectKey.project_code };
+               }
+             )
+           );
+         }
+         if (res[3]['msg_code'] === '0004') {
+           this.projectCollaboratorInfo = [];
+         } else {
+           this.projectCollaboratorInfo = res[3]['results'];
+
+         }
+          this.projectCollaboratorInfo.map( (project) => {
+
+            project.project_code = project.ProjectCollaboratorKey.project_code;
+            project.email_address = project.ProjectCollaboratorKey.email_address;
+
+          });
 
           await this.initContractForm(this.contractInfo);
-          console.log('contract form for updating ', this.contractForm);
           this.extensionsList.next(this.contractExtensionInfo.slice());
+          this.contractProjectList.next(this.contractProjectInfo.slice());
+          this.projectCollaboratorList.next(this.projectCollaboratorInfo);
           this.isLoading.next(false);
         },
         (error) => {
@@ -962,7 +988,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ...this.contractForm.controls.RATE.value,
       ...this.contractForm.controls.TIMESHEET.value,
     };
-    console.log('my contract form', this.contractForm.value);
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
     Contract.contract_code = this.canUpdate(this.contractId) ?
@@ -979,7 +1004,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       } else {
         Contract.attachments = this.contractInfo.attachments;
       }
-      console.log('contrat for updateddddddddddddd ', Contract);
       this.contractsService.updateContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
@@ -1050,6 +1074,116 @@ export class AddContractComponent implements OnInit, OnDestroy {
             );
         }
       }
+      for (const project of this.contractProjectInfo) {
+        console.log('my project ', project);
+        project.application_id = Contract.application_id;
+        project.company_email = Contract.email_address;
+        project.contract_code = Contract.contract_code;
+        project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+          type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+        project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+          type.viewValue === project.extension_status)?.value;
+
+        if (project._id && project?.updated) {
+          project.project_code = project.ContractProjectKey?.project_code;
+          console.log('project for updating ', project);
+          this.contractsService.updateContractProject(project)
+            .pipe(
+              takeUntil(this.destroy$)
+            )
+            .subscribe(
+              (response) => {
+                this.utilsService.openSnackBar('Project Updated !', '', 2000);
+              },
+              (error) => {
+                console.log('error', error);
+              },
+              () => {
+                itemsFetched += 1;
+              }
+            );
+        } else if (!project?._id) {
+          this.contractsService.addContractProject(project)
+            .pipe(
+              takeUntil(
+                this.destroy$
+              )
+            )
+            .subscribe(
+              (resp) => {
+                this.utilsService.openSnackBar('Project Added !', '', 2000);
+              },
+              error => {
+                console.log('error', error);
+              },
+              () => {
+                itemsFetched += 1;
+                if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                  if (this.type === 'CLIENT') {
+                    this.router.navigate(
+                      ['/manager/contract-management/clients-contracts/contracts-list']);
+                  } else if (this.type === 'SUPPLIER') {
+                    this.router.navigate(
+                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                  }
+                }
+              }
+            );
+        }
+      }
+      for (const projectCollaborator of this.projectCollaboratorInfo ) {
+        projectCollaborator.contract_code = Contract.contract_code;
+        if (projectCollaborator._id && projectCollaborator?.updated) {
+          this.contractsService.updateProjectCollaborator(projectCollaborator)
+            .pipe(
+              takeUntil(this.destroy$)
+            )
+            .subscribe(
+              (response) => {
+                this.utilsService.openSnackBar('Project Collaborator Updated !', '', 2000);
+              },
+              (error) => {
+                console.log('error', error);
+              },
+              () => {
+                itemsFetched += 1;
+              }
+            );
+        } else if (!projectCollaborator?._id) {
+          this.contractsService.addProjectCollaborator(projectCollaborator)
+            .pipe(
+              takeUntil(
+                this.destroy$
+              )
+            )
+            .subscribe(
+              (resp) => {
+                if (resp['msg_code'] === '0001') {
+                  this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                } else {
+                  this.utilsService.openSnackBar('Project Collaborator Added !', '', 2000);
+
+                }
+              },
+              error => {
+                console.log('error', error);
+              },
+              () => {
+                itemsFetched += 1;
+                if (itemsFetched === this.projectCollaboratorInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                  if (this.type === 'CLIENT') {
+                    this.router.navigate(
+                      ['/manager/contract-management/clients-contracts/contracts-list']);
+                  } else if (this.type === 'SUPPLIER') {
+                    this.router.navigate(
+                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
+                  }
+                }
+              }
+            );
+        }
+      }
 
     } else {
       if (this.selectedContractFile.name !== '') {
@@ -1057,7 +1191,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       } else {
         Contract.attachments = '';
       }
-      console.log(Contract);
       this.contractsService.addContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
@@ -1120,73 +1253,34 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @param result
    * result.action: ['update', addMode]
    *************************************************************************/
-  addContractExtension(result) {
-    switch (result.action) {
-      case 'update': {
-        this.contractExtensionInfo.forEach(
-          (element, index) => {
-            if ( (element.contractExtensionKey ? element.contractExtensionKey.extension_code  : element.extension_code  ) ===
-              this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value) {
-              this.contractExtensionInfo[index].extension_start_date =
-                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
-              this.contractExtensionInfo[index].extension_end_date =
-                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
-              this.contractExtensionInfo[index].extension_rate = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
-              this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value)?.viewValue;
-              this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
-              this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
-              this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
-
-              this.contractExtensionInfo[index].updated = true;
-            }
-          }
-        );
-        this.contractForm.patchValue(
-          {
-            CONTRACT_EXTENSION: {
-              extension_code: '',
-              extension_start_date: '',
-              extension_end_date: '',
-              extension_rate: '',
-              extension_status: '',
-              extension_currency_cd: '',
-              attachments: '',
-            },
-          }
-        );
-        this.canUpdateAction.next(false);
-        this.canAddAction.next(true);
-      }
-        break;
-      case 'addMore': {
-        if (
-          !this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value &&
-          this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value === '' ) {
-        } else {
-          this.extensionsList.next([]);
-          this.contractExtensionInfo.push(
-            {
-              extension_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-EXT`,
-              extension_start_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value,
-              extension_end_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value,
-              extension_rate: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value,
-              extension_currency_cd: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd?.value ?
-                this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC : '',
-              extension_status: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value ?
-                this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value)?.viewValue : '',
-              attachments: this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value,
-              selectedExtensionFile: this.selectedExtensionFile.pop(),
+  addInfo(result) {
+    if (result.formGroupName === 'CONTRACT_EXTENSION') {
+      switch (result.action) {
+        case 'update': {
+          this.contractExtensionInfo.forEach(
+            (element, index) => {
+              if ( (element.contractExtensionKey ? element.contractExtensionKey.extension_code  : element.extension_code  ) ===
+                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value) {
+                this.contractExtensionInfo[index].extension_start_date =
+                  this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
+                this.contractExtensionInfo[index].extension_end_date =
+                  this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
+                this.contractExtensionInfo[index].extension_rate = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
+                this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                  type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value)?.viewValue;
+                this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
+                this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
+                this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
+                this.contractExtensionInfo[index].updated = true;
+              }
             }
           );
-          this.extensionsList.next(this.contractExtensionInfo.slice());
           this.contractForm.patchValue(
             {
               CONTRACT_EXTENSION: {
                 extension_code: '',
+
                 extension_start_date: '',
                 extension_end_date: '',
                 extension_rate: '',
@@ -1196,11 +1290,213 @@ export class AddContractComponent implements OnInit, OnDestroy {
               },
             }
           );
-          this.utilsService.openSnackBar('Extension Added', '', 2000);
+          this.canUpdateAction.next(false);
+          this.canAddAction.next(true);
         }
+          break;
+        case 'addMore': {
+          if (
+            !this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value &&
+            this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value === '' ) {
+          } else {
+            this.extensionsList.next([]);
+            this.contractExtensionInfo.push(
+              {
+                extension_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-EXT`,
+                extension_start_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value,
+                extension_end_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value,
+                extension_rate: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value,
+                extension_currency_cd: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd?.value ?
+                  this.appInitializerService.currenciesList.find((type) =>
+                    type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC : '',
+                extension_status: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value ?
+                  this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                    type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value)?.viewValue : '',
+                attachments: this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value,
+                selectedExtensionFile: this.selectedExtensionFile.pop(),
+              }
+            );
+            this.extensionsList.next(this.contractExtensionInfo.slice());
+            this.contractForm.patchValue(
+              {
+                CONTRACT_EXTENSION: {
+                  extension_code: '',
+                  extension_start_date: '',
+                  extension_end_date: '',
+                  extension_rate: '',
+                  extension_status: '',
+                  extension_currency_cd: '',
+                  attachments: '',
+                },
+              }
+            );
+            this.utilsService.openSnackBar('Extension Added', '', 2000);
+          }
+        }
+          break;
       }
-        break;
     }
+    if (result.formGroupName === 'CONTRACT_PROJECT' ) {
+      switch (result.action) {
+        case 'update': {
+          this.contractProjectInfo.forEach(
+            (element, index) => {
+              if ( (element.ContractProjectKey ? element.ContractProjectKey.project_code : element.project_code  ) ===
+                this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.value) {
+                this.contractProjectInfo[index].start_date =
+                  this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value;
+                this.contractProjectInfo[index].project_desc =
+                  this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value;
+                this.contractProjectInfo[index].end_date =
+                  this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value;
+                this.contractProjectInfo[index].comment =
+                  this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
+               // this.contractProjectInfo[index].vat_vbr =
+                //  this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_vbr.value;
+                this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
+                this.contractProjectInfo[index].project_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                  type.value === this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value)?.viewValue;
+                this.contractProjectInfo[index].rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC;
+
+                this.contractProjectInfo[index].updated = true;
+              }
+            }
+          );
+          this.contractForm.patchValue(
+            {
+              CONTRACT_PROJECT: {
+                project_code: '',
+                category_code: '',
+                project_desc: '',
+                start_date: '',
+                end_date: '',
+                project_rate: '',
+                project_status: '',
+                rate_currency: '',
+                vat_vbr: '',
+                comment: '',
+              },
+            }
+          );
+          this.canUpdateContractProjectAction.next(false);
+          this.canAddContractProjectAction.next(true);
+        }
+          break;
+        case 'addMore': {
+          if (
+            !this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value &&
+            this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value === '' ) {
+          } else {
+            this.contractProjectList.next([]);
+            this.contractProjectInfo.push(
+              {
+                project_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-PROJECT`,
+                start_date: this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value,
+                category_code: this.contractForm.controls.CONTRACT_PROJECT['controls'].category_code.value,
+                end_date: this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value,
+                project_rate: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value,
+                project_desc: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value,
+               // vat_vbr: this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_vbr.value,
+                comment: this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value,
+                extension_currency_cd: this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency?.value ?
+                  this.appInitializerService.currenciesList.find((type) =>
+                    type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC : '',
+                project_status: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status?.value ?
+                  this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                    type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].project_status?.value)?.viewValue : '',
+              }
+            );
+            this.contractProjectList.next(this.contractProjectInfo.slice());
+            this.contractForm.patchValue(
+              {
+                CONTRACT_PROJECT: {
+                  project_code: '',
+                  project_desc: '',
+                  category_code: '',
+                  start_date: '',
+                  end_date: '',
+                  project_rate: '',
+                  project_status: '',
+                  rate_currency: '',
+                  vat_vbr: '',
+                  comment: '',
+                },
+              }
+            );
+            this.utilsService.openSnackBar('Project Added', '', 2000);
+          }
+        }
+          break;
+      }
+    }
+    if (result.formGroupName === 'PROJECT_COLLABORATOR') {
+      switch (result.action) {
+        case 'update': {
+          this.projectCollaboratorInfo.forEach(
+            (element, index) => {
+              if (( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.project_code : element.project_code  ) ===
+                this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value) &&
+              ( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.email_address : element.email_address  ) ===
+                this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value)) {
+                this.projectCollaboratorInfo[index].start_date =
+                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value;
+                this.projectCollaboratorInfo[index].project_code =
+                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value;
+                this.projectCollaboratorInfo[index].contract_code = this.contractInfo.contractKey.contract_code;
+                this.projectCollaboratorInfo[index].email_address =
+                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value;
+                this.projectCollaboratorInfo[index].end_date =
+                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value;
+                this.projectCollaboratorInfo[index].updated = true;
+              }
+            }
+          );
+          this.contractForm.patchValue(
+            {
+              PROJECT_COLLABORATOR: {
+                project_code: '',
+                email_address: '',
+                start_date: '',
+                end_date: '',
+              },
+            }
+          );
+          this.canUpdateContractProjectAction.next(false);
+          this.canAddContractProjectAction.next(true);
+        }
+          break;
+        case 'addMore': {
+
+            this.projectCollaboratorList.next([]);
+            this.projectCollaboratorInfo.push(
+              {
+                project_code: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value,
+                start_date: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value,
+                end_date: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value,
+                email_address: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value,
+                contract_code: this.contractInfo.contractKey.contract_code
+
+              }
+            );
+            this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
+          this.contractForm.patchValue(
+            {
+              PROJECT_COLLABORATOR: {
+                project_code: '',
+                email_address: '',
+                start_date: '',
+                end_date: '',
+              },
+            }
+          );
+            this.utilsService.openSnackBar('Project Collaborator Added', '', 2000);
+
+        }
+          break;
+      }
+    }
+
   }
 
   /**************************************************************************
@@ -1210,15 +1506,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * rowAction [show, update, delete]
    *************************************************************************/
   switchAction(rowAction: any) {
-    if (rowAction.formGroupName === 'CONTRACT_EXTENSION') {
+
       switch (rowAction.actionType) {
         case ('show'): // this.showContact(rowAction.data);
           break;
-        case ('update'): this.setContractExtension(rowAction.data);
+        case ('update'): this.setContractExtension(rowAction);
           break;
-        case('delete'):  // this.onStatusChange(rowAction.data);
+        case('delete'):   this.onStatusChange(rowAction);
       }
-    }
 
   }
 
@@ -1227,21 +1522,53 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * update form with row details
    *************************************************************************/
   setContractExtension(row) {
-    this.canAddAction.next(false);
-    this.canUpdateAction.next(true);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.setValue(
-      row.contractExtensionKey?.extension_code ? row.contractExtensionKey?.extension_code : row.extension_code);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.setValue(row.extension_start_date);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.setValue(row.extension_end_date);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.setValue(row.extension_rate);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(
-      this.appInitializerService.currenciesList.find((type) =>
-        type.CURRENCY_DESC === row.extension_currency_cd)?.CURRENCY_CODE
-    );
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.setValue(
-      this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-        type.viewValue === row.extension_status)?.value);
-    this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.setValue(row.attachments);
+    if (row.formGroupName === 'CONTRACT_EXTENSION') {
+      this.canAddAction.next(false);
+      this.canUpdateAction.next(true);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.setValue(
+        row.data.contractExtensionKey?.extension_code ? row.data.contractExtensionKey?.extension_code : row.data.extension_code);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.setValue(row.data.extension_start_date);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.setValue(row.data.extension_end_date);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.setValue(row.data.extension_rate);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(
+        this.appInitializerService.currenciesList.find((type) =>
+          type.CURRENCY_DESC === row.data.extension_currency_cd)?.CURRENCY_CODE
+      );
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.setValue(
+        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+          type.viewValue === row.data.extension_status)?.value);
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.setValue(row.data.attachments);
+    } else if ( row.formGroupName === 'CONTRACT_PROJECT' ) {
+      this.canAddContractProjectAction.next(false);
+      this.canUpdateContractProjectAction.next(true);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.setValue(
+        row.data.ContractProjectKey?.project_code ? row.data.ContractProjectKey?.project_code : row.data.project_code);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.setValue(row.data.start_date);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.setValue(row.data.end_date);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.setValue(row.data.project_rate);
+     // this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_vbr.setValue(row.vat_vbr);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.setValue(row.data.comment);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.setValue(row.data.project_desc);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.setValue(
+        this.appInitializerService.currenciesList.find((type) =>
+          type.CURRENCY_DESC === row.data.rate_currency)?.CURRENCY_CODE
+      );
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.setValue(
+        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+          type.viewValue === row.data.project_status)?.value);
+    } else if ( row.formGroupName === 'PROJECT_COLLABORATOR' ) {
+      this.canAddProjectCollaboratorAction.next(false);
+      this.canUpdateProjectCollaboratorAction.next(true);
+      this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.setValue(
+        row.ProjectCollaboratorKey?.project_code ? row.ProjectCollaboratorKey?.project_code : row.data.project_code);
+      this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.setValue(
+        row.ProjectCollaboratorKey?.email_address ? row.ProjectCollaboratorKey?.email_address : row.data.email_address);
+      this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.setValue(
+        row.data.start_date);
+      this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.setValue(
+        row.data.end_date);
+    }
+
   }
 
   /**************************************************************************
@@ -1333,5 +1660,108 @@ export class AddContractComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
     // Unsubscribe from subscriptions
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+  /**************************************************************************
+   * @description delete and confirm function from datatable
+   *************************************************************************/
+  onStatusChange(row) {
+    const confirmation = {
+      code: 'delete',
+      title: 'delete Info',
+      description: `Are you sure you want to delete ?`,
+    };
+    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (res) => {
+          let code = '';
+           let index = 0;
+          let element = null;
+          let email = '';
+          if (res === true) {
+            if (row.formGroupName === 'CONTRACT_EXTENSION') {
+              code = row.data.contractExtensionKey?.extension_code ? row.data.contractExtensionKey?.extension_code : row.data.extension_code;
+              element = this.contractExtensionInfo.filter(x => x.contractExtensionKey?.extension_code === code || x.extension_code === code)[0];
+              index = this.contractExtensionInfo.indexOf(element);
+              if (index !== -1) {
+                this.contractExtensionInfo.splice(index, 1);
+                this.extensionsList.next(this.contractExtensionInfo.slice());
+                if (row.data._id) {
+                  this.contractsService.disableContractExtension(row.data._id).subscribe((res1) => {
+                    this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+
+                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+
+                } else {
+                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+
+                }
+              }
+
+            } else if (row.formGroupName === 'CONTRACT_PROJECT') {
+              code = row.data.ContractProjectKey?.project_code ? row.data.ContractProjectKey?.project_code : row.data.project_code;
+              element = this.contractProjectInfo.filter(x => x.ContractProjectKey?.project_code === code || x.project_code === code)[0];
+              index = this.contractProjectInfo.indexOf(element);
+              if (index !== -1) {
+                if (!this.checkProjectExist(code)) {
+                  this.contractProjectInfo.splice(index, 1);
+                  this.contractProjectList.next(this.contractProjectInfo.slice());
+                  if ((row.data._id)) {
+                    this.contractsService.disableContractProject(row.data._id).subscribe((res1) => {
+                      this.utilsService.openSnackBar('project deleted successfully', 'close');
+
+                    }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+
+                  } else {
+                    this.utilsService.openSnackBar('project deleted successfully', 'close');
+
+                  }
+                } else {
+                  this.utilsService.openSnackBar('this project already affected to collaborator', 'close');
+
+                }
+
+              }
+
+            } else if (row.formGroupName === 'PROJECT_COLLABORATOR') {
+              code = row.data.ProjectCollaboratorKey?.project_code ? row.data.ProjectCollaboratorKey?.project_code : row.data.project_code;
+              email = row.data.ProjectCollaboratorKey?.email_address ? row.data.ProjectCollaboratorKey?.email_address : row.data.email_address;
+              // tslint:disable-next-line:max-line-length
+              element = this.projectCollaboratorInfo.filter(x => (x.ContractProjectKey?.project_code === code || x.project_code === code) && (x.ContractProjectKey?.email_address === email || x.email_address === email))[0];
+              index = this.projectCollaboratorInfo.indexOf(element);
+              if (index !== -1) {
+                this.projectCollaboratorInfo.splice(index, 1);
+                this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
+                if (row.data._id) {
+                  this.contractsService.disableProjectCollaborator(row.data._id).subscribe((res1) => {
+                    this.utilsService.openSnackBar('project collaborator successfully', 'close');
+
+                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+
+                } else {
+                  this.utilsService.openSnackBar('project collaborator deleted successfully', 'close');
+
+                }
+              }
+
+            }
+          }
+
+        });
+  }
+  /**************************************************************************
+   * @description check project affected to collaborator
+   *************************************************************************/
+  checkProjectExist(project_code: any): boolean {
+    let element = null;
+    element = this.projectCollaboratorInfo.filter(x => x.ContractProjectKey?.project_code === project_code || x.project_code === project_code )[0];
+
+    if (element !== null && element !== undefined) {
+      return true;
+    }
+    return false;
+
   }
 }
