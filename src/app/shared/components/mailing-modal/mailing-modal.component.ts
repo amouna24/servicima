@@ -187,25 +187,25 @@ export class MailingModalComponent implements OnInit {
                 mailingObject.message,
                 attach,
                 this.copies,
-                this.hiddenCopies);
+                this.hiddenCopies,
+                );
             });
           });
         } else {
-
           this.data.map((data) => {
-            this.invoiceService.sendInvoiceMail(this.localStorageService.getItem('language').langId,
-              this.localStorageService.getItem('userCredentials').application_id,
-              this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-              'dhia.othmen@widigital-group.com',
-              data.contractor_code,
-              'data.user_info.actual_job',
-              '${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}',
+
+            this.invoiceService.sendInvoiceMail(
+              [email],
               [{ filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
                 path: environment.uploadFileApiUrl + '/show/' + data.attachment },
               ], this.copies,
               this.hiddenCopies,
+              mailingObject.subject,
+              mailingObject.message,
             ).subscribe(() => {
-            });
+            }, (error => {
+              console.error(error);
+            }));
           });
         }
       });

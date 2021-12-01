@@ -9,7 +9,7 @@
       Import Payslip
     </p>
     </div>
-  <div fxLayout="column" class="p-10 p-t-0" fxFlex>
+  <div fxLayout="column" class="p-10 p-t-0 full-height" fxFlex>
     <ng-container *ngIf="selectedFiles.length<1 else loaded">
       <wid-skeleton-loader fxFlex="100"
                            [nbrColumn]="3"
@@ -29,6 +29,7 @@
           </button>
         </div>
       </div>
+      <div>
       <ng-container *ngFor="let file of selectedFiles">
         <form fxLayout="row" fxLayoutAlign="space-around center"
               style="border-bottom: 1px solid #ebebeb" class="p-t-15 p-b-15"
@@ -74,6 +75,11 @@
           </ng-template>
         </form>
       </ng-container>
+      </div>
+        <div *ngIf="detectUnknownFile()" fxFlex="5" fxFlexAlign="end end" fxLayoutAlign="start center"
+             class="full-width bg-warning-yellow-two border-radius-5 font-size-12 font-light p-10">
+          {{detectUnknownFile()}}
+        </div>
     </ng-template>
 
   </div>

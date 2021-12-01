@@ -31,6 +31,7 @@ export class PayslipImportComponent implements OnInit {
       async (res) => {
         this.collaboratorList = res;
         await this.getFileData(Object.values(this.data.files));
+        this.detectUnknownFile();
       }
     ).finally( () => { this.isLoading.next(false); });
   }
@@ -39,7 +40,7 @@ export class PayslipImportComponent implements OnInit {
     return {
       application_id: this.data.application_id,
       company_email: this.data.company_email,
-      file_name: file.name,
+      file_name: file.selectedFile.name,
       file: file.reader,
     };
   }
@@ -60,6 +61,15 @@ export class PayslipImportComponent implements OnInit {
           });
       }
     );
+  }
+  detectUnknownFile(): string {
+    if (this.unknownFiles.length > 0) {
+      if (this.unknownFiles.length === 1) {
+        return `There is one file unknown`;
+      } else {
+        return `There is ${this.unknownFiles.length} files unknown`;
+      }
+    }
   }
   getCompanyCollaborator(applicationId, companyEmail): Promise<IUserModel[]> {
     return new Promise(

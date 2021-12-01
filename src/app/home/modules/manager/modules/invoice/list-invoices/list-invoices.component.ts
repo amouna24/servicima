@@ -126,8 +126,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         break;
       case('download'): this.downloadInvoice(rowAction.data);
         break;
-      case('to pay'): this.toPay(rowAction.data);
-        break;
       case('archiver'): this.archiver(rowAction.data);
         break;
       case('sendMailing'): this.sendMailing(rowAction.data);
@@ -137,35 +135,14 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
     }
   }
 
- /* protectInvoice(data) {
-    this.modalService.displayModal('protectInvoice', data,
-      '500px', '344px').subscribe(async (res) => {
-      if (res) {
-      }
-    });
-  } */
-
   /**
    * @description : update invoice
    * @param data: object to update
    */
   updateInvoice(data) {
-  /*  if (data.password) {
-      this.modalService.displayModal('setPwdInvoice', data,
-        '500px', '255px').subscribe(async (res) => {
-        if (res) {
-          this.router.navigate(['/manager/invoices/add-invoice'],
-            { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
-            });
-        } else {
-          console.log('error');
-        }
-      });
-    } else {*/
       this.router.navigate(['/manager/invoices/add-invoice'],
         { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
         });
-   // }
   }
 
   /**
@@ -196,20 +173,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param row: list invoices to send
    */
   sendMailing(row) {
-  /*  row.map((data) => {
-      this.invoiceService.sendInvoiceMail(this.languageId,
-        this.applicationId,
-        this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
-        this. companyEmail,
-        data.contractor_code,
-        'data.user_info.actual_job',
-        '${environment.uploadFileApiUrl}/show/${data.resume_filename_docx}',
-        [{ filename: 'invoice' + data.InvoiceHeaderKey.invoice_nbr + '.pdf',
-          path: environment.uploadFileApiUrl + '/show/' + data.attachment }]
-      ).subscribe(() => {
-      });
-    });*/
-
     this.subscriptionModal = this.modalServices.displayModal('mailing', row, '500px', '640px')
       .subscribe(
         (res) => {
@@ -219,6 +182,10 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * @description : archive invoice
+   * @param data: invoice to archive
+   */
   archiver(data) {
     data.map((invoice) => {
       const invoiceHeader = {
@@ -247,40 +214,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
     this.getAllInvoices();
   }
 
-  toPay(data) {
-    console.log(data, 'data');
-    this.modalService.displayModal('PayInvoice', data,
-      '500px', '580px').subscribe(async (res) => {
-      if (res) {
-      }
-    });
-    data.map((invoice) => {
-      const invoiceHeader = {
-        application_id: invoice.InvoiceHeaderKey.application_id,
-        company_email: invoice.InvoiceHeaderKey.company_email,
-        invoice_nbr: invoice.InvoiceHeaderKey.invoice_nbr ,
-        invoice_status: 'Payed',
-        factor_involved: invoice.factor_involved,
-        invoice_date: invoice.invoice_date,
-        invoice_delay: invoice.invoice_delay,
-        contractor_code: invoice.code ,
-        contract_code: invoice.contract_code,
-        vat_amount: invoice.vat_amount,
-        invoice_total_amount: invoice.invoice_total_amount,
-        invoice_currency: invoice.invoice_currency,
-        invoice_amount: invoice.invoice_amount,
-        comment1: '',
-        comment2: '',
-        attachment: invoice.attachment,
-      };
-      /* this.invoiceService.updateInvoiceHeader(invoiceHeader).subscribe((res) => {
-         console.log(res);
-       });*/
-
-    });
-    this.getAllInvoices();
-  }
-
   /**
    * @description load xml
    */
@@ -297,7 +230,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
             this.xmlItems = xml;
           });
       });
-    /*Read Data*/
   }
 
   /**

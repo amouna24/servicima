@@ -48,13 +48,15 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       }
     );
   }
-  fillDataTable(status): Promise<any[]> {
+  async fillDataTable(status): Promise<any[]> {
     if (!this.companyEmail) {
-      this.getUserInfo();
+      await this.getUserInfo();
     }
     return new Promise(
       resolve => {
-        this.uploadPayslipService.getAssociatedPayslip(`?status=${status}`).toPromise().then(
+        this.uploadPayslipService.getAssociatedPayslip(
+          `?company_address${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
+        ).toPromise().then(
           (res) => {
             const result = [];
             res.map(data => {

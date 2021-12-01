@@ -180,17 +180,15 @@ export class InvoiceService {
    * @param companyName: company name
    * @param collaboratorPosition: collaborator position
    * @param resumeUrl: resume url
-   * @param attachment: attachment
+   * @param attachement: attachment
+   * @param emailcc: email cc
+   * @param emailbcc: email bcc
    *************************************************************************/
-  sendInvoiceMail(languageId: string, applicationId: string, companyId: string, emailAddress: string,
-                  companyName: string, collaboratorPosition: string, resumeUrl: string, attachement: any, emailcc, emailbcc): Observable<any> {
-    return this.httpClient.post(`${environment.invoiceHeaderApiUrl}/mailing`, { languageId,
-      applicationId,
-      companyId,
-      emailAddress,
-      companyName,
-      collaboratorPosition,
-      resumeUrl, attachement, emailcc, emailbcc });
+  sendInvoiceMail(emailAddress: string[],
+                   attachement: any, emailcc, emailbcc, subject, text): Observable<any> {
+    return this.httpClient.post(`${environment.invoiceHeaderApiUrl}/mailing`, {
+
+      emailAddress, attachement, emailcc, emailbcc, subject, text });
   }
 
   /**
