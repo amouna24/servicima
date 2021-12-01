@@ -35,7 +35,7 @@ export class UploadSheetComponent implements OnInit {
     formData.append('file', this.selectedFiles[0]);
     formData.append('caption', this.selectedFiles.item(0).name);
     this.file = formData;
-    this._bottomSheetRef.dismiss({ file: this.file, name: this.selectedFiles.item(0).name});
+    this._bottomSheetRef.dismiss({ file: this.file, name: this.selectedFiles.item(0).name, selectedFiles : this.selectedFiles});
     event.preventDefault();
   }
 }

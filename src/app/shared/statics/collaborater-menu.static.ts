@@ -27,27 +27,27 @@ export const collaboraterMenu: IMenu[] = [
     name: 'hr-records',
     type: 'link',
     icon: 'wi_dashboard',
-    feature: 'HR_FOLDER_ACCESS',
+    feature: 'SOURCING_CAND_FILE_ACCESS',
   },
   {
     state: 'timesheet',
     name: 'timesheet',
     type: 'sub',
     icon: 'wi_timesheet',
-    feature: 'HR_FOLDER_ACCESS',
+    feature: 'SOURCING_CAND_FILE_ACCESS',
     children: [
       {
         state: 'TIMESHEET',
         name: 'timesheet',
         icon: 'wi_timesheet',
-        feature: 'HR_FOLDER_ACCESS',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
       {
         state: 'TIMESHEET_EXTRA',
         name: 'timesheet extra',
         icon: 'wi_timesheet',
-        feature: 'HR_FOLDER_ACCESS',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
     ]

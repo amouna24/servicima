@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ManagerComponent } from './manager.component';
+import { ShareOnLinkedinComponent } from './modules/share-on-linkedin/share-on-linkedin.component';
 
 const routes: Routes = [
   {
@@ -22,9 +23,11 @@ const routes: Routes = [
         loadChildren: () => import('./modules/activity-reports/activity-reports.module').then(m => m.ActivityReportsModule)
       },
       {
-        path: 'billings',
-        loadChildren: () => import('./modules/billings/billings.module').then(m => m.BillingsModule),
-
+        path: 'invoices',
+        loadChildren: () => import('./modules/invoice/invoice.module').then(m => m.InvoiceModule),
+        data: {
+          breadcrumb: 'invoices'
+        },
       },
       {
         path: 'contract-management',
@@ -67,6 +70,10 @@ const routes: Routes = [
         path: 'resume',
         loadChildren: () => import('./modules/resume/resume.module').then(m => m.ResumeModule),
       },
+      {
+        path: 'linkedin',
+        component: ShareOnLinkedinComponent
+      }
     ]
   }
 ];

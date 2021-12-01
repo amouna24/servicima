@@ -1075,7 +1075,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
         }
       }
       for (const project of this.contractProjectInfo) {
-        console.log('my project ', project);
         project.application_id = Contract.application_id;
         project.company_email = Contract.email_address;
         project.contract_code = Contract.contract_code;
@@ -1086,7 +1085,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
 
         if (project._id && project?.updated) {
           project.project_code = project.ContractProjectKey?.project_code;
-          console.log('project for updating ', project);
           this.contractsService.updateContractProject(project)
             .pipe(
               takeUntil(this.destroy$)

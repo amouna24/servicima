@@ -8,6 +8,7 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { UserService } from '@core/services/user/user.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { userType } from '@shared/models/userProfileType.model';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-profile-image',
@@ -25,6 +26,7 @@ export class ProfileImageComponent implements OnInit {
   @Input() diameter: any;
   @Input() height: any;
   @Input() width: any;
+  @Input() oldImage: any;
   @Output() newFile = new EventEmitter<FormData>();
 
   page = Math.random();
@@ -34,9 +36,15 @@ export class ProfileImageComponent implements OnInit {
     private uploadService: UploadService,
     private userService: UserService,
     private profileService: ProfileService,
+    private utilsService: UtilsService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  snackBarAction() {
+    this.utilsService.openSnackBar('the image must be less than 2mb  ', 'Undo',
+      300);
   }
 
   /**
@@ -47,22 +55,24 @@ export class ProfileImageComponent implements OnInit {
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-     this.avatar = reader.result as string;
-     this.haveImage = 'have image';
+      this.avatar = reader.result as string;
+      this.haveImage = 'have image';
     };
-   reader.readAsDataURL(file);
-      const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
-     formData.append('file', file);
-     formData.append('caption', file.name);
-     this.selectedFile.file = formData;
-     this.selectedFile.name = file.name;
-     this.newFile.emit(formData);
+    reader.readAsDataURL(file);
+    const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
+    formData.append('file', file);
+    formData.append('caption', file.name);
+    this.selectedFile.file = formData;
+    this.selectedFile.name = file.name;
+    this.newFile.emit(formData);
+
   }
 
   /**
    * @description : Upload Image to Server  with async to promise
    */
   async uploadFile() {
+
     /*** Create file after uploading selected Image ***/
     const filename = await this.uploadService.uploadImage(this.selectedFile.file)
       .pipe(
@@ -79,6 +89,12 @@ export class ProfileImageComponent implements OnInit {
       this.profileService.updateUser(this.modelObject).subscribe(
         () => {
           this.userService.haveImage('have image');
+          this.uploadService.emitImage(this.modelObject.photo);
+          if (this.oldImage) {
+            this.uploadService.deleteFile(this.oldImage).subscribe(() => {
+              console.log('file deleted');
+            });
+          }
         },
         (error) => {
           console.error(error);

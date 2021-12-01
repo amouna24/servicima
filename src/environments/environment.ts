@@ -21,18 +21,16 @@ export const environment = {
   featuresApiUrl: 'http://192.168.1.22:8021/admin/features/v1',
 
   /************************** SERVICIMA **********************************/
- // contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
-  contractApiUrl: 'http://localhost:8060/servicima/contracts/v1',
-  // contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
-  contractExtensionApiUrl: 'http://localhost:8061/servicima/contractextensions/v1',
-  // contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
-  contractProjectApiUrl: 'http://localhost:8095/servicima/contractproject/v1',
+  contractApiUrl: 'http://192.168.1.22:8060/servicima/contracts/v1',
+  contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
+  contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
 
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
   companyLicenceApiUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
+  companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   companyPaymentTermsApiUrl: 'http://192.168.1.22:8065/servicima/companypaymentterms/v1',
   companyRoleFeaturesApiUrl: 'http://192.168.1.22:8037/auth/companyrolefeatures/v1',
   companyTimesheetSettingApiUrl: 'http://192.168.1.22:8080/servicima/companytimesheetsetting/v1',
@@ -51,7 +49,7 @@ export const environment = {
   resumeDataApiUrl: 'http://192.168.1.22:8123/servicima/resumedata/v1',
   docxTemplateApiUrl: 'http://192.168.1.22:8094/generate',
   candidateApiUrl: 'http://192.168.1.22:8031/auth/candidates/v1',
-  resumeMailingHistoryApiUrl: 'http://192.168.1.22:8130/servicima/mailinghistory/v1',
+  resumeMailingHistoryApiUrl: 'http://192.168.1.22:8125/servicima/mailinghistory/v1',
   bankingApiUrl: 'http://192.168.1.22:8083/servicima/hrbanking/v1',
   childApiUrl: 'http://192.168.1.22:8089/servicima/hrchild/v1',
   emergencyContactApiUrl: 'http://192.168.1.22:8087/servicima/hremergencycontact/v1',
@@ -67,25 +65,26 @@ export const environment = {
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
   invoiceLineApiUrl: 'http://192.168.1.22:8105/servicima/invoiceline/v1',
   invoiceHeaderApiUrl: 'http://192.168.1.22:8106/servicima/invoiceheader/v1',
-  invoicePaymentApiUrl: 'http://127.0.0.1:8107/servicima/invoicepayment/v1',
+  invoicePaymentApiUrl: 'http://192.168.1.22:8107/servicima/invoicepayment/v1',
+  invoiceAttachmentApiUrl: 'http://192.168.1.22:9005/servicima/invoiceattachment/v1',
   companyBankingInfoApiUrl: 'http://192.168.1.22:8108/servicima/companybankinginfo/v1',
   timesheetApiUrl: 'http://192.168.1.22:8079/servicima/timesheet/v1',
   timesheetHolidayApiUrl: 'http://192.168.1.22:8110/servicima/timesheetholiday/v1',
-  // projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
-  projectCollaboratorApiUrl: 'http://localhost:8097/servicima/projectcollaborator/v1',
+  projectCollaboratorApiUrl: 'http://192.168.1.22:8096/servicima/projectcollaborator/v1',
+  linkedInOauthApiUrl: 'http://192.168.1.22:8126/servicima/shareonsocialnetwork/v1',
+  servicmaUrl: 'http://localhost:4200',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://192.168.1.22:8030/auth/credentials/v1',
   userRoleApiUrl: 'http://192.168.1.22:8034/auth/userroles/v1',
   companyApiUrl: 'http://192.168.1.22:8035/auth/companies/v1',
   userApiUrl: 'http://192.168.1.22:8038/auth/users/v1',
   userGatewayApiUrl: 'http://192.168.1.22:8201/auth/v1',
-  companyLicenceUrl: 'http://192.168.1.22:8036/auth/companylicences/v1',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
   /************************* GENERATE CERTIFICATION ******************************/
-  pdfFile: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
+  pdfFileUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
   /************************* UPLOAD RESUME FILE ************************/
   uploadResumeFileApiUrl: 'http://192.168.1.22:8121/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/

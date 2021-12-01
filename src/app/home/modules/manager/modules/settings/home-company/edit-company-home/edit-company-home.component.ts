@@ -57,6 +57,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
   company: ICompanyModel;
   userInfo: IUserInfo;
   companyId: string;
+  ancienPhoto: string;
   applicationId: string;
   languageId: string;
   user: IUserModel;
@@ -217,7 +218,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       address: this.company['adress'],
       city: this.company['city'],
       zipCode: this.company['zip_code'],
-      stamp: this.company['stamp'] ? this.company['stamp'] : null ,
+      stamp: this.company['stamp'] ? this.company['stamp'] : ' ' ,
       registrationNumber: this.company['reg_nbr'],
       activityDescription: this.company['activity_desc'],
       capital: this.company['capital'],
@@ -295,16 +296,14 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
           ))
         .toPromise();
     }
+    let fileName = null;
     if (this.selectedFile) {
-      const fileName = await this.uploadService.uploadImage(this.selectedFile.file).pipe(map(
+      fileName = await this.uploadService.uploadImage(this.selectedFile.file).pipe(map(
         response => response.file.filename
 
       )).toPromise();
-      console.log('file uploaded');
-      this.form.controls['stamp'].setValue(fileName);
 
     }
-
     const companyProfile = {
       _id: this.company._id,
       application_id: this.company.companyKey['application_id'],
@@ -323,7 +322,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       country_id: this.form.value.countryCtrl,
       city: this.form.value.city,
       employee_nbr: this.form.value.employeeNum,
-      stamp: this.form.value.stamp,
+      stamp:  fileName ? fileName : this.form.value.stamp,
       web_site: this.form.value.webSite,
       contact_email: this.form.value.contactEmail,
       linkedin_url: this.form.value.linkedinAccount,
@@ -337,7 +336,7 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
       phone_nbr2: this.form.value.phoneNbr2,
       fax_nbr: this.form.value.faxNbr,
     };
-    console.log('company update ', companyProfile);
+
     const confirmation = {
       code: 'edit',
       title: 'user.back',
@@ -345,15 +344,21 @@ export class EditCompanyHomeComponent implements OnInit, OnDestroy {
     };
     this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe(async (value) => {
       if (value === true) {
-
+        this.ancienPhoto =  this.company['photo'];
         this.subscriptions.push(this.profileService.updateCompany(companyProfile).subscribe(res => {
           this.userInfo['company'][0] = res;
+          if (this.ancienPhoto && companyProfile.photo !== this.ancienPhoto) {
+            this.uploadService.deleteFile(this.ancienPhoto).subscribe(() => {
+              console.log('file deleted');
+            });
+          }
           this.userService.connectedUser$.next(this.userInfo);
           this.router.navigate(['/manager/settings/home-company']);
         }, (err) => console.error(err)));
       }
       this.subscription.unsubscribe();
     });
+
   }
 
   /**

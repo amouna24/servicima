@@ -62,14 +62,6 @@ const routes: Routes = [
   },
 
   {
-    path: 'invoices',
-    loadChildren: () => import('./invoices/invoice.module').then(m => m.InvoiceModule),
-    data: {
-      breadcrumb: 'invoices'
-    },
-  },
-
-  {
     path: 'company-banking-info',
     loadChildren: () => import('./company-banking-info/companyBankingInfo.module').then(m => m.CompanyBankingInfoModule),
     data: {
