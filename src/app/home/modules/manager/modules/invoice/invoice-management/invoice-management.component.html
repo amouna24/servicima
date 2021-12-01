@@ -361,7 +361,8 @@
                 <th class="small-col">Tva%</th>
                 <th class="medium-col">Tva</th>
                 <th class="small-col" >Escompte</th>
-                <th class="medium-col montant">Montant</th>
+                <th class="medium-col montant">Montant </th>
+              </tr>
               <tr *ngFor="let roleListControl of getListRole().controls; let i = index" [formGroupName]="i">
                 <td>
                   <mat-select formControlName="project_code" placeholder="Services">
@@ -373,19 +374,19 @@
                   </mat-select>
                 </td>
                 <td>
-                      <textarea class="overflow-hidden"  matInput name="Text1" class="overflow-hidden"  placeholder="description project" formControlName='project_desc' matInput
+                      <textarea class="overflow-hidden"   name="Text1"   placeholder="description project" formControlName='project_desc' matInput
                                 cdkTextareaAutosize
                                 cdkAutosizeMinRows="1"
                       ></textarea>
                 </td>
                 <td>
-                        <textarea class="overflow-hidden"  matInput name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
+                        <textarea  name="Text1" (blur)="getTvaOrMountInvoice(i)" placeholder="quantité"  class="overflow-hidden"  required formControlName='invoice_line_unit_amount' matInput
                                   cdkTextareaAutosize
                                   cdkAutosizeMinRows="1"
                         ></textarea>
                 </td>
                 <td>
-                        <textarea class="overflow-hidden"  (blur)="getTvaOrMountInvoice(i)"  matInput name="Text1" placeholder="Days"  class="overflow-hidden"  required formControlName='days_nbr' matInput
+                        <textarea   (blur)="getTvaOrMountInvoice(i)"   name="Text1" placeholder="Days"  class="overflow-hidden"  required formControlName='days_nbr' matInput
                                   cdkTextareaAutosize
                                   cdkAutosizeMinRows="1"
                         ></textarea>
