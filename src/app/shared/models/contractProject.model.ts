@@ -4,7 +4,7 @@ export interface IContractProject {
   /* ID */
   _id?: string;
   ContractProjectKey?: IContractProjectKey;
-  category_code?: number;
+  category_code?: string;
   project_desc: string;
   start_date: Date;
   end_date?: Date;
@@ -13,7 +13,6 @@ export interface IContractProject {
   vat_nbr?: string;
   project_status?: string;
   comment: string;
-
   application_id: string;
   company_email: string;
   contract_code: string;

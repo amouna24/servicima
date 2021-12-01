@@ -6,7 +6,6 @@ export interface IProjectCollaborator {
   ProjectCollaboratorKey?: IProjectCollaboratorKey;
   start_date: Date;
   end_date?: Date;
-
   contract_project_code?: number;
   email_address: string;
 }

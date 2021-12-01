@@ -202,10 +202,9 @@ export class MailingModalComponent implements OnInit {
               this.hiddenCopies,
               mailingObject.subject,
               mailingObject.message,
-            ).subscribe((sub) => {
-              console.log(sub, 'nnnnn');
+            ).subscribe(() => {
             }, (error => {
-              console.log(error, 'nwq');
+              console.error(error);
             }));
           });
         }
