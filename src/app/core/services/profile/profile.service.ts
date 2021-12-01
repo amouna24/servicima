@@ -30,7 +30,8 @@ export class ProfileService {
    */
   getAllUser(companyEmail: string, userType? , limit?, offset?): Observable<IUserModel[]> {
     return this.httpClient
-      .get<IUserModel[]>(`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}&user_type=${userType}`);
+      .get<IUserModel[]>
+      (`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}${userType ? '&user_type=' + userType : ''}`);
   }
   /**
    * @description: http request get to get all users registered in the same company and has the same type

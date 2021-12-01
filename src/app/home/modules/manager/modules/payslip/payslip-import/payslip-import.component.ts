@@ -12,12 +12,9 @@ import { UploadPayslipService } from '@core/services/upload-payslip/upload-paysl
 })
 export class PayslipImportComponent implements OnInit {
   collaboratorList: IUserModel[];
-  selectedFiles: any[] = [];
-  unknownFiles: any[] = [];
+  selectedFiles = new BehaviorSubject<any[]>([]);
   totalFiles: number;
   isLoading = new BehaviorSubject<boolean>(true);
-  selectedCollaborator: string;
-  associateAllBtn = true;
   constructor(
     public dialogRef: MatDialogRef<PayslipImportComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { files: any[], application_id: string, company_email: string},
@@ -30,36 +27,36 @@ export class PayslipImportComponent implements OnInit {
     this.getCompanyCollaborator(this.data.application_id, this.data.company_email).then(
       async (res) => {
         this.collaboratorList = res;
-        await this.getFileData(Object.values(this.data.files));
+        await this.getFileData(Object.values(this.data.files)).then(
+          data => this.selectedFiles.next(data)
+        );
       }
-    ).finally( () => { this.isLoading.next(false); });
+    ).finally(() => { this.isLoading.next(false); });
   }
-
+  loaded(): boolean {
+    return (this.selectedFiles.value.length === this.totalFiles) ;
+  }
   createNewPayslip(file): any {
     return {
       application_id: this.data.application_id,
       company_email: this.data.company_email,
-      file_name: file.name,
+      file_name: file.selectedFile.name,
       file: file.reader,
     };
   }
-  async getFileData(data) {
-    data.map(row => {
+  async getFileData(data): Promise<any[]> {
+    const result = [];
+    data.map(async row => {
         this.uploadPayslipService.distributePayslip(this.createNewPayslip(row)).toPromise().then(
           (res) => {
-            res['collaboraterName'] = res.email_address ? this.getCollabName(res) : null;
-            res['associated'] = false;
+            res['collaboratorName'] = res.email_address ? this.getCollabName(res) : null;
             res['form_data'] = row.file;
             res['file_type'] = row.type;
-            if (res.email_address) {
-              this.selectedFiles.push(res);
-            } else {
-              this.unknownFiles.push(res);
-            }
-
+            result.push(res);
           });
       }
     );
+    return result;
   }
   getCompanyCollaborator(applicationId, companyEmail): Promise<IUserModel[]> {
     return new Promise(
@@ -95,11 +92,7 @@ export class PayslipImportComponent implements OnInit {
       month: 1,
       year: 2
     };
-    this.uploadPayslipService.associatePayslip(data).toPromise().then(
-      res => {
-        file['associated'] = true;
-      }
-    );
+    this.uploadPayslipService.associatePayslip(data).toPromise().then(res => { file['associated'] = true; });
   }
 
   openFile(file) {
@@ -107,11 +100,15 @@ export class PayslipImportComponent implements OnInit {
   }
 
   associateAll() {
-    this.selectedFiles.map(
+    this.selectedFiles.getValue().map(
       (row) => {
         if (!row.associated && row.email_address) {
           this.associate(row);
         }
       });
+  }
+
+  setMessage($event: any) {
+    return 'message';
   }
 }

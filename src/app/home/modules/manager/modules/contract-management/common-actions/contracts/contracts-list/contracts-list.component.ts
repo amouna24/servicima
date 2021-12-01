@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { IContract } from '@shared/models/contract.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -174,8 +173,14 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Table
    *************************************************************************/
   updateContract(Contract: IContract): void {
+    let url = '';
+    if (Contract.contractKey.contract_type === 'SUPPLIER') {
+        url = '/manager/contract-management/suppliers-contracts/contracts';
+    } else {
+      url = '/manager/contract-management/clients-contracts/contracts';
+    }
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/contracts'],
+      [url],
       { queryParams: {
           id: btoa(Contract._id),
           cc: btoa(Contract.contractKey.contract_code),
