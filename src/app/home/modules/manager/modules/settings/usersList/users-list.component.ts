@@ -59,6 +59,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
           }
         });
   }
+
   getDataWithStatus(status) {
   }
 
@@ -67,7 +68,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    */
   getAllUsers(limit, offset) {
     this.subscriptions.push(
-      this.profileService.getAllUser(this.emailAddress, limit, offset)
+      this.profileService.getAllUser(this.emailAddress, '', limit, offset)
         .subscribe((res) => {
           res['results'] = this.getUserWithType(res['results'], this.typeUser);
         this.ELEMENT_DATA.next(res['results']);

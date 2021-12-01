@@ -8,9 +8,9 @@
       [diameter]= "diameter ? diameter : 80"
       strokeWidth="2">
     </mat-progress-spinner>
-    <img  [src]="haveImage ? avatar : 'assets/img/default.jpg'" [width]='width ?width:80'
+    <img  alt="image" [src]="haveImage ? avatar : 'assets/img/default.jpg'" [width]='width ?width:80'
           [height]='height? height:80' class="edit-img"
-          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }" />
+          [ngStyle.xs]="{ 'width.px': 100, 'height.px': 120 }">
   </div>
 <!--  *ngIf="loading$ | async"-->
   <!--Input File accept only image with preview Image-->
@@ -22,10 +22,10 @@
                 </span>
     </label>
   <input style="display: none;" #file type="file" id="{{page}}" name="file" (change)="previewFile($event)"
-         accept="image/*" />
+         accept="image/*">
   </div>
 </div>
-  <input type="hidden" name="profile_avatar_remove" />
+  <input type="hidden" name="profile_avatar_remove">
 
 <div class="btn-cancel" *ngIf="selectedFile.file" >
                   <span class="material-icons" (click)="clearPreview()">
