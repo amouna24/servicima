@@ -62,13 +62,14 @@ export class InvoiceManagementComponent implements OnInit {
   contractorEmailAddress: string;
   editContractors = false;
   contractorSelected = false;
-  listProject: IContractProject[];
   listContractor: IContractor[];
   listContract: IContract[];
+  listProject: IContractProject[];
+
   companyBankingInfos: ICompanyBankingInfoModel;
   paymentTerms: number;
   avatar: any;
-  invoices: Array<{ }>;
+  invoices: any;
   invoiceLine: IInvoiceLineModel;
   invoiceHeader: IInvoiceHeaderModel;
   invoicePayment: IInvoicePaymentModel[] = [];
@@ -355,7 +356,6 @@ export class InvoiceManagementComponent implements OnInit {
         }
       });
     }
-
     this.data1 = new MatTableDataSource<any>(this.invoiceAttachment);
   }
 
@@ -435,7 +435,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.countPayment();
     this.formFactor.controls['factorInvoice'].setValue(this.invoiceHeader ['factor_involved'] === 'Y');
     this.mp = { ...this.invoiceLine };
-    this.maxInvoiceHeader = this.invoices[2]['max'] ? parseInt(this.invoices[2]['max'], 10) + 1 : 1;
+    this.maxInvoiceHeader = this.invoices[2]?.max ? parseInt(this.invoices[2]['max'], 10) + 1 : 1;
     this.formHeader = this.formBuilder.group({
       contractor: this.invoiceHeader['contractor_code'],
       contract: this.invoiceHeader['contract_code'],
@@ -635,7 +635,7 @@ RIB:${this.companyBankingInfos?.rib}`);
    *************************************************************************/
   getContractProject(contractCode: string): void {
     this.contractProjectService.getContractProject(`${this.companyEmail}`, contractCode).subscribe((data) => {
-      this.listProject = data;
+      this.listProject = data.results;
     });
   }
 

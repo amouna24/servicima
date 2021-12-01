@@ -6,8 +6,8 @@
   [title]="title"
   (dynamicFormGroup)="createNewContract($event)"
   (selectedDoc)="getFile($event)"
-  (listOfObjects)="addContractExtension($event)"
+  (listOfObjects)="addInfo($event)"
   (rowActionData)="switchAction($event)"
-  [allowedTableActions]="{ update: true, delete: false, show: false }"
+  [allowedTableActions]="{ update: true, delete: true, show: false }"
 >
 </wid-dynamic-component>

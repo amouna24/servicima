@@ -218,8 +218,14 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Table
    *************************************************************************/
   updateContractor(Contractor: IContractor): void {
+    let url = '';
+    if (Contractor.contractor_type === 'SUPPLIER') {
+      url = '/manager/contract-management/suppliers-contracts/suppliers';
+    } else {
+      url = '/manager/contract-management/clients-contracts/clients';
+    }
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'],
+      [url],
       { queryParams: {
           id: btoa(Contractor._id),
           cc: btoa(Contractor.contractorKey.contractor_code),

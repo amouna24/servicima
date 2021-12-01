@@ -6,6 +6,8 @@ import { IContractExtension } from '@shared/models/contractExtension.model';
 import { IContractProject } from '@shared/models/contractProject.model';
 
 import { environment } from '../../../../environments/environment';
+// tslint:disable-next-line:origin-ordered-imports
+import { IProjectCollaborator } from '@shared/models/projectCollaborator.model';
 
 @Injectable({
   providedIn: 'root'
@@ -101,6 +103,14 @@ export class ContractsService {
     return this.httpClient.delete<IContractExtension>(`${environment.contractExtensionApiUrl}/disable?_id=${ID}`);
   }
 
+  /**************************************************************************
+   * @description Disable ContractExtension Status
+   * @param ID : of contractExtension
+   *************************************************************************/
+  deleteContractExtension(ID: string): Observable<any> {
+    return this.httpClient.delete<IContractExtension>(`${environment.contractExtensionApiUrl}?_id=${ID}`);
+  }
+
   /*------------------------------------------------------------------------*/
 
   /*------------------------------CONTRACT PROJECT -----------------------------------*/
@@ -144,6 +154,54 @@ export class ContractsService {
    *************************************************************************/
   disableContractProject(ID: string): Observable<any> {
     return this.httpClient.delete<IContractProject>(`${environment.contractProjectApiUrl}/disable?_id=${ID}`);
+  }
+  /**************************************************************************
+   * @description delete ContractProject Status
+   * @param ID : of ContractProject
+   *************************************************************************/
+  deleteContractProject(ID: string): Observable<any> {
+    return this.httpClient.delete<IContractProject>(`${environment.contractProjectApiUrl}?_id=${ID}`);
+  }
+
+  /*------------------------------COLLABORATOR PROJECT -----------------------------------*/
+
+  /**************************************************************************
+   * @description Get Contract Project List
+   * @param filter: search query like [ ?id=123 ]
+   * @returns All ContractProject Observable<IProjectCollaborator[]>
+   *************************************************************************/
+  getCollaboratorProject(filter: string): Observable<IProjectCollaborator[]> {
+    return this.httpClient.get<IProjectCollaborator[]>(`${environment.projectCollaboratorApiUrl}${filter}` );
+  }
+
+  /**************************************************************************
+   * @description Add new Project Collaborator
+   * @param Contract: Contract Model
+   *************************************************************************/
+  addProjectCollaborator(ProjectCollaborator: IProjectCollaborator): Observable<any> {
+    return this.httpClient.post<IContract>(`${environment.projectCollaboratorApiUrl}`, ProjectCollaborator);
+  }
+  /**************************************************************************
+   * @description Update Date of Project
+   * @param contract: updated project collaborator Object
+   *************************************************************************/
+  updateProjectCollaborator(ProjectCollaborator: IProjectCollaborator): Observable<any> {
+    return this.httpClient.put<IProjectCollaborator>(`${environment.projectCollaboratorApiUrl}`, ProjectCollaborator);
+  }
+  /**************************************************************************
+   * @description delete project affected to collaborator
+   * @param ID: Of ProjectCollaborator
+   *************************************************************************/
+  deleteProjectCollaborator(ID: string): Observable<any> {
+    return this.httpClient.delete<IProjectCollaborator>(`${environment.projectCollaboratorApiUrl}?_id=${ID}`);
+  }
+
+  /**************************************************************************
+   * @description disable project affected to collaborator
+   * @param ID: Of ProjectCollaborator
+   *************************************************************************/
+  disableProjectCollaborator(ID: string): Observable<any> {
+    return this.httpClient.delete<IProjectCollaborator>(`${environment.projectCollaboratorApiUrl}/disable?_id=${ID}`);
   }
 
   /*------------------------------------------------------------------------*/
