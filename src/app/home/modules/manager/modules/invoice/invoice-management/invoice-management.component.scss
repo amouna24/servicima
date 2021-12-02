@@ -110,15 +110,18 @@
   .small-col {
     width: 8% !important;
     min-width: 8% !important;
+    font-weight: normal;
   }
   .large-col {
     width:  30% !important;
     min-width:  30% !important;
+    font-weight: normal;
   }
   .medium-col {
     width: 12% !important;
     min-width: 12% !important;
     max-width: 12% !important;
+    font-weight: normal;
   }
   .vat_mount {
     font-size: 12px !important;
@@ -135,7 +138,7 @@
   flex-wrap: wrap !important;
 }
 .btn-add-line{
-  height: 100px !important
+  height: 70px !important
 }
 
 .eye-icon{
@@ -215,6 +218,12 @@
     width: 350px !important;
 }
  }
+
+button:disabled,
+button[disabled]{
+  background-color: #cccccc !important;
+  color: #666666 !important;
+}
 
 .width-100{
   max-width: 100px !important;

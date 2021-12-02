@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
@@ -173,16 +173,12 @@ export class InvoiceService {
 
   /**************************************************************************
    * @description send invoice mail
-   * @param languageId: language id
-   * @param applicationId: application od
-   * @param companyId: company id
    * @param emailAddress: email address
-   * @param companyName: company name
-   * @param collaboratorPosition: collaborator position
-   * @param resumeUrl: resume url
    * @param attachement: attachment
    * @param emailcc: email cc
    * @param emailbcc: email bcc
+   * @param subject: subject
+   * @param text: text
    *************************************************************************/
   sendInvoiceMail(emailAddress: string[],
                    attachement: any, emailcc, emailbcc, subject, text): Observable<any> {
