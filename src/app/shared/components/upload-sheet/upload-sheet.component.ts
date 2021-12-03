@@ -52,7 +52,7 @@ export class UploadSheetComponent implements OnInit {
           reader.onload = () => {
             this.selectedFilesList.push({
               file: this.file,
-              name: fileRow['name'],
+              selectedFile: fileRow,
               type: this.fileType,
               reader: reader.result});
           };
