@@ -60,6 +60,7 @@ export const environment = {
   payslipApiUrl: 'http://192.168.1.22:8090/servicima/hrpayslip/v1',
   hrContractApiUrl: 'http://192.168.1.22:8092/servicima/hrcontract/v1',
   hrContractExtension: 'http://192.168.1.22:8093/servicima/hrcontractextension/v1',
+  hrPreviousContractApiUrl: 'http://localhost:8113/servicima/hrcontractprevious/v1',
   workCertificateUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/v1',
 
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',

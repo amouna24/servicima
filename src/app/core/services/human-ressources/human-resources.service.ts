@@ -15,6 +15,7 @@ import { IWorkCertificate } from '@shared/models/workCertificate.model';
 
 import { environment } from '../../../../environments/environment';
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
+import { IHrPreviousContract } from '@shared/models/hrContractPrevious.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -448,6 +449,50 @@ export class HumanRessourcesService {
    *************************************************************************/
   deleteWorkCertificate(id: string): Observable<any> {
     return this.httpClient.delete(`${environment.workCertificateUrl}?_id=${id}`);
+  }
+
+  /**************************************************************************
+   * @description Add new PreviousContract
+   * @param PreviousContract: IHrPreviousContract
+   *************************************************************************/
+  addPreviousContract(PreviousContract: IHrPreviousContract): Observable<any> {
+    return this.httpClient.post<IEvaluation>(`${environment.hrPreviousContractApiUrl}`, PreviousContract);  }
+
+  /**************************************************************************
+   * @description Update PreviousContract
+   * @param PreviousContract updated IHrPreviousContract
+   *************************************************************************/
+  updatePreviousContract(PreviousContract: any): Observable<any> {
+    return this.httpClient.put<any>(`${environment.hrPreviousContractApiUrl}`, PreviousContract);
+  }
+  /**************************************************************************
+   * @description Delete PreviousContract
+   * @param id: deleted PreviousContract Object
+   *************************************************************************/
+  deletePreviousContract(id: string): Observable<any> {
+    return this.httpClient.delete(`${environment.hrPreviousContractApiUrl}?_id=${id}`);
+  }
+  /**************************************************************************
+   * @description Get PreviousContract
+   * @param filter: string
+   * @return IHrPreviousContract[]
+   *************************************************************************/
+  getPreviousContracts(filter: string): Observable<any> {
+    return this.httpClient.get<any>(`${environment.hrPreviousContractApiUrl}/${filter}` );
+  }
+  /**************************************************************************
+   * @description Delete previous contract
+   * @param ID: make previous contract disable
+   *************************************************************************/
+  disablePreviousContracts(id: string): Observable<any> {
+    return this.httpClient.delete<any>(`${environment.hrPreviousContractApiUrl}/disable?_id=${id}` );
+  }
+  /**************************************************************************
+   * @description Active previous contract
+   * @param id: make previous contract enable
+   *************************************************************************/
+  enablePreviousContracts(id: string): Observable<any> {
+    return this.httpClient.put<any>(`${environment.hrPreviousContractApiUrl}/enable?_id=${id}`, null);
   }
 
 }

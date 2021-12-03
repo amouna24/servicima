@@ -80,6 +80,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   evaluationInfo = [];
   emergencyContactInfo = [];
   contractExtensionInfo = [];
+  contractPreviousInfo = [];
   goalInfo = [];
   bankingInfo: any = null;
   filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
@@ -112,7 +113,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   canAddEmergencyContact: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   canUpdateExtension: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddExtension: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  canUpdatePreviousContract: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  canAddPreviousContract: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   contractExtensionList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
+  contractPreviousList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractPreviousInfo);
   contract: any = null;
 
   /**************************************************************************
@@ -156,11 +160,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
+      title: 'Previous Contract',
+      titleKey: 'PREVIOUS_CONTRACT',
+      child: []
+    },
+    {
       title: 'Contract Extension',
       titleKey: 'CONTRACT_EXTENSION',
       child: []
     },
-
     {
       title: 'Evaluation',
       titleKey: 'EVALUATION',
@@ -216,748 +224,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.contract = this.router.getCurrentNavigation().extras.state.contract ? this.router.getCurrentNavigation().extras.state.contract : null;
     this.bankingInfo = this.router.getCurrentNavigation().extras.state.banking ? this.router.getCurrentNavigation().extras.state.banking : null;
     this.userInfo = this.router.getCurrentNavigation().extras.state.userInfo ? this.router.getCurrentNavigation().extras.state.userInfo : null;
-    this.dynamicForm = new BehaviorSubject<IDynamicForm[]>([
-      {
-        'titleRef': 'PERSONAL_DATA',
-        'fieldsLayout': FieldsAlignment.tow_items_with_image_at_right,
-        'fields': [
-          {
-            label: 'First name',
-            placeholder: 'First name',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'first_name'
-          },
-          {
-            label: 'Last name',
-            placeholder: 'Last name',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'last_name'
-          },
-          {
-            type: FieldsType.IMAGE,
-            imageInputs: {
-              avatar: this.avatar,
-              haveImage:  this.haveImage,
-              modelObject:  this.userInfo,
-              singleUpload: true,
-              userType: userType.UT_USER,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Email',
-            placeholder: 'exp@email.com',
-            type: FieldsType.INPUT,
-            inputType: InputType.EMAIL,
-            formControlName: 'email_address',
-          },
-          {
-            label: 'Phone',
-            placeholder: '+216 123 456 78',
-            type: FieldsType.INPUT,
-            inputType: InputType.NUMBER,
-            formControlName: 'phone'
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Birth date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'birth_date',
-          },
-          {
-            label: 'Gender',
-            placeholder: 'Gender',
-            type: FieldsType.SELECT,
-            selectFieldList: this.genderList,
-            formControlName: 'gender_id'
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Birth country',
-            placeholder: 'birth country',
-            type: FieldsType.SELECT_WITH_SEARCH,
-            filteredList: this.filteredCountries,
-            searchControlName: 'countryFilterCtrl',
-            formControlName: 'birth_country_id',
-          },
-          {
-            label: 'Birth city',
-            placeholder: 'birth city',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'birth_city',
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Adress',
-            placeholder: 'full adress here',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'adress',
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Country',
-            placeholder: 'Country',
-            type: FieldsType.SELECT_WITH_SEARCH,
-            filteredList: this.filteredCountries,
-            formControlName: 'country_id',
-            searchControlName: 'countryFilterCtrl'
-          },
-          {
-            label: 'Zip',
-            placeholder: 'zip_code',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'zip_code',
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Family situation',
-            placeholder: 'family situation',
-            type: FieldsType.SELECT,
-            selectFieldList: this.familySituationList,
-            formControlName: 'family_situation_id',
-          },
-          {
-            label: 'Nationality',
-            placeholder: 'nationality',
-            type: FieldsType.SELECT_WITH_SEARCH,
-            filteredList: this.filteredNationalities,
-            searchControlName: 'nationalityFilterCtrl',
-            formControlName: 'nationality_id',
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Registration number',
-            placeholder: 'registration number',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'registration_number',
-          },
-          {
-            label: 'Social security number',
-            placeholder: 'social security number',
-            type: FieldsType.INPUT,
-            inputType: InputType.NUMBER,
-            formControlName: 'social_secu_nbr',
-          },
-        ],
-      },
-      {
-        titleRef: 'PERSONAL_DATA',
-        fieldsLayout: FieldsAlignment.one_item_at_left,
-        fields: [
-          {
-            label: 'Medical exam date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'medical_exam_date',
-          },
-        ],
-      },
-      {
-        titleRef: 'IDENTITY_DOCUMENT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: ['rowItem', 'type', 'validity_date', 'file', 'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Document type', prop: 'type', type: InputType.TEXT},
-                { name: 'validity date', prop: 'validity_date', type: InputType.DATE},
-                { name: 'Attachement', prop: 'file', type: InputType.TEXT},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.identityDocumentList,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'IDENTITY_DOCUMENT',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Document type',
-            placeholder: 'document type',
-            type: FieldsType.SELECT,
-            selectFieldList: this.documentTypeList,
-            formControlName: 'type',
-          },
-          {
-            label: 'validity date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'validity_date',
-          },
-        ],
-      },
-      {
-        titleRef: 'IDENTITY_DOCUMENT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Attachement',
-            placeholder: 'File',
-            type: FieldsType.UPLOAD_FILE,
-            formControlName: 'file',
-            inputType: InputType.TEXT,
-          },
-        ],
-      },
-      {
-        titleRef: 'IDENTITY_DOCUMENT',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateID,
-            canAdd: this.canAddID,
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Rate',
-            placeholder: '0.00',
-            type: FieldsType.INPUT,
-            inputType: InputType.NUMBER,
-            formControlName: 'contract_rate',
-          },
-          {
-            label: 'Currency',
-            placeholder: 'Currency',
-            type: FieldsType.SELECT,
-            selectFieldList: this.currencyList,
-            formControlName: 'currency_cd',
-            searchControlName: 'currencyFilterCtrl'
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Start date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'contract_start_date',
-          },
-          {
-            label: 'End date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'contract_end_date',
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Assignment Date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'contract_date',
-          },
-          {
-            label: 'Contract type',
-            placeholder: 'Contract type',
-            type: FieldsType.SELECT,
-            selectFieldList: this.contractTypeList,
-            formControlName: 'contract_type',
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Attachement',
-            placeholder: 'File',
-            type: FieldsType.UPLOAD_FILE,
-            formControlName: 'attachments',
-            inputType: InputType.TEXT,
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT_EXTENSION',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: [
-                'rowItem',
-                'extension_rate', 'title_cd', 'extension_start_date', 'extension_end_date',
-                'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Rate', prop: 'extension_rate', type: InputType.TEXT},
-                { name: 'Job title', prop: 'title_cd', type: InputType.TEXT},
-                { name: 'Start date', prop: 'extension_start_date', type: InputType.DATE},
-                { name: 'End date', prop: 'extension_end_date', type: InputType.DATE},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.contractExtensionList,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT_EXTENSION',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Start date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'extension_start_date',
-          },
-          {
-            label: 'End date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'extension_end_date',
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT_EXTENSION',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Rate',
-            placeholder: '0.00',
-            type: FieldsType.INPUT,
-            inputType: InputType.NUMBER,
-            formControlName: 'extension_rate',
-          },
-          {
-            label: 'Job title',
-            placeholder: 'job title',
-            type: FieldsType.SELECT,
-            selectFieldList: this.jobTitleList,
-            formControlName: 'title_cd',
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT_EXTENSION',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Currency',
-            placeholder: 'currency',
-            type: FieldsType.SELECT,
-            selectFieldList: this.currencyList,
-            formControlName: 'extension_currency_cd',
-          },
-          {
-            label: 'Attachement',
-            placeholder: 'File',
-            type: FieldsType.UPLOAD_FILE,
-            formControlName: 'attachments',
-            inputType: InputType.TEXT,
-          },
-        ],
-      },
-      {
-        titleRef: 'CONTRACT_EXTENSION',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateExtension,
-            canAdd: this.canAddExtension,
-          },
-        ],
-      },
-      {
-        titleRef: 'EVALUATION',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: [
-                'rowItem',
-                'main_mission', 'evaluation_start_date', 'evaluation_end_date', 'report',
-                'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Main mission', prop: 'main_mission', type: InputType.TEXT},
-                { name: 'Evaluation start date', prop: 'evaluation_start_date', type: InputType.DATE},
-                { name: 'Evaluation end date', prop: 'evaluation_end_date', type: InputType.DATE},
-                { name: 'Report', prop: 'report', type: InputType.TEXT},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.evaluationList
-            }
-          },
-        ],
-      },
-
-      {
-        titleRef: 'EVALUATION',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Evaluation main mission',
-            placeholder: 'main mission',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'main_mission',
-          },
-          {
-            label: 'Report',
-            placeholder: 'report',
-            type: FieldsType.INPUT,
-            formControlName: 'report',
-          },
-        ],
-      },
-
-      {
-        titleRef: 'EVALUATION',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Start date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'evaluation_start_date',
-          },
-          {
-            label: 'End date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'evaluation_end_date',
-          },
-        ],
-      },
-
-      {
-        titleRef: 'EVALUATION',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Attachement',
-            placeholder: 'File',
-            type: FieldsType.UPLOAD_FILE,
-            formControlName: 'evaluation_doc',
-            inputType: InputType.TEXT,
-          },
-        ],
-      },
-      {
-        titleRef: 'EVALUATION',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateEv,
-            canAdd: this.canAddEv,
-          },
-        ],
-      },
-      {
-        titleRef: 'GOAL',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: [
-                'rowItem',
-                'description', 'expected_result', 'deadline',
-                'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Description', prop: 'description', type: InputType.TEXT},
-                { name: 'Expected Result', prop: 'expected_result', type: InputType.TEXT},
-                { name: 'Deadline', prop: 'deadline', type: InputType.DATE},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.goalList,
-            }
-          },
-        ],
-      },
-
-      {
-        titleRef: 'GOAL',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Description',
-            placeholder: 'description',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'description',
-          },
-          {
-            label: 'Expected result',
-            placeholder: 'expected result',
-            type: FieldsType.INPUT,
-            formControlName: 'expected_result',
-          },
-        ],
-      },
-
-      {
-        titleRef: 'GOAL',
-        fieldsLayout: FieldsAlignment.one_item_at_left,
-        fields: [
-          {
-            label: 'Deadline',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'deadline',
-          },
-        ],
-      },
-
-      {
-        titleRef: 'GOAL',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateGoal,
-            canAdd: this.canAddGoal,
-          },
-        ],
-      },
-      {
-        titleRef: 'CHILDREN',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: ['rowItem', 'full_name', 'birth_date', 'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Full name', prop: 'full_name', type: InputType.TEXT},
-                { name: 'Birth date', prop: 'birth_date', type: InputType.DATE},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.childrenList,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'CHILDREN',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Full name',
-            placeholder: 'full name',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'full_name',
-          },
-          {
-            label: 'Birth date',
-            placeholder: 'dd/mm/yyyy',
-            type: FieldsType.DATE_PICKER,
-            formControlName: 'birth_date',
-          },
-        ],
-      },
-      {
-        titleRef: 'CHILDREN',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateChild,
-            canAdd: this.canAddChild,
-          },
-        ],
-      },
-      {
-        titleRef: 'EMERGENCY_CONTACT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: ['rowItem', 'full_name', 'phone', 'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Full name', prop: 'full_name', type: InputType.TEXT},
-                { name: 'Phone', prop: 'phone', type: InputType.TEXT},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.emergencyContactList,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'EMERGENCY_CONTACT',
-        fieldsLayout: FieldsAlignment.tow_items,
-        fields: [
-          {
-            label: 'Full name',
-            placeholder: 'Full name',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'full_name',
-          },
-          {
-            label: 'Phone',
-            placeholder: 'Phone',
-            type: FieldsType.INPUT,
-            inputType: InputType.NUMBER,
-            formControlName: 'phone',
-          },
-        ],
-      },
-      {
-        titleRef: 'EMERGENCY_CONTACT',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateEmergencyContact,
-            canAdd: this.canAddEmergencyContact,
-          },
-        ],
-      },
-      {
-        titleRef: 'BANKING',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Bank name',
-            placeholder: 'bank name',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'bank_name',
-          },
-        ],
-      },
-      {
-        titleRef: 'BANKING',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'IBAN',
-            placeholder: 'IBAN',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'iban',
-          },
-        ],
-      },
-      {
-        titleRef: 'BANKING',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'RIB',
-            placeholder: 'RIB',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'rib',
-          },
-        ],
-      },
-      {
-        titleRef: 'EQUIPMENT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            type: FieldsType.DATA_TABLE,
-            dataTable: {
-              displayedColumns: ['rowItem', 'equipment_name', 'Actions'],
-              columns: [
-                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-                { name: 'Equipment name', prop: 'equipment_name', type: InputType.TEXT},
-                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
-              ],
-              dataSource: this.equipmentList,
-            }
-          },
-        ],
-      },
-      {
-        titleRef: 'EQUIPMENT',
-        fieldsLayout: FieldsAlignment.one_item_stretch,
-        fields: [
-          {
-            label: 'Equipment',
-            placeholder: 'equipment',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'equipment_name',
-          },
-        ],
-      },
-      {
-        titleRef: 'EQUIPMENT',
-        fieldsLayout: FieldsAlignment.one_item_at_right,
-        fields: [
-          {
-            type: FieldsType.ADD_MORE_OR_UPDATE,
-            canUpdate: this.canUpdateEquipment,
-            canAdd: this.canAddEquipment,
-          },
-        ],
-      },
-    ]);
     // tslint:disable-next-line:max-line-length
     this.collaborator = this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
     console.log('collaborator ', this.collaborator);
@@ -1270,6 +536,122 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.one_item_stretch,
+        fields: [
+          {
+            type: FieldsType.DATA_TABLE,
+            dataTable: {
+              displayedColumns: [
+                'rowItem',
+                'company_name', 'contract_type', 'contract_start_date', 'contract_end_date',
+                'country_code',
+                'Actions'],
+              columns: [
+                { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
+                { name: 'Company', prop: 'company_name', type: InputType.TEXT},
+                { name: 'contract_type', prop: 'contract_type', type: InputType.TEXT},
+                { name: 'Start date', prop: 'contract_start_date', type: InputType.DATE},
+                { name: 'End date', prop: 'contract_end_date', type: InputType.DATE},
+                { name: 'Country', prop: 'country_code', type: InputType.TEXT},
+                { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+              ],
+              dataSource: this.contractPreviousList,
+            }
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.tow_items,
+        fields: [
+          {
+            label: 'Company Name',
+            placeholder: 'company name',
+            type: FieldsType.INPUT,
+            inputType: InputType.TEXT,
+            formControlName: 'company_name',
+          },
+          {
+            label: 'Country',
+            placeholder: 'country',
+            type: FieldsType.SELECT_WITH_SEARCH,
+            filteredList: this.filteredCountries,
+            searchControlName: 'countryFilterCtrl',
+            formControlName: 'country_code',
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.tow_items,
+        fields: [
+          {
+            label: 'Start date',
+            placeholder: 'dd/mm/yyyy',
+            type: FieldsType.DATE_PICKER,
+            formControlName: 'contract_start_date',
+          },
+          {
+            label: 'End date',
+            placeholder: 'dd/mm/yyyy',
+            type: FieldsType.DATE_PICKER,
+            formControlName: 'contract_end_date',
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.tow_items,
+        fields: [
+          {
+            label: 'Rate',
+            placeholder: '0.00',
+            type: FieldsType.INPUT,
+            inputType: InputType.NUMBER,
+            formControlName: 'contract_rate',
+          },
+          {
+            label: 'Currency',
+            placeholder: 'currency',
+            type: FieldsType.SELECT,
+            selectFieldList: this.currencyList,
+            formControlName: 'currency_cd',
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.tow_items,
+        fields: [
+          {
+            label: 'Contract Type',
+            placeholder: 'contract type',
+            type: FieldsType.SELECT,
+            selectFieldList: this.contractTypeList,
+            formControlName: 'contract_type',
+          },
+          {
+            label: 'Job title',
+            placeholder: 'job title',
+            type: FieldsType.SELECT,
+            selectFieldList: this.jobTitleList,
+            formControlName: 'title_cd',
+          },
+        ],
+      },
+      {
+        titleRef: 'PREVIOUS_CONTRACT',
+        fieldsLayout: FieldsAlignment.one_item_at_right,
+        fields: [
+          {
+            type: FieldsType.ADD_MORE_OR_UPDATE,
+            canUpdate: this.canUpdatePreviousContract,
+            canAdd: this.canAddPreviousContract,
           },
         ],
       },
@@ -1766,6 +1148,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         contract_type: [this.contract !== null ? this.contract.HRContractKey.contract_type : ''],
         currencyFilterCtrl: ['']
       }),
+      PREVIOUS_CONTRACT: this.formBuilder.group({
+        contract_code: [''],
+        company_name: [''],
+        contract_start_date:  [''],
+        contract_end_date:  [''],
+        contract_type:  [''],
+        contract_rate: [''],
+        currency_cd: [''],
+        country_code: [''],
+        title_cd: [''],
+        countryFilterCtrl: ['']
+      }),
       CONTRACT_EXTENSION: this.formBuilder.group({
         extension_code: [''],
         extension_start_date:  [''],
@@ -1891,7 +1285,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.hrService.getEvaluationGoals(url),
       this.hrService.getEmergencyContact(url),
       this.hrService.getIdentityDocument(url),
-      this.hrService.getContractExtensions(url)
+      this.hrService.getContractExtensions(url),
+      this.hrService.getPreviousContracts(`?collaborator_email=${email}&contract_status=ACTIVE`)
     ])
       .pipe(
         takeUntil(this.destroy$)
@@ -1943,6 +1338,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           } else {
             this.contractExtensionInfo = res[6];
             this.contractExtensionList.next(this.contractExtensionInfo);
+          }
+          if (res[7]['msg_code'] === '0004') {
+            this.contractPreviousInfo = [];
+            console.log('no data found');
+          } else {
+           this.contractPreviousInfo = res[7]['results'];
+           this.contractPreviousList.next(this.contractPreviousInfo);
+            console.log('data found , ', res[7]);
           }
         }
 
@@ -2249,6 +1652,67 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         }
           break;
       }
+    } else if (result.formGroupName === 'PREVIOUS_CONTRACT') {
+      switch (result.action) {
+        case 'update': {
+          this.contractPreviousInfo.forEach(
+            (element, index) => {
+              if ((element.HRContractPreviousKey ? element.HRContractPreviousKey.contract_code : element.contract_code) ===
+                this.profileForm.controls.PREVIOUS_CONTRACT['controls'].extension_code.value) {
+
+                this.contractPreviousInfo[index].contract_start_date =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value;
+                this.contractPreviousInfo[index].contract_end_date =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value;
+                this.contractPreviousInfo[index].contract_rate =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_rate.value;
+                this.contractPreviousInfo[index].company_name =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].company_name.value;
+                this.contractPreviousInfo[index].country_code =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].country_code.value;
+                this.contractPreviousInfo[index].contract_type =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_type.value;
+                this.contractPreviousInfo[index].title_cd =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].title_cd.value;
+                this.contractPreviousInfo[index].currency_cd =
+                  this.profileForm.controls.PREVIOUS_CONTRACT['controls'].currency_cd.value;
+                this.contractPreviousInfo[index].updated = true;
+              }
+            }
+          );
+          this.profileForm.controls.PREVIOUS_CONTRACT.reset();
+          this.hrHelper.addForm(this.canUpdatePreviousContract, this.canAddPreviousContract);
+        }
+          break;
+        case 'addMore': {
+          if (
+            !this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value &&
+            this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value === '') {
+            this.utilsService.openSnackBar('Full name Required', 'close');
+          } else {
+            this.contractExtensionList.next([]);
+            const addPreviousContract =  {
+              contract_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-PRV`,
+              contract_start_date: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value,
+              contract_end_date: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value,
+              contract_rate: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_rate.value,
+              title_cd: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].title_cd.value,
+              currency_cd: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].currency_cd.value,
+              country_code: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].country_code.value,
+              contract_type: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_type.value,
+              company_name: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].company_name.value,
+            };
+            // tslint:disable-next-line:max-line-length
+            this.contractPreviousInfo.push(
+              addPreviousContract
+            );
+            this.contractPreviousList.next(this.contractPreviousInfo.slice());
+            this.profileForm.controls.PREVIOUS_CONTRACT.reset();
+            this.utilsService.openSnackBar('Contract previous Added', 'close');
+          }
+        }
+          break;
+      }
     }
   }
   /**************************************************************************
@@ -2329,8 +1793,22 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.setValue(new Date(row.data.extension_start_date));
       this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.setValue(new Date(row.data.extension_end_date));
       this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.setValue(new Date(row.data.extension_rate));
-      this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(new Date(row.data.extension_currency_cd));
-      this.profileForm.controls.CONTRACT_EXTENSION['controls'].title_cd.setValue(new Date(row.data.extension_currency_cd));
+      this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(row.data.extension_currency_cd);
+      this.profileForm.controls.CONTRACT_EXTENSION['controls'].title_cd.setValue(row.data.title_cd);
+    } else if (row.formGroupName === 'PREVIOUS_CONTRACT') {
+      this.hrHelper.updateForm(this.canUpdatePreviousContract, this.canAddPreviousContract);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].extension_code.setValue(
+        row.data.HRContractPreviousKey?.contract_code ?
+          row.data.HRContractPreviousKey?.contract_code : row.data.contract_code);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_code.setValue(row.data.contract_code);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.setValue(new Date(row.data.contract_start_date));
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.setValue(new Date(row.data.contract_end_date));
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_rate.setValue(row.data.contract_rate);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].currency_cd.setValue(row.data.currency_cd);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].company_name.setValue(row.data.company_name);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].title_cd.setValue(row.data.title_cd);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].country_code.setValue(row.data.country_code);
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_type.setValue(row.data.contract_type);
     }
   }
 
@@ -2419,6 +1897,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       .subscribe(
         (res) => {
           if (res === true) {
+            console.log('row want to deleted ', row);
             if (row.formGroupName === 'CHILDREN') {
               // tslint:disable-next-line:max-line-length
               const code = row.data.HRChildKey?.child_code ? row.data.HRChildKey.child_code : row.data.child_code;
@@ -2489,6 +1968,24 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
 
               this.subscriptionModal.unsubscribe();
+            } else if (row.formGroupName === 'PREVIOUS_CONTRACT') {
+              const code = row.data.HRContractPreviousKey?.contract_code ?  row.data.HRContractPreviousKey?.contract_code : row.data.contract_code;
+              const element = this.contractPreviousInfo.filter(x => x.HRContractPreviousKey?.contract_code === code || x .contract_code === code )[0];
+              const index = this.contractPreviousInfo.indexOf(element);
+              if (index !== -1) {
+                this.contractPreviousInfo.splice(index, 1);
+                this.contractPreviousList.next(this.contractPreviousInfo.slice());
+                if (row.data._id) {
+                  this.hrService.disablePreviousContracts(row.data._id).subscribe((res1) => {
+                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+
+                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+
+                } else {
+                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+
+                }
+              }
             }
           }}
       );
@@ -2559,14 +2056,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         this.hrHelper.addOrUpdateIdentifyDocument(identityDocument.updated, identityDocument, this.applicationId, this.emailAddress, identityDocument.identity_document_code);
 
       }
+    for (const previousContact of this.contractPreviousInfo) {
+      this.hrHelper.addOrUpdatePreviousContract
+      (previousContact.updated, previousContact, this.emailAddress, this.applicationId, this.companyEmail, previousContact.contract_code);
+    }
       if (this.contract) {
         for (const extensionContact of this.contractExtensionInfo) {
           if (extensionContact.selectedExtensionContractFile && extensionContact?.selectedExtensionContractFile?.name !== '') {
             extensionContact.attachments = await this.uploadFile(extensionContact.selectedExtensionContractFile.file);
           }
           extensionContact['contract_code'] = this.contract.HRContractKey.contract_code;
-          // tslint:disable-next-line:max-line-length
-          this.hrHelper.addOrUpdateExtensionContract(extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
+          this.hrHelper.addOrUpdateExtensionContract
+          (extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
         }
       } else {
         this.utilsService.openSnackBar('no contract disponible', 'close');

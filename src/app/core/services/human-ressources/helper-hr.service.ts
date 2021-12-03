@@ -464,6 +464,45 @@ export class HelperHrService {
     }
   }
   /**************************************************************************
+   * @description Add/Update Previous Contract
+   *************************************************************************/
+  // tslint:disable-next-line:max-line-length
+  addOrUpdatePreviousContract(previousCheck: boolean, previousContract: any, collaborator_email: string , applicationId: string, emailAddress: string, code: string) {
+    previousContract.contract_code = code ? code : previousContract.HRContractPreviousKey.contract_code;
+    previousContract.email_address = emailAddress;
+    previousContract.application_id = applicationId;
+    previousContract.collaborator_email = collaborator_email;
+    console.log('my object want to added ', previousContract);
+    if (previousCheck && previousContract._id) {
+
+      this.hrService.updatePreviousContract(previousContract)
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(
+          (response) => {
+            console.log('Previous Contract updated successfuly', response);
+          },
+          (error) => {
+            console.log('error', error);
+          },
+        );
+    } else if (!previousContract._id) {
+      this.hrService.addPreviousContract(previousContract).pipe(
+        takeUntil(this.destroy$)
+      )
+        .subscribe(
+          (response) => {
+            console.log('Previous Contract  added successfuly', response);
+
+          },
+          (error) => {
+            console.log('error', error);
+          },
+        );
+    }
+  }
+  /**************************************************************************
    * @description delete Equipment
    *************************************************************************/
   deleteEquipment(id: string, email: string) {
