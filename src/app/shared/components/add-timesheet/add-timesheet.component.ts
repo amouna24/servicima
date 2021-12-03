@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { UserService } from '@core/services/user/user.service';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -147,14 +147,14 @@ export class AddTimesheetComponent implements OnInit {
       if (this.contract) {
         this.contractService.getContractProject(`?contract_code=${this.contract.contractKey.contract_code}`).subscribe(
           (res) => {
-            this.projectsList = res;
+            this.projectsList = res['results'];
           }
         );
       }
     } else {
       this.contractService.getContractProject(`?contract_code=${contractCode}`).toPromise().then(
         (res) => {
-          this.projectsList = res ;
+          this.projectsList = res['results'] ;
         }
       );
     }

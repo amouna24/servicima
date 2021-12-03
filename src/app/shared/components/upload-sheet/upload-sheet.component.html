@@ -7,15 +7,19 @@
        <h6 class="white font">Upload File</h6>
     </div>
     <div fxFlex="35" fxLayout="column" fxLayoutAlign="center end" >
-      <img src="assets/icons/close.svg" class="bg-close">
+      <button mat-button class="btn-close border-radius-5 bg-pale-grey" (click)="closeUploadSheet()">
+        <mat-icon svgIcon="wi-close-normal"></mat-icon>
+      </button>
     </div>
   </div>
   <div fxFlex="35" fxLayout="row" fxLayoutAlign="space-evenly center">
     <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center" (click)="fileInput.click()">
       <mat-icon class="icon material-icons-outlined">computer
       </mat-icon>
-      <span class="black-three" fxFlexOffset="5">From your computer</span>
-      <input hidden (change)="selectFile($event)" type="file" id="file" #fileInput >
+      <span class="black-three" fxFlexOffset="5">
+        From your computer<span class="steel font-size-10 cool-grey font-medium" *ngIf="totalFiles > 0">({{totalFiles}})</span>
+        </span>
+      <input hidden (change)="selectFile($event)" type="file" [accept]="acceptedFormat" id="file" [multiple]="multiple" #fileInput >
     </button>
     <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center">
       <mat-icon class="icon material-icons-outlined">add_to_drive
@@ -46,41 +50,11 @@
     </div>
   </div>
   <div fxFlex="15" fxLayout="row" fxLayoutAlign="space-evenly center">
-    <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="30" fxLayoutAlign="space-evenly center">
+    <button mat-raised-button  class="btn-medium bg-pale-grey" (click)="closeUploadSheet()" fxFlex="30" fxLayoutAlign="space-evenly center">
       <span class="black-three">Cancel</span>
     </button>
-    <button mat-raised-button  class="btn-medium bg-cerulean-blue"  fxFlex="30" fxLayoutAlign="space-evenly center">
-      <<span class="white">Confirm</span>
+    <button mat-raised-button (click)="confirm()" class="btn-medium bg-cerulean-blue"  fxFlex="30" fxLayoutAlign="space-evenly center">
+      <span class="white">Confirm</span>
     </button>
   </div>
 </div>
-
-<!--
-
-<mat-nav-list>
-  <a (click)="fileInput.click()" mat-list-item>
-    <span mat-line>From Local Path</span>
-    <mat-form-field mat-line>
-      <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
-      <ng-template #newFile>
-        <mat-label>Choose file</mat-label>
-      </ng-template>
-      <input matInput disabled>
-      <button mat-icon-button matSuffix>
-        <mat-icon>attach_file</mat-icon>
-      </button>
-      <input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
-    </mat-form-field>
-  </a>
-
-  <a href="https://plus.google.com/" mat-list-item (click)="openLink($event)">
-    <span mat-line>Google Drive</span>
-    <span mat-line>Share with your friends</span>
-  </a>
-
-  <a href="https://plus.google.com/" mat-list-item (click)="openLink($event)">
-    <span mat-line>URL</span>
-    <span mat-line>Share with your friends</span>
-  </a>
-</mat-nav-list>
--->

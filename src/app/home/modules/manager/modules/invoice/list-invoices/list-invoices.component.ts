@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
 import xml2js from 'xml2js';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { InvoiceService } from '@core/services/invoice/invoice.service';
@@ -14,8 +14,11 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 import { FileSaver } from 'file-saver';
 import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
+import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
+import { SheetService } from '@core/services/sheet/sheet.service';
+import { environment } from '@environment/environment';
+import { takeUntil } from 'rxjs/operators';
 
-import { environment } from '../../../../../../../environments/environment';
 import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invoice.component';
 import { SetPwdInvoiceComponent } from '../set-pwd-invoice/set-pwd-invoice.component';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
@@ -36,7 +39,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   applicationId: string;
   languageId: string;
   public xmlItems: any;
-  private subscriptions: Subscription[] = [];
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   subscriptionModal: Subscription;
   constructor(private userService: UserService,
               private modalService: ModalService,
@@ -46,6 +49,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
               private router: Router,
               private modalServices: ModalService,
               private utilsService: UtilsService,
+              private sheetService: SheetService,
               private localStorageService: LocalStorageService,
               private http: HttpClient) { }
   /**
@@ -65,13 +69,17 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       { modalName: 'PayInvoice', modalComponent: PaymentInvoiceComponent });
     this.isLoading.next(true);
     this.getAllInvoices();
+    this.sheetService.registerSheets(
+      [
+        { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
+      ]);
   }
 
   /**
    * @description Get connected user
    */
   getConnectedUser() {
-    this.userService.connectedUser$
+    this.userService.connectedUser$.pipe(takeUntil(this.destroyed$))
       .subscribe(
         (userInfo) => {
           if (userInfo) {
@@ -96,7 +104,9 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description get all invoices by company
    */
   getAllInvoices() {
-    this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`).subscribe((data) => {
+    this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}`)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
         if (data.length === 0) {
           this.ELEMENT_DATA.next(data);
           this.isLoading.next(false);
@@ -206,7 +216,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         comment2: '',
         attachment: invoice.attachment,
       };
-      this.invoiceService.updateInvoiceHeader(invoiceHeader).subscribe((res) => {
+      this.invoiceService.updateInvoiceHeader(invoiceHeader).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
         console.log(res);
       });
 
@@ -218,25 +228,27 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description load xml
    */
   loadXML() {
-    /*Read Data*/
-    this.http.get(`${environment.uploadFileApiUrl}/show/7df3fa951f52f59e92b064406c57e387`,
-      {
-        headers: new HttpHeaders(),
-        responseType: 'text'
-      })
-      .subscribe((data) => {
-        this.parseXML(data)
-          .then((xml) => {
-            this.xmlItems = xml;
-          });
-      });
+    this.sheetService.displaySheet('uploadSheetComponent', { acceptedFormat: '.xml'})
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        async (res) => {
+          if (res) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              this.parseXML(reader.result)
+                .then((xml) => {
+                  this.xmlItems = xml;
+                  this.getAllInvoices();
+                });
+            };
+            reader.readAsText(res.selectedFile);
+          }
+        });
   }
 
   /**
    * @description parse xml
    */
   parseXML(data) {
-    const applicationId = this.applicationId;
     const companyEmail = this.companyEmail;
     const listContractor = this.listContractor;
     return new Promise(resolve => {
@@ -247,30 +259,33 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       });
       parser.parseString(data, (err, result) => {
         result.invoices.invoice.map((resp) => {
-          console.log(resp);
-        });
+          const contractorCode =  listContractor.find(value => value.contractor_name  === 'Adele Willis').contractorKey.contractor_code;
 
-        const contractorCode =  listContractor.find(value => value.contractor_name  === 'Adele Willis').contractorKey.contractor_code;
-        const invoiceHeader = {
-          application_id: applicationId,
-          company_email: companyEmail,
-          invoice_nbr: result.invoices.invoice[0].no[0],
-          invoice_status: result.invoices.invoice[0].status[0],
-          factor_involved: 'N',
-          invoice_date: new Date(),
-          invoice_delay: new Date(),
-          contractor_code: contractorCode,
-          contract_code: 'AZE21T8',
-          vat_amount: 'this.vatMount',
-          invoice_total_amount: result.invoices.invoice[0].status[0],
-          invoice_currency: 'this.currencyCode',
-          invoice_amount: 'this.sousTotalHT',
-          comment1: 'this.formCompanyBanking.value.comment1',
-          comment2: '',
-          attachment: '',
-          password: '12345',
-          old_password: '12345'
-        };
+          console.log(resp);
+          const invoiceHeader = {
+            application_id: this.applicationId,
+            company_email: companyEmail,
+            invoice_nbr: resp.no[0],
+            invoice_status: resp.status[0],
+            factor_involved: 'N',
+            invoice_date: new Date(),
+            invoice_delay: new Date(),
+            contractor_code: contractorCode,
+            contract_code: 'AZE21T8',
+            vat_amount: 12110,
+            invoice_total_amount: 200000,
+            // invoice_total_amount: result.invoices.invoice[0].status[0],
+            invoice_currency: 'this.currencyCode',
+            invoice_amount: 100000,
+            comment1: 'this.formCompanyBanking.value.comment1',
+            comment2: '',
+            attachment: '',
+          };
+          this.invoiceService.addInvoiceHeader(invoiceHeader)
+            .pipe(takeUntil(this.destroyed$)).subscribe(() => {
+          });
+
+        });
 
         /*result.invoices.invoice.map((p) => {
         } ) */
@@ -281,7 +296,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
              id: item.id[0],
              name: item.name[0],
              email: item.email[0],
-
            });
          }*/
         resolve(arr);
@@ -293,7 +307,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description destroy
    */
   ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
