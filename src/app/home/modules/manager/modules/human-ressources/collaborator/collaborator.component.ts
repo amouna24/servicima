@@ -1899,10 +1899,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (res === true) {
             console.log('row want to deleted ', row);
             if (row.formGroupName === 'CHILDREN') {
-              // tslint:disable-next-line:max-line-length
-              const code = row.data.HRChildKey?.child_code ? row.data.HRChildKey.child_code : row.data.child_code;
-              // tslint:disable-next-line:max-line-length
-              const element = this.childInfo.filter(x => x.HRChildKey?.child_code === code || x.child_code === code)[0];
+              const code = row.data.HRChildKey?.child_code ?
+                row.data.HRChildKey.child_code : row.data.child_code;
+              const element = this.childInfo
+                .filter(x => x.HRChildKey?.child_code === code || x.child_code === code)[0];
               const index = this.childInfo.indexOf(element);
               this.childInfo.splice(index, 1);
               this.childrenList.next(this.childInfo.slice());
@@ -1910,64 +1910,80 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.utilsService.openSnackBar('Child deleted successfully', 'close');
               this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'IDENTITY_DOCUMENT') {
-              // tslint:disable-next-line:max-line-length
-              const code = row.data.HRIdentityDocumentKey?.identity_document_code ? row.data.HRIdentityDocumentKey.identity_document_code : row.data.identity_document_code;
-              // tslint:disable-next-line:max-line-length
-              const element = this.identityDocumentInfo.filter(x => x.HRIdentityDocumentKey?.identity_document_code === code || x.identity_document_code === code)[0];
+              const code = row.data.HRIdentityDocumentKey?.identity_document_code ?
+                row.data.HRIdentityDocumentKey.identity_document_code : row.data.identity_document_code;
+              const element = this.identityDocumentInfo
+                .filter(x => x.HRIdentityDocumentKey?.identity_document_code === code || x.identity_document_code === code)[0];
               const index = this.identityDocumentInfo.indexOf(element);
-              this.identityDocumentInfo.splice(index, 1);
-              this.identityDocumentList.next(this.identityDocumentInfo.slice());
-              row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Identity document deleted successfully', 'close');
-              this.subscriptionModal.unsubscribe();
+              if (index !== -1) {
+                this.identityDocumentInfo.splice(index, 1);
+                this.identityDocumentList.next(this.identityDocumentInfo.slice());
+                row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
+
             } else if (row.formGroupName === 'EVALUATION') {
               const code = row.data.HREvaluationKey?.evaluation_code ? row.data.HREvaluationKey.evaluation_code : row.data.evaluation_code;
               const element = this.evaluationInfo.filter(x => x.HREvaluationKey?.evaluation_code === code || x.evaluation_code === code)[0];
               const index = this.evaluationInfo.indexOf(element);
-              this.evaluationInfo.splice(index, 1);
-              this.evaluationList.next(this.evaluationInfo.slice());
-              row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
-              this.subscriptionModal.unsubscribe();
+              if (index !== -1) {
+                this.evaluationInfo.splice(index, 1);
+                this.evaluationList.next(this.evaluationInfo.slice());
+                row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
+
             } else if (row.formGroupName === 'GOAL') {
               const code = row.data.HREvaluationGoalsKey?.goal_code ? row.data.HREvaluationGoalsKey.goal_code : row.data.goal_code;
               const element = this.goalInfo.filter(x => x.HREvaluationGoalsKey?.goal_code === code || x.goal_code === code)[0];
               const index = this.goalInfo.indexOf(element);
-              this.goalInfo.splice(index, 1);
-              this.goalList.next(this.goalInfo.slice());
-              row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close');
-              this.subscriptionModal.unsubscribe();
+              if ( index !== -1) {
+                this.goalInfo.splice(index, 1);
+                this.goalList.next(this.goalInfo.slice());
+                row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
+
             } else if (row.formGroupName === 'EQUIPMENT') {
               const code = row.data.HREquipmentKey?.equipment_code ? row.data.HREquipmentKey.equipment_code : row.data.equipment_code;
               const element = this.equipmentInfo.filter(x => x.HREquipmentKey?.equipment_code === code || x.equipment_code === code)[0];
               const index = this.equipmentInfo.indexOf(element);
-              this.equipmentInfo.splice(index, 1);
-              this.equipmentList.next(this.equipmentInfo.slice());
-              row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
-              this.subscriptionModal.unsubscribe();
+              if (index !== -1) {
+
+                this.equipmentInfo.splice(index, 1);
+                this.equipmentList.next(this.equipmentInfo.slice());
+                row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
             } else if (row.formGroupName === 'EMERGENCY_CONTACT') {
               const code = row.data.HREmergencyContactKey?.contact_code ? row.data.HREmergencyContactKey.contact_code : row.data.contact_code;
               const element = this.emergencyContactInfo.filter(x => x.HREmergencyContactKey?.contact_code === code || x.contact_code === code)[0];
               const index = this.emergencyContactInfo.indexOf(element);
-              this.emergencyContactInfo.splice(index, 1);
-              this.emergencyContactList.next(this.emergencyContactInfo.slice());
-              row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close');
-              this.subscriptionModal.unsubscribe();
+              if (index !== -1) {
+                this.emergencyContactInfo.splice(index, 1);
+                this.emergencyContactList.next(this.emergencyContactInfo.slice());
+                row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
+
             } else if (row.formGroupName === 'CONTRACT_EXTENSION') {
               const code = row.data.HRContractExtensionKey?.extension_code ? row.data.HRContractExtensionKey.extension_code : row.data.extension_code;
-              // tslint:disable-next-line:max-line-length
-              const element = this.contractExtensionInfo.filter(x => x.HRContractExtensionKey?.extension_code === code || x .extension_code === code )[0];
+              const element = this.contractExtensionInfo
+                .filter(x => x.HRContractExtensionKey?.extension_code === code || x .extension_code === code )[0];
               const index = this.contractExtensionInfo.indexOf(element);
-              this.contractExtensionInfo.splice(index, 1);
-              this.contractExtensionList.next(this.contractExtensionInfo.slice());
+              if (index !== -1) {
+                this.contractExtensionInfo.splice(index, 1);
+                this.contractExtensionList.next(this.contractExtensionInfo.slice());
+                row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
+                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+                this.subscriptionModal.unsubscribe();
+              }
 
-              row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
-
-              this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'PREVIOUS_CONTRACT') {
               const code = row.data.HRContractPreviousKey?.contract_code ?  row.data.HRContractPreviousKey?.contract_code : row.data.contract_code;
               const element = this.contractPreviousInfo.filter(x => x.HRContractPreviousKey?.contract_code === code || x .contract_code === code )[0];
@@ -2024,7 +2040,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.collaboratorInfo['application_id'] = this.applicationId;
       this.hrHelper.updateCollaboratorInfo(this.collaboratorInfo);
       const Banking = this.profileForm.controls.BANKING.value;
-
       this.hrHelper.addOrUpdateBanking(this.bankingCheck, Banking, this.applicationId, this.emailAddress);
       this.equipmentInfo.forEach(
         (equipment) => {

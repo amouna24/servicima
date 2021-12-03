@@ -12,10 +12,9 @@ import { IPayslip } from '@shared/models/payslip.model';
 import { ICollaborator } from '@shared/models/collaborator.model';
 import { IHrContract } from '@shared/models/hrContract.model';
 import { IWorkCertificate } from '@shared/models/workCertificate.model';
+import { IHrPreviousContract } from '@shared/models/hrContractPrevious.model';
 
 import { environment } from '../../../../environments/environment';
-import { AppInitializerService } from '../app-initializer/app-initializer.service';
-import { IHrPreviousContract } from '@shared/models/hrContractPrevious.model';
 @Injectable({
   providedIn: 'root'
 })
