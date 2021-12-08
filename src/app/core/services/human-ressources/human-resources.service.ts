@@ -402,18 +402,18 @@ export class HumanRessourcesService {
    * @param ID of the collaborator
    *************************************************************************/
   enableWorkCertificate(ID: string): Observable<any> {
-    return this.httpClient.put<IWorkCertificate>(`${environment.workCertificateUrl}/enable?_id=${ID}`, null);
+    return this.httpClient.put<IWorkCertificate>(`${environment.workCertificateApiUrl}/enable?_id=${ID}`, null);
   }
   /**************************************************************************
    * @description Disable collaborator Status
    * @param ID of the collaborator
    *************************************************************************/
   disableWorkCertificate(ID: string): Observable<any> {
-    return this.httpClient.delete<any>(`${environment.workCertificateUrl}/disable?_id=${ID}`);
+    return this.httpClient.delete<any>(`${environment.workCertificateApiUrl}/disable?_id=${ID}`);
   }
 
   getWorkCertificates(filter: string): Observable<IWorkCertificate[]> {
-    return this.httpClient.get<IWorkCertificate[]>(`${environment.workCertificateUrl}/${filter}` );
+    return this.httpClient.get<IWorkCertificate[]>(`${environment.workCertificateApiUrl}/${filter}` );
   }
   /**************************************************************************
    * @description get Collaborator by ID
@@ -421,14 +421,14 @@ export class HumanRessourcesService {
    *************************************************************************/
   getWorkCertificate(id: string): Observable<IWorkCertificate> {
     return this.httpClient
-      .get<IWorkCertificate>(`${environment.workCertificateUrl}?_id=${id}`);
+      .get<IWorkCertificate>(`${environment.workCertificateApiUrl}?_id=${id}`);
   }
   /**************************************************************************
    * @description Add new Collaborator
    * @param collaborator Model
    *************************************************************************/
   addWorkCertificate(certificate: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.workCertificateUrl}`, certificate);
+    return this.httpClient.post<any>(`${environment.workCertificateApiUrl}`, certificate);
   }
 
   /**************************************************************************
@@ -436,18 +436,22 @@ export class HumanRessourcesService {
    * @param collaborator updated collaborator Object
    *************************************************************************/
   updateWorkCertificate(certificate: any): Observable<any> {
-    return this.httpClient.put<any>(`${environment.workCertificateUrl}`, certificate);
+    return this.httpClient.put<any>(`${environment.workCertificateApiUrl}`, certificate);
   }
 
+  /**************************************************************************
+   * @description Generate certification
+   * @param certificate : certification want to generating
+   *************************************************************************/
   generateCertif(certificate: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.pdfFileUrl}`, certificate);
+    return this.httpClient.post<any>(`${environment.pdfFileApiUrl}`, certificate);
   }
   /**************************************************************************
    * @description Delete workcertificate
    * @param id: deleted workcertificate Object
    *************************************************************************/
   deleteWorkCertificate(id: string): Observable<any> {
-    return this.httpClient.delete(`${environment.workCertificateUrl}?_id=${id}`);
+    return this.httpClient.delete(`${environment.workCertificateApiUrl}?_id=${id}`);
   }
 
   /**************************************************************************

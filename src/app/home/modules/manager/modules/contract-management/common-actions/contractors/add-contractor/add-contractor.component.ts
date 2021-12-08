@@ -636,8 +636,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       CONTACT: this.formBuilder.group({
         first_name: [''],
         last_name: [''],
-        main_contact: ['', Validators.email],
-        contact_email: ['', [Validators.required, Validators.email]],
+        main_contact: [''],
+        contact_email: [''],
         gender_cd: [''],
         title_cd: [''],
         phone_nbr: [''],

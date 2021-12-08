@@ -15,6 +15,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UtilsService } from '@core/services/utils/utils.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { TranslateService } from '@ngx-translate/core';
+import { IViewParam } from '@shared/models/view.model';
 @Component({
   selector: 'wid-certification-list',
   templateUrl: './certification-list.component.html',
@@ -33,8 +34,8 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    * @description DATA_TABLE paginations
    *************************************************************************/
   nbtItems = new BehaviorSubject<number>(5);
+  countriesList: IViewParam[] = [];
   blocData = [];
-
   applicationId: string;
   companyId: string;
   companyEmail: string;
@@ -52,6 +53,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
   languages: any;
   currentCompany: any;
   refData = { };
+  lastExperience: any;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -72,6 +74,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
 
   dataSource: MatTableDataSource<IWorkCertificate>;
   ELEMENT_DATA = new BehaviorSubject<any>([]);
+  PREVIOUS_CONTRACT = new BehaviorSubject<any>(0);
   isLoading = new BehaviorSubject<boolean>(true);
 
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
@@ -109,7 +112,9 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
       this.currentCompany = company[0];
     });
     this.translateDocs();
-
+    this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.infoUser['user'][0]['language_id'])).map((country) => {
+      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+    });
   }
   /**************************************************************************
    * @description load data emitted by child components
@@ -143,7 +148,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
                 certif['photo'] = profile.results[0].photo;
               });
           });
-          this.isLoading.next(false);
           this.isLoading.next(false);
 
           resolve(res);
@@ -322,7 +326,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
       'rh_website_certif', 'rh_cdd_certif' , 'rh_f_certif', 'rh_article3_certif', 'rh_article2_certif'
       , 'rh_article1_certif' , 'rh_fonctions_certif', 'rh_renumeration_certif', 'rh_salary_certif',
       'rh_employed_certif', 'rh_presente_certif', 'rh_number_certif', 'rh_commerce_certif', 'rh_exp_certif',
-      'rh_cdi', 'rh_cdd' , 'rh_travail' , 'rh_recrute'
+      'rh_cdi', 'rh_cdd' , 'rh_travail' , 'rh_recrute' , 'her_rh', 'his_rh', 'she_rh', 'he_rh', 'rh_en_certif', 'rh_contract'
     ];
 
     this.translate.get(this.translateKey).subscribe(res => {
@@ -364,7 +368,13 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
         rhCDI: res['rh_cdi'],
         rhCDD: res['rh_cdd'],
         rhRecrute: res['rh_recrute'],
-        rhTravail: res['rh_travail']
+        rhTravail: res['rh_travail'],
+        rhHer: res['her_rh'],
+        rhHis: res['his_rh'],
+        rhShe: res['she_rh'],
+        rhHe: res['he_rh'],
+        rhEnCertif: res['rh_en_certif'],
+        rhContract: res['rh_contract']
       };
     });
   }
@@ -380,6 +390,37 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
       ['PROF_TITLES'],
       false
     );
+
+  }
+  async getPreviousContract(email: string, contractType: string, countryCode: string) {
+    return new Promise((resolve) => {
+      this.hrService.getPreviousContracts
+      (`?collaborator_email=${email}&contract_status=ACTIVE&contract_type=${contractType}&country_code=TUN&country_code=${countryCode}`)
+        .subscribe(async (res) => {
+        if (res['msg_code'] !== '0004') {
+      resolve(res);
+        }
+        resolve(null);
+      });
+    });
+
+  }
+  getLastExperience(experiences: any[]): any {
+  let lastExp = experiences[0];
+  if (experiences.length > 1) {
+    experiences.map((x, index) => {
+      if (index !== 0) {
+        const d1 = new Date(lastExp.contract_end_date);
+        const d2 = new Date(x.contract_end_date);
+        if (d1.getTime() < d2.getTime()) {
+          lastExp = x;
+        }
+      }
+
+    });
+  }
+  return lastExp;
+
   }
 
   /**************************************************************************
@@ -393,33 +434,36 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
 
     if (certificate && certificate.request_status === 'Confirmed' && certificate.signature ) {
       if (certificate['data'].stamp) {
-        await  this.profileService.getAllUser(this.companyEmail, 'COMPANY').subscribe(async res => {
-            certificate['company'] = res['results'][0];
-            const postionManager =   await this.refData['PROF_TITLES'].find(
-              (item) =>  item.value === res['results'][0].title_id
-            ).viewValue;
-            const position = await this.refData['PROF_TITLES'].find(
-              (item) =>  item.value === certificate.title_id
-            ).viewValue;
-            certificate['companyName'] = this.companyName;
-            certificate['positionManager'] = postionManager;
-            certificate['position'] = position;
-            await this.hrService.generateCertif(certificate).subscribe(async (data) => {
-              const iframe = '<iframe width=\'100%\' height=\'100%\' src=\'' + data.result + '\'></iframe>';
-              // tslint:disable-next-line:prefer-const
-              const x = window.open();
-              x.document.open();
-              x.document.write(iframe);
-              x.document.close();
+       await this.getPreviousContract(certificate.email_address, certificate.contract_type, this.currentCompany.country_id).then((data) => {
+         this.PREVIOUS_CONTRACT.next(data);
+       });
+       const companyCountry =  this.countriesList.filter(x => x.value === this.currentCompany.country_id)[0].viewValue;
+        const lastExpCountry = this.getLastExperience(this.PREVIOUS_CONTRACT.value['results']).country_code;
+        const lastCountry = this.countriesList.filter(x => x.value === lastExpCountry)[0].viewValue;
 
-              // tslint:disable-next-line:prefer-const
-
-            }, (err) => {
-              this.utilsService.openSnackBar('Something wrong', 'close');
-              console.log('error ', err);
-            });
-          }
-        );
+        this.profileService.getAllUser(this.companyEmail, 'COMPANY').subscribe(async (res) => {
+          certificate['company'] = res['results'][0];
+          const postionManager = await this.refData['PROF_TITLES'].find((item) => item.value === res['results'][0].title_id).viewValue;
+          const position = await this.refData['PROF_TITLES'].find((item) => item.value === certificate.title_id).viewValue;
+          certificate['companyName'] = this.companyName;
+          certificate['positionManager'] = postionManager;
+          certificate['position'] = position;
+          certificate['companyCountry'] = companyCountry;
+          certificate['lastCountry'] = lastCountry;
+          certificate['nbrPreviousContract'] = this.PREVIOUS_CONTRACT.value['count'];
+          await this.hrService.generateCertif(certificate).subscribe(async (data) => {
+            const iframe = '<iframe width=\'100%\' height=\'100%\' src=\'' + data.result + '\'></iframe>';
+            // tslint:disable-next-line:prefer-const
+            const x = window.open();
+            x.document.open();
+            x.document.write(iframe);
+            x.document.close();
+            // tslint:disable-next-line:prefer-const
+          }, (err) => {
+            this.utilsService.openSnackBar('Something wrong', 'close');
+            console.log('error ', err);
+          });
+        });
 
       } else {
         this.utilsService.openSnackBar('stamp required', 'close');
