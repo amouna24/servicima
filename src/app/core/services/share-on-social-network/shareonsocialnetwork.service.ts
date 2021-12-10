@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IShareOnSocialNetworkModel } from '@shared/models/shareOnSocialNetwork.model';
 
 import { environment } from '../../../../environments/environment';
@@ -76,14 +76,26 @@ export class ShareOnSocialNetworkService {
   /**************************************************************************
    * @description Get linkedin Authentication link
    *************************************************************************/
-  getIndeedAuthLink(): Observable<any> {
-    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/indeedAuth`);
+  getFacebookAuthLink(): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookAuth`);
   }
   /**************************************************************************
    * @description Get linkedinAccess token
    * @param code : code auth given by linkedin
    *************************************************************************/
-  getIndeedAccessToken(code: string): Observable<any> {
-    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/indeedAccessToken?code=${code}`);
+  getFacebookId(code: string): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookAccessToken?code=${code}`);
+  }
+  getFacebookPageData(access_token: string): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookId?access_token=${access_token}`);
+  }
+  postOnFacebookPage(accessToken, id, post, file) {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/postOnFacebookPage`,
+      { post, accessToken, id, file}, { headers });
+  }
+  getFacebookEmail(accessToken, id) {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookEmail?access_token=${accessToken}&id=${id}`);
   }
 }
