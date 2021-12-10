@@ -29,7 +29,7 @@ export class SheetService {
     return sheet.sheetComponent;
   }
 
-  displaySheet(sheetName: string, sheetData?: object): Observable<any> {
+  displaySheet(sheetName: string, sheetData?: object): Observable<any[] | any> {
     const sheetComponent = this.getSheetComponentRef(sheetName);
     const dialogRef = this._bottomSheet.open(sheetComponent, {
       data: sheetData,
