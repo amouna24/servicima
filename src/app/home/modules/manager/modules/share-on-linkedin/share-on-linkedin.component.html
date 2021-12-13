@@ -1,4 +1,5 @@
-<div fxLayout="column" fxFlexFill>
+<div fxLayout="row" class="dynamic-component-container border-radius-20">
+<div  fxLayout="column" fxFlex="100" >
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Publish an offer</h1>
@@ -12,12 +13,12 @@
   <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div fxLayout="row" fxFlex="66">
+  <div fxLayout="row" fxFlex="78">
     <wid-scrollbar  fxFlexFill >
         <form [formGroup]="linkedinForm" fxLayout="column" fxFlexFill>
           <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
             <div fxLayout="column" fxFlex="82">
-              <div fxLayout="row" >
+              <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     Offer title:
@@ -30,7 +31,7 @@
                 </div>
 
               </div>
-              <div fxLayout="row" >
+              <div fxLayout="row" fxFlex="30" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     Offer description:
@@ -83,4 +84,5 @@
     </div>
   </div>
 
+</div>
 </div>
