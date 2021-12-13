@@ -23,7 +23,7 @@ export class ShareOnLinkedinComponent implements OnInit {
   linkedinForm: FormGroup;
   id: any;
   text: string;
-  access_token: string;
+  accessToken: string;
   selectedFile: File = null;
   subscriptionModal: Subscription;
   linkedinEmailAddress: string;
@@ -86,7 +86,7 @@ export class ShareOnLinkedinComponent implements OnInit {
       this.linkedinEmailAddress = await this.getLinkedinEmail(atob(this.localStorageService.getItem('linkedin_access_token')));
       this.linkedInService.getLinkedinId(atob(this.localStorageService.getItem('linkedin_access_token'))).subscribe(async (res) => {
         this.id = res.id;
-        this.access_token = res.access_token;
+        this.accessToken = res.access_token;
         this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
       });
     } else {
@@ -96,7 +96,7 @@ export class ShareOnLinkedinComponent implements OnInit {
               this.linkedInService.getLinkedInAccessToken(params['code']).subscribe(async (res) => {
                 this.localStorageService.setItem('linkedin_access_token', btoa(res.access_token));
                 this.id = res.id;
-                this.access_token = res.access_token;
+                this.accessToken = res.access_token;
                 this.linkedinEmailAddress = await this.getLinkedinEmail(res.access_token);
                 this.linkedInService.getPosts(
                   `?published=false&social_network_name=LINKEDIN&company_email=${await this.getCompanyEmail()}`
@@ -129,11 +129,11 @@ export class ShareOnLinkedinComponent implements OnInit {
   }
   /**************************************************************************
    * @description Get Linkedin profile email
-   * @param linkedin_access_token: linkedin profile access token
+   * @param linkedinAccessToken: linkedin profile access token
    *************************************************************************/
-  getLinkedinEmail(linkedin_access_token): Promise<string> {
+  getLinkedinEmail(linkedinAccessToken): Promise<string> {
     return new Promise((resolve) => {
-      this.linkedInService.getLinkedinEmail(linkedin_access_token).subscribe((res) => {
+      this.linkedInService.getLinkedinEmail(linkedinAccessToken).subscribe((res) => {
         if (res.data.elements) {
           resolve(res.data.elements[0]['handle~']['emailAddress']);
         } else {
@@ -193,7 +193,7 @@ export class ShareOnLinkedinComponent implements OnInit {
    * @param fileType : contains the uploaded file extension
    *************************************************************************/
   latePostOnLinkedin(linkedInObject, fileData, fileType) {
-    this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
+    this.linkedInService.postOnLinkedin(this.accessToken, this.id, linkedInObject,
       {
         file: fileType === 'pdf' ? '' : fileData,
         fileName: linkedInObject.image,
@@ -256,14 +256,14 @@ export class ShareOnLinkedinComponent implements OnInit {
       {
         form: this.linkedinForm.value,
         companyEmail: await this.getCompanyEmail(),
-        linkedinEmail: this.access_token ? await this.getLinkedinEmail(this.access_token) : 'not Available',
+        linkedinEmail: this.accessToken ? await this.getLinkedinEmail(this.accessToken) : 'not Available',
         facebookEmail: this.facebookAccessToken ? await this.getFacebookUserEmail() : 'not available',
         facebookAccessToken: this.facebookAccessToken,
         facebookUserId: this.userId,
         facebookPageId: this.pageId,
         facebookPageAccessToken: this.pageAccessToken,
         fileData: this.file,
-        access_token: this.access_token,
+        access_token: this.accessToken,
         formDataFile: this.formDataFile,
         id: this.id,
         imageObject: this.imageObject,

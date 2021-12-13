@@ -28,28 +28,29 @@ export class ShareOnSocialNetworkService {
   }
   /**************************************************************************
    * @description Share posts on Linkedin
-   * @param access_token: profile access token
+   * @param accessToken: profile access token
    * @param id: profile id
    * @param post: Post data
    * @param file: attached file for shared post
    *************************************************************************/
-  postOnLinkedin(access_token, id, post, file) {
+  postOnLinkedin(accessToken, id, post, file) {
+    console.log('access token ', accessToken);
     return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/postOnLinkedin`,
-      { post, access_token, id, file});
+      { post, access_token: accessToken, id, file});
   }
   /**************************************************************************
    * @description Get linkedin profile ID
-   * @param access_token: profile access token
+   * @param accessToken: profile access token
    *************************************************************************/
-  getLinkedinId(access_token): Observable<any> {
-    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinId?access_token=${access_token}`);
+  getLinkedinId(accessToken): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinId?access_token=${accessToken}`);
   }
   /**************************************************************************
    * @description Get linkedin profile Email
-   * @param access_token: profile access token
+   * @param accessToken: profile access token
    *************************************************************************/
-  getLinkedinEmail(access_token): Observable<any> {
-    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinEmail?access_token=${access_token}`);
+  getLinkedinEmail(accessToken): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinEmail?access_token=${accessToken}`);
   }
   /**************************************************************************
    * @description Get posts List
@@ -98,10 +99,10 @@ export class ShareOnSocialNetworkService {
   }
   /**************************************************************************
    * @description Get Facebook needed data for sharing posts on
-   * @param access_token: profile access token
+   * @param accessToken: profile access token
    *************************************************************************/
-  getFacebookPageData(access_token: string): Observable<any> {
-    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookId?access_token=${access_token}`);
+  getFacebookPageData(accessToken: string): Observable<any> {
+    return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookId?access_token=${accessToken}`);
   }
   /**************************************************************************
    * @description Share posts on Facebook Pages

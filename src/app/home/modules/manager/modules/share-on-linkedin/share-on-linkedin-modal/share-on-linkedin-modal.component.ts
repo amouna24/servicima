@@ -106,6 +106,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
    * @param imageObject : object contains the image data for sharing image attached with posts
    **************************************************************************/
   postOnLinkedin(linkedinObject, imageObject) {
+    console.log('linkedin Object = ', linkedinObject, this.data.access_token, imageObject, this.data.id);
     this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');
