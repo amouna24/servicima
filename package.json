@@ -52,7 +52,6 @@
     "ngx-mat-select-search": "3.0.0",
     "ngx-spinner": "9.0.2",
     "node-sass": "4.13.1",
-    "pdf2pic": "^2.1.4",
     "rxjs": "6.5.4",
     "stream": "0.0.2",
     "timers": "^0.1.1",

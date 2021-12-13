@@ -27,7 +27,6 @@ export class ShareOnSocialNetworkService {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/auth`);
   }
   postOnLinkedin(access_token, id, post, file) {
-    console.log('file ====', file);
     return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/postOnLinkedin`,
       { post, access_token, id, file});
   }

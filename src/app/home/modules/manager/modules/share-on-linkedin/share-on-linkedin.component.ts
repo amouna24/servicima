@@ -14,7 +14,7 @@ import { ShareOnLinkedinModalComponent } from './share-on-linkedin-modal/share-o
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
-  selector: 'wid-share-on-social-network',
+  selector: 'wid-share-on-linkedin',
   templateUrl: './share-on-linkedin.component.html',
   styleUrls: ['./share-on-linkedin.component.scss']
 })
@@ -195,7 +195,6 @@ export class ShareOnLinkedinComponent implements OnInit {
         linkedInObject.application_id = linkedInObject.ShareOnSocialNetworkKey.application_id;
         linkedInObject.company_email = linkedInObject.ShareOnSocialNetworkKey.company_email;
         linkedInObject.date = linkedInObject.ShareOnSocialNetworkKey.date;
-        console.log('share on linkedin object ', linkedInObject);
         this.linkedInService.updatePosts(linkedInObject).subscribe((resPostUpdate) => {
           this.linkedInService.deletePosts(linkedInObject._id).subscribe((deleteOldPost) => {
             const confirmation = {

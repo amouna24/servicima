@@ -95,7 +95,6 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       .toPromise();
   }
   postOnLinkedin(linkedinObject, imageObject) {
-    console.log('linkedin object ', linkedinObject);
     this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');
@@ -103,7 +102,6 @@ export class ShareOnLinkedinModalComponent implements OnInit {
           window.location.href = resAuth.url;
         });
       } else if (resPost.status === 200) {
-        console.log('linkedin object ', linkedinObject);
         this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'info',
