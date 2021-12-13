@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -107,6 +108,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     FlexLayoutModule,
     ReactiveFormsModule,
     MatSelectModule,
+    MatTooltipModule,
     NgxMatSelectSearchModule,
     FormsModule,
     NgxDatatableModule,
@@ -137,6 +139,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
+    MatTooltipModule,
     StepperComponent,
     AlertComponent,
     RightSidenaveComponent,

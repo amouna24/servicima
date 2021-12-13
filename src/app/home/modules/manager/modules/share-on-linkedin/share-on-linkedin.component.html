@@ -52,7 +52,7 @@
                       <button  class="buttonImage" type="button">
                         <input type="file"
                                id="upload"
-                               accept="image/png, image/gif, image/jpeg"
+                               accept="image/png, image/gif, image/jpeg, application/pdf"
                                (change)="setValueToImageField($event)"
                                hidden/>
                         <label for="upload">Upload</label></button>
@@ -72,11 +72,11 @@
           <div fxLayout="column" >
             <button mat-raised-button type="button" color="primary" class="white  btn-small"(click)="routeToShareDialog()" [disabled]="linkedinForm.invalid">
               <span class="white font-size-11">Publish</span>
-            </button></div>
-
+            </button>
+          </div>
         <div fxLayout="column" >
-          <button  class="btn-small small-button">
-            <span class="cerulean-blue font-size-11" [routerLink]="'/manager'">Back</span>
+          <button  class="btn-small small-button" >
+            <span class="cerulean-blue font-size-11" >Back</span>
           </button>
         </div>
       </div>

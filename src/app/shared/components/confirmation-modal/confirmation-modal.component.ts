@@ -116,10 +116,10 @@ export class ConfirmationModalComponent implements OnInit {
           title: '',
           button: {
             buttonLeft: {
-              visible: false,
-              name: 'Confirm',
-              color: ' #f3f6f9',
-              background: '#0459bc',
+              visible: true,
+              name: 'OK',
+              color: '#f3f6f9',
+              background: '#FF0000',
               nextValue: true,
             },
             buttonRight: {

@@ -32,6 +32,40 @@
   color: white;
   animation: dotElasticAfter 1s infinite ;
 }
+.dot-elastic-blue {
+  margin-bottom: 5px;
+  position: relative;
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  background-color: #003a9b;
+  color: #003a9b;
+  animation: dotElastic 1s infinite ;
+}
+.dot-elastic-blue::before, .dot-elastic-blue::after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.dot-elastic-blue::before {
+  left: -15px;
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  background-color: #003a9b;
+  color: #003a9b;
+  animation: dotElasticBefore 1s infinite ;
+}
+
+.dot-elastic-blue::after {
+  left: 15px;
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  background-color: #003a9b;
+  color: #003a9b;
+  animation: dotElasticAfter 1s infinite ;
+}
 
 @keyframes dotElasticBefore {
   0% {
