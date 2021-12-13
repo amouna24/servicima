@@ -41,6 +41,7 @@ export class ShareOnLinkedinComponent implements OnInit {
   pageId: string;
   facebookAccessToken: string;
   userId: string;
+  uploadUrl = `${environment.uploadFileApiUrl}/show/`;
   extension: string;
   constructor(
     private route: ActivatedRoute,
@@ -85,7 +86,7 @@ export class ShareOnLinkedinComponent implements OnInit {
     } else {
       this.route.queryParams
         .subscribe(params => {
-            if (params['code'] && !params['state']) {
+            if (params['code'] && params['state'] === 'LINKEDIN') {
               this.linkedInService.getLinkedInAccessToken(params['code']).subscribe(async (res) => {
                 this.localStorageService.setItem('linkedin_access_token', btoa(res.access_token));
                 this.id = res.id;
@@ -96,16 +97,22 @@ export class ShareOnLinkedinComponent implements OnInit {
                 ).subscribe((resSocial) => {
                   const linkedInObject: IShareOnSocialNetworkModel = resSocial[0];
                   if (linkedInObject.image !== '') {
-                    this.uploadService.getImageData(linkedInObject.image).subscribe((resImage) => {
-                      const reader = new FileReader();
-                      reader.readAsDataURL(resImage);
-                      reader.onloadend = (() => {
-                        const base64data = reader.result;
-                        this.latePostOnLinkedin(linkedInObject, base64data);
+                    if (linkedInObject.image.split('.').pop() !== 'pdf') {
+                      this.uploadService.getImageData(linkedInObject.image).subscribe((resImage) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(resImage);
+                        reader.onloadend = (() => {
+                          const base64data = reader.result;
+                          this.latePostOnLinkedin(linkedInObject, base64data, linkedInObject.image.split('.').pop());
+                        });
                       });
-                    });
+                    } else {
+                      const fileUrl = this.uploadUrl + linkedInObject.image;
+                      this.latePostOnLinkedin(linkedInObject, fileUrl, linkedInObject.image.split('.').pop());
+                    }
+
                   } else {
-                    this.latePostOnLinkedin(linkedInObject, '');
+                    this.latePostOnLinkedin(linkedInObject, '', '');
                   }
                 });
               });
@@ -167,11 +174,13 @@ export class ShareOnLinkedinComponent implements OnInit {
     });
   }
 
-  latePostOnLinkedin(linkedInObject, base64data) {
+  latePostOnLinkedin(linkedInObject, fileData, fileType) {
     this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
       {
-        file: base64data,
+        file: fileType === 'pdf' ? '' : fileData,
         fileName: linkedInObject.image,
+        fileType,
+        fileUrl: fileType === 'pdf' ? fileData : '',
       }).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');
@@ -186,6 +195,7 @@ export class ShareOnLinkedinComponent implements OnInit {
         linkedInObject.application_id = linkedInObject.ShareOnSocialNetworkKey.application_id;
         linkedInObject.company_email = linkedInObject.ShareOnSocialNetworkKey.company_email;
         linkedInObject.date = linkedInObject.ShareOnSocialNetworkKey.date;
+        console.log('share on linkedin object ', linkedInObject);
         this.linkedInService.updatePosts(linkedInObject).subscribe((resPostUpdate) => {
           this.linkedInService.deletePosts(linkedInObject._id).subscribe((deleteOldPost) => {
             const confirmation = {

@@ -9,7 +9,7 @@ import { ShareOnSocialNetworkService } from '@core/services/share-on-social-netw
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 
-import { environment } from '../../../../../../../environments/environment';
+import { environment } from '@environment/environment';
 
 @Component({
   selector: 'wid-share-on-social-network-modal',
@@ -21,6 +21,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
   loadingLabel: boolean;
   loadingFacebookLabel: boolean;
   uploadUrl = `${environment.uploadFileApiUrl}/show/`;
+  cannotShareLabel = `you can't share PDF document on Facebook`;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private  localStorageService: LocalStorageService,
@@ -52,6 +53,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         formData.append('caption', this.data.form.image);
         this.uploadImage(formData).then(filename => {
           linkedinObject.image = filename;
+          this.data.imageObject.fileUrl = this.uploadUrl + filename;
           this.postOnLinkedin(linkedinObject, this.data.imageObject);
         });
       } else {
@@ -64,6 +66,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     } else {
       const linkedinObject: IShareOnSocialNetworkModel = this.data.form;
       // @ts-ignore
+      linkedinObject.social_network_name = 'LINKEDIN';
       linkedinObject.company_email = this.data.companyEmail;
       linkedinObject.social_network_email = 'not available';
       linkedinObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
@@ -92,6 +95,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       .toPromise();
   }
   postOnLinkedin(linkedinObject, imageObject) {
+    console.log('linkedin object ', linkedinObject);
     this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');
@@ -99,6 +103,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
           window.location.href = resAuth.url;
         });
       } else if (resPost.status === 200) {
+        console.log('linkedin object ', linkedinObject);
         this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'info',

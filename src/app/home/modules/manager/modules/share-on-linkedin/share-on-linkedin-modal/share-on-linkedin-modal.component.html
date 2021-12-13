@@ -53,7 +53,7 @@
                                   </div>
                                   <div fxLayout="row">
                                     <ng-template [ngIf]="data.imageObject?.file">
-                                      <img [src]="data.imageObject.file" width="314px" height="180px" alt="Post image">
+                                      <img [src]="data.imageObject.fileType === 'pdf' ? 'assets/icons/pdf-logo.svg' : data.imageObject.file" width="314px" height="180px" alt="Post image">
                                     </ng-template>
                                   </div>
                                 </div>
@@ -98,15 +98,17 @@
 
             </div>
             <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-indeed" (click)="publishOnFacebook()">
+              <div fxLayout="column" fxFlex="70"   fxLayoutAlign="center center" [matTooltip]=" data.imageObject?.fileType === 'pdf' ? cannotShareLabel : null">
+                <button class="publish-button-indeed" (click)="publishOnFacebook() "
+                        [disabled]="data.imageObject?.fileType === 'pdf'"
+                        matTooltipPosition="below">
                   <div fxLayout="row" >
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
                       <img src="assets/icons/facebook-logo.svg" width="18" alt="LinkedinLogo">
                     </div>
                     <div fxLayout="column" fxFlex="82" fxLayoutAlign=" start">
                       <ng-template [ngIf]="!loadingFacebookLabel">
-                        <span class="font-size-12  font-light" style="color: #003a9b"> Share on Facebook</span>
+                        <span class="font-size-12  font-light" style="color: #003a9b" > Share on Facebook</span>
                       </ng-template>
                       <ng-template [ngIf]="loadingFacebookLabel">
                         <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
