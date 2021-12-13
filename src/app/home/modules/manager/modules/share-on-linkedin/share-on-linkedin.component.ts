@@ -61,12 +61,16 @@ export class ShareOnLinkedinComponent implements OnInit {
       this.getFacebookData();
     }
   }
-
+  /**************************************************************************
+   * @description Set all functions that needs to be loaded on component init
+   *************************************************************************/
   async ngOnInit(): Promise<void> {
     this.modalServices.registerModals(this.modals);
     this.initForm();
   }
-
+  /**************************************************************************
+   * @description Initialize the Social Network form
+   *************************************************************************/
   initForm() {
     this.linkedinForm = this.fb.group({
       title: '',
@@ -74,7 +78,9 @@ export class ShareOnLinkedinComponent implements OnInit {
       image: '',
     });
   }
-
+  /**************************************************************************
+   * @description Get Linkedin Profile ID and access token
+   *************************************************************************/
   async getLinkedinId() {
     if (this.localStorageService.getItem('linkedin_access_token')) {
       this.linkedinEmailAddress = await this.getLinkedinEmail(atob(this.localStorageService.getItem('linkedin_access_token')));
@@ -121,7 +127,10 @@ export class ShareOnLinkedinComponent implements OnInit {
         );
     }
   }
-
+  /**************************************************************************
+   * @description Get Linkedin profile email
+   * @param linkedin_access_token: linkedin profile access token
+   *************************************************************************/
   getLinkedinEmail(linkedin_access_token): Promise<string> {
     return new Promise((resolve) => {
       this.linkedInService.getLinkedinEmail(linkedin_access_token).subscribe((res) => {
@@ -133,7 +142,10 @@ export class ShareOnLinkedinComponent implements OnInit {
       });
     });
   }
-
+  /**************************************************************************
+   * @description Get uploaded image and convert it to formData and base64 formats
+   * @param event: uploaded image data
+   *************************************************************************/
   setValueToImageField(event) {
     const reader = new FileReader();
     const element = event.currentTarget as HTMLInputElement;
@@ -161,10 +173,11 @@ export class ShareOnLinkedinComponent implements OnInit {
           }
         );
       };
-
     }
   }
-
+  /**************************************************************************
+   * @description Get company email from connected user
+   *************************************************************************/
   getCompanyEmail() {
     return new Promise((resolve) => {
       this.userService.connectedUser$
@@ -173,7 +186,12 @@ export class ShareOnLinkedinComponent implements OnInit {
         });
     });
   }
-
+  /**************************************************************************
+   * @description Share post on Linkedin after Authentication from linkedin webSite
+   * @param linkedInObject : object contains the needed data for sharing posts
+   * @param fileData : contains the needed image data for sharing attached image with the post
+   * @param fileType : contains the uploaded file extension
+   *************************************************************************/
   latePostOnLinkedin(linkedInObject, fileData, fileType) {
     this.linkedInService.postOnLinkedin(this.access_token, this.id, linkedInObject,
       {
@@ -216,7 +234,9 @@ export class ShareOnLinkedinComponent implements OnInit {
       }
     });
   }
-
+  /**************************************************************************
+   * @description Open application in the parent page after authentication in the small child site
+   *************************************************************************/
   redirectToParentPage() {
     this.route.queryParams
       .subscribe(params => {
@@ -228,7 +248,9 @@ export class ShareOnLinkedinComponent implements OnInit {
       });
     window.close();
   }
-
+  /**************************************************************************
+   * @description Open social network modal after filling in the form
+   *************************************************************************/
   async routeToShareDialog() {
     this.subscriptionModal = this.modalServices.displayModal('shareOnSocialNetwork',
       {
@@ -257,7 +279,9 @@ export class ShareOnLinkedinComponent implements OnInit {
           };
         });
   }
-
+  /**************************************************************************
+   * @description Get facebook profile needed Data
+   *************************************************************************/
   private getFacebookData() {
     if (this.localStorageService.getItem('facebook_access_token')) {
       this.facebookAccessToken = atob(this.localStorageService.getItem('facebook_access_token'));
@@ -266,7 +290,10 @@ export class ShareOnLinkedinComponent implements OnInit {
       this.getFacebookDataWithAuthCode();
     }
   }
-
+  /**************************************************************************
+   * @description Get facebook profile needed Data if the access token is stocked in the local storage
+   * @param accessToken: profile access token
+   *************************************************************************/
   getFacebookDataWithLocalStorage(accessToken) {
   this.linkedInService.getFacebookPageData(accessToken).subscribe( (facebookResults) => {
     this.pageAccessToken = facebookResults.pageAccessToken;
@@ -274,7 +301,9 @@ export class ShareOnLinkedinComponent implements OnInit {
     this.userId = facebookResults.userId;
   });
   }
-
+  /**************************************************************************
+   * @description Share posts in the Facebook page
+   *************************************************************************/
   PostOnFacebookPage(facebookObject: IShareOnSocialNetworkModel) {
     if (facebookObject.image !== '') {
       this.uploadService.getImageData(facebookObject.image).subscribe((resImage) => {
@@ -291,7 +320,9 @@ export class ShareOnLinkedinComponent implements OnInit {
       this.latePostOnFacebookPage(facebookObject);
     }
   }
-
+  /**************************************************************************
+   * @description Get facebook profile needed Data by the queryParam code
+   *************************************************************************/
   getFacebookDataWithAuthCode() {
     this.route.queryParams
       .subscribe(params => {
@@ -312,6 +343,11 @@ export class ShareOnLinkedinComponent implements OnInit {
         }
       });
   }
+  /**************************************************************************
+   * @description Share post on Facebook after Authentication from facebook webSite
+   * @param facebookObject : object contains the needed data for sharing posts
+   * @param imageObject : contains the needed image data for sharing attached image with the post
+   *************************************************************************/
   latePostOnFacebookPage(facebookObject, imageObject?) {
     this.linkedInService.postOnFacebookPage(
       this.pageAccessToken,
@@ -360,6 +396,9 @@ export class ShareOnLinkedinComponent implements OnInit {
       }
     });
   }
+  /**************************************************************************
+   * @description Get Facebook profile email
+   *************************************************************************/
   getFacebookUserEmail(): Promise<any> {
     return new Promise( (resolve) => {
       this.linkedInService.getFacebookEmail(this.facebookAccessToken, this.userId).subscribe( (emailResult: any) => {

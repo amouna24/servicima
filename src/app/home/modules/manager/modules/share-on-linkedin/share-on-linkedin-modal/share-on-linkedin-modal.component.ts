@@ -33,8 +33,10 @@ export class ShareOnLinkedinModalComponent implements OnInit {
 
   ) { }
   ngOnInit(): void {
-
   }
+  /**************************************************************************
+   * @description Publish posts on Linkedin
+   *************************************************************************/
   async publishOnLinkedin() {
     this.loadingLabel = true;
     if (this.localStorageService.getItem('linkedin_access_token')) {
@@ -87,6 +89,10 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     }
 
   }
+  /**************************************************************************
+   * @description Upload the file and insert it into database by calling uploadService
+   * @param formData : file uploaded in formData format
+   **************************************************************************/
   async uploadImage(formData) {
     return await this.uploadService.uploadImage(formData)
       .pipe(
@@ -94,6 +100,11 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       )
       .toPromise();
   }
+  /**************************************************************************
+   * @description method that allows to call the socialNetworkService for sharing posts onLinkedin
+   * @param linkedinObject : object contains the needed data for sharing posts
+   * @param imageObject : object contains the image data for sharing image attached with posts
+   **************************************************************************/
   postOnLinkedin(linkedinObject, imageObject) {
     this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
@@ -122,6 +133,10 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       }
     });
   }
+  /**************************************************************************
+   * @description method that allows insert the post in Servicima's database and redirecting to the linkedin Auth page
+   * @param linkedinObject : object contains the needed data for sharing posts
+   **************************************************************************/
   addLinkedinPostAndRedirect(linkedinObject) {
     this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
       this.socialNetworkService.getLinkedinAuthLink().subscribe( (res) => {
@@ -129,6 +144,10 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       });
     });
   }
+  /**************************************************************************
+   * @description method that allows insert the post in Servicima's database and redirecting to the Facebook Auth page
+   * @param facebookObject : object contains the needed data for sharing posts
+   **************************************************************************/
   addFacebookPostAndRedirect(facebookObject) {
     this.socialNetworkService.addPosts(facebookObject).subscribe( (addPostResult) => {
       this.socialNetworkService.getFacebookAuthLink().subscribe( (res) => {
@@ -136,11 +155,9 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       });
     });
   }
-  shareOnFacebook() {
-    this.socialNetworkService.getFacebookAuthLink().subscribe( (res) => {
-      window.location.href = res.url;
-    });
-  }
+  /**************************************************************************
+   * @description Publish posts on Facebook
+   *************************************************************************/
   async publishOnFacebook() {
     this.loadingFacebookLabel = true;
     if (this.localStorageService.getItem('facebook_access_token')) {
@@ -195,6 +212,11 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     }
 
   }
+  /**************************************************************************
+   * @description method that allows to call the socialNetworkService for sharing posts on Facebook
+   * @param facebookObject : object contains the needed data for sharing posts
+   * @param imageObject : object contains the image data for sharing image attached with posts
+   **************************************************************************/
   postOnFacebook(facebookObject, imageObject) {
     this.socialNetworkService
       .postOnFacebookPage(

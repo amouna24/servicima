@@ -26,19 +26,30 @@ export class ShareOnSocialNetworkService {
   getLinkedinAuthLink(): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/auth`);
   }
+  /**************************************************************************
+   * @description Share posts on Linkedin
+   * @param access_token: profile access token
+   * @param id: profile id
+   * @param post: Post data
+   * @param file: attached file for shared post
+   *************************************************************************/
   postOnLinkedin(access_token, id, post, file) {
     return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/postOnLinkedin`,
       { post, access_token, id, file});
   }
+  /**************************************************************************
+   * @description Get linkedin profile ID
+   * @param access_token: profile access token
+   *************************************************************************/
   getLinkedinId(access_token): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinId?access_token=${access_token}`);
   }
+  /**************************************************************************
+   * @description Get linkedin profile Email
+   * @param access_token: profile access token
+   *************************************************************************/
   getLinkedinEmail(access_token): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/linkedinEmail?access_token=${access_token}`);
-  }
-  uploadLinkedinImage(access_token, id,  file) {
-    return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/uploadImage`,
-      { access_token, id, file});
   }
   /**************************************************************************
    * @description Get posts List
@@ -73,27 +84,43 @@ export class ShareOnSocialNetworkService {
     return this.httpClient.delete<IShareOnSocialNetworkModel>(`${environment.linkedInOauthApiUrl}/?_id=${id}`);
   }
   /**************************************************************************
-   * @description Get linkedin Authentication link
+   * @description Get Facebook Authentication link
    *************************************************************************/
   getFacebookAuthLink(): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookAuth`);
   }
   /**************************************************************************
-   * @description Get linkedinAccess token
-   * @param code : code auth given by linkedin
+   * @description Get Facebook id and access Token
+   * @param code : code auth given by Facebook
    *************************************************************************/
   getFacebookId(code: string): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookAccessToken?code=${code}`);
   }
+  /**************************************************************************
+   * @description Get Facebook needed data for sharing posts on
+   * @param access_token: profile access token
+   *************************************************************************/
   getFacebookPageData(access_token: string): Observable<any> {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookId?access_token=${access_token}`);
   }
+  /**************************************************************************
+   * @description Share posts on Facebook Pages
+   * @param accessToken: page access token
+   * @param id: page id
+   * @param post: Post data
+   * @param file: attached file for shared post
+   *************************************************************************/
   postOnFacebookPage(accessToken, id, post, file) {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     return this.httpClient.post<any>(`${environment.linkedInOauthApiUrl}/postOnFacebookPage`,
       { post, accessToken, id, file}, { headers });
   }
+  /**************************************************************************
+   * @description Get Facebook profile email
+   * @param accessToken: profile access token
+   * @param id: profile  id
+   *************************************************************************/
   getFacebookEmail(accessToken, id) {
     return this.httpClient.get<string>(`${environment.linkedInOauthApiUrl}/facebookEmail?access_token=${accessToken}&id=${id}`);
   }
