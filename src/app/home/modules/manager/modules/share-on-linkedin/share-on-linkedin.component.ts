@@ -147,7 +147,6 @@ export class ShareOnLinkedinComponent implements OnInit {
    * @param event: uploaded image data
    *************************************************************************/
   setValueToImageField(event) {
-    console.log('hello');
     const reader = new FileReader();
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
