@@ -24,17 +24,18 @@
       </button>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
-    <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '2px'}"></mat-divider>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center" >
+    <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '2px'}" ></mat-divider>
   </div>
   <div>
   </div>
-  <br>
   <wid-scrollbar class="m-l-20">
 
     <div fxLayout="column" fxFlex="100">
-      <div fxLayout="row" fxLayoutAlign="center center" class="m-l-15" fxLayoutGap="10px">
-        <div fxLayout="row" fxFlex="12"> <img [ngStyle]="{'padding': '6px', 'width':'115px'}" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
+      <div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 5px;" class="m-l-15" fxLayoutGap="10px">
+        <div fxLayout="row" fxFlex="12"> <img [ngStyle]="{'width':'115px','border-radius': '5px',
+
+    'border': '2px solid #707070'}" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
         <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">Invoice</h1> </div>
         <div fxLayout="row" fxFlex="65" fxLayoutAlign="flex-end flex-end" fxLayoutGap="6px" class="m-r-40 m-b-15 min-full-height" >
           <div>
@@ -61,7 +62,7 @@
           </div>
         </div>
       </div>
-      <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%' , 'color':'#f3f6f9'}"></mat-divider>
+      <mat-divider  class="m-t-10" [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%' , 'color':'#f3f6f9'}"></mat-divider>
 
 
       <div [hidden]="!showAttachmentFile"  class="container-tab m-l-5">
@@ -80,7 +81,7 @@
             </div>
           </div>
 
-          <table  #table2 [hidden]="invoiceAttachment.length ==0" matSort  [ngStyle]=" {'width': '93%', 'box-shadow': 'none !important,','margin-left': '2%'}" mat-table  [dataSource]="data1" class="mat-elevation-z8">
+          <table  #tableInvoiceAttachment [hidden]="invoiceAttachment.length ==0" matSort  [ngStyle]=" {'width': '93%', 'box-shadow': 'none !important,','margin-left': '2%'}" mat-table  [dataSource]="dataSourceInvoiceAttachment" class="mat-elevation-z8">
 
             <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
@@ -118,8 +119,8 @@
               </td>
             </ng-container>
             </tr>
-            <tr mat-header-row *matHeaderRowDef="tableColumns1"></tr>
-            <tr mat-row *matRowDef="let row; columns: tableColumns1;"></tr>
+            <tr mat-header-row *matHeaderRowDef="tableColumnsInvoiceAttachment"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableColumnsInvoiceAttachment;"></tr>
           </table>
       </div>
       </div>
@@ -147,7 +148,7 @@
             </div>
           </div>
 
-          <table #table1 [hidden]="invoicePayment.length == 0"    [ngStyle]="{'width': '93%', 'box-shadow': 'none !important', 'margin-left': '2%'}" mat-table  [dataSource]="data" class="mat-elevation-z8" matSort>
+          <table #tableInvoicePayment [hidden]="invoicePayment.length == 0"    [ngStyle]="{'width': '93%', 'box-shadow': 'none !important', 'margin-left': '2%'}" mat-table  [dataSource]="dataSourceInvoicePayment" class="mat-elevation-z8" matSort>
             <ng-container matColumnDef="Entered By">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Entered By </th>
               <td  class="width-125" mat-cell *matCellDef="let element"> {{element.Entred}} </td>
@@ -182,8 +183,8 @@
               </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="tableColumnsInvoicePayment"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableColumnsInvoicePayment;"></tr>
           </table>
         </div>
 
@@ -201,15 +202,6 @@
           </div>
         </div>
       </div>
-      <br>
-     <!-- <ng-container *ngIf="isLoading.getValue();">
-        <div class="min-full-width min-full-height" fxLayoutAlign="center center">
-          <mat-progress-spinner
-            color="primary"
-            mode="indeterminate">
-          </mat-progress-spinner>
-        </div>
-      </ng-container> -->
 
       <div  [formGroup]="formHeader" fxLayout="row" fxFlex="87" fxLayoutGap="50px" class="p-20">
         <div fxLayout="column" fxFlex.gt-lg="28" fxFlex="20">
@@ -218,10 +210,10 @@
           <div>{{userInfo['adress']}}</div>
         </div>
         <div fxLayout="column" fxFlex.gt-lg="41" fxFlex="25">
-          <div *ngIf="!contractorName || !contractCode  || editContractors">
+          <div *ngIf="!contractor?.contractor_name || !contractCode  || editContractors">
             <div fxLayout="row" [ngStyle.gt-lg]="{'width':'70%'}">
               <div fxLayout="column" fxFlex="100">
-                <label class="required" class="font-bold">Facturé à:</label>
+                <label  class="required font-bold">Facturé à:</label>
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-select formControlName="contractor" placeholder="Contractor">
                     <mat-option *ngFor="let contractor of listContractor"
@@ -250,7 +242,7 @@
             </div>
           </div>
 
-          <div *ngIf="contractorName && contractCode && !editContractors" class="cursor-pointer">
+          <div *ngIf="contractor?.contractor_name && contractCode && !editContractors" class="cursor-pointer">
             <div (mouseenter)="mouseEnter() " (click)="editContractor()" (mouseleave)="mouseLeave()">
               <div fxLayout="row" fxLayoutGap=" 50%">
                 <div class="font-bold">Facturé à:</div>
@@ -261,14 +253,14 @@
               </div>
               <div>
               </div>
-              <div class="font-bold">{{contractorName}}</div>
-              <div>{{contractorAddress}}</div>
+              <div class="font-bold">{{contractor?.contractor_name}}</div>
+              <div>{{contractor['address']}}</div>
 
             </div>
           </div>
           <div fxLayout="column" fxLayoutGap="10px" class="cerulean-blue">
 
-            <div fxLayout="row" fxLayoutGap="10px" *ngIf='!contractorName'>
+            <div fxLayout="row" fxLayoutGap="10px" *ngIf='!contractor?.contractor_name'>
               <div class="btn container-plus" fxLayout="row" fxLayoutAlign="flex-start center">
                 <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button">+</button>
               </div>
@@ -276,7 +268,7 @@
                        [routerLink]="['/manager/contract-management/suppliers-contracts/suppliers-list']">Ajouter un
                 nouveau client </a> </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="10px" *ngIf='contractorName'  fxLayoutAlign="flex-start center" class="cursor-pointer">
+            <div fxLayout="row" fxLayoutGap="10px" *ngIf='contractor?.contractor_name'  fxLayoutAlign="flex-start center" class="cursor-pointer">
               <mat-icon class="icon material-icons-outlined eye-icon" svgIcon="wi-eye">
               </mat-icon>
               <div class="steel" (click)="showInfoContractor()"> Voir la fiche du client</div>
@@ -345,11 +337,12 @@
         </div>
       </div>
       <br>
-      <mat-divider *ngIf="contractorName && contractCode && !editContractors" [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
-      <br>
-      <br>
+      <mat-divider *ngIf="contractor?.contractor_name && contractCode && !editContractors" [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
 
-      <div [formGroup]="form" [ngStyle]="{ 'padding-top': '10px', 'margin-left': '2%','width': '96%'}" *ngIf="contractorName && contractCode && !editContractors">
+
+      <div [formGroup]="form" [ngStyle]="{ 'margin-left': '2%','width': '96%'}" *ngIf="contractor?.contractor_name && contractCode && !editContractors">
+
+      <div style="padding-top: 20px;padding-bottom: 20px">
         <div formArrayName='input'>
           <div class="form-container">
             <table  class="full-width ">
@@ -400,8 +393,7 @@
                 <td>
                   <input  class="black-three font-size-12" type="number" (blur)="getTvaOrMountInvoice(i)" min="0" max="100" autocomplete="off" matInput required placeholder="discount"
                           formControlName='discount'
-                          type = "number"
-                          maxlength = "3" />
+                          maxlength = "3" >
                 </td>
                 <td  class="vat_mount">
                   {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
@@ -418,25 +410,25 @@
         </div>
         <div *ngIf='getListRole().controls.length >0' class="btn-add-line" fxLayout="row"
              fxLayoutAlign="flex-start center">
-          <button [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-small bg-cerulean-blue white" (click)="onAddAnotherLine()"> <span
-            class="btn-plus">+</span> Add new line</button>
+          <button #buttonAddLine [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-small bg-cerulean-blue white" (click)="onAddAnotherLine()"> <span
+            class="btn-plus">+</span>  Add new line</button>
 
 
         </div>
         <div *ngIf='getListRole().controls.length ==0'>
           <div fxLayout="row" fxLayoutAlign="center start">
             <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center" class="border-none"
-                 [ngStyle]="{border: 'solid 3px #e8f1f9',  height: '200px','border-top': 'none'}" >
+                 [ngStyle]="{border: 'solid 3px #707070',  height: '200px','border-top': 'none'}" >
               <div fxLayout="column" fxLayoutAlign="center center">
-                <div class="font-size-24 line-height-3 gray"> This Invoice has no row</div>
+                <div class="font-size-24 line-height-3" style="color:#afb1b8; font-weight: 500"> This Invoice has no row</div>
                 <button mat-raised-button class="btn-medium bg-cerulean-blue">
-                  <span class="white font-normal" (click)="onAddAnotherLine()">Add  new line</span>
+                  <span  class="white font-normal" (click)="onAddAnotherLine()">Add  new line</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <br>
+      </div>
         <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
 
         <div fxLayout="row" class="p-t-20" flexLayoutGap="30px" [formGroup]="formCompanyBanking">
@@ -444,7 +436,7 @@
             <div fxFlex="50"> <span>Condition et modalité</span>
               <div class="container-factor">
                 <mat-form-field  appearance="outline" class="width-435 p-0" >
-                    <textarea matInput name="Text1"  rows="8"  class="overflow-hidden line-height-1-4" formControlName='comment1' matInput
+                    <textarea name="Text1"  rows="8"  class="overflow-hidden line-height-1-4" formControlName='comment1' matInput
                     ></textarea>
                 </mat-form-field>
               </div>
@@ -452,7 +444,6 @@
                 <mat-checkbox   class="example-margin" (click)='setCompanyBankingInfo()' formControlName="factorInvoice">Fator
                 </mat-checkbox>
               </div>
-              <br>
             </div>
           </div>
           <div fxFlex="60" fxFlex.gt-lg="95"  [ngStyle]="{'height': '200px','padding-left': '16%','line-height':'2'}" fxLayout="column"
@@ -485,7 +476,7 @@
         </div>
 
         <div fxLayout="column" class="min-height-25">
-          <div fxFlex="55" class="p-b-5">
+          <div fxFlex="55" class="p-b-5" fxLayout="column" fxLayoutAlign="center">
             <div fxLayout="row" class="flex-wrap">
               <div class="width-100"> Tel: </div>
               <div> {{this.userInfo['phone_nbr1']}} </div>
@@ -501,14 +492,14 @@
               <div> <a class="cerulean-blue">{{this.userInfo['web_site']}}</a></div>
             </div>
           </div>
-          <div   fxFlex="35"  fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px"
+          <div   fxFlex="35"  fxLayoutAlign="flex-end flex-start" fxLayout="row" fxLayoutGap="30px"
                class="m-r-10">
             <div class="full-width">
               <button mat-raised-button class="btn-small bg-pale-grey black-three">Cancel</button>
             </div>
             <button [disabled] = "formHeader.invalid" *ngIf="!statusInvoice" mat-raised-button class="btn-small bg-pale-grey black-three" (click)="generateInvoice('DRAFT')">Soumettre Draft</button>
-            <button  [disabled] = "formHeader.invalid"  mat-raised-button class="btn-small bg-ocean-blue white"
-                     (click)="generateInvoice('PENDING')" >
+            <button  [disabled] = "(!!formHeader.invalid  || getListRole().controls.length ==0 )|| isLoad.getValue()"  mat-raised-button class="btn-small bg-ocean-blue white"
+                     (click)="generateInvoice('PENDING')"  >
               <ng-template [ngIf]="!isLoad.getValue()"  [ngIfElse]="loading">
                 confirm
               </ng-template>

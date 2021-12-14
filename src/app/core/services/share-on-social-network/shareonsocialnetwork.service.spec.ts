@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PostLinkedinService } from './shareonlinkedin.service';
+import { ShareOnSocialNetworkService } from './shareonsocialnetwork.service';
 
 describe('Shareonlinkedin.ServiceService', () => {
-  let service: PostLinkedinService;
+  let service: ShareOnSocialNetworkService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ });
-    service = TestBed.inject(PostLinkedinService);
+    service = TestBed.inject(ShareOnSocialNetworkService);
   });
 
   it('should be created', () => {
