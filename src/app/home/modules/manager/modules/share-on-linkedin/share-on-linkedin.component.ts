@@ -277,6 +277,7 @@ export class ShareOnLinkedinComponent implements OnInit {
             fileType: null,
             fileUrl: undefined
           };
+          document.getElementById('upload')['value'] = null;
         });
   }
   /**************************************************************************
