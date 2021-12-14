@@ -9,6 +9,7 @@ export interface IShareOnSocialNetworkModel {
   published: boolean;
   application_id: string;
   company_email: string;
-  linkedin_email: string;
+  social_network_email: string;
+  social_network_name;
   date: Date;
 }

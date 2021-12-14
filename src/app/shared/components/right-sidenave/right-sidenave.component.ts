@@ -185,6 +185,10 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
         localStorage.removeItem('userCredentials');
         localStorage.removeItem('currentToken');
         localStorage.removeItem('email_adress');
+        // tslint:disable-next-line:no-unused-expression
+        localStorage.getItem('linkedin_access_token') ? localStorage.removeItem('linkedin_access_token') : null;
+        // tslint:disable-next-line:no-unused-expression
+        localStorage.getItem('facebook_access_token') ? localStorage.removeItem('facebook_access_token') : null;
         this.sidenavService.firstClick$.next(false);
         this.router.navigate(['/auth/login']);
       },
