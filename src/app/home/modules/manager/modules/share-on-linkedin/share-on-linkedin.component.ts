@@ -167,6 +167,7 @@ export class ShareOnLinkedinComponent implements OnInit {
           fileName: event.target.files[0].name,
           fileType: fileList[0].name.split('.').pop()
         };
+        console.log('image name = ', event.target.files[0].name);
         this.linkedinForm.patchValue(
           {
             image: event.target.files[0].name,

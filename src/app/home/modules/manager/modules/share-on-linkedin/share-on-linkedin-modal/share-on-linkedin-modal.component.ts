@@ -142,6 +142,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
       this.socialNetworkService.getLinkedinAuthLink().subscribe( (res) => {
         window.open(res.url , '', 'width=600, height=500, left=700,top=700').focus();
+        this.loadingLabel = false;
       });
     });
   }
@@ -153,6 +154,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     this.socialNetworkService.addPosts(facebookObject).subscribe( (addPostResult) => {
       this.socialNetworkService.getFacebookAuthLink().subscribe( (res) => {
         window.open(res.url , '', 'width=600, height=500, left=700,top=700').focus();
+        this.loadingFacebookLabel = false;
       });
     });
   }
