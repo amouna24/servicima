@@ -7,6 +7,7 @@ import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadPayslipService } from '@core/services/upload-payslip/upload-payslip.service';
+import { environment } from '@environment/environment';
 
 import { PayslipImportComponent } from '../payslip-import/payslip-import.component';
 
@@ -16,12 +17,12 @@ import { PayslipImportComponent } from '../payslip-import/payslip-import.compone
   styleUrls: ['./payslip-list.component.scss']
 })
 export class PayslipListComponent implements OnInit, OnDestroy {
-  ELEMENT_DATA = new BehaviorSubject<any[]>([]);
-  isLoading = new BehaviorSubject<boolean>(true);
-  destroy$: Subject<boolean> = new Subject<boolean>();
-  subscriptions: Subscription[] = [];
+  public ELEMENT_DATA = new BehaviorSubject<any[]>([]);
+  public isLoading = new BehaviorSubject<boolean>(true);
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+  private subscriptions: Subscription[] = [];
   private companyEmail: string;
-
+  private env = `${environment.uploadFileApiUrl}/show/`;
   constructor(private sheetService: SheetService,
               private userService: UserService,
               private utilService: UtilsService,
@@ -35,7 +36,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     this.modalServices.registerModals({ modalName: 'importPayslip', modalComponent: PayslipImportComponent});
   }
 
-  getCollaboratorName(email_address): Promise<string> {
+  getCollaboratorName(email_address: string): Promise<string> {
     return new Promise(
       resolve => {
         this.userService.getAllUsers(
@@ -48,7 +49,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       }
     );
   }
-  async fillDataTable(status): Promise<any[]> {
+  async fillDataTable(status: string): Promise<any[]> {
     if (!this.companyEmail) {
       await this.getUserInfo();
     }
@@ -56,25 +57,26 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       resolve => {
         this.uploadPayslipService.getAssociatedPayslip(
           `?company_address${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
-        ).toPromise().then(
+        ).subscribe(
           (res) => {
             const result = [];
             res.map(data => {
               this.getCollaboratorName(data.payslipKey.email_address).then(
                 (collaboratorName) => {
+                  res['full_name'] = collaboratorName;
+                  res['email_address'] = data.payslipKey.email_address;
                   result.push({
                     _id: data._id,
                     full_name: collaboratorName,
                     email_address: data.payslipKey.email_address,
+                    file_name: data.file_name,
                     month: data.month,
-                    year: data.year
-                  });
+                    year: data.year});
                 });
               });
             resolve(result);
           });
-      }
-    );
+      });
 
   }
 
@@ -98,7 +100,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       });
   }
 
-  displayImportModal(data): void {
+  displayImportModal(data: any[]): void {
     this.modalServices.displayModal(
       'importPayslip',
       {
@@ -114,33 +116,52 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     );
   }
 
-  async uploadPayslip() {
+  async uploadPayslip(): Promise<void> {
     this.openUploadSheet().then(
       (data) => {
-        this.displayImportModal(data);
+        if (data.length > 0) {
+          this.displayImportModal(data);
+        }
       });
   }
 
-  deletePayslip(data): void {
+  deletePayslip(data: any[]): void {
     this.isLoading.next(true);
     data.map((row) => {
       this.uploadPayslipService.disableAssociatedPayslip(row._id).toPromise().then(
         async res => {
-          await this.getData('ACTIVE');
+          this.getData('ACTIVE').then( () => {
+            this.isLoading.next(false);
+          });
         });
     });
-    this.isLoading.next(false);
   }
 
-  async switchAction(rowAction) {
+  openFile(fileName: string): void {
+    window.open(`${this.env}${fileName}`, '_blank');
+  }
+
+  downloadFile(data): void {
+    data.map((row) => {
+      const element = document.createElement('a');
+      element.href = `${this.env}${row.file_name}`;
+      element.download = row.file_name;
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    });
+  }
+  async switchAction(rowAction): Promise<void> {
     switch (rowAction.actionType) {
       case ('update'):
+        this.openFile(rowAction.data.file_name);
         break;
       case ('Delete'):
         this.deletePayslip(rowAction.data);
         break;
       case ('Download'):
-        console.log('Download');
+        this.downloadFile(rowAction.data);
         break;
       case ('Import'):
         await this.uploadPayslip();
@@ -148,15 +169,15 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
-  }
-
   async getData(event) {
     this.isLoading.next(true);
-    this.fillDataTable(event).then( (res) => {
+    await   this.fillDataTable(event).then( (res) => {
       this.ELEMENT_DATA.next(res);
       this.isLoading.next(false);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
   }
 }

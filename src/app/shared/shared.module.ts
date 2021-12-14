@@ -161,6 +161,7 @@ import { ConfirmListComponent } from './components/confirm-list/confirm-list.com
     NgMultiSelectDropDownModule,
     RequestWorkCertificateComponent,
     PaginationDirective,
+    ConfirmListComponent,
   ]
 })
 export class SharedModule { }

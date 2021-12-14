@@ -244,11 +244,11 @@ Paddings
 
 
 .p-t-0 {
-    padding-top: 0;
+    padding-top: 0 !important;
 }
 
 .p-t-5 {
-  padding-top: 5px;
+  padding-top: 5px !important;
 }
 
 .p-t-10 {
@@ -271,11 +271,11 @@ Paddings
 }
 
 .p-b-5 {
-    padding-bottom: 5px;
+    padding-bottom: 5px !important;
 }
 
 .p-b-10 {
-    padding-bottom: 10px;
+    padding-bottom: 10px !important;
 }
 
 .p-b-20 {
@@ -387,7 +387,7 @@ html body {
 }
 
 .m-r-15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
 }
 
 .m-r-20 {
@@ -443,7 +443,7 @@ html body {
 }
 
 .m-b-5 {
-    margin-bottom: 5px;
+    margin-bottom: 5px !important;
 }
 
 .m-b-10 {
@@ -626,6 +626,9 @@ html body {
 .bg-cool-grey {
   background-color: $cool-grey !important;
 }
+.bg-light-khaki{
+  background-color: $light-khaki !important;
+}
 .bg-steel {
   background-color: $steel;
 }
@@ -685,6 +688,12 @@ html body {
 }
 .bg-pale-grey-four{
   background-color: $pale-grey-four !important;
+}
+/*******************
+    fill colors
+*******************/
+.fill-golden-yellow{
+  fill: $golden-yellow !important;
 }
 /*******************
        logo
