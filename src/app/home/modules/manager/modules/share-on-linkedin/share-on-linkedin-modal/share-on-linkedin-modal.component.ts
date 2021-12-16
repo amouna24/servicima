@@ -52,7 +52,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
         // @ts-ignore
         formData.append('file', this.data.fileData);
-        formData.append('caption', this.data.form.image);
+        formData.append('caption', this.data.form.image ? this.data.form.image : linkedinObject.image);
         this.uploadImage(formData).then(filename => {
           linkedinObject.image = filename;
           this.data.imageObject.fileUrl = this.uploadUrl + filename;
@@ -77,7 +77,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       if (this.data.fileData) {
         const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
         formData.append('file', this.data.fileData);
-        formData.append('caption', this.data.form.image);
+        formData.append('caption', this.data.form.image ? this.data.form.image : linkedinObject.image);
         this.uploadImage(formData).then(filename => {
           linkedinObject.image = filename;
           this.addLinkedinPostAndRedirect(linkedinObject);
@@ -106,7 +106,6 @@ export class ShareOnLinkedinModalComponent implements OnInit {
    * @param imageObject : object contains the image data for sharing image attached with posts
    **************************************************************************/
   postOnLinkedin(linkedinObject, imageObject) {
-    console.log('linkedin Object = ', linkedinObject, this.data.access_token, imageObject, this.data.id);
     this.socialNetworkService.postOnLinkedin(this.data.access_token, this.data.id, linkedinObject, imageObject).subscribe((resPost) => {
       if (resPost.status === 401) {
         localStorage.removeItem('linkedin_access_token');

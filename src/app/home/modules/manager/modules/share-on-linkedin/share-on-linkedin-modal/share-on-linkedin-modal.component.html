@@ -71,8 +71,10 @@
           <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="center" >
               <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-linkedin" (click)="publishOnLinkedin()">
-                  <div fxLayout="row" >
+                <button class="publish-button-linkedin"
+                        (click)="publishOnLinkedin()"
+                        fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="100" fxLayoutAlign=" center">
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
                       <img src="assets/icons/linkedin.svg" width="12" alt="LinkedinLogo">
                     </div>
@@ -101,8 +103,9 @@
               <div fxLayout="column" fxFlex="70"   fxLayoutAlign="center center" [matTooltip]=" data.imageObject?.fileType === 'pdf' ? cannotShareLabel : null">
                 <button class="publish-button-indeed" (click)="publishOnFacebook() "
                         [disabled]="data.imageObject?.fileType === 'pdf'"
-                        matTooltipPosition="below">
-                  <div fxLayout="row" >
+                        matTooltipPosition="below"
+                        fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="100" fxLayoutAlign=" center">
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
                       <img src="assets/icons/facebook-logo.svg" width="18" alt="LinkedinLogo">
                     </div>
