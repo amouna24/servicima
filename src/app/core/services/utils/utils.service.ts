@@ -21,7 +21,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class UtilsService {
-  companiesList: ICompanyModel[];
+
   constructor(
     private appInitializerService: AppInitializerService,
     private localStorageService: LocalStorageService,
@@ -32,6 +32,7 @@ export class UtilsService {
   ) {
 
   }
+  companiesList: ICompanyModel[];
 
   /*----------- IT WORKS FOR ANY APPLICATIONS AND COMPANY -------------*/
 

@@ -450,7 +450,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
           certificate['position'] = position;
           certificate['companyCountry'] = companyCountry;
           certificate['lastCountry'] = lastCountry;
-          certificate['nbrPreviousContract'] = this.PREVIOUS_CONTRACT.value['count'];
+          certificate['nbrPreviousContract'] = this.PREVIOUS_CONTRACT.value['count'] + 1;
           await this.hrService.generateCertif(certificate).subscribe(async (data) => {
             const iframe = '<iframe width=\'100%\' height=\'100%\' src=\'' + data.result + '\'></iframe>';
             // tslint:disable-next-line:prefer-const
