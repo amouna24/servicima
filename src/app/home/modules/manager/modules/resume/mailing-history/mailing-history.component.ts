@@ -45,7 +45,7 @@ export class MailingHistoryComponent implements OnInit {
           .subscribe(async (mailingList) => {
             return new Promise((resolve) => {
               if (mailingList['msg_code'] !== '0004') {
-                resolve(mailingList.map((mailing, index) => {
+                resolve(mailingList['results'].map((mailing, index) => {
                   const sendTime = mailing.MailingHistoryKey.send_time;
                   const sendTo = mailing.MailingHistoryKey.send_to;
                   return {
