@@ -198,7 +198,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         params.value.value2 =   { 'column': '', value: '' };
     this.invoiceService.getSearchInvoice(this.companyEmail, params, this.nbtItems.getValue(), 0).subscribe((data) => {
       this.mapResult(data);
-      console.log(data, 'data');
       this.ELEMENT_DATA.next(data);
     });
   }
@@ -366,7 +365,6 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       parser.parseString(data, (err, result) => {
         result.invoices.invoice.map((resp) => {
           this.invoiceService.getInvoiceHeader(`?email_address=${this.companyEmail}&invoice_nbr=${resp.no}`).subscribe((response) => {
-            console.log(response, 'responese');
             // @ts-ignore
             if (response?.results.length) {
              alert(`Invoice N°${resp.no} already exist`);

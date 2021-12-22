@@ -181,7 +181,8 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
    * @param formData: formData
    *************************************************************************/
   async uploadFile(formData: FormData): Promise<string> {
-    return await this.uploadService.uploadImageLocal(formData)
+    return await this.uploadService.uploadImage(formData)
+   // return await this.uploadService.uploadImageLocal(formData)
       .pipe(
         map(response => response.file.filename)
       )

@@ -4,7 +4,7 @@
   [isLoading]="isLoading"
   [buttonAdd]="false"
   (changeStatus) = "getData($event)"
-  [header]="{ title: 'Mailing history'}"
+  [header]="{ title:  'mailing_history' | translate}"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['Resend', Archive]">
 

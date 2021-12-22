@@ -335,8 +335,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         .map((x, i) => i + 1) : null;
       let keys: string;
       const dataList = res?.results ? res?.results : res;
-      console.log(dataList, 'data');
-      dataList.map((data) => {
+      Object.values(dataList).map((data) => {
         const keyAndValueList = Object.entries(data);
         keyAndValueList.map((keyAndValue) => {
           keys = keyAndValue[0];
@@ -344,7 +343,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
             if (typeof (value) === 'object' && value) {
               // tslint:disable-next-line:prefer-for-of
               for (let i = 0; i < Object.keys(value).length; i++) {
-                dataList.map((elm) => {
+                Object.values(dataList).map((elm) => {
                   elm[Object.keys(value)[i]] = elm[keys][Object.keys(value)[i]];
                 });
               }
@@ -546,12 +545,12 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    *************************************************************************/
   isIndeterminate(): boolean {
     if (JSON.stringify(this.tableData.getValue()) !== '{}') {
-    if (this.listChecked.length === (this.tableData.getValue()?.length ? this.tableData.getValue().length
-      : this.tableData.getValue()['results'].length)) {
+    if (this.listChecked.length === (this.tableData.getValue()?.length ? this.tableData.getValue()?.length
+      : this.tableData.getValue()?.results?.length)) {
       this.selectedAll = true;
       return this.indeterminate = false;
-    } else if (this.listChecked.length > 0 && this.listChecked.length < (this.tableData.getValue()?.length ? this.tableData.getValue().length
-      : this.tableData.getValue()['results'].length)) {
+    } else if (this.listChecked.length > 0 && this.listChecked.length < (this.tableData.getValue()?.length ? this.tableData.getValue()?.length
+      : this.tableData.getValue()?.results?.length)) {
       this.selectedAll = false;
       return this.indeterminate = true;
     } else {
@@ -727,59 +726,60 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description display description
    *************************************************************************/
   convertData() {
-    this.dataSource.map((dataS) => {
-      if (dataS.application_id) {
-        dataS['application_id'] = this.utilService.getApplicationName(dataS.application_id);
+    console.log(Object.values(this.dataSource), 'data source');
+    Object.values(this.dataSource).map((dataS) => {
+      if (dataS['application_id']) {
+        dataS['application_id'] = this.utilService.getApplicationName(dataS['application_id']);
       }
       /*** ***********************       APP INITIALIZER        *********************** ***/
-      if (dataS.language_id) {
+      if (dataS['language_id']) {
         dataS['language_id'] = this.appInitializerService.languageList.find((type) =>
           type._id === dataS['language_id'])?.language_desc ? this.appInitializerService.languageList.find((type) =>
             type._id === dataS['language_id'])?.language_desc : dataS['language_id'];
       }
-      if (dataS.company_id) {
+      if (dataS['company_id']) {
         dataS['company_id'] = this.utilService.companiesList.find((type) =>
           type._id === dataS['company_id'])?.company_name;
       }
-      if (dataS.language) {
+      if (dataS['language']) {
         dataS['language'] = this.appInitializerService.languageList.find((type) =>
           type.LanguageKey.language_code === dataS['language'])?.language_desc;
       }
-      if (dataS.activity_sector) {
+      if (dataS['activity_sector']) {
         dataS['activity_sector'] = this.appInitializerService.activityCodeList.find((type) =>
           type.NAF === dataS['activity_sector'])?.ACTIVITE;
       }
-      if (dataS.currency_cd) {
+      if (dataS['currency_cd']) {
         dataS['currency_cd'] = this.appInitializerService.currenciesList.find((type) =>
           type.CURRENCY_CODE === dataS['currency_cd'])?.CURRENCY_DESC;
       }
       /*** ***********************           REF DATA           *********************** ***/
-      if (dataS.payment_cd) {
+      if (dataS['payment_cd']) {
         dataS['payment_cd'] = this.refData['PAYMENT_MODE'].find((type) =>
           type.value === dataS['payment_cd'])?.viewValue;
       }
-      if (dataS.gender_cd) {
+      if (dataS['gender_cd']) {
         dataS['gender_cd'] = this.refData['GENDER'].find((type) =>
           type.value === dataS['gender_cd'])?.viewValue;
       }
-      if (dataS.gender_id) {
+      if (dataS['gender_id']) {
         dataS['gender_id'] = this.refData['GENDER'].find((type) =>
           type.value === dataS['gender_id']) ? this.refData['GENDER'].find((type) =>
             type.value === dataS['gender_id'])?.viewValue : dataS['gender_id'];
       }
-      if (dataS.contract_status) {
+      if (dataS['contract_status']) {
         dataS['contract_status'] = this.refData['CONTRACT_STATUS'].find((type) =>
           type.value === dataS['contract_status'])?.viewValue;
       }
-      if (dataS.legal_form) {
+      if (dataS['legal_form']) {
         dataS['legal_form'] = this.refData['LEGAL_FORM'].find((type) =>
           type.value === dataS['legal_form'])?.viewValue;
       }
-      if (dataS.title_cd) {
+      if (dataS['title_cd']) {
         dataS['title_cd'] = this.refData['PROF_TITLES'].find((type) =>
           type.value === dataS['title_cd'])?.viewValue;
       }
-      if (dataS.user_type) {
+      if (dataS['user_type']) {
         dataS['user_type'] = this.refData['PROFILE_TYPE'].find((type) =>
           type.value === dataS['user_type']) ? this.refData['PROFILE_TYPE'].find((type) =>
           type.value === dataS['user_type'])?.viewValue : dataS['user_type'];

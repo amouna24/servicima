@@ -4,7 +4,7 @@
       <div fxLayout="column" fxFlexFill>
         <div fxLayout="row" fxFlex="15">
           <div fxLayout="column" fxLayoutAlign="center">
-            <div class="steel font-size-15" fxLayoutAlign=" center">Publish an offer</div>
+            <div class="steel font-size-15" fxLayoutAlign=" center">{{'publish_offer' | translate}}</div>
           </div>
           <div fxLayout="column" fxFlex="76" class="p-r-15 p-t-10 " fxLayoutAlign=" end">
             <button class="x-button" mat-dialog-close>X</button>
@@ -28,7 +28,7 @@
                                       </div>
                                     </div>
                                     <div fxLayout="column" fxFlex="33" fxLayoutAlign="center center">
-                                      <span class="font-size-12 black font-medium">Offer title :</span>
+                                      <span class="font-size-12 black font-medium"> {{'offer_title' | translate}}:</span>
                                     </div>
                                     <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
                                       <span class="black font-size-12 font-light"> {{data.form.title}}</span>
@@ -44,7 +44,7 @@
                               <div fxLayout="row" fxFlex="80">
                                 <div fxLayout="column" fxFlexFill>
                                   <div fxLayout="row">
-                                    <span class="font-size-12 black font-medium">Description:</span>
+                                    <span class="font-size-12 black font-medium">{{'offer_description' | translate}}:</span>
                                   </div>
                                   <div fxLayout="row">
                                     <p class="font-size-12 font-light black">
@@ -53,7 +53,7 @@
                                   </div>
                                   <div fxLayout="row">
                                     <ng-template [ngIf]="data.imageObject?.file">
-                                      <img [src]="data.imageObject.file" width="314px" height="180px" alt="Post image">
+                                      <img [src]="data.imageObject.fileType === 'pdf' ? 'assets/icons/pdf-logo.svg' : data.imageObject.file" width="314px" height="180px" alt="Post image">
                                     </ng-template>
                                   </div>
                                 </div>
@@ -71,14 +71,16 @@
           <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="center" >
               <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-linkedin" (click)="publishOnLinkedin()">
-                  <div fxLayout="row" >
+                <button class="publish-button-linkedin"
+                        (click)="publishOnLinkedin()"
+                        fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="100" fxLayoutAlign=" center">
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
                       <img src="assets/icons/linkedin.svg" width="12" alt="LinkedinLogo">
                     </div>
-                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
+                    <div fxLayout="column" fxFlex="82" fxLayoutAlign=" start">
                       <ng-template [ngIf]="!loadingLabel">
-                        <span class="font-size-12 white font-light"> Share on linkedin</span>
+                        <span class="font-size-12 white font-light"> {{'share_on_linkedin' | translate}}</span>
                       </ng-template>
                       <ng-template [ngIf]="loadingLabel">
                         <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
@@ -98,57 +100,34 @@
 
             </div>
             <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-indeed" >
-                  <div fxLayout="row" >
+              <div fxLayout="column" fxFlex="70"   fxLayoutAlign="center center" [matTooltip]=" data.imageObject?.fileType === 'pdf' ? cannotShareLabel : null">
+                <button class="publish-button-indeed" (click)="publishOnFacebook() "
+                        [disabled]="data.imageObject?.fileType === 'pdf'"
+                        matTooltipPosition="below"
+                        fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="100" fxLayoutAlign=" center">
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
-                      <img src="assets/icons/Indeed_logo small.svg" width="12" alt="LinkedinLogo">
+                      <img src="assets/icons/facebook-logo.svg" width="18" alt="LinkedinLogo">
                     </div>
-                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
-                      <span class="font-size-12 font-light" style="color: #003a9b"> Share on indeed</span>
+                    <div fxLayout="column" fxFlex="82" fxLayoutAlign=" start">
+                      <ng-template [ngIf]="!loadingFacebookLabel">
+                        <span class="font-size-12  font-light" style="color: #003a9b" > {{'share_on_facebook' | translate}}</span>
+                      </ng-template>
+                      <ng-template [ngIf]="loadingFacebookLabel">
+                        <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
+                          <div fxLayout="column" style="padding-right: 19px">
+                            {{'resume-loading' | translate}}
+                          </div>
+                          <div fxLayout="column" style="padding-top: 8px">
+                            <div  class="dot-elastic-blue">
+                            </div></div>
+                        </div>
+                      </ng-template>
                     </div>
                   </div>
-
-
                 </button>
               </div>
-
             </div>
-            <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-monster" >
-                  <div fxLayout="row" >
-                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
-                      <img src="assets/icons/-Monster.com_Logo_2019%20small.svg" width="12" alt="LinkedinLogo">
-                    </div>
-                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
-                      <span class="font-size-12 font-light" style="color: white"> Share on Monster jobs</span>
-                    </div>
-                  </div>
-
-
-                </button>
-              </div>
-
-            </div>
-            <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
-                <button class="publish-button-talent" >
-                  <div fxLayout="row" >
-                    <div fxLayout="column" fxFlex="18" fxLayoutAlign=" center">
-                      <img src="assets/icons/talent.svg" width="12" alt="LinkedinLogo">
-                    </div>
-                    <div fxLayout="column" fxFlex="75" fxLayoutAlign=" start">
-                      <span class="font-size-12 font-light" style="color: #691f74"> Share on Talent</span>
-                    </div>
-                  </div>
-
-
-                </button>
-              </div>
-
-            </div>
-
 
           </div>
         </div>

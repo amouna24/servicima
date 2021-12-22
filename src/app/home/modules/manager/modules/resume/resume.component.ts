@@ -63,14 +63,14 @@ await this.getData();
                     if (resume['msg_code'] !== '0004') {
                       blocData.push({
                         resume_name: candidate.first_name + ' ' + candidate.last_name,
-                        resume_years_exp: resume[0].years_of_experience,
-                        resume_position: resume[0].actual_job,
-                        resume_status: resume[0].status,
+                        resume_years_exp: resume['results'][0].years_of_experience,
+                        resume_position: resume['results'][0].actual_job,
+                        resume_status: resume['results'][0].status,
                         resume_email: candidate.userKey.email_address,
                         resume_user_type: candidate.user_type,
-                        resume_filename_docx: resume[0].resume_filename_docx,
-                        resume_filename_pdf: resume[0].resume_filename_pdf,
-                        user_info: resume[0],
+                        resume_filename_docx: resume['results'][0].resume_filename_docx,
+                        resume_filename_pdf: resume['results'][0].resume_filename_pdf,
+                        user_info: resume['results'][0],
                         first_name: candidate.first_name,
                         last_name: candidate.last_name,
                       });

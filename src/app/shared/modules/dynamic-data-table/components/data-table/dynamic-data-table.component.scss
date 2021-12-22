@@ -148,4 +148,6 @@ tr:hover {
   }
 
 }
-
+::ng-deep.dynamic-data-table-content .thumb{
+padding-top: 45px !important;
+}

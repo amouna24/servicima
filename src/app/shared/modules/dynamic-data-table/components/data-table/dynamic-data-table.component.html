@@ -134,7 +134,7 @@
 
 
   <div fxLayout="row" fxFlex="51" fxLayoutAlign="space-around">
-    <wid-scrollbar  class="dynamic-data-table-content" style="width: 100%" >
+    <wid-scrollbar  class="dynamic-data-table-content" style="width: 100%;" >
       <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
