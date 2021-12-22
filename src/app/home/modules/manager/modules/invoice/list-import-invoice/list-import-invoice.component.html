@@ -1,0 +1,15 @@
+<div  fxLayout="column" fxLayoutAlign="start start" class="full-height full-width overflow-hidden">
+  <wid-scrollbar  class="full-width loaded">
+  <wid-confirm-list
+    fxFlex class="full-width"
+    [DATA]="selectedFiles"
+    [title]="'Import invoice'"
+    [selectAllBtn]="true"
+    [btnLabel]="'Associate'"
+    [requiredFields]="['no', 'client', 'status', 'remark']"
+    [message]="{ field: 'no', message: 'Are you sure to add this invoice [$VALUE] '}"
+    (action)="associate($event)"
+    (dialogAction)="modalActions($event)"
+  ></wid-confirm-list>
+    </wid-scrollbar>
+</div>

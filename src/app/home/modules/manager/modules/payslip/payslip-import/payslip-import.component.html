@@ -1,80 +1,43 @@
-<div fxLayout="column" class="full-height full-width">
-  <div fxLayout="row" fxLayoutAlign="end start" class="p-10 p-b-0">
-    <button mat-button class="m-r-10 btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
-      <mat-icon svgIcon="wi-close-normal"></mat-icon>
-    </button>
+<div *ngIf="loaded()" fxLayout="column" fxLayoutAlign="start start" class="full-height full-width">
+  <wid-confirm-list
+    fxFlex class="full-width"
+    [DATA]="selectedFiles"
+    [title]="'Import Payslip'"
+    [selectAllBtn]="true"
+    [btnLabel]="'Associate'"
+    [requiredFields]="['email_address', 'collaboratorName']"
+    [selectList]=" { data: collaboratorList, selected: 'email_address' , value: ['userKey', 'email_address'], text: 'first_name', placeHolder: 'Collaborator'}"
+    [message]="{ field: 'collaboratorName', message: 'The name [$VALUE] here was found in the payslip'}"
+    (action)="associate($event)"
+    (dialogAction)="modalActions($event)"
+  ></wid-confirm-list>
+  <div fxFlex="8" fxLayout="row" fxLayoutAlign="start center"
+       class="full-width p-10 p-t-5">
+    <p class="font-size-12 black m-0 m-b-10 m-r-15">Pay period :</p>
+    <mat-form-field appearance="outline" style="width: 100px" class="m-r-15 font-size-8">
+      <mat-select [(ngModel)]="this.payslipMonth" placeholder="Month">
+        <ng-container *ngFor="let month of months; let index = index">
+          <mat-option [value]="index + 1">
+            {{month}}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+      <mat-error class="wid-error-messages">
+        Required field
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100px" class="font-size-8">
+      <mat-select [(ngModel)]="this.payslipYear"  placeholder="Year" class="m-0 p-0">
+        <ng-container *ngFor="let year of years ">
+          <mat-option [value]="year" class="m-0 p-0">
+            {{ year }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+      <mat-error class="wid-error-messages">
+        Required field
+      </mat-error>
+    </mat-form-field>
   </div>
-  <div fxLayout="row" fxLayoutAlign="start start" class="p-0 p-l-15">
-    <p class="font-size-17 steel m-0">
-      Import Payslip
-    </p>
-    </div>
-  <div fxLayout="column" class="p-10 p-t-0" fxFlex>
-    <ng-container *ngIf="selectedFiles.length<1 else loaded">
-      <wid-skeleton-loader fxFlex="100"
-                           [nbrColumn]="3"
-                           [nbrRow]="totalFiles"
-                           [marginTop]="21"
-                           [marginBottom]="21"
-                           [width]="125"
-                           [height]="25"
-      >
-      </wid-skeleton-loader>
-    </ng-container>
-    <ng-template #loaded>
-      <div fxLayout="row" class="p-t-15 p-b-15" *ngIf="associateAllBtn">
-        <div fxLayout="row" fxLayoutAlign="end center" fxFlex="98" class="full-height">
-          <button (click)="associateAll()" type="submit" class="btn-small pale-grey-four cursor-pointer bg-cerulean-blue m-b-10">
-            Associate all
-          </button>
-        </div>
-      </div>
-      <ng-container *ngFor="let file of selectedFiles">
-        <form fxLayout="row" fxLayoutAlign="space-around center"
-              style="border-bottom: 1px solid #ebebeb" class="p-t-15 p-b-15"
-              (ngSubmit)="associate(file)">
-          <div class="p-b-10" fxFlex="55">
-            <ng-container *ngIf="file.email_address else nameNotFound">
-              <p class="font-size-12 font-light p-0" [ngClass]="file.associated ? 'steel' : 'black-three'">
-                The name <span (click)="openFile(file.file)" class="decoration"
-                               [ngClass]="file.associated ? 'black-three' : 'golden-yellow cursor-pointer'">
-            {{file.collaboraterName}}
-          </span> here was found in the payslip
-              </p>
-            </ng-container>
-            <ng-template #nameNotFound>
-              <p class="font-size-12 font-light p-0" [ngClass]="file.associated ? 'steel' : 'black-three'">
-                No name is found in
-                <span (click)="openFile(file.file)" class="decoration" [ngClass]="file.associated ? 'black-three' : 'golden-yellow cursor-pointer'">
-                  This payslip</span>.</p>
-            </ng-template>
-          </div>
-          <mat-form-field appearance="outline" fxFlex="25" class="font-size-8 p-0">
-            <mat-select [(ngModel)]="file.email_address" [disabled]="file.associated" name="collaborator" fxFlex="100"
-                        placeholder="Collaborator Name" class="p-0" required>
-              <ng-container *ngFor="let colaborator of collaboratorList">
-                <mat-option [value]="colaborator.userKey.email_address">
-                  {{colaborator.first_name}} {{colaborator.last_name}}
-                </mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-          <ng-container *ngIf="file.associated else associateBtn">
-            <div style="width: 109px">
-              <p class="font-size-11 font-normal cool-grey text-center">
-                Associated
-              </p>
-            </div>
-          </ng-container>
-          <ng-template #associateBtn>
-            <button type="submit" [disabled]="file.associated"
-                    class="btn-small bg-pale-grey-four cursor-pointer cerulean-blue m-b-10">
-              Associate
-            </button>
-          </ng-template>
-        </form>
-      </ng-container>
-    </ng-template>
 
-  </div>
 </div>
