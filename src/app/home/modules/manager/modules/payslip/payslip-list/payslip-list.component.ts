@@ -56,8 +56,8 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     return new Promise(
       resolve => {
         this.uploadPayslipService.getAssociatedPayslip(
-          `?company_address${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
-        ).subscribe(
+          `?company_address=${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
+        ).toPromise().then(
           (res) => {
             const result = [];
             res.map(data => {
@@ -100,7 +100,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       });
   }
 
-  displayImportModal(data: any[]): void {
+  async displayImportModal(data: any[]): Promise<void> {
     this.modalServices.displayModal(
       'importPayslip',
       {
@@ -118,9 +118,9 @@ export class PayslipListComponent implements OnInit, OnDestroy {
 
   async uploadPayslip(): Promise<void> {
     this.openUploadSheet().then(
-      (data) => {
+      async (data) => {
         if (data.length > 0) {
-          this.displayImportModal(data);
+          await this.displayImportModal(data);
         }
       });
   }
@@ -144,8 +144,9 @@ export class PayslipListComponent implements OnInit, OnDestroy {
   downloadFile(data): void {
     data.map((row) => {
       const element = document.createElement('a');
-      element.href = `${this.env}${row.file_name}`;
-      element.download = row.file_name;
+      const link = `${this.env}${row.file_name}`;
+      element.setAttribute('href', 'data:application/pdf;base64, ' + encodeURIComponent(link));
+      element.setAttribute('download', row.file_name);
       element.style.display = 'none';
       document.body.appendChild(element);
       element.click();
@@ -171,9 +172,11 @@ export class PayslipListComponent implements OnInit, OnDestroy {
 
   async getData(event) {
     this.isLoading.next(true);
-    await   this.fillDataTable(event).then( (res) => {
-      this.ELEMENT_DATA.next(res);
-      this.isLoading.next(false);
+    await this.fillDataTable(event).then( (res) => {
+      if (res) {
+        this.ELEMENT_DATA.next(res);
+        this.isLoading.next(false);
+      }
     });
   }
 

@@ -5,7 +5,6 @@ import { IUserModel } from '@shared/models/user.model';
 import { BehaviorSubject } from 'rxjs';
 import { UploadPayslipService } from '@core/services/upload-payslip/upload-payslip.service';
 import { range } from 'lodash';
-import { UploadService } from '@core/services/upload/upload.service';
 
 @Component({
   selector: 'wid-payslip-import',
@@ -105,7 +104,6 @@ export class PayslipImportComponent implements OnInit {
             year: this.payslipYear
           }
         ).toPromise().then( res => {
-          console.log('[PAYSLIP]', res);
           file['associated'] = true;
         });
   }
