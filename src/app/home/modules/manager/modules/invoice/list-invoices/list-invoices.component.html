@@ -7,6 +7,9 @@
   [title]="'Invoices list'"
   [security] = true
   (rowActionData)="switchAction($event)"
+  (pagination)="loadMoreItems($event)"
   [allowedActions]="['show', 'download', 'archiver','sendMailing', 'import']"
+  (search)= "searchInvoice($event)"
+  (filter) ="search($event)"
 >
 </wid-dynamic-data-table>

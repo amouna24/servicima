@@ -36,10 +36,7 @@ tr:hover {
   cursor: pointer;
 }
 
-.mat-select{
-  width: 30% !important;
-  color: white;
-}
+
 
 .checkbox-width{
   width: 40px !important;
@@ -132,3 +129,23 @@ tr:hover {
 ::ng-deep .setting .mat-expansion-panel-header-description, .setting .mat-expansion-indicator::after {
   color: red !important;
 }
+
+.select-paginator{
+
+  .mat-select{
+    width: 30% !important;
+    color: white;
+  }
+  .mat-select,
+  .mat-select-trigger,
+  .mat-select-placeholder,
+  .cdk-overlay-pane,
+  .mat-select-panel,
+  .mat-select-content
+  {
+    min-width: 40px !important;
+    width: 40px !important;
+  }
+
+}
+

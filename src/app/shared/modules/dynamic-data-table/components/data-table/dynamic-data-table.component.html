@@ -7,7 +7,6 @@
       <button *ngIf="buttonAdd !== false" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
         </mat-icon>
-        &nbsp;
         <span   class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
       </button>
     </div>
@@ -19,16 +18,16 @@
     <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxFlex="80" fxLayoutGap="20px" class="m-t-10">
         <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
-          <input matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
-          <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg"></span>
+          <input (blur)="searchData($event)" matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
+          <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg" alt="search"></span>
         </mat-form-field>
         <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" (click)="displayTableConfig()">
           <mat-icon svgIcon="wi_adjustments" class="icon material-icons-outlined steel"></mat-icon>
         </button>
-        <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" >
+        <button [disabled]="this.form.value.input.length> 0" (click)="onAddAnotherFilter()" mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" >
           <mat-icon svgIcon="wi_filter" class="icon material-icons-outlined steel"></mat-icon>
         </button>
-        <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}">
+        <button [disabled]="form.invalid || form.value.input.length === 0"  (click)="run()" mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}">
           <span class="cool-grey">Run</span>
         </button>
         <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" >
@@ -43,7 +42,7 @@
         </button>
       </div>
       <div fxLayout="row">
-        <mat-accordion class="mat-accordion-action bg-topaz" #accordion="matAccordion"  [ngClass]="{
+        <mat-accordion class="mat-accordion-action bg-topaz"  [ngClass]="{
     'accordion-list':panelOpenState === true,
     'accordion-btn':panelOpenState === false
   }">
@@ -64,16 +63,78 @@
             <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }"> {{ listAction }}
             </div>
           </mat-expansion-panel>
-
-
         </mat-accordion>
       </div>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="64" fxLayoutAlign="space-around">
+ <div fxLayout="row" fxFlex="11">
+   <div [formGroup]="form" >
+     <div formArrayName='input' style="margin-left: 80px">
+       <div *ngFor="let roleListControl of getListFilter().controls; let i = index">
+         <div [formGroupName]="i">
+           <div fxLayout="row" fxFlex="100" fxLayoutGap="5%">
+             <div fxLayout="column" fxFlex="20">
+               <mat-form-field appearance="outline">
+                 <mat-select formControlName="column" placeholder="Select column">
+                   <ng-container *ngFor="let column of viewColumns">
+                     <mat-option [value]="column.name" (click)="selected(column.name, i)">
+                       {{ column.name }}
+                     </mat-option>
+                   </ng-container>
+                 </mat-select>
+                 <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
+               </mat-form-field>
+             </div>
+             <div fxLayout="column" fxFlex="10">
+               <mat-form-field appearance="outline">
+                 <mat-select formControlName="operator" placeholder="operator" >
+                   <ng-container *ngFor="let operator of operator">
+                     <mat-option [value]="operator">
+                       {{ operator }}
+                     </mat-option>
+                   </ng-container>
+                 </mat-select>
+               </mat-form-field>
+             </div>
+             <div fxLayout="column" fxFlex="20">
+               <mat-form-field appearance="outline">
+                 <input formControlName="valueFilter" *ngIf="form.value.input[i].type !== 'selection'"
+                        type="{{form.value.input[i].type}}"
+                        (change)="applyFilter($event.target['value'], this.form.value.input[i])"
+                        (keyup)="applyFilter($event.target['value'], this.form.value.input[i])" matInput
+                        placeholder="taper value" class="font-extra-light font-size-12">
+                 <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
 
-    <wid-scrollbar class="dynamic-data-table-content" style="width: 100%" >
+                 <mat-select *ngIf="form.value.input[i].type == 'selection'" formControlName="valueFilter"
+                             placeholder="taper value">
+                   <div *ngFor="let selection of selections">
+                     <mat-option [value]="selection"
+                                 (click)="applyFilter(selection, this.form.value.input[i])">
+                       {{keyColumnDesc ? selection[keyColumnDesc] : selection  }}
+                     </mat-option>
+                   </div>
+                 </mat-select>
+                 <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
+                   {{ 'general.required' | translate }}</mat-error>
+               </mat-form-field>
+             </div>
+             <div fxLayout="row" fxFlex="3" fxFlexAlign="center" fxLayoutGap="90%" class="m-b-15">
+               <button mat-stroked-button  type="button">OR</button>
+               <button mat-stroked-button  type="button">AND</button>
+               <button mat-stroked-button  type="button" (click)="delete(i)">X</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
 
+
+  <div fxLayout="row" fxFlex="51" fxLayoutAlign="space-around">
+    <wid-scrollbar  class="dynamic-data-table-content" style="width: 100%" >
       <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
@@ -103,7 +164,7 @@
                 <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
 
                   <th cdk-header-cell *cdkHeaderCellDef class="steel font-size-14 font-semi-bold">
-                    <mat-checkbox color="accent" (change)="selectAll($event)" [(ngModel)]="selectedAll"  color="accent"  [indeterminate]="isIndeterminate()"  class="example-margin checkbox-width" fxFlex="100" fxLayoutAlign="center">
+                    <mat-checkbox  (change)="selectAll($event)" [(ngModel)]="selectedAll"  color="accent"  [indeterminate]="isIndeterminate()"  class="example-margin checkbox-width" fxFlex="100" fxLayoutAlign="center">
                     </mat-checkbox>
                   </th>
 
@@ -157,7 +218,7 @@
                                 <span matTooltip="{{showAllText ? row[col.prop] : ''}}"
                                       [class]="colorObject ? sendColors(col.prop,row[col.prop]) : ''" fxLayoutAlign="center center" >
                                   <ng-container *ngIf="showAvatar(col.prop).haveImg && showAvatar(col.prop, row).imgSrc, else avatarLoading">
-                                    <img class="img-rounded m-r-5" width="25px" height="25px" [src]="showAvatar(col.prop, row).imgSrc">
+                                    <img class="img-rounded m-r-5" width="25px" height="25px" [src]="showAvatar(col.prop, row).imgSrc" alt="image">
                                   </ng-container>
                                   <ng-template #avatarLoading>
                                     <wid-skeleton-loader
@@ -202,7 +263,8 @@
     </wid-scrollbar>
 
   </div>
-  <div class="data-table-pagination" fxLayout="row" fxFlex="7" fxLayoutAlign="space-between">
+  <ng-template  [ngIf]="!!tableData.getValue()?.results && !!offset && (!!(totalCountedItems || countedItems) && !!totalItems)"  [ngIfElse]="loading">
+  <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
     <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
       <div fxLayout="row" fxLayoutAlign="space-around center">
 
@@ -268,8 +330,8 @@
           </mat-label>
         </div>
         <div fxLayout="column" fxFlex="50px" fxLayoutAlign="center center">
-          <mat-form-field class="mat-form-field-no-padding font-size-10" appearance="outline">
-            <mat-select disableOptionCentering [formControl]="itemsPerPageControl">
+          <mat-form-field class="mat-form-field-no-padding font-size-10 select-paginator" appearance="outline">
+            <mat-select [placeholder]=" 'addpaymentmethod.language' | translate | capitalizeFirstLetter" disableOptionCentering [formControl]="itemsPerPageControl">
               <mat-option *ngFor="let v of itemsPerPage" [value]="v">
                 {{v}}
               </mat-option>
@@ -282,4 +344,7 @@
 
     </div>
   </div>
+  </ng-template>
+  <ng-template #loading >
+  </ng-template>
 </div>

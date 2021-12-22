@@ -7,7 +7,7 @@ import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '@environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -61,15 +61,15 @@ export class InvoiceService {
 
   /**************************************************************************
    * @description add many invoice Attachment
-   * @param invoiceLine: invoiceAttachment
+   * @param invoiceAttachment: invoiceAttachment
    *************************************************************************/
-  addManyInvoiceAttachment(invoiceAttachment): Observable<any> {
+  addManyInvoiceAttachment(invoiceAttachment: object): Observable<any> {
     return this.httpClient.post(`${environment.invoiceAttachmentApiUrl}/many`, invoiceAttachment);
   }
 
   /**
    * @description delete many invoice attachment
-   * @param list: list
+   * @param InvoiceAttachment: list
    */
   deleteManyInvoiceAttachment(InvoiceAttachment: object): Observable<any> {
     return this.httpClient.put(`${environment.invoiceAttachmentApiUrl}/many`, InvoiceAttachment);
@@ -165,7 +165,7 @@ export class InvoiceService {
 
   /**
    * @description delete many invoice payment
-   * @param list: list
+   * @param InvoicePayment: list
    */
   deleteManyInvoicePayment(InvoicePayment: object): Observable<any> {
     return this.httpClient.put(`${environment.invoicePaymentApiUrl}/many`, InvoicePayment);
@@ -204,5 +204,26 @@ export class InvoiceService {
   deleteInvoice(invoice): Observable<any> {
     return this.httpClient
       .post<any>(`${environment.invoiceGenerateApiUrl}/delete`, invoice, { responseType: 'blob' as 'json'});
+  }
+
+  /**
+   * @description: http request get to get all invoices registered in the same company
+   * @params company_email, limit, offset
+   */
+  getSearchInvoice(companyEmail: string, search: string, limit?, offset?): Observable<IInvoiceHeaderModel[]> {
+    return this.httpClient
+      .put<IInvoiceHeaderModel[]>
+      (`${environment.invoiceHeaderApiUrl}/search?beginning=${offset}&number=${limit}&company_email=${companyEmail}`, search);
+  }
+
+  /**
+   * @description: http request get to get all invoice registered in the same company
+   * @params company_email, limit, offset
+   */
+  filterAllInvoice(companyEmail: string, limit?, offset?, columns?, filterValue?,  operator?): Observable<any> {
+    return this.httpClient
+      .get<IInvoiceHeaderModel[]>(
+        `${environment.invoiceHeaderApiUrl}/filter?beginning=${offset}&number=${limit}&company_email=${companyEmail}` +
+            `&${columns}=${filterValue}&operator=${operator}`);
   }
 }
