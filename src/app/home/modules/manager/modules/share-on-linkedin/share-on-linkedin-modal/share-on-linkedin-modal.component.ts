@@ -116,8 +116,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'info',
-            title: 'Share post on linkedin',
-            description: `Your post is shared successfully`,
+            title: 'share_on_linkedin',
+            description: `shared-successfully`,
           };
           this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
             .subscribe(
@@ -230,8 +230,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         this.socialNetworkService.addPosts(facebookObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'info',
-            title: 'Share post on Facebook',
-            description: `Your post is shared successfully`,
+            title: 'share_on_facebook',
+            description: `shared-successfully`,
           };
           this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
             .subscribe(
