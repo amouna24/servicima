@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
 import { SheetService } from '@core/services/sheet/sheet.service';
 import { takeUntil } from 'rxjs/operators';
@@ -8,25 +8,29 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UploadPayslipService } from '@core/services/upload-payslip/upload-payslip.service';
 import { environment } from '@environment/environment';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { PayslipImportComponent } from '../payslip-import/payslip-import.component';
 
+declare var require: any;
+// tslint:disable-next-line:no-var-requires
+const FileSaver = require('file-saver');
 @Component({
   selector: 'wid-payslip-list',
   templateUrl: './payslip-list.component.html',
   styleUrls: ['./payslip-list.component.scss']
 })
-export class PayslipListComponent implements OnInit, OnDestroy {
+export class PayslipListComponent implements OnInit {
   public ELEMENT_DATA = new BehaviorSubject<any[]>([]);
   public isLoading = new BehaviorSubject<boolean>(true);
   private destroy$: Subject<boolean> = new Subject<boolean>();
-  private subscriptions: Subscription[] = [];
   private companyEmail: string;
   private env = `${environment.uploadFileApiUrl}/show/`;
   constructor(private sheetService: SheetService,
               private userService: UserService,
               private utilService: UtilsService,
               private uploadPayslipService: UploadPayslipService,
+              private uploadService: UploadService,
               private modalServices: ModalService) {
   }
 
@@ -50,6 +54,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     );
   }
   async fillDataTable(status: string): Promise<any[]> {
+    this.isLoading.next(true);
     if (!this.companyEmail) {
       await this.getUserInfo();
     }
@@ -58,26 +63,36 @@ export class PayslipListComponent implements OnInit, OnDestroy {
         this.uploadPayslipService.getAssociatedPayslip(
           `?company_address=${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
         ).toPromise().then(
-          (res) => {
-            const result = [];
-            res.map(data => {
-              this.getCollaboratorName(data.payslipKey.email_address).then(
-                (collaboratorName) => {
-                  res['full_name'] = collaboratorName;
-                  res['email_address'] = data.payslipKey.email_address;
-                  result.push({
-                    _id: data._id,
-                    full_name: collaboratorName,
-                    email_address: data.payslipKey.email_address,
-                    file_name: data.file_name,
-                    month: data.month,
-                    year: data.year});
-                });
-              });
-            resolve(result);
-          });
+          (res) => this.loadDataTable(res).then(
+            (resp) => {
+              this.ELEMENT_DATA.next(resp);
+              resolve(resp);
+            }));
       });
 
+  }
+
+  loadDataTable(file): Promise<any[]> {
+    return new Promise(
+      resolve => {
+        // tslint:disable-next-line:no-shadowed-variable
+        const result = [];
+        file.map(data => {
+          this.getCollaboratorName(data.payslipKey.email_address).then(
+            (collaboratorName) => {
+              const monthName = new Date(0, Number(data.month)).toLocaleString('default', { month: 'long' });
+              result.push({
+                _id: data._id,
+                full_name: collaboratorName,
+                email_address: data.payslipKey.email_address,
+                file_name: data.file_name,
+                month: monthName,
+                year: data.year});
+            });
+        });
+        resolve (result);
+      }
+    );
   }
 
   openUploadSheet(): Promise<any[]> {
@@ -110,13 +125,13 @@ export class PayslipListComponent implements OnInit, OnDestroy {
       },
       '62vw',
       '80vh').subscribe(
-      async (res) => {
+      async () => {
         await this.getData('ACTIVE');
       }
     );
   }
 
-  async uploadPayslip(): Promise<void> {
+  async importPayslip(): Promise<void> {
     this.openUploadSheet().then(
       async (data) => {
         if (data.length > 0) {
@@ -129,7 +144,7 @@ export class PayslipListComponent implements OnInit, OnDestroy {
     this.isLoading.next(true);
     data.map((row) => {
       this.uploadPayslipService.disableAssociatedPayslip(row._id).toPromise().then(
-        async res => {
+        async () => {
           this.getData('ACTIVE').then( () => {
             this.isLoading.next(false);
           });
@@ -143,14 +158,9 @@ export class PayslipListComponent implements OnInit, OnDestroy {
 
   downloadFile(data): void {
     data.map((row) => {
-      const element = document.createElement('a');
-      const link = `${this.env}${row.file_name}`;
-      element.setAttribute('href', 'data:application/pdf;base64, ' + encodeURIComponent(link));
-      element.setAttribute('download', row.file_name);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
+      const fileURL = `${this.env}${row.file_name}`;
+      const fileName = `Payslip-${row.full_name}-${row.month}-${row.year}-${Date.now().toString(16)}.pdf`;
+      FileSaver.saveAs(fileURL, fileName);
     });
   }
   async switchAction(rowAction): Promise<void> {
@@ -165,22 +175,17 @@ export class PayslipListComponent implements OnInit, OnDestroy {
         this.downloadFile(rowAction.data);
         break;
       case ('Import'):
-        await this.uploadPayslip();
+        await this.importPayslip();
         break;
     }
   }
 
   async getData(event) {
-    this.isLoading.next(true);
     await this.fillDataTable(event).then( (res) => {
-      if (res) {
-        this.ELEMENT_DATA.next(res);
+      if (!!res) {
         this.isLoading.next(false);
       }
     });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription => subscription.unsubscribe()));
-  }
 }

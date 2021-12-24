@@ -52,7 +52,6 @@ export class PayslipImportComponent implements OnInit {
   }
   async getFileData(data): Promise<any[]> {
     const result = [];
-    console.log(data);
     data.map(async row => {
         this.uploadPayslipService.distributePayslip(this.createNewPayslip(row)).toPromise().then(
           (res) => {
@@ -64,7 +63,6 @@ export class PayslipImportComponent implements OnInit {
           });
       }
     );
-    console.log(result);
     return result;
   }
   getCompanyCollaborator(applicationId, companyEmail): Promise<IUserModel[]> {
@@ -92,7 +90,6 @@ export class PayslipImportComponent implements OnInit {
   }
 
   associate(file: any) {
-        console.log('[UPLOAD]', file);
         this.uploadPayslipService.associatePayslip(
           {
             application_id: file.application_id,
@@ -103,7 +100,7 @@ export class PayslipImportComponent implements OnInit {
             month: this.payslipMonth,
             year: this.payslipYear
           }
-        ).toPromise().then( res => {
+        ).toPromise().then( () => {
           file['associated'] = true;
         });
   }
@@ -112,7 +109,7 @@ export class PayslipImportComponent implements OnInit {
     const date = new Date();
     this.payslipMonth = date.getMonth() + 1;
     this.payslipYear = date.getFullYear();
-    this.years = range(date.getFullYear() - 4 , date.getFullYear() + 20);
+    this.years = range(date.getFullYear() - 6 , date.getFullYear() + 4);
     this.months = Array.from({ length: 12}, (item, i) => {
       return new Date(0, i).toLocaleString('en-US', { month: 'long'});
     });
