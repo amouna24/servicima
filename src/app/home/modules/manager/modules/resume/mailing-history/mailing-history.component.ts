@@ -84,25 +84,23 @@ export class MailingHistoryComponent implements OnInit {
   private showMailDetails(data) {
     this.resumeService.getMailingHistory(`?send_to=${data.send_to}&send_time=${data.send_time}`)
       .subscribe((mailingData) => {
-        console.log('mailing data', mailingData[0]);
+        console.log('mailing data', mailingData['results'][0]);
         this.router.navigate(['/manager/resume/history/details'],
           {
             state: {
-              send_time: mailingData[0].MailingHistoryKey.send_time,
-              send_to: mailingData[0].MailingHistoryKey.send_to,
-              copies: mailingData[0].copy,
-              hidden_copies: mailingData[0].hidden_copy,
-              message: mailingData[0].message,
-              subject: mailingData[0].subject,
-              attachment: mailingData[0].attachment
+              send_time: mailingData['results'][0].MailingHistoryKey.send_time,
+              send_to: mailingData['results'][0].MailingHistoryKey.send_to,
+              copies: mailingData['results'][0].copy,
+              hidden_copies: mailingData['results'][0].hidden_copy,
+              message: mailingData['results'][0].message,
+              subject: mailingData['results'][0].subject,
+              attachment: mailingData['results'][0].attachment
             }
           });
       });
   }
-
   private resendMail(data) {
     data.map((mailHistory) => {
-      console.log(data);
       this.resumeService.getMailingHistory(`?send_to=${mailHistory.send_to}&send_time=${mailHistory.send_time}`)
         .subscribe((historyData) => {
           this.resumeService
@@ -111,11 +109,11 @@ export class MailingHistoryComponent implements OnInit {
               this.utilsService.getApplicationID('SERVICIMA'),
               this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
               [mailHistory.send_to],
-              mailHistory.message,
-              historyData[0].attachment,
-              historyData[0].copy,
-              historyData[0].hidden_copy,
+              historyData['results'][0].attachment,
+              historyData['results'][0].copy,
+              historyData['results'][0].hidden_copy,
               mailHistory.subject,
+              mailHistory.message,
             ).subscribe((dataB) => {
             console.log('email resended');
           });
@@ -130,10 +128,10 @@ export class MailingHistoryComponent implements OnInit {
       this.resumeService.getMailingHistory(`?send_to=${mailHistory.send_to}&send_time=${mailHistory.send_time}`)
         .subscribe((historyData) => {
           console.log('history data', historyData);
-          historyData[0].application_id = historyData[0].MailingHistoryKey.application_id;
-          historyData[0].send_to = historyData[0].MailingHistoryKey.send_to;
-          historyData[0].send_time = historyData[0].MailingHistoryKey.send_time;
-          historyData[0].company_email = historyData[0].MailingHistoryKey.company_email;
+          historyData['results'][0].application_id = historyData[0].MailingHistoryKey.application_id;
+          historyData['results'][0].send_to = historyData[0].MailingHistoryKey.send_to;
+          historyData['results'][0].send_time = historyData[0].MailingHistoryKey.send_time;
+          historyData['results'][0].company_email = historyData[0].MailingHistoryKey.company_email;
           if (action === 'Disable') {
             historyData[0].status = 'DISABLED' ;
             this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {

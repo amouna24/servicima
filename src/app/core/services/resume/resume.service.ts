@@ -40,6 +40,9 @@ export class ResumeService {
   getResume(filter: string): Observable<IResumeModel[]> {
     return this.httpClient.get<IResumeModel[]>(`${environment.resumeApiUrl}/${filter}`);
   }
+  getResumeDataTable(filter): Observable<object[]> {
+    return this.httpClient.get<IResumeModel[]>(`${environment.resumeApiUrl}/datatable/${filter}`);
+  }
 
   /**************************************************************************
    * @description Add new Resume
@@ -508,22 +511,22 @@ export class ResumeService {
       application_id,
       company_id,
       email_address,
-      attachement,
-      emailcc,
-      emailbcc,
       subject,
       text,
+      emailcc,
+      emailbcc,
+      attachement,
     });
     return this.httpClient.post<any>(`${environment.resumeApiUrl}/mailing`, {
       language_id,
       application_id,
       company_id,
       email_address,
-      attachement,
-      emailcc,
-      emailbcc,
       subject,
       text,
+      emailcc,
+      emailbcc,
+      attachement,
     });
   }
   /*-------------------------------------------------------------------------------------*/

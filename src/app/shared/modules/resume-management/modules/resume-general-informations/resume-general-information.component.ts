@@ -174,6 +174,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
             .getValue().user[0]['company_email']}`)
           .subscribe(
             async (generalInfo) => {
+              console.log('general info =', generalInfo);
               if (generalInfo['msg_code'] !== '0004') {
                 if (!!generalInfo) {
                   if ((generalInfo[0].image !== undefined) && (generalInfo[0].image !== null)) {
