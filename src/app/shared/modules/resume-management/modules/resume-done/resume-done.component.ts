@@ -611,6 +611,7 @@ export class ResumeDoneComponent implements OnInit {
    * @param dataCompany it contains the necessary data for the Resume
    *************************************************************************/
   downloadDocs(dataCompany: object,  action: string, dataCollaborator?: IResumeDataModel) {
+    const oldImage = this.generalInfoList[0].resume_filename_docx;
     if (action === 'generate') {
       if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR' || this.companyuserType === 'COLLABORATOR') {
         const confirmation = {
@@ -631,7 +632,6 @@ export class ResumeDoneComponent implements OnInit {
                     const formData = new FormData(); // CONVERT IMAGE TO FORMDATA
                     formData.append('file', file);
                     formData.append('caption', file.name);
-                    this.uploadService.deleteImage(this.generalInfoList[0].resume_filename_docx).subscribe( async (resDelete) => {
                       await this.uploadCompanyFile(formData).then(async (filename) => {
                         this.generalInfoList[0].resume_filename_docx = filename;
                         this.generalInfoList[0].email_address = this.generalInfoList[0].ResumeKey.email_address;
@@ -656,14 +656,14 @@ export class ResumeDoneComponent implements OnInit {
                                   console.log('resume Data updated', resume);
                                 });
                               }
-                            });
+                              this.uploadService.deleteImage(oldImage).subscribe( async (resDelete) => {
+                                console.log('old image deleted');
+                              });
+                              });
                           this.router.navigate(['/candidate/']);
                         });
                       });
                     });
-
-                    this.subscriptionModal.unsubscribe();
-                  });
                 this.subscriptionModal.unsubscribe();
               }
             });
@@ -726,7 +726,9 @@ export class ResumeDoneComponent implements OnInit {
                               console.log('resume Data updated', resume);
                             });
                           }
-                        });
+                          this.uploadService.deleteImage(oldImage).subscribe( async (resDelete) => {
+                            console.log('old image deleted');
+                          });                        });
                       this.showWaiting = false;
                       this.router.navigate(['/candidate/']);
                     });

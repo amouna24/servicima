@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -56,6 +57,7 @@ import { TitleCertifComponent } from './modules/work-certificates/title-certif/t
 import { EditWorkCertificateComponent } from './modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
 import { SignatureComponent } from './components/signature/signature.component';
 import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
+import { ConfirmListComponent } from './components/confirm-list/confirm-list.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +99,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     DisableControlDirective,
     CapitalizeFirstLetter,
     SpliceText,
+    ConfirmListComponent,
   ],
   imports: [
     CommonModule,
@@ -107,6 +110,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     FlexLayoutModule,
     ReactiveFormsModule,
     MatSelectModule,
+    MatTooltipModule,
     NgxMatSelectSearchModule,
     FormsModule,
     NgxDatatableModule,
@@ -137,6 +141,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     NgxMatSelectSearchModule,
     MatIconModule,
     MatBottomSheetModule,
+    MatTooltipModule,
     StepperComponent,
     AlertComponent,
     RightSidenaveComponent,
@@ -156,6 +161,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
     NgMultiSelectDropDownModule,
     RequestWorkCertificateComponent,
     PaginationDirective,
+    ConfirmListComponent,
   ]
 })
 export class SharedModule { }

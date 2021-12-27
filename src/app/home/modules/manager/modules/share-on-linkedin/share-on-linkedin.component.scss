@@ -4,16 +4,17 @@
 }
 .buttonImage {
   position: absolute;
-  top: -9px;
+  top: -7px;
   border-radius: 0 5px 5px 0;
   right: 0;
   border: none;
-  width: 150px;
-  height: 58px;
+  width: 120px;
+  height: 43px;
   color: white;
   background-color: $topaz;
-  transform: translateX(12px);
+  transform: translateX(8px);
 }
+
 .small-button {
   background-color: #e8f1f9 ;
   border: none;

@@ -1,42 +1,43 @@
-<div fxLayout="column" fxFlexFill>
+<div fxLayout="row" class="dynamic-component-container border-radius-20">
+<div  fxLayout="column" fxFlex="100" >
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Publish an offer</h1>
+      <h1 class="steel font-size-24 font-medium">{{'publish_offer' | translate}}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{'back' | translate}}</span>
       </button>
     </div>
   </div>
   <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div fxLayout="row" fxFlex="66">
+  <div fxLayout="row" fxFlex="78">
     <wid-scrollbar  fxFlexFill >
         <form [formGroup]="linkedinForm" fxLayout="column" fxFlexFill>
           <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
             <div fxLayout="column" fxFlex="82">
-              <div fxLayout="row" >
+              <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
-                    Offer title:
+                    {{'offer_title' | translate}}:
                   </mat-label>
                   <mat-form-field appearance="outline">
-                    <input  formControlName="title" matInput placeholder="title" required>
+                    <input  formControlName="title" matInput [placeholder]="'offer_title' | translate" required>
                     <mat-error class="red" >
                       {{ 'general.required' | translate }}</mat-error>
                   </mat-form-field>
                 </div>
 
               </div>
-              <div fxLayout="row" >
+              <div fxLayout="row" fxFlex="30" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
-                    Offer description:
+                    {{'offer_description' | translate}}:
                   </mat-label>
                   <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="text" rows="7"
+                              <textarea matInput [placeholder]="'offer_description' | translate" rows="7"
                                         formControlName="text" required></textarea>
                   </mat-form-field>
                 </div>
@@ -44,18 +45,18 @@
               <div fxLayout="row" >
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 ">
-                    Image:
+                    {{'offer_image' | translate}}:
                   </mat-label>
                   <mat-form-field appearance="outline"  >
                     <div >
-                      <input matInput matSuffix formControlName="image" placeholder="Image"  >
+                      <input matInput matSuffix formControlName="image" [placeholder]="'offer_image' | translate"  >
                       <button  class="buttonImage" type="button">
                         <input type="file"
                                id="upload"
-                               accept="image/png, image/gif, image/jpeg"
+                               accept="image/png, image/gif, image/jpeg, application/pdf"
                                (change)="setValueToImageField($event)"
                                hidden/>
-                        <label for="upload">Upload</label></button>
+                        <label for="upload">{{'offer_upload' | translate}}</label></button>
                     </div>
                   </mat-form-field>
                 </div>
@@ -71,16 +72,17 @@
       <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="column" >
             <button mat-raised-button type="button" color="primary" class="white  btn-small"(click)="routeToShareDialog()" [disabled]="linkedinForm.invalid">
-              <span class="white font-size-11">Publish</span>
-            </button></div>
-
+              <span class="white font-size-11">{{'publish_button' | translate}}</span>
+            </button>
+          </div>
         <div fxLayout="column" >
-          <button  class="btn-small small-button">
-            <span class="cerulean-blue font-size-11" [routerLink]="'/manager'">Back</span>
+          <button  class="btn-small small-button" >
+            <span class="cerulean-blue font-size-11" >{{'back' | translate}}</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 
+</div>
 </div>

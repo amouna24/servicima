@@ -1,0 +1,92 @@
+<div fxLayout="column" class="full-width full-height oh" >
+  <div fxLayout="row" fxLayoutAlign="end start" class="p-10 p-b-0">
+    <button mat-button class="m-r-10 btn-close border-radius-5 bg-pale-grey" (click)="modalActions()">
+      <mat-icon svgIcon="wi-close-normal"></mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start start" class="p-0 p-l-15">
+    <p class="font-size-17 steel m-0">
+      {{title ? title : 'Import'}}
+    </p>
+  </div>
+  <div fxLayout="column" fxLayoutAlign=" center" fxFlex class="p-10 p-t-0">
+    <ng-container *ngIf="!isLoaded() else loaded">
+      <wid-skeleton-loader fxFlex="100"
+                           [nbrColumn]="3"
+                           [nbrRow]="DATA.getValue().length"
+                           [marginTop]="21"
+                           [marginBottom]="21"
+                           [width]="125"
+                           [height]="25"
+      >
+      </wid-skeleton-loader>
+    </ng-container>
+    <ng-template #loaded>
+      <wid-scrollbar fxFlex="92"  class="full-width">
+        <div fxLayout="row" class="p-15 p-b-5 p-t-0" *ngIf="selectAllBtn">
+          <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100" class="full-height">
+            <button (click)="selectAll()" type="submit"
+                    class="btn-small pale-grey-four cursor-pointer bg-cerulean-blue m-b-10">
+              {{btnLabel}} All
+            </button>
+          </div>
+        </div>
+        <div>
+          <ng-container *ngFor="let file of showList.getValue()">
+            <form fxLayout="row" [fxLayoutAlign]="setFlexLayout()"
+                  style="border-bottom: 1px solid #ebebeb" class="p-15"
+                  (ngSubmit)="actionClick(file)">
+              <div class="p-b-10" fxFlex="55">
+                <ng-container *ngIf="!missingField(file) else nameNotFound">
+                  <p class="font-size-12 font-light p-0" [innerHTML]="setMessage(file)"
+                     [ngClass]="file.selected ? 'steel' : 'black-three'">
+                  </p>
+                </ng-container>
+                <ng-template #nameNotFound>
+                  <p class="font-size-12 font-light p-0" [ngClass]="file.selected ? 'steel' : 'black-three'">
+                    No name is found in
+                    <span class="decoration" [ngClass]="file.selected ? 'black-three' : 'golden-yellow cursor-pointer'">
+                  This payslip</span>.</p>
+                </ng-template>
+              </div>
+              <mat-form-field *ngIf="selectList" appearance="outline" fxFlex="25" class="font-size-8 p-0">
+                <mat-select [(ngModel)]=" file[selectList.selected]" [disabled]="file.selected" name="collaborator"
+                            fxFlex="100"
+                            [placeholder]="selectList.placeHolder ? selectList.placeHolder : ''" class="p-0" required>
+                  <ng-container *ngFor="let SList of selectList.data">
+                    <mat-option [value]="getSelectField('value', SList)">
+                      {{getSelectField('text', SList)}}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+              <ng-container *ngIf="file.selected else selectBtn">
+                <div style="width: 109px">
+                  <p class="font-size-11 font-normal cool-grey text-center">
+                    {{btnLabel}}
+                  </p>
+                </div>
+              </ng-container>
+              <ng-template #selectBtn>
+                <button type="submit" [disabled]="file.selected"
+                        class="btn-small bg-pale-grey-four cursor-pointer cerulean-blue m-b-10">
+                  {{btnLabel}}
+                </button>
+              </ng-template>
+            </form>
+          </ng-container>
+        </div>
+      </wid-scrollbar>
+      <div *ngIf="detectUnknownFile()" fxFlex="8" fxFlexAlign="end end"
+           fxLayout="row" fxLayoutAlign="start center"
+           class="full-width bg-light-khaki border-radius-5 p-10">
+        <mat-icon svgIcon="wi_alert_warning" class="m-0 m-l-5 fill-golden-yellow"></mat-icon>
+        <p class="font-size-11 font-light black m-0 p-5">
+          <span class="golden-yellow font-normal font-size-12">Warning: </span>{{detectUnknownFile()}}
+        </p>
+
+      </div>
+    </ng-template>
+
+  </div>
+</div>

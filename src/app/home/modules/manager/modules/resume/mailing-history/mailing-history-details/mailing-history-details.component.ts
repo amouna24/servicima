@@ -69,11 +69,12 @@ export class MailingHistoryDetailsComponent implements OnInit {
                 this.utilsService.getApplicationID('SERVICIMA'),
                 this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
                 [this.send_to],
-                this.message,
                 this.attachments,
                 this.copies,
                 this.hiddenCopies,
                 this.subject,
+                this.message,
+
               ).subscribe((dataB) => {
               console.log('email resended');
             });
