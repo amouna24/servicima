@@ -58,7 +58,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    * Subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
-  private subscriptions: Subscription;
   private subscriptionModal: Subscription;
 
   /******************************************************************************************
@@ -226,7 +225,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.userInfo = this.router.getCurrentNavigation().extras.state.userInfo ? this.router.getCurrentNavigation().extras.state.userInfo : null;
     // tslint:disable-next-line:max-line-length
     this.collaborator = this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
-    console.log('collaborator ', this.collaborator);
     this.dynamicForm = new BehaviorSubject<IDynamicForm[]>([
       {
         'titleRef': 'PERSONAL_DATA',
@@ -306,8 +304,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'birth country',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
-            searchControlName: 'countryFilterCtrl',
             formControlName: 'birth_country_id',
+            searchControlName: 'countryBirthFilterCtrl',
+
           },
           {
             label: 'Birth city',
@@ -1100,7 +1099,17 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       });
 
     await this.initProfileForm();
+    await this.getRefData(this.userInfo.company_email);
     await this.getInitialData();
+    this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.userInfo.language_id)).map((country) => {
+      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+    });
+    this.filteredCountries.next(this.countriesList.slice());
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.profileForm.controls.PERSONAL_DATA['controls'].countryBirthFilterCtrl,
+      this.filteredCountries
+    );
     this.sheetService.registerSheets(
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
@@ -1124,6 +1133,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         adress: [this.collaborator === null ? '' : this.collaborator.adress],
         country_id: [this.collaborator === null ? '' : this.collaborator.country_id],
         countryFilterCtrl: [''],
+        countryBirthFilterCtrl: [''],
         zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code],
         family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id],
         nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id],
@@ -1214,11 +1224,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.applicationId = cred['application_id'];
     this.emailAddress = this.userInfo.userKey.email_address;
     this.companyEmail = cred['email_address'];
-
     this.profileService
       .getUserById(this.id)
       .subscribe(async user => {
-          await  this.getRefData(user['results'][0].company_email);
+
           await this.getDataByEmail(this.emailAddress);
           this.hrService.getCollaborators(`?email_address=${this.emailAddress}`)
             .subscribe(async collaborator => {
@@ -1235,7 +1244,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
               this.bankingCheck = this.bankingInfo !== null ? true : false;
               this.contractCheck = this.contract !== null ? true : false;
-              console.log('contract check ', this.contractCheck);
 
             });
         },
@@ -1260,20 +1268,22 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
-    this.filteredCountries.next(this.appInitializerService.countriesList.map((country) => {
-      return { value : country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC};
-    }));
+   /* this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.userInfo.language_id)).map((country) => {
+      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+    });
+    this.filteredCountries.next(this.countriesList.slice());
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.profileForm.controls.PERSONAL_DATA['controls'].countryBirthFilterCtrl,
+      this.filteredCountries
+    );*/
 
     this.contractTypeList.next(this.refData['HR_CT_TYPE']);
     this.genderList.next(this.refData['GENDER']);
     this.familySituationList.next(this.refData['FAMILY_SITUATION']);
     this.documentTypeList.next(this.refData['IDENTITY_TYPE']);
     this.jobTitleList.next(this.refData['PROF_TITLES']);
-    this.utilsService.changeValueField(
-      this.countriesList,
-      this.profileForm.controls.PERSONAL_DATA['controls'].countryFilterCtrl,
-      this.filteredCountries
-    );
+
   }
 
   async getDataByEmail(email: string) {
@@ -1345,7 +1355,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           } else {
            this.contractPreviousInfo = res[7]['results'];
            this.contractPreviousList.next(this.contractPreviousInfo);
-            console.log('data found , ', res[7]);
           }
         }
 
@@ -2102,11 +2111,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.userInfo.language_id,
       this.profileForm.controls.PERSONAL_DATA['controls'].nationalityFilterCtrl,
       this.filteredNationalities
-    );
-    this.utilsService.changeValueField(
-      this.countriesList,
-      this.profileForm.controls.PERSONAL_DATA['controls'].countryFilterCtrl,
-      this.filteredCountries
     );
 
   }

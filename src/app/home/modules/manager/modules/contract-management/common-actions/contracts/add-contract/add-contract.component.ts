@@ -1017,7 +1017,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               resolve(
                 Contacts['results'].map(
                   (obj) => {
-                    return { value: obj.contractorContactKey.contractor_code, viewValue: obj.first_name + ' ' + obj.last_name};
+                    return { value: obj.contractorContactKey.contact_email, viewValue: obj.first_name + ' ' + obj.last_name};
                   }
                 )
               );

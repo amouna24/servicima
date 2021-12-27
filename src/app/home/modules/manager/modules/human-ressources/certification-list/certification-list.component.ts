@@ -53,7 +53,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
   languages: any;
   currentCompany: any;
   refData = { };
-  lastExperience: any;
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -142,7 +141,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
       // tslint:disable-next-line:max-line-length3 max-line-length
       this.hrService.getWorkCertificates(`?${ this.email ? `email_address=${this.email}&status=ACTIVE` : `company_email=${this.companyEmail}&status=ACTIVE`  }` ).subscribe( async (res) => {
         if (res['msg_code'] !== '0004') {
-          await res.map((certif) => {
+          await res['results'].map((certif) => {
             this.profileService.getUser(`?email_address=${certif.HRWorkCertificateKey.email_address}`).toPromise()
               .then((profile) => {
                 certif['photo'] = profile.results[0].photo;
