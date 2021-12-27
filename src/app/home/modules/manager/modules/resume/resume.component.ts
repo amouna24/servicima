@@ -59,7 +59,8 @@ await this.getData();
         this.userService.getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}`)
           .subscribe(async (res) => {
             await res['results'].map(async (candidate) => {
-              await this.resumeService.getResume(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
+              await this.resumeService
+                .getResumeDataTable(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
                 .subscribe((resume) => {
                   return new Promise((resolve) => {
                     if (resume['msg_code'] !== '0004') {
@@ -265,6 +266,7 @@ await this.getData();
                         console.log('candidate deleted', deleteCandidate);
                         this.resumeService.getResumeData(`?resume_code=${changeStatusData.user_info.ResumeKey.resume_code}`)
                           .subscribe((resumeData) => {
+                            console.log('resumeData model', resumeData);
                           resumeData[0].user_type = 'COLLABORATOR';
                           resumeData[0].resume_code = resumeData[0].ResumeDataKey.resume_code;
                           resumeData[0].application_id = resumeData[0].ResumeDataKey.application_id;
