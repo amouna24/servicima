@@ -11,6 +11,7 @@ import { IUserModel } from '@shared/models/user.model';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
+import { TranslateService } from '@ngx-translate/core';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -29,6 +30,7 @@ export class ResumeComponent implements OnInit {
     private userService: UserService,
     private resumeService: ResumeService,
     private router: Router,
+    private translateService: TranslateService,
     private modalServices: ModalService,
     private collaboratorService: CollaboratorService,
     private candidateService: CandidateService,
@@ -93,26 +95,29 @@ await this.getData();
    To change
    *************************************************************************/
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('Change status'):
-        this.changeCandidateToCollaborator(rowAction.data);
-        break;
-      case ('update'):
-        this.updateResume(rowAction.data);
-        break;
-      case('Send email'):
-        this.sendMail(rowAction.data);
-        break;
-      case('export PDF'):
-        this.exportPdf(rowAction.data);
-        break;
-      case('download docx'):
-        this.downloadDocx(rowAction.data);
-        break;
-      case('Archive Resume'):
-        this.archiveUser(rowAction.data);
-        break;
-    }
+     this.translateService.get(['resume-change-status', 'send-mail', 'export-pdf', 'downlaod-docx', 'resume-archive']).subscribe( (res) => {
+      switch (rowAction.actionType) {
+        case (res['resume-change-status']):
+          this.changeCandidateToCollaborator(rowAction.data);
+          break;
+        case ('update'):
+          this.updateResume(rowAction.data);
+          break;
+        case(res['send-mail']):
+          this.sendMail(rowAction.data);
+          break;
+        case(res['export-pdf']):
+          this.exportPdf(rowAction.data);
+          break;
+        case(res['downlaod-docx']):
+          this.downloadDocx(rowAction.data);
+          break;
+        case(res['resume-archive']):
+          this.archiveUser(rowAction.data);
+          break;
+      }
+    });
+
   }
   /**************************************************************************
    * @description Export Resume in pdf format
@@ -208,8 +213,8 @@ await this.getData();
   changeCandidateToCollaborator(data) {
       const confirmation = {
         code: 'edit',
-        title: 'Change Candidate(s) to Collaborator(s)',
-        description: `Are you sure ?`,
+        title: 'cand-collab',
+        description: `resume-u-sure`,
       };
       this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
         .subscribe(
