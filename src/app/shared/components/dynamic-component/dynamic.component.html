@@ -924,7 +924,7 @@
                                  <div fxLayout="row" fxFlex="70" >
                                    <img class="resume-icon" width="84.5x" height="120px" src="{{oneObject.icon}}">
                                  </div>
-                                 <mat-radio-button fxLayout="row" fxFlex="30" [value]="oneObject.value" [checked]="oneObject.value === 'DEFAULT'"  class="black font-size-8 font-normal">
+                                 <mat-radio-button fxLayout="row" fxFlex="30"   [value]="oneObject.value ? oneObject.value : 'DEFAULT'"  class="black font-size-8 font-normal">
                                    {{oneObject.viewValue}}
                                  </mat-radio-button>
                                </div>

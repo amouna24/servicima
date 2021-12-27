@@ -11,9 +11,8 @@ import { IContractorContact } from '@shared/models/contractorContact.model';
 import { takeUntil } from 'rxjs/operators';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { UserService } from '@core/services/user/user.service';
-import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
-import { ICompanyTaxModel } from '@shared/models/companyTax.model';
-
+// tslint:disable-next-line:origin-ordered-imports
+import { ContractsService } from '@core/services/contracts/contracts.service';
 import { ShowModalComponent } from '../show-modal/show-modal.component';
 
 @Component({
@@ -39,6 +38,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description DATA_TABLE paginations
    *************************************************************************/
   nbtItems = new BehaviorSubject<number>(5);
+  blocData = [];
 
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
@@ -55,7 +55,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description UserInfo
    *************************************************************************/
   displayedColumns: string[] = ['contractor_code', 'contractor_name', 'email_address',
-    'contact_email', 'creation_date', 'status', 'show', 'Actions'];
+    'contact_email', 'Actions'];
   dataSource: MatTableDataSource<IContractor>;
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(true);
@@ -65,6 +65,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private contractorService: ContractorsService,
+    private contractService: ContractsService,
     private userService: UserService,
     private router: Router,
     private modalsServices: ModalService,
@@ -146,7 +147,9 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe(
       (response) => {
-        this.ELEMENT_DATA.next(response);
+        this.blocData = response['results'];
+        this.ELEMENT_DATA.next(this.blocData);
+
         response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
       },
       (error) => {
@@ -172,11 +175,11 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description: Function to call  Dialog
    * @return: Updated Contractor Status
    *************************************************************************/
-  onStatusChange(Contractor) {
+  onStatusChange(Contractor: IContractor, status: string): void {
     const confirmation = {
       code: 'changeStatus',
       title: 'change the status',
-      status: Contractor['status']
+      description: `Are you sure you want to change status ?`,
     };
     this.subscriptionModal = this.modalsServices.displayConfirmationModal(confirmation, '560px', '300px')
       .pipe(
@@ -185,26 +188,37 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (res) => {
           if (res === true) {
-            if (Contractor.status === 'ACTIVE') {
-              this.contractorService.disableContractor(Contractor._id)
-                .pipe(
-                  takeUntil(this.destroy$)
-                )
-                .subscribe(
-                (res1) => {
-                  this.getContractors(this.nbtItems.getValue(), 0);
-                }
-              );
-            } else if (Contractor.status === 'DISABLED') {
-              this.contractorService.enableContractor(Contractor._id)
-                .pipe(
-                  takeUntil(this.destroy$)
-                )
-                .subscribe(
-                (res1) => {
-                  this.getContractors(this.nbtItems.getValue(), 0);
-                }
-              );
+
+            const element = this.blocData.filter(x => x._id === Contractor._id)[0];
+            const index = this.ELEMENT_DATA.value.indexOf(element);
+            if (status === 'DISABLED') {
+              if (index !== -1) {
+                this.blocData.splice(index, 1);
+                this.ELEMENT_DATA.next(this.blocData.slice());
+                this.contractorService.disableContractor(Contractor._id)
+                  .pipe(
+                    takeUntil(this.destroy$)
+                  )
+                  .subscribe(
+                    (res1) => {
+
+                    }
+                  );
+              }
+
+            } else if (Contractor.status === 'ACTIVE') {
+              if (index !== -1) {
+                this.contractorService.enableContractor(Contractor._id)
+                  .pipe(
+                    takeUntil(this.destroy$)
+                  )
+                  .subscribe(
+                    (res1) => {
+                      this.getContractors(this.nbtItems.getValue(), 0);
+                    }
+                  );
+              }
+
             }
             this.subscriptionModal.unsubscribe();
           }
@@ -224,6 +238,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       url = '/manager/contract-management/clients-contracts/clients';
     }
+    console.log('url ', url);
     this.router.navigate(
       [url],
       { queryParams: {
@@ -233,7 +248,33 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       }
       });
   }
+  /**************************************************************************
+   * @description: Function to call updateMail Dialog with current data
+   * @param Contractor contractor Object
+   * @return: Updated Table
+   *************************************************************************/
+  deleteContractor(Contractor: IContractor): void {
+    const confirmation = {
+      code: 'delete',
+      title: 'delete Info',
+      description: `Are you sure you want to delete ?`,
+    };
+    this.subscriptionModal = this.modalsServices.displayConfirmationModal(confirmation, '560px', '300px')
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe((res) => {
+          if (res === true) {
+             this.contractorService.disableContractor(Contractor._id).pipe(
+               takeUntil(this.destroy$)
+             ).subscribe(
 
+             );
+          }
+      }
+
+      );
+  }
   /**************************************************************************
    * @description: Show Contact
    * @param Contractor contractor Object
@@ -282,7 +323,10 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       break;
       case ('update'): this.updateContractor(rowAction.data);
       break;
-      case('delete'): this.onStatusChange(rowAction.data);
+     case('disabled'): this.onStatusChange(rowAction.data, 'DISABLED');
+     break;
+      case('active'): this.onStatusChange(rowAction.data, 'ACTIVE');
+      break;
     }
   }
 

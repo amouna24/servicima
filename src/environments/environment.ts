@@ -25,7 +25,9 @@ export const environment = {
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
   contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
 
+  // contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
+  // contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',
@@ -60,6 +62,8 @@ export const environment = {
   payslipApiUrl: 'http://192.168.1.22:8090/servicima/hrpayslip/v1',
   hrContractApiUrl: 'http://192.168.1.22:8092/servicima/hrcontract/v1',
   hrContractExtension: 'http://192.168.1.22:8093/servicima/hrcontractextension/v1',
+  hrPreviousContractApiUrl: 'http://192.168.1.22:8113/servicima/hrcontractprevious/v1',
+  workCertificateApiUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/v1',
   workCertificateUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/v1',
   payslipAssociateApiUrl: 'http://192.168.1.22:8112/servicima/payslipassociate/v1',
   invoiceGenerateApiUrl: 'http://192.168.1.22:3000',
@@ -84,7 +88,7 @@ export const environment = {
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://192.168.1.22:8067',
   /************************* GENERATE CERTIFICATION ******************************/
-  pdfFileUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
+  pdfFileApiUrl: 'http://192.168.1.22:8104/servicima/hrworkcertificate/pdf/v1',
   /************************* UPLOAD RESUME FILE ************************/
   uploadResumeFileApiUrl: 'http://192.168.1.22:8121/servicima/resumelist/v1',
   /*************************** OTHERS ************************************/

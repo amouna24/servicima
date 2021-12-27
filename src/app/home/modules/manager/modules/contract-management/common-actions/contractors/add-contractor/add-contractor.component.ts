@@ -13,8 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 import { IContractor } from '@shared/models/contractor.model';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
-import { IContractorContact } from '@shared/models/contractorContact.model';
 import { IDynamicMenu } from '@shared/models/dynamic-component/menu-item.model';
+
 import {
   FieldsAlignment,
   FieldsType,
@@ -51,7 +51,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading = new BehaviorSubject<boolean>(false);
-  private subscriptions: Subscription;
+
+private subscriptions: Subscription;
   private subscriptionModal: Subscription;
 
   /**************************************************************************
@@ -74,6 +75,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   countriesList: IViewParam[] = [];
   activitySectorList: IViewParam[] = [];
   filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredGenders: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredTitles: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredPayMode: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredLegalForm: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   activityCodeList: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   langList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   citiesList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
@@ -83,7 +89,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-
   companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contactList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractorContactInfo);
   canUpdateAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -342,9 +347,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         {
           label: 'Payment Mode',
           placeholder: 'Payment Mode',
-          type: FieldsType.SELECT,
-          selectFieldList: this.paymentModeList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredPayMode,
           formControlName: 'payment_cd',
+          searchControlName: 'filteredPayementOrganisation'
         },
       ],
     },
@@ -355,9 +361,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         {
           label: 'Currency',
           placeholder: 'Currency',
-          type: FieldsType.SELECT,
-          selectFieldList: this.currencyList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
+          searchControlName: 'filteredCurrencyOrganisation'
         },
         {
           label: 'VAT Number',
@@ -375,9 +382,10 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         {
           label: 'Legal Form',
           placeholder: 'Legal Form',
-          type: FieldsType.SELECT,
-          selectFieldList: this.legalList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredLegalForm,
           formControlName: 'legal_form',
+          searchControlName: 'filteredLegalOrganisation'
         },
         {
           label: 'Company Tax',
@@ -474,16 +482,18 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         {
           label: 'Gender',
           placeholder: 'Gender',
-          type: FieldsType.SELECT,
-          selectFieldList: this.genderList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredGenders,
           formControlName: 'gender_cd',
+          searchControlName: 'filteredGenderContact'
         },
         {
           label: 'Title',
           placeholder: 'Title',
-          type: FieldsType.SELECT,
-          selectFieldList: this.profileTitleList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredTitles,
           formControlName: 'title_cd',
+          searchControlName: 'filteredTitleContact'
         },
       ],
     },
@@ -538,7 +548,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     },
 
   ]);
-  private refData: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -558,6 +567,17 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService
   ) {
     this.initContractForm();
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe( params => {
+        if (params.id) {
+          this.contractorId = params.id;
+          this.contractorFilter = { cc: params.cc, ea: params.ea };
+          this.getContractorByID(params);
+        }
+      });
   }
 
   /**************************************************************************
@@ -565,17 +585,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    *************************************************************************/
  async ngOnInit() {
     await this.getInitialData();
-    this.route.queryParams
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(params => {
-        if (params.id) {
-          this.contractorId = params.id;
-          this.contractorFilter = { cc: params.cc, ea: params.ea };
-          this.getContractorByID(params);
-        }
-      });
+
     this.contractorForm.get('ADDRESS').valueChanges.subscribe(selectedValue => {
       selectedValue.country_cd === 'FRA' ?
         this.dynamicForm.getValue()[7].fields[0] = {
@@ -595,7 +605,6 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         };
     });
   }
-
   /**************************************************************************
    * @description Init Contract Form
    *************************************************************************/
@@ -603,11 +612,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.contractorForm = this.formBuilder.group({
       PERSONAL_INFORMATION: this.formBuilder.group({
         contractor_name: ['', Validators.required],
-        registry_code: [],
+        registry_code: [''],
         language: [''],
       }),
       ADDRESS: this.formBuilder.group({
-        address: [''],
+        address: ['', Validators.required],
         country_cd: [''],
         registryCountryFilterCtrl: [''],
         zip_code: [''],
@@ -615,39 +624,46 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       }),
       GENERAL_CONTACT: this.formBuilder.group({
         web_site: [''],
-        contact_email: ['', [Validators.required, Validators.email]],
+        contact_email: [''],
         phone_nbr: [''],
         phone2_nbr: [''],
-        fax_nbr: [''],
+        fax_nbr: ['', ],
       }),
       ORGANISATION: this.formBuilder.group({
-        activity_sector: [''],
+        activity_sector: ['' ],
         activitySectorFilterCtrl: [''],
         payment_cd: [''],
         currency_cd: [''],
+        filteredPayementOrganisation: [''],
+        filteredLegalOrganisation: [''],
+        filteredCurrencyOrganisation: [''],
         vat_nbr: [''],
         legal_form: [''],
         tax_cd: [''],
       }),
       RESUME_TEMPLATE: this.formBuilder.group( {
-        resume_template: ['DEFAULT'],
+        resume_template: [''],
         update: true,
       }),
       CONTACT: this.formBuilder.group({
         first_name: [''],
         last_name: [''],
-        main_contact: ['', Validators.email],
-        contact_email: ['', [Validators.required, Validators.email]],
+        main_contact: [''],
+        contact_email: [''],
         gender_cd: [''],
         title_cd: [''],
         phone_nbr: [''],
         cell_phone_nbr: [''],
+        filteredTitleContact: [''],
+        filteredGenderContact: [''],
+        registryCountryFilterCtrl: [''],
         language_cd: [''],
         can_sign_contract: [''],
       }),
     });
   }
   updateForms(contractor: IContractor) {
+    console.log('contractor ', contractor);
     this.contractorForm.patchValue({
       PERSONAL_INFORMATION : {
         contractor_name: contractor.contractor_name,
@@ -678,8 +694,8 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         tax_cd: contractor.tax_cd,
       },
       RESUME_TEMPLATE: {
-        resume_template: '',
-        update: true,
+        resume_template: contractor.template_resume,
+        update: false,
       },
       CONTACT: {
         first_name: '',
@@ -709,10 +725,43 @@ export class AddContractorComponent implements OnInit, OnDestroy {
   const cred = this.localStorageService.getItem('userCredentials');
   this.applicationId = cred['application_id'];
     /************************************ USER ************************************/
-    this.subscriptions = this.userService.connectedUser$.subscribe((data) => {
+    this.subscriptions = this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.userInfo = data;
         this.companyEmail = data.user[0]['company_email'];
+        /********************************** REF DATA **********************************/
+        await this.refDataService.getRefData(
+          this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+          this.applicationId,
+          [ 'GENDER', 'PROF_TITLES', 'LEGAL_FORM', 'PAYMENT_MODE']
+        );
+        /******************************** ACTIVITY CODE *******************************/
+        this.legalList.next(this.refDataService.refData['LEGAL_FORM']);
+        this.filteredLegalForm.next(this.legalList.value);
+        this.utilsService.changeValueField(this.legalList.value,
+          this.contractorForm.controls.ORGANISATION['controls'].filteredLegalOrganisation,
+          this.filteredLegalForm
+        );
+        this.genderList.next(this.refDataService.refData['GENDER']);
+        this.filteredGenders.next(this.genderList.value.slice());
+
+        this.utilsService.changeValueField(this.genderList.value,
+          this.contractorForm.controls.CONTACT['controls'].filteredGenderContact,
+          this.filteredGenders
+          );
+        this.profileTitleList.next(this.refDataService.refData['PROF_TITLES']);
+        this.filteredTitles.next(this.profileTitleList.value);
+        this.utilsService.changeValueField(this.profileTitleList.value,
+          this.contractorForm.controls.CONTACT['controls'].filteredTitleContact,
+          this.filteredTitles
+        );
+        this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
+        this.filteredPayMode.next(this.profileTitleList.value);
+        this.utilsService.changeValueField(this.paymentModeList.value,
+          this.contractorForm.controls.ORGANISATION['controls'].filteredPayementOrganisation,
+          this.filteredPayMode
+        );
+
         this.getCompanyTax();
       }
     });
@@ -751,24 +800,12 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
-    /********************************** REF DATA **********************************/
-    await this.refDataService.getRefData(
-      this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
-      this.applicationId,
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'RESUM_TEMP']
+    this.filteredCurrencies.next(this.currencyList.value);
+    this.utilsService.changeValueField(
+      this.currencyList.value,
+      this.contractorForm.controls.ORGANISATION['controls'].filteredCurrencyOrganisation,
+      this.filteredCurrencies
     );
-    await this.refDataService.getRefData(
-      this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
-      this.applicationId,
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'RESUM_TEMP']
-    );
-    /******************************** ACTIVITY CODE *******************************/
-    this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
-    this.legalList.next(this.refDataService.refData['LEGAL_FORM']);
-    this.genderList.next(this.refDataService.refData['GENDER']);
-    this.profileTitleList.next(this.refDataService.refData['PROF_TITLES']);
-    this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
-    /****************************** RESUME MODELS ***********************************/
   }
 
   /**************************************************************************
@@ -802,7 +839,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
     this.isLoading.next(true);
     forkJoin([
       this.contractorService.getContractors(`?_id=${atob(params.id)}`),
-      this.contractorService.getContractorsContact(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}`)
+      this.contractorService.getContractorsContact(`?contractor_code=${atob(params.cc)}&email_address=${atob(params.ea)}&status=ACTIVE`)
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -815,15 +852,15 @@ export class AddContractorComponent implements OnInit, OnDestroy {
           this.avatar.next(av);
 
           res[1]['results'][0] === [] ? this.contractorContactInfo = [] : this.contractorContactInfo = res[1]['results'];
-
-          this.contractorContactInfo.map(
-            (contact) => {
-              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+         this.contractorContactInfo.map(
+           async (contact) => {
+              contact.title_cd = await this.refDataService.refData['PROF_TITLES'].find((type) =>
                 type.value === contact.title_cd)?.viewValue;
             }
           );
           this.updateForms(this.contractorInfo);
           this.contactList.next(this.contractorContactInfo.slice());
+
           this.isLoading.next(false);
 
         },
@@ -919,16 +956,15 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.update_date = Date.now();
       Contractor.creation_date = this.contractorInfo.creation_date;
       /*** RESUME TEMPLATE ***/
-      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
-      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update;
-
+      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
+      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
       this.contractorService.updateContractor(Contractor)
         .pipe(
           takeUntil(this.destroy$)
         )
         .subscribe(
           (res) => {
-            console.log('res', res);
+            this.utilsService.openSnackBar('Contractor update successfully', 'close');
 
           },
           (error) => {
@@ -949,19 +985,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               )
               .subscribe(
                 (response) => {
-                  console.log('response', response);
                 },
                 (error) => {
                   console.log('error', error);
                 },
                 () => {
-                  if (this.type === 'CLIENT') {
-                    this.router.navigate(
-                      ['/manager/contract-management/clients-contracts/clients-list']);
-                  } else if (this.type === 'SUPPLIER') {
-                    this.router.navigate(
-                      ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-                  }
                 }
               );
           } else if (!contact?._id) {
@@ -973,24 +1001,25 @@ export class AddContractorComponent implements OnInit, OnDestroy {
               )
               .subscribe(
                 (resp) => {
-                  console.log('resp', resp);
                 },
                 error => {
                   console.log('error', error);
                 },
                 () => {
-                  if (this.type === 'CLIENT') {
-                    this.router.navigate(
-                      ['/manager/contract-management/clients-contracts/clients-list']);
-                  } else if (this.type === 'SUPPLIER') {
-                    this.router.navigate(
-                      ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-                  }
+
                 }
               );
           }
         }
       );
+      this.utilsService.openSnackBar('Contractor updated successfully ', null, 5000);
+      if (this.type === 'CLIENT') {
+        this.router.navigate(
+          ['/manager/contract-management/clients-contracts/clients-list']);
+      } else if (this.type === 'SUPPLIER') {
+        this.router.navigate(
+          ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+      }
     } else {
       /*** CONTRACTOR KEY ***/
       Contractor.application_id = this.userInfo.company[0].companyKey.application_id;
@@ -1021,8 +1050,9 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
       Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
       /*** RESUME TEMPLATE ***/
-      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template;
-      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update;
+      const templateValue = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
+      Contractor.template_resume = templateValue !== '' ? templateValue : 'DEFAULT';
+      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
 
       Contractor.creation_date = Date.now();
       this.contractorService.addContractor(Contractor)
@@ -1031,44 +1061,47 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (response) => {
-            console.log('response', response);
+            this.contractorContactInfo.forEach(
+              async (contact) => {
+                contact.application_id = Contractor.application_id;
+                contact.email_address = Contractor.email_address;
+                contact.contractor_code = Contractor.contractor_code;
+                contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                  type.viewValue === contact.title_cd)?.value;
+                await this.contractorService.addContractorContact(contact)
+                  .pipe(
+                    takeUntil(
+                      this.destroy$
+                    )
+                  )
+                  .subscribe(
+                    (res) => {
+                    },
+                    error => {
+                      console.log('error', error);
+                    },
+                    () => {
+
+                    }
+                  );
+
+              }
+            );
+            this.utilsService.openSnackBar('Contractor added successfully ', null, 5000);
+            if (this.type === 'CLIENT') {
+              this.router.navigate(
+                ['/manager/contract-management/clients-contracts/clients-list']);
+            } else if (this.type === 'SUPPLIER') {
+              this.router.navigate(
+                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
+            }
           },
 
           (error) => {
             console.log(error);
           }
         );
-      this.contractorContactInfo.forEach(
-        (contact) => {
-          contact.application_id = Contractor.application_id;
-          contact.email_address = Contractor.email_address;
-          contact.contractor_code = Contractor.contractor_code;
-          contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-            type.viewValue === contact.title_cd)?.value;
-          this.contractorService.addContractorContact(contact)
-            .pipe(
-              takeUntil(
-                this.destroy$
-              )
-            )
-            .subscribe(
-              (res) => {
-              },
-              error => {
-                console.log('error', error);
-              },
-              () => {
-                if (this.type === 'CLIENT') {
-                  this.router.navigate(
-                    ['/manager/contract-management/clients-contracts/clients-list']);
-                } else if (this.type === 'SUPPLIER') {
-                  this.router.navigate(
-                    ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-                }
-              }
-            );
-        }
-      );
+
     }
     this.photo = null;
   }
@@ -1100,22 +1133,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
             }
           }
         );
-        this.contractorForm.patchValue(
-          {
-            CONTACT: {
-              first_name: '',
-              last_name: '',
-              main_contact: '',
-              contact_email: '',
-              gender_cd: '',
-              title_cd: '',
-              phone_nbr: '',
-              cell_phone_nbr: '',
-              language_cd: '',
-              can_sign_contract: '',
-            },
-          }
-        );
+        this.contractorForm.controls.CONTACT.reset();
         this.canUpdateAction.next(false);
         this.canAddAction.next(true);
         this.contractorForm.controls.CONTACT['controls'].contact_email.enable();
@@ -1144,22 +1162,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
             }
           );
           this.contactList.next(this.contractorContactInfo.slice());
-          this.contractorForm.patchValue(
-            {
-              CONTACT: {
-                first_name: '',
-                last_name: '',
-                main_contact: '',
-                contact_email: '',
-                gender_cd: '',
-                title_cd: '',
-                phone_nbr: '',
-                cell_phone_nbr: '',
-                language_cd: '',
-                can_sign_contract: '',
-              },
-            }
-          );
+          this.contractorForm.controls.CONTACT.reset();
           this.utilsService.openSnackBar('Contact Added', 'close');
         }
       }
@@ -1180,11 +1183,11 @@ export class AddContractorComponent implements OnInit, OnDestroy {
    * @description: Function to call  Dialog
    * @return: Updated Contractor Status
    *************************************************************************/
-  onStatusChange(Contact) {
+  onStatusChange(row) {
     const confirmation = {
       code: 'delete',
-      title: 'Are you sure ?',
-      status: Contact['status']
+      title: 'delete Info',
+      description: `Are you sure you want to delete ?`,
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .pipe(
@@ -1193,25 +1196,32 @@ export class AddContractorComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           if (res === true) {
-              this.contractorService.deleteContractorContact(Contact._id)
-                .pipe(
-                  takeUntil(this.destroy$)
-                )
-                .subscribe(
-                  (res1) => {
-                    this.contractorContactInfo.filter(
-                      (contact) => {
-                        return contact._id !== Contact._id;
-                      }
-                    );
-                    this.contactList.next(this.contractorContactInfo.slice());
-                    console.log('contractorContactInfo', this.contractorContactInfo);
-                    console.log('contactList', this.contactList);
-                    this.contractorService.getContractorsContact(
-                      `?contractor_code=${atob(this.contractorFilter.cc)}&email_address=${atob(this.contractorFilter.ea)}`
-                    );
-                  }
-                );
+            let code = '';
+            let index = 0;
+            let element = null;
+           if (row.formGroupName === 'CONTACT') {
+             code = row.data.contractorContactKey?.contractor_code ? row.data.contractorContactKey?.contractor_code : row.data.contractor_code;
+             element = this.contractorContactInfo.filter(x => x.contractorContactKey?.contractor_code === code || x.contractor_code === code)[0];
+             index = this.contractorContactInfo.indexOf(element);
+             if (index !== -1) {
+               this.contractorContactInfo.splice(index, 1);
+               this.contactList.next(this.contractorContactInfo.slice());
+               if (row.data._id) {
+                 this.contractorService.disableContractorContact(row.data._id)
+                   .pipe(
+                     takeUntil(this.destroy$)
+                   )
+                   .subscribe(
+                     (res1) => {
+
+                     }
+                   );
+               }
+             }
+             this.utilsService.openSnackBar('contact deleted successfully', 'close');
+
+           }
+
             this.subscriptionModal.unsubscribe();
           }
         }
@@ -1230,7 +1240,7 @@ export class AddContractorComponent implements OnInit, OnDestroy {
         break;
       case ('update'): this.setContractorContact(rowAction.data);
         break;
-      case('delete'):  this.onStatusChange(rowAction.data);
+      case('delete'):  this.onStatusChange(rowAction);
     }
   }
 

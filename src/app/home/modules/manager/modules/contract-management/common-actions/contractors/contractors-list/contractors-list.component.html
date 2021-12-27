@@ -4,9 +4,10 @@
   [tableCode]="'CONTRACTOR_S'"
   [isLoading]="isLoading"
   [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
-  [allowedActions]="{ update: true, delete: true, show: false }"
+  [allowedActions]="['update', 'disabled','active']"
   (rowActionData)="switchAction($event)"
   (pagination)="loadMoreItems($event)"
+  [setAvatar]="{columnCode:'email_address', imgSrc: 'photo' }"
 >
 </wid-dynamic-data-table>
 <!--         END        -->
