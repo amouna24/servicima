@@ -50,6 +50,9 @@ export interface IFieldsObject {
   formControlName?: string;
   selectFieldList ?: BehaviorSubject<IViewParam[]>;
   searchControlName?: string;
+  min?: number;
+  max?: number;
+  required?: boolean;
   filteredList ?: ReplaySubject<IViewParam[]>;
   canUpdate ?: BehaviorSubject<boolean>;
   canAdd ?: BehaviorSubject<boolean>;

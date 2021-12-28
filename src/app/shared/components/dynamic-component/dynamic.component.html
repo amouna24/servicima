@@ -25,16 +25,16 @@
             <ng-container *ngIf="mi.child.length > 0; else ChildMI">
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
                              [ngClass]="childSelected(mi.titleKey) ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
-                             (click)="scroll(mi.titleKey)"> {{ mi.title }} </mat-list-item>
+                             (click)="scroll(mi.titleKey)"> {{ mi.title | translate }} </mat-list-item>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
                              [ngClass]="childMI.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-14 m-l-20' : 'steel-two font-size-14 m-l-20'"
                              *ngFor="let childMI of mi.child"
-                             (click)="scroll(childMI.titleKey)"> {{ childMI.title }} </mat-list-item>
+                             (click)="scroll(childMI.titleKey)"> {{ childMI.title | translate }} </mat-list-item>
             </ng-container>
             <ng-template #ChildMI>
               <mat-list-item [ngStyle]="{cursor: 'pointer'}"
                              [ngClass]="mi.titleKey === valueOfSelectedItem ? 'cerulean-blue font-size-16' : 'steel font-size-16'"
-                             (click)="scroll('#' + mi.titleKey)"> {{ mi.title }} </mat-list-item>
+                             (click)="scroll('#' + mi.titleKey)"> {{ mi.title | translate }} </mat-list-item>
             </ng-template>
           </mat-list>
         </div>
@@ -65,7 +65,7 @@
 
                   <!------------------------ TITLE  ------------------------->
                   <div fxLayout="row">
-                    <h1 class="steel font-size-18">{{ chMI.title }}</h1>
+                    <h1 class="steel font-size-18">{{ chMI.title | translate }}</h1>
                   </div>
                   <!--------------------------------------------------------->
 
@@ -83,12 +83,12 @@
                              fxLayoutAlign="space-evenly center">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -96,11 +96,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -110,13 +110,13 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -129,12 +129,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -144,7 +144,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -179,12 +179,12 @@
                              fxLayoutAlign="start center">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -192,11 +192,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -206,13 +206,13 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -225,12 +225,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label |translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -240,7 +240,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -275,12 +275,12 @@
                              fxLayoutAlign="space-evenly center">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="87">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -288,11 +288,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -302,13 +302,13 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -321,12 +321,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="87">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -336,7 +336,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="87">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -371,12 +371,14 @@
                              fxLayoutAlign="space-evenly center">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }}:
                               </mat-label>
+
                               <mat-form-field appearance="outline">
+
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" >
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -384,11 +386,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -398,13 +400,13 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}"  matInput
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -417,12 +419,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -432,7 +434,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -468,12 +470,12 @@
                           <div fxLayout="column" fxFlex="40">
                             <ng-container *ngFor="let sf of ff.fields">
                               <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -481,11 +483,11 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -495,13 +497,13 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -514,12 +516,12 @@
 
                               </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <mat-select disableOptionCentering panelClass="panelColor"
-                                              placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                              placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                     <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                       {{v.viewValue}}
                                     </mat-option>
@@ -529,7 +531,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
@@ -558,11 +560,11 @@
                           <div fxLayout="column" fxFlex="40" fxLayoutAlign="center stretch" [style]="{height: '100%'}">
                             <ng-container *ngFor="let sf of ff.fields">
                               <div *ngIf="sf.type === 'textarea'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                <textarea matInput placeholder="{{ sf.placeholder }}" rows="7"
+                                <textarea matInput placeholder="{{ sf.placeholder | translate }}" rows="7"
                                           formControlName="{{sf.formControlName}}"></textarea>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
@@ -582,12 +584,12 @@
                           <div fxLayout="column" fxFlex="40">
                             <ng-container *ngFor="let sf of ff.fields">
                               <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -595,11 +597,11 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -609,13 +611,13 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -628,12 +630,12 @@
 
                               </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <mat-select disableOptionCentering panelClass="panelColor"
-                                              placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                              placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                     <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                       {{v.viewValue}}
                                     </mat-option>
@@ -643,7 +645,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
@@ -705,12 +707,12 @@
                           <div fxLayout="column" fxFlex="40">
                             <ng-container *ngFor="let sf of ff.fields">
                               <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -718,11 +720,11 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                  <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
@@ -732,13 +734,13 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                                <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <div fxLayout="row" fxFlex="100">
                                   <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                     <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
@@ -751,12 +753,12 @@
 
                               </div>
                               <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
-                                  {{ sf.label }} :
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                  {{ sf.label | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
                                   <mat-select disableOptionCentering panelClass="panelColor"
-                                              placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                              placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                     <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                       {{v.viewValue}}
                                     </mat-option>
@@ -766,7 +768,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                                <mat-label class="black font-size-12">
+                                <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
@@ -810,7 +812,7 @@
 
                 <!------------------------ TITLE  ------------------------->
                 <div fxLayout="row">
-                  <h1 class="steel font-size-18">{{ mi.title }}</h1>
+                  <h1 class="steel font-size-18">{{ mi.title | translate }}</h1>
                 </div>
                 <!--------------------------------------------------------->
                 <wid-skeleton-loader
@@ -828,12 +830,12 @@
                            fxLayoutAlign="space-evenly center">
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                     placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -841,11 +843,11 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -855,8 +857,8 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -874,12 +876,12 @@
 
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }"  >
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <mat-select disableOptionCentering panelClass="panelColor"
-                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                          placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                   {{v.viewValue}}
                                 </mat-option>
@@ -889,7 +891,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
+                            <mat-label class="black font-size-12"  [ngClass]="{'required': sf.required  }" >
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
@@ -914,8 +916,8 @@
                             <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
                           </div>
                           <div *ngIf="sf.type === 'themeRadioGroup'" fxLayout="column" fxFlex="87">
-                            <mat-label fxLayout="row">
-                              {{sf.label }}:
+                            <mat-label fxLayout="row" [ngClass]="{'required': sf.required  }" >
+                              {{sf.label | translate }}:
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                             <wid-scrollbar   class="full-width resume-container">
@@ -943,12 +945,12 @@
                            fxLayoutAlign="start center">
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                     placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -956,11 +958,11 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -970,8 +972,8 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -989,12 +991,12 @@
 
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <mat-select disableOptionCentering panelClass="panelColor"
-                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                          placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                   {{v.viewValue}}
                                 </mat-option>
@@ -1004,7 +1006,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
@@ -1054,12 +1056,12 @@
 
                           </div>
                           <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                     placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1067,11 +1069,11 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1081,8 +1083,8 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -1100,12 +1102,12 @@
 
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <mat-select disableOptionCentering panelClass="panelColor"
-                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                          placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                   {{v.viewValue}}
                                 </mat-option>
@@ -1115,7 +1117,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-label class="black font-size-12">
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
@@ -1150,12 +1152,12 @@
                            fxLayoutAlign="space-evenly center">
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="87">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                     placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1163,11 +1165,11 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="87">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1177,8 +1179,8 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="87">
-                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -1196,12 +1198,12 @@
 
                           </div>
                           <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="87">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <mat-select disableOptionCentering panelClass="panelColor"
-                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                          placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                   {{v.viewValue}}
                                 </mat-option>
@@ -1211,7 +1213,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="87">
-                            <mat-label class="black font-size-12">
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
@@ -1322,12 +1324,12 @@
                            fxLayoutAlign="space-evenly center">
                         <ng-container *ngFor="let sf of ff.fields">
                           <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <input type="{{ sf.inputType }}" (keyup)="keyUpHandler($event.target)" matInput
-                                     placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" value="">
+                                     placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" value="">
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1335,11 +1337,11 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                              <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                               <mat-datepicker #datepicker color="primary"></mat-datepicker>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1349,8 +1351,8 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                              {{ sf.label }} :
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -1367,13 +1369,13 @@
                             </div>
 
                           </div>
-                          <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
-                              {{ sf.label }} :
+                          <div *ngIf="sf.type === 'select'"  fxLayout="column" fxFlex="40">
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required }">
+                              {{ sf.label | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
                               <mat-select disableOptionCentering panelClass="panelColor"
-                                          placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                          placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                   {{v.viewValue}}
                                 </mat-option>
@@ -1383,7 +1385,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="40">
-                            <mat-label class="black font-size-12">
+                            <mat-label class="black font-size-12" [ngClass]="{'required': sf.required }">
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
@@ -1419,12 +1421,12 @@
                         <div fxLayout="column" fxFlex="40">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1432,11 +1434,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1446,8 +1448,8 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -1465,12 +1467,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -1480,7 +1482,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -1509,11 +1511,11 @@
                         <div fxLayout="column" fxFlex="40" fxLayoutAlign="center stretch" [style]="{height: '100%'}">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'textarea'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="{{ sf.placeholder }}" rows="7"
+                              <textarea matInput placeholder="{{ sf.placeholder | translate }}" rows="7"
                                         formControlName="{{sf.formControlName}}"></textarea>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
@@ -1533,12 +1535,12 @@
                         <div fxLayout="column" fxFlex="40">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1546,11 +1548,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1560,8 +1562,8 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
@@ -1579,12 +1581,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -1594,7 +1596,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
@@ -1658,12 +1660,12 @@
                         <div fxLayout="column" fxFlex="40">
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'input'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                       placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1671,11 +1673,11 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="datePickerFilter" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder }}">
+                                <input matInput [matDatepicker]="datepicker" min="{{sf.minDate}}" [matDatepickerFilter]="" formControlName="{{sf.formControlName}}" placeholder="{{ sf.placeholder | translate }}">
                                 <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #datepicker color="primary"></mat-datepicker>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
@@ -1685,13 +1687,13 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
-                              <mat-label class="black font-size-12" fxLayout="row" fxFlex="100">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1704,12 +1706,12 @@
 
                             </div>
                             <div *ngIf="sf.type === 'select'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
-                                {{ sf.label }} :
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }">
+                                {{ sf.label | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
                                 <mat-select disableOptionCentering panelClass="panelColor"
-                                            placeholder="{{ sf.placeholder }}" formControlName="{{sf.formControlName}}">
+                                            placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}">
                                   <mat-option *ngFor="let v of sf.selectFieldList.getValue()" [value]="v.value">
                                     {{v.viewValue}}
                                   </mat-option>
@@ -1719,7 +1721,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'selectWithSearch'" fxLayout="column" fxFlex="100">
-                              <mat-label class="black font-size-12">
+                              <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" >
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">

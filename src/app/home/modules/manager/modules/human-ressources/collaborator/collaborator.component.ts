@@ -144,22 +144,22 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   profileItems: IDynamicMenu[] = [
     {
-      title: 'Personal Data',
+      title: 'personal_data_all',
       titleKey: 'PERSONAL_DATA',
       child: []
     },
     {
-      title: 'Identity Document',
+      title: 'identity_doc_all',
       titleKey: 'IDENTITY_DOCUMENT',
       child: []
     },
     {
-      title: 'Contract',
+      title: 'contract_all',
       titleKey: 'CONTRACT',
       child: []
     },
     {
-      title: 'Previous Contract',
+      title: 'previous_contract_all',
       titleKey: 'PREVIOUS_CONTRACT',
       child: []
     },
@@ -174,17 +174,17 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Goals',
+      title: 'goal_all',
       titleKey: 'GOAL',
       child: []
     },
     {
-      title: 'Children',
+      title: 'child_all',
       titleKey: 'CHILDREN',
       child: []
     },
     {
-      title: 'Emergency Contact',
+      title: 'emergency_contact_all',
       titleKey: 'EMERGENCY_CONTACT',
       child: []
     },
@@ -194,7 +194,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Equipment',
+      title: 'equipment_all',
       titleKey: 'EQUIPMENT',
       child: []
     }
@@ -231,18 +231,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         'fieldsLayout': FieldsAlignment.tow_items_with_image_at_right,
         'fields': [
           {
-            label: 'First name',
-            placeholder: 'First name',
+            label: 'first_name_all',
+            placeholder: 'first_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
-            formControlName: 'first_name'
+            formControlName: 'first_name',
+            required: true
+
           },
           {
-            label: 'Last name',
-            placeholder: 'Last name',
+            label: 'last_name_all',
+            placeholder: 'last_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
-            formControlName: 'last_name'
+            formControlName: 'last_name',
+            required: true
           },
           {
             type: FieldsType.IMAGE,
@@ -261,18 +264,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Email',
+            label: 'email_all',
             placeholder: 'exp@email.com',
             type: FieldsType.INPUT,
             inputType: InputType.EMAIL,
             formControlName: 'email_address',
+            required: true
           },
           {
-            label: 'Phone',
+            label: 'phone_all',
             placeholder: '+216 123 456 78',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
-            formControlName: 'phone'
+            formControlName: 'phone',
+            required: true
           },
         ],
       },
@@ -281,13 +286,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Birth date',
+            label: 'birth_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
+            required: true
+
           },
           {
-            label: 'Gender',
+            label: 'gender_all',
             placeholder: 'Gender',
             type: FieldsType.SELECT,
             selectFieldList: this.genderList,
@@ -300,8 +307,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Birth country',
-            placeholder: 'birth country',
+            label: 'birth_country_all',
+            placeholder: 'birth_country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             formControlName: 'birth_country_id',
@@ -309,8 +316,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
           },
           {
-            label: 'Birth city',
-            placeholder: 'birth city',
+            label: 'birth_city_all',
+            placeholder: 'birth_city_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'birth_city',
@@ -322,8 +329,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Adress',
-            placeholder: 'full adress here',
+            label: 'address_label_all',
+            placeholder: 'address_placeholder_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'adress',
@@ -335,8 +342,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Country',
-            placeholder: 'Country',
+            label: 'country_all',
+            placeholder: 'country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             formControlName: 'country_id',
@@ -356,15 +363,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Family situation',
-            placeholder: 'family situation',
+            label: 'family_sit_all',
+            placeholder: 'family_sit_all',
             type: FieldsType.SELECT,
             selectFieldList: this.familySituationList,
             formControlName: 'family_situation_id',
           },
           {
-            label: 'Nationality',
-            placeholder: 'nationality',
+            label: 'natio_all',
+            placeholder: 'natio_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredNationalities,
             searchControlName: 'nationalityFilterCtrl',
@@ -377,15 +384,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Registration number',
-            placeholder: 'registration number',
+            label: 'registre_nbr_all',
+            placeholder: 'registre_nbr_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'registration_number',
           },
           {
-            label: 'Social security number',
-            placeholder: 'social security number',
+            label: 'social_sec_all',
+            placeholder: 'social_sec_all',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'social_secu_nbr',
@@ -397,7 +404,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_at_left,
         fields: [
           {
-            label: 'Medical exam date',
+            label: 'medical_exam_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'medical_exam_date',
@@ -429,14 +436,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Document type',
-            placeholder: 'document type',
+            label: 'doc_type_all',
+            placeholder: 'doc_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.documentTypeList,
             formControlName: 'type',
           },
           {
-            label: 'validity date',
+            label: 'valid_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'validity_date',
@@ -448,8 +455,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'file',
             inputType: InputType.TEXT,
@@ -472,15 +479,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'contract_rate',
+            min: 0
           },
           {
-            label: 'Currency',
-            placeholder: 'Currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
@@ -493,13 +501,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -511,14 +519,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Assignment Date',
+            label: 'date_assign_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_date',
           },
           {
-            label: 'Contract type',
-            placeholder: 'Contract type',
+            label: 'contract_type_all',
+            placeholder: 'contract_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
@@ -530,8 +538,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
@@ -569,15 +577,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Company Name',
-            placeholder: 'company name',
+            label: 'company_name_all',
+            placeholder: 'company_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'company_name',
           },
           {
-            label: 'Country',
-            placeholder: 'country',
+            label: 'country_all',
+            placeholder: 'country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             searchControlName: 'countryFilterCtrl',
@@ -590,13 +598,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -608,15 +616,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
+            min: 0,
             formControlName: 'contract_rate',
           },
           {
-            label: 'Currency',
-            placeholder: 'currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
@@ -628,15 +637,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Contract Type',
-            placeholder: 'contract type',
+            label: 'contract_type_all',
+            placeholder: 'contract_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
           },
           {
-            label: 'Job title',
-            placeholder: 'job title',
+            label: 'job_title_all',
+            placeholder: 'job_title_all',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -683,13 +692,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_start_date',
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_end_date',
@@ -701,15 +710,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'extension_rate',
           },
           {
-            label: 'Job title',
-            placeholder: 'job title',
+            label: 'job_title_all',
+            placeholder: 'job_title_all',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -721,15 +730,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Currency',
-            placeholder: 'currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'extension_currency_cd',
           },
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
@@ -777,15 +786,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Evaluation main mission',
-            placeholder: 'main mission',
+            label: 'evaluation_mission_all',
+            placeholder: 'evaluation_mission_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'main_mission',
           },
           {
-            label: 'Report',
-            placeholder: 'report',
+            label: 'report_all',
+            placeholder: 'report_all',
             type: FieldsType.INPUT,
             formControlName: 'report',
           },
@@ -797,13 +806,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_start_date',
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_end_date',
@@ -816,8 +825,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'evaluation_doc',
             inputType: InputType.TEXT,
@@ -864,15 +873,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Description',
-            placeholder: 'description',
+            label: 'invoice.descriptionLine',
+            placeholder: 'invoice.descriptionLine',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'description',
           },
           {
-            label: 'Expected result',
-            placeholder: 'expected result',
+            label: 'expected_result_all',
+            placeholder: 'expected_result_all',
             type: FieldsType.INPUT,
             formControlName: 'expected_result',
           },
@@ -884,7 +893,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_at_left,
         fields: [
           {
-            label: 'Deadline',
+            label: 'deadline_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'deadline',
@@ -927,14 +936,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Full name',
-            placeholder: 'full name',
+            label: 'first_name_all',
+            placeholder: 'first_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
           },
           {
-            label: 'Birth date',
+            label: 'birth_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
@@ -983,8 +992,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             formControlName: 'full_name',
           },
           {
-            label: 'Phone',
-            placeholder: 'Phone',
+            label: 'phone_all',
+            placeholder: 'phone_all',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'phone',
@@ -1007,8 +1016,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Bank name',
-            placeholder: 'bank name',
+            label: 'bank_name_all',
+            placeholder: 'bank_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'bank_name',
@@ -1064,8 +1073,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Equipment',
-            placeholder: 'equipment',
+            label: 'equipment_all',
+            placeholder: 'equipment_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'equipment_name',
