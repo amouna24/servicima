@@ -164,7 +164,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Contract Extension',
+      title: 'contract_ext_all',
       titleKey: 'CONTRACT_EXTENSION',
       child: []
     },
@@ -189,7 +189,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Banking Informations',
+      title: 'banking_info_all',
       titleKey: 'BANKING',
       child: []
     },
