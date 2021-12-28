@@ -17,7 +17,7 @@ export const managerMenu: IMenu[] = [
     },
   {
     state: 'payslip',
-    name: 'Payslip',
+    name: 'payslip',
     type: 'link',
     icon: 'wi-recruitment',
     feature: 'SOURCING_ACCESS',
@@ -222,21 +222,21 @@ export const managerMenu: IMenu[] = [
     },
   {
     state: 'resume',
-    name: 'Resume management',
+    name: 'resume-management',
     type: 'sub',
     icon: 'wi-billings',
     feature: 'CONTRACT_ACCESS',
     children: [
       {
         state: '',
-        name: 'Resume List',
+        name: 'resume-list',
         icon: 'wi_dashboard',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
       {
         state: 'history',
-        name: 'Mailing history',
+        name: 'mailing_history',
         icon: 'wi-user',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
@@ -244,7 +244,7 @@ export const managerMenu: IMenu[] = [
 ]},
   {
     state: 'linkedin',
-    name: 'Share on Social Network',
+    name: 'share-on-social',
     icon: 'wi_dashboard',
     feature: 'CONTRACT_ACCESS',
     type: 'link',

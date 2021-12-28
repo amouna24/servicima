@@ -11,33 +11,33 @@
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <mat-list role="list"    >
-              <mat-list-item role="listitem" class="black font-size-12">Contract start on: {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">Contract end on: {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_contract_certif_start' | translate}}: {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_contract_certif_end' | translate}}: {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
             <mat-list role="list">
-              <mat-list-item role="listitem" class="black font-size-12">Address: {{ certificate.address ? certificate.address : 'No Address For collaborator' }}</mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">Nationality: {{ certificate.nationality_id ? certificate.nationality_id : 'No nationality' }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_address_certif' | translate}}: {{ certificate.address ? certificate.address : 'No Address For collaborator' }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_nationality_certif' | translate}}: {{ certificate.nationality_id ? certificate.nationality_id : 'No nationality' }}</mat-list-item>
             </mat-list>
           </div>
         </div>
       </section>
       <section fxLayout="column" fxFlex="80" style="margin-left: 2%;" >
         <div fxLayout="row">
-          <h1 class="steel font-size-18">Request information: </h1>
+          <h1 class="steel font-size-18">{{ 'rh_request_information' | translate}}: </h1>
         </div>
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <mat-list role="list" >
-              <mat-list-item role="listitem" class="black font-size-12">Request date: {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">Request Response : {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_request_certif_date' | translate}} : {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_reponse_certif_date' | translate}} : {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <div  fxLayout="column" fxFlex="40" *ngIf="!collaborator">
               <div class="black font-size-12">
-                Language  {{ certificate.language }}
+                {{ 'rh_language_cerif_show' | translate}} {{ certificate.language }}
               </div>
 
 
@@ -47,7 +47,7 @@
         </div>
         <div fxLayout="column wrap"  fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
           <mat-list role="list">
-            <mat-list-item role="listitem" class="black font-size-12">Comment: {{ certificate.comment }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_comment_certif' | translate}}: {{ certificate.comment }}</mat-list-item>
 
           </mat-list>
 

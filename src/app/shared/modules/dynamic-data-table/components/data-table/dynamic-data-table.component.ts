@@ -95,7 +95,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   columnStatus: string[] = [];
   defaultRes: any;
   searchT: { columns: string, filterValue: string, operator: string, defaultValue: string };
-  andOr: string[] = [];
   viewColumns = [];
   constructor(
     private dynamicDataTableService: DynamicDataTableService,
@@ -113,6 +112,22 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
+  }
+
+  async ngOnInit() {
+    this.initForm();
+    await this.connectedUser();
+    await this.getRefData();
+    this.getDataSource();
+    this.getDataList();
+    this.itemsPerPageControl.valueChanges
+      .subscribe(
+        () => {
+          this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0,  search: this.searchT,   searchBoolean: this.searchBoolean});
+          this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
+        },
+      );
+    this.showAllText = false;
   }
 
   /**
@@ -165,14 +180,13 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   /**
-   * @description  Delete filter
+   * @description  Delete line filter
    */
-  delete(index: number) {
-    this.andOr.splice(index, 1);
+  deleteLineFilter(index: number) {
     this.getListFilter().removeAt(index);
     this.tableData.next(this.defaultRes);
     this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0, search: ''});
-    this.currentPage = this.nbrPages[0];
+    this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
     this.searchT = null;
   }
 
@@ -184,9 +198,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   }
 
   /**
-   * @description : selected select
+   * @description : selected column
+   * @param type: type of column
+   * @param index: index of column
    */
-  selected(type: string, index: number) {
+  selected(type: string, index: number): void {
     this.searchT = null;
     this.selections = [];
     this.keyColumnDesc = '';
@@ -221,7 +237,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description : attribute column to selection
    * @param column: column code
    */
-  switchColumn(column: string) {
+  switchColumn(column: string): string {
     switch (column) {
       case 'language_id':
         this.selections = this.appInitializerService.languageList;
@@ -305,23 +321,10 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
           : { 'column': '', value: '' } }, listColumns: listProps},  );
   }
 
-  async ngOnInit() {
-    this.initForm();
-    await this.connectedUser();
-    await this.getRefData();
-    this.getDataSource();
-    this.getDataList();
-    this.itemsPerPageControl.valueChanges
-      .subscribe(
-        () => {
-          this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0,  search: this.searchT,   searchBoolean: this.searchBoolean});
-          this.currentPage = this.nbrPages[0];
-        },
-      );
-    this.showAllText = false;
-  }
-
-  getDataSource() {
+  /**
+   * @description : get data source
+   */
+  getDataSource(): void {
     this.tableData.subscribe((res) => {
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
@@ -362,7 +365,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @param columns: columns
    * @param res: res
    *************************************************************************/
-  findColumnDescription(columns, res) {
+  findColumnDescription(columns, res): void {
     columns.map((element) => {
       if (element.prop !== 'rowItem' || element.prop !== 'rowItem1') {
         element['name'] = res.find((type) =>
@@ -374,7 +377,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   /**************************************************************************
    * @description get data list
    *************************************************************************/
-  getDataList() {
+  getDataList(): void {
     this.languageCode = this.localStorageService.getItem('language').langCode;
     this.languageId = this.localStorageService.getItem('language').langId;
     this.temp = this.tableData?.getValue()['results'] ? [...this.tableData?.getValue()['results']] :
@@ -459,7 +462,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @param color: color of line
    * @param checked: checked or not
    *************************************************************************/
-  changeColorAndCheckRow(color: string, checked: boolean) {
+  changeColorAndCheckRow(color: string, checked: boolean): void {
     (this.tableData.getValue()?.length ? this.tableData.getValue() : this.tableData.getValue()['results']).map((data) => {
       data['color'] = color;
       data['checked'] = checked;
@@ -470,7 +473,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description change status
    * @param status: status
    *************************************************************************/
-  showWithStatus(status: string) {
+  showWithStatus(status: string): void {
     this.changeStatus.emit(status);
     if (this.status === 'ACTIVE') {
       this.status = 'DISABLED';
@@ -513,7 +516,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description select all checkbox
    * @param event: event
    *************************************************************************/
-  selectAll(event: MatCheckboxChange) {
+  selectAll(event: MatCheckboxChange): void {
     if (event.checked) {
       if (this.listChecked.length === 0) {
         this.listChecked = this.tableData.getValue()?.length ? this.tableData.getValue() : this.tableData.getValue()['results'];
@@ -726,7 +729,6 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description display description
    *************************************************************************/
   convertData() {
-    console.log(Object.values(this.dataSource), 'data source');
     Object.values(this.dataSource).map((dataS) => {
       if (dataS['application_id']) {
         dataS['application_id'] = this.utilService.getApplicationName(dataS['application_id']);
@@ -796,7 +798,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     switch (type) {
       case 'first-page' : {
         this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0,  search: this.searchT,   searchBoolean: this.searchBoolean});
-        this.currentPage = this.nbrPages[0];
+        this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
       }
         break;
       case 'previous-page' : {

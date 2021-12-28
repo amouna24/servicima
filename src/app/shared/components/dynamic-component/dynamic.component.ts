@@ -32,7 +32,6 @@ export class DynamicComponent implements OnInit, OnDestroy {
   @Output() keyUpEventValue = new EventEmitter<string>();
   @Output() listOfObjects = new EventEmitter<{ form: FormGroup, action: string, formGroupName: string }>();
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any, formGroupName: string }>();
-
   /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/

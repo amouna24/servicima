@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContractsService } from '@core/services/contracts/contracts.service';
 import { UserService } from '@core/services/user/user.service';
@@ -36,6 +36,31 @@ import { ModalService } from '@core/services/modal/modal.service';
 })
 export class AddContractComponent implements OnInit, OnDestroy {
 
+  constructor(
+    private contractsService: ContractsService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private utilsService: UtilsService,
+    private translateService: TranslateService,
+    private contractorService: ContractorsService,
+    private appInitializerService: AppInitializerService,
+    private assetsDataService: AssetsDataService,
+    private companyPaymentTermsService: CompanyPaymentTermsService,
+    private sheetService: SheetService,
+    private uploadService: UploadService,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private route: ActivatedRoute,
+    private refDataService: RefdataService,
+    private localStorageService: LocalStorageService,
+    private profileService: ProfileService,
+    private companyTimeSheetService: TimesheetSettingService,
+    private modalServices: ModalService,
+
+  ) {
+    this.contractForm = new FormGroup({ });
+  }
+
   /**************************************************************************
    * @description Input from child's Components [SUPPLIERS, CLIENTS]
    *************************************************************************/
@@ -52,8 +77,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
   statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentTermsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorsList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  vatList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   collaboratorList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   projectList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  contractorContactList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   staffList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractorContacts: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contractExtensionInfo = [];
@@ -69,6 +96,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   canUpdateProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   companyTimesheet: ICompanyTimesheetSettingModel;
+  paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description Declaring Form Group
@@ -106,7 +134,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
   /**************************************************************************
    * @description list of Data filtered by search keyword
    *************************************************************************/
-  public filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredStatus: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredPayment: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredVat: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
 
   avatar: any;
   selectedContractFile = { file: FormData, name: ''};
@@ -169,9 +200,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Status',
           placeholder: 'Status',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
-          formControlName: 'contract_status'
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredStatus,
+          formControlName: 'contract_status',
+          searchControlName: 'contractStatusFilter'
         },
       ],
     },
@@ -222,7 +254,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           label: 'Contractor signer',
           placeholder: 'exp@email.com',
           type: FieldsType.SELECT,
-          selectFieldList: this.contractorContacts,
+          selectFieldList: this.contractorContactList,
           formControlName: 'signer_contractor_email',
         },
       ],
@@ -259,9 +291,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Currency',
           placeholder: 'Currency',
-          type: FieldsType.SELECT,
-          selectFieldList: this.currencyList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
+          searchControlName: 'filterCurrencyControl'
         },
       ],
     },
@@ -272,9 +305,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Payment',
           placeholder: 'Payment',
-          type: FieldsType.SELECT,
-          selectFieldList: this.paymentTermsList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredPayment,
           formControlName: 'payment_terms',
+          searchControlName: 'contractPaymentFilter'
         },
       ],
     },
@@ -378,9 +412,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Currency',
           placeholder: 'Currency',
-          type: FieldsType.SELECT,
-          selectFieldList: this.currencyList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
           formControlName: 'extension_currency_cd',
+          searchControlName: 'filterCurrencyControl'
         },
       ],
     },
@@ -391,9 +426,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Status',
           placeholder: 'Status',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredStatus,
           formControlName: 'extension_status',
+          searchControlName: 'filterStatusControl'
         },
         {
           label: 'Attachments',
@@ -491,9 +527,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'Currency',
           placeholder: 'Currency',
-          type: FieldsType.SELECT,
-          selectFieldList: this.currencyList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCurrencies,
           formControlName: 'rate_currency',
+          searchControlName: 'filterCurrencyControl'
         },
       ],
     },
@@ -504,16 +541,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'VAT',
           placeholder: 'VAT',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
-          formControlName: 'vat_nbr'
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredVat,
+          formControlName: 'vat_nbr',
+          searchControlName: 'filterVatControl'
         },
         {
           label: 'Status',
           placeholder: 'Status',
-          type: FieldsType.SELECT,
-          selectFieldList: this.statusList,
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredStatus,
           formControlName: 'project_status',
+          searchControlName: 'filterStatusControl'
         },
         {
           label: 'Comment',
@@ -612,31 +651,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
     },
   ]);
 
-  constructor(
-    private contractsService: ContractsService,
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private utilsService: UtilsService,
-    private translateService: TranslateService,
-    private contractorService: ContractorsService,
-    private appInitializerService: AppInitializerService,
-    private assetsDataService: AssetsDataService,
-    private companyPaymentTermsService: CompanyPaymentTermsService,
-    private sheetService: SheetService,
-    private uploadService: UploadService,
-    private sanitizer: DomSanitizer,
-    private router: Router,
-    private route: ActivatedRoute,
-    private refDataService: RefdataService,
-    private localStorageService: LocalStorageService,
-    private profileService: ProfileService,
-    private companyTimeSheetService: TimesheetSettingService,
-    private modalServices: ModalService,
-
-  ) {
-    this.contractForm = new FormGroup({ });
-  }
-
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
@@ -651,34 +665,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
         if (this.canUpdate(params.id)) {
           this.contractId = params.id;
           this.getContractByID(params);
+          console.log('my contract info ', this.contractInfo);
         }
       });
     this.sheetService.registerSheets(
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
-    this.contractForm.get('INFORMATION').valueChanges.subscribe(selectedValue => {
-      selectedValue?.contractor_code !== '' ?
-        this.getContractorContact(selectedValue?.contractor_code).then(
-          (data) => {
-            this.contractorContacts.next(data);
-            this.dynamicForm.getValue()[3].fields[1] = {
-              label: 'Contractor signer',
-              placeholder: 'exp@email.com',
-              type: FieldsType.SELECT,
-              selectFieldList: this.contractorContacts,
-              formControlName: 'signer_contractor_email',
-          };
-          }) :
-        this.dynamicForm.getValue()[3].fields[1] = {
-          label: 'Contractor signer',
-          placeholder: 'exp@email.com',
-          type: FieldsType.SELECT,
-          selectFieldList: this.contractorContacts,
-          formControlName: 'signer_contractor_email',
-        };
-      selectedValue.contract_start_date !== '' ? this.minDate.next(new Date(selectedValue.contract_start_date)) : this.minDate.next('');
-    });
+    this.getSignerContractor();
+
   }
 
   /**************************************************************************
@@ -710,6 +705,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
     this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
       return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
     }));
+    this.filteredCurrencies.next(this.currencyList.value);
+    this.utilsService.changeValueField(this.currencyList.value,
+      this.contractForm.controls.RATE['controls'].filterCurrencyControl,
+      this.filteredCurrencies
+    );
+    this.utilsService.changeValueField(this.currencyList.value,
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].filterCurrencyControl,
+      this.filteredCurrencies
+    );
+    this.utilsService.changeValueField(this.currencyList.value,
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].filterCurrencyControl,
+      this.filteredCurrencies
+    );
     await this.profileService.getAllUser(this.companyEmail, 'STAFF')
       .subscribe((res) => {
         this.staffList.next(res['results'].map(
@@ -733,9 +741,35 @@ export class AddContractComponent implements OnInit, OnDestroy {
    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
-      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
+      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'PAYMENT_MODE' , 'GENDER', 'PROF_TITLES']
+    );
+   this.vatList.next(this.refDataService.refData['VAT']);
+   this.filteredVat.next(this.vatList.value);
+    this.utilsService.changeValueField(this.vatList.value,
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].filterVatControl,
+      this.filteredVat
+    );
+    this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
+    this.filteredPayment.next(this.paymentModeList.value);
+    this.utilsService.changeValueField(this.paymentModeList.value,
+      this.contractForm.controls.RATE['controls'].contractPaymentFilter,
+      this.filteredPayment
     );
     this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
+    this.filteredStatus.next(this.statusList.value);
+    this.utilsService.changeValueField(this.statusList.value,
+      this.contractForm.controls.INFORMATION['controls'].contractStatusFilter,
+      this.filteredStatus
+      );
+    this.utilsService.changeValueField(this.statusList.value,
+      this.contractForm.controls.CONTRACT_EXTENSION['controls'].filterStatusControl,
+      this.filteredStatus
+    );
+    this.utilsService.changeValueField(this.statusList.value,
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].filterStatusControl,
+      this.filteredStatus
+    );
+
     this.contractorService
       .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
       .pipe(
@@ -757,7 +791,43 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
       );
   }
+  /**************************************************************************
+   * @description Get Signer for specific contractor
+   *************************************************************************/
+   getSignerContractor(contractor_code?: string) {
+     console.log('contractor code ', contractor_code);
+     if (contractor_code === undefined) {
+       this.contractForm.get('INFORMATION').valueChanges.subscribe(selectedValue => {
+         if (selectedValue?.contractor_code !== '') {
+           this.getContractorContact(selectedValue?.contractor_code).then(
+             (data) => {
+               this.contractorContacts.next(data);
+               this.dynamicForm.getValue()[3].fields[1] = {
+                 label: 'Contractor signer',
+                 placeholder: 'exp@email.com',
+                 type: FieldsType.SELECT,
+                 selectFieldList: this.contractorContacts,
+                 formControlName: 'signer_contractor_email',
+               };
+             });
+         }
 
+       });
+     } else {
+       this.getContractorContact(contractor_code).then(
+         (data) => {
+           this.contractorContacts.next(data);
+           this.dynamicForm.getValue()[3].fields[1] = {
+             label: 'Contractor signer',
+             placeholder: 'exp@email.com',
+             type: FieldsType.SELECT,
+             selectFieldList: this.contractorContacts,
+             formControlName: 'signer_contractor_email',
+           };
+         });
+     }
+
+  }
   /**************************************************************************
    * @description Init form with initial data
    * empty if it's create contract + extension case
@@ -766,11 +836,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
   async initContractForm(contract: IContract) {
     this.contractForm = this.formBuilder.group({
       INFORMATION: this.formBuilder.group({
-        contractor_code: [contract === null ? null : contract.contractor_code],
+        contractor_code: [contract === null ? `${Math.random().toString(36).substring(7).toUpperCase()}` : contract.contractor_code],
         contract_date: [contract === null ? '' : contract.contract_date],
         contract_start_date: [contract === null ? '' : contract.contract_start_date],
         contract_end_date: [contract === null ? '' : contract.contract_end_date],
         contract_status: [contract === null ? '' : contract.contract_status],
+        contractStatusFilter: [''],
         attachments: [contract === null ? '' : await this.getFileNameAndUpdateForm(contract.attachments, 'INFORMATION')],
       }),
       SIGNER: this.formBuilder.group({
@@ -784,6 +855,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         currency_cd: [contract === null ? '' : contract.currency_cd],
         payment_terms: [contract === null ? '' : contract.payment_terms],
         filterCurrencyControl: [''],
+        contractPaymentFilter: [''],
         paymentTermsControl: [''],
       }),
       TIMESHEET: this.formBuilder.group({
@@ -799,6 +871,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
         extension_status: [''],
         extension_rate: [''],
         extension_currency_cd: [''],
+        filterCurrencyControl: [''],
+        filterStatusControl: [''],
         attachments: [''],
       }),
       CONTRACT_PROJECT: this.formBuilder.group({
@@ -810,6 +884,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
         project_rate: [''],
         rate_currency: [''],
         vat_nbr: [''],
+        filterCurrencyControl: [''],
+        filterStatusControl: [''],
+        filterVatControl: [''],
         project_status: [''],
         comment: [''],
       }),
@@ -832,7 +909,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractsService.getContracts(`?_id=${atob(params.id)}`),
       this.contractsService.getContractExtension(`?contract_code=${atob(params.cc)}&email_address=${atob(params.ea)}`),
       this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}&project_status=ACTIVE`),
-      this.contractsService.getCollaboratorProject(`?contract_code=${atob(params.cc)}&status=ACTIVE`)
+      this.contractsService.getCollaboratorProject(`?contract_code=${atob(params.cc)}&status=ACTIVE`),
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -840,6 +917,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .subscribe(
         async (res) => {
           this.contractInfo = res[0]['results'][0];
+          this.getSignerContractor(this.contractInfo.contractor_code);
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
           } else {
@@ -874,6 +952,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
            this.projectCollaboratorInfo = res[3]['results'];
 
          }
+
           this.projectCollaboratorInfo.map( (project) => {
 
             project.project_code = project.ProjectCollaboratorKey.project_code;
@@ -885,6 +964,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           this.extensionsList.next(this.contractExtensionInfo.slice());
           this.contractProjectList.next(this.contractProjectInfo.slice());
           this.projectCollaboratorList.next(this.projectCollaboratorInfo);
+          console.log('contractor ', this.contractorContactList.value);
           this.isLoading.next(false);
         },
         (error) => {
@@ -933,13 +1013,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (Contacts) => {
-            resolve(
-              Contacts.map(
-                (obj) => {
-                  return { value: obj.contractorContactKey.contractor_code, viewValue: obj.main_contact};
-                }
-              )
-            );
+            if (Contacts['msg_code'] !== '0004') {
+              resolve(
+                Contacts['results'].map(
+                  (obj) => {
+                    return { value: obj.contractorContactKey.contact_email, viewValue: obj.first_name + ' ' + obj.last_name};
+                  }
+                )
+              );
+            } else {
+              resolve([]);
+            }
+
           },
           (error) => {
             resolve(error);
@@ -994,8 +1079,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractInfo.contractKey.contract_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;
     Contract.email_address = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.email_address : this.userInfo.company[0].companyKey.email_address;
-/*    Contract.extension_code = this.canUpdate(this.contractId) ?
-      this.contractExtensionInfo.contractExtensionKey.extension_code : `${Math.random().toString(36).substring(7).toUpperCase()}`;*/
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
     if (this.canUpdate(this.contractId)) {
@@ -1189,13 +1272,97 @@ export class AddContractComponent implements OnInit, OnDestroy {
       } else {
         Contract.attachments = '';
       }
+      console.log('Contract management ', Contract);
       this.contractsService.addContract(Contract)
         .pipe(
           takeUntil(this.destroy$)
         )
         .subscribe(
-          (response) => {
-            this.utilsService.openSnackBar('Contract Created !', '', 2000);
+          async (response) => {
+            for (const extension of this.contractExtensionInfo) {
+              extension.application_id = Contract.application_id;
+              extension.email_address = Contract.email_address;
+              extension.contract_code = Contract.contract_code;
+              extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+              extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                type.viewValue === extension.extension_status)?.value;
+              if (extension.selectedExtensionFile.name !== '') {
+                extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+              }
+            await this.contractsService.addContractExtension(extension)
+                .pipe(
+                  takeUntil(
+                    this.destroy$
+                  )
+                )
+                .subscribe(
+                  async (res) => {
+
+                  },
+                  error => {
+                    console.log('error', error);
+                  },
+                  () => {
+
+                  }
+                );
+            }
+            for (const project of this.contractProjectInfo) {
+              project.application_id = Contract.application_id;
+              project.company_email = Contract.email_address;
+              project.contract_code = Contract.contract_code;
+              project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+              project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                type.viewValue === project.extension_status)?.value;
+              await this.contractsService.addContractProject(project)
+                .pipe(
+                  takeUntil(
+                    this.destroy$
+                  )
+                )
+                .subscribe(
+                  async (resp) => {
+                    this.utilsService.openSnackBar('Project Added !', '', 2000);
+
+                  },
+                  error => {
+                    console.log('error', error);
+                  },
+                  () => {
+
+                  }
+                );
+            }
+            for (const projectCollaborator of this.projectCollaboratorInfo ) {
+              projectCollaborator.contract_code = Contract.contract_code;
+              await this.contractsService.addProjectCollaborator(projectCollaborator)
+                .pipe(
+                  takeUntil(
+                    this.destroy$
+                  )
+                )
+                .subscribe(
+                  (resp1) => {
+                    if (resp1['msg_code'] === '0001') {
+                      this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                    } else {
+                      this.utilsService.openSnackBar('Project Collaborator Added !', '', 2000);
+
+                    }
+                  },
+                  error => {
+                    console.log('error', error);
+                  },
+                  () => {
+                  }
+                );
+
+            }
+            this.utilsService.openSnackBar('Contract Added Successfully !', '', 2000);
+
           },
           (error) => {
             console.log(error);
@@ -1204,45 +1371,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             itemsFetched += 1;
           }
         );
-      for (const extension of this.contractExtensionInfo) {
-        extension.application_id = Contract.application_id;
-        extension.email_address = Contract.email_address;
-        extension.contract_code = Contract.contract_code;
-        extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-          type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-        extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-          type.viewValue === extension.extension_status)?.value;
-        if (extension.selectedExtensionFile.name !== '') {
-          extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
-        }
-        this.contractsService.addContractExtension(extension)
-          .pipe(
-            takeUntil(
-              this.destroy$
-            )
-          )
-          .subscribe(
-            (res) => {
-              this.utilsService.openSnackBar('Extension Created !', '', 2000);
 
-            },
-            error => {
-              console.log('error', error);
-            },
-            () => {
-              itemsFetched += 1;
-              if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-                if (this.type === 'CLIENT') {
-                  this.router.navigate(
-                    ['/manager/contract-management/clients-contracts/contracts-list']);
-                } else if (this.type === 'SUPPLIER') {
-                  this.router.navigate(
-                    ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                }
-              }
-            }
-          );
-      }
     }
   }
 
@@ -1274,20 +1403,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             }
           );
-          this.contractForm.patchValue(
-            {
-              CONTRACT_EXTENSION: {
-                extension_code: '',
-
-                extension_start_date: '',
-                extension_end_date: '',
-                extension_rate: '',
-                extension_status: '',
-                extension_currency_cd: '',
-                attachments: '',
-              },
-            }
-          );
+          this.contractForm.controls.CONTRACT_EXTENSION.reset();
           this.canUpdateAction.next(false);
           this.canAddAction.next(true);
         }
@@ -1315,19 +1431,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             );
             this.extensionsList.next(this.contractExtensionInfo.slice());
-            this.contractForm.patchValue(
-              {
-                CONTRACT_EXTENSION: {
-                  extension_code: '',
-                  extension_start_date: '',
-                  extension_end_date: '',
-                  extension_rate: '',
-                  extension_status: '',
-                  extension_currency_cd: '',
-                  attachments: '',
-                },
-              }
-            );
+            this.contractForm.controls.CONTRACT_EXTENSION.reset();
             this.utilsService.openSnackBar('Extension Added', '', 2000);
           }
         }
@@ -1361,22 +1465,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             }
           );
-          this.contractForm.patchValue(
-            {
-              CONTRACT_PROJECT: {
-                project_code: '',
-                category_code: '',
-                project_desc: '',
-                start_date: '',
-                end_date: '',
-                project_rate: '',
-                project_status: '',
-                rate_currency: '',
-                vat_vbr: '',
-                comment: '',
-              },
-            }
-          );
+          this.contractForm.controls.CONTRACT_PROJECT.reset();
           this.canUpdateContractProjectAction.next(false);
           this.canAddContractProjectAction.next(true);
         }
@@ -1406,22 +1495,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             );
             this.contractProjectList.next(this.contractProjectInfo.slice());
-            this.contractForm.patchValue(
-              {
-                CONTRACT_PROJECT: {
-                  project_code: '',
-                  project_desc: '',
-                  category_code: '',
-                  start_date: '',
-                  end_date: '',
-                  project_rate: '',
-                  project_status: '',
-                  rate_currency: '',
-                  vat_vbr: '',
-                  comment: '',
-                },
-              }
+            this.projectList.next([]);
+            this.projectList.next(
+              this.contractProjectInfo.map(
+                (obj) => {
+                  return { value: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
+                      obj.project_code
+                , viewValue: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
+                      obj.project_code };
+                }
+              )
             );
+            this.contractForm.controls.CONTRACT_PROJECT.reset();
             this.utilsService.openSnackBar('Project Added', '', 2000);
           }
         }
@@ -1450,22 +1535,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
               }
             }
           );
-          this.contractForm.patchValue(
-            {
-              PROJECT_COLLABORATOR: {
-                project_code: '',
-                email_address: '',
-                start_date: '',
-                end_date: '',
-              },
-            }
-          );
+          this.contractForm.controls.PROJECT_COLLABORATOR.reset();
           this.canUpdateContractProjectAction.next(false);
           this.canAddContractProjectAction.next(true);
         }
           break;
         case 'addMore': {
-
             this.projectCollaboratorList.next([]);
             this.projectCollaboratorInfo.push(
               {
@@ -1473,21 +1548,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 start_date: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value,
                 end_date: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value,
                 email_address: this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value,
-                contract_code: this.contractInfo.contractKey.contract_code
+                contract_code: this.contractForm.controls.INFORMATION['controls'].contractor_code.value
 
               }
             );
             this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
-          this.contractForm.patchValue(
-            {
-              PROJECT_COLLABORATOR: {
-                project_code: '',
-                email_address: '',
-                start_date: '',
-                end_date: '',
-              },
-            }
-          );
+          this.contractForm.controls.PROJECT_COLLABORATOR.reset();
             this.utilsService.openSnackBar('Project Collaborator Added', '', 2000);
 
         }
@@ -1607,6 +1673,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
           console.log(error);
         });
   }
+  onChangesData(data) {
+    console.log('on change data ', data);
+  }
 
   /**************************************************************************
    * @description : GET the name of document and return it
@@ -1706,6 +1775,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 if (!this.checkProjectExist(code)) {
                   this.contractProjectInfo.splice(index, 1);
                   this.contractProjectList.next(this.contractProjectInfo.slice());
+                  this.projectList.next([]);
+                  this.projectList.next(
+                    this.contractProjectInfo.map(
+                      (obj) => {
+                        return { value: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
+                            obj.project_code
+                          , viewValue: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
+                            obj.project_code };
+                      }
+                    )
+                  );
                   if ((row.data._id)) {
                     this.contractsService.disableContractProject(row.data._id).subscribe((res1) => {
                       this.utilsService.openSnackBar('project deleted successfully', 'close');
