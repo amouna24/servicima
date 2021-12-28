@@ -35,6 +35,8 @@ import { IInvoiceLineModel } from '@shared/models/invoiceLine.model';
 import { IUserModel } from '@shared/models/user.model';
 import { IInvoicePaymentModel } from '@shared/models/invoicePayment.model';
 import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model';
+import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
+import { ICurrency } from '@shared/models/currency.model';
 
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 
@@ -64,6 +66,8 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
   listUsers: IUserModel[];
   avatar: SafeUrl;
   paymentTerms: number;
+  listCurrency: ICurrency[];
+  symbolCurrency: string;
   /**************************************************************************
    *  Initialise contractor, contract and project
    *************************************************************************/
@@ -144,6 +148,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private paymentTermsService: CompanyPaymentTermsService,
     private contractorsService: ContractorsService,
+    private assetsDataService: AssetsDataService,
     private localStorageService: LocalStorageService) {
     this.invoiceNbr = this.router.getCurrentNavigation()?.extras?.state?.nbrInvoice;
   }
@@ -154,6 +159,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.emailAddress = this.localStorageService.getItem('userCredentials').email_address;
+    this.getCurrency();
     this.initForm();
     await this.getConnectedUser();
     await this.getRefData();
@@ -176,6 +182,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
    *************************************************************************/
   async uploadFile(formData: FormData): Promise<string> {
     return await this.uploadService.uploadImage(formData)
+   // return await this.uploadService.uploadImageLocal(formData)
       .pipe(
         map(response => response.file.filename)
       )
@@ -240,6 +247,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
             };
             this.invoiceAttachment.push(invoiceAttachment as any);
             this.dataSourceInvoiceAttachment = new MatTableDataSource(this.invoiceAttachment);
+            this.refreshInvoiceAttachment();
           }
         }, (error => {
           console.error(error);
@@ -286,6 +294,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
    */
   showAttachment(row: IInvoiceAttachmentModel): void {
     const path = environment.uploadFileApiUrl + '/show/' + row['attachment'];
+//  const path = environment.uploadFileApiLocalUrl + '/show/' + row['attachment'];
     window.open(path);
   }
 
@@ -307,7 +316,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
     this.dataSourceInvoicePayment.sortingDataAccessor = (item, property) => {
       switch (property) {
         case 'Entered By': {
-          return item['Entred'].toLowerCase();
+          return item['Entered'].toLowerCase();
         }
         case 'Type': {
           return item.payment_mode_desc.toLowerCase();
@@ -443,6 +452,15 @@ RIB:${this.companyBankingInfos?.rib}`);
   }
 
   /**************************************************************************
+   *  @description : get currency
+   *************************************************************************/
+  getCurrency() {
+    this.assetsDataService.getAllCurrencies().subscribe((currency) => {
+      this.listCurrency = currency;
+    });
+  }
+
+  /**************************************************************************
    *  @description : set the value of the form if it was an update invoice
    *************************************************************************/
   async setForm(): Promise<void> {
@@ -450,6 +468,8 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.invoiceLine = this.invoices[2] as IInvoiceLineModel;
     this.contractCode = this.invoiceHeader['contract_code'];
     this.currencyCode = this.invoiceHeader['invoice_currency'];
+    this.symbolCurrency = this.listCurrency.find((value) => value['CURRENCY_CODE'] === this.currencyCode).CURRENCY_SYMBOL;
+
     this.statusInvoice = this.invoiceHeader['invoice_status'];
     this.editContractors = false;
     await this.getContract(this.invoiceHeader['contractor_code']);
@@ -476,7 +496,7 @@ RIB:${this.companyBankingInfos?.rib}`);
         invoice_line_total_amount: [data.invoice_line_total_amount ? data.invoice_line_total_amount : null],
         vat_amount: [data.vat_amount ? data.vat_amount : null],
         invoice_line_code: [data.InvoiceLineKey.invoice_line_code ? data.InvoiceLineKey.invoice_line_code : null],
-        discount: [data.discount ? data.discount : null],
+        discount: [data.discount ? data.discount : 0],
       })) : []),
     });
     this.sousTotalHT = this.getSum('invoice_line_total_amount');
@@ -521,7 +541,6 @@ RIB:${this.companyBankingInfos?.rib}`);
    *  @description : get invoice number
    *************************************************************************/
   async getInvoiceNbr(): Promise<void> {
-
     if (this.invoiceNbr) {
       this.updateOrAddInvoice = 'update';
       await this.getInvoice();
@@ -633,6 +652,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.contract = this.listContract.find(value => value.contractKey.contract_code === contractCode);
     this.contractCode = contractCode;
     this.currencyCode = this.contract['currency_cd'];
+    this.symbolCurrency = this.listCurrency.find((value) => value['CURRENCY_CODE'] === this.currencyCode).CURRENCY_SYMBOL;
     this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`, 'ACTIVE')
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -810,7 +830,7 @@ RIB:${this.companyBankingInfos?.rib}`;
     invoicePayment.map((invoicePay) => {
       const firstName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).first_name;
       const lastName = this.listUsers.find(value => value.userKey.email_address === invoicePay['entered_by']).last_name;
-      invoicePay['Entred'] = firstName + '   ' + lastName;
+      invoicePay['Entered'] = firstName + '   ' + lastName;
       invoicePay['payment_mode_desc'] = this.paymentMethodsList.find(value => value.value
         === invoicePay['payment_mode']).viewValue;
     });
@@ -914,7 +934,7 @@ RIB:${this.companyBankingInfos?.rib}`;
       vat_amount: '',
       invoice_line_total_amount: '',
       invoice_line_unit_amount: '',
-      discount: '',
+      discount: 0,
     }));
 
   }
@@ -1059,7 +1079,7 @@ RIB:${this.companyBankingInfos?.rib}`;
         .subscribe(async (res) => {
           if (res) {
             this.listToRemoveAttachmentFromUpload.map((removeFromUpload) => {
-              this.uploadService.deleteFile(removeFromUpload)
+              this.uploadService.deleteFileLocal(removeFromUpload)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((deleted) => {
                   console.log('file deleted', deleted);
@@ -1196,7 +1216,7 @@ RIB:${this.companyBankingInfos?.rib}`;
       this.addOrUpdatePayment();
       this.addOrUpdateInvoiceLine();
       const label: object = this.getLabel();
-      const data = Object.values(this.form.value.input).map((invoice) => {
+      const listLineInvoice = Object.values(this.form.value.input).map((invoice) => {
         return {
           description: invoice['project_desc'],
           unit: invoice['invoice_line_unit_amount'],
@@ -1213,6 +1233,7 @@ RIB:${this.companyBankingInfos?.rib}`;
         email: this.userInfo['contact_email'],
         phone: this.userInfo['phone_nbr1'],
         siteWeb: this.userInfo['web_site'],
+        currencySymbol: this.symbolCurrency,
         date: this.datePipe.transform(this.formHeader.value.invoiceDate),
         invoiceDelay: this.datePipe.transform(this.formHeader.value.invoiceDelay),
         imageUrl: environment.uploadFileApiUrl + '/image/' + this.userInfo['photo'],
@@ -1230,7 +1251,7 @@ RIB:${this.companyBankingInfos?.rib}`;
         vatMount: this.vatMount,
         totalTTC: this.totalTTC,
       };
-      const listParmaToPassToPDF = { company, data, contractor, total, label, upload: true };
+      const listParmaToPassToPDF = { company, listLineInvoice, contractor, total, label, upload: true };
       if (type === 'PENDING') {
         this.generateInvoicePdf(listParmaToPassToPDF, type);
       } else if (type === 'DRAFT') {

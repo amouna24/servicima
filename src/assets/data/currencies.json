@@ -245,7 +245,8 @@
   },
   {
     "CURRENCY_CODE": "USD",
-    "CURRENCY_DESC": "Dollar US"
+    "CURRENCY_DESC": "Dollar US",
+    "CURRENCY_SYMBOL": "$"
   },
   {
     "CURRENCY_CODE": "ERN",
@@ -765,7 +766,8 @@
   },
   {
     "CURRENCY_CODE": "TND",
-    "CURRENCY_DESC": "Dinars Tunisiens"
+    "CURRENCY_DESC": "Dinars Tunisiens",
+    "CURRENCY_SYMBOL": "DT"
   },
   {
     "CURRENCY_CODE": "TMT",
@@ -785,7 +787,9 @@
   },
   {
     "CURRENCY_CODE": "EUR",
-    "CURRENCY_DESC": "Euro"
+    "CURRENCY_DESC": "Euro",
+    "CURRENCY_SYMBOL": "€"
+
   },
   {
     "CURRENCY_CODE": "AED",

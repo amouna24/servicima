@@ -33,6 +33,28 @@ export class ProfileService {
       .get<IUserModel[]>
       (`${environment.userApiUrl}?beginning=${offset}&number=${limit}&company_email=${companyEmail}${userType ? '&user_type=' + userType : ''}`);
   }
+
+  /**
+   * @description: http request get to get all users registered in the same company
+   * @params company_email, limit, offset
+   */
+  getSearchUser(companyEmail: string, search: string, limit?, offset?): Observable<IUserModel[]> {
+    return this.httpClient
+      .put<IUserModel[]>
+      (`${environment.userApiUrl}/search?beginning=${offset}&number=${limit}&company_email=${companyEmail}`, search);
+  }
+
+  /**
+   * @description: http request get to get all users registered in the same company
+   * @params company_email, limit, offset
+   */
+  filterAllUser(companyEmail: string, limit?, offset?, columns?, filterValue?,  operator?): Observable<any> {
+    return this.httpClient
+      .get<IUserModel[]>
+      (`${environment.userApiUrl}/filter?beginning=${offset}&number=${limit}&company_email=${companyEmail}` +
+           `&${columns}=${filterValue}&operator=${operator}`);
+  }
+
   /**
    * @description: http request get to get all users registered in the same company and has the same type
    * @params company_email, type , limit, offset
@@ -64,13 +86,12 @@ export class ProfileService {
   addNewProfile(user: object): Observable<IMessageCodeModel> {
     return this.httpClient.post<IMessageCodeModel>(`${environment.userGatewayApiUrl}/addprofile`, user);
   }
-
   /**
    * @description: http request delete if wanna disable the status of the user
    *               http request put if wanna enable the status of the user
    * @param id: id user
    * @param status: status
-   * @param updated_by: email user
+   * @param updatedBy: email user
    */
   userChangeStatus(id: string, status: string, updatedBy: string): Observable<IMessageCodeModel> {
     if (status === 'ACTIVE') {
@@ -81,7 +102,7 @@ export class ProfileService {
   }
   /**
    * @description update company credentials
-   * @param company: company object to update
+   * @param email: company object to update
    */
   getCompany(email: string): Observable<IMessageCodeModel>  {
     return this.httpClient

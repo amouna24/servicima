@@ -6,8 +6,8 @@ import { IActivity } from '@shared/models/activity.model';
 import { ICurrency } from '@shared/models/currency.model';
 import { ICities } from '@shared/models/cities.model';
 
-import { environment } from '../../../../environments/environment';
-// tslint:disable-next-line:origin-ordered-imports
+import { environment } from '@environment/environment';
+
 import { INationality } from '@shared/models/nationality.model';
 
 @Injectable({

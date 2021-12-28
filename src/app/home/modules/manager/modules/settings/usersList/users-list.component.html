@@ -8,5 +8,7 @@
   [allowedActions]="['show','delete']"
   (pagination)="loadMoreItems($event)"
   (changeStatus) = "getDataWithStatus($event)"
+  (search)= "searchUser($event)"
+  (filter) ="search($event)"
 >
 </wid-dynamic-data-table>
