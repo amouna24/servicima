@@ -12,6 +12,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { IResumeModel } from '@shared/models/resume.model';
 
 import { environment } from '../../../../../../environments/environment';
 
@@ -26,6 +27,7 @@ export class ResumeComponent implements OnInit {
   subscriptionModal: Subscription;
   modals = { modalName: 'mailing', modalComponent: MailingModalComponent };
   clientEmailAddress: string;
+  nbtItems = new BehaviorSubject<number>(5);
   constructor(
     private userService: UserService,
     private resumeService: ResumeService,
@@ -45,52 +47,55 @@ export class ResumeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.modalService.registerModals(this.modals);
     this.clientEmailAddress = 'khmayesbounguicha@gmail.com';
-await this.getData();
+await this.getData(0, this.nbtItems.getValue());
   }
   /**************************************************************************
    * @description Get Users Data  from user service and resume service
    *************************************************************************/
-  async getData() {
+  async getData(offset, limit) {
     this.isLoading.next(true);
     const blocData = [];
     let index = 1;
     this.userService.connectedUser$
       .subscribe((userInfo) => {
-        this.userService.getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}`)
-          .subscribe(async (res) => {
-            await res['results'].map(async (candidate) => {
-              await this.resumeService
-                .getResumeDataTable(`?email_address=${candidate.userKey.email_address}&company_email=${candidate.company_email}`)
-                .subscribe((resume) => {
-                  return new Promise((resolve) => {
-                    if (resume['msg_code'] !== '0004') {
-                      blocData.push({
-                        resume_name: candidate.first_name + ' ' + candidate.last_name,
-                        resume_years_exp: resume['results'][0].years_of_experience,
-                        resume_position: resume['results'][0].actual_job,
-                        resume_status: resume['results'][0].status,
-                        resume_email: candidate.userKey.email_address,
-                        resume_user_type: candidate.user_type,
-                        resume_filename_docx: resume['results'][0].resume_filename_docx,
-                        resume_filename_pdf: resume['results'][0].resume_filename_pdf,
-                        user_info: resume['results'][0],
-                        first_name: candidate.first_name,
-                        last_name: candidate.last_name,
-                      });
-                    }
-                    index++;
-                    if (index > res['results'].length) {
-                      resolve(blocData);
-                    }
-                  }).then((result) => {
-                    this.isLoading.next(false);
-                    this.tableData.next(result);
-                  });
+         this.resumeService
+          .getResumeDataTable(`?company_email=${userInfo?.company[0].companyKey.email_address}&beginning=${offset}&number=${limit}`)
+          .subscribe((resume) => {
+            resume['results'].map( (oneResume: IResumeModel) => {
+              this.userService
+                .getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}&email_address=${oneResume.ResumeKey.email_address}`)
+                .subscribe(async (user) => {
+                    return new Promise((resolve) => {
+                      if (user['msg_code'] !== '0004') {
+                        blocData.push({
+                          resume_name: user['results'][0].first_name + ' ' + user['results'][0].last_name,
+                          resume_years_exp: oneResume.years_of_experience,
+                          resume_position: oneResume.actual_job,
+                          resume_status: oneResume.status,
+                          resume_email: user['results'][0].userKey.email_address,
+                          resume_user_type: user['results'][0].user_type,
+                          resume_filename_docx: oneResume.resume_filename_docx,
+                          resume_filename_pdf: oneResume.resume_filename_pdf,
+                          user_info: oneResume,
+                          first_name: user['results'][0].first_name,
+                          last_name: user['results'][0].last_name,
+                        });
+                      }
+                      index++;
+                      if (index > resume['results'].length) {
+                        resume['results'] = blocData;
+                        console.log('resume =', resume);
+                        resolve(resume);
+                      }
+                    }).then((result) => {
+                      this.isLoading.next(false);
+                      this.tableData.next(result);
+                    });
 
+                  });
                 });
             });
           });
-      });
   }
   /**************************************************************************
    To change
@@ -261,7 +266,7 @@ await this.getData();
                     user['results'][0].application_id = user['results'][0].userKey.application_id;
                     user['results'][0].email_address = user['results'][0].userKey.email_address;
                     this.userService.updateUser(user['results'][0]).subscribe(async () => {
-                      await this.getData();
+                      await this.getData(0, this.nbtItems.getValue());
                       this.candidateService.deleteCandidate(candidateData[0]._id).subscribe(async (deleteCandidate) => {
                         console.log('candidate deleted', deleteCandidate);
                         this.resumeService.getResumeData(`?resume_code=${changeStatusData.user_info.ResumeKey.resume_code}`)
@@ -300,7 +305,7 @@ await this.getData();
       dataResume.user_info.application_id = dataResume.user_info.ResumeKey.application_id;
       dataResume.user_info.status = 'D';
       this.resumeService.updateResume(dataResume.user_info).subscribe( async (res) => {
-        await this.getData();
+        await this.getData(0, this.nbtItems.getValue());
       });
     });
     }
@@ -329,5 +334,13 @@ await this.getData();
         'red',
       ],
     }];
+  }
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getData(params.offset, params.limit);
   }
 }

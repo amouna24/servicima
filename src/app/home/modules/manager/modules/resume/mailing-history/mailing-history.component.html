@@ -3,8 +3,9 @@
   [tableCode]="'MAILING_HISTORY'"
   [isLoading]="isLoading"
   [buttonAdd]="false"
-  (changeStatus) = "getData($event)"
+  (changeStatus) = "getData($event, 0, 5)"
   [header]="{ title:  'mailing_history' | translate}"
+  (pagination)="loadMoreItems($event)"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['Resend', Archive]">
 
