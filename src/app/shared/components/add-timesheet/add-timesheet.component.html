@@ -4,13 +4,13 @@
      <div fxLayout="row" fxFlex="92" fxLayoutAlign="space-between center" class="full-height"
           style="border-bottom: 1px solid #afb1b8">
      <ng-container *ngIf="formType.add else Edit">
-       <h2 class="steel font-medium font-size-24">Add timesheets</h2>
+       <h2 class="steel font-medium font-size-24"> {{ 'timesheet.add' | translate }}</h2>
      </ng-container>
      <ng-template #Edit>
-       <h2 class="steel font-medium font-size-24">Edit timesheets</h2>
+       <h2 class="steel font-medium font-size-24">{{ 'timesheet.update' | translate }}</h2>
      </ng-template>
      <button mat-flat-button class="btn-small bg-pale-grey cool-grey" (click)="backClicked()">
-       Back
+       {{'timesheet.back' | translate}}
      </button>
      </div>
    </div>
@@ -21,7 +21,7 @@
            <!-- left column form -->
            <div fxFlex="28" fxLayout="column">
              <div fxLayout="column">
-               <label class="font-size-12 required"> Week start on :</label>
+               <label class="font-size-12 required">{{ 'timesheet.week.start.on' | translate }} :</label>
                <mat-form-field appearance="outline">
                  <input matInput
                         formControlName="start_date"
@@ -40,7 +40,7 @@
                </mat-form-field>
              </div>
              <div fxLayout="column">
-               <label class="font-size-12 required"> Project : </label>
+               <label class="font-size-12 required">{{ 'timesheet.project' | translate }} : </label>
                <mat-form-field appearance="outline">
                  <mat-select  formControlName="project_code"  [placeholder]="projectsList && contract? 'Project' : 'No project found'">
                    <ng-container *ngIf="projectsList && contract">
@@ -56,7 +56,7 @@
                </mat-form-field>
              </div>
              <div fxLayout="column">
-               <label class="font-size-12 required"> Comment : </label>
+               <label class="font-size-12 required"> {{ 'timesheet.comment' | translate }} : </label>
                <mat-form-field appearance="outline">
                  <textarea rows="3" placeholder="comment ..." matInput formControlName="comment"></textarea>
                </mat-form-field>
@@ -82,7 +82,7 @@
                  </div>
                </ng-container>
                <div fxLayout="column">
-                 <label class="font-size-12"> Total : </label>
+                 <label class="font-size-12">{{ 'timesheet.total' | translate }}: </label>
                  <mat-form-field appearance="outline" class="disabled">
                    <input matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
                  </mat-form-field>
@@ -91,15 +91,15 @@
            </div>
          </div>
          <div fxLayout="row" fxLayoutAlign="space-between center" class="m-b-20">
-           <button mat-flat-button [type]="formType.add ? 'reset' : 'button' " (click)="formType.edit ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">Cancel</button>
+           <button mat-flat-button [type]="formType.add ? 'reset' : 'button' " (click)="formType.edit ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">{{ 'timesheet.cancel' | translate }}</button>
            <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
              <ng-container *ngIf="formType.managerMode else collaborator">
-               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">Approve</button>
+               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">{{ 'timesheet.approve' | translate }}</button>
              </ng-container>
              <ng-template #collaborator>
-               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">Submit</button>
+               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">{{ 'timesheet.submit' | translate }}</button>
                <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">
-                 {{formType.add ? 'Save' : 'Edit'}}
+                 {{formType.add ? ('timesheet.save' | translate ) : 'timesheet.update' | translate}}
                </button>
              </ng-template>
 
