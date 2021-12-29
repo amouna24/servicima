@@ -17,6 +17,10 @@ export class TaxComponent implements OnInit , OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<ICompanyTaxModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   emailAddress: string;
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
   private subscriptions: Subscription[] = [];
   constructor(private utilService: UtilsService,
               private userService: UserService,
@@ -31,7 +35,16 @@ export class TaxComponent implements OnInit , OnDestroy {
       { modalName: 'addTax', modalComponent: AddTaxCompanyComponent });
     this.isLoading.next(true);
     this.getConnectedUser();
-    this.getAllTax();
+    this.getAllTax(this.nbtItems.getValue(), 0);
+  }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+      this.nbtItems.next(params.limit);
+      this.getAllTax(params.limit, params.offset);
   }
 
   /**
@@ -50,8 +63,8 @@ export class TaxComponent implements OnInit , OnDestroy {
   /**
    * @description get all tax by company
    */
-  getAllTax() {
-    this.subscriptions.push(this.companyTaxService.getCompanyTax(this.emailAddress).subscribe((data) => {
+  getAllTax(limit: number, offset: number) {
+    this.subscriptions.push(this.companyTaxService.getCompanyTax(this.emailAddress, limit, offset).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }, error => console.error(error)));
@@ -79,7 +92,7 @@ export class TaxComponent implements OnInit , OnDestroy {
     this.modalService.displayModal('addTax', data,
       '657px', '480px').subscribe((res) => {
         if (res) {
-          this.getAllTax();
+          this.getAllTax(this.nbtItems.getValue(), 0);
         }
     });
   }

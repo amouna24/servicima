@@ -38,7 +38,7 @@
     <div fxLayout="row" fxFlex="30" fxLayoutGap="2%"  fxLayoutAlign="center center">
       <div fxLayout="row">
         <button  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="showWithStatus(status)">
-          <span class="white font-size-11">{{status}}</span>
+          <span class="white font-size-11">import</span>
         </button>
       </div>
       <div fxLayout="row">
@@ -67,10 +67,9 @@
       </div>
     </div>
   </div>
- <div fxLayout="row" fxFlex="63" fxLayoutAlign="space-around">
+  <div fxLayout="column" fxFlex="74" fxLayoutAlign="space-between">
 
     <wid-scrollbar  class="dynamic-data-table-content" style="width: 100%;" >
-      <div>
         <div [formGroup]="form" >
           <div formArrayName='input' style="margin-left: 80px">
             <div *ngFor="let roleListControl of getListFilter().controls; let i = index">
@@ -133,8 +132,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <ng-container *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" >
+
+      <div *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" style=" min-height: 287px;" >
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
             <div  fxFlex="15" fxLayout="row">
@@ -149,9 +148,8 @@
             </div>
           </div>
         </div>
-      </ng-container>
-
-      <ng-container  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
+      </div>
+      <div  *ngIf="isLoading.getValue() === false && dataSource?.length > 0" >
         <table  BORDER=0 CELLSPACING=0 cdk-table [style]="{'width': '100%', 'height': 'min-content'}" [dataSource]="dataSource" [trackBy]="identify" @dataAppearance>
 
           <ng-container *ngFor="let col of columns;" >
@@ -247,21 +245,20 @@
           <tr [style.background]="row['color']" cdk-row *cdkRowDef="let row; columns: columnsList;"></tr>
 
         </table>
-      </ng-container>
+      </div>
 
-      <ng-container *ngIf="isLoading.getValue();">
-        <div class="min-full-width min-full-height" fxLayoutAlign="center center">
+      <div  *ngIf="isLoading.getValue();">
+        <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
           <mat-progress-spinner
             color="primary"
             mode="indeterminate">
           </mat-progress-spinner>
         </div>
-      </ng-container>
+      </div>
+
 
 
     </wid-scrollbar>
-
-  </div>
   <ng-template  [ngIf]="!!tableData.getValue()?.results && !!offset && (!!(totalCountedItems || countedItems) && !!totalItems)"  [ngIfElse]="loading">
   <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
     <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
@@ -347,3 +344,5 @@
   <ng-template #loading >
   </ng-template>
 </div>
+
+  </div>

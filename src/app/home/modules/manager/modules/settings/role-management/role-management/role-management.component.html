@@ -7,5 +7,6 @@
     [allowedActions]="['delete']"
     [title]="'Role list'"
     (rowActionData)="switchAction($event)"
+    (pagination)="loadMoreItems($event)"
   >
   </wid-dynamic-data-table>

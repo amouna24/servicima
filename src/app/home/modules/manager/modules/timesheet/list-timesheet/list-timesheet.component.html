@@ -6,6 +6,7 @@
   (rowActionData)="switchAction($event)"
   [allowedActions]="['Approve', 'Reject', 'Delete']"
   [buttonAdd]="false"
+  (pagination)="loadMoreItems($event)"
   [setAvatar]="{columnCode:'profile', imgSrc: 'photo' }"
 >
 </wid-dynamic-data-table>

@@ -203,11 +203,11 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @param index: index of column
    */
   selected(type: string, index: number): void {
+    this.tableData.next(this.defaultRes);
     this.searchT = null;
     this.selections = [];
     this.keyColumnDesc = '';
     const formArr = this.form.controls['input'] as FormArray;
-    this.tableData.next(this.defaultRes);
     formArr.controls[index].patchValue({ valueFilter: '' });
     const column = this.localStorageService.getItem(this.tableCode).columns.find(value => value.name === type);
     if (column.type === 'selection') {
@@ -329,6 +329,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
       this.offset = res?.offset ? Number(res?.offset) + 1 : null;
+      this.currentPage = this.offset === 1 ? 1 : this.currentPage;
       this.limit = res?.limit ? Number(res?.limit) : null;
       this.totalCountedItems = res?.count ? res?.count === this.itemsPerPageControl.value ?
         this.currentPage * this.itemsPerPageControl.value :
