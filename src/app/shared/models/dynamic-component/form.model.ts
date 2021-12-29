@@ -63,6 +63,7 @@ export interface IFieldsObject {
     modelObject: any;
     singleUpload: boolean;
     userType: userType;
+    imageLoading?: BehaviorSubject<boolean>;
   };
   dataTable ?: {
     displayedColumns: string[],

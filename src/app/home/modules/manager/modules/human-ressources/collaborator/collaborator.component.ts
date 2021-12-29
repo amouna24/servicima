@@ -117,6 +117,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   contractExtensionList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
   contractPreviousList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractPreviousInfo);
   contract: any = null;
+  isLoadingImage: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   /**************************************************************************
    * @description collaborator Image
@@ -124,7 +125,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
-  title = 'HR Folder';
+  title = 'hr_folder_all';
 
   /**************************************************************************
    * @description UserInfo
@@ -255,6 +256,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               modelObject:  this.userInfo,
               singleUpload: true,
               userType: userType.UT_USER,
+              imageLoading: this.isLoadingImage
             }
           },
         ],
@@ -1153,6 +1155,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         this.userInfo = user['results'][0];
         this.haveImage.next(user['results'][0]['photo']);
         this.avatar.next(await this.uploadService.getImage(user['results'][0]['photo']));
+        this.isLoadingImage.next(false);
       });
 
     await this.initProfileForm();

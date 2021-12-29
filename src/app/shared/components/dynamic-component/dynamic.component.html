@@ -1626,11 +1626,20 @@
                           <ng-container *ngFor="let sf of ff.fields">
                             <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center"
                                  class="profile-image">
+                              <ng-template [ngIf]="!sf.imageInputs.imageLoading.getValue()">
                               <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
                                                  [modelObject]="sf.imageInputs.modelObject"
                                                  [singleUpload]="sf.imageInputs.singleUpload"
                                                  [userType]="sf.imageInputs.userType"
                                                  (newFile)="getFile($event)"></wid-profile-image>
+                              </ng-template>
+
+                              <ng-template [ngIf]="sf.imageInputs.imageLoading.getValue()">
+                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+                                  <mat-spinner color="primary"></mat-spinner>
+                                  <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+                                </div>
+                              </ng-template>
                             </div>
                           </ng-container>
                         </div>
