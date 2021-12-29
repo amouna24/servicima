@@ -1079,7 +1079,7 @@ RIB:${this.companyBankingInfos?.rib}`;
         .subscribe(async (res) => {
           if (res) {
             this.listToRemoveAttachmentFromUpload.map((removeFromUpload) => {
-              this.uploadService.deleteFileLocal(removeFromUpload)
+              this.uploadService.deleteFile(removeFromUpload)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((deleted) => {
                   console.log('file deleted', deleted);

@@ -2,7 +2,7 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'USERS-LIST'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Users management', addActionURL: '/manager/settings/users/add-user', addActionText: 'New User'}"
+  [header]="{ title: 'manager-setting-menu.users.management' | translate, addActionURL: '/manager/settings/users/add-user', addActionText: 'add-new' | translate}"
   [title]="'Users list'"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['show','delete']"

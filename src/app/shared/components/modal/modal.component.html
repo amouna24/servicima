@@ -21,11 +21,11 @@
         [disabled]="!form?.valid && existForm && modelConfig?.button?.buttonLeft?.validator"
         [style.background-color]="modelConfig?.button?.buttonLeft?.background"
         [style.color]="modelConfig.button?.buttonLeft?.color" *ngIf="modelConfig.button?.buttonLeft?.visible"
-        mat-flat-button mat-stroked-button>{{modelConfig.button.buttonLeft.name}}</button>
+        mat-flat-button mat-stroked-button>{{modelConfig.button.buttonLeft.name | translate}}</button>
       <button mat-raised-button class="btn-medium"  color="primary" (click)="confirm(modelConfig?.button?.buttonRight?.nextValue)"
         [style.background-color]="modelConfig?.button?.buttonRight?.background" [disabled]="!form?.valid && existForm && modelConfig?.button?.buttonRight?.validator"
         [style.color]="modelConfig?.button?.buttonRight?.color" *ngIf="modelConfig.button?.buttonRight?.visible"
-        mat-flat-button mat-stroked-button>{{modelConfig?.button?.buttonRight?.name}}</button>
+        mat-flat-button mat-stroked-button>{{modelConfig?.button?.buttonRight?.name | translate}}</button>
     </div>
 </div>
 
