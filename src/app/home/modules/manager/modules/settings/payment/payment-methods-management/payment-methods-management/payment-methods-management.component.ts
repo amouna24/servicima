@@ -15,9 +15,14 @@ import { AddPaymentMethodComponent } from '../add-payment-method/add-payment-met
 })
 export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   refData: { } = { };
-  ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
+  ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   emailAddress: string;
+  companyId: string;
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -34,12 +39,12 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
       { modalName: 'addPaymentTermsMethode', modalComponent: AddPaymentMethodComponent });
     this.isLoading.next(true);
     this.getConnectedUser();
-    this.getPaymentMethode().then(() => this.isLoading.next(false));
+    this.getPaymentMethode(this.nbtItems.getValue(), 0).then(() => this.isLoading.next(false));
   }
 
- async getPaymentMethode() {
-    const data = await this.getRefdata();
-    this.ELEMENT_DATA.next(data['PAYMENT_MODE']);
+ async getPaymentMethode(limit: number, offset: number) {
+    const data = await this.getRefdata(limit, offset);
+    this.ELEMENT_DATA.next(data);
   }
 
   /**
@@ -51,6 +56,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
         (userInfo) => {
           if (userInfo) {
             this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+            this.companyId = userInfo['company'][0]._id;
           }
         });
   }
@@ -72,13 +78,25 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
-  async getRefdata() {
-    const list = ['PAYMENT_MODE'];
-    this.refData =  await this.refdataService
-      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
-      list, true);
-    return this.refData;
+  async getRefdata(limit: number, offset: number) {
+    return  new Promise((resolve => {
+      this.refdataService
+        .getRefDataByTypeDatatable( this.companyId , this.userService.applicationId, this.utilService.getRefTypeId('PAYMENT_MODE'),
+          this.userService.language.langId, limit, offset).subscribe((data) => {
+        resolve(data);
+      });
+    }));
   }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+ async loadMoreItems(params) {
+      this.nbtItems.next(params.limit);
+   await   this.getPaymentMethode(params.limit, params.offset);
+  }
+
   /**
    * @description : change the status of the user
    * @param id: string
@@ -96,7 +114,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
         this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
-             await this.getPaymentMethode();
+             await this.getPaymentMethode(this.nbtItems.getValue(), 0);
             }
           },
           (err) => console.error(err),
@@ -120,7 +138,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
       this.modalService.displayModal('addPaymentTermsMethode', obj,
         '657px', '270px').subscribe(async (res) => {
           if (res) {
-            await this.getPaymentMethode();
+            await this.getPaymentMethode(this.nbtItems.getValue(), 0);
           }
       });
 

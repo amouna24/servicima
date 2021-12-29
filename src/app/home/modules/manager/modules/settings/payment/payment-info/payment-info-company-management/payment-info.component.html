@@ -6,6 +6,7 @@
     [header]="{ title: 'payment-info-manag' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
     , addActionText: 'add-new' | translate}"
     (rowActionData)="switchAction($event)"
+    (pagination)="loadMoreItems($event)"
     [allowedActions]="['delete']"
     [security] = false
     (changeStatus) = "getDataWithStatus($event)"

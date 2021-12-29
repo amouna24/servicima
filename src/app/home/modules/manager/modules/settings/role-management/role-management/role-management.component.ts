@@ -14,10 +14,15 @@ import { AddRoleComponent } from '../add-role/add-role.component';
   styleUrls: ['./role-management.component.scss']
 })
 export class RoleManagementComponent implements OnInit, OnDestroy {
-  ELEMENT_DATA = new BehaviorSubject<IRefdataModel[]>([]);
+  ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
   emailAddress: string;
+  companyId: string;
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -29,24 +34,31 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   /**
    * @description Loaded when component in init state
    */
-   ngOnInit() {
+  async ngOnInit() {
     this.modalService.registerModals(
       { modalName: 'addRole', modalComponent: AddRoleComponent });
     this.isLoading.next(true);
     this.getConnectedUser();
-    this.getRole().then((data) => {
-      if (data) {
-        this.ELEMENT_DATA.next(data['ROLE']);
-        this.isLoading.next(false);
-      }
-    });
+    await  this.getRole(this.nbtItems.getValue(), 0);
+
+    this.isLoading.next(false);
+  }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+   async  loadMoreItems(params) {
+      this.nbtItems.next(params.limit);
+    await this.getRole(params.limit, params.offset);
   }
 
   /**
    * @description : get role
    */
- async getRole() {
-    return  await this.getRefdata();
+ async getRole(limit: number, offset: number) {
+    this.refData =   await this.getRefdata(limit, offset);
+    this.ELEMENT_DATA.next(this.refData);
   }
   /**
    * @description : action
@@ -69,6 +81,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
         (userInfo) => {
           if (userInfo) {
             this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
+            this.companyId = userInfo['company'][0]._id;
           }
         });
   }
@@ -90,7 +103,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
     this.modalService.displayModal('addRole', obj,
       '657px', '527px').subscribe(async (res) => {
         if (res) {
-       await this.getRole();
+       await this.getRole(this.nbtItems.getValue(), 0);
         }
     });
     }, error => console.error(error)));
@@ -99,12 +112,14 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from appInitializer service and mapping data
    */
-  async getRefdata() {
-    const list = ['ROLE'];
-    this.refData =  await this.refDataService
-      .getRefData( this.utilService.getCompanyId(this.emailAddress, this.userService.applicationId) , this.userService.applicationId,
-      list, true);
-    return this.refData;
+  async getRefdata(limit: number, offset: number) {
+   return  new Promise((resolve => {
+      this.refDataService
+        .getRefDataByTypeDatatable( this.companyId , this.userService.applicationId, this.utilService.getRefTypeId('ROLE'),
+          this.userService.language.langId, limit, offset).subscribe((data) => {
+        resolve(data);
+      });
+    }));
   }
 
   /**
@@ -123,7 +138,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.refDataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           async (res) => {
             if (res) {
-              await this.getRole();
+              await this.getRole(this.nbtItems.getValue(), 0);
             }
           },
           (err) => console.error(err),
