@@ -3,7 +3,7 @@
   [tableCode]="'MAILING_HISTORY'"
   [isLoading]="isLoading"
   [buttonAdd]="false"
-  (changeStatus) = "getData($event, 0, 5)"
+  (changeStatus) = "getData($event, 0, nbtItems.getValue())"
   [header]="{ title:  'mailing_history' | translate}"
   (pagination)="loadMoreItems($event)"
   (rowActionData)="switchAction($event)"
