@@ -56,8 +56,8 @@ export class MailingHistoryDetailsComponent implements OnInit {
   resendMail() {
     const confirmation = {
       code: 'edit',
-      title: `Resend this Mail to ${this.send_to}`,
-      description: `Are you sure ?`,
+      title: 'resend-mail',
+      description: `resume-u-sure`,
     };
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '550px', '350px')
       .subscribe(

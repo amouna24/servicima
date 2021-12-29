@@ -2,13 +2,13 @@
      fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Subscription Detail</h1>
+      <h1 class="steel font-size-24 font-medium">{{'subscription-detail' | translate}}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{'back' | translate}}</span>
       </button>
     </div>
 
@@ -20,7 +20,7 @@
         <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
           <div fxLayout="row" >
             <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
-              <div>Working hours per day </div>
+              <div>{{'working_hour_per_day' | translate}}</div>
             </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
@@ -34,7 +34,7 @@
 
           <div fxLayout="row" fxLayoutAlign="start center">
             <div fxLayout="column" fxFlex="30">
-              overtime per day rate </div>
+              {{'overtime-per-day' | translate}} </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
                 <input formControlName="overtimePerDayRate" class="font-size-12" autocomplete="off" matInput required placeholder="0.00"
@@ -47,8 +47,7 @@
 
           <div fxLayout="row" fxLayoutAlign="start center">
             <div fxLayout="column" fxFlex="30">
-              Sunday rate
-
+              {{'sunday_rate_all' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
@@ -62,7 +61,7 @@
 
           <div fxLayout="row" fxLayoutAlign="start center">
             <div fxLayout="column" fxFlex="30">
-              Saturday rate
+              {{'saturday_rate_all' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
@@ -76,7 +75,7 @@
 
           <div fxLayout="row" fxLayoutAlign="start center">
             <div fxLayout="column" fxFlex="30">
-              Holiday rate
+              {{'holiday_rate_all' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
@@ -95,13 +94,13 @@
           <div fxLayout="row" fxLayoutGap="20px" >
             <button  mat-button mat-raised-button class="btn-small bg-denim white" >
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <span class="font-size-14" (click)="updateTimesheetSetting()"> Save</span>
+                <span class="font-size-14" (click)="updateTimesheetSetting()">{{'resume-save' | translate}}</span>
               </div>
             </button>
           <button  mat-button mat-raised-button (click)="cancel()"  class="btn-small bg-pale-grey black-three"
           >
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-              <span class="font-size-14">Cancel</span>
+              <span class="font-size-14">{{'company.banking.info.cancel' | translate}}</span>
             </div>
           </button>
         </div>
