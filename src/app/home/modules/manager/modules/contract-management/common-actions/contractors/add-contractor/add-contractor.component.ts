@@ -212,6 +212,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'contractor_name',
+          required: true
         },
         {
           label: 'registre_nbr_all',
@@ -219,6 +220,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'registry_code',
+          required: true
         },
         {
           type: FieldsType.IMAGE,
@@ -255,6 +257,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'address',
+          required: true
         },
         {
           label: 'country_all',
@@ -262,7 +265,8 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCountries,
           formControlName: 'country_cd',
-          searchControlName: 'registryCountryFilterCtrl'
+          searchControlName: 'registryCountryFilterCtrl',
+          required: true
         },
       ],
     },
@@ -276,6 +280,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'zip_code',
+          required: true
         },
         {
           label: 'homecompany.city',
@@ -283,6 +288,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'city',
+          required: true
         },
       ],
     },
@@ -303,6 +309,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
+          required: true
         },
       ],
     },
@@ -316,6 +323,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
+          required: true
         },
         {
           label: 'phone_all',
@@ -350,7 +358,8 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredPayMode,
           formControlName: 'payment_cd',
-          searchControlName: 'filteredPayementOrganisation'
+          searchControlName: 'filteredPayementOrganisation',
+          required: true
         },
       ],
     },
@@ -364,7 +373,8 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
-          searchControlName: 'filteredCurrencyOrganisation'
+          searchControlName: 'filteredCurrencyOrganisation',
+          required: true
         },
         {
           label: 'invoice.vatLine',
@@ -385,7 +395,8 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredLegalForm,
           formControlName: 'legal_form',
-          searchControlName: 'filteredLegalOrganisation'
+          searchControlName: 'filteredLegalOrganisation',
+          required: true
         },
         {
           label: 'company_tax_all',
@@ -445,6 +456,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'first_name',
+          required: true
         },
         {
           label: 'last_name_all',
@@ -452,6 +464,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'last_name',
+          required: true
         },
       ],
     },
@@ -465,6 +478,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'main_contact',
+          required: true
         },
         {
           label: 'email_all',
@@ -472,6 +486,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
+          required: true
         },
       ],
     },
@@ -493,7 +508,8 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredTitles,
           formControlName: 'title_cd',
-          searchControlName: 'filteredTitleContact'
+          searchControlName: 'filteredTitleContact',
+          required: true
         },
       ],
     },
@@ -507,6 +523,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
+          required: true
         },
         {
           label: 'cell_phone_all',
@@ -514,6 +531,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'cell_phone_nbr',
+          required: true
         },
       ],
     },
@@ -531,7 +549,8 @@ private subscriptions: Subscription;
         {
           label: 'Signature',
           type: FieldsType.SLIDE_TOGGLE,
-          formControlName: 'can_sign_contract'
+          formControlName: 'can_sign_contract',
+          required: true
         },
       ],
     },

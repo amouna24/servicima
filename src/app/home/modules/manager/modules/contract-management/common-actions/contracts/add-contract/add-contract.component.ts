@@ -195,7 +195,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           placeholder: 'contractor_name',
           type: FieldsType.SELECT,
           selectFieldList: this.contractorsList,
-          formControlName: 'contractor_code'
+          formControlName: 'contractor_code',
+          required: true
         },
         {
           label: 'users.status',
@@ -203,7 +204,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'contract_status',
-          searchControlName: 'contractStatusFilter'
+          searchControlName: 'contractStatusFilter',
+          required: true
         },
       ],
     },
@@ -215,7 +217,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           label: 'star_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
-          formControlName: 'contract_start_date'
+          formControlName: 'contract_start_date',
+          required: true
         },
         {
           label: 'end_date_all',
@@ -223,6 +226,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.DATE_PICKER,
           formControlName: 'contract_end_date',
           minDate: this.minDate,
+          required: true
         },
       ],
     },
@@ -249,6 +253,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT,
           selectFieldList: this.staffList,
           formControlName: 'signer_company_email',
+          required: true
         },
         {
           label: 'contractor_signer_all',
@@ -256,6 +261,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT,
           selectFieldList: this.contractorContactList,
           formControlName: 'signer_contractor_email',
+          required: true
         },
       ],
     },
@@ -264,16 +270,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Company signature date',
+          label: 'company_date_signer_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'signature_company_date',
+          required: true
         },
         {
-          label: 'Contractor signature date',
+          label: 'contra_date_signer_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'signature_contractor_date',
+          required: true
         },
       ],
     },
@@ -287,6 +295,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'contract_rate',
+          required: true
         },
         {
           label: 'currency_all',
@@ -294,7 +303,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -308,7 +318,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredPayment,
           formControlName: 'payment_terms',
-          searchControlName: 'contractPaymentFilter'
+          searchControlName: 'contractPaymentFilter',
+          required: true
         },
       ],
     },
@@ -389,12 +400,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'extension_start_date',
+          required: true
         },
         {
           label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'extension_end_date',
+          required: true
         },
       ],
     },
@@ -408,6 +421,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'extension_rate',
+          required: true
         },
         {
           label: 'currency_all',
@@ -415,7 +429,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'extension_currency_cd',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -429,14 +444,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'extension_status',
-          searchControlName: 'filterStatusControl'
+          searchControlName: 'filterStatusControl',
+          required: true
         },
         {
           label: 'attachment_all',
           placeholder: 'attachment_all',
           type: FieldsType.UPLOAD_FILE,
           inputType: InputType.TEXT,
-          formControlName: 'attachments'
+          formControlName: 'attachments',
         },
       ],
     },
@@ -485,6 +501,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'category_code',
+          required: true
         },
         {
           label: 'resume-desc',
@@ -492,6 +509,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'project_desc',
+          required: true
         },
       ],
     },
@@ -504,12 +522,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'start_date',
+          required: true
         },
         {
           label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'end_date',
+          required: true
         },
       ],
     },
@@ -523,6 +543,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'project_rate',
+          required: true
         },
         {
           label: 'currency_all',
@@ -530,7 +551,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'rate_currency',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -609,6 +631,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           selectFieldList: this.projectList,
           searchControlName: 'projectCodeFilterCtrl',
           formControlName: 'project_code',
+          required: true
         },
         {
           label: 'manager.menu.static.contract.management.suppliers.management.collaborators',
@@ -617,6 +640,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           selectFieldList: this.collaboratorList,
           searchControlName: 'emailAddressFilterCtrl',
           formControlName: 'email_address',
+          required: true
         },
       ],
     },
@@ -629,12 +653,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'start_date',
+          required: true
         },
         {
           label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'end_date',
+          required: true
         },
       ],
     },

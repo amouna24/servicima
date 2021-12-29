@@ -313,6 +313,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             filteredList: this.filteredCountries,
             formControlName: 'birth_country_id',
             searchControlName: 'countryBirthFilterCtrl',
+            required: true
 
           },
           {
@@ -321,6 +322,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'birth_city',
+            required: true
           },
         ],
       },
@@ -334,6 +336,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'adress',
+            required: true
           },
         ],
       },
@@ -347,7 +350,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             formControlName: 'country_id',
-            searchControlName: 'countryFilterCtrl'
+            searchControlName: 'countryFilterCtrl',
+            required: true
           },
           {
             label: 'Zip',
@@ -355,6 +359,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'zip_code',
+            required: true
           },
         ],
       },
@@ -368,6 +373,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.familySituationList,
             formControlName: 'family_situation_id',
+            required: true,
           },
           {
             label: 'natio_all',
@@ -376,6 +382,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             filteredList: this.filteredNationalities,
             searchControlName: 'nationalityFilterCtrl',
             formControlName: 'nationality_id',
+            required: true
           },
         ],
       },
@@ -389,6 +396,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'registration_number',
+            required: true
           },
           {
             label: 'social_sec_all',
@@ -396,6 +404,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'social_secu_nbr',
+            required: true
           },
         ],
       },
@@ -441,12 +450,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.documentTypeList,
             formControlName: 'type',
+            required: true
           },
           {
             label: 'valid_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'validity_date',
+            required: true
           },
         ],
       },
@@ -460,6 +471,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'file',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -484,7 +496,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'contract_rate',
-            min: 0
+            required: true
           },
           {
             label: 'currency_all',
@@ -492,7 +504,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
-            searchControlName: 'currencyFilterCtrl'
+            searchControlName: 'currencyFilterCtrl',
+            required: true
           },
         ],
       },
@@ -505,12 +518,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
+            required: true
           },
           {
             label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
+            required: true
           },
         ],
       },
@@ -523,6 +538,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_date',
+            required: true
           },
           {
             label: 'contract_type_all',
@@ -530,6 +546,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
+            required: true
           },
         ],
       },
@@ -543,6 +560,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -582,6 +600,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'company_name',
+            required: true
           },
           {
             label: 'country_all',
@@ -590,6 +609,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             filteredList: this.filteredCountries,
             searchControlName: 'countryFilterCtrl',
             formControlName: 'country_code',
+            required: true
           },
         ],
       },
@@ -602,12 +622,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
+            required: true
           },
           {
             label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
+            required: true
           },
         ],
       },
@@ -622,6 +644,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             inputType: InputType.NUMBER,
             min: 0,
             formControlName: 'contract_rate',
+            required: true
           },
           {
             label: 'currency_all',
@@ -629,6 +652,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
+            required: true
           },
         ],
       },
@@ -642,6 +666,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
+            required: true
           },
           {
             label: 'job_title_all',
@@ -649,6 +674,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
+            required: true
           },
         ],
       },
@@ -696,12 +722,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_start_date',
+            required: true
           },
           {
             label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_end_date',
+            required: true
           },
         ],
       },
@@ -715,6 +743,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'extension_rate',
+            required: true
           },
           {
             label: 'job_title_all',
@@ -722,6 +751,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
+            required: true
           },
         ],
       },
@@ -735,6 +765,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'extension_currency_cd',
+            required: true
           },
           {
             label: 'attachment_all',
@@ -742,6 +773,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -791,12 +823,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'main_mission',
+            required: true
           },
           {
             label: 'report_all',
             placeholder: 'report_all',
             type: FieldsType.INPUT,
             formControlName: 'report',
+            required: true
           },
         ],
       },
@@ -810,12 +844,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_start_date',
+            required: true
           },
           {
             label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_end_date',
+            required: true
           },
         ],
       },
@@ -830,6 +866,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'evaluation_doc',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -878,12 +915,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'description',
+            required: true
           },
           {
             label: 'expected_result_all',
             placeholder: 'expected_result_all',
             type: FieldsType.INPUT,
             formControlName: 'expected_result',
+            required: true
           },
         ],
       },
@@ -897,6 +936,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'deadline',
+            required: true
           },
         ],
       },
@@ -941,12 +981,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
+            required: true
           },
           {
             label: 'birth_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
+            required: true
           },
         ],
       },
@@ -985,11 +1027,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Full name',
-            placeholder: 'Full name',
+            label: 'full_name_all',
+            placeholder: 'full_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
+            required: true
           },
           {
             label: 'phone_all',
@@ -997,6 +1040,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'phone',
+            required: true
           },
         ],
       },
@@ -1021,6 +1065,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'bank_name',
+            required: true
           },
         ],
       },
@@ -1034,6 +1079,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'iban',
+            required: true
           },
         ],
       },
@@ -1047,6 +1093,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'rib',
+            required: true
           },
         ],
       },
@@ -1078,6 +1125,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'equipment_name',
+            required: true
           },
         ],
       },
