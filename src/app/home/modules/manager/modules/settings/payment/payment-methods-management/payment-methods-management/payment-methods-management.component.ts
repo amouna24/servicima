@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { IRefdataModel } from '@shared/models/refdata.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UserService } from '@core/services/user/user.service';
@@ -100,7 +99,6 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
   /**
    * @description : change the status of the user
    * @param id: string
-   * @param status: string
    */
   onChangeStatus(id: string) {
     const confirmation = {
@@ -136,7 +134,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
       });
       const obj = { data, list: listArray};
       this.modalService.displayModal('addPaymentTermsMethode', obj,
-        '657px', '270px').subscribe(async (res) => {
+        '657px', '276px').subscribe(async (res) => {
           if (res) {
             await this.getPaymentMethode(this.nbtItems.getValue(), 0);
           }
