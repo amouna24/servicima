@@ -31,21 +31,21 @@ export const managerMenu: IMenu[] = [
     children: [
       {
         state: 'Pending',
-        name: 'Pending',
+        name: 'timesheet-pending',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
       {
         state: 'Rejected',
-        name: 'Rejected',
+        name: 'timeshhet-rejected',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
       },
       {
         state: 'Approved',
-        name: 'Approved',
+        name: 'timesheet-approved',
         icon: '',
         feature: 'CONTRACT_ACCESS',
         type: 'link',
