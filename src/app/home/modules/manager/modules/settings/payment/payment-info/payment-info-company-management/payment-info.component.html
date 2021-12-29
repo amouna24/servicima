@@ -3,9 +3,8 @@
     [tableData]="ELEMENT_DATA"
     [isLoading]="isLoading"
     [tableCode]="'COMPANY_PAYMENT_TERMS'"
-    [header]="{ title: 'Payment info management',type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
-    , addActionText: 'New payment info'}"
-    [title]="'Payment info list'"
+    [header]="{ title: 'payment-info-manag' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
+    , addActionText: 'add-new' | translate}"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
     [allowedActions]="['delete']"

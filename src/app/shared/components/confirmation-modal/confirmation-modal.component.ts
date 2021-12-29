@@ -46,14 +46,14 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Deactivate',
+              name: 'homecompany.desactivate',
               color: ' #f3f6f9',
               nextValue: true,
               background: '#d24d57'
             },
             buttonRight: {
               visible: true,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               nextValue: false,
               color: '#232323',
               background: '#f3f6f9'
@@ -71,14 +71,14 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Confirm',
+              name: 'company.banking.info.confirm',
               color: ' #f3f6f9',
               nextValue: true,
               background: '#0459bc'
             },
             buttonRight: {
               visible: true,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               nextValue: false,
               color: '#232323',
               background: '#f3f6f9'
@@ -94,14 +94,14 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Confirm',
+              name: 'company.banking.info.confirm',
               color: ' #f3f6f9',
               background: '#0459bc',
               nextValue: true,
             },
             buttonRight: {
               visible: true,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -124,7 +124,7 @@ export class ConfirmationModalComponent implements OnInit {
             },
             buttonRight: {
               visible: false,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -140,14 +140,14 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: false,
-              name: 'Confirm',
+              name: 'company.banking.info.confirm',
               color: ' #f3f6f9',
               background: '#0459bc',
               nextValue: true,
             },
             buttonRight: {
               visible: false,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -163,14 +163,15 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: this.data.status === 'A' ? 'Deactivate' : 'Activate',
+              name: this.data.status === 'A' ? 'homecompany.desactivate' : 'modal-activate' +
+                '',
               color: this.data.status === 'A' ? 'white' : 'white',
               background: this.data.status === 'A' ? '#d24d57' : '#1bc5bd',
               nextValue: true,
             },
             buttonRight: {
               visible: true,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -186,14 +187,14 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Delete',
+              name: 'resume-delete',
               color: 'white',
               background: '#d24d57',
               nextValue: true,
             },
             buttonRight: {
               visible: true,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -216,7 +217,7 @@ export class ConfirmationModalComponent implements OnInit {
             },
             buttonRight: {
               visible: false,
-              name: 'cancel',
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
@@ -232,14 +233,37 @@ export class ConfirmationModalComponent implements OnInit {
           button: {
             buttonLeft: {
               visible: true,
-              name: 'Yes',
+              name: 'yes',
               color: ' #f3f6f9',
               background: '#0459bc',
               nextValue: true,
             },
             buttonRight: {
               visible: true,
-              name: 'No',
+              name: 'modal-no',
+              color: '#232323',
+              background: '#f3f6f9',
+              nextValue: false,
+            },
+          },
+          style: { }
+        };
+        break;
+      }
+      case 'preview': {
+        this.modelConfig = {
+          title: '',
+          button: {
+            buttonLeft: {
+              visible: true,
+              name: 'cand.menu.static.preview',
+              color: 'white',
+              background: 'blue',
+              nextValue: true,
+            },
+            buttonRight: {
+              visible: false,
+              name: 'company.banking.info.cancel',
               color: '#232323',
               background: '#f3f6f9',
               nextValue: false,
