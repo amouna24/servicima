@@ -26,7 +26,7 @@ export class MailingHistoryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getData('ACTIVE', 0, 5);
+    await this.getData('ACTIVE', 0, this.nbtItems.getValue());
   }
 
   /**************************************************************************
@@ -139,13 +139,13 @@ export class MailingHistoryComponent implements OnInit {
             historyData[0].status = 'DISABLED' ;
             this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
               console.log('history disabled', mailingUpdate);
-              await this.getData('ACTIVE', 0, 5);
+              await this.getData('ACTIVE', 0, this.nbtItems.getValue());
             });
           } else {
             historyData[0].status = 'ACTIVE' ;
             this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
               console.log('history enabled', mailingUpdate);
-              await this.getData('DISABLED', 0, 5);
+              await this.getData('DISABLED', 0, this.nbtItems.getValue());
             });
           }
 
