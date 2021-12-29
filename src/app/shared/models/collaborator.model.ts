@@ -22,6 +22,8 @@ export interface ICollaborator {
   bank_iban?: string;
   rib_key?: string;
   medical_exam_date?: string;
+  registration_number?: string;
+  social_secu_nbr?: string;
   status?: string;
   application_id: string;
   email_address: string;

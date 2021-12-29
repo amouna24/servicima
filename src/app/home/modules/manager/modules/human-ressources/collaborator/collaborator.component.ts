@@ -1179,7 +1179,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    * @description Init form with initial data
    *************************************************************************/
   async initProfileForm() {
-
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
         first_name: [this.userInfo === null ? '' : this.userInfo.first_name],
@@ -1198,8 +1197,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id],
         nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id],
         nationalityFilterCtrl: [''],
-        registration_number: [''],
-        social_secu_nbr: [''],
+        registration_number: [this.collaborator === null ? '' : this.collaborator.registration_number],
+        social_secu_nbr: [this.collaborator === null ? '' : this.collaborator.social_secu_nbr],
         medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date],
       }),
       IDENTITY_DOCUMENT: this.formBuilder.group({
@@ -2105,6 +2104,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
       }
       this.collaboratorInfo = this.profileForm.controls.PERSONAL_DATA.value;
+      console.log('my collaborator form ', this.collaboratorInfo);
       this.collaboratorInfo['email_address'] = this.emailAddress;
       this.collaboratorInfo['application_id'] = this.applicationId;
       this.hrHelper.updateCollaboratorInfo(this.collaboratorInfo);
@@ -2160,7 +2160,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.router.navigate(
         ['/manager/human-ressources/collaborator-list'],
       );
-      this.utilsService.openSnackBar('Collaborator updated successfully', 'close');
+      this.utilsService.openSnackBar('Collaborator updated successfully', 'close', 2000);
 
   }
 
