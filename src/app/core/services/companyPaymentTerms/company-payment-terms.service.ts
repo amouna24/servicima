@@ -21,8 +21,9 @@ export class CompanyPaymentTermsService {
    * @apram company company Email
    * @returns Companies Tax <list>
    *************************************************************************/
-  getCompanyPaymentTerms(company: string, status?: string): Observable<ICompanyPaymentTermsModel[]> {
-    return this.httpClient.get<ICompanyPaymentTermsModel[]>(`${environment.companyPaymentTermsApiUrl}/?company_email=${company}&status=${status}` );
+  getCompanyPaymentTerms(company: string, status?: string, offset?: number, limit?: number): Observable<ICompanyPaymentTermsModel[]> {
+    return this.httpClient.get<ICompanyPaymentTermsModel[]>
+    (`${environment.companyPaymentTermsApiUrl}/datatable?company_email=${company}&status=${status}&beginning=${offset}&number=${limit}` );
   }
 
   /**************************************************************************

@@ -115,7 +115,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       } else if (resPost.status === 200) {
         this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
-            code: 'info',
+            code: 'preview',
             title: 'share_on_linkedin',
             description: `shared-successfully`,
           };
@@ -123,6 +123,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
             .subscribe(
               (resModal) => {
                 if (resModal === true) {
+                  window.open(resPost.url);
+                  console.log(resPost);
                 }
                 this.subscriptionModal.unsubscribe();
               }
@@ -229,7 +231,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       if (resPost.body.id) {
         this.socialNetworkService.addPosts(facebookObject).subscribe( (addPostResult) => {
           const confirmation = {
-            code: 'info',
+            code: 'preview',
             title: 'share_on_facebook',
             description: `shared-successfully`,
           };
@@ -237,6 +239,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
             .subscribe(
               (resModal) => {
                 if (resModal === true) {
+                  window.open(resPost.url);
                 }
                 this.subscriptionModal.unsubscribe();
               }
@@ -247,8 +250,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       } else {
         const confirmation = {
           code: 'error',
-          title: 'Share post on Facebook',
-          description: `Your post is not shared, try again `,
+          title: 'share_on_facebook',
+          description: `no-shared-social`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
           .subscribe(

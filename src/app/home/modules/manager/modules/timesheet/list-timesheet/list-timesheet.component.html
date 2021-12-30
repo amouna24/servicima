@@ -2,10 +2,11 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'TIMESHEET'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Timesheet management', addActionURL: '#', addActionText: ''}"
+  [header]="{ title: 'timesheet-manag' | translate, addActionURL: '#', addActionText: ''}"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['Approve', 'Reject', 'Delete']"
   [buttonAdd]="false"
+  (pagination)="loadMoreItems($event)"
   [setAvatar]="{columnCode:'profile', imgSrc: 'photo' }"
 >
 </wid-dynamic-data-table>

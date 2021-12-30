@@ -2,10 +2,11 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'ROLE'"
     [isLoading]="isLoading"
-    [header]="{ title: 'Role management', addActionText: 'New role',type:'dialog',
-        addActionDialog: { modalName: 'addRole', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '520px' }}"
+    [header]="{ title: 'manager-setting-menu.users.management.role.management' | translate, addActionText: 'add-new' | translate,type:'dialog',
+        addActionDialog: { modalName: 'addRole', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '526px' }}"
     [allowedActions]="['delete']"
     [title]="'Role list'"
     (rowActionData)="switchAction($event)"
+    (pagination)="loadMoreItems($event)"
   >
   </wid-dynamic-data-table>

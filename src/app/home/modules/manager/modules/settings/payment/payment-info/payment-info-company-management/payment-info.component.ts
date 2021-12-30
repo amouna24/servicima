@@ -19,6 +19,10 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   ELEMENT_DATA = new BehaviorSubject<any>([]);
   isLoading = new BehaviorSubject<boolean>(false);
   emailAddress: string;
+  /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -36,7 +40,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
       { modalName: 'addPaymentTerms', modalComponent: AddPaymentInfoCompanyComponent });
     this.isLoading.next(true);
     this.getConnectedUser();
-    this.getPaymentTerms();
+    this.getPaymentTerms(this.nbtItems.getValue(), 0);
   }
   /**
    * @description Get connected user
@@ -51,8 +55,17 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
         });
   }
 
-  getPaymentTerms() {
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, 'ACTIVE').subscribe((data) => {
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+      this.nbtItems.next(params.limit);
+      this.getPaymentTerms(params.limit, params.offset);
+  }
+
+  getPaymentTerms(limit: number, offset: number ) {
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, 'ACTIVE', offset, limit).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
@@ -87,7 +100,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
           .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
           (res) => {
             if (res) {
-              this.getPaymentTerms();
+              this.getPaymentTerms(this.nbtItems.getValue(), 0);
             }
           },
           (err) => console.error(err),
@@ -99,13 +112,14 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   updatePaymentTerms(data) {
   this.modalService.displayModal('addPaymentTerms', data,
     '657px', '396px').subscribe(() => {
-    this.getPaymentTerms();
+    this.getPaymentTerms(this.nbtItems.getValue(), 0);
   });
   }
 
   getDataWithStatus(status) {
     this.isLoading.next(true);
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, status).subscribe((data) => {
+    this.subscriptions.push(this.companyPaymentTermsService
+      .getCompanyPaymentTerms(this.emailAddress, status, this.nbtItems.getValue(), 0).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));

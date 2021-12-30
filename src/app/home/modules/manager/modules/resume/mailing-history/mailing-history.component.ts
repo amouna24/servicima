@@ -15,7 +15,7 @@ export class MailingHistoryComponent implements OnInit {
   @Input() tableData = new BehaviorSubject<any>([]);
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   Archive = 'Disable';
-
+  nbtItems = new BehaviorSubject<number>(5);
   constructor(
     private userService: UserService,
     private resumeService: ResumeService,
@@ -26,13 +26,13 @@ export class MailingHistoryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getData('ACTIVE');
+    await this.getData('ACTIVE', 0, this.nbtItems.getValue());
   }
 
   /**************************************************************************
    * @description Get Users Data  from user service and resume service
    *************************************************************************/
-  async getData(status) {
+  async getData(status, offset, limit) {
     if (status === 'ACTIVE') {
       this.Archive = 'Disable';
     } else {
@@ -41,7 +41,8 @@ export class MailingHistoryComponent implements OnInit {
     this.isLoading.next(true);
     this.userService.connectedUser$
       .subscribe((userInfo) => {
-        this.resumeService.getMailingHistory(`?company_email=${userInfo?.company[0].companyKey.email_address}&status=${status}`)
+        this.resumeService
+          .getMailingHistory(`?company_email=${userInfo?.company[0].companyKey.email_address}&status=${status}&beginning=${offset}&number=${limit}`)
           .subscribe(async (mailingList) => {
             return new Promise((resolve) => {
               if (mailingList['msg_code'] !== '0004') {
@@ -60,8 +61,10 @@ export class MailingHistoryComponent implements OnInit {
                 resolve([]);
               }
             }).then((result) => {
+              mailingList['results'] = result;
+              console.log('result=', result);
               this.isLoading.next(false);
-              this.tableData.next(result);
+              this.tableData.next(mailingList);
             });
           });
       });
@@ -136,17 +139,25 @@ export class MailingHistoryComponent implements OnInit {
             historyData[0].status = 'DISABLED' ;
             this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
               console.log('history disabled', mailingUpdate);
-              await this.getData('ACTIVE');
+              await this.getData('ACTIVE', 0, this.nbtItems.getValue());
             });
           } else {
             historyData[0].status = 'ACTIVE' ;
             this.resumeService.updateMailingHistory(historyData[0]).subscribe(async (mailingUpdate) => {
               console.log('history enabled', mailingUpdate);
-              await this.getData('DISABLED');
+              await this.getData('DISABLED', 0, this.nbtItems.getValue());
             });
           }
 
         });
     });
+  }
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getData('ACTIVE', params.offset, params.limit);
   }
 }

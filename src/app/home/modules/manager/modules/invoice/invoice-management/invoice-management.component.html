@@ -151,7 +151,7 @@
           <table #tableInvoicePayment [hidden]="invoicePayment.length == 0"    [ngStyle]="{'width': '93%', 'box-shadow': 'none !important', 'margin-left': '2%'}" mat-table  [dataSource]="dataSourceInvoicePayment" class="mat-elevation-z8" matSort>
             <ng-container matColumnDef="Entered By">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Entered By </th>
-              <td  class="width-125" mat-cell *matCellDef="let element"> {{element.Entred}} </td>
+              <td  class="width-125" mat-cell *matCellDef="let element"> {{element.Entered}} </td>
 
             </ng-container>
             <ng-container matColumnDef="Type">
@@ -194,11 +194,11 @@
         <div  class="m-t-10 width-250" *ngIf="showPayment && invoicePayment.length > 0">
           <div fxLayout="row" class="flex-wrap m-l-30">
             <div class="width-100">Total Payments: </div>
-            <div> {{totalPayments}}$</div>
+            <div> {{totalPayments}} {{symbolCurrency}}</div>
           </div>
           <div fxLayout="row" class="flex-wrap m-l-30">
             <div class="width-100"> pay: </div>
-            <div> {{leftToPay}}$ </div>
+            <div> {{leftToPay}}{{symbolCurrency}}</div>
           </div>
         </div>
       </div>
@@ -451,26 +451,26 @@
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
               <div class="width-100"> Sous-total: </div>
-              <div> {{sousTotalHT}}$ </div>
+              <div> {{sousTotalHT}} {{symbolCurrency}} </div>
             </div>
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
               <div class="width-100"> TVA: </div>
-              <div> {{vatMount}}$ </div>
+              <div> {{vatMount}} {{symbolCurrency}} </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
               <div class="width-100"> Total: </div>
-              <div> {{totalTTC}}$ </div>
+              <div> {{totalTTC}} {{symbolCurrency}} </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
               <div class="width-100"> Paiement(s): </div>
-              <div> {{totalTTC}}$ </div>
+              <div> {{totalTTC}} {{symbolCurrency}} </div>
             </div>
 
             <div fxLayout="row" class="flex-wrap font-bold" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}" >
               <div class="width-100"> Solde à payer: </div>
-              <div> {{totalTTC}}$ </div>
+              <div> {{totalTTC}} {{symbolCurrency}} </div>
             </div>
           </div>
         </div>

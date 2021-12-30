@@ -25,6 +25,16 @@ export class TimesheetService {
     return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}${filter}`);
   }
 
+  /*------------------------------------ TIMESHEET --------------------------------------*/
+  /**************************************************************************
+   * @description Get Timesheet List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Timesheet Observable<ITimesheet[]>
+   *************************************************************************/
+  getTimesheetPaginator(filter: string): Observable<ITimesheetModel[]> {
+    return this.httpClient.get<ITimesheetModel[]>(`${environment.timesheetApiUrl}/datatable${filter}`);
+  }
+
   /**************************************************************************
    * @description Add new Timesheet
    * @param Timesheet: Timesheet Model

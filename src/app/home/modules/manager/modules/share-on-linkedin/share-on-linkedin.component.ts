@@ -216,14 +216,15 @@ export class ShareOnLinkedinComponent implements OnInit {
         this.linkedInService.updatePosts(linkedInObject).subscribe((resPostUpdate) => {
           this.linkedInService.deletePosts(linkedInObject._id).subscribe((deleteOldPost) => {
             const confirmation = {
-              code: 'info',
-              title: 'Share post on linkedin',
-              description: `Your post is shared successfully`,
+              code: 'preview',
+              title: 'share_on_linkedin',
+              description: `shared-successfully`,
             };
             this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
               .subscribe(
                 (resModal) => {
                   if (resModal === true) {
+                    window.open(resPost.url);
                   }
                   this.subscriptionModal.unsubscribe();
                 }
@@ -366,14 +367,16 @@ export class ShareOnLinkedinComponent implements OnInit {
         this.linkedInService.updatePosts(facebookObject).subscribe((resPostUpdate) => {
           this.linkedInService.deletePosts(facebookObject._id).subscribe((deleteOldPost) => {
             const confirmation = {
-              code: 'info',
-              title: 'Share post on Facebook',
-              description: `Your post is shared successfully`,
+              code: 'preview',
+              title: 'share_on_facebook',
+              description: `shared-successfully`,
             };
             this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
               .subscribe(
                 (resModal) => {
                   if (resModal === true) {
+                    console.log(resFacebookPost.url);
+                    window.open(resFacebookPost.url);
                   }
                   this.subscriptionModal.unsubscribe();
                 }
@@ -383,15 +386,18 @@ export class ShareOnLinkedinComponent implements OnInit {
       } else {
         const confirmation = {
           code: 'error',
-          title: 'Share post on Facebook',
-          description: `We cannot share your post, please try again`,
+          title: 'share_on_facebook',
+          description: `no-shared-social`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
           .subscribe(
             (resModal) => {
               if (resModal === true) {
               }
-              this.subscriptionModal.unsubscribe();
+              this.linkedInService.deletePosts(facebookObject._id).subscribe((deleteOldPost) => {
+                console.log('deleted');
+              });
+                this.subscriptionModal.unsubscribe();
             }
           );
       }

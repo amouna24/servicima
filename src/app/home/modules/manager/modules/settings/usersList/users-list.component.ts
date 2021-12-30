@@ -20,6 +20,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
   isLoading = new BehaviorSubject<boolean>(false);
   refData: { } = { };
   typeUser: string;
+  searchParam: any;
+  searchUsers: any;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -34,7 +36,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private utilsService: UtilsService,
               private modalService: ModalService, ) {
-    this.typeUser = this.router.getCurrentNavigation().extras.state?.typeUser;
+    this.typeUser = this.router.getCurrentNavigation() ? this.router.getCurrentNavigation().extras?.state?.typeUser : '' ;
   }
 
   /**
@@ -66,12 +68,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * @description : get all users
    */
-  getAllUsers(limit, offset) {
+   getAllUsers(limit, offset) {
     this.subscriptions.push(
       this.profileService.getAllUser(this.emailAddress, '', limit, offset)
         .subscribe((res) => {
           res['results'] = this.getUserWithType(res['results'], this.typeUser);
-        this.ELEMENT_DATA.next(res['results']);
+        this.ELEMENT_DATA.next(res);
         this.isLoading.next(false);
     }));
   }
@@ -108,6 +110,20 @@ export class UsersListComponent implements OnInit, OnDestroy {
   updateUser(data) {
     this.router.navigate(['/manager/settings/users/update-user'],
       { state: { id: data._id }
+      });
+  }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param filter object
+   *************************************************************************/
+  search(filter) {
+    this.isLoading.next(true);
+    this.searchParam = filter;
+    this.profileService.filterAllUser(this.emailAddress, this.nbtItems.getValue(), 0, filter.columns, filter.filterValue, filter.operator)
+      .subscribe((res) => {
+        this.ELEMENT_DATA.next(res);
+        this.isLoading.next(false);
       });
   }
 
@@ -157,10 +173,32 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param params object
    *************************************************************************/
   loadMoreItems(params) {
-    this.nbtItems.next(params.limit);
-    this.getAllUsers(params.limit, params.offset);
+    if (params.searchBoolean) {
+      this.profileService.getSearchUser(this.emailAddress, this.searchUsers, params.limit, params.offset).subscribe((data) => {
+        this.ELEMENT_DATA.next(data);
+      });
+    } else if (params.search) {
+       const filter = this.searchParam;
+      this.profileService.filterAllUser(this.emailAddress, params.limit, params.offset, filter.columns, filter.filterValue, filter.operator)
+        .subscribe((res) => {
+          this.ELEMENT_DATA.next(res);
+          this.isLoading.next(false);
+        });
+    } else {
+      this.nbtItems.next(params.limit);
+      this.getAllUsers(params.limit, params.offset);
+    }
+
   }
 
+  searchUser(params) {
+    this.isLoading.next(true);
+    this.searchUsers = params;
+    this.profileService.getSearchUser(this.emailAddress, params, this.nbtItems.getValue(), 0).subscribe((data) => {
+      this.ELEMENT_DATA.next(data);
+      this.isLoading.next(false);
+    });
+  }
   /**
    * @description destroy
    */

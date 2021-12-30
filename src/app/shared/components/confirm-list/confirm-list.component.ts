@@ -37,12 +37,17 @@ export class ConfirmListComponent implements OnInit {
     if (this.requiredFields.length > 0) {
       await this.verifyRequiredFields();
     } else {
-      this.showList.next(this.DATA.value);
+      this.DATA.subscribe((data) => {
+        this.showList.next(data);
+      });
+
     }
   }
  async verifyRequiredFields(): Promise<void> {
    this.DATA.subscribe(
       (res) => {
+        this.showList.next([]);
+        this.unknownList.next([]);
         res.map(
           row => {
             if (!this.missingField(row)) {

@@ -89,11 +89,25 @@ export class RefdataService {
    * @description get refData with specific refType
    * @param company: company
    * @param application :application
-   * @param reftypeId: id refType
    */
   getRefDataByType(company: string, application: string) {
     return this.httpClient
       .get<IRefdataModel[]>(`${environment.refDataApiUrl}?company_id=${company}&application_id=${application}`);
+  }
+
+  /**
+   * @description get refData with specific refType
+   * @param company: company
+   * @param application :application
+   * @param refType: id refType
+   * @param language: language id
+   * @param limit: limit
+   * @param offset: offset
+   */
+  getRefDataByTypeDatatable(company: string, application: string, refType, language: string, limit: number, offset: number ) {
+    return this.httpClient
+      .get<IRefdataModel[]>(`${environment.refDataApiUrl}/datatable?company_id=${company}&application_id=${application}&ref_type_id=${refType}` +
+      `&language_id=${language}&beginning=${offset}&number=${limit}`);
   }
 
   /**

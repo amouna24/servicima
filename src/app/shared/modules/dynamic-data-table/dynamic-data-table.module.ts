@@ -29,8 +29,5 @@ import { DataTableConfigComponent } from './components/data-table-config/data-ta
   exports: [
     DynamicDataTableComponent,
   ],
-  providers: [
-    DynamicDataTableService
-  ],
 })
 export class DynamicDataTableModule { }

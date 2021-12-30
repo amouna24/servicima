@@ -32,6 +32,11 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   listStatus: string;
 
   /**************************************************************************
+   * @description DATA_TABLE paginations
+   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
+
+  /**************************************************************************
    * @description Variable used to destroy all subscriptions
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -56,7 +61,7 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
     this.modalsServices.registerModals({ modalName: 'rejectTimesheet', modalComponent: RejectTimesheetComponent });
     this.route.params.subscribe(params => {
       this.listStatus = params['status'];
-      this.getAllTimesheet();
+      this.getAllTimesheet(this.nbtItems.getValue(), 0);
     });
     this.isLoading.next(false);
   }
@@ -84,15 +89,15 @@ export class ListTimesheetComponent implements OnInit, OnDestroy {
   /**
    * @description : get all timesheet
    */
-getAllTimesheet() {
-  this.timesheetService.getTimesheet(
+getAllTimesheet(limit: number, offset: number) {
+  this.timesheetService.getTimesheetPaginator(
           `?application_id=${this.userService.applicationId}` +
           `&company_email=${this.companyEmail}` +
           `&timesheet_status=${this.listStatus}` +
-          `&status=ACTIVE`).toPromise().then(
+          `&status=ACTIVE&beginning=${offset}&number=${limit}`).toPromise().then(
          async (timesheetList) => {
            if (timesheetList) {
-             timesheetList.map((timesheet) => {
+             timesheetList['results'].map((timesheet) => {
                  this.profileService.getUser(`?email_address=${timesheet.TimeSheetKey.email_address}`)
                    .toPromise().then(
                    (profile) => {
@@ -128,7 +133,7 @@ getAllTimesheet() {
                 '353px')
                 .subscribe((result) => {
                   if (result) {
-                    this.getAllTimesheet();
+                    this.getAllTimesheet(this.nbtItems.getValue(), 0);
                   }
                 });
             }
@@ -153,6 +158,16 @@ getAllTimesheet() {
         break;
     }
   }
+
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  loadMoreItems(params) {
+      this.nbtItems.next(params.limit);
+      this.getAllTimesheet(params.limit, params.offset);
+  }
+
   /**************************************************************************
    * @description Destroy All subscriptions declared with takeUntil operator
    *************************************************************************/

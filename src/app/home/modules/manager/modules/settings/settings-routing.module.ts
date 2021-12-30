@@ -76,6 +76,22 @@ const routes: Routes = [
       breadcrumb: 'role'
     },
   },
+
+  {
+    path: 'departments',
+    loadChildren: () => import('./departments/departments.module').then(m => m.DepartmentsModule),
+    data: {
+      breadcrumb: 'department'
+    },
+  },
+
+  {
+    path: 'calendars',
+    loadChildren: () => import('./calendars/calendars.module').then(m => m.CalendarsModule),
+    data: {
+      breadcrumb: 'calendar'
+    },
+  },
 ];
 
 @NgModule({

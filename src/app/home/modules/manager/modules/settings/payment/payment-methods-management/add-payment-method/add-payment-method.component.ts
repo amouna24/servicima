@@ -141,11 +141,13 @@ export class AddPaymentMethodComponent implements OnInit, OnDestroy {
           }
         }));
       });
-      const allList = await this.refdataService
-        .getRefData( this.utilsService.getCompanyId(this.userService.emailAddress, this.userService.applicationId) , this.userService.applicationId,
-          ['PAYMENT_MODE'], true);
-      this.dialogRef.close(allList['PAYMENT_MODE']);
+      this.refdataService
+        .getRefDataByTypeDatatable(this.companyId, this.userService.applicationId, this.utilsService.getRefTypeId('PAYMENT_MODE'),
+          this.userService.language.langId, 5, 0).subscribe((resp) => {
+        this.dialogRef.close(resp);
+      });
     }));
+
   }
   /**
    * @description : update payment method
@@ -165,9 +167,8 @@ export class AddPaymentMethodComponent implements OnInit, OnDestroy {
         if (data) {
         }
       }));
-    }
-    /* update payment method desc with other languages and add it if is not exist */
-    let i = 0;
+      /* update payment method desc with other languages and add it if is not exist */
+    } else { let i = 0;
     this.form.value.input.map((desc) => {
 
       const PaymentMethodUpdated = {
@@ -193,6 +194,7 @@ export class AddPaymentMethodComponent implements OnInit, OnDestroy {
         }));
       }
     });
+    }
     this.dialogRef.close(true);
 
   }

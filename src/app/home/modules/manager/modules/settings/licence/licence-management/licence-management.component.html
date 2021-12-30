@@ -20,7 +20,7 @@
         <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
          <div fxLayout="row" >
            <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
-             <div>Contact</div>
+             <div>{{'user.contact' | translate}}</div>
            </div>
            <div fxLayout="column" fxFlex="25">
              <mat-form-field appearance="outline">
@@ -34,7 +34,7 @@
 
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="30">
-            Account creation date
+            {{ 'acc-creation-date' | translate}}
           </div>
           <div fxLayout="column" fxFlex="25">
             {{this.startDate | date}}
@@ -43,23 +43,23 @@
 
         <div fxLayout="row" fxLayoutAlign="start center">
           <div fxLayout="column" fxFlex="30">
-            Subscription type
-          </div>
+            {{ 'subscription-date' | translate}}          </div>
           <div  fxFlex="25">
             {{typeLicence | titlecase}} pack <sup class="denim font-size-8">({{periodicity}})</sup>
           </div>
           <div fxLayout="column" fxFlex="30">
-            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn-renew">Renew or edit subscription </button>
+            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn-renew">
+              {{'renew-subscription' | translate}}</button>
           </div>
         </div>
 
         <div fxLayout="row"  >
           <div fxLayout="column" fxFlex="30">
-            Your subscription amount <sup class="font-size-8 denim">auto. renewal without obligation
+            {{'subscription-amount' | translate}}<sup class="font-size-8 denim">{{'auto-renew' | translate}}
           </sup>
           </div>
           <div  fxFlex="12">
-            80.50€ <sup class="font-size-8 denim"> per month</sup>
+            80.50€ <sup class="font-size-8 denim">{{'per-month' | translate}}</sup>
           </div>
           <div fxLayout="row" fxFlex="20"  class="denim decoration" fxLayoutAlign="flex-start center" >
             <div fxLayout="column" >
@@ -67,14 +67,14 @@
               </mat-icon>
             </div>
 
-            <div  fxLayout="column" class="font-size-8"> History</div>
+            <div  fxLayout="column" class="font-size-8"> {{"history" | translate}}</div>
           </div>
         </div>
 
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="30">
-            User licenses <sup  class="font-size-8 denim">
-            Additional user (mensuel) 5.00€
+            {{"user-licence" | translate}} <sup  class="font-size-8 denim">
+           {{'additional-user' | translate}}
           </sup>
           </div>
           <div fxLayout="column" fxFlex="25">
@@ -82,15 +82,15 @@
 
           </div>
           <div fxLayout="column" fxFlex="30">
-            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn">Users management
+            <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn">{{'manager-setting-menu.users.management' | translate}}
             </button>
           </div>
         </div>
 
         <div fxLayout="row"  >
           <div fxLayout="column" fxFlex="30">
-            Next sampling
-          </div>
+          {{'new-sampling' | translate}}
+            </div>
           <div  fxFlex="12">
             15.00€ <sup  class="font-size-8 denim">  31/05/2021 </sup>
           </div>
@@ -100,15 +100,14 @@
               </mat-icon>
             </div>
 
-            <div  fxLayout="column" class="font-size-8"> next invoice </div>
+            <div  fxLayout="column" class="font-size-8"> {{'next-invoice' | translate}} </div>
           </div>
 
         </div>
 
         <div fxLayout="row"  fxLayoutAlign="start center ">
           <div fxLayout="column" fxFlex="30">
-            Payment information
-          </div>
+            {{ 'manager-setting-menu.payment.payment.info' | translate}}          </div>
           <div fxLayout="column" fxFlex="25">
             <div fxLayout="row" >
             <div fxLayout="column" fxFlex="35">  **** **** ****  </div>
@@ -116,7 +115,8 @@
             </div>
           </div>
           <div  fxLayout="column" fxFlex="30" >
-            <button mat-raised-button class="btn-small bg-pale-grey font-size-11 denim overwrite-btn" >Edit credit card
+            <button mat-raised-button class="btn-small bg-pale-grey font-size-11 denim overwrite-btn" >
+              {{'edit-credit-card' | translate}}
             </button>
           </div>
         </div>

@@ -9,8 +9,8 @@ export interface IUserModel {
   first_name: string;
   last_name: string;
   gender_id: string;
-  prof_phone: string;
-  cellphone_nbr: string;
+  prof_phone: number;
+  cellphone_nbr: number;
   language_id: string;
   title_id: string;
   linkedin_url: string;
@@ -23,9 +23,9 @@ export interface IUserModel {
   instagram_url: string;
   viber_url: string;
   youtube_url: string;
-  creation_date: string;
+  creation_date: Date;
   created_by: string;
-  update_date: string;
+  update_date: Date;
   updated_by: string;
   application_id: string;
   email_address: string;

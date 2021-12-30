@@ -20,8 +20,9 @@ export class CompanyTaxService {
    * @apram company company Email
    * @returns Companies Tax <list>
    *************************************************************************/
-  getCompanyTax(company: string): Observable<ICompanyTaxModel[]> {
-    return this.httpClient.get<ICompanyTaxModel[]>(`${environment.companyTaxApiUrl}/?company_email=${company}` );
+  getCompanyTax(company: string, limit?: number, offset?: number): Observable<ICompanyTaxModel[]> {
+    return this.httpClient.get<ICompanyTaxModel[]>
+    (`${environment.companyTaxApiUrl}/datatable?company_email=${company}&beginning=${offset}&number=${limit}` );
   }
 
   /**************************************************************************
