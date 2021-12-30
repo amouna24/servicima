@@ -25,9 +25,7 @@ export const environment = {
   contractExtensionApiUrl: 'http://192.168.1.22:8061/servicima/contractextensions/v1',
   contractProjectApiUrl: 'http://192.168.1.22:8095/servicima/contractproject/v1',
 
-  // contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
   contractorApiUrl: 'http://192.168.1.22:8062/servicima/contractors/v1',
-  // contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   contractorContactApiUrl: 'http://192.168.1.22:8063/servicima/contractorcontacts/v1',
   companyTaxApiUrl: 'http://192.168.1.22:8064/servicima/companytaxes/v1',
   collaboratorApiUrl: 'http://192.168.1.22:8032/auth/collaborators/v1',

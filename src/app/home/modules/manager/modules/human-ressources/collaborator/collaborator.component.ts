@@ -1181,25 +1181,25 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   async initProfileForm() {
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
-        first_name: [this.userInfo === null ? '' : this.userInfo.first_name],
-        last_name: [this.userInfo === null ? '' : this.userInfo.last_name],
-        email_address: [this.collaborator === null ? '' : this.collaborator.collaboratorKey.email_address],
-        phone: [this.userInfo === null ? '' : this.userInfo.cellphone_nbr],
-        birth_date: [this.collaborator === null ? '' : this.collaborator.birth_date],
-        gender_id: [this.userInfo === null ? '' : this.userInfo.gender_id],
-        birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id],
-        birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city],
-        adress: [this.collaborator === null ? '' : this.collaborator.adress],
-        country_id: [this.collaborator === null ? '' : this.collaborator.country_id],
+        first_name: [this.userInfo === null ? '' : this.userInfo.first_name, Validators.required],
+        last_name: [this.userInfo === null ? '' : this.userInfo.last_name, Validators.required],
+        email_address: [this.collaborator === null ? '' : this.collaborator.collaboratorKey.email_address, Validators.required],
+        phone: [this.userInfo === null ? '' : this.userInfo.cellphone_nbr, Validators.required],
+        birth_date: [this.collaborator === null ? '' : this.collaborator.birth_date, Validators.required],
+        gender_id: [this.userInfo === null ? '' : this.userInfo.gender_id, Validators.required],
+        birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id, Validators.required],
+        birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city, Validators.required],
+        adress: [this.collaborator === null ? '' : this.collaborator.adress, Validators.required],
+        country_id: [this.collaborator === null ? '' : this.collaborator.country_id, Validators.required],
         countryFilterCtrl: [''],
         countryBirthFilterCtrl: [''],
-        zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code],
-        family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id],
-        nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id],
+        zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code, Validators.required],
+        family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id, Validators.required],
+        nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id, Validators.required],
         nationalityFilterCtrl: [''],
-        registration_number: [this.collaborator === null ? '' : this.collaborator.registration_number],
-        social_secu_nbr: [this.collaborator === null ? '' : this.collaborator.social_secu_nbr],
-        medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date],
+        registration_number: [this.collaborator === null ? '' : this.collaborator.registration_number, Validators.required],
+        social_secu_nbr: [this.collaborator === null ? '' : this.collaborator.social_secu_nbr, Validators.required],
+        medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date, Validators.required],
       }),
       IDENTITY_DOCUMENT: this.formBuilder.group({
         identity_document_code: [''],
@@ -1208,7 +1208,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         file: [''],
       }),
       CONTRACT: this.formBuilder.group({
-        contract_rate: [this.contract !== null ? this.contract.contract_rate : 0],
+        contract_rate: [this.contract !== null ? this.contract.contract_rate : '', Validators.min(0)],
         currency_cd: [this.contract !== null ? this.contract.currency_cd : null],
         contract_start_date:  [this.contract !== null ? this.contract.contract_start_date : ''],
         contract_end_date:   [this.contract !== null ? this.contract.contract_end_date : ''],
@@ -1223,7 +1223,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         contract_start_date:  [''],
         contract_end_date:  [''],
         contract_type:  [''],
-        contract_rate: [''],
+        contract_rate: ['', Validators.min(0)],
         currency_cd: [''],
         country_code: [''],
         title_cd: [''],
@@ -1233,7 +1233,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         extension_code: [''],
         extension_start_date:  [''],
         extension_end_date:  [''],
-        extension_rate:  [''],
+        extension_rate:  ['', Validators.min(0)],
         title_cd: [''],
         extension_currency_cd: [''],
         attachments: [''],
@@ -1433,6 +1433,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   addInfo(result) {
     if (result.formGroupName === 'IDENTITY_DOCUMENT') {
+      console.log('selectedIdentityDoc ', this.selectedIdentityFile);
       switch (result.action) {
         case 'update': {
           this.identityDocumentInfo.forEach(
@@ -1457,7 +1458,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value &&
             this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value === '') {
-            this.utilsService.openSnackBar('Document type Required', 'close');
+            this.utilsService.openSnackBar('Document type Required', 'close', 2000);
           } else {
             this.identityDocumentInfo.push(
               {
@@ -1470,7 +1471,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.identityDocumentList.next(this.identityDocumentInfo.slice());
             this.profileForm.controls.IDENTITY_DOCUMENT.reset();
-            this.utilsService.openSnackBar('Identity document Added', 'close');
+            this.utilsService.openSnackBar('Identity document Added', 'close', 2000);
           }
         }
           break;
@@ -1500,7 +1501,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EVALUATION['controls'].main_mission.value &&
             this.profileForm.controls.EVALUATION['controls'].main_misasion.value === '') {
-            this.utilsService.openSnackBar(' main mission Required', 'close');
+            this.utilsService.openSnackBar(' main mission Required', 'close', 2000);
           } else {
             this.evaluationInfo.push(
               {
@@ -1515,7 +1516,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.evaluationList.next(this.evaluationInfo.slice());
             this.profileForm.controls.EVALUATION.reset();
-            this.utilsService.openSnackBar('Evaluation Added', 'close');
+            this.utilsService.openSnackBar('Evaluation Added', 'close', 2000);
           }
         }
           break;
@@ -1542,7 +1543,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.GOAL['controls'].expected_result.value &&
             this.profileForm.controls.GOAL['controls'].expected_result.value === '') {
-            this.utilsService.openSnackBar('expected result Required', 'close');
+            this.utilsService.openSnackBar('expected result Required', 'close', 2000);
           } else {
             this.profileForm.controls.GOAL['controls'].goal_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-GOAL`);
             this.goalInfo.push(
@@ -1555,7 +1556,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.goalList.next(this.goalInfo.slice());
             this.profileForm.controls.GOAL.reset();
-            this.utilsService.openSnackBar('Goal Added', 'close');
+            this.utilsService.openSnackBar('Goal Added', 'close', 2000);
           }
         }
           break;
@@ -1581,7 +1582,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value &&
             this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.emergencyContactInfo.push(
               {
@@ -1592,7 +1593,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.emergencyContactList.next(this.emergencyContactInfo.slice());
             this.profileForm.controls.EMERGENCY_CONTACT.reset();
-            this.utilsService.openSnackBar('Contact Added', 'close');
+            this.utilsService.openSnackBar('Contact Added', 'close', 2000);
           }
         }
           break;
@@ -1618,7 +1619,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.CHILDREN['controls'].full_name.value &&
             this.profileForm.controls.CHILDREN['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.childrenList.next([]);
             this.profileForm.controls.CHILDREN['controls'].child_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CHILD`);
@@ -1631,7 +1632,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.childrenList.next(this.childInfo.slice());
             this.profileForm.controls.CHILDREN.reset();
-            this.utilsService.openSnackBar('Child Added', 'close');
+            this.utilsService.openSnackBar('Child Added', 'close', 2000);
           }
         }
           break;
@@ -1656,13 +1657,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value &&
             this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value === '') {
-            this.utilsService.openSnackBar('Equipment name Required', 'close');
+            this.utilsService.openSnackBar('Equipment name Required', 'close', 2000);
           } else {
             this.profileForm.controls.EQUIPMENT['controls'].equipment_code.setValue(this.hrHelper.generateCode('EQ'));
             this.equipmentInfo.push(this.profileForm.controls.EQUIPMENT.value);
             this.equipmentList.next(this.equipmentInfo.slice());
             this.profileForm.controls.EQUIPMENT.reset();
-            this.utilsService.openSnackBar('Equipment Added', 'close');
+            this.utilsService.openSnackBar('Equipment Added', 'close', 2000);
           }
         }
           break;
@@ -1697,7 +1698,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value &&
             this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addExtentionContract =  {
@@ -1715,7 +1716,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractExtensionList.next(this.contractExtensionInfo.slice());
             this.profileForm.controls.CONTRACT_EXTENSION.reset();
-            this.utilsService.openSnackBar('Contract extension Added', 'close');
+            this.utilsService.openSnackBar('Contract extension Added', 'close', 2000);
           }
         }
           break;
@@ -1756,7 +1757,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value &&
             this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addPreviousContract =  {
@@ -1776,7 +1777,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractPreviousList.next(this.contractPreviousInfo.slice());
             this.profileForm.controls.PREVIOUS_CONTRACT.reset();
-            this.utilsService.openSnackBar('Contract previous Added', 'close');
+            this.utilsService.openSnackBar('Contract previous Added', 'close', 2000);
           }
         }
           break;
@@ -1975,7 +1976,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.childInfo.splice(index, 1);
               this.childrenList.next(this.childInfo.slice());
               row.data._id ? this.hrHelper.deleteCHild(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Child deleted successfully', 'close');
+                this.utilsService.openSnackBar('Child deleted successfully', 'close', 2000);
               this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'IDENTITY_DOCUMENT') {
               const code = row.data.HRIdentityDocumentKey?.identity_document_code ?
@@ -1987,7 +1988,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.identityDocumentInfo.splice(index, 1);
                 this.identityDocumentList.next(this.identityDocumentInfo.slice());
                 row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -1999,7 +2000,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.evaluationInfo.splice(index, 1);
                 this.evaluationList.next(this.evaluationInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2011,7 +2012,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.goalInfo.splice(index, 1);
                 this.goalList.next(this.goalInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2024,7 +2025,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.equipmentInfo.splice(index, 1);
                 this.equipmentList.next(this.equipmentInfo.slice());
                 row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
             } else if (row.formGroupName === 'EMERGENCY_CONTACT') {
@@ -2035,7 +2036,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.emergencyContactInfo.splice(index, 1);
                 this.emergencyContactList.next(this.emergencyContactInfo.slice());
                 row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2048,7 +2049,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractExtensionInfo.splice(index, 1);
                 this.contractExtensionList.next(this.contractExtensionInfo.slice());
                 row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2061,12 +2062,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractPreviousList.next(this.contractPreviousInfo.slice());
                 if (row.data._id) {
                   this.hrService.disablePreviousContracts(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
 
-                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close', 2000); });
 
                 } else {
-                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
 
                 }
               }
@@ -2154,7 +2155,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           (extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
         }
       } else {
-        this.utilsService.openSnackBar('no contract disponible', 'close');
+        this.utilsService.openSnackBar('no contract disponible', 'close', 2000);
 
       }
       this.router.navigate(
