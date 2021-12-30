@@ -2,23 +2,23 @@
   <wid-title-certif
     certificate="certificate"
   >
-    <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100">
+    <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100" @dataAppearance>
 
       <section fxLayout="column" fxFlex="80" style="margin-left: 2%;"  >
         <div fxLayout="row">
-          <h1 class="steel font-size-18">{{role}} information </h1>
+          <h1 class="steel font-size-18">{{ 'collaborator.information' | translate }}</h1>
         </div>
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <mat-list role="list"    >
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_contract_certif_start' | translate}}: {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_contract_certif_end' | translate}}: {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_contract_certif_start' | translate}} :</span> {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_contract_certif_end' | translate}} :</span>  {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
             <mat-list role="list">
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_address_certif' | translate}}: {{ certificate.address ? certificate.address : 'No Address For collaborator' }}</mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_nationality_certif' | translate}}: {{ certificate.nationality_id ? certificate.nationality_id : 'No nationality' }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_address_certif' | translate}} :</span> {{ certificate.address ? certificate.address : 'no_address_all' | translate }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_nationality_certif' | translate}} :</span> {{ certificate.nationality_id ? nationality : 'no_natio_all' | translate }}</mat-list-item>
             </mat-list>
           </div>
         </div>
@@ -30,24 +30,20 @@
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <mat-list role="list" >
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_request_certif_date' | translate}} : {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_reponse_certif_date' | translate}} : {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_request_certif_date' | translate}} :</span> {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_reponse_certif_date' | translate}} :</span> {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-            <div  fxLayout="column" fxFlex="40" *ngIf="!collaborator">
-              <div class="black font-size-12">
-                {{ 'rh_language_cerif_show' | translate}} {{ certificate.language }}
-              </div>
-
-
-
-            </div>
+            <mat-list role="list" >
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_request_type' | translate}} :</span> {{ requestType | translate }}</mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_reponse_certif_date' | translate}} :</span> {{ position }} </mat-list-item>
+            </mat-list>
           </div>
         </div>
         <div fxLayout="column wrap"  fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
           <mat-list role="list">
-            <mat-list-item role="listitem" class="black font-size-12">{{ 'rh_comment_certif' | translate}}: {{ certificate.comment }}</mat-list-item>
+            <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_comment_certif' | translate}} :</span> {{ certificate.comment }}</mat-list-item>
 
           </mat-list>
 
@@ -90,7 +86,7 @@
                   <button  mat-raised-button  class="white btn-small bg-topaz"
                            (click)="sign($event)"
                   >
-                    sign
+                    {{ 'sign_all' | translate }}
                   </button>
 
                 </div>
@@ -98,7 +94,7 @@
                   <button mat-raised-button disabled class="topaz font-size-11 bg-white">
                     <mat-icon  class="mat-icon icon material-icons-outlined mat-icon-no-color">
                     </mat-icon>
-                    <span style="padding-top: 1rem">Signed and Confirmed</span></button>
+                    <span style="padding-top: 1rem">{{ 'sign_confirm_all' | translate }}</span></button>
 
                 </div>
               </button>
