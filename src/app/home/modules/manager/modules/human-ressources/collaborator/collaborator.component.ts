@@ -117,6 +117,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   contractExtensionList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractExtensionInfo);
   contractPreviousList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractPreviousInfo);
   contract: any = null;
+  isLoadingImage: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   /**************************************************************************
    * @description collaborator Image
@@ -124,7 +125,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   avatar: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   haveImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   photo: FormData;
-  title = 'HR Folder';
+  title = 'hr_folder_all';
 
   /**************************************************************************
    * @description UserInfo
@@ -144,27 +145,27 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   profileItems: IDynamicMenu[] = [
     {
-      title: 'Personal Data',
+      title: 'personal_data_all',
       titleKey: 'PERSONAL_DATA',
       child: []
     },
     {
-      title: 'Identity Document',
+      title: 'identity_doc_all',
       titleKey: 'IDENTITY_DOCUMENT',
       child: []
     },
     {
-      title: 'Contract',
+      title: 'contract_all',
       titleKey: 'CONTRACT',
       child: []
     },
     {
-      title: 'Previous Contract',
+      title: 'previous_contract_all',
       titleKey: 'PREVIOUS_CONTRACT',
       child: []
     },
     {
-      title: 'Contract Extension',
+      title: 'contract_ext_all',
       titleKey: 'CONTRACT_EXTENSION',
       child: []
     },
@@ -174,27 +175,27 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Goals',
+      title: 'goal_all',
       titleKey: 'GOAL',
       child: []
     },
     {
-      title: 'Children',
+      title: 'child_all',
       titleKey: 'CHILDREN',
       child: []
     },
     {
-      title: 'Emergency Contact',
+      title: 'emergency_contact_all',
       titleKey: 'EMERGENCY_CONTACT',
       child: []
     },
     {
-      title: 'Banking Informations',
+      title: 'banking_info_all',
       titleKey: 'BANKING',
       child: []
     },
     {
-      title: 'Equipment',
+      title: 'equipment_all',
       titleKey: 'EQUIPMENT',
       child: []
     }
@@ -231,18 +232,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         'fieldsLayout': FieldsAlignment.tow_items_with_image_at_right,
         'fields': [
           {
-            label: 'First name',
-            placeholder: 'First name',
+            label: 'first_name_all',
+            placeholder: 'first_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
-            formControlName: 'first_name'
+            formControlName: 'first_name',
+            required: true
+
           },
           {
-            label: 'Last name',
-            placeholder: 'Last name',
+            label: 'last_name_all',
+            placeholder: 'last_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
-            formControlName: 'last_name'
+            formControlName: 'last_name',
+            required: true
           },
           {
             type: FieldsType.IMAGE,
@@ -252,6 +256,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               modelObject:  this.userInfo,
               singleUpload: true,
               userType: userType.UT_USER,
+              imageLoading: this.isLoadingImage
             }
           },
         ],
@@ -261,18 +266,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Email',
+            label: 'email_all',
             placeholder: 'exp@email.com',
             type: FieldsType.INPUT,
             inputType: InputType.EMAIL,
             formControlName: 'email_address',
+            required: true
           },
           {
-            label: 'Phone',
+            label: 'phone_all',
             placeholder: '+216 123 456 78',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
-            formControlName: 'phone'
+            formControlName: 'phone',
+            required: true
           },
         ],
       },
@@ -281,13 +288,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Birth date',
+            label: 'birth_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
+            required: true
+
           },
           {
-            label: 'Gender',
+            label: 'gender_all',
             placeholder: 'Gender',
             type: FieldsType.SELECT,
             selectFieldList: this.genderList,
@@ -300,20 +309,22 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Birth country',
-            placeholder: 'birth country',
+            label: 'birth_country_all',
+            placeholder: 'birth_country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             formControlName: 'birth_country_id',
             searchControlName: 'countryBirthFilterCtrl',
+            required: true
 
           },
           {
-            label: 'Birth city',
-            placeholder: 'birth city',
+            label: 'birth_city_all',
+            placeholder: 'birth_city_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'birth_city',
+            required: true
           },
         ],
       },
@@ -322,11 +333,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Adress',
-            placeholder: 'full adress here',
+            label: 'address_label_all',
+            placeholder: 'address_placeholder_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'adress',
+            required: true
           },
         ],
       },
@@ -335,12 +347,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Country',
-            placeholder: 'Country',
+            label: 'country_all',
+            placeholder: 'country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             formControlName: 'country_id',
-            searchControlName: 'countryFilterCtrl'
+            searchControlName: 'countryFilterCtrl',
+            required: true
           },
           {
             label: 'Zip',
@@ -348,6 +361,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'zip_code',
+            required: true
           },
         ],
       },
@@ -356,19 +370,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Family situation',
-            placeholder: 'family situation',
+            label: 'family_sit_all',
+            placeholder: 'family_sit_all',
             type: FieldsType.SELECT,
             selectFieldList: this.familySituationList,
             formControlName: 'family_situation_id',
+            required: true,
           },
           {
-            label: 'Nationality',
-            placeholder: 'nationality',
+            label: 'natio_all',
+            placeholder: 'natio_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredNationalities,
             searchControlName: 'nationalityFilterCtrl',
             formControlName: 'nationality_id',
+            required: true
           },
         ],
       },
@@ -377,18 +393,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Registration number',
-            placeholder: 'registration number',
+            label: 'registre_nbr_all',
+            placeholder: 'registre_nbr_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'registration_number',
+            required: true
           },
           {
-            label: 'Social security number',
-            placeholder: 'social security number',
+            label: 'social_sec_all',
+            placeholder: 'social_sec_all',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'social_secu_nbr',
+            required: true
           },
         ],
       },
@@ -397,7 +415,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_at_left,
         fields: [
           {
-            label: 'Medical exam date',
+            label: 'medical_exam_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'medical_exam_date',
@@ -429,17 +447,19 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Document type',
-            placeholder: 'document type',
+            label: 'doc_type_all',
+            placeholder: 'doc_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.documentTypeList,
             formControlName: 'type',
+            required: true
           },
           {
-            label: 'validity date',
+            label: 'valid_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'validity_date',
+            required: true
           },
         ],
       },
@@ -448,11 +468,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'file',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -472,19 +493,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'contract_rate',
+            required: true
           },
           {
-            label: 'Currency',
-            placeholder: 'Currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
-            searchControlName: 'currencyFilterCtrl'
+            searchControlName: 'currencyFilterCtrl',
+            required: true
           },
         ],
       },
@@ -493,16 +516,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
+            required: true
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
+            required: true
           },
         ],
       },
@@ -511,17 +536,19 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Assignment Date',
+            label: 'date_assign_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_date',
+            required: true
           },
           {
-            label: 'Contract type',
-            placeholder: 'Contract type',
+            label: 'contract_type_all',
+            placeholder: 'contract_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
+            required: true
           },
         ],
       },
@@ -530,11 +557,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -569,19 +597,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Company Name',
-            placeholder: 'company name',
+            label: 'company_name_all',
+            placeholder: 'company_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'company_name',
+            required: true
           },
           {
-            label: 'Country',
-            placeholder: 'country',
+            label: 'country_all',
+            placeholder: 'country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             searchControlName: 'countryFilterCtrl',
             formControlName: 'country_code',
+            required: true
           },
         ],
       },
@@ -590,16 +620,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
+            required: true
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
+            required: true
           },
         ],
       },
@@ -608,18 +640,21 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
+            min: 0,
             formControlName: 'contract_rate',
+            required: true
           },
           {
-            label: 'Currency',
-            placeholder: 'currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'currency_cd',
+            required: true
           },
         ],
       },
@@ -628,18 +663,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Contract Type',
-            placeholder: 'contract type',
+            label: 'contract_type_all',
+            placeholder: 'contract_type_all',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
+            required: true
           },
           {
-            label: 'Job title',
-            placeholder: 'job title',
+            label: 'job_title_all',
+            placeholder: 'job_title_all',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
+            required: true
           },
         ],
       },
@@ -683,16 +720,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_start_date',
+            required: true
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_end_date',
+            required: true
           },
         ],
       },
@@ -701,18 +740,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Rate',
+            label: 'rate_all',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'extension_rate',
+            required: true
           },
           {
-            label: 'Job title',
-            placeholder: 'job title',
+            label: 'job_title_all',
+            placeholder: 'job_title_all',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
+            required: true
           },
         ],
       },
@@ -721,18 +762,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Currency',
-            placeholder: 'currency',
+            label: 'currency_all',
+            placeholder: 'currency_all',
             type: FieldsType.SELECT,
             selectFieldList: this.currencyList,
             formControlName: 'extension_currency_cd',
+            required: true
           },
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -777,17 +820,19 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Evaluation main mission',
-            placeholder: 'main mission',
+            label: 'evaluation_mission_all',
+            placeholder: 'evaluation_mission_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'main_mission',
+            required: true
           },
           {
-            label: 'Report',
-            placeholder: 'report',
+            label: 'report_all',
+            placeholder: 'report_all',
             type: FieldsType.INPUT,
             formControlName: 'report',
+            required: true
           },
         ],
       },
@@ -797,16 +842,18 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Start date',
+            label: 'star_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_start_date',
+            required: true
           },
           {
-            label: 'End date',
+            label: 'end_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_end_date',
+            required: true
           },
         ],
       },
@@ -816,11 +863,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Attachement',
-            placeholder: 'File',
+            label: 'attachment_all',
+            placeholder: 'attachment_all',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'evaluation_doc',
             inputType: InputType.TEXT,
+            required: true
           },
         ],
       },
@@ -864,17 +912,19 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Description',
-            placeholder: 'description',
+            label: 'invoice.descriptionLine',
+            placeholder: 'invoice.descriptionLine',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'description',
+            required: true
           },
           {
-            label: 'Expected result',
-            placeholder: 'expected result',
+            label: 'expected_result_all',
+            placeholder: 'expected_result_all',
             type: FieldsType.INPUT,
             formControlName: 'expected_result',
+            required: true
           },
         ],
       },
@@ -884,10 +934,11 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_at_left,
         fields: [
           {
-            label: 'Deadline',
+            label: 'deadline_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'deadline',
+            required: true
           },
         ],
       },
@@ -927,17 +978,19 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Full name',
-            placeholder: 'full name',
+            label: 'first_name_all',
+            placeholder: 'first_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
+            required: true
           },
           {
-            label: 'Birth date',
+            label: 'birth_date_all',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
+            required: true
           },
         ],
       },
@@ -976,18 +1029,20 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'Full name',
-            placeholder: 'Full name',
+            label: 'full_name_all',
+            placeholder: 'full_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
+            required: true
           },
           {
-            label: 'Phone',
-            placeholder: 'Phone',
+            label: 'phone_all',
+            placeholder: 'phone_all',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'phone',
+            required: true
           },
         ],
       },
@@ -1007,11 +1062,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Bank name',
-            placeholder: 'bank name',
+            label: 'bank_name_all',
+            placeholder: 'bank_name_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'bank_name',
+            required: true
           },
         ],
       },
@@ -1025,6 +1081,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'iban',
+            required: true
           },
         ],
       },
@@ -1038,6 +1095,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'rib',
+            required: true
           },
         ],
       },
@@ -1064,11 +1122,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'Equipment',
-            placeholder: 'equipment',
+            label: 'equipment_all',
+            placeholder: 'equipment_all',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'equipment_name',
+            required: true
           },
         ],
       },
@@ -1096,6 +1155,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         this.userInfo = user['results'][0];
         this.haveImage.next(user['results'][0]['photo']);
         this.avatar.next(await this.uploadService.getImage(user['results'][0]['photo']));
+        this.isLoadingImage.next(false);
       });
 
     await this.initProfileForm();
@@ -1119,28 +1179,27 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    * @description Init form with initial data
    *************************************************************************/
   async initProfileForm() {
-
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
-        first_name: [this.userInfo === null ? '' : this.userInfo.first_name],
-        last_name: [this.userInfo === null ? '' : this.userInfo.last_name],
-        email_address: [this.collaborator === null ? '' : this.collaborator.collaboratorKey.email_address],
-        phone: [this.userInfo === null ? '' : this.userInfo.cellphone_nbr],
-        birth_date: [this.collaborator === null ? '' : this.collaborator.birth_date],
-        gender_id: [this.userInfo === null ? '' : this.userInfo.gender_id],
-        birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id],
-        birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city],
-        adress: [this.collaborator === null ? '' : this.collaborator.adress],
-        country_id: [this.collaborator === null ? '' : this.collaborator.country_id],
+        first_name: [this.userInfo === null ? '' : this.userInfo.first_name, Validators.required],
+        last_name: [this.userInfo === null ? '' : this.userInfo.last_name, Validators.required],
+        email_address: [this.collaborator === null ? '' : this.collaborator.collaboratorKey.email_address, Validators.required],
+        phone: [this.userInfo === null ? '' : this.userInfo.cellphone_nbr, Validators.required],
+        birth_date: [this.collaborator === null ? '' : this.collaborator.birth_date, Validators.required],
+        gender_id: [this.userInfo === null ? '' : this.userInfo.gender_id, Validators.required],
+        birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id, Validators.required],
+        birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city, Validators.required],
+        adress: [this.collaborator === null ? '' : this.collaborator.adress, Validators.required],
+        country_id: [this.collaborator === null ? '' : this.collaborator.country_id, Validators.required],
         countryFilterCtrl: [''],
         countryBirthFilterCtrl: [''],
-        zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code],
-        family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id],
-        nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id],
+        zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code, Validators.required],
+        family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id, Validators.required],
+        nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id, Validators.required],
         nationalityFilterCtrl: [''],
-        registration_number: [''],
-        social_secu_nbr: [''],
-        medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date],
+        registration_number: [this.collaborator === null ? '' : this.collaborator.registration_number, Validators.required],
+        social_secu_nbr: [this.collaborator === null ? '' : this.collaborator.social_secu_nbr, Validators.required],
+        medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date, Validators.required],
       }),
       IDENTITY_DOCUMENT: this.formBuilder.group({
         identity_document_code: [''],
@@ -1149,7 +1208,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         file: [''],
       }),
       CONTRACT: this.formBuilder.group({
-        contract_rate: [this.contract !== null ? this.contract.contract_rate : 0],
+        contract_rate: [this.contract !== null ? this.contract.contract_rate : '', Validators.min(0)],
         currency_cd: [this.contract !== null ? this.contract.currency_cd : null],
         contract_start_date:  [this.contract !== null ? this.contract.contract_start_date : ''],
         contract_end_date:   [this.contract !== null ? this.contract.contract_end_date : ''],
@@ -1164,7 +1223,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         contract_start_date:  [''],
         contract_end_date:  [''],
         contract_type:  [''],
-        contract_rate: [''],
+        contract_rate: ['', Validators.min(0)],
         currency_cd: [''],
         country_code: [''],
         title_cd: [''],
@@ -1174,7 +1233,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         extension_code: [''],
         extension_start_date:  [''],
         extension_end_date:  [''],
-        extension_rate:  [''],
+        extension_rate:  ['', Validators.min(0)],
         title_cd: [''],
         extension_currency_cd: [''],
         attachments: [''],
@@ -1374,6 +1433,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   addInfo(result) {
     if (result.formGroupName === 'IDENTITY_DOCUMENT') {
+      console.log('selectedIdentityDoc ', this.selectedIdentityFile);
       switch (result.action) {
         case 'update': {
           this.identityDocumentInfo.forEach(
@@ -1398,7 +1458,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value &&
             this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value === '') {
-            this.utilsService.openSnackBar('Document type Required', 'close');
+            this.utilsService.openSnackBar('Document type Required', 'close', 2000);
           } else {
             this.identityDocumentInfo.push(
               {
@@ -1411,7 +1471,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.identityDocumentList.next(this.identityDocumentInfo.slice());
             this.profileForm.controls.IDENTITY_DOCUMENT.reset();
-            this.utilsService.openSnackBar('Identity document Added', 'close');
+            this.utilsService.openSnackBar('Identity document Added', 'close', 2000);
           }
         }
           break;
@@ -1441,7 +1501,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EVALUATION['controls'].main_mission.value &&
             this.profileForm.controls.EVALUATION['controls'].main_misasion.value === '') {
-            this.utilsService.openSnackBar(' main mission Required', 'close');
+            this.utilsService.openSnackBar(' main mission Required', 'close', 2000);
           } else {
             this.evaluationInfo.push(
               {
@@ -1456,7 +1516,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.evaluationList.next(this.evaluationInfo.slice());
             this.profileForm.controls.EVALUATION.reset();
-            this.utilsService.openSnackBar('Evaluation Added', 'close');
+            this.utilsService.openSnackBar('Evaluation Added', 'close', 2000);
           }
         }
           break;
@@ -1483,7 +1543,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.GOAL['controls'].expected_result.value &&
             this.profileForm.controls.GOAL['controls'].expected_result.value === '') {
-            this.utilsService.openSnackBar('expected result Required', 'close');
+            this.utilsService.openSnackBar('expected result Required', 'close', 2000);
           } else {
             this.profileForm.controls.GOAL['controls'].goal_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-GOAL`);
             this.goalInfo.push(
@@ -1496,7 +1556,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.goalList.next(this.goalInfo.slice());
             this.profileForm.controls.GOAL.reset();
-            this.utilsService.openSnackBar('Goal Added', 'close');
+            this.utilsService.openSnackBar('Goal Added', 'close', 2000);
           }
         }
           break;
@@ -1522,7 +1582,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value &&
             this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.emergencyContactInfo.push(
               {
@@ -1533,7 +1593,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.emergencyContactList.next(this.emergencyContactInfo.slice());
             this.profileForm.controls.EMERGENCY_CONTACT.reset();
-            this.utilsService.openSnackBar('Contact Added', 'close');
+            this.utilsService.openSnackBar('Contact Added', 'close', 2000);
           }
         }
           break;
@@ -1559,7 +1619,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.CHILDREN['controls'].full_name.value &&
             this.profileForm.controls.CHILDREN['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.childrenList.next([]);
             this.profileForm.controls.CHILDREN['controls'].child_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CHILD`);
@@ -1572,7 +1632,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.childrenList.next(this.childInfo.slice());
             this.profileForm.controls.CHILDREN.reset();
-            this.utilsService.openSnackBar('Child Added', 'close');
+            this.utilsService.openSnackBar('Child Added', 'close', 2000);
           }
         }
           break;
@@ -1597,13 +1657,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value &&
             this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value === '') {
-            this.utilsService.openSnackBar('Equipment name Required', 'close');
+            this.utilsService.openSnackBar('Equipment name Required', 'close', 2000);
           } else {
             this.profileForm.controls.EQUIPMENT['controls'].equipment_code.setValue(this.hrHelper.generateCode('EQ'));
             this.equipmentInfo.push(this.profileForm.controls.EQUIPMENT.value);
             this.equipmentList.next(this.equipmentInfo.slice());
             this.profileForm.controls.EQUIPMENT.reset();
-            this.utilsService.openSnackBar('Equipment Added', 'close');
+            this.utilsService.openSnackBar('Equipment Added', 'close', 2000);
           }
         }
           break;
@@ -1638,7 +1698,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value &&
             this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addExtentionContract =  {
@@ -1656,7 +1716,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractExtensionList.next(this.contractExtensionInfo.slice());
             this.profileForm.controls.CONTRACT_EXTENSION.reset();
-            this.utilsService.openSnackBar('Contract extension Added', 'close');
+            this.utilsService.openSnackBar('Contract extension Added', 'close', 2000);
           }
         }
           break;
@@ -1697,7 +1757,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value &&
             this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close');
+            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addPreviousContract =  {
@@ -1717,7 +1777,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractPreviousList.next(this.contractPreviousInfo.slice());
             this.profileForm.controls.PREVIOUS_CONTRACT.reset();
-            this.utilsService.openSnackBar('Contract previous Added', 'close');
+            this.utilsService.openSnackBar('Contract previous Added', 'close', 2000);
           }
         }
           break;
@@ -1916,7 +1976,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.childInfo.splice(index, 1);
               this.childrenList.next(this.childInfo.slice());
               row.data._id ? this.hrHelper.deleteCHild(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Child deleted successfully', 'close');
+                this.utilsService.openSnackBar('Child deleted successfully', 'close', 2000);
               this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'IDENTITY_DOCUMENT') {
               const code = row.data.HRIdentityDocumentKey?.identity_document_code ?
@@ -1928,7 +1988,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.identityDocumentInfo.splice(index, 1);
                 this.identityDocumentList.next(this.identityDocumentInfo.slice());
                 row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -1940,7 +2000,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.evaluationInfo.splice(index, 1);
                 this.evaluationList.next(this.evaluationInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -1952,7 +2012,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.goalInfo.splice(index, 1);
                 this.goalList.next(this.goalInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -1965,7 +2025,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.equipmentInfo.splice(index, 1);
                 this.equipmentList.next(this.equipmentInfo.slice());
                 row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
             } else if (row.formGroupName === 'EMERGENCY_CONTACT') {
@@ -1976,7 +2036,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.emergencyContactInfo.splice(index, 1);
                 this.emergencyContactList.next(this.emergencyContactInfo.slice());
                 row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -1989,7 +2049,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractExtensionInfo.splice(index, 1);
                 this.contractExtensionList.next(this.contractExtensionInfo.slice());
                 row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2002,12 +2062,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractPreviousList.next(this.contractPreviousInfo.slice());
                 if (row.data._id) {
                   this.hrService.disablePreviousContracts(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
 
-                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close', 2000); });
 
                 } else {
-                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close');
+                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
 
                 }
               }
@@ -2045,6 +2105,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
       }
       this.collaboratorInfo = this.profileForm.controls.PERSONAL_DATA.value;
+      console.log('my collaborator form ', this.collaboratorInfo);
       this.collaboratorInfo['email_address'] = this.emailAddress;
       this.collaboratorInfo['application_id'] = this.applicationId;
       this.hrHelper.updateCollaboratorInfo(this.collaboratorInfo);
@@ -2094,13 +2155,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           (extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
         }
       } else {
-        this.utilsService.openSnackBar('no contract disponible', 'close');
+        this.utilsService.openSnackBar('no contract disponible', 'close', 2000);
 
       }
       this.router.navigate(
         ['/manager/human-ressources/collaborator-list'],
       );
-      this.utilsService.openSnackBar('Collaborator updated successfully', 'close');
+      this.utilsService.openSnackBar('Collaborator updated successfully', 'close', 2000);
 
   }
 

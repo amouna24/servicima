@@ -148,7 +148,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    *************************************************************************/
   contractItems: IDynamicMenu[] = [
     {
-      title: 'Contract',
+      title: 'contract_all',
       titleKey: 'CONTRACT',
       child: [
         {
@@ -156,31 +156,31 @@ export class AddContractComponent implements OnInit, OnDestroy {
           titleKey: 'INFORMATION',
         },
         {
-          title: 'Signer',
+          title: 'signer_all',
           titleKey: 'SIGNER',
         },
         {
-          title: 'Rate',
+          title: 'rate_all',
           titleKey: 'RATE',
         },
         {
-          title: 'TimeSheet',
+          title: 'template.timesheet',
           titleKey: 'TIMESHEET',
         }
       ]
     },
     {
-      title: 'Contract Extension',
+      title: 'contract_ext_all',
       titleKey: 'CONTRACT_EXTENSION',
       child: []
     },
     {
-      title: 'Contract Project',
+      title: 'contract_project_all',
       titleKey: 'CONTRACT_PROJECT',
       child: []
     },
     {
-      title: 'Project Collaborator',
+      title: 'project_collaborator_all',
       titleKey: 'PROJECT_COLLABORATOR',
       child: []
     },
@@ -191,19 +191,21 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Contractor name',
-          placeholder: 'Contractor code',
+          label: 'contractor_name',
+          placeholder: 'contractor_name',
           type: FieldsType.SELECT,
           selectFieldList: this.contractorsList,
-          formControlName: 'contractor_code'
+          formControlName: 'contractor_code',
+          required: true
         },
         {
-          label: 'Status',
-          placeholder: 'Status',
+          label: 'users.status',
+          placeholder: 'users.status',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'contract_status',
-          searchControlName: 'contractStatusFilter'
+          searchControlName: 'contractStatusFilter',
+          required: true
         },
       ],
     },
@@ -212,17 +214,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Start date',
+          label: 'star_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
-          formControlName: 'contract_start_date'
+          formControlName: 'contract_start_date',
+          required: true
         },
         {
-          label: 'End date',
+          label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'contract_end_date',
           minDate: this.minDate,
+          required: true
         },
       ],
     },
@@ -231,8 +235,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'Attachments',
-          placeholder: 'File',
+          label: 'attachment_all',
+          placeholder: 'attachment_all',
           type: FieldsType.UPLOAD_FILE,
           inputType: InputType.TEXT,
           formControlName: 'attachments'
@@ -244,18 +248,20 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Company signer',
+          label: 'company_signer_all',
           placeholder: 'exp@email.com',
           type: FieldsType.SELECT,
           selectFieldList: this.staffList,
           formControlName: 'signer_company_email',
+          required: true
         },
         {
-          label: 'Contractor signer',
+          label: 'contractor_signer_all',
           placeholder: 'exp@email.com',
           type: FieldsType.SELECT,
           selectFieldList: this.contractorContactList,
           formControlName: 'signer_contractor_email',
+          required: true
         },
       ],
     },
@@ -264,16 +270,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Company signature date',
+          label: 'company_date_signer_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'signature_company_date',
+          required: true
         },
         {
-          label: 'Contractor signature date',
+          label: 'contra_date_signer_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'signature_contractor_date',
+          required: true
         },
       ],
     },
@@ -282,19 +290,21 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Rate',
+          label: 'rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'contract_rate',
+          required: true
         },
         {
-          label: 'Currency',
-          placeholder: 'Currency',
+          label: 'currency_all',
+          placeholder: 'currency_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -303,12 +313,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'Payment',
-          placeholder: 'Payment',
+          label: 'manager-setting-menu.payment.payment.methods',
+          placeholder: 'manager-setting-menu.payment.payment.methods',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredPayment,
           formControlName: 'payment_terms',
-          searchControlName: 'contractPaymentFilter'
+          searchControlName: 'contractPaymentFilter',
+          required: true
         },
       ],
     },
@@ -317,14 +328,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Working hour day',
+          label: 'working_hour_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'working_hour_day',
         },
         {
-          label: 'Holiday rate',
+          label: 'holiday_rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
@@ -337,14 +348,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Saturday rate',
+          label: 'saturday_rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'saturday_rate',
         },
         {
-          label: 'Sunday rate',
+          label: 'sunday_rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
@@ -385,16 +396,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Start date',
+          label: 'star_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'extension_start_date',
+          required: true
         },
         {
-          label: 'End date',
+          label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'extension_end_date',
+          required: true
         },
       ],
     },
@@ -403,19 +416,21 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Rate',
+          label: 'rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'extension_rate',
+          required: true
         },
         {
-          label: 'Currency',
-          placeholder: 'Currency',
+          label: 'currency_all',
+          placeholder: 'currency_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'extension_currency_cd',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -424,19 +439,20 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Status',
-          placeholder: 'Status',
+          label: 'users.status',
+          placeholder: 'users.status',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'extension_status',
-          searchControlName: 'filterStatusControl'
+          searchControlName: 'filterStatusControl',
+          required: true
         },
         {
-          label: 'Attachments',
-          placeholder: 'File',
+          label: 'attachment_all',
+          placeholder: 'attachment_all',
           type: FieldsType.UPLOAD_FILE,
           inputType: InputType.TEXT,
-          formControlName: 'attachments'
+          formControlName: 'attachments',
         },
       ],
     },
@@ -480,18 +496,20 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Category',
-          placeholder: 'Category',
+          label: 'category_all',
+          placeholder: 'category_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'category_code',
+          required: true
         },
         {
-          label: 'Description',
-          placeholder: 'Description',
+          label: 'resume-desc',
+          placeholder: 'resume-desc',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'project_desc',
+          required: true
         },
       ],
     },
@@ -500,16 +518,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Start date',
+          label: 'star_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'start_date',
+          required: true
         },
         {
-          label: 'End date',
+          label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'end_date',
+          required: true
         },
       ],
     },
@@ -518,19 +538,21 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Rate',
+          label: 'rate_all',
           placeholder: '0.00',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'project_rate',
+          required: true
         },
         {
-          label: 'Currency',
-          placeholder: 'Currency',
+          label: 'currency_all',
+          placeholder: 'currency_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'rate_currency',
-          searchControlName: 'filterCurrencyControl'
+          searchControlName: 'filterCurrencyControl',
+          required: true
         },
       ],
     },
@@ -547,16 +569,16 @@ export class AddContractComponent implements OnInit, OnDestroy {
           searchControlName: 'filterVatControl'
         },
         {
-          label: 'Status',
-          placeholder: 'Status',
+          label: 'users.status',
+          placeholder: 'users.status',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'project_status',
           searchControlName: 'filterStatusControl'
         },
         {
-          label: 'Comment',
-          placeholder: 'Comment',
+          label: 'rh_comment_certif',
+          placeholder: 'rh_comment_certif',
           type: FieldsType.TEXTAREA,
           formControlName: 'comment'
         }
@@ -603,20 +625,22 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Project Code',
-          placeholder: 'Project Code',
+          label: 'project_code_all',
+          placeholder: 'project_code_all',
           type: FieldsType.SELECT,
           selectFieldList: this.projectList,
           searchControlName: 'projectCodeFilterCtrl',
           formControlName: 'project_code',
+          required: true
         },
         {
-          label: 'Collaborator',
-          placeholder: 'Collaborator',
+          label: 'manager.menu.static.contract.management.suppliers.management.collaborators',
+          placeholder: 'manager.menu.static.contract.management.suppliers.management.collaborators',
           type: FieldsType.SELECT,
           selectFieldList: this.collaboratorList,
           searchControlName: 'emailAddressFilterCtrl',
           formControlName: 'email_address',
+          required: true
         },
       ],
     },
@@ -625,16 +649,18 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Start date',
+          label: 'star_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'start_date',
+          required: true
         },
         {
-          label: 'End date',
+          label: 'end_date_all',
           placeholder: 'dd/mm/yyyy',
           type: FieldsType.DATE_PICKER,
           formControlName: 'end_date',
+          required: true
         },
       ],
     },

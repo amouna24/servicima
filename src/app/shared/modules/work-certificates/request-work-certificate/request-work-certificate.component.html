@@ -9,32 +9,35 @@
       <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{ 'back' | translate }}</span>
       </button>
     </div>
   </div>
   <div fxLayout="row" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <form [formGroup]="initialForm">
+  <form [formGroup]="initialForm" *ngIf="initialForm" >
     <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100">
 
 
       <div fxFlex="75" fxLayout="column" fxLayoutAlign="space-evenly center">
+
         <div  fxLayout="row" fxFlex="25" style="width: 80%">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label class="black font-size-12">
-              {{ 'rh_request_type' | translate }}
+            <mat-label class="black font-size-12 required">
+              {{ 'rh_request_type' | translate }}:
             </mat-label>
-            <mat-select formControlName="request_type"  panelClass="panelColor">
-              <mat-option value="CERT" selected>{{ 'rh_work_certif' | translate}}</mat-option>
-              <mat-option value="EXP">{{ 'rh_expatriation' | translate }}</mat-option>
+            <mat-select   disableOptionCentering  formControlName="request_type"  panelClass="panelColor" >
+              <mat-option value="CERT" >{{ 'rh_work_certif' | translate}}</mat-option>
+              <mat-option value="EXP">{{ 'rh_exp_certif' | translate }}</mat-option>
             </mat-select>
+            <mat-error class="red" >
+              {{ 'general.required' | translate }} </mat-error>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxFlex="25" style="width: 80%">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label class="black font-size-12">
+            <mat-label class="black font-size-12 required">
               {{ 'rh_language_certif' | translate }}
             </mat-label>
             <mat-select formControlName="language"  panelClass="panelColor">
@@ -49,10 +52,10 @@
 
         <div fxLayout="row" fxFlex="25" style="width: 80%">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label class="black font-size-12">
+            <mat-label class="black font-size-12 required">
               {{ 'rh_comment_certif' | translate }}
             </mat-label>
-            <textarea resizeable="false" matInput formControlName="comment" class="Input_Comment"  rows="7"></textarea>
+            <textarea resizeable="false" matInput  formControlName="comment" class="Input_Comment"  rows="7"></textarea>
           </mat-form-field>
         </div>
       </div>
@@ -61,10 +64,10 @@
       <div  fxLayout="row" fxLayoutAlign="space-evenly end" fxFlex="100" >
 
         <button type="submit" mat-raised-button (click)="request()"  class="bg-cerulean-blue btn-small"  [style]="{marginTop: '8%'}">
-          <span class="font-size-11 white">Send</span>
+          <span class="font-size-11 white">{{ 'send' | translate }}</span>
         </button>
         <button type="submit" mat-raised-button   class="black btn-small bg-white-two" [style]="{marginTop: '8%'}">
-          <span class="font-size-11" >Cancel</span>
+          <span class="font-size-11" >{{ 'timesheet.cancel' | translate }}</span>
         </button>
       </div>
     </div>

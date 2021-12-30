@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { forkJoin, ReplaySubject, Subject } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HumanRessourcesService } from '@core/services/human-ressources/human-resources.service';
 import { takeUntil } from 'rxjs/operators';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
@@ -49,15 +49,21 @@ export class RequestWorkCertificateComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.getConnectedUser();
     await this.getInitialData(this.emailAddress);
+    this.initializeForm();
     this.languageList = this.appInitializer.languageList;
-    this.initialForm = this.fb.group({
-      application_id: this.applicationId,
-      company_email: this.companyEmail,
-      email_address: this.emailAddress,
-      certification_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-WC`,
-      request_type : ['', Validators.required],
-      language : ['', Validators.required],
-      comment : ['']
+  }
+  /**************************************************************************
+   * @description Initialize Form
+   *************************************************************************/
+  initializeForm() {
+    this.initialForm  = new FormGroup({
+      application_id: new FormControl(this.applicationId),
+      company_email: new FormControl(this.companyEmail),
+      email_address: new FormControl(this.emailAddress),
+      certification_code: new FormControl(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-WC`) ,
+      request_type : new FormControl('', Validators.required),
+      language : new FormControl('', Validators.required),
+      comment : new FormControl(''),
     });
   }
   /**************************************************************************
