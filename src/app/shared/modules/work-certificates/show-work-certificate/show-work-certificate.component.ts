@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { SignatureCertificateComponent } from '@shared/modules/work-certificates/signature-certificate/signature-certificate.component';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { IViewParam } from '@shared/models/view.model';
-import {  dataAppearance } from '@shared/animations/animations';
+import {  dataAppearance, showBloc } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-show-work-certificate',
@@ -23,6 +23,7 @@ import {  dataAppearance } from '@shared/animations/animations';
   styleUrls: ['./show-work-certificate.component.scss'],
   animations: [
     dataAppearance,
+    showBloc
   ]
 })
 export class ShowWorkCertificateComponent implements OnInit {
@@ -36,7 +37,6 @@ export class ShowWorkCertificateComponent implements OnInit {
   showBtnEdit = 'Edit';
   refData = { };
   role = 'Collaborator';
-  wi_calender = 'wi_calender';
   collaborator = false;
   modals = { modalName: 'signature', modalComponent: SignatureCertificateComponent };
   subscriptionModal: Subscription;
@@ -125,6 +125,17 @@ export class ShowWorkCertificateComponent implements OnInit {
         this.utilsService.openSnackBar('something wrong', 'close', 5000);
       }
     );
+  }
+  /**************************************************************************
+   * @description  navigate to update certification
+   *************************************************************************/
+  update() {
+    this.router.navigate(
+      ['/collaborator/work-certificates/editCertif'],
+      { state: {
+            certificate: this.certificate
+        }
+      });
   }
   /**
    * @description: get connected user

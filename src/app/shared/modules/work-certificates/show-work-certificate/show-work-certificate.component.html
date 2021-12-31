@@ -4,7 +4,7 @@
   >
     <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100" @dataAppearance>
 
-      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;"  >
+      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;" @showBloc >
         <div fxLayout="row">
           <h1 class="steel font-size-18">{{ 'collaborator.information' | translate }}</h1>
         </div>
@@ -23,7 +23,7 @@
           </div>
         </div>
       </section>
-      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;" >
+      <section fxLayout="column" fxFlex="80" style="margin-left: 2%;" @showBloc >
         <div fxLayout="row">
           <h1 class="steel font-size-18">{{ 'rh_request_information' | translate}}: </h1>
         </div>
@@ -37,7 +37,7 @@
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
             <mat-list role="list" >
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_request_type' | translate}} :</span> {{ requestType | translate }}</mat-list-item>
-              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_reponse_certif_date' | translate}} :</span> {{ position }} </mat-list-item>
+              <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'job_title_all' | translate}} :</span> {{ position }} </mat-list-item>
             </mat-list>
           </div>
         </div>
@@ -50,7 +50,7 @@
         </div>
       </section>
 
-      <section  [ngSwitch]="certificate.request_status" fxFlex="80">
+      <section  [ngSwitch]="certificate.request_status" fxFlex="80" @showBloc>
         <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Pending'" >
           <div  fxLayout="row" fxLayoutGap="16px" *ngIf="!collaborator">
             <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
@@ -69,6 +69,14 @@
             </div>
           </div>
         </div>
+        <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Pending'" >
+          <div  fxLayout="row" fxLayoutGap="16px" *ngIf="collaborator">
+            <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
+              <button (click)="update()" mat-raised-button  class="steel btn-small bg-pale-grey">
+                {{ 'resume-edit' | translate }}</button>
+            </div>
+          </div>
+        </div>
         <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Rejected'" >
           <div  fxLayout="row" fxLayoutGap="16px">
             <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
@@ -81,11 +89,9 @@
           <div  fxLayout="row" fxLayoutGap="16px">
             <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50"  >
               <button mat-raised-button disabled class="topaz font-size-11 bg-white">
-
                 <div fxLayout="row" fxLayoutGap="24px" style="margin-top: 1rem;" *ngIf="!certificate.signature">
                   <button  mat-raised-button  class="white btn-small bg-topaz"
-                           (click)="sign($event)"
-                  >
+                           (click)="sign($event)">
                     {{ 'sign_all' | translate }}
                   </button>
 
