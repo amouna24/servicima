@@ -224,8 +224,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.contract = this.router.getCurrentNavigation().extras.state.contract ? this.router.getCurrentNavigation().extras.state.contract : null;
     this.bankingInfo = this.router.getCurrentNavigation().extras.state.banking ? this.router.getCurrentNavigation().extras.state.banking : null;
     this.userInfo = this.router.getCurrentNavigation().extras.state.userInfo ? this.router.getCurrentNavigation().extras.state.userInfo : null;
-    // tslint:disable-next-line:max-line-length
-    this.collaborator = this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
+    this.collaborator =
+      this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
     this.dynamicForm = new BehaviorSubject<IDynamicForm[]>([
       {
         'titleRef': 'PERSONAL_DATA',
@@ -1433,7 +1433,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   addInfo(result) {
     if (result.formGroupName === 'IDENTITY_DOCUMENT') {
-      console.log('selectedIdentityDoc ', this.selectedIdentityFile);
       switch (result.action) {
         case 'update': {
           this.identityDocumentInfo.forEach(
@@ -1966,7 +1965,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       .subscribe(
         (res) => {
           if (res === true) {
-            console.log('row want to deleted ', row);
             if (row.formGroupName === 'CHILDREN') {
               const code = row.data.HRChildKey?.child_code ?
                 row.data.HRChildKey.child_code : row.data.child_code;
@@ -2105,7 +2103,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
       }
       this.collaboratorInfo = this.profileForm.controls.PERSONAL_DATA.value;
-      console.log('my collaborator form ', this.collaboratorInfo);
       this.collaboratorInfo['email_address'] = this.emailAddress;
       this.collaboratorInfo['application_id'] = this.applicationId;
       this.hrHelper.updateCollaboratorInfo(this.collaboratorInfo);
