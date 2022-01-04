@@ -1433,12 +1433,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   addInfo(result) {
     if (result.formGroupName === 'IDENTITY_DOCUMENT') {
+      const validatedField = ['validity_date', 'type', 'file'];
       switch (result.action) {
         case 'update': {
           this.identityDocumentInfo.forEach(
             (element, index) => {
-              if ((element.HRIdentityDocumentKey ? element.HRIdentityDocumentKey.identity_document_code : element.identity_document_code) ===
-                this.profileForm.controls.IDENTITY_DOCUMENT['controls'].identity_document_code.value) {
+              if (((element.HRIdentityDocumentKey ? element.HRIdentityDocumentKey.identity_document_code : element.identity_document_code) ===
+                this.profileForm.controls.IDENTITY_DOCUMENT['controls'].identity_document_code.value)
+                && (this.utilsService.checkFormGroup(this.profileForm.controls.IDENTITY_DOCUMENT, validatedField))) {
                 this.identityDocumentInfo[index].type = this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value;
                 this.identityDocumentInfo[index].selectedIdentityFile = this.selectedIdentityFile.pop();
                 this.identityDocumentInfo[index].file = this.profileForm.controls.IDENTITY_DOCUMENT['controls']
@@ -1455,9 +1457,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value &&
-            this.profileForm.controls.IDENTITY_DOCUMENT['controls'].type.value === '') {
-            this.utilsService.openSnackBar('Document type Required', 'close', 2000);
+            !this.utilsService.checkFormGroup(this.profileForm.controls.IDENTITY_DOCUMENT, validatedField)
+          ) {
+            this.utilsService.openSnackBar('Field Identity Document required', 'close', 2000);
           } else {
             this.identityDocumentInfo.push(
               {
@@ -1476,12 +1478,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'EVALUATION') {
+      const validatedField = ['main_mission', 'evaluation_start_date', 'evaluation_end_date', 'report', 'evaluation_doc'];
       switch (result.action) {
         case 'update': {
           this.evaluationInfo.forEach(
             (element, index) => {
-              if ((element.HREvaluationKey ? element.HREvaluationKey.evaluation_code : element.evaluation_code) ===
-                this.profileForm.controls.EVALUATION['controls'].evaluation_code.value) {
+              if (((element.HREvaluationKey ? element.HREvaluationKey.evaluation_code : element.evaluation_code) ===
+                this.profileForm.controls.EVALUATION['controls'].evaluation_code.value)
+                && (this.utilsService.checkFormGroup(this.profileForm.controls.EVALUATION, validatedField))
+              ) {
                 this.evaluationInfo[index].main_mission = this.profileForm.controls.EVALUATION['controls'].main_mission.value;
                 this.evaluationInfo[index].evaluation_start_date = this.profileForm.controls.EVALUATION['controls'].evaluation_start_date.value;
                 this.evaluationInfo[index].evaluation_end_date = this.profileForm.controls.EVALUATION['controls'].evaluation_end_date.value;
@@ -1498,9 +1503,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.EVALUATION['controls'].main_mission.value &&
-            this.profileForm.controls.EVALUATION['controls'].main_misasion.value === '') {
-            this.utilsService.openSnackBar(' main mission Required', 'close', 2000);
+            !this.utilsService.checkFormGroup(this.profileForm.controls.EVALUATION, validatedField)
+          ) {
+            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
           } else {
             this.evaluationInfo.push(
               {
@@ -1521,12 +1526,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'GOAL') {
+      const validatedField = ['description', 'expected_result', 'deadline'];
       switch (result.action) {
         case 'update': {
           this.evaluationInfo.forEach(
             (element, index) => {
-              if ((element.HREvaluationGoalsKey ? element.HREvaluationGoalsKey.goal_code : element.goal_code) ===
-                this.profileForm.controls.GOAL['controls'].goal_code.value) {
+              if (((element.HREvaluationGoalsKey ? element.HREvaluationGoalsKey.goal_code : element.goal_code) ===
+                this.profileForm.controls.GOAL['controls'].goal_code.value)
+                && (this.utilsService.checkFormGroup(this.profileForm.controls.GOAL, validatedField))
+              ) {
                 this.goalInfo[index].description = this.profileForm.controls.GOAL['controls'].description.value;
                 this.goalInfo[index].expected_result = this.profileForm.controls.GOAL['controls'].expected_result.value;
                 this.goalInfo[index].deadline = this.profileForm.controls.GOAL['controls'].deadline.value;
@@ -1540,9 +1548,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.GOAL['controls'].expected_result.value &&
-            this.profileForm.controls.GOAL['controls'].expected_result.value === '') {
-            this.utilsService.openSnackBar('expected result Required', 'close', 2000);
+           !this.utilsService.checkFormGroup(this.profileForm.controls.GOAL, validatedField)
+          ) {
+            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
           } else {
             this.profileForm.controls.GOAL['controls'].goal_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-GOAL`);
             this.goalInfo.push(
@@ -1561,12 +1569,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'EMERGENCY_CONTACT') {
+      const validatedField = ['full_name', 'phone'];
       switch (result.action) {
         case 'update': {
           this.emergencyContactInfo.forEach(
             (element, index) => {
-              if ((element.HREmergencyContactKey ? element.HREmergencyContactKey.contact_code : element.contact_code) ===
-                this.profileForm.controls.EMERGENCY_CONTACT['controls'].contact_code.value) {
+              if (((element.HREmergencyContactKey ? element.HREmergencyContactKey.contact_code : element.contact_code) ===
+                this.profileForm.controls.EMERGENCY_CONTACT['controls'].contact_code.value)
+                && this.utilsService.checkFormGroup(this.profileForm.controls.EMERGENCY_CONTACT, validatedField)
+              ) {
                 this.emergencyContactInfo[index].full_name = this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value;
                 this.emergencyContactInfo[index].phone = this.profileForm.controls.EMERGENCY_CONTACT['controls'].phone.value;
                 this.emergencyContactInfo[index].updated = true;
@@ -1578,10 +1589,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         }
           break;
         case 'addMore': {
-          if (
-            !this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value &&
-            this.profileForm.controls.EMERGENCY_CONTACT['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
+          if (!this.utilsService.checkFormGroup(this.profileForm.controls.EMERGENCY_CONTACT, validatedField)) {
+            this.utilsService.openSnackBar('Missing Emergency Contact field', 'close', 2000);
           } else {
             this.emergencyContactInfo.push(
               {
@@ -1598,12 +1607,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'CHILDREN') {
+      const validatedField = ['full_name', 'birth_date'];
       switch (result.action) {
         case 'update': {
           this.childInfo.forEach(
             (element, index) => {
-              if ((element.HRChildKey ? element.HRChildKey.child_code : element.child_code) ===
-                this.profileForm.controls.CHILDREN['controls'].child_code.value) {
+              if (((element.HRChildKey ? element.HRChildKey.child_code : element.child_code) ===
+                this.profileForm.controls.CHILDREN['controls'].child_code.value)
+               && this.utilsService.checkFormGroup(this.profileForm.controls.CHILDREN, validatedField)
+              ) {
                 this.childInfo[index].full_name = this.profileForm.controls.CHILDREN['controls'].full_name.value;
                 this.childInfo[index].birth_date = this.profileForm.controls.CHILDREN['controls'].birth_date.value;
                 this.childInfo[index].updated = true;
@@ -1616,9 +1628,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.CHILDREN['controls'].full_name.value &&
-            this.profileForm.controls.CHILDREN['controls'].full_name.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
+            !this.utilsService.checkFormGroup(this.profileForm.controls.CHILDREN, validatedField)) {
+            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
           } else {
             this.childrenList.next([]);
             this.profileForm.controls.CHILDREN['controls'].child_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CHILD`);
@@ -1637,12 +1648,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'EQUIPMENT') {
+      const validatedField = ['equipment_name'];
       switch (result.action) {
         case 'update': {
           this.equipmentInfo.forEach(
             (element, index) => {
-              if ((element.HREquipmentKey ? element.HREquipmentKey.equipment_code : element.equipment_code) ===
-                this.profileForm.controls.EQUIPMENT['controls'].equipment_code.value) {
+              if (((element.HREquipmentKey ? element.HREquipmentKey.equipment_code : element.equipment_code) ===
+                this.profileForm.controls.EQUIPMENT['controls'].equipment_code.value)
+                && this.utilsService.checkFormGroup(this.profileForm.controls.EQUIPMENT, validatedField)
+              ) {
                 this.equipmentInfo[index].equipment_name = this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value;
                 this.equipmentInfo[index].updated = true;
               }
@@ -1654,8 +1668,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value &&
-            this.profileForm.controls.EQUIPMENT['controls'].equipment_name.value === '') {
+            !this.utilsService.checkFormGroup(this.profileForm.controls.EQUIPMENT, validatedField)) {
             this.utilsService.openSnackBar('Equipment name Required', 'close', 2000);
           } else {
             this.profileForm.controls.EQUIPMENT['controls'].equipment_code.setValue(this.hrHelper.generateCode('EQ'));
@@ -1668,23 +1681,25 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'CONTRACT_EXTENSION') {
+      const validatedField =
+        ['extension_start_date', 'extension_end_date', 'extension_rate', 'title_cd', 'extension_currency_cd', 'selectedExtensionContractFile'];
       switch (result.action) {
         case 'update': {
           this.contractExtensionInfo.forEach(
             (element, index) => {
-              if ((element.HRContractExtensionKey ? element.HRContractExtensionKey.extension_code : element.extension_code) ===
-                this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value) {
-
-                // tslint:disable-next-line:max-line-length
-                this.contractExtensionInfo[index].extension_start_date = this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
-                // tslint:disable-next-line:max-line-length
-                this.contractExtensionInfo[index].extension_end_date = this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
+              if (((element.HRContractExtensionKey ? element.HRContractExtensionKey.extension_code : element.extension_code) ===
+                this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value)
+                && this.utilsService.checkFormGroup(this.profileForm.controls.CONTRACT_EXTENSION, validatedField)
+              ) {
+                this.contractExtensionInfo[index].extension_start_date =
+                  this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
+                this.contractExtensionInfo[index].extension_end_date =
+                  this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
                 this.contractExtensionInfo[index].extension_rate = this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
                 this.contractExtensionInfo[index].title_cd = this.profileForm.controls.CONTRACT_EXTENSION['controls'].title_cd.value;
-                // tslint:disable-next-line:max-line-length
                 this.contractExtensionInfo[index].selectedExtensionContractFile = this.selectedExtensionContractFile.pop();
-                // tslint:disable-next-line:max-line-length
-                this.contractExtensionInfo[index].extension_currency_cd = this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value;
+                this.contractExtensionInfo[index].extension_currency_cd =
+                  this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value;
                 this.contractExtensionInfo[index].updated = true;
               }
             }
@@ -1695,9 +1710,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value &&
-            this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
+            !this.utilsService.checkFormGroup(this.profileForm.controls.CONTRACT_EXTENSION, validatedField)) {
+            this.utilsService.openSnackBar('Missing field contract previous', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addExtentionContract =  {
@@ -1709,7 +1723,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               extension_currency_cd: this.profileForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value,
               selectedExtensionContractFile: this.selectedExtensionContractFile.pop()
             };
-            // tslint:disable-next-line:max-line-length
             this.contractExtensionInfo.push(
               addExtentionContract
             );
@@ -1721,12 +1734,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
       }
     } else if (result.formGroupName === 'PREVIOUS_CONTRACT') {
+      const validatedField =
+        ['contract_start_date', 'contract_end_date', 'contract_rate', 'company_name', 'country_code', 'contract_type', 'title_cd', 'currency_cd'];
       switch (result.action) {
         case 'update': {
           this.contractPreviousInfo.forEach(
             (element, index) => {
-              if ((element.HRContractPreviousKey ? element.HRContractPreviousKey.contract_code : element.contract_code) ===
-                this.profileForm.controls.PREVIOUS_CONTRACT['controls'].extension_code.value) {
+              if (((element.HRContractPreviousKey ? element.HRContractPreviousKey.contract_code : element.contract_code) ===
+                this.profileForm.controls.PREVIOUS_CONTRACT['controls'].extension_code.value)
+                && this.utilsService.checkFormGroup(this.profileForm.controls.PREVIOUS_CONTRACT, validatedField)
+              ) {
 
                 this.contractPreviousInfo[index].contract_start_date =
                   this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value;
@@ -1754,9 +1771,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (
-            !this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_start_date.value &&
-            this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_end_date.value === '') {
-            this.utilsService.openSnackBar('Full name Required', 'close', 2000);
+            !this.utilsService.checkFormGroup(this.profileForm.controls.PREVIOUS_CONTRACT, validatedField)) {
+            this.utilsService.openSnackBar('Missing field previous contract', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addPreviousContract =  {
@@ -1770,7 +1786,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               contract_type: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].contract_type.value,
               company_name: this.profileForm.controls.PREVIOUS_CONTRACT['controls'].company_name.value,
             };
-            // tslint:disable-next-line:max-line-length
             this.contractPreviousInfo.push(
               addPreviousContract
             );
