@@ -59,6 +59,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    *************************************************************************/
   destroy$: Subject<boolean> = new Subject<boolean>();
   private subscriptionModal: Subscription;
+  private subscriptions: Subscription;
 
   /******************************************************************************************
    * @description IDENTITY & EVALUATION  & EVALUATION EXTENSION & CONTRACT & CONTRACT EXTENSION
@@ -83,6 +84,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   goalInfo = [];
   bankingInfo: any = null;
   filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   contractTypeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   filteredNationalities: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredCurrency: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
@@ -220,12 +222,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               private hrHelper: HelperHrService,
 
   ) {
+    this.initProfileForm();
     this.id = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state._id : null;
     this.contract = this.router.getCurrentNavigation().extras.state.contract ? this.router.getCurrentNavigation().extras.state.contract : null;
     this.bankingInfo = this.router.getCurrentNavigation().extras.state.banking ? this.router.getCurrentNavigation().extras.state.banking : null;
     this.userInfo = this.router.getCurrentNavigation().extras.state.userInfo ? this.router.getCurrentNavigation().extras.state.userInfo : null;
     this.collaborator =
       this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
+
     this.dynamicForm = new BehaviorSubject<IDynamicForm[]>([
       {
         'titleRef': 'PERSONAL_DATA',
@@ -503,10 +507,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           {
             label: 'currency_all',
             placeholder: 'currency_all',
-            type: FieldsType.SELECT,
-            selectFieldList: this.currencyList,
+            type: FieldsType.SELECT_WITH_SEARCH,
+            filteredList: this.filteredCurrencies,
             formControlName: 'currency_cd',
-            searchControlName: 'currencyFilterCtrl',
+            searchControlName: 'currencyFilter',
             required: true
           },
         ],
@@ -651,9 +655,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           {
             label: 'currency_all',
             placeholder: 'currency_all',
-            type: FieldsType.SELECT,
-            selectFieldList: this.currencyList,
+            type: FieldsType.SELECT_WITH_SEARCH,
+            filteredList: this.filteredCurrencies,
             formControlName: 'currency_cd',
+            searchControlName: 'currencyFilter',
             required: true
           },
         ],
@@ -764,9 +769,10 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           {
             label: 'currency_all',
             placeholder: 'currency_all',
-            type: FieldsType.SELECT,
-            selectFieldList: this.currencyList,
+            type: FieldsType.SELECT_WITH_SEARCH,
+            filteredList: this.filteredCurrencies,
             formControlName: 'extension_currency_cd',
+            searchControlName: 'currencyFilter',
             required: true
           },
           {
@@ -1157,19 +1163,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         this.avatar.next(await this.uploadService.getImage(user['results'][0]['photo']));
         this.isLoadingImage.next(false);
       });
+   this.subscriptions = this.userService.connectedUser$.subscribe(async (data) => {
+     if (!!data) {
+       this.initProfileForm();
+       await this.getRefData(this.userInfo.company_email);
+       await this.getInitialData();
+     }
+   });
 
-    await this.initProfileForm();
-    await this.getRefData(this.userInfo.company_email);
-    await this.getInitialData();
-    this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.userInfo.language_id)).map((country) => {
-      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
-    });
-    this.filteredCountries.next(this.countriesList.slice());
-    this.utilsService.changeValueField(
-      this.countriesList,
-      this.profileForm.controls.PERSONAL_DATA['controls'].countryBirthFilterCtrl,
-      this.filteredCountries
-    );
     this.sheetService.registerSheets(
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
@@ -1178,7 +1179,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   /**************************************************************************
    * @description Init form with initial data
    *************************************************************************/
-  async initProfileForm() {
+  initProfileForm() {
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
         first_name: [this.userInfo === null ? '' : this.userInfo.first_name, Validators.required],
@@ -1210,12 +1211,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       CONTRACT: this.formBuilder.group({
         contract_rate: [this.contract !== null ? this.contract.contract_rate : '', Validators.min(0)],
         currency_cd: [this.contract !== null ? this.contract.currency_cd : null],
+        currencyFilter: [''],
         contract_start_date:  [this.contract !== null ? this.contract.contract_start_date : ''],
         contract_end_date:   [this.contract !== null ? this.contract.contract_end_date : ''],
         contract_date: [this.contract !== null ? this.contract.contract_date : ''],
         attachments: [this.contract !== null ? this.contract.attachments : ''],
         contract_type: [this.contract !== null ? this.contract.HRContractKey.contract_type : ''],
-        currencyFilterCtrl: ['']
       }),
       PREVIOUS_CONTRACT: this.formBuilder.group({
         contract_code: [''],
@@ -1225,6 +1226,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         contract_type:  [''],
         contract_rate: ['', Validators.min(0)],
         currency_cd: [''],
+        currencyFilter: [''],
         country_code: [''],
         title_cd: [''],
         countryFilterCtrl: ['']
@@ -1237,7 +1239,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         title_cd: [''],
         extension_currency_cd: [''],
         attachments: [''],
-        currencyFilterCtrl: ['']
+        currencyFilter: ['']
       }),
       EVALUATION: this.formBuilder.group({
         evaluation_code: [''],
@@ -1293,14 +1295,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.collaboratorInfo = collaborator[0];
               this.collaboratorInfo['email_address'] = collaborator[0]['collaboratorKey']['email_address'];
               await this.getData();
-              await this.initProfileForm();
               this.profileForm.controls.PERSONAL_DATA['controls'].first_name.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].last_name.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].email_address.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].phone.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].gender_id.disable();
               this.isLoading.next(false);
-
               this.bankingCheck = this.bankingInfo !== null ? true : false;
               this.contractCheck = this.contract !== null ? true : false;
 
@@ -1319,23 +1319,51 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     /********************************** REF DATA **********************************/
     this.refData = await this.refDataService.getRefData(
       this.utilsService.getCompanyId(
-        companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
+        companyEmail,
+        this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
       [ 'GENDER', 'FAMILY_SITUATION', 'HR_CT_TYPE', 'IDENTITY_TYPE', 'PROF_TITLES'],
       false
     );
-    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
-      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
-    }));
-   /* this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.userInfo.language_id)).map((country) => {
-      this.countriesList.push({ value: country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC });
+    this.appInitializerService.countriesList.forEach((country) => {
+      this.countriesList.push({ value : country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC});
     });
+    /***************************** FILTERED COUNTRY *******************************/
     this.filteredCountries.next(this.countriesList.slice());
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.profileForm.controls.PERSONAL_DATA['controls'].countryFilterCtrl,
+      this.filteredCountries
+    );
     this.utilsService.changeValueField(
       this.countriesList,
       this.profileForm.controls.PERSONAL_DATA['controls'].countryBirthFilterCtrl,
       this.filteredCountries
-    );*/
+    );
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].countryFilterCtrl,
+      this.filteredCountries
+    );
+    this.currencyList.next(this.appInitializerService.currenciesList.map((currency) => {
+      return { value: currency.CURRENCY_CODE, viewValue: currency.CURRENCY_DESC};
+    }));
+    this.filteredCurrencies.next(this.currencyList.value);
+    this.utilsService.changeValueField(
+      this.currencyList.value,
+      this.profileForm.controls.CONTRACT['controls'].currencyFilter,
+      this.filteredCurrencies
+    );
+    this.utilsService.changeValueField(
+      this.currencyList.value,
+      this.profileForm.controls.PREVIOUS_CONTRACT['controls'].currencyFilter,
+      this.filteredCurrencies
+    );
+    this.utilsService.changeValueField(
+      this.currencyList.value,
+      this.profileForm.controls.CONTRACT_EXTENSION['controls'].currencyFilter,
+      this.filteredCurrencies
+    );
 
     this.contractTypeList.next(this.refData['HR_CT_TYPE']);
     this.genderList.next(this.refData['GENDER']);
@@ -1962,6 +1990,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+    this.subscriptions.unsubscribe();
+
   }
   /**************************************************************************
    * @description delete and confirm function from datatable
