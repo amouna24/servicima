@@ -14,4 +14,4 @@ import { TimesheetManagementRoutingModule } from './timesheet-management-routing
     DataTableModule,
   ]
 })
-export class TimesheetManagementModule { }
+export class TimesheetSettingsModule { }

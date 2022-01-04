@@ -672,6 +672,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       this.modalsServices.displayModal(this.header.addActionDialog.modalName, this.header.addActionDialog.data,
         this.header.addActionDialog.width, this.header.addActionDialog.height).subscribe((data) => {
         if (data) {
+          this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0,  search: this.searchT,   searchBoolean: this.searchBoolean});
+          this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
           this.tableData.next(data);
         }
       });

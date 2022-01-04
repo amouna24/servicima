@@ -46,8 +46,7 @@
             <mat-form-field appearance="outline">
               <mat-select formControlName="language"  [placeholder]=" 'addpaymentmethod.language' | translate | capitalizeFirstLetter">
                 <ng-container *ngFor="let language of languages">
-                  <mat-option  (click)="getValue(language.value, i)"
-                               [value]=language.value
+                  <mat-option  [value]=language.value
                                [ngStyle]="{ display : !language.selected ? 'block' : 'none' }"
                   >
                     {{ language.viewValue }}
@@ -99,16 +98,39 @@
     <label class="font-size-12 black-three  required">{{'addrole.featurerole' | translate | capitalizeFirstLetter}}  </label>
     </div>
     <div fxLayout="row" class="container-role-feature">
-      <wid-scrollbar class="scrollbar">
-        <mat-select-trigger>
-          <mat-chip-list>
-            <mat-chip *ngFor="let roleFeature of roleFeatureControl.value"
-                      [removable]="true" (removed)="onRoleFeatureRemoved(roleFeature)">
-              {{ roleFeature }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-          </mat-chip-list>
-        </mat-select-trigger>
+      <div  *ngIf="isLoading.getValue();"  class="min-full-width">
+        <div class="min-full-width min-full-height" fxLayoutAlign="center center">
+          <mat-progress-spinner
+            color="primary"
+            mode="indeterminate">
+          </mat-progress-spinner>
+        </div>
+      </div>
+      <wid-scrollbar class="scrollbar"  >
+<div *ngIf="isLoading.getValue() === false">
+
+    <mat-select-trigger>
+      <mat-chip-list>
+        <mat-chip *ngFor="let roleFeature of roleFeatureControl.value"
+                  [removable]="true" (removed)="onRoleFeatureRemoved(roleFeature)">
+
+          <ng-template  [ngIf]="!getDescription(roleFeature)" [ngIfElse]= "data" class="min-full-width">
+            <div fxLayoutAlign="center center">
+              <mat-progress-spinner [diameter]="20"
+                                    color="primary"
+                                    mode="indeterminate">
+              </mat-progress-spinner>
+            </div>
+          </ng-template>
+          <ng-template  #data>
+            {{ getDescription(roleFeature)}}
+          </ng-template>
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-select-trigger>
+
+</div>
       </wid-scrollbar>
       <br/>
     </div>

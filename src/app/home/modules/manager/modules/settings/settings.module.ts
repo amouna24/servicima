@@ -15,7 +15,7 @@ import { LicenceManagementComponent } from './licence/licence-management/licence
 import { PaymentMethodsManagementComponent } from './payment/payment-methods-management/payment-methods-management/payment-methods-management.component';
 import { PaymentInfoComponent } from './payment/payment-info/payment-info-company-management/payment-info.component';
 import { RoleManagementComponent } from './role-management/role-management/role-management.component';
-import { TimesheetManagementComponent } from './timesheet management/timesheet-management/timesheet-management.component';
+import { TimesheetSettingsComponent } from './timesheet settings/timesheet-settings.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CompanyBankingInfoComponent } from './company-banking-info/edit-company-banking-info/company-banking-info.component';
 
@@ -30,7 +30,7 @@ import { CompanyBankingInfoComponent } from './company-banking-info/edit-company
     PaymentMethodsManagementComponent,
     PaymentInfoComponent,
     RoleManagementComponent,
-    TimesheetManagementComponent,
+    TimesheetSettingsComponent,
     DashboardComponent,
     CompanyBankingInfoComponent,
   ],
