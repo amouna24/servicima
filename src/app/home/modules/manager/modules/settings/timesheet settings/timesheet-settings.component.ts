@@ -11,10 +11,10 @@ import { ModalService } from '@core/services/modal/modal.service';
 
 @Component({
   selector: 'wid-timesheet-management',
-  templateUrl: './timesheet-management.component.html',
-  styleUrls: ['./timesheet-management.component.scss']
+  templateUrl: './timesheet-settings.component.html',
+  styleUrls: ['./timesheet-settings.component.scss']
 })
-export class TimesheetManagementComponent implements OnInit , OnDestroy {
+export class TimesheetSettingsComponent implements OnInit , OnDestroy {
   form: FormGroup;
   companyTimesheetSetting: ICompanyTimesheetSettingModel;
   isLoading = new BehaviorSubject<boolean>(false);
@@ -119,7 +119,8 @@ export class TimesheetManagementComponent implements OnInit , OnDestroy {
     };
     const confirmation = {
       code: 'edit',
-      title: 'edit your timesheet setting',
+      title: 'timesheet.settings.title.modal',
+      description: 'timesheet.settings.description.modal'
     };
     this.subscription = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
       if (value === true) {

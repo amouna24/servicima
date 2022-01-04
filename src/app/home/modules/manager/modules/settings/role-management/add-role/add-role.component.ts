@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import { RoleFeatureService } from '@core/services/role-feature/role-feature.service';
@@ -13,6 +13,7 @@ import { UserService } from '@core/services/user/user.service';
 
 import { IViewParam } from '@shared/models/view.model';
 import { ICompanyModel } from '@shared/models/company.model';
+import { IRoleFeaturesModel } from '@shared/models/roleFeatures.model';
 
 @Component({
   selector: 'wid-add-role',
@@ -24,17 +25,17 @@ export class AddRoleComponent implements OnInit, OnDestroy {
   company: ICompanyModel;
   action: string;
   languages = [];
-  listFeatureAdded: string[] = [];
-  listRoleFeatures: any[] = [];
+  listRoleFeatures: IRoleFeaturesModel[] = [];
   listRemoveRole: string[] = [];
   featureList: IViewParam[] = [];
   arrayToAddRoleFeature: any[] = [];
   roleFeatureControl = new FormControl([]);
+  listIdFeature: any[];
   public filteredRoleFeature = new ReplaySubject(1);
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
-
+  isLoading = new BehaviorSubject<boolean>(false);
   constructor(public dialogRef: MatDialogRef<AddRoleComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private formBuilder: FormBuilder,
@@ -50,6 +51,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
    * @description Loaded when component in init state
    */
   ngOnInit() {
+    this.isLoading.next(true);
     this.getConnectedUser();
     this.initForm();
     this.getAllFeatures();
@@ -57,6 +59,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
      if (this.data) {
        this.action = 'Update';
        this.getCompanyRoleFeatures();
+
      } else {
        this.action = 'Add';
      }
@@ -93,6 +96,7 @@ export class AddRoleComponent implements OnInit, OnDestroy {
    * @description : get all features
    */
   getAllFeatures() {
+    console.log(this.userService.language.langId, 'id lang');
     this.featureService.getAllFeatures(this.userService.language.langId).subscribe( (features) => {
       this.featureList =  features.map((feature) => {
         return { value: feature.FeatureKey.feature_code, viewValue: feature.feature_desc};
@@ -108,17 +112,20 @@ export class AddRoleComponent implements OnInit, OnDestroy {
   getCompanyRoleFeatures() {
     this.userService.getCompanyRoleFeatures(this.data.data.RefDataKey.ref_data_code, this.userService.emailAddress).subscribe((data) => {
       this.listRoleFeatures = data as any[];
-      this.listRoleFeatures = this.listRoleFeatures.map((list) => {
-        return { value: list.companyRoleFeaturesKey.feature_code};
+      this.listIdFeature = Object.values(data).map((list) => {
+        return { 'id': list._id, 'value': list.companyRoleFeaturesKey.feature_code};
       });
-      const addListFeatureRole = this.listRoleFeatures.map((roleFeature) => {
-        return roleFeature.value;
+      this.listRoleFeatures = Object.values(data).map((list) => {
+        return  list.companyRoleFeaturesKey.feature_code;
       });
-      this.listFeatureAdded = this.listRoleFeatures.map((roleFeatures) => {
-        return roleFeatures.value;
-      });
+
+      const addListFeatureRole = [...this.listRoleFeatures];
       this.roleFeatureControl.setValue(addListFeatureRole);
-    }, error => console.error(error));
+      this.isLoading.next(false);
+    }, error => {
+      console.error(error);
+      this.isLoading.next(false);
+    });
   }
 
   /**
@@ -173,10 +180,6 @@ export class AddRoleComponent implements OnInit, OnDestroy {
    */
   onAddAnotherRoleName() {
     return this.getListRole().push(this.formBuilder.group({ language: '', desc: '' }));
-  }
-
-  getValue(value, rang) {
-    // this.languages.find(el => el.value === value).selected = true;
   }
 
   /**
@@ -249,6 +252,13 @@ export class AddRoleComponent implements OnInit, OnDestroy {
   }, error => console.error(error));
 }
 
+  getDescription(code: string) {
+    this.isLoading.next(true);
+    const desc = this.featureList.find((resp) => resp.value === code)?.viewValue;
+    this.isLoading.next(false);
+    return desc;
+  }
+
   /**
    * @description: update role feature
    */
@@ -298,32 +308,35 @@ export class AddRoleComponent implements OnInit, OnDestroy {
       });
       // remove roles features
       const listToRemove = _.difference(
-        this.listFeatureAdded, this.roleFeatureControl.value);
-      listToRemove.map((feature) => {
-        this.subscriptions.push( this.roleFeatureService
-          .getRoleFeature(this.userService.applicationId, this.userService.emailAddress, this.data.data.RefDataKey.ref_data_code, feature)
-          .subscribe((data) => {
-            if (data) {
-              this.subscriptions.push(this.roleFeatureService.deleteFeatureRole(data[0]['_id']).subscribe(() => {
-              }, error => console.error(error)));
-            }
-          }, error => console.error(error)));
+        this.listRoleFeatures, this.roleFeatureControl.value);
+      const listIdToBeRemoved = [];
+      listToRemove.map((codeToRemove) => {
+        listIdToBeRemoved.push(this.listIdFeature.find((feature) => feature.value === codeToRemove).id);
+      });
+
+      this.roleFeatureService.deleteManyFeatureRole(listIdToBeRemoved).subscribe((data) => {
+        console.log(data);
       });
 
       // add roles features
-      const addRoleList = _.differenceWith(this.roleFeatureControl.value, this.listFeatureAdded, _.isEqual);
+      const addRoleList = _.differenceWith(this.roleFeatureControl.value, this.listRoleFeatures, _.isEqual);
+const listRoleFeatureToAdded = [];
       addRoleList.map((feature) => {
         const roleFeature = {
-          application_id: this.userService.applicationId,
-          role_code: this.data.data.RefDataKey.ref_data_code,
-          email_address: this.userService.emailAddress,
+          companyRoleFeaturesKey: {
+            application_id: this.userService.applicationId,
+            role_code: this.data.data.RefDataKey.ref_data_code,
+            email_address: this.userService.emailAddress,
+            feature_code: feature,
+          },
           granted_by: this.userService.emailAddress,
-          feature_code: feature,
         };
-        this.subscriptions.push( this.roleFeatureService.addFeatureRole(roleFeature).subscribe((featureRole) => {
+
+        listRoleFeatureToAdded.push(roleFeature);
+      });
+      this.subscriptions.push( this.roleFeatureService.addManyFeatureRole(listRoleFeatureToAdded).subscribe((featureRole) => {
           console.log(featureRole);
         }, error => console.error(error)));
-      }, error => console.error(error));
       this.dialogRef.close(true);
     }
   }

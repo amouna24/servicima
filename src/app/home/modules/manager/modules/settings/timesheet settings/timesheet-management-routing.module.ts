@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TimesheetManagementComponent } from './timesheet-management/timesheet-management.component';
+import { TimesheetSettingsComponent } from './timesheet-settings.component';
 
 const routes: Routes = [
 
   {
     path: '',
-    component: TimesheetManagementComponent,
+    component: TimesheetSettingsComponent,
   },
 ];
 
