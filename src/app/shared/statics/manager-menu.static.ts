@@ -61,14 +61,14 @@ export const managerMenu: IMenu[] = [
     children: [
       {
         state: 'collaborator-list',
-        name: 'Collaborator List',
+        name: 'manager_collaborator',
         icon: '',
         feature: 'HR_ACCESS',
         type: 'link',
       },
       {
         state: 'work-certificate',
-        name: 'Work Certificate',
+        name: 'certification_all',
         icon: '',
         feature: 'HR_ACCESS',
         type: 'link',

@@ -170,19 +170,19 @@ private subscriptions: Subscription;
    *************************************************************************/
   contractorItems: IDynamicMenu[] = [
     {
-      title: 'General information',
+      title: 'resume-general-info',
       titleKey: 'GENERAL_INFORMATION',
       child: [
         {
-          title: 'Personal information',
+          title: 'personal_information_all',
           titleKey: 'PERSONAL_INFORMATION',
         },
         {
-          title: 'Address',
+          title: 'address_label_all',
           titleKey: 'ADDRESS',
         },
         {
-          title: 'General Contact',
+          title: 'general_contact_all',
           titleKey: 'GENERAL_CONTACT',
         },
         {
@@ -191,12 +191,12 @@ private subscriptions: Subscription;
         },
       ]
     },
-    { title: 'Resume template',
+    { title: 'resume_template_all',
       titleKey: 'RESUME_TEMPLATE',
       child: [],
     },
     {
-      title: 'Contact',
+      title: 'user.contact',
       titleKey: 'CONTACT',
       child: []
     },
@@ -207,18 +207,20 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
       fields: [
         {
-          label: 'Social Reason',
-          placeholder: 'Social Reason',
+          label: 'contractor_name',
+          placeholder: 'contractor_name',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'contractor_name',
+          required: true
         },
         {
-          label: 'Registry number',
-          placeholder: 'Registry number',
+          label: 'registre_nbr_all',
+          placeholder: 'registre_nbr_all',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'registry_code',
+          required: true
         },
         {
           type: FieldsType.IMAGE,
@@ -237,8 +239,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'Language',
-          placeholder: 'Language',
+          label: 'rh_language_cerif_show',
+          placeholder: 'rh_language_cerif_show',
           type: FieldsType.SELECT,
           selectFieldList: this.langList,
           formControlName: 'language'
@@ -250,19 +252,21 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Address',
-          placeholder: 'Address',
+          label: 'address_label_all',
+          placeholder: 'address_label_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'address',
+          required: true
         },
         {
-          label: 'Country',
-          placeholder: 'Country',
+          label: 'country_all',
+          placeholder: 'country_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCountries,
           formControlName: 'country_cd',
-          searchControlName: 'registryCountryFilterCtrl'
+          searchControlName: 'registryCountryFilterCtrl',
+          required: true
         },
       ],
     },
@@ -276,13 +280,15 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'zip_code',
+          required: true
         },
         {
-          label: 'City',
-          placeholder: 'City',
+          label: 'homecompany.city',
+          placeholder: 'homecompany.city',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'city',
+          required: true
         },
       ],
     },
@@ -291,18 +297,19 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Web Site',
-          placeholder: 'Web Site',
+          label: 'rh_website_certif',
+          placeholder: 'rh_website_certif',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'web_site',
         },
         {
-          label: 'Email',
-          placeholder: 'Email',
+          label: 'email_all',
+          placeholder: 'email_all',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
+          required: true
         },
       ],
     },
@@ -311,15 +318,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Phone 1',
-          placeholder: 'Phone 1',
+          label: 'phone_all',
+          placeholder: 'phone_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
+          required: true
         },
         {
-          label: 'Phone 2',
-          placeholder: 'Phone 2',
+          label: 'phone_all',
+          placeholder: 'phone_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone2_nbr',
@@ -345,12 +353,13 @@ private subscriptions: Subscription;
       fields: [
         this.activitySectorField.getValue(),
         {
-          label: 'Payment Mode',
-          placeholder: 'Payment Mode',
+          label: 'manager-setting-menu.payment.payment.method',
+          placeholder: 'manager-setting-menu.payment.payment.method',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredPayMode,
           formControlName: 'payment_cd',
-          searchControlName: 'filteredPayementOrganisation'
+          searchControlName: 'filteredPayementOrganisation',
+          required: true
         },
       ],
     },
@@ -359,16 +368,17 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Currency',
-          placeholder: 'Currency',
+          label: 'currency_all',
+          placeholder: 'currency_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
-          searchControlName: 'filteredCurrencyOrganisation'
+          searchControlName: 'filteredCurrencyOrganisation',
+          required: true
         },
         {
-          label: 'VAT Number',
-          placeholder: 'VAT Number',
+          label: 'invoice.vatLine',
+          placeholder: 'invoice.vatLine',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'vat_nbr',
@@ -380,16 +390,17 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'Legal Form',
-          placeholder: 'Legal Form',
+          label: 'homecompany.legalform',
+          placeholder: 'homecompany.legalform',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredLegalForm,
           formControlName: 'legal_form',
-          searchControlName: 'filteredLegalOrganisation'
+          searchControlName: 'filteredLegalOrganisation',
+          required: true
         },
         {
-          label: 'Company Tax',
-          placeholder: 'Company Tax',
+          label: 'company_tax_all',
+          placeholder: 'company_tax_all',
           type: FieldsType.SELECT,
           selectFieldList: this.companyTaxList,
           formControlName: 'tax_cd',
@@ -401,7 +412,7 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_center,
       fields: [
         {
-          label: 'Models',
+          label: 'resume_template_all',
           type: FieldsType.THEME_RADIO_GROUP,
           selectFieldList: this.resumeModels,
           formControlName: 'resume_template',
@@ -440,18 +451,20 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'First name',
-          placeholder: 'First name',
+          label: 'first_name_all',
+          placeholder: 'first_name_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'first_name',
+          required: true
         },
         {
-          label: 'Last name',
-          placeholder: 'Last name',
+          label: 'last_name_all',
+          placeholder: 'last_name_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'last_name',
+          required: true
         },
       ],
     },
@@ -460,18 +473,20 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Main Contact',
-          placeholder: 'Main Contact',
+          label: 'user.contact',
+          placeholder: 'user.contact',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'main_contact',
+          required: true
         },
         {
-          label: 'Email',
-          placeholder: 'Email',
+          label: 'email_all',
+          placeholder: 'email_all',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
+          required: true
         },
       ],
     },
@@ -480,20 +495,21 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Gender',
-          placeholder: 'Gender',
+          label: 'gender_all',
+          placeholder: 'gender_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredGenders,
           formControlName: 'gender_cd',
           searchControlName: 'filteredGenderContact'
         },
         {
-          label: 'Title',
-          placeholder: 'Title',
+          label: 'job_title_all',
+          placeholder: 'job_title_all',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredTitles,
           formControlName: 'title_cd',
-          searchControlName: 'filteredTitleContact'
+          searchControlName: 'filteredTitleContact',
+          required: true
         },
       ],
     },
@@ -502,18 +518,20 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Phone',
-          placeholder: 'Phone',
+          label: 'phone_all',
+          placeholder: 'phone_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
+          required: true
         },
         {
-          label: 'Cellphone',
-          placeholder: 'Cellphone',
+          label: 'cell_phone_all',
+          placeholder: 'cell_phone_all',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'cell_phone_nbr',
+          required: true
         },
       ],
     },
@@ -522,8 +540,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Language',
-          placeholder: 'Language',
+          label: 'rh_language_cerif_show',
+          placeholder: 'rh_language_cerif_show',
           type: FieldsType.SELECT,
           selectFieldList: this.langList,
           formControlName: 'language_cd'
@@ -531,7 +549,8 @@ private subscriptions: Subscription;
         {
           label: 'Signature',
           type: FieldsType.SLIDE_TOGGLE,
-          formControlName: 'can_sign_contract'
+          formControlName: 'can_sign_contract',
+          required: true
         },
       ],
     },

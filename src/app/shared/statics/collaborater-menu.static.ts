@@ -31,21 +31,21 @@ export const collaboraterMenu: IMenu[] = [
   },
   {
     state: 'timesheet',
-    name: 'timesheet',
+    name: 'template.timesheet',
     type: 'sub',
     icon: 'wi_timesheet',
     feature: 'HR_FOLDER_ACCESS',
     children: [
       {
         state: 'TIMESHEET',
-        name: 'timesheet',
+        name: 'template.timesheet',
         icon: 'wi_timesheet',
         feature: 'HR_FOLDER_ACCESS',
         type: 'link',
       },
       {
         state: 'TIMESHEET_EXTRA',
-        name: 'timesheet extra',
+        name: 'timesheet.extra',
         icon: 'wi_timesheet',
         feature: 'HR_FOLDER_ACCESS',
         type: 'link',
@@ -68,7 +68,7 @@ export const collaboraterMenu: IMenu[] = [
   },
   {
     state: 'work-certificates',
-    name: 'work-certificates',
+    name: 'certification_all',
     type: 'link',
     icon: 'wi_dashboard',
     feature: 'HR_FOLDER_ACCESS',

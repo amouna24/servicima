@@ -1,21 +1,20 @@
 <div class="list-collaborator-component border-radius-20" fxLayout="column" fxFlex="100">
   <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium" >Collaborators List</h1>
+      <h1 class="steel font-size-24 font-medium" >{{ 'manager_collaborator' | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{ 'back'| translate }}</span>
       </button>
     </div>
   </div>
   <div fxLayout="row" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-
-  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-between center"    >
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-between center">
     <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxFlex="80" fxLayoutGap="20px">
         <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '60%', 'fontSize': '5px'}" appearance="outline">

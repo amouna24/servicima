@@ -50,6 +50,9 @@ export interface IFieldsObject {
   formControlName?: string;
   selectFieldList ?: BehaviorSubject<IViewParam[]>;
   searchControlName?: string;
+  min?: number;
+  max?: number;
+  required?: boolean;
   filteredList ?: ReplaySubject<IViewParam[]>;
   canUpdate ?: BehaviorSubject<boolean>;
   canAdd ?: BehaviorSubject<boolean>;
@@ -60,6 +63,7 @@ export interface IFieldsObject {
     modelObject: any;
     singleUpload: boolean;
     userType: userType;
+    imageLoading?: BehaviorSubject<boolean>;
   };
   dataTable ?: {
     displayedColumns: string[],
