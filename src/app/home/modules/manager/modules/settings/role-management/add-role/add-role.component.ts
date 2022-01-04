@@ -96,7 +96,6 @@ export class AddRoleComponent implements OnInit, OnDestroy {
    * @description : get all features
    */
   getAllFeatures() {
-    console.log(this.userService.language.langId, 'id lang');
     this.featureService.getAllFeatures(this.userService.language.langId).subscribe( (features) => {
       this.featureList =  features.map((feature) => {
         return { value: feature.FeatureKey.feature_code, viewValue: feature.feature_desc};
