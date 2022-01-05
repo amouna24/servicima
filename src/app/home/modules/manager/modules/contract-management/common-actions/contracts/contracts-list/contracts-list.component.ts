@@ -69,7 +69,6 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description load data emitted by child components
    *************************************************************************/
   ngOnChanges(changes: { [propKey: string]: SimpleChange}) {
-    console.log(this.type);
   }
 
   ngOnInit(): void {

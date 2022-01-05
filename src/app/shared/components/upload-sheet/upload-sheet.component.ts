@@ -54,6 +54,7 @@ export class UploadSheetComponent implements OnInit {
               file: this.file,
               selectedFile: fileRow,
               type: this.fileType,
+              name: fileRow['name'],
               reader: reader.result});
           };
       }

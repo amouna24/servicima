@@ -2,18 +2,19 @@
   <wid-title-certif
     certificate="certificate"
   >
-    <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100">
-      <form [formGroup]="editForm"  [style]="{'width': '100%', 'height': 'min-content'}" >
+    <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
+    <div class="full-height"  style="min-width: 100%" fxLayout="column" fxFlex="100"   @dataAppearance>
+      <form [formGroup]="editForm" *ngIf="editForm" [style]="{'width': '100%', 'height': 'min-content'}" >
         <div class="full-height"  style="min-width: 100%; margin-right: 2%;" fxLayout="column" fxFlex="100">
 
           <div fxLayout="column" style="margin-left: 2%;">
             <div fxLayout="row">
-              <h1 class="steel font-size-18">{{role}} {{ 'rh_information_certif' | translate }} </h1>
+              <h1 class="steel font-size-18">{{ 'collaborator.information' | translate }} </h1>
             </div>
             <div fxLayout="row"  fxLayoutGap="5%">
               <div fxLayout="column" fxFlex="40">
-                <label class="black font-size-12">
-                  {{ 'rh_contract_start' | translate }}
+                <label class="black font-size-12 font-semi-bold">
+                  {{ 'rh_contract_start' | translate }} :
                 </label>
                 <mat-form-field appearance="outline" >
                   <input matInput [matDatepicker]="datepicker"  [matDatepickerFilter]="datePickerFilter" formControlName="contract_start_date" placeholder="Contract Start date" (keyup)="onKey($event)">
@@ -24,8 +25,8 @@
                 </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex="40">
-                <label class="black font-size-12">
-                  Contract end on  :
+                <label class="black font-size-12 font-semi-bold">
+                  {{ 'contract_end_all' | translate }}  :
                 </label>
                 <mat-form-field appearance="outline" >
                   <input matInput [matDatepicker]="datepicker1"  [matDatepickerFilter]="datePickerFilter" formControlName="contract_end_date" placeholder="Contract End date" (keyup)="onKey($event)">
@@ -40,8 +41,8 @@
           </div>
           <div fxLayout="row"  fxLayoutGap="5%" style="margin-left: 2%;">
             <div  fxLayout="column" fxFlex="40">
-              <mat-label class="black font-size-12">
-                Address :
+              <mat-label class="black font-size-12 font-semi-bold">
+                {{ 'address_label_all' | translate }} :
               </mat-label>
               <mat-form-field appearance="outline" >
                 <input  type="text" matInput
@@ -54,13 +55,13 @@
               </mat-form-field>
             </div>
             <div  fxLayout="column" fxFlex="40">
-              <label class="black font-size-12">
-                Nationnalité :
+              <label class="black font-size-12 font-semi-bold">
+                {{ 'natio_all' | translate }} :
               </label>
               <mat-form-field appearance="outline" class="full-width">
-                <mat-select formControlName="language"  panelClass="panelColor" placeholder="Nationality">
-                  <mat-option *ngFor="let natio of natioList" value="{{ natio.NATIONALITY_CODE }}">
-                    {{ natio.NATIONALITY_DESC }}
+                <mat-select  formControlName="nationality_id"  panelClass="panelColor" placeholder="Nationality">
+                  <mat-option *ngFor="let natio of nationalitiesList" value="{{ natio.value }}">
+                    {{ natio.viewValue }}
                   </mat-option>
                 </mat-select>
                 <mat-error class="red" *ngIf="editForm.controls.nationality_id.errors?.required">
@@ -70,28 +71,28 @@
 
           </div>
 
-          <div class="column"  fxLayoutGap="5%" style="margin-left: 2%;">
+          <div class="column"   style="margin-left: 2%;">
             <div fxLayout="row">
-              <h1 class="steel font-size-18">Request information </h1>
+              <h1 class="steel font-size-18">{{ 'rh_request_information' | translate }}</h1>
             </div>
             <div fxLayout="row"  fxLayoutGap="5%">
               <div  fxLayout="column" fxFlex="40">
-                <mat-label class="black font-size-12">
-                  Request date  :
+                <mat-label class="black font-size-12 font-semi-bold">
+                  {{'rh_request_certif_date' | translate }}  :
                 </mat-label>
                 <mat-form-field appearance="outline" >
-                  <input matInput [matDatepicker]="datepicker"   [matDatepickerFilter]="datePickerFilter" formControlName="request_date" placeholder="Request date">
-                  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                  <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                  <input matInput [matDatepicker]="datepicker2"    formControlName="request_date" placeholder="Request date">
+                  <mat-datepicker-toggle matSuffix [for]="datepicker2"></mat-datepicker-toggle>
+                  <mat-datepicker #datepicker2 color="primary"></mat-datepicker>
 
                 </mat-form-field>
               </div>
               <div  fxLayout="column" fxFlex="40">
-                <mat-label class="black font-size-12">
-                  Request response :
+                <mat-label class="black font-size-12 font-semi-bold">
+                  {{ 'request_response_all' | translate }} :
                 </mat-label>
                 <mat-form-field appearance="outline"  *ngIf="certificate.response_request" >
-                  <input matInput [matDatepicker]="datepicker" disabled  [matDatepickerFilter]="datePickerFilter" formControlName="response_request" placeholder="Request date">
+                  <input matInput [matDatepicker]="datepicker" disabled   formControlName="response_request" placeholder="Request date">
                   <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
                   <mat-datepicker #datepicker color="primary"></mat-datepicker>
                 </mat-form-field>
@@ -106,24 +107,23 @@
             </div>
             <div fxLayout="row"  fxLayoutGap="5%">
               <div  fxLayout="column" fxFlex="40">
-                <mat-label class="black font-size-12">
-                  Type :
+                <mat-label class="black font-size-12 font-semi-bold">
+                  {{ 'rh_request_type' | translate }} :
                 </mat-label>
                 <mat-form-field appearance="outline" >
                   <mat-select formControlName="request_type"  panelClass="panelColor">
-                    <mat-option value="CERT" selected>Work certificate</mat-option>
-                    <mat-option value="EXP">Expatriation</mat-option>
+                    <mat-option value="{{ certificate.request_type }}" selected>{{ requestType | translate }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div  fxLayout="column" fxFlex="40">
-                <mat-label class="black font-size-12">
-                  Language :
+                <mat-label class="black font-size-12 font-semi-bold">
+                  {{ 'rh_language_certif' | translate }} :
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-select formControlName="language"  panelClass="panelColor" placeholder="Language" >
-                    <mat-option *ngFor="let lang of languageList" value="{{ lang.LanguageKey.language_code }}">
-                      {{ lang.language_desc }}
+                    <mat-option value="{{ certificate.language }}" selected>
+                      {{ certificate.language }}
                     </mat-option>
                   </mat-select>
                   <mat-error class="red" *ngIf="editForm.controls.language.errors?.required">
@@ -136,11 +136,11 @@
           </div>
 
 
-          <div class="row"  class="full-width" style="width: 86%; margin-left: 2%">
+          <div class="row"  class="full-width" style="width: 83%; margin-left: 2%">
             <div   >
               <div  fxLayout="column"  >
-                <label class="black font-size-12">
-                  Comment
+                <label class="black font-size-12 font-semi-bold">
+                  {{ 'timesheet.comment' | translate }} :
                 </label>
                 <mat-form-field appearance="outline">
                                 <textarea matInput placeholder="Comment" rows="7"
@@ -156,10 +156,10 @@
           </div>
           <div fxLayout fxLayoutAlign="center center"  fxLayoutGap="32px"  style="margin-bottom: .5rem;">
             <button  mat-raised-button  class="black btn-small bg-white-two" >
-              Cancel
+              {{ 'timesheet.cancel' | translate }}
             </button>
             <button (click)="confirm()" mat-raised-button  class="white btn-small bg-topaz">
-              Confirm
+              {{ 'rh_confirmed_certif' | translate }}
             </button>
 
           </div>
@@ -168,6 +168,7 @@
         </div>
       </form>
     </div>
+    </wid-scrollbar>
   </wid-title-certif>
 </div>
 
