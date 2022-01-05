@@ -98,7 +98,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    *************************************************************************/
   async ngOnInit(): Promise<void> {
     this.type = 'Certification';
-    this.title = 'Certificates List';
+    this.title = 'Certification';
 
     // tslint:disable-next-line:max-line-length
     this.collaboratorAction ? this.header = { title: this.title, addActionURL: this.redirectUrl, addActionText: this.addButtonLabel} : this.header = { title: this.title} ;
