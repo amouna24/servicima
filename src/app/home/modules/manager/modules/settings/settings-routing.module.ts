@@ -34,7 +34,7 @@ const routes: Routes = [
 
   {
     path: 'timesheet-setting',
-    loadChildren: () => import('./timesheet management/timesheet-management.module').then(m => m.TimesheetManagementModule),
+    loadChildren: () => import('./timesheet settings/timesheet-settings.module').then(m => m.TimesheetSettingsModule),
     data: {
       breadcrumb: 'timesheet-setting'
     },

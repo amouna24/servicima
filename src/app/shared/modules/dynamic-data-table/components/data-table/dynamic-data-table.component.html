@@ -60,7 +60,7 @@
 
 
             </mat-expansion-panel-header >
-            <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }"> {{ listAction }}
+            <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }">  {{ listAction | translate }}
             </div>
           </mat-expansion-panel>
         </mat-accordion>

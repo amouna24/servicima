@@ -15,10 +15,10 @@
   </div>
   <div fxLayout="row" fxFlex="78">
     <wid-scrollbar  fxFlexFill >
-        <form [formGroup]="linkedinForm" fxLayout="column" fxFlexFill>
-          <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
+        <form [formGroup]="linkedinForm" fxLayout="column">
+          <div fxLayout="row" fxFlex="100" fxLayoutAlign="center">
             <div fxLayout="column" fxFlex="82">
-              <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
+              <div fxLayout="row" fxFlex="30" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     {{'offer_title' | translate}}:
@@ -31,7 +31,7 @@
                 </div>
 
               </div>
-              <div fxLayout="row" fxFlex="30" fxLayoutAlign=" end">
+              <div fxLayout="row" fxFlex="48" fxLayoutAlign=" center">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     {{'offer_description' | translate}}:
@@ -42,7 +42,7 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div fxLayout="row" >
+              <div fxLayout="row" fxFlex="24">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 ">
                     {{'offer_image' | translate}}:
@@ -61,7 +61,7 @@
                   </mat-form-field>
                 </div>
 
-              </div>
+              </div >
             </div>
           </div>
         </form>
