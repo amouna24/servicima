@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Resume</h1>
+      <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
@@ -94,7 +94,9 @@
                           <mat-error class="red" *ngIf="sendProExp.controls.start_date.errors?.required">
                             {{ 'general.required' | translate }}</mat-error>
                         </mat-form-field>
-                        <mat-checkbox class="example-margin black font-size-12" [checked]="checkedBox === true" (change)="checkCurrentDate($event)" [disabled]="disableCheckBox" >Im currently working in this role</mat-checkbox>
+                        <mat-checkbox class="example-margin black font-size-12" [checked]="checkedBox === true" (change)="checkCurrentDate($event)" [disabled]="disableCheckBox" >
+                          {{'resume-currently' | translate}}
+                        </mat-checkbox>
 
                       </div>
                       <div fxLayout="column" fxFlex="35">

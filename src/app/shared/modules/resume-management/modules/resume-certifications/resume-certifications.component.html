@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Resume</h1>
+      <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
@@ -152,14 +152,15 @@
                                              accept="image/png, image/gif, image/jpeg"
                                              (change)="setValueToImageField($event)"
                                              hidden/>
-                                      <label for="upload">Upload</label></button>
+                                      <label for="upload">{{'offer_upload' | translate}}</label></button>
                                   </div>
                                 </mat-form-field>
                               </div>
                             </div>
                             <div fxLayout="column" fxFlex="15"></div>
                             <div fxLayout="column" fxFlex="35" fxLayoutAlign="center">
-                              <mat-checkbox  class="black font-size-12 " [checked]="display_image" [disabled]="verifyDisplayed()"  (change)="verifyCheckedDisplayImage($event)" > Display image on your resume</mat-checkbox>
+                              <mat-checkbox  class="black font-size-12 " [checked]="display_image" [disabled]="verifyDisplayed()"  (change)="verifyCheckedDisplayImage($event)" >
+                                {{'resume-display' | translate}}</mat-checkbox>
                             </div>
                           </div>
 

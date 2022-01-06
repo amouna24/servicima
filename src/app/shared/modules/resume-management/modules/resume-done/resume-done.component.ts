@@ -616,8 +616,8 @@ export class ResumeDoneComponent implements OnInit {
       if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR' || this.companyuserType === 'COLLABORATOR') {
         const confirmation = {
           code: 'edit',
-          title: 'Send Email',
-          description: `Are you sure you want to save your resume`,
+          title: 'send-mail',
+          description: `resume-save-data`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
           .subscribe(
