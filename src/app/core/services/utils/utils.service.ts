@@ -252,7 +252,6 @@ export class UtilsService {
     filterCtrl.valueChanges
       .subscribe(
         (res) => {
-          console.log('resultat filter ', res);
           this.filterData(list, filterCtrl, filtered);
         },
         (e) => {

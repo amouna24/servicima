@@ -220,6 +220,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               private hrHelper: HelperHrService,
 
   ) {
+    this.initProfileForm();
     this.id = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state._id : null;
     this.contract = this.router.getCurrentNavigation().extras.state.contract ? this.router.getCurrentNavigation().extras.state.contract : null;
     this.bankingInfo = this.router.getCurrentNavigation().extras.state.banking ? this.router.getCurrentNavigation().extras.state.banking : null;
@@ -351,7 +352,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             placeholder: 'country_all',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
-            formControlName: 'country_id',
+            formControlName: 'country_cd',
             searchControlName: 'countryFilterCtrl',
             required: true
           },
@@ -814,7 +815,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'EVALUATION',
         fieldsLayout: FieldsAlignment.tow_items,
@@ -836,7 +836,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'EVALUATION',
         fieldsLayout: FieldsAlignment.tow_items,
@@ -857,7 +856,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'EVALUATION',
         fieldsLayout: FieldsAlignment.one_item_stretch,
@@ -906,7 +904,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'GOAL',
         fieldsLayout: FieldsAlignment.tow_items,
@@ -928,7 +925,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'GOAL',
         fieldsLayout: FieldsAlignment.one_item_at_left,
@@ -942,7 +938,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           },
         ],
       },
-
       {
         titleRef: 'GOAL',
         fieldsLayout: FieldsAlignment.one_item_at_right,
@@ -1158,7 +1153,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         this.isLoadingImage.next(false);
       });
 
-    await this.initProfileForm();
     await this.getRefData(this.userInfo.company_email);
     await this.getInitialData();
     this.utilsService.getCountry(this.utilsService.getCodeLanguage(this.userInfo.language_id)).map((country) => {
@@ -1170,6 +1164,11 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.profileForm.controls.PERSONAL_DATA['controls'].countryBirthFilterCtrl,
       this.filteredCountries
     );
+    this.utilsService.changeValueField(
+      this.countriesList,
+      this.profileForm.controls.PERSONAL_DATA['controls'].countryFilterCtrl,
+      this.filteredCountries
+    );
     this.sheetService.registerSheets(
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
@@ -1178,7 +1177,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   /**************************************************************************
    * @description Init form with initial data
    *************************************************************************/
-  async initProfileForm() {
+   initProfileForm() {
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
         first_name: [this.userInfo === null ? '' : this.userInfo.first_name, Validators.required],
@@ -1190,7 +1189,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id, Validators.required],
         birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city, Validators.required],
         adress: [this.collaborator === null ? '' : this.collaborator.adress, Validators.required],
-        country_id: [this.collaborator === null ? '' : this.collaborator.country_id, Validators.required],
+        country_cd: [''],
         countryFilterCtrl: [''],
         countryBirthFilterCtrl: [''],
         zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code, Validators.required],
@@ -1293,7 +1292,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.collaboratorInfo = collaborator[0];
               this.collaboratorInfo['email_address'] = collaborator[0]['collaboratorKey']['email_address'];
               await this.getData();
-              await this.initProfileForm();
               this.profileForm.controls.PERSONAL_DATA['controls'].first_name.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].last_name.disable();
               this.profileForm.controls.PERSONAL_DATA['controls'].email_address.disable();
