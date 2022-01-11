@@ -172,7 +172,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Evaluation',
+      title: 'evaluation_all',
       titleKey: 'EVALUATION',
       child: []
     },
@@ -197,7 +197,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'equipment_all',
+      title: 'hr.collab.menu.eqp',
       titleKey: 'EQUIPMENT',
       child: []
     }
@@ -520,14 +520,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.ctr.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.ctr.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -540,7 +540,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'date_assign_all',
+            label: 'hr.collab.ctr.assign_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_date',
@@ -609,8 +609,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'country_all',
-            placeholder: 'country_all',
+            label: 'hr.collab.prv.country;',
+            placeholder: 'hr.collab.prv.country;',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             searchControlName: 'countryFilterCtrl',
@@ -624,14 +624,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.prv.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.prv.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -644,7 +644,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'rate_all',
+            label: 'hr.collab.prv.rate',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
@@ -653,8 +653,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'currency_all',
-            placeholder: 'currency_all',
+            label: 'hr.collab.prv.currency',
+            placeholder: 'hr.collab.prv.currency',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCurrencies,
             formControlName: 'currency_cd',
@@ -668,16 +668,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'contract_type_all',
-            placeholder: 'contract_type_all',
+            label: 'hr.collab.prv.ctrtype',
+            placeholder: 'hr.collab.prv.ctrtype',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
             required: true
           },
           {
-            label: 'job_title_all',
-            placeholder: 'job_title_all',
+            label: 'hr.collab.prv.jobtl',
+            placeholder: 'hr.collab.prv.jobtl',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -725,14 +725,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.ext.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.ext.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_end_date',
@@ -745,7 +745,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'rate_all',
+            label: 'hr.collab.ext.rate',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
@@ -753,8 +753,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'job_title_all',
-            placeholder: 'job_title_all',
+            label: 'hr.collab.ext.jbt',
+            placeholder: 'hr.collab.ext.jbt',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -767,8 +767,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'currency_all',
-            placeholder: 'currency_all',
+            label: 'hr.collab.ext.currency',
+            placeholder: 'hr.collab.ext.currency',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCurrencies,
             formControlName: 'extension_currency_cd',
@@ -776,8 +776,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'attachment_all',
-            placeholder: 'attachment_all',
+            label: 'hr.collab.ext.file',
+            placeholder: 'hr.collab.ext.file',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
@@ -826,16 +826,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'evaluation_mission_all',
-            placeholder: 'evaluation_mission_all',
+            label: 'hr.collab.eval.miss',
+            placeholder: 'hr.collab.eval.miss',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'main_mission',
             required: true
           },
           {
-            label: 'report_all',
-            placeholder: 'report_all',
+            label: 'hr.collab.eval.report',
+            placeholder: 'hr.collab.eval.report',
             type: FieldsType.INPUT,
             formControlName: 'report',
             required: true
@@ -848,14 +848,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.eval.d_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.eval.e_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_end_date',
@@ -869,8 +869,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'attachment_all',
-            placeholder: 'attachment_all',
+            label: 'hr.collab.eval.file',
+            placeholder: 'hr.collab.eval.file',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'evaluation_doc',
             inputType: InputType.TEXT,
@@ -918,8 +918,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'invoice.descriptionLine',
-            placeholder: 'invoice.descriptionLine',
+            label: 'hr.collab.goal.desc',
+            placeholder: 'hr.collab.goal.desc',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'description',
@@ -984,15 +984,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'first_name_all',
-            placeholder: 'first_name_all',
+            label: 'hr.collab.child.name',
+            placeholder: 'hr.collab.child.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
             required: true
           },
           {
-            label: 'birth_date_all',
+            label: 'hr.collab.child.b_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
@@ -1035,16 +1035,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'full_name_all',
-            placeholder: 'full_name_all',
+            label: 'hr.collab.cnt.name',
+            placeholder: 'hr.collab.cnt.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
             required: true
           },
           {
-            label: 'phone_all',
-            placeholder: 'phone_all',
+            label: 'hr.collab.cnt.phone',
+            placeholder: 'hr.collab.cnt.phone',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'phone',
@@ -1068,8 +1068,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'bank_name_all',
-            placeholder: 'bank_name_all',
+            label: 'hr.collab.bank.name',
+            placeholder: 'hr.collab.bank.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'bank_name',
@@ -2125,13 +2125,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    ********************************************************************************************************************/
   async newCollaboratorInfo(data: FormGroup) {
     const Contract = this.profileForm.controls.CONTRACT.value;
-    //  const PersonalData = this.profileForm.controls.PERSONAL_DATA.value;
     if (Contract.contract_start_date !== '') {
       this.contractCheck = true;
     }
       const contract_type = this.profileForm.controls.CONTRACT['controls'].contract_type?.value;
-      // tslint:disable-next-line:max-line-length
-      this.contract !== null ? Contract['contract_code'] = this.contract.HRContractKey.contract_code : Contract['contract_code'] = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CONTRACT` ;
+      this.contract !== null ?
+        Contract['contract_code'] = this.contract.HRContractKey.contract_code
+        : Contract['contract_code'] = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CONTRACT` ;
       Contract['email_address'] = this.userInfo.company_email;
       Contract['application_id'] = this.applicationId;
       Contract['collaborator_email'] = this.collaborator.collaboratorKey.email_address;
@@ -2179,8 +2179,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         if (identityDocument.selectedIdentityFile && identityDocument?.selectedIdentityFile?.name !== '') {
           identityDocument.file = await this.uploadFile(identityDocument.selectedIdentityFile.file);
         }
-        // tslint:disable-next-line:max-line-length
-        this.hrHelper.addOrUpdateIdentifyDocument(identityDocument.updated, identityDocument, this.applicationId, this.emailAddress, identityDocument.identity_document_code);
+        this.hrHelper
+          .addOrUpdateIdentifyDocument
+          (identityDocument.updated, identityDocument, this.applicationId, this.emailAddress, identityDocument.identity_document_code);
 
       }
     for (const previousContact of this.contractPreviousInfo) {

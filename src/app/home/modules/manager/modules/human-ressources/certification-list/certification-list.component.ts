@@ -99,9 +99,8 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
   async ngOnInit(): Promise<void> {
     this.type = 'Certification';
     this.title = 'Certifications';
-
-    // tslint:disable-next-line:max-line-length
-    this.collaboratorAction ? this.header = { title: this.title, addActionURL: this.redirectUrl, addActionText: this.addButtonLabel} : this.header = { title: this.title} ;
+    this.collaboratorAction
+      ? this.header = { title: this.title, addActionURL: this.redirectUrl, addActionText: this.addButtonLabel} : this.header = { title: this.title} ;
     await this.getConnectedUser();
     await  this.getCertificate(this.nbtItems.getValue(), 0).then((data) => {
       this.ELEMENT_DATA.next(data);
@@ -138,8 +137,12 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    *************************************************************************/
   async getCertificate(limit?, offset?) {
     return new Promise((resolve) => {
-      // tslint:disable-next-line:max-line-length3 max-line-length
-      this.hrService.getWorkCertificates(`?beginning=${offset}&number=${limit}&${ this.email ? `email_address=${this.email}&status=ACTIVE` : `company_email=${this.companyEmail}&status=ACTIVE`  }` ).subscribe( async (res) => {
+      this.hrService.
+      getWorkCertificates
+      (
+        `?beginning=${offset}&number=${limit}&${ this.email ? `email_address=${this.email}&status=ACTIVE` :
+          `company_email=${this.companyEmail}&status=ACTIVE`  }` )
+        .subscribe( async (res) => {
         if (res['msg_code'] !== '0004') {
           await res['results'].map((certif) => {
             this.profileService.getUser(`?email_address=${certif.HRWorkCertificateKey.email_address}`).toPromise()
@@ -300,7 +303,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
       'rh_cdi_certif', 'rh_sivp_certif', 'rh_and_certif', 'rh_contract_certif', 'rh_under_certif', 'rh_email_certif', 'rh_activation_certif',
       'rh_website_certif', 'rh_cdd_certif' , 'rh_f_certif', 'rh_article3_certif', 'rh_article2_certif'
       , 'rh_article1_certif' , 'rh_fonctions_certif', 'rh_renumeration_certif', 'rh_salary_certif',
-      'rh_employed_certif', 'rh_presente_certif', 'rh_number_certif', 'rh_commerce_certif', 'rh_exp_certif',
+        'rh_employed_certif', 'rh_presente_certif', 'rh_number_certif', 'rh_commerce_certif', 'rh_exp_certif',
       'rh_cdi', 'rh_cdd' , 'rh_travail' , 'rh_recrute' , 'her_rh', 'his_rh', 'she_rh', 'he_rh', 'rh_en_certif', 'rh_contract'
     ];
 
@@ -428,12 +431,10 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
           certificate['nbrPreviousContract'] = this.PREVIOUS_CONTRACT.value['count'] + 1;
           await this.hrService.generateCertif(certificate).subscribe(async (data) => {
             const iframe = '<iframe width=\'100%\' height=\'100%\' src=\'' + data.result + '\'></iframe>';
-            // tslint:disable-next-line:prefer-const
             const x = window.open();
             x.document.open();
             x.document.write(iframe);
             x.document.close();
-            // tslint:disable-next-line:prefer-const
           }, (err) => {
             this.utilsService.openSnackBar('Something wrong', 'close');
             console.log('error ', err);
