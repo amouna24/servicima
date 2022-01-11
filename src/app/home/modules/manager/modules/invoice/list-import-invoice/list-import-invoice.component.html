@@ -3,11 +3,11 @@
   <wid-confirm-list
     fxFlex class="full-width"
     [DATA]="selectedFiles"
-    [title]="'Import invoice'"
+    [title]="'invoice.import.title'"
     [selectAllBtn]="true"
     [btnLabel]="'Associate'"
     [requiredFields]="['no', 'client', 'status', 'remark']"
-    [message]="{ field: 'no', message: 'Are you sure to add this invoice [$VALUE] '}"
+    [message]="{ field: 'no', message: '\'invoice.project.vat\' | translate | capitalizeFirstLetter [$VALUE] '}"
     (action)="associate($event)"
     (dialogAction)="modalActions($event)"
   ></wid-confirm-list>

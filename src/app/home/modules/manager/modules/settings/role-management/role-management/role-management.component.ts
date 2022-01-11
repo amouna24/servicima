@@ -68,7 +68,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
   switch (rowAction.actionType) {
        case ('update'): this.updateRole(rowAction.data);
          break;
-       case('delete'): this.onChangeStatus(rowAction.data);
+       case('delete.user.action'): this.onChangeStatus(rowAction.data);
      }
   }
 
@@ -101,7 +101,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
       });
       const obj = { data, list: listArray};
     this.modalService.displayModal('addRole', obj,
-      '657px', '527px').subscribe(async (res) => {
+      '657px', '565px').subscribe(async (res) => {
         if (res) {
        await this.getRole(this.nbtItems.getValue(), 0);
         }
@@ -126,23 +126,26 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
    * @description : change the status
    * @param id: string
    */
-  onChangeStatus(id: string) {
+  onChangeStatus(list) {
     const confirmation = {
       code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
+      title: 'change.status.title.modal',
+      description: 'change.status.description.modal',
+      status: 'ACTIVE'
     };
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push(this.refDataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
-          async (res) => {
-            if (res) {
-              await this.getRole(this.nbtItems.getValue(), 0);
-            }
-          },
-          (err) => console.error(err),
-        ));
+        list.map((id) => {
+          this.subscriptions.push(this.refDataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
+            async (res) => {
+              if (res) {
+                await this.getRole(this.nbtItems.getValue(), 0);
+              }
+            },
+            (err) => console.error(err),
+          ));
+        });
         this.subscriptionModal.unsubscribe();
       }
     });

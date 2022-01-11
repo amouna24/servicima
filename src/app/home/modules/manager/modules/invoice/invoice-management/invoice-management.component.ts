@@ -482,8 +482,8 @@ RIB:${this.companyBankingInfos?.rib}`);
       contractor: this.invoiceHeader['contractor_code'],
       contract: this.invoiceHeader['contract_code'],
       invoiceNbr: this.invoiceNbr,
-      invoiceDate: this.invoiceHeader['invoice_date'],
-      invoiceDelay: this.invoiceHeader['invoice_delay'],
+      invoiceDate: this.datePipe.transform(this.invoiceHeader['invoice_date']),
+      invoiceDelay: this.datePipe.transform(this.invoiceHeader['invoice_delay']),
     });
 
     this.form = this.formBuilder.group({
@@ -505,7 +505,6 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.countLeftToPay();
     await this.getContract(this.invoiceHeader['contractor_code']);
     this.contract = this.listContract.find(value => value.contractKey.contract_code === this.contractCode);
-
   }
 
   /**************************************************************************
@@ -653,7 +652,7 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.contractCode = contractCode;
     this.currencyCode = this.contract['currency_cd'];
     this.symbolCurrency = this.listCurrency.find((value) => value['CURRENCY_CODE'] === this.currencyCode).CURRENCY_SYMBOL;
-    this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`, 'ACTIVE')
+    this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         this.paymentTerms = data.find(value => value.companyPaymentTermsKey.payment_terms_code === this.contract['payment_terms']).delay;
@@ -1127,37 +1126,37 @@ RIB:${this.companyBankingInfos?.rib}`;
    *************************************************************************/
   getLabel(): object {
     let label: object;
-    const translateKey = ['invoice.siteWeb', 'invoice.email', 'invoice.phone', 'invoice.accountsPayable',
-      'invoice.totalTTC', 'invoice.Subtotal', 'invoice.BicCode', 'invoice.RIB', 'invoice.IBAN', 'invoice.address',
-      'invoice.ConditionAndModality', 'invoice.amountLine', 'invoice.vatLine', 'invoice.quantity',
-      'invoice.priceLine', 'invoice.descriptionLine', 'invoice.invoiceTo', 'invoice.dateDeadLine',
-      'invoice.dateStart', 'invoice.number', 'invoice.of', 'invoice.title'];
+    const translateKey = ['invoice.website', 'invoice.email', 'invoice.phone', 'invoice.balance.payable',
+      'invoice.total', 'invoice.subtotal', 'invoice.bic.code', 'invoice.rib', 'invoice.iban', 'invoice.address',
+      'invoice.condition.and.modality', 'invoice.project.amount', 'invoice.project.vat', 'invoice.project.quantity',
+      'invoice.project.price', 'invoice.project.description', 'invoice.invoice.to', 'invoice.due.date',
+      'invoice.date', 'invoice.n°', 'invoice.sender', 'invoice.title'];
     this.translate.get(translateKey)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         label = {
           title: res['invoice.title'],
-          of: res['invoice.of'],
-          number: res['invoice.number'],
-          dateStart: res['invoice.dateStart'],
-          dateDeadLine: res['invoice.dateDeadLine'],
-          invoiceTo: res['invoice.invoiceTo'],
-          description: res['invoice.descriptionLine'],
-          price: res['invoice.priceLine'],
-          quantity: res['invoice.quantity'],
-          vat: res['invoice.vatLine'],
+          of: res['invoice.sender'],
+          number: res['invoice.n°'],
+          dateStart: res['invoice.date'],
+          dateDeadLine: res['invoice.due.date'],
+          invoiceTo: res['invoice.invoice.to'],
+          description: res['invoice.project.description'],
+          price: res['invoice.project.price'],
+          quantity: res['invoice.project.quantity'],
+          vat: res['invoice.project.vat'],
           amount: res['invoice.amountLine'],
-          ConditionAndModality: res['invoice.ConditionAndModality'],
+          ConditionAndModality: res['invoice.condition.and.modality'],
           address: res['invoice.address'],
-          IBAN: res['invoice.IBAN'],
-          RIB: res['invoice.RIB'],
-          BicCode: res['invoice.BicCode'],
-          Subtotal: res['invoice.Subtotal'],
-          TotalTTC: res['invoice.totalTTC'],
-          accountsPayable: res['invoice.accountsPayable'],
+          IBAN: res['invoice.iban'],
+          RIB: res['invoice.rib'],
+          BicCode: res['invoice.bic.code'],
+          Subtotal: res['invoice.subtotal'],
+          TotalTTC: res['invoice.total'],
+          accountsPayable: res['invoice.balance.payable'],
           phone: res['invoice.phone'],
           Email: res['invoice.email'],
-          SiteWeb: res['invoice.siteWeb'],
+          SiteWeb: res['invoice.website'],
         };
       }, (error => {
         console.error(error);

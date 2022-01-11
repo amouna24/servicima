@@ -26,7 +26,7 @@ export const ManagerSettingMenu: IMenu[] = [
   },
   {
     state: 'Payment',
-    name: 'manager-setting-menu.users.management.payment',
+    name: 'manager-setting-menu.payment',
     type: 'sub',
     icon: 'wi-credit-card',
     feature: 'PAYMENT',
@@ -78,7 +78,7 @@ export const ManagerSettingMenu: IMenu[] = [
     children: [
       {
         state: 'home-company',
-        name: 'manager-setting-menu.companyprofile',
+        name: 'manager-setting-menu.others.company.profile',
         type: 'link',
         icon: 'wi_company',
         //  feature: 'company-profile',
@@ -86,7 +86,7 @@ export const ManagerSettingMenu: IMenu[] = [
       },
       {
         state: 'company-banking-info',
-        name: 'manager-setting-menu.company.banking.info',
+        name: 'manager-setting-menu.others.company.banking.info',
         type: 'link',
         icon: 'wi_company',
         //  feature: 'company-profile',
@@ -94,14 +94,14 @@ export const ManagerSettingMenu: IMenu[] = [
       },
       {
         state: 'departments',
-        name: 'manager-setting-menu.departments',
+        name: 'manager-setting-menu.others.departments',
         icon: 'assignment',
         feature: 'SETTINGS_DEP_ACCESS',
         type: 'link',
       },
       {
         state: 'calendars',
-        name: 'manager-setting-menu.calendars',
+        name: 'manager-setting-menu.others.calendars',
         icon: 'assignment',
         feature: 'SETTINGS_CALENDAR_ACCESS',
         type: 'link',

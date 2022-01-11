@@ -57,37 +57,37 @@ export class ListImportInvoiceComponent implements OnInit {
    *************************************************************************/
   getLabel(): object {
     let label: object;
-    const translateKey = ['invoice.siteWeb', 'invoice.email', 'invoice.phone', 'invoice.accountsPayable',
-      'invoice.totalTTC', 'invoice.Subtotal', 'invoice.BicCode', 'invoice.RIB', 'invoice.IBAN', 'invoice.address',
-      'invoice.ConditionAndModality', 'invoice.amountLine', 'invoice.vatLine', 'invoice.quantity',
-      'invoice.priceLine', 'invoice.descriptionLine', 'invoice.invoiceTo', 'invoice.dateDeadLine',
-      'invoice.dateStart', 'invoice.number', 'invoice.of', 'invoice.title'];
+    const translateKey = ['invoice.website', 'invoice.email', 'invoice.phone', 'invoice.balance.payable',
+      'invoice.total', 'invoice.subtotal', 'invoice.bic.code', 'invoice.rib', 'invoice.iban', 'invoice.address',
+      'invoice.condition.and.modality', 'invoice.project.amount', 'invoice.project.vat', 'invoice.project.quantity',
+      'invoice.project.price', 'invoice.project.description', 'invoice.invoice.to', 'invoice.due.date',
+      'invoice.date', 'invoice.n°', 'invoice.sender', 'invoice.title'];
     this.translate.get(translateKey)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         label = {
           title: res['invoice.title'],
-          of: res['invoice.of'],
-          number: res['invoice.number'],
-          dateStart: res['invoice.dateStart'],
-          dateDeadLine: res['invoice.dateDeadLine'],
-          invoiceTo: res['invoice.invoiceTo'],
-          description: res['invoice.descriptionLine'],
-          price: res['invoice.priceLine'],
-          quantity: res['invoice.quantity'],
-          vat: res['invoice.vatLine'],
+          of: res['invoice.sender'],
+          number: res['invoice.n°'],
+          dateStart: res['invoice.date'],
+          dateDeadLine: res['invoice.due.date'],
+          invoiceTo: res['invoice.invoice.to'],
+          description: res['invoice.project.description'],
+          price: res['invoice.project.price'],
+          quantity: res['invoice.project.quantity'],
+          vat: res['invoice.project.vat'],
           amount: res['invoice.amountLine'],
-          ConditionAndModality: res['invoice.ConditionAndModality'],
+          ConditionAndModality: res['invoice.condition.and.modality'],
           address: res['invoice.address'],
-          IBAN: res['invoice.IBAN'],
-          RIB: res['invoice.RIB'],
-          BicCode: res['invoice.BicCode'],
-          Subtotal: res['invoice.Subtotal'],
-          TotalTTC: res['invoice.totalTTC'],
-          accountsPayable: res['invoice.accountsPayable'],
+          IBAN: res['invoice.iban'],
+          RIB: res['invoice.rib'],
+          BicCode: res['invoice.bic.code'],
+          Subtotal: res['invoice.subtotal'],
+          TotalTTC: res['invoice.total'],
+          accountsPayable: res['invoice.balance.payable'],
           phone: res['invoice.phone'],
           Email: res['invoice.email'],
-          SiteWeb: res['invoice.siteWeb'],
+          SiteWeb: res['invoice.website'],
         };
       }, (error => {
         console.error(error);

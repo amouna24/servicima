@@ -3,12 +3,13 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'INVOICES-LIST'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Invoice management', addActionURL: '/manager/invoices/add-invoice', addActionText: 'New invoice'}"
+  [header]="{ title: 'invoice.management.title' | translate, addActionURL: '/manager/invoices/add-invoice', addActionText: 'New invoice'}"
   [title]="'Invoices list'"
   [security] = true
   (rowActionData)="switchAction($event)"
   (pagination)="loadMoreItems($event)"
-  [allowedActions]="['show', 'download', 'archiver','sendMailing', 'import']"
+  [allowedActions]="['invoice.management.show', 'invoice.management.download', 'invoice.management.delete','invoice.management.sendmail']"
+  (importAction)="import()"
   (search)= "searchInvoice($event)"
   (filter) ="search($event)"
 >
