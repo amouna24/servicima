@@ -31,7 +31,7 @@ export class ChangePwdComponent implements OnInit, OnDestroy {
     button: {
       buttonRight: {
         visible: true,
-        name: 'save',
+        name: 'changepwd.save',
         color: '#f3f6f9',
         background: '#0067e0',
         nextValue: true,
@@ -39,7 +39,7 @@ export class ChangePwdComponent implements OnInit, OnDestroy {
       },
       buttonLeft: {
         visible: true,
-        name: 'cancel',
+        name: 'changepwd.cancel',
         color: '#232323',
         background: '#f3f6f9',
         nextValue: false,

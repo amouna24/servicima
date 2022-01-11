@@ -9,7 +9,7 @@
         </div>
       </div>
       <div>
-        <div class="steel font-size-15 font-medium">Enter a payment</div>
+        <div class="steel font-size-15 font-medium">{{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</div>
       </div>
     </div>
 
@@ -17,11 +17,11 @@
       <div fxLayout="row">
         <div fxLayout="column" fxFlex="98">
           <mat-label class="black font-size-12 required">
-            Amount :
+            {{'invoice.payment.amount' | translate | capitalizeFirstLetter}} :
           </mat-label>
           <div style="font-size: 10px" class="full-width">
             <mat-form-field appearance="outline" class="full-width">
-              <input type="number" formControlName="amount" matInput placeholder="Amount" >
+              <input type="number" formControlName="amount" matInput [placeholder]=" 'invoice.payment.amount' | translate"  >
             </mat-form-field>
           </div>
         </div>
@@ -31,11 +31,11 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="98">
             <mat-label class="black font-size-12 required">
-              Payment mode :
+              {{'invoice.payment.type' | translate | capitalizeFirstLetter}} :
             </mat-label>
             <div style="font-size: 10px" class="full-width">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-select placeholder="Payment methode" formControlName="paymentMethodsCtrl"
+                <mat-select [placeholder]=" 'invoice.payment.amount' | translate" formControlName="paymentMethodsCtrl"
                             #singleSelect>
                   <mat-option>
                     <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
@@ -62,11 +62,11 @@ add
       <div fxLayout="row">
         <div fxLayout="column" fxFlex="98">
           <mat-label class="black font-size-12">
-            Bank account :
+            {{'invoice.bank.account' | translate | capitalizeFirstLetter}}:
           </mat-label>
           <div style="font-size: 10px" class="full-width">
             <mat-form-field appearance="outline" class="full-width">
-              <input formControlName="bankAccount" matInput placeholder="Bank account" >
+              <input formControlName="bankAccount" matInput [placeholder]=" 'invoice.bank.account' | translate" >
             </mat-form-field>
           </div>
         </div>
@@ -74,11 +74,11 @@ add
       <div fxLayout="row">
         <div fxLayout="column" fxFlex="98">
           <mat-label class="black font-size-12 required">
-            Payment date:
+            {{'invoice.payment.date' | translate | capitalizeFirstLetter}}
           </mat-label>
           <div style="font-size: 10px" class="full-width">
             <mat-form-field appearance="outline" class="full-width">
-              <input type="datetime-local" formControlName="paymentDate" matInput placeholder="Payment date" >
+              <input type="datetime-local" formControlName="paymentDate" matInput [placeholder]=" 'invoice.payment.date' | translate">
             </mat-form-field>
           </div>
         </div>
@@ -86,18 +86,18 @@ add
       <div fxLayout="row">
         <div fxLayout="column" fxFlex="98">
           <mat-label class="black font-size-12 required">
-            Notes:
+            {{'invoice.payment.notes' | translate | capitalizeFirstLetter}}:
           </mat-label>
           <mat-form-field appearance="outline" class="full-width">
-                    <textarea style="font-size: 12px !important" matInput formControlName="message" placeholder="Write your note here"
+                    <textarea style="font-size: 12px !important" matInput formControlName="message"[placeholder]=" 'invoice.payment.notes' | translate"
                               rows="3" required></textarea>
           </mat-form-field>
         </div>
       </div>
     </div>
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px" style="min-height: 45px !important;">
-      <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="addInvoicepayment()" mat-dialog-close [disabled]="mailingForm.invalid">Send</button>
-      <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>Cancel</button>
+      <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="addInvoicepayment()" mat-dialog-close [disabled]="mailingForm.invalid">{{'invoice.management.sendmail' | translate | capitalizeFirstLetter}}</button>
+      <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>{{'invoice.cancel' | translate | capitalizeFirstLetter}}</button>
     </div>
   </form>
 </div>

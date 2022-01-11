@@ -132,26 +132,30 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param id: string
    * @params status: string
    */
-  onChangeStatus(id: string) {
+  onChangeStatus(listInvoice) {
+
     const confirmation = {
       code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
+      title: 'change.status.title.modal',
+      description: 'change.status.description.modal',
+      status: 'ACTIVE'
     };
 
-    this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
-      if (value === true) {
-        this.subscriptions.push( this.profileService.userChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
-          async (res) => {
-            if (res) {
-             await this.getAllUsers(this.nbtItems.getValue(), 0);
-            }
-          },
-          (err) => console.error(err),
-        ));
-        this.subscriptionModal.unsubscribe();
-      }
-    });
+      this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
+        if (value === true) {
+          listInvoice.map((id) => {
+            this.subscriptions.push(this.profileService.userChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
+              async (res) => {
+                if (res) {
+                  await this.getAllUsers(this.nbtItems.getValue(), 0);
+                }
+              },
+              (err) => console.error(err),
+            ));
+            this.subscriptionModal.unsubscribe();
+          });
+        }
+      });
   }
 
   /**
@@ -160,11 +164,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
    */
   switchAction(rowAction: any) {
     switch (rowAction.actionType) {
-      case ('show'): this.showUser(rowAction.data);
+      case ('show.user.action'): this.showUser(rowAction.data);
         break;
       case ('update'): this.updateUser(rowAction.data);
         break;
-      case('delete'): this.onChangeStatus(rowAction.data);
+      case('delete.user.action'): this.onChangeStatus(rowAction.data);
     }
   }
 

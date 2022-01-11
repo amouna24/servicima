@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit {
    * @description Get payment information
    */
   getPaymentInformation() {
-    this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, 'ACTIVE').subscribe((data) => {
+    this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress).subscribe((data) => {
       this.companyPaymentTerms = data;
     }, error => console.error(error));
   }
