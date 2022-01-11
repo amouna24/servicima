@@ -98,12 +98,12 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    *************************************************************************/
   async ngOnInit(): Promise<void> {
     this.type = 'Certification';
-    this.title = 'Certificates List';
+    this.title = 'Certifications';
 
     // tslint:disable-next-line:max-line-length
     this.collaboratorAction ? this.header = { title: this.title, addActionURL: this.redirectUrl, addActionText: this.addButtonLabel} : this.header = { title: this.title} ;
     await this.getConnectedUser();
-    await  this.getCertificate().then((data) => {
+    await  this.getCertificate(this.nbtItems.getValue(), 0).then((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     });
@@ -139,7 +139,7 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
   async getCertificate(limit?, offset?) {
     return new Promise((resolve) => {
       // tslint:disable-next-line:max-line-length3 max-line-length
-      this.hrService.getWorkCertificates(`?${ this.email ? `email_address=${this.email}&status=ACTIVE` : `company_email=${this.companyEmail}&status=ACTIVE`  }` ).subscribe( async (res) => {
+      this.hrService.getWorkCertificates(`?beginning=${offset}&number=${limit}&${ this.email ? `email_address=${this.email}&status=ACTIVE` : `company_email=${this.companyEmail}&status=ACTIVE`  }` ).subscribe( async (res) => {
         if (res['msg_code'] !== '0004') {
           await res['results'].map((certif) => {
             this.profileService.getUser(`?email_address=${certif.HRWorkCertificateKey.email_address}`).toPromise()
@@ -148,7 +148,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
               });
           });
           this.isLoading.next(false);
-
           resolve(res);
         }
 
@@ -175,29 +174,6 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
           }
         }) :
       this.utilsService.openSnackBar('you must select one certification', 'close');
-
-  }
-
-  /**************************************************************************
-   * @description: Show Work Certificate
-   * @param WorkCertificate certificate Object
-   * @return: WorkCertificate
-   *************************************************************************/
-  updateCertificate(certificate: any) {
-    if ((this.collaboratorAction ) || !this.collaboratorAction) {
-      this.router.navigate([this.collaboratorAction ? this.router.routerState.snapshot.url + '/editCertif' :
-          '/manager/contract-management/suppliers-contracts/editCertif'],
-        {
-          state: {
-            certificate,
-            collaborator: this.collaboratorAction
-
-          }
-        });
-    } else {
-      this.utilsService.openSnackBar('you must select one certification', 'close');
-
-    }
 
   }
   activateCertification(certificate: any ) {
@@ -474,6 +450,14 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
 
     }
 
+  }
+  /**************************************************************************
+   * @description get Date with nbrItems as limit
+   * @param params object
+   *************************************************************************/
+  async loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    await this.getCertificate(params.limit, params.offset);
   }
   /**************************************************************************
    * @description colors for request status

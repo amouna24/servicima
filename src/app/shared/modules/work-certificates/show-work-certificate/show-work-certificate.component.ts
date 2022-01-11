@@ -14,15 +14,22 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { Subscription } from 'rxjs';
 import { SignatureCertificateComponent } from '@shared/modules/work-certificates/signature-certificate/signature-certificate.component';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { IViewParam } from '@shared/models/view.model';
+import {  dataAppearance, showBloc } from '@shared/animations/animations';
 
 @Component({
   selector: 'wid-show-work-certificate',
   templateUrl: './show-work-certificate.component.html',
-  styleUrls: ['./show-work-certificate.component.scss']
+  styleUrls: ['./show-work-certificate.component.scss'],
+  animations: [
+    dataAppearance,
+    showBloc
+  ]
 })
 export class ShowWorkCertificateComponent implements OnInit {
 
   certificate: any;
+  nationality = '';
   user: IUserModel;
   position: string;
   requestType: string;
@@ -30,7 +37,6 @@ export class ShowWorkCertificateComponent implements OnInit {
   showBtnEdit = 'Edit';
   refData = { };
   role = 'Collaborator';
-  wi_calender = 'wi_calender';
   collaborator = false;
   modals = { modalName: 'signature', modalComponent: SignatureCertificateComponent };
   subscriptionModal: Subscription;
@@ -40,6 +46,7 @@ export class ShowWorkCertificateComponent implements OnInit {
   emailAddress: string;
   companyName: string;
   infoUser: IUserInfo;
+  nationalitiesList: IViewParam[] = [];
 
   /**************************************************************************
    * @description get initial data
@@ -65,11 +72,13 @@ export class ShowWorkCertificateComponent implements OnInit {
     await this.getConnectedUser();
 
     if (this.certificate.request_type === 'CERT') {
-      this.requestType = 'Certificate';
-    } else { this.requestType = 'Expatriation'; }
+      this.requestType = 'rh_title_certif';
+    } else { this.requestType = 'rh_exp_certif'; }
     await  this.getRefData();
   }
-
+  /**************************************************************************
+   * @description get Ref data
+   *************************************************************************/
   async getRefData() {
     /********************************** REF DATA **********************************/
     this.refData = await this.refDataService.getRefData(
@@ -79,6 +88,16 @@ export class ShowWorkCertificateComponent implements OnInit {
       ['PROF_TITLES'],
       false
     );
+    this.position = this.refData['PROF_TITLES'].filter(x => x.value === this.certificate.title_id)[0].viewValue;
+
+    this.utilsService
+      .getNationality(this.utilsService
+        .getCodeLanguage( this.localStorageService.getItem('language')['langId'])).map((nationality) => {
+      this.nationalitiesList.push({ value: nationality.NATIONALITY_CODE, viewValue: nationality.NATIONALITY_DESC });
+    });
+    if (this.certificate.nationality_id) {
+      this.nationality = this.nationalitiesList.filter(x => x.value === this.certificate.nationality_id)[0].viewValue;
+    }
   }
   /**************************************************************************
    * @description confirm certification
@@ -106,6 +125,17 @@ export class ShowWorkCertificateComponent implements OnInit {
         this.utilsService.openSnackBar('something wrong', 'close', 5000);
       }
     );
+  }
+  /**************************************************************************
+   * @description  navigate to update certification
+   *************************************************************************/
+  update() {
+    this.router.navigate(
+      ['/collaborator/work-certificates/editCertif'],
+      { state: {
+            certificate: this.certificate
+        }
+      });
   }
   /**
    * @description: get connected user

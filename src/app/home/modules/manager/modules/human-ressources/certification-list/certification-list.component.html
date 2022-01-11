@@ -8,6 +8,8 @@
   [colorObject]="colorCheck()"
   [allowedActions]="['show','delete','download', 'activate']"
   [setAvatar]="{columnCode:'full_name', imgSrc: 'photo' }"
+  (pagination)="loadMoreItems($event)"
+
 >
 
 </wid-dynamic-data-table>

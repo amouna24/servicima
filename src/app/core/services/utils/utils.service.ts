@@ -16,6 +16,8 @@ import { iconsList } from '@shared/statics/list-icons.static';
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { environment } from '../../../../environments/environment';
+// tslint:disable-next-line:origin-ordered-imports
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -244,7 +246,6 @@ export class UtilsService {
       refDataList.filter(refData => refData.viewValue.toLowerCase().indexOf(search) > -1),
     );
   }
-
   /**
    * @description listen for search field value changes
    */
@@ -252,13 +253,19 @@ export class UtilsService {
     filterCtrl.valueChanges
       .subscribe(
         (res) => {
-          console.log('resultat filter ', res);
           this.filterData(list, filterCtrl, filtered);
         },
         (e) => {
           console.log('e', e);
         }
       );
+  }
+  /**
+   * @description check formgroup field
+   */
+  checkFormGroup(form: AbstractControl, columnFields: string[]): boolean {
+    const isValueValid = (field) => form['controls'][field].value !== '' && form['controls'][field].value ;
+    return columnFields.every(isValueValid);
   }
 
 }
