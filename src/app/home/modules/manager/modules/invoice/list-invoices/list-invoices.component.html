@@ -3,13 +3,17 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'INVOICES-LIST'"
   [isLoading]="isLoading"
-  [header]="{ title: 'invoice.management.title' | translate, addActionURL: '/manager/invoices/add-invoice', addActionText: 'New invoice'}"
+  [header]="{ title: 'invoice.management.title' | translate, addActionURL: '/manager/invoices/add-invoice', feature:'INVOICING_ADD_BILLS', addActionText: 'invoice.management.add'}"
   [title]="'Invoices list'"
   [security] = true
+  [singleAction]="{name:'invoice.management.import', feature: 'INVOICING_IMPORT_BILLS'}"
   (rowActionData)="switchAction($event)"
   (pagination)="loadMoreItems($event)"
-  [allowedActions]="['invoice.management.show', 'invoice.management.download', 'invoice.management.delete','invoice.management.sendmail']"
-  (importAction)="import()"
+  [allowedActions]="[{name:'invoice.management.show', feature: 'INVOICING_SHOW_PDF_BILLS'},
+  {name:'invoice.management.download', feature: 'INVOICING_DOWNLOAD_PDF_BILLS'},
+  {name:'invoice.management.delete', feature: 'INVOICING_DELETE_BILLS'},
+  {name:'invoice.management.sendmail', feature: 'INVOICING_SEND_BILLS'}]"
+  (otherAction)="import()"
   (search)= "searchInvoice($event)"
   (filter) ="search($event)"
 >

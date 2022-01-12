@@ -2,8 +2,7 @@
 
 
 <div  fxLayout="column"  class="font-size-12 container-show bg-white border-radius-15">
-
- <ng-container *ngIf="isLoading.getValue();">
+  <ng-container *ngIf="isLoading.getValue();">
     <div class="min-full-width min-full-height" fxLayoutAlign="center center">
       <mat-progress-spinner
         color="primary"
@@ -11,8 +10,8 @@
       </mat-progress-spinner>
     </div>
   </ng-container>
- <ng-container *ngIf="!isLoading.getValue();">
-  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+  <ng-container *ngIf="!isLoading.getValue();">
+  <div fxLayout="row" fxFlex="13" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-medium font-size-28" >{{'invoice.title' | translate | capitalizeFirstLetter}}</h1>
     </div>
@@ -24,19 +23,18 @@
       </button>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center" >
+  <div fxLayout="row" fxFlex="1" fxLayoutAlign="space-around center" >
     <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '2px'}" ></mat-divider>
   </div>
-  <div>
-  </div>
+
   <wid-scrollbar class="m-l-20">
 
     <div fxLayout="column" fxFlex="100">
-      <div fxLayout="row" fxLayoutAlign="center center" style="padding-top: 5px;" class="m-l-15" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutAlign="center center" class="m-l-15 p-t-5" fxLayoutGap="10px">
         <div fxLayout="row" fxFlex="12"> <img [ngStyle]="{'width':'115px','border-radius': '5px',
 
     'border': '2px solid #707070'}" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
-        <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">Invoice</h1> </div>
+        <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">{{'invoice.subtitle' | translate | capitalizeFirstLetter}}</h1> </div>
         <div fxLayout="row" fxFlex="65" fxLayoutAlign="flex-end flex-end" fxLayoutGap="6px" class="m-r-40 m-b-15 min-full-height" >
           <div>
             <button mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> {{'invoice.attach.file' | translate | capitalizeFirstLetter}}</button>
@@ -82,32 +80,23 @@
           </div>
 
           <table  #tableInvoiceAttachment [hidden]="invoiceAttachment.length ==0" matSort  [ngStyle]=" {'width': '93%', 'box-shadow': 'none !important,','margin-left': '2%'}" mat-table  [dataSource]="dataSourceInvoiceAttachment" class="mat-elevation-z8">
-
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
-
-            <!-- Position Column -->
-
             <tr>
+
             <ng-container matColumnDef="File Title">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'invoice.file.title' | translate | capitalizeFirstLetter}}</th>
               <td (click)="showAttachment(element)" class="width-125" mat-cell *matCellDef="let element"> {{element.file_title}}</td>
             </ng-container>
 
-            <!-- Name Column -->
             <ng-container matColumnDef="Size">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'invoice.file.size' | translate | capitalizeFirstLetter}} </th>
               <td (click)="showAttachment(element)" mat-cell *matCellDef="let element"> {{element.size}} </td>
             </ng-container>
 
-            <!-- Weight Column -->
             <ng-container matColumnDef="Date">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'invoice.file.date' | translate | capitalizeFirstLetter}} </th>
               <td  (click)="showAttachment(element)" class="width-40" mat-cell *matCellDef="let element"> {{element.date | date}} </td>
             </ng-container>
 
-            <!-- Weight Column -->
-            <!-- Actions Column -->
             <ng-container matColumnDef="Action">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let row">
@@ -118,6 +107,7 @@
                 </button>
               </td>
             </ng-container>
+
             </tr>
             <tr mat-header-row *matHeaderRowDef="tableColumnsInvoiceAttachment"></tr>
             <tr mat-row *matRowDef="let row; columns: tableColumnsInvoiceAttachment;"></tr>
@@ -152,8 +142,8 @@
             <ng-container matColumnDef="Entered By">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'invoice.payment.entered.by' | translate | capitalizeFirstLetter}} </th>
               <td  class="width-125" mat-cell *matCellDef="let element"> {{element.Entered}} </td>
-
             </ng-container>
+
             <ng-container matColumnDef="Type">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'invoice.payment.type' | translate | capitalizeFirstLetter}} </th>
               <td mat-cell *matCellDef="let element"> {{element.payment_mode_desc}} </td>
@@ -341,7 +331,7 @@
 
       <div [formGroup]="form" [ngStyle]="{ 'margin-left': '2%','width': '96%'}" *ngIf="contractor?.contractor_name && contractCode && !editContractors">
 
-      <div style="padding-top: 20px;padding-bottom: 20px">
+      <div class="p-t-20 p-b-20">
         <div formArrayName='input'>
           <div class="form-container">
             <table  class="full-width ">
