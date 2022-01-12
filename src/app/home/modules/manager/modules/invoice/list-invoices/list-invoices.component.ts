@@ -216,8 +216,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description : action
    * @param rowAction: object
    */
-  switchAction(rowAction: { actionType: string, data: IInvoiceHeaderModel[]}): void {
-    switch (rowAction.actionType) {
+  switchAction(rowAction: { actionType: any, data: IInvoiceHeaderModel[]}): void {
+    switch (rowAction.actionType.name) {
       case ('invoice.management.show'): this.showInvoice(rowAction.data);
         break;
       case ('update'): this.updateInvoice(rowAction.data as any);

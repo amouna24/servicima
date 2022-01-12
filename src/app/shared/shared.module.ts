@@ -97,7 +97,6 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
     /* Directives */
     CanBeDisplayedDirective,
     PaginationDirective,
-    CantBeDisplayedDirective,
     ClickOutsideDirective,
     DisableControlDirective,
     CapitalizeFirstLetter,
