@@ -4,7 +4,7 @@
       <div fxLayout="column" fxFlexFill>
         <div fxLayout="row" fxFlex="15">
           <div fxLayout="column" fxLayoutAlign="center">
-            <div class="steel font-size-15" fxLayoutAlign=" center">{{'publish_offer' | translate}}</div>
+            <div class="steel font-size-15" fxLayoutAlign=" center">{{'manager.socialnetwork.publishoffer' | translate}}</div>
           </div>
           <div fxLayout="column" fxFlex="76" class="p-r-15 p-t-10 " fxLayoutAlign=" end">
             <button class="x-button" mat-dialog-close>X</button>
@@ -28,7 +28,7 @@
                                       </div>
                                     </div>
                                     <div fxLayout="column" fxFlex="33" fxLayoutAlign="center center">
-                                      <span class="font-size-12 black font-medium"> {{'offer_title' | translate}}:</span>
+                                      <span class="font-size-12 black font-medium"> {{'manager.socialnetwork.offer_title' | translate}}:</span>
                                     </div>
                                     <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
                                       <span class="black font-size-12 font-light"> {{data.form.title}}</span>
@@ -44,7 +44,7 @@
                               <div fxLayout="row" fxFlex="80">
                                 <div fxLayout="column" fxFlexFill>
                                   <div fxLayout="row">
-                                    <span class="font-size-12 black font-medium">{{'offer_description' | translate}}:</span>
+                                    <span class="font-size-12 black font-medium">{{'manager.socialnetwork.offer_description' | translate}}:</span>
                                   </div>
                                   <div fxLayout="row">
                                     <p class="font-size-12 font-light black">
@@ -80,12 +80,12 @@
                     </div>
                     <div fxLayout="column" fxFlex="82" fxLayoutAlign=" start">
                       <ng-template [ngIf]="!loadingLabel">
-                        <span class="font-size-12 white font-light"> {{'share_on_linkedin' | translate}}</span>
+                        <span class="font-size-12 white font-light"> {{'manager.socialnetwork.share_on_linkedind' | translate}}</span>
                       </ng-template>
                       <ng-template [ngIf]="loadingLabel">
                         <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
                           <div fxLayout="column" style="padding-right: 19px">
-                            {{'resume-loading' | translate}}
+                            {{'manager.socialnetwork.loadin' | translate}}
                           </div>
                           <div fxLayout="column" style="padding-top: 8px">
                             <div  class="dot-elastic">
@@ -111,12 +111,12 @@
                     </div>
                     <div fxLayout="column" fxFlex="82" fxLayoutAlign=" start">
                       <ng-template [ngIf]="!loadingFacebookLabel">
-                        <span class="font-size-12  font-light" style="color: #003a9b" > {{'share_on_facebook' | translate}}</span>
+                        <span class="font-size-12  font-light" style="color: #003a9b" > {{'manager.socialnetwork.share_on_facebook' | translate}}</span>
                       </ng-template>
                       <ng-template [ngIf]="loadingFacebookLabel">
                         <div fxLayout="row" fxLayoutAlign="center" class="p-r-20">
                           <div fxLayout="column" style="padding-right: 19px">
-                            {{'resume-loading' | translate}}
+                            {{'manager.socialnetwork.loadin' | translate}}
                           </div>
                           <div fxLayout="column" style="padding-top: 8px">
                             <div  class="dot-elastic-blue">

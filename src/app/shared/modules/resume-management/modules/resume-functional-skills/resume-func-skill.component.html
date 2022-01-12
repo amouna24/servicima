@@ -1,13 +1,13 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium">Resume</h1>
+      <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
         <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{"back" | translate}}</span>
       </button>
     </div>
   </div>
@@ -43,7 +43,7 @@
 
               <div fxLayout="column" fxFlex="80">
                 <mat-label class="black font-size-12 required">
-                  {{ 'resume-skill-title' | translate }}:
+                  {{ 'resume-func-skill-title' | translate }}:
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input formControlName="skill" matInput placeholder="{{ 'resume-skill-title' | translate }}" required>

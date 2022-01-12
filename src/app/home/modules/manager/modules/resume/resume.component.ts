@@ -130,30 +130,31 @@ await this.getData(0, this.nbtItems.getValue());
    * @param data: contains the data of resume
    *************************************************************************/
   exportPdf(data) {
-    data.map( (exportPdfData) => {
-      if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
-        this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
-          console.log('pdf =', pdf);
-          const fileURL = URL.createObjectURL(pdf);
-          window.open(fileURL, '_blank');
-        });
-      } else {
-        const confirmation = {
-          code: 'info',
-          title: 'Export Resume',
-          description: `You cant export the resume of ${exportPdfData.first_name} ${exportPdfData.last_name} because it doesnt exist`,
-        };
-        this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-          .subscribe(
-            (res) => {
-              if (res === true) {
+    this.translateService.get(['manager.resume.export', 'manager.resume.noexist']).subscribe( (resTranslate) => {
+      data.map( (exportPdfData) => {
+        if (exportPdfData.resume_filename_docx !== undefined && exportPdfData.resume_filename_docx !== null) {
+          this.resumeService.convertResumeToPdf(environment.uploadFileApiUrl + '/show/' + exportPdfData.resume_filename_docx).subscribe((pdf) => {
+            const fileURL = URL.createObjectURL(pdf);
+            window.open(fileURL, '_blank');
+          });
+        } else {
+          const confirmation = {
+            code: 'info',
+            title: 'manager.resume.exportcv',
+            // tslint:disable-next-line:max-line-length
+            description: `${resTranslate['manager.resume.export']} ${exportPdfData.first_name} ${exportPdfData.last_name} ${resTranslate['manager.resume.noexist']}`,
+          };
+          this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+            .subscribe(
+              (res) => {
+                if (res === true) {
+                }
+                this.subscriptionModal.unsubscribe();
               }
-              this.subscriptionModal.unsubscribe();
-            }
-          );
-      }
+            );
+        }
+      });
     });
-
   }
   /**************************************************************************
    * @description Update the resume of user
@@ -180,26 +181,28 @@ await this.getData(0, this.nbtItems.getValue());
    * @param data: contains the data of resume
    *************************************************************************/
   private downloadDocx(data) {
-    data.map ( (downloadDocxData) => {
-      if (downloadDocxData.resume_filename_docx !== undefined && downloadDocxData.resume_filename_docx !== null) {
-        window.location.href = environment.uploadFileApiUrl + '/show/' + downloadDocxData.resume_filename_docx;
-      } else {
-        const confirmation = {
-          code: 'info',
-          title: 'Export Resume',
-          description: `You cant download the resume of ${downloadDocxData.first_name} ${downloadDocxData.last_name}  because it doesnt exist`,
-        };
-        this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-          .subscribe(
-            (res) => {
-              if (res === true) {
+    this.translateService.get(['manager.resume.download', 'manager.resume.noexist']).subscribe( (resTranslate) => {
+      data.map ( (downloadDocxData) => {
+        if (downloadDocxData.resume_filename_docx !== undefined && downloadDocxData.resume_filename_docx !== null) {
+          window.location.href = environment.uploadFileApiUrl + '/show/' + downloadDocxData.resume_filename_docx;
+        } else {
+          const confirmation = {
+            code: 'info',
+            title: 'manager.resume.exportcv',
+            // tslint:disable-next-line:max-line-length
+            description: `${resTranslate['manager.resume.download']} ${downloadDocxData.first_name} ${downloadDocxData.last_name}  ${resTranslate['manager.resume.noexist']}`,
+          };
+          this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+            .subscribe(
+              (res) => {
+                if (res === true) {
+                }
+                this.subscriptionModal.unsubscribe();
               }
-              this.subscriptionModal.unsubscribe();
-            }
-          );
-      }
+            );
+        }
+      });
     });
-
   }
   /**************************************************************************
    * @description Send mail contains the resume of the collaborator to client
