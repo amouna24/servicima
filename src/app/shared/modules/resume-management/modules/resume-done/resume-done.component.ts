@@ -616,7 +616,7 @@ export class ResumeDoneComponent implements OnInit {
       if (this.userService.connectedUser$.getValue().user[0].user_type === 'COLLABORATOR' || this.companyuserType === 'COLLABORATOR') {
         const confirmation = {
           code: 'edit',
-          title: 'send-mail',
+          title: 'resume-send-mail',
           description: `resume-save-data`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
@@ -670,8 +670,8 @@ export class ResumeDoneComponent implements OnInit {
       } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE' || this.companyuserType === 'CANDIDATE') {
         const confirmation = {
           code: 'edit',
-          title: 'Send Email',
-          description: `Are you sure you want to save your resume ? It will be sent to the company `,
+          title: 'resume-send-mail',
+          description: `resume-save-company `,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '550px', '350px')
           .subscribe(

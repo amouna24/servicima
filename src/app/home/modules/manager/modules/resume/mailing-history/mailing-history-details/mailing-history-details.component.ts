@@ -56,7 +56,7 @@ export class MailingHistoryDetailsComponent implements OnInit {
   resendMail() {
     const confirmation = {
       code: 'edit',
-      title: 'resend-mail',
+      title: 'manager.resume.mailing_history.resendmail',
       description: `resume-u-sure`,
     };
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '550px', '350px')

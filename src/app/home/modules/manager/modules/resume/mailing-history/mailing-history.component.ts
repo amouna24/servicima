@@ -125,7 +125,6 @@ export class MailingHistoryComponent implements OnInit {
   }
 
   private DisableEnableMail(data, action) {
-    console.log('data=', data, 'table data=', this.tableData);
     data.map((mailHistory) => {
       console.log(`?send_to=${mailHistory.send_to}&send_time=${mailHistory.send_time}`);
       this.resumeService.getMailingHistory(`?send_to=${mailHistory.send_to}&send_time=${mailHistory.send_time}`)

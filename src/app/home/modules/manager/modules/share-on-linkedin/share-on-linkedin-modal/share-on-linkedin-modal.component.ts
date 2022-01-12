@@ -8,6 +8,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { ShareOnSocialNetworkService } from '@core/services/share-on-social-network/shareonsocialnetwork.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 import { environment } from '@environment/environment';
 
@@ -21,7 +22,7 @@ export class ShareOnLinkedinModalComponent implements OnInit {
   loadingLabel: boolean;
   loadingFacebookLabel: boolean;
   uploadUrl = `${environment.uploadFileApiUrl}/show/`;
-  cannotShareLabel = `you can't share PDF document on Facebook`;
+  cannotShareLabel: string;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private  localStorageService: LocalStorageService,
@@ -29,10 +30,15 @@ export class ShareOnLinkedinModalComponent implements OnInit {
     private  uploadService: UploadService,
     private  socialNetworkService: ShareOnSocialNetworkService,
     private  modalServices: ModalService,
-    private dialogRef: MatDialogRef<ShareOnLinkedinModalComponent>
+    private dialogRef: MatDialogRef<ShareOnLinkedinModalComponent>,
+    private translateService: TranslateService,
+  ) {
 
-  ) { }
+  }
   ngOnInit(): void {
+    this.translateService.get(['manager.socialnetwork.cantsharepdf']).subscribe( (res) => {
+      this.cannotShareLabel = res['manager.socialnetwork.cantsharepdf'];
+    });
   }
   /**************************************************************************
    * @description Publish posts on Linkedin
@@ -116,9 +122,9 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         this.socialNetworkService.addPosts(linkedinObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'preview',
-            title: 'share_on_linkedin',
-            description: `shared-successfully`,
-          };
+            title: 'manager.socialnetwork.share_on_linkedind',
+            description: `manager.socialnetwork.shared`,
+            };
           this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
             .subscribe(
               (resModal) => {
@@ -232,8 +238,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
         this.socialNetworkService.addPosts(facebookObject).subscribe( (addPostResult) => {
           const confirmation = {
             code: 'preview',
-            title: 'share_on_facebook',
-            description: `shared-successfully`,
+            title: 'manager.socialnetwork.share_on_facebook',
+            description: `manager.socialnetwork.shared`,
           };
           this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
             .subscribe(
@@ -250,8 +256,8 @@ export class ShareOnLinkedinModalComponent implements OnInit {
       } else {
         const confirmation = {
           code: 'error',
-          title: 'share_on_facebook',
-          description: `no-shared-social`,
+          title: 'manager.socialnetwork.share_on_facebook',
+          description: `manager.socialnetwork.nosharedsocial`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
           .subscribe(

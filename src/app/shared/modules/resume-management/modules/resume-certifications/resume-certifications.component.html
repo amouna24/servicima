@@ -139,7 +139,7 @@
                             <div fxLayout="column" fxFlex="35">
                               <div fxLayout="row">
                                 <mat-label class="black font-size-12 ">
-                                  Image:
+                                  {{ 'resume-image' | translate }}:
                                 </mat-label>
                               </div>
                               <div fxLayout="row">
@@ -152,7 +152,7 @@
                                              accept="image/png, image/gif, image/jpeg"
                                              (change)="setValueToImageField($event)"
                                              hidden/>
-                                      <label for="upload">{{'offer_upload' | translate}}</label></button>
+                                      <label for="upload">{{'resume-upload' | translate}}</label></button>
                                   </div>
                                 </mat-form-field>
                               </div>

@@ -8,7 +8,7 @@
       <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
         <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{ 'back' | translate}}</span>
       </button>
     </div>
   </div>
@@ -33,7 +33,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="center">
                     <button mat-raised-button (click)="showCustomSection()" color="primary" class="btn-large  white">
-                      {{ 'resume-add-section' | translate }}
+                      {{ 'resume-add-custom-section' | translate }}
                     </button>
                   </div>
                 </div>
@@ -75,10 +75,10 @@
                   </div>
                   <div fxLayout="column">
                     <mat-label class="black font-size-12 required">
-                      {{ 'resume-desc' | translate }}:
+                      {{ 'resume-cust-desc' | translate }}:
                     </mat-label>
                     <mat-form-field appearance="outline">
-                              <textarea matInput placeholder="{{ 'resume-desc' | translate }}" rows="7"
+                              <textarea matInput placeholder="{{ 'resume-cust-desc' | translate }}" rows="7"
                                         formControlName="section_desc" required></textarea>
                       <mat-error class="red" *ngIf="sendSection.controls.section_desc.errors?.required">
                         {{ 'general.required' | translate }}</mat-error>
