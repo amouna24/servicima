@@ -58,6 +58,7 @@ import { EditWorkCertificateComponent } from './modules/work-certificates/edit-w
 import { SignatureComponent } from './components/signature/signature.component';
 import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
 import { ConfirmListComponent } from './components/confirm-list/confirm-list.component';
+import { DisabledFormDirective } from './directives/disabled-form.directive';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { ConfirmListComponent } from './components/confirm-list/confirm-list.com
     CapitalizeFirstLetter,
     SpliceText,
     ConfirmListComponent,
+    DisabledFormDirective,
   ],
   imports: [
     CommonModule,
@@ -162,6 +164,7 @@ import { ConfirmListComponent } from './components/confirm-list/confirm-list.com
     RequestWorkCertificateComponent,
     PaginationDirective,
     ConfirmListComponent,
+    DisabledFormDirective
   ]
 })
 export class SharedModule { }

@@ -11,7 +11,7 @@
           <mat-icon class="cursor-pointer" matSuffix (click)="hideOldPassword = !hideOldPassword">
             {{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           <mat-error *ngIf="form.controls.oldPassword.errors?.required">
-            Required filed</mat-error>
+            {{ 'general.required' | translate }}</mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="100">
@@ -21,8 +21,8 @@
             name="password" type="password" required />
           <mat-icon class="cursor-pointer" matSuffix (click)="hidePassword = !hidePassword">
             {{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-          <mat-error *ngIf="form.controls.password.errors?.required">Required filed</mat-error>
-          <mat-error *ngIf="form.controls.password.errors?.pattern">{{ 'updatepwd.invalidpwq' | translate }}.
+          <mat-error *ngIf="form.controls.password.errors?.required">{{ 'general.required' | translate }}</mat-error>
+          <mat-error *ngIf="form.controls.password.errors?.pattern">{{ 'changepwd.invalidpwq' | translate }}.
           </mat-error>
         </mat-form-field>
       </div>
@@ -36,8 +36,7 @@
             {{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           <mat-error *ngIf="form.controls.confirmPassword.errors?.required">
             Required Field </mat-error>
-          <mat-error *ngIf="form.hasError('passwordsDoNotMatch')"> Passwords do
-            not match!</mat-error>
+          <mat-error *ngIf="form.hasError('passwordsDoNotMatch')"> {{ 'changepwd.pwd.no.match' | translate }}  </mat-error>
         </mat-form-field>
       </div>
     </div>

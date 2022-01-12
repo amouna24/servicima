@@ -26,19 +26,6 @@ export class HelperHrService {
   applicationId = this.cred['application_id'];
 
   /**************************************************************************
-   * @description Get countries
-   *************************************************************************/
-  getCountries(countries, input, filterCountriesList) {
-    this.appInitializerService.countriesList.forEach((country) => {
-      countries.push({ value : country.COUNTRY_CODE, viewValue: country.COUNTRY_DESC});
-    });
-    this.utilsService.changeValueField(
-      countries,
-      input,
-      filterCountriesList
-    );
-  }
-  /**************************************************************************
    * @description Get nationnalities
    *************************************************************************/
   getNationalities(nationalities, lang, input, filterNationalitiesList) {
@@ -51,29 +38,6 @@ export class HelperHrService {
       input,
       filterNationalitiesList
     );
-  }
-  /**************************************************************************
-   * @description Get emergency contact
-   *************************************************************************/
-  getEmergencyContact(emergencyContactList, email) {
-    this.hrService.getEmergencyContact(`?application_id=${this.cred['application_id']}&email_address=${email}`)
-      // tslint:disable-next-line:no-shadowed-variable
-      .subscribe(
-        info => {
-          if (info['msg_code'] === '0004' ) {
-
-          } else {
-
-            emergencyContactList.next(info);
-          }
-        },
-        error => {
-          console.log('error hrService', error.error.msg_code );
-          if (error.error.msg_code === '0004') {
-
-          }
-        }
-      );
   }
   /**************************************************************************
    * @description Get banking info
@@ -108,22 +72,6 @@ export class HelperHrService {
           } else {
             console.log(data);
             equipmentList.next(data);
-          }
-        },
-        error => console.log(error)
-      );
-  }
-  /**************************************************************************
-   * @description Get identityDocument
-   *************************************************************************/
-  getIdentityDocument(identityDocumentList, email) {
-    this.hrService.getIdentityDocument(`?application_id=${this.cred['application_id']}&email_address=${email}`)
-      .subscribe(
-        data => {
-          if (data['msg_code'] === '0004' ) {
-
-          } else {
-            identityDocumentList.next(data);
           }
         },
         error => console.log(error)

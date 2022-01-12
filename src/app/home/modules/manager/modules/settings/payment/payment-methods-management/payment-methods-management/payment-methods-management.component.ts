@@ -70,7 +70,7 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
          break;*/
        case ('update'): this.updatePaymentMethod(rowAction.data);
          break;
-       case('delete'): this.onChangeStatus(rowAction.data);
+       case('delete.user.action'): this.onChangeStatus(rowAction.data);
      }
   }
 
@@ -98,25 +98,28 @@ export class PaymentMethodsManagementComponent implements OnInit, OnDestroy {
 
   /**
    * @description : change the status of the user
-   * @param id: string
+   * @param list: string
    */
-  onChangeStatus(id: string) {
+  onChangeStatus(list) {
     const confirmation = {
       code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
+      title: 'change.status.title.modal',
+      description: 'change.status.description.modal',
+      status: 'ACTIVE'
     };
 
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
-          async (res) => {
-            if (res) {
-             await this.getPaymentMethode(this.nbtItems.getValue(), 0);
-            }
-          },
-          (err) => console.error(err),
-        ));
+        list.map((id) => {
+          this.subscriptions.push(this.refdataService.refdataChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
+            async (res) => {
+              if (res) {
+                await this.getPaymentMethode(this.nbtItems.getValue(), 0);
+              }
+            },
+            (err) => console.error(err),
+          ));
+        });
         this.subscriptionModal.unsubscribe();
       }
     });

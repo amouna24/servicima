@@ -21,9 +21,9 @@ export class CompanyPaymentTermsService {
    * @apram company company Email
    * @returns Companies Tax <list>
    *************************************************************************/
-  getCompanyPaymentTerms(company: string, status?: string, offset?: number, limit?: number): Observable<ICompanyPaymentTermsModel[]> {
+  getCompanyPaymentTerms(company: string, offset?: number, limit?: number): Observable<ICompanyPaymentTermsModel[]> {
     return this.httpClient.get<ICompanyPaymentTermsModel[]>
-    (`${environment.companyPaymentTermsApiUrl}/datatable?company_email=${company}&status=${status}&beginning=${offset}&number=${limit}` );
+    (`${environment.companyPaymentTermsApiUrl}/datatable?company_email=${company}&beginning=${offset}&number=${limit}` );
   }
 
   /**************************************************************************
@@ -62,7 +62,7 @@ export class CompanyPaymentTermsService {
    * @param updated_by: email user
    */
   paymentTermsCompanyChangeStatus(id: string, status: string, updatedBy: string): Observable<IMessageCodeModel> {
-    if (status === 'A') {
+    if (status === 'ACTIVE') {
       return this.httpClient.delete<IMessageCodeModel>(`${environment.companyPaymentTermsApiUrl}/disable?_id=${id}&updated_by=${updatedBy}`);
     } else if (status === 'D') {
       return this.httpClient.put<IMessageCodeModel>(`${environment.companyPaymentTermsApiUrl}/enable?_id=${id}&updated_by=${updatedBy}`, null);

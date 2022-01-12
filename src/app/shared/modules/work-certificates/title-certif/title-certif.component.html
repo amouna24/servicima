@@ -1,14 +1,14 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
   <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium" >   Certification
+      <h1 class="steel font-size-24 font-medium" >   {{ 'cand.menu.static.certif' | translate }}
       </h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button mat-raised-button  class="btn-small bg-pale-grey" (click)="backClicked()">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_arrow_back">
         </mat-icon>
-        <span class="cool-grey">back</span>
+        <span class="cool-grey">{{ 'back' | translate }}</span>
       </button>
     </div>
   </div>

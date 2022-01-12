@@ -45,7 +45,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number, search?: any, searchBoolean?: boolean }>();
   @Output() checked = new EventEmitter<{ }>();
-  @Output() changeStatus = new EventEmitter<{ }>();
+  @Output() importAction = new EventEmitter<{ }>();
   @Output() search = new EventEmitter<{ }>();
   @Output() filter = new EventEmitter<{ }>();
   @ViewChild('closePanel')
@@ -474,7 +474,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description change status
    * @param status: status
    *************************************************************************/
-  showWithStatus(status: string): void {
+  /*showWithStatus(status: string): void {
     this.changeStatus.emit(status);
     if (this.status === 'ACTIVE') {
       this.status = 'DISABLED';
@@ -485,7 +485,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
      return data['status'] === status;
    });
   this.tableData.next(newData);
-  }
+  }*/
 
   /**
    * @description  Apply filter
@@ -662,6 +662,15 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       data['color'] = 'white';
       data['checked'] = false;
     });
+  }
+
+  /**************************************************************************
+   * @description action
+   * @param action: name of action
+   * @param rowData: list of row to do action
+   *************************************************************************/
+  importClicked() {
+    this.importAction.emit('clicked');
   }
 
   /**************************************************************************

@@ -53,7 +53,7 @@
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC FORM SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
     <div fxLayout="column" fxFlex="69">
       <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
-        <form [formGroup]="formData" fxLayout="column" fxFlex="100">
+        <form [formGroup]="formData" *ngIf="formData" fxLayout="column" fxFlex="100">
           <ng-container *ngFor="let mi of menuItems">
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  FIRST ITEM AND ITS CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
             <ng-container *ngIf="mi.child.length > 0; else childSection">
@@ -863,7 +863,7 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -978,7 +978,7 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder  | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1089,7 +1089,7 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder | translate  }}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1185,7 +1185,7 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1357,7 +1357,7 @@
                             <div fxLayout="row" fxFlex="100">
                               <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                 <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1454,7 +1454,7 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{sf.placeholder | translate  }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
@@ -1568,7 +1568,7 @@
                               <div fxLayout="row" fxFlex="100">
                                 <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
                                   <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{sf.placeholder}}" formControlName="{{sf.formControlName}}" readonly>
+                                         placeholder="{{sf.placeholder  | translate  }}" formControlName="{{sf.formControlName}}" readonly>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">

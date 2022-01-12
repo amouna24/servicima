@@ -3,12 +3,11 @@
     [tableData]="ELEMENT_DATA"
     [isLoading]="isLoading"
     [tableCode]="'COMPANY_PAYMENT_TERMS'"
-    [header]="{ title: 'payment-info-manag' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
+    [header]="{ title: 'payment.info.title' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
     , addActionText: 'add-new' | translate}"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
-    [allowedActions]="['delete']"
+    [allowedActions]="['payment.info.delete']"
     [security] = false
-    (changeStatus) = "getDataWithStatus($event)"
   >
   </wid-dynamic-data-table>
