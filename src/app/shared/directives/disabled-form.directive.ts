@@ -53,7 +53,7 @@ export class DisabledFormDirective implements OnInit {
    * Insert or remove the html element from the DOM
    */
   updateView() {
-    if (this.isDisplayed()) {
+    if (!this.isDisplayed()) {
       this.form.disable();
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);

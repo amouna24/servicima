@@ -381,10 +381,10 @@
                 <button  mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
                   <span class="font-size-14"> {{ 'homecompany.reset' | translate}}</span>
                 </button>
-                <button  mat-raised-button class="btn-medium white" color="accent"
+                <button [disabled] = "form.invalid" mat-raised-button class="btn-medium white" color="accent"
                          (click)="addOrUpdate()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="font-size-14">{{ 'homecompany.save' | translate}}</span>
+                    <span  class="font-size-14">{{ 'homecompany.save' | translate}}</span>
                   </div>
                 </button>
               </div>

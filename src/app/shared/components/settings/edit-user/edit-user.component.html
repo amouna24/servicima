@@ -23,7 +23,7 @@
       ></wid-skeleton-loader>
       <div fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 " *ngIf="!isLoading" form
         [formGroup]="form"  >
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
+        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'INVOICING_SEND_BILLS', 'form': form}">
           <wid-scrollbar class="scrollbar">
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">

@@ -164,7 +164,8 @@ import { DisabledFormDirective } from './directives/disabled-form.directive';
     RequestWorkCertificateComponent,
     PaginationDirective,
     ConfirmListComponent,
-    DisabledFormDirective
+    DisabledFormDirective,
+    CanBeDisplayedDirective,
   ]
 })
 export class SharedModule { }

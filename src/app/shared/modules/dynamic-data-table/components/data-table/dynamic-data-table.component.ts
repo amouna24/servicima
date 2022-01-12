@@ -34,18 +34,20 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
     type?: string,
+    feature?: string,
     addActionDialog?:
       { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
+  @Input() singleAction: any;
   @Input() security: boolean;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
-  @Input() allowedActions: string[];
+  @Input() allowedActions: any;
   @Input() buttonAdd: boolean;
   @Input() setAvatar: { columnCode: string, imgSrc: string};
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number, search?: any, searchBoolean?: boolean }>();
   @Output() checked = new EventEmitter<{ }>();
-  @Output() importAction = new EventEmitter<{ }>();
+  @Output() otherAction = new EventEmitter<{ }>();
   @Output() search = new EventEmitter<{ }>();
   @Output() filter = new EventEmitter<{ }>();
   @ViewChild('closePanel')
@@ -666,11 +668,9 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
 
   /**************************************************************************
    * @description action
-   * @param action: name of action
-   * @param rowData: list of row to do action
    *************************************************************************/
-  importClicked() {
-    this.importAction.emit('clicked');
+  ActionClicked() {
+    this.otherAction.emit('clicked');
   }
 
   /**************************************************************************
