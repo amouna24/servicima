@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-size-24 font-medium">Resume</h1>
+          <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
         </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
           <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
@@ -59,7 +59,7 @@
                           </ng-container>
                         </mat-select>
                         <mat-error class="red" *ngIf="CreationForm.invalid">
-                          Please select an item in the list</mat-error>
+                          {{'general.select_tem' | translate}}</mat-error>
                       </mat-form-field>
                       </div>
                       <div fxLayout="row" fxFlex="10">
@@ -74,7 +74,7 @@
                          <mat-form-field *ngIf="showYears" @dataAppearance appearance="outline" class="full-width">
                            <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder=" {{ 'resume-yrs-of-experience' | translate }}" >
                            <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
-                             You should select a number between 0 and 31</mat-error>
+                             {{'resume-limit-numbers' | translate}}</mat-error>
                          </mat-form-field>
                        </div>
 
@@ -99,7 +99,7 @@
                             <ng-template [ngIf]="isLoadingImage">
                               <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
                                 <mat-spinner color="primary"></mat-spinner>
-                                <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+                                <div style="position: fixed; font-size: 11px">{{'resume-load-image-gen-info' | translate}}</div>
                               </div>
                             </ng-template>
 

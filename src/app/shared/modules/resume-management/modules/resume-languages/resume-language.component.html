@@ -2,7 +2,7 @@
 
       <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
         <div fxLayout="column" fxFlex="56">
-          <h1 class="steel font-size-24 font-medium">Resume</h1>
+          <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
         </div>
         <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
           <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
@@ -48,7 +48,7 @@
             <div fxLayout="row" fxLayoutAlign=" center" >
                 <div fxLayout="column" fxFlex="30"  >
                   <mat-label class="black font-size-12 required">
-                    Language:
+                    {{'resume-language' | translate}}:
                   </mat-label>
                   <mat-form-field appearance="outline">
                     <mat-select disableOptionCentering panelClass="panelColor" formControlName="resume_language_code"

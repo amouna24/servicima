@@ -217,8 +217,8 @@ export class ShareOnLinkedinComponent implements OnInit {
           this.linkedInService.deletePosts(linkedInObject._id).subscribe((deleteOldPost) => {
             const confirmation = {
               code: 'preview',
-              title: 'share_on_linkedin',
-              description: `shared-successfully`,
+              title: 'manager.socialnetwork.share_on_linkedind',
+              description: `manager.socialnetwork.shared`,
             };
             this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
               .subscribe(
@@ -368,8 +368,8 @@ export class ShareOnLinkedinComponent implements OnInit {
           this.linkedInService.deletePosts(facebookObject._id).subscribe((deleteOldPost) => {
             const confirmation = {
               code: 'preview',
-              title: 'share_on_facebook',
-              description: `shared-successfully`,
+              title: 'manager.socialnetwork.share_on_facebook',
+              description: `manager.socialnetwork.shared`,
             };
             this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
               .subscribe(
@@ -386,8 +386,8 @@ export class ShareOnLinkedinComponent implements OnInit {
       } else {
         const confirmation = {
           code: 'error',
-          title: 'share_on_facebook',
-          description: `no-shared-social`,
+          title: 'manager.socialnetwork.share_on_facebook',
+          description: `manager.socialnetwork.nosharedsocial`,
         };
         this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
           .subscribe(

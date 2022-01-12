@@ -4,7 +4,7 @@
   [isLoading]="isLoading"
   [buttonAdd]="false"
   (changeStatus) = "getData($event, 0, nbtItems.getValue())"
-  [header]="{ title:  'mailing_history' | translate}"
+  [header]="{ title:  'manager.mailing_history.title' | translate}"
   (pagination)="loadMoreItems($event)"
   (rowActionData)="switchAction($event)"
   [allowedActions]="['Resend', Archive]">

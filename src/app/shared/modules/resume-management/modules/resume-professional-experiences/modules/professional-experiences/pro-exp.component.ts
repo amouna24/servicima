@@ -471,8 +471,8 @@ export class ProExpComponent implements OnInit {
     } else {
       const confirmation = {
         code: 'confirmation',
-        title: 'Data is not saved',
-        description: `Are you sure you want go to the  ${typeRoute} page ?`,
+        title: 'resume-not-saved',
+        description: typeRoute === 'next' ? `resume-next-page` : `resume-previoous-page`,
       };
       this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
         .subscribe(
