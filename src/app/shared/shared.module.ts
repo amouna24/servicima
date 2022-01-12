@@ -59,6 +59,7 @@ import { SignatureComponent } from './components/signature/signature.component';
 import { SignatureCertificateComponent } from './modules/work-certificates/signature-certificate/signature-certificate.component';
 import { ConfirmListComponent } from './components/confirm-list/confirm-list.component';
 import { DisabledFormDirective } from './directives/disabled-form.directive';
+import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directive';
 
 @NgModule({
   declarations: [
@@ -96,12 +97,14 @@ import { DisabledFormDirective } from './directives/disabled-form.directive';
     /* Directives */
     CanBeDisplayedDirective,
     PaginationDirective,
+    CantBeDisplayedDirective,
     ClickOutsideDirective,
     DisableControlDirective,
     CapitalizeFirstLetter,
     SpliceText,
     ConfirmListComponent,
     DisabledFormDirective,
+    CantBeDisplayedDirective,
   ],
   imports: [
     CommonModule,
@@ -164,7 +167,9 @@ import { DisabledFormDirective } from './directives/disabled-form.directive';
     RequestWorkCertificateComponent,
     PaginationDirective,
     ConfirmListComponent,
-    DisabledFormDirective
+    DisabledFormDirective,
+    CanBeDisplayedDirective,
+    CantBeDisplayedDirective
   ]
 })
 export class SharedModule { }
