@@ -4,7 +4,7 @@
       <div fxLayout="column" fxFlexFill>
         <div fxLayout="row" fxFlex="15">
           <div fxLayout="column" fxFlex="50">
-            <div class="title" fxLayoutAlign=" center">{{'send-mail' | translate}}</div>
+            <div class="title" fxLayoutAlign=" center">{{'manager.mailing_modal.send_mail' | translate}}</div>
           </div>
           <div fxLayout="column" fxFlex="76" class="p-r-15 p-t-10 " fxLayoutAlign=" end">
             <button style="border-radius: 5px; background-color: #f2f3f8; color: gray; border: none" mat-dialog-close>X</button>
@@ -13,7 +13,7 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="94">
             <mat-label class="black font-size-12 required">
-              {{'choose-contact' | translate}}
+              {{'manager.mailing_modal.choose_contact' | translate}}
             </mat-label>
             <ng-multiselect-dropdown style="font-size: 12px; font-style: normal; color: #d6d7da; margin-bottom: 10px" class="selected-item"
                                      [placeholder]="'contact(email)'"
@@ -28,7 +28,7 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="94">
             <mat-label class="black font-size-12 ">
-              {{'send-copy' | translate}}
+              {{'manager.mailing_modal.send_copy' | translate}}
             </mat-label>
             <div style="font-size: 10px" class="full-width">
               <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline mat-form-field-wrapper" appearance="outline">
@@ -44,7 +44,7 @@
                   </mat-chip>
                   <input
                     matInput
-                    placeholder="{{'send-copy' | translate}}"
+                    placeholder="{{'manager.mailing_modal.send_copy' | translate}}"
                     #copyInput
                     type="email"
                     formControlName="copy"
@@ -54,7 +54,7 @@
                     (matChipInputTokenEnd)="addCopy($event)"
                   >
                 </mat-chip-list>
-                <mat-error>You should set a valid email</mat-error>
+                <mat-error>{{"general.valid_mail" | translate}}</mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -62,7 +62,7 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="94">
             <mat-label class="black font-size-12 ">
-              {{ 'hidden-copy' | translate}}
+              {{ 'manager.mailing_modal.hidden_copy' | translate}}
             </mat-label>
             <div style="font-size: 10px" class="full-width">
               <mat-form-field class="example-chip-list full-width mat-form-field-appearance-outline" appearance="outline" >
@@ -78,7 +78,7 @@
                   </mat-chip>
                   <input
                     matInput
-                    placeholder="{{ 'hidden-copy' | translate}}"
+                    placeholder="{{ 'manager.mailing_modal.hidden_copy' | translate}}"
                     #hiddenCopyInput
                     formControlName="hidden_copy"
                     [matChipInputFor]="hiddenCopiesList"
@@ -86,7 +86,7 @@
                     [matChipInputAddOnBlur]="true"
                     (matChipInputTokenEnd)="addHiddenCopy($event)">
                 </mat-chip-list>
-                <mat-error>You should set a valid email</mat-error>
+                <mat-error>{{"general.valid_mail" | translate}}</mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -94,11 +94,11 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="94">
             <mat-label class="black font-size-12 required">
-              {{'subject' | translate}}:
+              {{'manager.mailing_modal.subject' | translate}}:
             </mat-label>
             <div style="font-size: 10px" class="full-width">
               <mat-form-field appearance="outline" class="full-width">
-                <input formControlName="subject" matInput placeholder="{{'subject' | translate}}" >
+                <input formControlName="subject" matInput placeholder="{{'manager.mailing_modal.subject' | translate}}" >
                 <mat-error class="red font-size-8" *ngIf="mailingForm.controls.subject.errors?.required">
                   {{ 'general.required' | translate }}</mat-error>
               </mat-form-field>
@@ -115,10 +115,10 @@
         <div fxLayout="row">
           <div fxLayout="column" fxFlex="94">
             <mat-label class="black font-size-12 required">
-              {{'message' | translate}}:
+              {{'manager.mailing_modal.message' | translate}}:
             </mat-label>
             <mat-form-field appearance="outline" class="full-width">
-                    <textarea class="textarea" matInput formControlName="message" placeholder="{{'message' | translate}}"
+                    <textarea class="textarea" matInput formControlName="message" placeholder="{{'manager.mailing_modal.message' | translate}}"
                               rows="5" required></textarea>
               <mat-error class="red" *ngIf="mailingForm.controls.message.errors?.required">
                 {{ 'general.required' | translate }}</mat-error>
@@ -128,7 +128,7 @@
         <div fxLayout="row" *ngIf="!invoice"  fxLayoutGap="3px" style="max-width: 94%; justify-content: flex-end">
           <div fxLayout="column" fxLayoutAlign="center">
             <mat-label class="black font-size-12 p-b-10">
-              Format:
+              {{ 'manager.mailing_modal.format' | translate}}:
             </mat-label>
           </div>
           <div fxLayout="column" fxLayoutAlign="end" fxFlex="20">
@@ -136,7 +136,7 @@
               <div style="font-size: 10px" class="full-width">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-select disableOptionCentering panelClass="panelColor" value="DOCX" formControlName="format"
-                              placeholder="Format" required>
+                              placeholder="{{ 'manager.mailing_modal.format' | translate}}" required>
                     <mat-option value="PDF" >PDF</mat-option>
                     <mat-option value="DOCX">DOCX</mat-option>
                   </mat-select>
@@ -151,8 +151,8 @@
     </wid-scrollbar>
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8px">
       <button mat-raised-button type="submit" color="primary" class="white btn-small" (click)="sendMail()" mat-dialog-close [disabled]="mailingForm.invalid">
-        {{'send' | translate}}</button>
-      <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>{{'company.banking.info.cancel' | translate}}</button>
+        {{'manager.mailing_modal.send' | translate}}</button>
+      <button mat-raised-button class="btn-small bg-pale-grey" mat-dialog-close>{{'manager.mailing_modal.cancel' | translate}}</button>
     </div>
   </form>
 </div>

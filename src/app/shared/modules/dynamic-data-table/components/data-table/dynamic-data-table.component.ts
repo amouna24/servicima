@@ -34,18 +34,20 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() header: {
     title: string, addActionURL?: string, addActionText?: string,
     type?: string,
+    feature?: string,
     addActionDialog?:
       { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
+  @Input() singleAction: any;
   @Input() security: boolean;
   @Input() isLoading = new BehaviorSubject<boolean>(false);
-  @Input() allowedActions: string[];
+  @Input() allowedActions: any;
   @Input() buttonAdd: boolean;
   @Input() setAvatar: { columnCode: string, imgSrc: string};
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number, search?: any, searchBoolean?: boolean }>();
   @Output() checked = new EventEmitter<{ }>();
-  @Output() changeStatus = new EventEmitter<{ }>();
+  @Output() otherAction = new EventEmitter<{ }>();
   @Output() search = new EventEmitter<{ }>();
   @Output() filter = new EventEmitter<{ }>();
   @ViewChild('closePanel')
@@ -474,7 +476,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @description change status
    * @param status: status
    *************************************************************************/
-  showWithStatus(status: string): void {
+  /*showWithStatus(status: string): void {
     this.changeStatus.emit(status);
     if (this.status === 'ACTIVE') {
       this.status = 'DISABLED';
@@ -485,7 +487,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
      return data['status'] === status;
    });
   this.tableData.next(newData);
-  }
+  }*/
 
   /**
    * @description  Apply filter
@@ -662,6 +664,13 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       data['color'] = 'white';
       data['checked'] = false;
     });
+  }
+
+  /**************************************************************************
+   * @description action
+   *************************************************************************/
+  ActionClicked() {
+    this.otherAction.emit('clicked');
   }
 
   /**************************************************************************

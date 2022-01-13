@@ -31,7 +31,7 @@
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="40" >
-      <label class="font-size-12 black-three  required">BIC code:</label>
+      <label class="font-size-12 black-three  required">{{'company.banking.info.biccode' | translate }}</label>
       <mat-form-field appearance="outline">
         <input formControlName="bicCode" class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.banking.info.biccode' | translate | capitalizeFirstLetter"
                [ngStyle.xs]="{'font-size': '15px'}" />

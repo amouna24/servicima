@@ -22,8 +22,8 @@
         nbrColumn=2
       ></wid-skeleton-loader>
       <div fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 " *ngIf="!isLoading" form
-        [formGroup]="form">
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
+        [formGroup]="form"  >
+        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'INVOICING_SEND_BILLS', 'form': form}">
           <wid-scrollbar class="scrollbar">
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
@@ -101,9 +101,9 @@
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="font-size-12">{{'use.profcellphone' | translate | capitalizeFirstLetter}} </label>
+                  <label class="font-size-12">{{'user.professional.cellphone' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
-                    <input autocomplete="off" matInput [placeholder]=" 'use.profcellphone' | translate | capitalizeFirstLetter"
+                    <input autocomplete="off" matInput [placeholder]=" 'user.professional.cellphone' | translate | capitalizeFirstLetter"
                       formControlName="profPhone" [ngStyle.xs]="{'font-size': '15px'}" />
                   </mat-form-field>
                 </div>
@@ -127,7 +127,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error class="wid-error-messages" *ngIf="form.value.titleCtrl?.errors?.required">
-                      {{ 'manager.reqfield' | translate }} </mat-error>
+                      {{ 'general.required' | translate }} </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -146,9 +146,9 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="font-size-12 required">{{'users.role' | translate | capitalizeFirstLetter}} </label>
+                  <label class="font-size-12 required">{{'user.role' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
-                    <mat-select [placeholder]=" 'users.role' | translate | capitalizeFirstLetter" formControlName="roleCtrl"
+                    <mat-select [placeholder]=" 'user.role' | translate | capitalizeFirstLetter" formControlName="roleCtrl"
                       #singleSelect>
                       <mat-option>
                         <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
@@ -160,15 +160,15 @@
                       </mat-option>
                     </mat-select>
                     <mat-error class="wid-error-messages" *ngIf="form.controls.roleCtrl.errors?.required">
-                      {{ 'manager.reqfield' | translate }} </mat-error>
+                      {{ 'general.required' | translate }} </mat-error>
                   </mat-form-field>
                 </div>
               </div>
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="font-size-12">{{'user.homecompany' | translate | capitalizeFirstLetter}} </label>
+                  <label class="font-size-12">{{'user.home.company' | translate | capitalizeFirstLetter}} </label>
                   <mat-form-field appearance="outline">
-                    <input autocomplete="off" matInput [placeholder]=" 'user.homecompany' | translate | capitalizeFirstLetter"
+                    <input autocomplete="off" matInput [placeholder]=" 'user.home.company' | translate | capitalizeFirstLetter"
                       formControlName="homeCompany" [ngStyle.xs]="{'font-size': '15px'}" />
                   </mat-form-field>
                 </div>
@@ -177,10 +177,10 @@
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
                 <div fxLayout="column" fxFlex="80">
-                  <label class="font-size-12 required">{{'user.profiletype' | translate | capitalizeFirstLetter}} </label>
+                  <label class="font-size-12 required">{{'user.type' | translate}} </label>
                   <mat-form-field appearance="outline">
                     <mat-select formControlName="userType" required
-                      [placeholder]=" 'user.profiletype' | translate | capitalizeFirstLetter">
+                      [placeholder]=" 'user.type' | translate | capitalizeFirstLetter">
                       <div *ngFor="let userType of typeList">
                         <div *ngIf="showCompany === false">
                           <mat-option [value]="userType.value" *ngIf="userType.value!=='COMPANY'">
@@ -214,7 +214,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error class="wid-error-messages" *ngIf="form.value.languageCtrl?.errors?.required">
-                      {{ 'manager.reqfield' | translate }} </mat-error>
+                      {{ 'general.required' | translate }} </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -224,7 +224,7 @@
             <div fxLayout="column">
               <div fxLayout="column" fxFlex="80" class="line-height-2">
                 <a (click)="onChangePassword()" class="topaz decoration"> {{ 'user.changepwd' | translate}}</a>
-                <a (click)="deactivateAccount()" class="topaz decoration"> {{ 'user.disactivate' | translate}}</a>
+                <a (click)="deactivateAccount()" class="topaz decoration"> {{ 'user.deactivate' | translate}}</a>
               </div>
             </div>
           </div>
@@ -241,7 +241,7 @@
                   </div>
                 </button>
                 </div>
-                <button [disableControl]="{'feature':'SOURCING_ACCESS', 'validator': form.valid}"  mat-raised-button  class="btn-medium white" color="primary"
+                <button [disableControl]="{'feature':'SETTINGS_UPDATE_USER', 'validator': form.valid}"  mat-raised-button  class="btn-medium white" color="primary"
                   (click)="addOrUpdate()">
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14">{{ 'user.save' | translate}}</span>

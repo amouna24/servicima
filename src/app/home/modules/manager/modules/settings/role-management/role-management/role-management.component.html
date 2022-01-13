@@ -2,9 +2,9 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'ROLE'"
     [isLoading]="isLoading"
-    [header]="{ title: 'manager-setting-menu.users.management.role.management' | translate, addActionText: 'add-new' | translate,type:'dialog',
-        addActionDialog: { modalName: 'addRole', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '526px' }}"
-    [allowedActions]="['delete']"
+    [header]="{ title: 'role.management.title' | translate, addActionText: 'add-new' | translate,type:'dialog',
+        addActionDialog: { modalName: 'addRole', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '565px' }}"
+    [allowedActions]="['role.management.delete']"
     [title]="'Role list'"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"

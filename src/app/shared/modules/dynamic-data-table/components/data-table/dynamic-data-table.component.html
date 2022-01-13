@@ -4,7 +4,7 @@
       <h1 class="steel font-size-24 font-medium" >{{ header.title | translate}}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
-      <button *ngIf="buttonAdd !== false" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
+      <button  *canBeDisplayed="{'feature': header.feature}" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
         <mat-icon class="icon material-icons-outlined"  svgIcon="wi_add_user">
         </mat-icon>
         <span   class="white font-size-12 font-normal">{{ header.addActionText | translate | spliceText: 20  }}</span>
@@ -37,8 +37,8 @@
     </div>
     <div fxLayout="row" fxFlex="30" fxLayoutGap="2%"  fxLayoutAlign="center center">
       <div fxLayout="row">
-        <button  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="showWithStatus(status)">
-          <span class="white font-size-11">import</span>
+        <button *canBeDisplayed="{'feature':singleAction.feature}"  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="ActionClicked()">
+          <span class="white font-size-11">{{singleAction.name | translate | capitalizeFirstLetter }}</span>
         </button>
       </div>
       <div fxLayout="row">
@@ -60,7 +60,11 @@
 
 
             </mat-expansion-panel-header >
-            <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions"> <hr class="white" [style]="{'height': '1px','border': '1px solid' }">  {{ listAction | translate }}
+            <div class="white cursor-pointer font-size-11"  (click)="actionRowData(listAction, listChecked)"  *ngFor="let listAction of allowedActions">
+             <div  *canBeDisplayed="{'feature':listAction.feature}">
+              <hr class="white" [style]="{'height': '1px','border': '1px solid' }">
+              {{ listAction.name | translate }}
+             </div>
             </div>
           </mat-expansion-panel>
         </mat-accordion>

@@ -3,8 +3,8 @@
 <div  fxLayout="column" fxFlex="100" >
 <div fxLayout="row"  fxLayoutAlign="space-around center">
   <div fxLayout="column" fxFlex="80">
-    <h1 class="steel font-size-24 font-medium" *ngIf="action ==='Update'">{{'updaterole.title' | translate | capitalizeFirstLetter}}</h1>
-    <h1 class="steel font-size-24 font-medium" *ngIf="action ==='Add'">{{'addrole.title' | translate | capitalizeFirstLetter}}</h1>
+    <h1 class="steel font-size-24 font-medium" *ngIf="action ==='Update'">{{'role.management.update.title' | translate | capitalizeFirstLetter}}</h1>
+    <h1 class="steel font-size-24 font-medium" *ngIf="action ==='Add'">{{'role.management.add.title' | translate | capitalizeFirstLetter}}</h1>
   </div>
   <div fxLayout="column" fxFlex="5" fxLayoutAlign="center end" class="font-size-25 steel" (click)="onNotify(false)">
     <img src="assets/icons/close.svg" class="bg-close">
@@ -19,18 +19,18 @@
 
   <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
     <div fxLayout="column" fxFlex="40">
-      <label class="font-size-12 black-three required">{{'addrole.company' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12 black-three required">{{'role.management.company' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
-        <input autocomplete="off" matInput required [placeholder]=" 'addrole.company' | translate | capitalizeFirstLetter"
+        <input autocomplete="off" matInput required [placeholder]=" 'role.management.company' | translate | capitalizeFirstLetter"
                formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" class="black-three" />
         <mat-error class="wid-error-messages" *ngIf="form.controls.company?.errors?.required">
           {{ 'general.required' | translate }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="40" >
-      <label class="font-size-12 black-three  required">{{'addrole.rolename' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12 black-three  required">{{'role.management.role.name' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
-        <input autocomplete="off" matInput required [placeholder]=" 'addrole.rolename' | translate | capitalizeFirstLetter"
+        <input autocomplete="off" matInput required [placeholder]=" 'role.management.role.name' | translate | capitalizeFirstLetter"
                formControlName="roleName" class="black-three" [ngStyle.xs]="{'font-size': '15px'}" />
         <mat-error class="wid-error-messages" *ngIf="form.controls.roleName?.errors?.required">
           {{ 'general.required' | translate }}</mat-error>
@@ -42,9 +42,9 @@
       <div [formGroupName]="i">
         <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
           <div fxLayout="column" fxFlex="40">
-            <label class="font-size-12 black-three required">{{'addpaymentmethod.language' | translate | capitalizeFirstLetter}} </label>
+            <label class="font-size-12 black-three required">{{'role.management.language' | translate | capitalizeFirstLetter}} </label>
             <mat-form-field appearance="outline">
-              <mat-select formControlName="language"  [placeholder]=" 'addpaymentmethod.language' | translate | capitalizeFirstLetter">
+              <mat-select formControlName="language"  [placeholder]=" 'role.management.language' | translate | capitalizeFirstLetter">
                 <ng-container *ngFor="let language of languages">
                   <mat-option  [value]=language.value
                                [ngStyle]="{ display : !language.selected ? 'block' : 'none' }"
@@ -58,9 +58,9 @@
             </mat-form-field>
           </div>
           <div fxLayout="column" fxFlex="40">
-            <label class="font-size-12 black-three required">{{'addpaymentmethod.translate' | translate | capitalizeFirstLetter}} </label>
+            <label class="font-size-12 black-three required">{{'role.management.translate' | translate | capitalizeFirstLetter}} </label>
             <mat-form-field appearance="outline">
-              <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'addpaymentmethod.translate' | translate | capitalizeFirstLetter"
+              <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'role.management.translate' | translate | capitalizeFirstLetter"
                       formControlName='desc' [ngStyle.xs]="{'font-size': '15px'}" />
               <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
                 {{ 'general.required' | translate }}</mat-error>
@@ -76,9 +76,9 @@
   <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
 
     <div fxLayout="column" fxFlex="90" >
-      <label class="font-size-12 black-three  required">{{'addrole.feature' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12 black-three  required">{{'role.management.features' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
-        <mat-select [placeholder]=" 'addrole.feature' | translate" [formControl]="roleFeatureControl"   multiple
+        <mat-select [placeholder]=" 'role.management.features' | translate" [formControl]="roleFeatureControl"   multiple
                     #singleSelect>
           <mat-option >
             <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
@@ -95,7 +95,7 @@
   </div>
   <div fxLayout="column" fxFlex="100" fxLayoutGap="10px" fxlayoutgap="20px">
     <div fxLayout="row">
-    <label class="font-size-12 black-three  required">{{'addrole.featurerole' | translate | capitalizeFirstLetter}}  </label>
+    <label class="font-size-12 black-three  required">{{'role.management.roles.features' | translate | capitalizeFirstLetter}}  </label>
     </div>
     <div fxLayout="row" class="container-role-feature">
       <div  *ngIf="isLoading.getValue();"  class="min-full-width">
@@ -141,8 +141,8 @@
   </div>
   <br/>
   <div class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10">
-    <button mat-raised-button class="btn-small bg-pale-grey black-three"(click)="onNotify(false)">Cancel</button>
-    <button mat-raised-button class="btn-small bg-ocean-blue white" [disabled]="form.invalid" (click)="onNotify(true)">Confirm</button>
+    <button mat-raised-button class="btn-small bg-pale-grey black-three"(click)="onNotify(false)">{{'role.management.cancel' | translate | capitalizeFirstLetter}}</button>
+    <button mat-raised-button class="btn-small bg-ocean-blue white" [disabled]="form.invalid" (click)="onNotify(true)">{{'role.management.confirm' | translate | capitalizeFirstLetter}}</button>
   </div>
   <br/>
 </div>

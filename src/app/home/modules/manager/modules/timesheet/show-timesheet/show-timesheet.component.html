@@ -54,7 +54,7 @@
         </p>
       </div>
       <div fxFlex >
-        <p class="font-size-12 m-0 font-normal black-three">{{'timesheet-project' | translate}}:
+        <p class="font-size-12 m-0 font-normal black-three">{{'timesheet.project' | translate}}:
           <span class="steel font-light">{{timesheet.project_desc}}</span>
         </p>
       </div>
@@ -85,13 +85,13 @@
 
     <div *ngIf="week" style="width: 85px; height: 65px" class="bg-pale-grey border-radius-10"
          fxLayout="column" fxLayoutAlign="center center">
-     <p class="black font-light font-size-12 m-0" >{{'timesheet-total' | translate}}:</p>
+     <p class="black font-light font-size-12 m-0" >{{'timesheet.total' | translate}}:</p>
       <p class="steel font-light font-size-10 m-0" >{{timesheet.total_week_hours}}h00m</p>
     </div>
   </div>
   <div fxFlex="10" class="full-width" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="25px">
     <ng-container *ngIf="timesheet.timesheet_status === 'Pending', else status">
-      <button mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">{{'imesheet-reject' | translate}}</button>
+      <button mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">{{'timesheet-reject' | translate}}</button>
       <button mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">{{'timesheet-approve' | translate}}</button>
     </ng-container>
     <ng-template #status>

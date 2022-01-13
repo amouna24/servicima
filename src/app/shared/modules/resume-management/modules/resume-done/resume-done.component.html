@@ -7,7 +7,7 @@
 
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
       <div fxLayout="column" fxFlex="56">
-        <h1 class="steel font-size-24 font-medium">Resume</h1>
+        <h1 class="steel font-size-24 font-medium">{{ 'resume-title' | translate }}</h1>
       </div>
       <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
         <button mat-raised-button  class="btn-small bg-pale-grey" routerLink="/">
@@ -22,7 +22,7 @@
     </div>
     <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
       <div fxLayout="column" fxFlex="86">
-        <h4 class="steel font-size-18 font-small">Preview</h4>
+        <h4 class="steel font-size-18 font-small">{{ 'resume-preview' | translate}}</h4>
       </div>
     </div>
     <div fxLayout="row" fxFlex="60" fxLayoutAlign="center" >
@@ -55,7 +55,7 @@
           <h1 class="font-extra-light font-size-18 black"> {{ 'resume-done' | translate }}</h1>
         </ng-template>
         <ng-template [ngIf]="userType === 'manager'">
-          <h1 class="font-extra-light font-size-18 black">this candidate has reached 100% of his Resume </h1>
+          <h1 class="font-extra-light font-size-18 black">{{ 'resume-candidate-complete' | translate}} </h1>
 
         </ng-template>
       </div>
@@ -98,7 +98,7 @@
       <ng-template [ngIf]="!showPage">
         <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
           <mat-spinner color="primary"></mat-spinner>
-          <div style="position: fixed; font-size: 11px">{{'load-image' | translate}}</div>
+          <div style="position: fixed; font-size: 11px">{{'resume-load-image-done' | translate}}</div>
         </div>
       </ng-template>
 
@@ -109,7 +109,9 @@
           <h1 class="font-medium font-size-24 cerulean-blue"> {{ 'resume-reached' | translate }} {{count}}%  {{ 'resume-of-cv' | translate }}</h1>
         </ng-template>
         <ng-template [ngIf]="userType === 'manager'">
-          <h1 class="font-medium font-size-24 cerulean-blue"> this candidate has reached {{count}}%  of his resume</h1>
+          <h1 class="font-medium font-size-24 cerulean-blue">
+            {{'resume-candidate-reached' | translate}} {{count}}{{"resume-of_his_resume" | translate}}</h1>
+
         </ng-template>
       </div>
       <div fxLayout="row" fxFlex="45" fxFlexAlign="center" fxLayoutAlign="center center">

@@ -307,7 +307,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       };
       const add = {
         code: 'add',
-        title: 'user.add',
+        title: 'user.add.title.modal',
         description: 'user.add.description.modal'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(add, '528px', '300px').subscribe((value) => {
@@ -347,7 +347,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       };
       const confirmation = {
         code: 'edit',
-        title: 'user.edit',
+        title: 'user.update.title.modal',
         description: 'user.update.description.modal'
       };
       this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '528px', '300px').subscribe((value) => {
@@ -409,11 +409,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
   deactivateAccount(): void {
     const deactivate  = {
       code: 'deactivate',
-      title: 'deactivate your account',
+      title: 'user.deactivate.title.modal',
+      description: 'user.deactivate.description.modal'
     };
     this.subscriptionModal = this.modalService.displayConfirmationModal(deactivate, '560px', '300px').subscribe((value) => {
       if (value) {
-        console.log('compte desactivé');
+        console.log(value);
       }
       this.subscriptionModal.unsubscribe();
     });

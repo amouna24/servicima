@@ -16,8 +16,6 @@ import { SheetService } from '@core/services/sheet/sheet.service';
 import { environment } from '@environment/environment';
 import { takeUntil } from 'rxjs/operators';
 
-import { ChangePwdInvoiceComponent } from '../change-pwd-invoice/change-pwd-invoice.component';
-import { SetPwdInvoiceComponent } from '../set-pwd-invoice/set-pwd-invoice.component';
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 import { ListImportInvoiceComponent } from '../list-import-invoice/list-import-invoice.component';
 
@@ -59,12 +57,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    */
   async ngOnInit(): Promise<void> {
     this.isLoading.next(true);
-    this.modalService.registerModals(
-      { modalName: 'protectInvoice', modalComponent: ChangePwdInvoiceComponent });
-    this.modalService.registerModals(
-      { modalName: 'setPwdInvoice', modalComponent: SetPwdInvoiceComponent });
-    this.modalService.registerModals({ modalName: 'importInvoice', modalComponent: ListImportInvoiceComponent });
 
+    this.modalService.registerModals({ modalName: 'importInvoice', modalComponent: ListImportInvoiceComponent });
     this.modalService.registerModals({ modalName: 'mailing', modalComponent: MailingModalComponent });
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.languageId = this.localStorageService.getItem('language').langId;
@@ -222,21 +216,28 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description : action
    * @param rowAction: object
    */
-  switchAction(rowAction: { actionType: string, data: IInvoiceHeaderModel[]}): void {
-    switch (rowAction.actionType) {
-      case ('show'): this.showInvoice(rowAction.data);
+  switchAction(rowAction: { actionType: any, data: IInvoiceHeaderModel[]}): void {
+    switch (rowAction.actionType.name) {
+      case ('invoice.management.show'): this.showInvoice(rowAction.data);
         break;
       case ('update'): this.updateInvoice(rowAction.data as any);
         break;
-      case('download'): this.downloadInvoice(rowAction.data);
+      case('invoice.management.download'): this.downloadInvoice(rowAction.data);
         break;
-      case('archiver'): this.archiver(rowAction.data);
+      case('invoice.management.delete'): this.archiver(rowAction.data);
         break;
-      case('sendMailing'): this.sendMailing(rowAction.data);
+      case('invoice.management.sendmail'): this.sendMailing(rowAction.data);
         break;
       case('import'): this.loadXML();
         break;
     }
+  }
+
+  /**
+   * @description : Import
+   */
+  import() {
+    this.loadXML();
   }
 
   /**

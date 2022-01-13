@@ -65,7 +65,7 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
   }
 
   getPaymentTerms(limit: number, offset: number ) {
-    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, 'ACTIVE', offset, limit).subscribe((data) => {
+    this.subscriptions.push(this.companyPaymentTermsService.getCompanyPaymentTerms(this.emailAddress, offset, limit).subscribe((data) => {
       this.ELEMENT_DATA.next(data);
       this.isLoading.next(false);
     }));
@@ -80,31 +80,33 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
            break; */
        case ('update'): this.updatePaymentTerms(rowAction.data);
          break;
-       case('delete'): this.onChangeStatus(rowAction.data);
+       case('delete.user.action'): this.onChangeStatus(rowAction.data);
  }
 }
   /**
    * @description : change the status
-   * @param id: string
+   * @param list: string
    */
-  onChangeStatus(id: string) {
+  onChangeStatus(list) {
     const confirmation = {
       code: 'changeStatus',
-      title: 'change the status',
-      status: id['status']
+      title: 'change.status.title.modal',
+      description: 'change.status.description.modal',
+      status: 'ACTIVE'
     };
-
     this.subscriptionModal = this.modalService.displayConfirmationModal(confirmation, '560px', '300px').subscribe((value) => {
       if (value === true) {
-        this.subscriptions.push( this.companyPaymentTermsService
-          .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
-          (res) => {
-            if (res) {
-              this.getPaymentTerms(this.nbtItems.getValue(), 0);
-            }
-          },
-          (err) => console.error(err),
-        ));
+        list.map((id) => {
+          this.subscriptions.push(this.companyPaymentTermsService
+            .paymentTermsCompanyChangeStatus(id['_id'], id['status'], this.emailAddress).subscribe(
+              (res) => {
+                if (res) {
+                  this.getPaymentTerms(this.nbtItems.getValue(), 0);
+                }
+              },
+              (err) => console.error(err),
+            ));
+        });
         this.subscriptionModal.unsubscribe();
       }
     });
@@ -114,15 +116,6 @@ export class PaymentInfoComponent implements OnInit, OnDestroy {
     '657px', '396px').subscribe(() => {
     this.getPaymentTerms(this.nbtItems.getValue(), 0);
   });
-  }
-
-  getDataWithStatus(status) {
-    this.isLoading.next(true);
-    this.subscriptions.push(this.companyPaymentTermsService
-      .getCompanyPaymentTerms(this.emailAddress, status, this.nbtItems.getValue(), 0).subscribe((data) => {
-      this.ELEMENT_DATA.next(data);
-      this.isLoading.next(false);
-    }));
   }
 
   /**
