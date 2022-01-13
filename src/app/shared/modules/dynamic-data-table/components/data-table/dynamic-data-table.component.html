@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100" >
   <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
-      <h1 class="steel font-size-24 font-medium" >{{ header.title }}</h1>
+      <h1 class="steel font-size-24 font-medium" >{{ header.title | translate}}</h1>
     </div>
     <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
       <button  *canBeDisplayed="{'feature': header.feature}" mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">

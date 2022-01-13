@@ -18,6 +18,8 @@ import { LocalStorageService } from '../storage/local-storage.service';
 import { environment } from '../../../../environments/environment';
 // tslint:disable-next-line:origin-ordered-imports
 import { AbstractControl } from '@angular/forms';
+// tslint:disable-next-line:origin-ordered-imports
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,7 @@ export class UtilsService {
     private domSanitizer: DomSanitizer,
     private matSnackBar: MatSnackBar,
     private httpClient: HttpClient,
+    private translateService: TranslateService
   ) {
 
   }
@@ -157,6 +160,23 @@ export class UtilsService {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
     });
+  }
+  /**
+   * @description Open SnackBar
+   * @param message;
+   *  @param action;
+   *  @param duration
+   * *
+   */
+  openSnackBarWithTranslate(message: string, action?: string, duration?: number) {
+    this.translateService.get([message]).subscribe( (res) => {
+      this.matSnackBar.open(res[message], action, {
+        duration,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      });
+    });
+
   }
 
   /**

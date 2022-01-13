@@ -123,7 +123,7 @@
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
                                 <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                  <span class="white">Browse</span>
+                                  <span class="white">{{ 'home.dynamic.browse' | translate }}</span>
                                 </button>
                               </div>
 
@@ -1768,7 +1768,7 @@
           </ng-container>
           <div fxLayoutAlign="end center" [style]="{ minHeight: '139px'}">
             <button (click)="submitAction()" color="primary" [disabled]="!formData.valid" [style]="{marginRight: '4%'}" mat-raised-button
-                    class="white btn-medium">Save
+                    class="white btn-medium">{{ 'home.dynamic.save' | translate }}
             </button>
           </div>
         </form>

@@ -170,7 +170,7 @@ private subscriptions: Subscription;
    *************************************************************************/
   contractorItems: IDynamicMenu[] = [
     {
-      title: 'resume-general-info',
+      title: 'lients.addcontractor.menu.general.info',
       titleKey: 'GENERAL_INFORMATION',
       child: [
         {
@@ -178,25 +178,25 @@ private subscriptions: Subscription;
           titleKey: 'PERSONAL_INFORMATION',
         },
         {
-          title: 'address_label_all',
+          title: 'clients.addcontractor.menu.address',
           titleKey: 'ADDRESS',
         },
         {
-          title: 'general_contact_all',
+          title: 'clients.addcontractor.menu.general.contact',
           titleKey: 'GENERAL_CONTACT',
         },
         {
-          title: 'Organisation',
+          title: 'clients.addcontractor.menu.organisation',
           titleKey: 'ORGANISATION',
         },
       ]
     },
-    { title: 'resume_template_all',
+    { title: 'clients.addcontractor.menu.resume.template',
       titleKey: 'RESUME_TEMPLATE',
       child: [],
     },
     {
-      title: 'user.contact',
+      title: 'clients.addcontractor.menu.contact',
       titleKey: 'CONTACT',
       child: []
     },
@@ -207,16 +207,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
       fields: [
         {
-          label: 'contractor_name',
-          placeholder: 'contractor_name',
+          label: 'clients.addcontractor.personal.info.contractor.name',
+          placeholder: 'clients.addcontractor.personal.info.contractor.name',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'contractor_name',
           required: true
         },
         {
-          label: 'registre_nbr_all',
-          placeholder: 'registre_nbr_all',
+          label: 'clients.addcontracto.personal.info.registre',
+          placeholder: 'clients.addcontracto.personal.info.registre',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'registry_code',
@@ -239,8 +239,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'rh_language_cerif_show',
-          placeholder: 'rh_language_cerif_show',
+          label: 'clients.addcontractor.personal.info.language',
+          placeholder: 'clients.addcontractor.personal.info.language',
           type: FieldsType.SELECT,
           selectFieldList: this.langList,
           formControlName: 'language'
@@ -252,16 +252,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'address_label_all',
-          placeholder: 'address_label_all',
+          label: 'clients.addcontractor.address',
+          placeholder: 'clients.addcontractor.address',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'address',
           required: true
         },
         {
-          label: 'country_all',
-          placeholder: 'country_all',
+          label: 'clients.addcontractor.address.country',
+          placeholder: 'clients.addcontractor.address.country',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCountries,
           formControlName: 'country_cd',
@@ -283,8 +283,8 @@ private subscriptions: Subscription;
           required: true
         },
         {
-          label: 'homecompany.city',
-          placeholder: 'homecompany.city',
+          label: 'clients.addcontractor.address.city',
+          placeholder: 'clients.addcontractor.address.city',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'city',
@@ -297,15 +297,15 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'rh_website_certif',
-          placeholder: 'rh_website_certif',
+          label: 'clients.addcontractor.contact.website',
+          placeholder: 'clients.addcontractor.contact.website',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'web_site',
         },
         {
-          label: 'email_all',
-          placeholder: 'email_all',
+          label: 'clients.addcontractor.contact.email',
+          placeholder: 'clients.addcontractor.contact.email',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
@@ -318,16 +318,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'phone_all',
-          placeholder: 'phone_all',
+          label: 'clients.addcontractor.contact.phone.one',
+          placeholder: 'clients.addcontractor.contact.phone.one',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
           required: true
         },
         {
-          label: 'phone_all',
-          placeholder: 'phone_all',
+          label: 'clients.addcontractor.contact.phone.two',
+          placeholder: 'clients.addcontractor.contact.phone.two',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone2_nbr',
@@ -353,8 +353,8 @@ private subscriptions: Subscription;
       fields: [
         this.activitySectorField.getValue(),
         {
-          label: 'manager-setting-menu.payment.payment.method',
-          placeholder: 'manager-setting-menu.payment.payment.method',
+          label: 'clients.addcontractor.organisation.payment.method',
+          placeholder: 'clients.addcontractor.organisation.payment.method',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredPayMode,
           formControlName: 'payment_cd',
@@ -368,8 +368,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'currency_all',
-          placeholder: 'currency_all',
+          label: 'clients.addcontractor.organisation.currency',
+          placeholder: 'clients.addcontractor.organisation.currency',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredCurrencies,
           formControlName: 'currency_cd',
@@ -377,8 +377,8 @@ private subscriptions: Subscription;
           required: true
         },
         {
-          label: 'invoice.vatLine',
-          placeholder: 'invoice.vatLine',
+          label: 'VAT',
+          placeholder: 'VAT',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'vat_nbr',
@@ -390,8 +390,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_left,
       fields: [
         {
-          label: 'homecompany.legalform',
-          placeholder: 'homecompany.legalform',
+          label: 'clients.addcontractor.organisation.legalform',
+          placeholder: 'clients.addcontractor.organisation.legalform',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredLegalForm,
           formControlName: 'legal_form',
@@ -399,8 +399,8 @@ private subscriptions: Subscription;
           required: true
         },
         {
-          label: 'company_tax_all',
-          placeholder: 'company_tax_all',
+          label: 'clients.addcontractor.organisation.company.tax',
+          placeholder: 'clients.addcontractor.organisation.company.tax',
           type: FieldsType.SELECT,
           selectFieldList: this.companyTaxList,
           formControlName: 'tax_cd',
@@ -412,7 +412,7 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.one_item_at_center,
       fields: [
         {
-          label: 'resume_template_all',
+          label: 'clients.addcontractor.resume',
           type: FieldsType.THEME_RADIO_GROUP,
           selectFieldList: this.resumeModels,
           formControlName: 'resume_template',
@@ -451,16 +451,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'first_name_all',
-          placeholder: 'first_name_all',
+          label: 'clients.addcontractor.contact.firstName',
+          placeholder: 'clients.addcontractor.contact.firstName',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'first_name',
           required: true
         },
         {
-          label: 'last_name_all',
-          placeholder: 'last_name_all',
+          label: 'clients.addcontractor.contact.lastName',
+          placeholder: 'clients.addcontractor.contact.lastName',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'last_name',
@@ -473,16 +473,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'user.contact',
-          placeholder: 'user.contact',
+          label: 'clients.addcontractor.contact.mainContact',
+          placeholder: 'clients.addcontractor.contact.mainContact',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'main_contact',
           required: true
         },
         {
-          label: 'email_all',
-          placeholder: 'email_all',
+          label: 'clients.addcontractor.contact.email',
+          placeholder: 'clients.addcontractor.contact.email',
           type: FieldsType.INPUT,
           inputType: InputType.EMAIL,
           formControlName: 'contact_email',
@@ -495,16 +495,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'gender_all',
-          placeholder: 'gender_all',
+          label: 'clients.addcontractor.contact.gender',
+          placeholder: 'clients.addcontractor.contact.gender',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredGenders,
           formControlName: 'gender_cd',
           searchControlName: 'filteredGenderContact'
         },
         {
-          label: 'job_title_all',
-          placeholder: 'job_title_all',
+          label: 'clients.addcontractor.contact.jobtitle',
+          placeholder: 'clients.addcontractor.contact.jobtitle',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredTitles,
           formControlName: 'title_cd',
@@ -518,16 +518,16 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'phone_all',
-          placeholder: 'phone_all',
+          label: 'clients.addcontractor.contact.phone',
+          placeholder: 'clients.addcontractor.contact.phone',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone_nbr',
           required: true
         },
         {
-          label: 'cell_phone_all',
-          placeholder: 'cell_phone_all',
+          label: 'clients.addcontractor.contact.cellphone',
+          placeholder: 'clients.addcontractor.contact.cellphone',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'cell_phone_nbr',
@@ -540,8 +540,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'rh_language_cerif_show',
-          placeholder: 'rh_language_cerif_show',
+          label: 'clients.addcontractor.contact.language',
+          placeholder: 'clients.addcontractor.contact.language',
           type: FieldsType.SELECT,
           selectFieldList: this.langList,
           formControlName: 'language_cd'
@@ -583,7 +583,7 @@ private subscriptions: Subscription;
     private sanitizer: DomSanitizer,
     private modalServices: ModalService,
     private refDataService: RefdataService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
   ) {
     this.initContractForm();
     this.route.queryParams
@@ -831,7 +831,7 @@ private subscriptions: Subscription;
    * @description get Tax for specific company
    *************************************************************************/
   getCompanyTax() {
-    this.companyTaxService.getCompanyTax(this.companyEmail)
+    this.companyTaxService.getTax()
       .pipe(
         takeUntil(this.destroy$)
       )
@@ -840,7 +840,7 @@ private subscriptions: Subscription;
           this.companyTaxList.next(
             companyTax.map(
               (obj) => {
-                return { value: obj.companyTaxKey.tax_code, viewValue: obj.tax_desc};
+                return { value: obj.taxKey.tax_code, viewValue: obj.tax_desc};
           }
           )
           );
@@ -983,7 +983,7 @@ private subscriptions: Subscription;
         )
         .subscribe(
           (res) => {
-            this.utilsService.openSnackBar('Contractor update successfully', 'close');
+            this.utilsService.openSnackBarWithTranslate('general.updated', 'close', 3000);
 
           },
           (error) => {
@@ -1031,7 +1031,7 @@ private subscriptions: Subscription;
           }
         }
       );
-      this.utilsService.openSnackBar('Contractor updated successfully ', null, 5000);
+      this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
       if (this.type === 'CLIENT') {
         this.router.navigate(
           ['/manager/contract-management/clients-contracts/clients-list']);
@@ -1106,7 +1106,7 @@ private subscriptions: Subscription;
 
               }
             );
-            this.utilsService.openSnackBar('Contractor added successfully ', null, 5000);
+            this.utilsService.openSnackBarWithTranslate('general.add ', null, 5000);
             if (this.type === 'CLIENT') {
               this.router.navigate(
                 ['/manager/contract-management/clients-contracts/clients-list']);
@@ -1131,12 +1131,15 @@ private subscriptions: Subscription;
    * result.action: ['update', addMode]
    *************************************************************************/
   addContractorContact(result) {
+    const validatedField = ['first_name', 'last_name', 'main_contact', 'contact_email', 'title_cd', 'phone_nbr', 'cell_phone_nbr'];
     switch (result.action) {
       case 'update': {
         this.contractorContactInfo.forEach(
           (element, index) => {
-            if ( (element.contractorContactKey ? element.contractorContactKey.contact_email  : element.contact_email  ) ===
-              this.contractorForm.controls.CONTACT['controls'].contact_email.value) {
+            if (( (element.contractorContactKey ? element.contractorContactKey.contact_email  : element.contact_email  ) ===
+              this.contractorForm.controls.CONTACT['controls'].contact_email.value)
+              && this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField)
+            ) {
               this.contractorContactInfo[index].first_name = this.contractorForm.controls.CONTACT['controls'].first_name.value;
               this.contractorContactInfo[index].last_name = this.contractorForm.controls.CONTACT['controls'].last_name.value;
               this.contractorContactInfo[index].main_contact = this.contractorForm.controls.CONTACT['controls'].main_contact.value;
@@ -1159,10 +1162,8 @@ private subscriptions: Subscription;
       }
         break;
       case 'addMore': {
-        if (
-          !this.contractorForm.controls.CONTACT['controls'].contact_email.value &&
-          this.contractorForm.controls.CONTACT['controls'].contact_email.value === '' ) {
-          this.utilsService.openSnackBar('Email Address Required', 'close');
+        if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField) ) {
+          this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close');
         } else {
           this.contactList.next([]);
           this.contractorContactInfo.push(
@@ -1182,7 +1183,7 @@ private subscriptions: Subscription;
           );
           this.contactList.next(this.contractorContactInfo.slice());
           this.contractorForm.controls.CONTACT.reset();
-          this.utilsService.openSnackBar('Contact Added', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.add', 'close');
         }
       }
       break;
@@ -1237,7 +1238,7 @@ private subscriptions: Subscription;
                    );
                }
              }
-             this.utilsService.openSnackBar('contact deleted successfully', 'close');
+             this.utilsService.openSnackBarWithTranslate('general.remove', 'close', 3000);
 
            }
 

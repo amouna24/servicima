@@ -172,7 +172,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'Evaluation',
+      title: 'evaluation_all',
       titleKey: 'EVALUATION',
       child: []
     },
@@ -197,7 +197,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       child: []
     },
     {
-      title: 'equipment_all',
+      title: 'hr.collab.menu.eqp',
       titleKey: 'EQUIPMENT',
       child: []
     }
@@ -520,14 +520,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.ctr.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.ctr.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -540,7 +540,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'date_assign_all',
+            label: 'hr.collab.ctr.assign_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_date',
@@ -609,8 +609,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'country_all',
-            placeholder: 'country_all',
+            label: 'hr.collab.prv.country;',
+            placeholder: 'hr.collab.prv.country;',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCountries,
             searchControlName: 'countryFilterCtrl',
@@ -624,14 +624,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.prv.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.prv.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'contract_end_date',
@@ -644,7 +644,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'rate_all',
+            label: 'hr.collab.prv.rate',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
@@ -653,8 +653,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'currency_all',
-            placeholder: 'currency_all',
+            label: 'hr.collab.prv.currency',
+            placeholder: 'hr.collab.prv.currency',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCurrencies,
             formControlName: 'currency_cd',
@@ -668,16 +668,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'contract_type_all',
-            placeholder: 'contract_type_all',
+            label: 'hr.collab.prv.ctrtype',
+            placeholder: 'hr.collab.prv.ctrtype',
             type: FieldsType.SELECT,
             selectFieldList: this.contractTypeList,
             formControlName: 'contract_type',
             required: true
           },
           {
-            label: 'job_title_all',
-            placeholder: 'job_title_all',
+            label: 'hr.collab.prv.jobtl',
+            placeholder: 'hr.collab.prv.jobtl',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -725,14 +725,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.ext.start_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.ext.end_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'extension_end_date',
@@ -745,7 +745,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'rate_all',
+            label: 'hr.collab.ext.rate',
             placeholder: '0.00',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
@@ -753,8 +753,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'job_title_all',
-            placeholder: 'job_title_all',
+            label: 'hr.collab.ext.jbt',
+            placeholder: 'hr.collab.ext.jbt',
             type: FieldsType.SELECT,
             selectFieldList: this.jobTitleList,
             formControlName: 'title_cd',
@@ -767,8 +767,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'currency_all',
-            placeholder: 'currency_all',
+            label: 'hr.collab.ext.currency',
+            placeholder: 'hr.collab.ext.currency',
             type: FieldsType.SELECT_WITH_SEARCH,
             filteredList: this.filteredCurrencies,
             formControlName: 'extension_currency_cd',
@@ -776,8 +776,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             required: true
           },
           {
-            label: 'attachment_all',
-            placeholder: 'attachment_all',
+            label: 'hr.collab.ext.file',
+            placeholder: 'hr.collab.ext.file',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'attachments',
             inputType: InputType.TEXT,
@@ -826,16 +826,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'evaluation_mission_all',
-            placeholder: 'evaluation_mission_all',
+            label: 'hr.collab.eval.miss',
+            placeholder: 'hr.collab.eval.miss',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'main_mission',
             required: true
           },
           {
-            label: 'report_all',
-            placeholder: 'report_all',
+            label: 'hr.collab.eval.report',
+            placeholder: 'hr.collab.eval.report',
             type: FieldsType.INPUT,
             formControlName: 'report',
             required: true
@@ -848,14 +848,14 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'star_date_all',
+            label: 'hr.collab.eval.d_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_start_date',
             required: true
           },
           {
-            label: 'end_date_all',
+            label: 'hr.collab.eval.e_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'evaluation_end_date',
@@ -869,8 +869,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'attachment_all',
-            placeholder: 'attachment_all',
+            label: 'hr.collab.eval.file',
+            placeholder: 'hr.collab.eval.file',
             type: FieldsType.UPLOAD_FILE,
             formControlName: 'evaluation_doc',
             inputType: InputType.TEXT,
@@ -918,8 +918,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'invoice.descriptionLine',
-            placeholder: 'invoice.descriptionLine',
+            label: 'hr.collab.goal.desc',
+            placeholder: 'hr.collab.goal.desc',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'description',
@@ -984,15 +984,15 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'first_name_all',
-            placeholder: 'first_name_all',
+            label: 'hr.collab.child.name',
+            placeholder: 'hr.collab.child.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
             required: true
           },
           {
-            label: 'birth_date_all',
+            label: 'hr.collab.child.b_date',
             placeholder: 'dd/mm/yyyy',
             type: FieldsType.DATE_PICKER,
             formControlName: 'birth_date',
@@ -1035,16 +1035,16 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.tow_items,
         fields: [
           {
-            label: 'full_name_all',
-            placeholder: 'full_name_all',
+            label: 'hr.collab.cnt.name',
+            placeholder: 'hr.collab.cnt.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'full_name',
             required: true
           },
           {
-            label: 'phone_all',
-            placeholder: 'phone_all',
+            label: 'hr.collab.cnt.phone',
+            placeholder: 'hr.collab.cnt.phone',
             type: FieldsType.INPUT,
             inputType: InputType.NUMBER,
             formControlName: 'phone',
@@ -1068,8 +1068,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         fieldsLayout: FieldsAlignment.one_item_stretch,
         fields: [
           {
-            label: 'bank_name_all',
-            placeholder: 'bank_name_all',
+            label: 'hr.collab.bank.name',
+            placeholder: 'hr.collab.bank.name',
             type: FieldsType.INPUT,
             inputType: InputType.TEXT,
             formControlName: 'bank_name',
@@ -1487,7 +1487,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.IDENTITY_DOCUMENT, validatedField)
           ) {
-            this.utilsService.openSnackBar('Field Identity Document required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.identityDocumentInfo.push(
               {
@@ -1500,7 +1500,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.identityDocumentList.next(this.identityDocumentInfo.slice());
             this.profileForm.controls.IDENTITY_DOCUMENT.reset();
-            this.utilsService.openSnackBar('Identity document Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.identity.doc.add', 'close', 2000);
           }
         }
           break;
@@ -1533,7 +1533,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.EVALUATION, validatedField)
           ) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.evaluationInfo.push(
               {
@@ -1548,7 +1548,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.evaluationList.next(this.evaluationInfo.slice());
             this.profileForm.controls.EVALUATION.reset();
-            this.utilsService.openSnackBar('Evaluation Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.eval.add', 'close', 2000);
           }
         }
           break;
@@ -1578,7 +1578,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
            !this.utilsService.checkFormGroup(this.profileForm.controls.GOAL, validatedField)
           ) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.profileForm.controls.GOAL['controls'].goal_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-GOAL`);
             this.goalInfo.push(
@@ -1591,7 +1591,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.goalList.next(this.goalInfo.slice());
             this.profileForm.controls.GOAL.reset();
-            this.utilsService.openSnackBar('Goal Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.goal.add', 'close', 2000);
           }
         }
           break;
@@ -1618,7 +1618,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.profileForm.controls.EMERGENCY_CONTACT, validatedField)) {
-            this.utilsService.openSnackBar('Missing Emergency Contact field', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.emergencyContactInfo.push(
               {
@@ -1629,7 +1629,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.emergencyContactList.next(this.emergencyContactInfo.slice());
             this.profileForm.controls.EMERGENCY_CONTACT.reset();
-            this.utilsService.openSnackBar('Contact Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.contract.add', 'close', 2000);
           }
         }
           break;
@@ -1657,7 +1657,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.CHILDREN, validatedField)) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.childrenList.next([]);
             this.profileForm.controls.CHILDREN['controls'].child_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CHILD`);
@@ -1670,7 +1670,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.childrenList.next(this.childInfo.slice());
             this.profileForm.controls.CHILDREN.reset();
-            this.utilsService.openSnackBar('Child Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.child.add', 'close', 2000);
           }
         }
           break;
@@ -1697,13 +1697,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.EQUIPMENT, validatedField)) {
-            this.utilsService.openSnackBar('Equipment name Required', 'close', 2000);
+          this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.profileForm.controls.EQUIPMENT['controls'].equipment_code.setValue(this.hrHelper.generateCode('EQ'));
             this.equipmentInfo.push(this.profileForm.controls.EQUIPMENT.value);
             this.equipmentList.next(this.equipmentInfo.slice());
             this.profileForm.controls.EQUIPMENT.reset();
-            this.utilsService.openSnackBar('Equipment Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.eqp.add', 'close', 2000);
           }
         }
           break;
@@ -1739,7 +1739,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.CONTRACT_EXTENSION, validatedField)) {
-            this.utilsService.openSnackBar('Missing field contract previous', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addExtentionContract =  {
@@ -1756,7 +1756,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractExtensionList.next(this.contractExtensionInfo.slice());
             this.profileForm.controls.CONTRACT_EXTENSION.reset();
-            this.utilsService.openSnackBar('Contract extension Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.ext.add', 'close', 2000);
           }
         }
           break;
@@ -1800,7 +1800,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.PREVIOUS_CONTRACT, validatedField)) {
-            this.utilsService.openSnackBar('Missing field previous contract', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addPreviousContract =  {
@@ -1819,7 +1819,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractPreviousList.next(this.contractPreviousInfo.slice());
             this.profileForm.controls.PREVIOUS_CONTRACT.reset();
-            this.utilsService.openSnackBar('Contract previous Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.prv.add', 'close', 2000);
           }
         }
           break;
@@ -2019,7 +2019,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.childInfo.splice(index, 1);
               this.childrenList.next(this.childInfo.slice());
               row.data._id ? this.hrHelper.deleteCHild(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Child deleted successfully', 'close', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.child.delete', 'close', 2000);
               this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'IDENTITY_DOCUMENT') {
               const code = row.data.HRIdentityDocumentKey?.identity_document_code ?
@@ -2031,7 +2031,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.identityDocumentInfo.splice(index, 1);
                 this.identityDocumentList.next(this.identityDocumentInfo.slice());
                 row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBarWithTranslate('general.doc.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2043,7 +2043,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.evaluationInfo.splice(index, 1);
                 this.evaluationList.next(this.evaluationInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.eval.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2055,7 +2055,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.goalInfo.splice(index, 1);
                 this.goalList.next(this.goalInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.goal.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2068,7 +2068,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.equipmentInfo.splice(index, 1);
                 this.equipmentList.next(this.equipmentInfo.slice());
                 row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.eqp.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
             } else if (row.formGroupName === 'EMERGENCY_CONTACT') {
@@ -2079,7 +2079,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.emergencyContactInfo.splice(index, 1);
                 this.emergencyContactList.next(this.emergencyContactInfo.slice());
                 row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.contact.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2092,7 +2092,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractExtensionInfo.splice(index, 1);
                 this.contractExtensionList.next(this.contractExtensionInfo.slice());
                 row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBarWithTranslate('general.ext.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2105,12 +2105,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractPreviousList.next(this.contractPreviousInfo.slice());
                 if (row.data._id) {
                   this.hrService.disablePreviousContracts(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
+                    this.utilsService.openSnackBar('general.ext.delete', 'close', 2000);
 
                   }, (err) => { this.utilsService.openSnackBar('something wrong', 'close', 2000); });
 
                 } else {
-                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.ext.delete', 'close', 2000);
 
                 }
               }
@@ -2125,13 +2125,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    ********************************************************************************************************************/
   async newCollaboratorInfo(data: FormGroup) {
     const Contract = this.profileForm.controls.CONTRACT.value;
-    //  const PersonalData = this.profileForm.controls.PERSONAL_DATA.value;
     if (Contract.contract_start_date !== '') {
       this.contractCheck = true;
     }
       const contract_type = this.profileForm.controls.CONTRACT['controls'].contract_type?.value;
-      // tslint:disable-next-line:max-line-length
-      this.contract !== null ? Contract['contract_code'] = this.contract.HRContractKey.contract_code : Contract['contract_code'] = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CONTRACT` ;
+      this.contract !== null ?
+        Contract['contract_code'] = this.contract.HRContractKey.contract_code
+        : Contract['contract_code'] = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CONTRACT` ;
       Contract['email_address'] = this.userInfo.company_email;
       Contract['application_id'] = this.applicationId;
       Contract['collaborator_email'] = this.collaborator.collaboratorKey.email_address;
@@ -2179,8 +2179,9 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         if (identityDocument.selectedIdentityFile && identityDocument?.selectedIdentityFile?.name !== '') {
           identityDocument.file = await this.uploadFile(identityDocument.selectedIdentityFile.file);
         }
-        // tslint:disable-next-line:max-line-length
-        this.hrHelper.addOrUpdateIdentifyDocument(identityDocument.updated, identityDocument, this.applicationId, this.emailAddress, identityDocument.identity_document_code);
+        this.hrHelper
+          .addOrUpdateIdentifyDocument
+          (identityDocument.updated, identityDocument, this.applicationId, this.emailAddress, identityDocument.identity_document_code);
 
       }
     for (const previousContact of this.contractPreviousInfo) {
@@ -2197,13 +2198,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           (extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
         }
       } else {
-        this.utilsService.openSnackBar('no contract disponible', 'close', 2000);
+        this.utilsService.openSnackBarWithTranslate('general.contact.no.dispo', 'close', 2000);
 
       }
       this.router.navigate(
         ['/manager/human-ressources/collaborator-list'],
       );
-      this.utilsService.openSnackBar('Collaborator updated successfully', 'close', 2000);
+      this.utilsService.openSnackBarWithTranslate('general.collab.update', 'close', 2000);
 
   }
 
