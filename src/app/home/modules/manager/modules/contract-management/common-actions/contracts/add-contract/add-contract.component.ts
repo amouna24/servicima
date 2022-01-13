@@ -1118,7 +1118,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (res) => {
-            this.utilsService.openSnackBar('Contract Updated !', '', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
           },
           (error) => {
             console.log(error);
@@ -1144,7 +1144,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                this.utilsService.openSnackBar('Extension Updated !', '', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
               },
               (error) => {
                 console.log('error', error);
@@ -1162,7 +1162,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (resp) => {
-                this.utilsService.openSnackBar('Extension Added !', '', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
               },
               error => {
                 console.log('error', error);
@@ -1199,7 +1199,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                this.utilsService.openSnackBar('Project Updated !', '', 2000);
+                this.utilsService.openSnackBar('general.updated', '', 2000);
               },
               (error) => {
                 console.log('error', error);
@@ -1217,7 +1217,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (resp) => {
-                this.utilsService.openSnackBar('Project Added !', '', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
               },
               error => {
                 console.log('error', error);
@@ -1246,7 +1246,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                this.utilsService.openSnackBar('Project Collaborator Updated !', '', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
               },
               (error) => {
                 console.log('error', error);
@@ -1268,7 +1268,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                   this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
 
                 } else {
-                  this.utilsService.openSnackBar('Project Collaborator Added !', '', 2000);
+                  this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
 
                 }
               },
@@ -1349,7 +1349,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 )
                 .subscribe(
                   async (resp) => {
-                    this.utilsService.openSnackBar('Project Added !', '', 2000);
+                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
 
                   },
                   error => {
@@ -1374,7 +1374,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
 
                     } else {
-                      this.utilsService.openSnackBar('Project Collaborator Added !', '', 2000);
+                      this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
 
                     }
                   },
@@ -1386,7 +1386,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 );
 
             }
-            this.utilsService.openSnackBar('Contract Added Successfully !', '', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
 
           },
           (error) => {
@@ -1438,7 +1438,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField)) {
-            this.utilsService.openSnackBar('Missing Field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.extensionsList.next([]);
             this.contractExtensionInfo.push(
@@ -1459,7 +1459,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             );
             this.extensionsList.next(this.contractExtensionInfo.slice());
             this.contractForm.controls.CONTRACT_EXTENSION.reset();
-            this.utilsService.openSnackBar('Extension Added', '', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
           }
         }
           break;
@@ -1505,7 +1505,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
-            this.utilsService.openSnackBar('Missing Field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
 
           } else {
             this.contractProjectList.next([]);
@@ -1540,7 +1540,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               )
             );
             this.contractForm.controls.CONTRACT_PROJECT.reset();
-            this.utilsService.openSnackBar('Project Added', '', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
           }
         }
           break;
@@ -1579,7 +1579,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField)) {
-            this.utilsService.openSnackBar('Missing Field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.projectCollaboratorList.next([]);
             this.projectCollaboratorInfo.push(
@@ -1594,7 +1594,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             );
             this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
             this.contractForm.controls.PROJECT_COLLABORATOR.reset();
-            this.utilsService.openSnackBar('Project Collaborator Added', '', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
           }
 
         }
@@ -1798,12 +1798,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 this.extensionsList.next(this.contractExtensionInfo.slice());
                 if (row.data._id) {
                   this.contractsService.disableContractExtension(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+                    this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
                   }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
 
                 } else {
-                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close');
+                  this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
                 }
               }
@@ -1829,12 +1829,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
                   );
                   if ((row.data._id)) {
                     this.contractsService.disableContractProject(row.data._id).subscribe((res1) => {
-                      this.utilsService.openSnackBar('project deleted successfully', 'close');
+                      this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
                     }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
 
                   } else {
-                    this.utilsService.openSnackBar('project deleted successfully', 'close');
+                    this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
                   }
                 } else {
@@ -1855,12 +1855,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
                 if (row.data._id) {
                   this.contractsService.disableProjectCollaborator(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('project collaborator successfully', 'close');
+                    this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
-                  }, (err) => { this.utilsService.openSnackBar('something wrong', 'close'); });
+                  }, (err) => { this.utilsService.openSnackBarWithTranslate('something wrong', 'close'); });
 
                 } else {
-                  this.utilsService.openSnackBar('project collaborator deleted successfully', 'close');
+                  this.utilsService.openSnackBarWithTranslate('general.remove', 'close');
 
                 }
               }

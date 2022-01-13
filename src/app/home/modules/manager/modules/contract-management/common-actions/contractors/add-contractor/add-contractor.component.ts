@@ -983,7 +983,7 @@ private subscriptions: Subscription;
         )
         .subscribe(
           (res) => {
-            this.utilsService.openSnackBar('Contractor update successfully', 'close');
+            this.utilsService.openSnackBarWithTranslate('general.updated', 'close', 3000);
 
           },
           (error) => {
@@ -1031,7 +1031,7 @@ private subscriptions: Subscription;
           }
         }
       );
-      this.utilsService.openSnackBar('Contractor updated successfully ', null, 5000);
+      this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
       if (this.type === 'CLIENT') {
         this.router.navigate(
           ['/manager/contract-management/clients-contracts/clients-list']);
@@ -1106,7 +1106,7 @@ private subscriptions: Subscription;
 
               }
             );
-            this.utilsService.openSnackBar('Contractor added successfully ', null, 5000);
+            this.utilsService.openSnackBarWithTranslate('general.add ', null, 5000);
             if (this.type === 'CLIENT') {
               this.router.navigate(
                 ['/manager/contract-management/clients-contracts/clients-list']);
@@ -1163,7 +1163,7 @@ private subscriptions: Subscription;
         break;
       case 'addMore': {
         if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField) ) {
-          this.utilsService.openSnackBar('Missing Field required', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close');
         } else {
           this.contactList.next([]);
           this.contractorContactInfo.push(
@@ -1183,7 +1183,7 @@ private subscriptions: Subscription;
           );
           this.contactList.next(this.contractorContactInfo.slice());
           this.contractorForm.controls.CONTACT.reset();
-          this.utilsService.openSnackBar('Contact Added', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.add', 'close');
         }
       }
       break;
@@ -1238,7 +1238,7 @@ private subscriptions: Subscription;
                    );
                }
              }
-             this.utilsService.openSnackBar('contact deleted successfully', 'close');
+             this.utilsService.openSnackBarWithTranslate('general.remove', 'close', 3000);
 
            }
 
