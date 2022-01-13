@@ -274,18 +274,30 @@ export class CertificationListComponent implements  OnInit, OnChanges, OnDestroy
    * rowAction [show, update, delete, download , activate]
    *************************************************************************/
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('show'):  this.showCertificate(rowAction.data[0]);
-        break;
-      case ('update'): rowAction.data['request_status'] === 'Confirmed' ? this.pdf(rowAction.data) :  this.showCertificate(rowAction.data);
-        break;
-      case('delete'):  this.onStatusChange(rowAction.data[0]);
-        break;
-      case('download'):  this.pdf(rowAction.data[0]);
-        break;
-      case('activate'): this.activateCertification(rowAction.data[0]);
-        break;
-    }
+  /*  this.translate
+      .get([
+        'manager.home.certif.show',
+        'manager.home.certif.update',
+        'manager.home.certif.remove',
+        'manager.home.certif.download',
+        'manager.home.certif.archive'])
+      .subscribe((res) => {
+        console.log('my translate resultat ', res);*/
+      switch (rowAction.actionType) {
+        case ('show'/*res['manager.home.certif.show']*/):  this.showCertificate(rowAction.data[0]);
+          break;
+        case ('update'):
+          rowAction.data['request_status'] === 'Confirmed' ? this.pdf(rowAction.data) :  this.showCertificate(rowAction.data);
+          break;
+        case('delete'):  this.onStatusChange(rowAction.data[0]);
+          break;
+        case('download'):  this.pdf(rowAction.data[0]);
+          break;
+        case('archive'): this.activateCertification(rowAction.data[0]);
+          break;
+      }
+ //   });
+
   }
   ngOnDestroy(): void {
     this.destroy$.next(true);

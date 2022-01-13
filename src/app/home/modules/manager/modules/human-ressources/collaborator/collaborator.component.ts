@@ -1487,7 +1487,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.IDENTITY_DOCUMENT, validatedField)
           ) {
-            this.utilsService.openSnackBar('Field Identity Document required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.identityDocumentInfo.push(
               {
@@ -1500,7 +1500,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.identityDocumentList.next(this.identityDocumentInfo.slice());
             this.profileForm.controls.IDENTITY_DOCUMENT.reset();
-            this.utilsService.openSnackBar('Identity document Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.identity.doc.add', 'close', 2000);
           }
         }
           break;
@@ -1533,7 +1533,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.EVALUATION, validatedField)
           ) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.evaluationInfo.push(
               {
@@ -1548,7 +1548,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.evaluationList.next(this.evaluationInfo.slice());
             this.profileForm.controls.EVALUATION.reset();
-            this.utilsService.openSnackBar('Evaluation Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.eval.add', 'close', 2000);
           }
         }
           break;
@@ -1578,7 +1578,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           if (
            !this.utilsService.checkFormGroup(this.profileForm.controls.GOAL, validatedField)
           ) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.profileForm.controls.GOAL['controls'].goal_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-GOAL`);
             this.goalInfo.push(
@@ -1591,7 +1591,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.goalList.next(this.goalInfo.slice());
             this.profileForm.controls.GOAL.reset();
-            this.utilsService.openSnackBar('Goal Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.goal.add', 'close', 2000);
           }
         }
           break;
@@ -1618,7 +1618,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.profileForm.controls.EMERGENCY_CONTACT, validatedField)) {
-            this.utilsService.openSnackBar('Missing Emergency Contact field', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.emergencyContactInfo.push(
               {
@@ -1629,7 +1629,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.emergencyContactList.next(this.emergencyContactInfo.slice());
             this.profileForm.controls.EMERGENCY_CONTACT.reset();
-            this.utilsService.openSnackBar('Contact Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.contract.add', 'close', 2000);
           }
         }
           break;
@@ -1657,7 +1657,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.CHILDREN, validatedField)) {
-            this.utilsService.openSnackBar('Missing field required', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.childrenList.next([]);
             this.profileForm.controls.CHILDREN['controls'].child_code.setValue(`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CHILD`);
@@ -1670,7 +1670,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.childrenList.next(this.childInfo.slice());
             this.profileForm.controls.CHILDREN.reset();
-            this.utilsService.openSnackBar('Child Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.child.add', 'close', 2000);
           }
         }
           break;
@@ -1697,13 +1697,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.EQUIPMENT, validatedField)) {
-            this.utilsService.openSnackBar('Equipment name Required', 'close', 2000);
+          this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.profileForm.controls.EQUIPMENT['controls'].equipment_code.setValue(this.hrHelper.generateCode('EQ'));
             this.equipmentInfo.push(this.profileForm.controls.EQUIPMENT.value);
             this.equipmentList.next(this.equipmentInfo.slice());
             this.profileForm.controls.EQUIPMENT.reset();
-            this.utilsService.openSnackBar('Equipment Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.eqp.add', 'close', 2000);
           }
         }
           break;
@@ -1739,7 +1739,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.CONTRACT_EXTENSION, validatedField)) {
-            this.utilsService.openSnackBar('Missing field contract previous', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addExtentionContract =  {
@@ -1756,7 +1756,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractExtensionList.next(this.contractExtensionInfo.slice());
             this.profileForm.controls.CONTRACT_EXTENSION.reset();
-            this.utilsService.openSnackBar('Contract extension Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.ext.add', 'close', 2000);
           }
         }
           break;
@@ -1800,7 +1800,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
         case 'addMore': {
           if (
             !this.utilsService.checkFormGroup(this.profileForm.controls.PREVIOUS_CONTRACT, validatedField)) {
-            this.utilsService.openSnackBar('Missing field previous contract', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
           } else {
             this.contractExtensionList.next([]);
             const addPreviousContract =  {
@@ -1819,7 +1819,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
             );
             this.contractPreviousList.next(this.contractPreviousInfo.slice());
             this.profileForm.controls.PREVIOUS_CONTRACT.reset();
-            this.utilsService.openSnackBar('Contract previous Added', 'close', 2000);
+            this.utilsService.openSnackBarWithTranslate('general.prv.add', 'close', 2000);
           }
         }
           break;
@@ -2019,7 +2019,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
               this.childInfo.splice(index, 1);
               this.childrenList.next(this.childInfo.slice());
               row.data._id ? this.hrHelper.deleteCHild(row.data._id, this.emailAddress) :
-                this.utilsService.openSnackBar('Child deleted successfully', 'close', 2000);
+                this.utilsService.openSnackBarWithTranslate('general.child.delete', 'close', 2000);
               this.subscriptionModal.unsubscribe();
             } else if (row.formGroupName === 'IDENTITY_DOCUMENT') {
               const code = row.data.HRIdentityDocumentKey?.identity_document_code ?
@@ -2031,7 +2031,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.identityDocumentInfo.splice(index, 1);
                 this.identityDocumentList.next(this.identityDocumentInfo.slice());
                 row.data._id ? this.hrHelper.deleteIdentityDocument(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Identity document deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBarWithTranslate('general.doc.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2043,7 +2043,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.evaluationInfo.splice(index, 1);
                 this.evaluationList.next(this.evaluationInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluation(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.eval.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2055,7 +2055,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.goalInfo.splice(index, 1);
                 this.goalList.next(this.goalInfo.slice());
                 row.data._id ? this.hrHelper.deleteEvaluationGoal(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Evaluation Goal deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.goal.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2068,7 +2068,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.equipmentInfo.splice(index, 1);
                 this.equipmentList.next(this.equipmentInfo.slice());
                 row.data._id ? this.hrHelper.deleteEquipment(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Equipment deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.eqp.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
             } else if (row.formGroupName === 'EMERGENCY_CONTACT') {
@@ -2079,7 +2079,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.emergencyContactInfo.splice(index, 1);
                 this.emergencyContactList.next(this.emergencyContactInfo.slice());
                 row.data._id ? this.hrHelper.deleteEmergencyContact(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Emergency contact deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.contact.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2092,7 +2092,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractExtensionInfo.splice(index, 1);
                 this.contractExtensionList.next(this.contractExtensionInfo.slice());
                 row.data._id ? this.hrHelper.deleteContractExtension(row.data._id, this.emailAddress) :
-                  this.utilsService.openSnackBar('Contract extension deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBarWithTranslate('general.ext.delete', 'close', 2000);
                 this.subscriptionModal.unsubscribe();
               }
 
@@ -2105,12 +2105,12 @@ export class CollaboratorComponent implements OnInit, OnChanges {
                 this.contractPreviousList.next(this.contractPreviousInfo.slice());
                 if (row.data._id) {
                   this.hrService.disablePreviousContracts(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
+                    this.utilsService.openSnackBar('general.ext.delete', 'close', 2000);
 
                   }, (err) => { this.utilsService.openSnackBar('something wrong', 'close', 2000); });
 
                 } else {
-                  this.utilsService.openSnackBar('previous contract deleted successfully', 'close', 2000);
+                  this.utilsService.openSnackBar('general.ext.delete', 'close', 2000);
 
                 }
               }
@@ -2198,13 +2198,13 @@ export class CollaboratorComponent implements OnInit, OnChanges {
           (extensionContact.updated, extensionContact, this.applicationId, this.emailAddress, extensionContact.extension_code);
         }
       } else {
-        this.utilsService.openSnackBar('no contract disponible', 'close', 2000);
+        this.utilsService.openSnackBarWithTranslate('general.contact.no.dispo', 'close', 2000);
 
       }
       this.router.navigate(
         ['/manager/human-ressources/collaborator-list'],
       );
-      this.utilsService.openSnackBar('Collaborator updated successfully', 'close', 2000);
+      this.utilsService.openSnackBarWithTranslate('general.collab.update', 'close', 2000);
 
   }
 

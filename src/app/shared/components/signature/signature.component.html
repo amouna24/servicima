@@ -5,7 +5,7 @@
         <img src="assets/icons/upload.svg" [style]="{width: '20px'}">
       </div>
       <div fxFlex="50" fxLayout="column" fxLayoutAlign="center start">
-        <h6 class="white font">{{ 'add_signature' | translate }}</h6>
+        <h6 class="white font">{{ 'hr.sign.modal.title' | translate }}</h6>
       </div>
       <div fxFlex="35" fxLayout="column" fxLayoutAlign="center end" >
         <img mat-dialog-close="true" src="assets/icons/close.svg" class="bg-close">
@@ -15,13 +15,13 @@
       <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center" (click)="fileInput.click()">
         <mat-icon class="icon material-icons-outlined">computer
         </mat-icon>
-        <span class="black-three" fxFlexOffset="5">{{ 'from_computer' | translate }}</span>
+        <span class="black-three" fxFlexOffset="5">{{ 'hr.sign.modal.file.pc' | translate }}</span>
         <input hidden (change)="selectFile($event)" type="file" id="file" #fileInput  accept="image/*">
       </button>
       <button mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="45" fxLayoutAlign="space-evenly center">
         <mat-icon class="icon material-icons-outlined">add_to_drive
         </mat-icon>
-        <span class="black-three" fxFlexOffset="5">{{ 'from_google_drive' | translate }}</span>
+        <span class="black-three" fxFlexOffset="5">{{ 'hr.sign.modal.file.drive' | translate }}</span>
       </button>
     </div>
     <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-evenly center"  *ngIf="this.showSig">
@@ -29,7 +29,7 @@
         <mat-divider></mat-divider>
       </div>
       <div  fxLayout="column" fxFlex="10" >
-        <span class="cool-grey font-size-12">{{ 'or_all' | translate }}</span>
+        <span class="cool-grey font-size-12">{{ 'hr.sign.modal.or' | translate }}</span>
       </div>
       <div  fxLayout="column" fxFlex="30" >
         <mat-divider></mat-divider>
@@ -39,16 +39,16 @@
       <div fxLayout="row" >
         <button   class="btn-signature"   fxLayoutAlign="space-evenly center" (click)="manualSig()">
           <span  matPrefix class="mat-icon-btn"><img src="../../../../assets/icons/signaturePad.svg"></span>
-          {{ 'use_singature_pad' | translate }}
+          {{ 'hr.sign.modal.signPad' | translate }}
         </button>
       </div>
     </div>
     <div fxFlex="15" fxLayout="row" fxLayoutAlign="space-evenly center"  *ngIf="this.showSig">
       <button mat-raised-button mat-dialog-close="true"  class="btn-medium bg-pale-grey"  fxFlex="30" fxLayoutAlign="space-evenly center">
-        <span class="black-three">{{ 'timesheet.cancel' | translate }}</span>
+        <span class="black-three">{{ 'button.cancel' | translate }}</span>
       </button>
       <button mat-raised-button mat-dialog-close="true"  class="btn-medium bg-theme" (click)="upload()"   fxFlex="30" fxLayoutAlign="space-evenly center">
-        <span class="white">{{ 'rh_confirmed_certif' | translate }}</span>
+        <span class="white">{{ 'button.confirm' | translate }}</span>
       </button>
     </div>
     <div class="sig" style="margin-top: 1rem" *ngIf="!this.showSig">
@@ -63,7 +63,7 @@
         </signature-pad>
         <div fxLayout="column" fxLayoutAlign="end end" style="margin: 1rem;" >
           <button   class="btn-signature"   fxLayoutAlign="space-evenly center" (click)="signaturePad.clear()">
-            {{ 'clear_all' | translate }}
+            {{ 'hr.sign.modal.clear' | translate }}
           </button>
         </div>
 
@@ -71,10 +71,10 @@
     </div>
     <div fxFlex="15" fxLayout="row" fxLayoutAlign="space-evenly center"  *ngIf="!this.showSig">
       <button (click)="manualSig()" mat-raised-button  class="btn-medium bg-pale-grey"  fxFlex="30" fxLayoutAlign="space-evenly center">
-        <span class="black-three">{{ 'timesheet.cancel' | translate }}</span>
+        <span class="black-three">{{ 'button.cancel' | translate }}</span>
       </button>
       <button mat-raised-button  mat-dialog-close="true" class="btn-medium bg-theme" (click)="sign($event)"  fxFlex="30" fxLayoutAlign="space-evenly center">
-        <span class="white">{{ 'rh_confirmed_certif' | translate }}</span>
+        <span class="white">{{ 'button.confirm' | translate }}</span>
       </button>
     </div>
 
