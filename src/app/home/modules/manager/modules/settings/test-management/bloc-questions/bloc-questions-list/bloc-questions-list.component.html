@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="tableData"
+  [tableCode]="'TEST-BLOC-QUESTIONS'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Bloc Question List', addActionURL: '/manager/settings/bloc-question/add', addActionText: 'Add'}"
+  [title]="'Skills list'"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="{ update: true, delete: true, show: true }"
+>
+</wid-dynamic-data-table>

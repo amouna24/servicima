@@ -1,0 +1,110 @@
+<div  fxLayout="column" fxFlexFill >
+  <div fxLayout="row" class="dynamic-component-container border-radius-20" fxFlex="12">
+      <div fxLayout="column" fxFlex="30" style="align-items: center;justify-content: center">
+        <h1 class="steel font-size-24 font-medium">Question Bloc Details</h1>
+      </div>
+      <div fxLayout="column" fxFlex="65" fxLayoutAlign="center end" class="font-size-25 steel">
+        <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/manager/settings/bloc-question/">
+          <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+          </mat-icon>
+          <span class="cool-grey">back</span>
+        </button>
+      </div>
+  </div>
+  <div fxLayout="row"  fxFlex="78" fxLayoutGap="7px">
+    <div fxLayout="column" class="dynamic-component-container border-radius-20" fxFlex="25">
+      <div fxLayout="row" fxFlex="28" class="steel font-size-24 font-normal" style="justify-content: center; align-items: center">
+        {{test_bloc_title}}</div>
+      <div fxLayout="row" fxFlex="15" style="justify-content: center">
+        <div class="tech-container" fxLayout="column"  style="justify-content: center; align-items: center">
+        <span class="font-size-10 font-normal white" fxLayout="row" >{{test_bloc_technology}}</span>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="50" style="justify-content: center">
+        <div fxLayout="column" fxFlex="90">
+          <div fxLayout="row">
+          <mat-label class="font-light">Description:</mat-label>
+        </div>
+        <div fxLayout="row">
+          <mat-label class="font-extra-light">{{test_question_bloc_desc}}</mat-label>
+        </div>
+        </div>
+      </div>
+      <div fxLayout="row"fxFlex="20" style="justify-content: center; align-items: center" class="font-light font-size-18 warm-grey">
+        {{test_bloc_total_number}} Questions</div>
+    </div>
+    <div fxLayout="column" class="dynamic-component-container border-radius-20" fxFlex="73">
+    <ng-template [ngIf]="!showQuestionList">
+      <div fxLayout="row" fxFlex="60" style="justify-content: center; align-items: center" >
+        <div fxLayout="column" fxFlex="80" class="height-80" style="border-radius: 9px;border-color: #e8f1f9;border-style: solid;justify-content: center">
+          <div fxLayout="row" fxFlexFill>
+          <div fxLayout="column" fxFlexFill fxLayoutGap="30px" style="justify-content: center">
+            <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>This Block has no Questions</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center">
+              <button mat-raised-button  color="primary" class="btn-large  white" (click)="routeToAdd()">
+                Add Question
+              </button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      </ng-template>
+    <ng-template [ngIf]="showQuestionList">
+      <div fxLayout="row" fxFlex="15"  style="justify-content: center">
+        <div fxLayout="column" style="justify-content: center;align-items: center" fxFlex="18">
+          <div fxLayout="row" fxLayoutGap="2px">
+          <mat-label fxLayout="column" fxFlexAlign="center" class="font-light font-size-12 black-three">Display: </mat-label>
+          <div class="p-l-10" style="max-width: 70%">
+            <input  matInput placeholder="Title" class="input" type="text" >
+          </div>
+          </div>
+        </div>
+        <div fxLayout="column" style="justify-content: center;align-items: center" fxFlex="22">
+          <div fxLayout="row" fxLayoutGap="2px">
+            <mat-label fxLayout="column" fxFlexAlign="center" class="font-light font-size-12 black-three">Sort By: </mat-label>
+            <div class="p-l-10" style="max-width: 70%" >
+              <input  matInput placeholder="All" class="input" type="text" >
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="60" style="align-items: flex-end; justify-content: center">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-small bg-topaz" [style]="{marginRight: '4%'}"
+                  (click)="routeToAdd()" >
+            Add
+          </button>
+        </div>
+      </div>
+      <wid-scrollbar fxLayout="row" fxFlex="85"  >
+        <div fxLayout="column" fxLayoutGap="5px" fxFlexFill>
+        <div *ngFor="let item of questionsList; let pointIndex=index"  fxLayout="row"  class="block-pos" >
+          <div fxLayout="column" fxFlex="91" class="answer-container"     >
+            <div fxLayout="row" fxFlexFill style="justify-content: center; align-items: center">
+              <div fxLayout="column" fxFlex="60" >
+                <div class="font-extra-light cool-grey font-size-12 p-l-10">{{item.test_question_title}}</div>
+              </div>
+              <div fxLayout="column" fxFlex="15" fxLayoutAlign="center center" >
+                <div class="font-extra-light cool-grey font-size-12">{{getLevel(item.TestQuestionKey.test_level_code)}}</div>
+              </div>
+              <div fxLayout="column" fxFlex="13" fxLayoutAlign="center center">
+                <div class="font-extra-light cool-grey font-size-12">{{item.duration}}</div>
+              </div>
+              <div fxLayout="column" fxFlex="15" fxLayoutAlign="center center" >
+                <div class="font-extra-light white font-size-12">
+                  <button mat-raised-button type="submit" style="background-color: #7b7e8a" class="white  btn-small " [style]="{marginRight: '4%'}"
+                          (click)="ShowQuestionDetail(item.test_question_title,getLevel(item.TestQuestionKey.test_level_code),item.TestQuestionKey.test_question_code,item.mark,item.duration,item.question_type,item.test_question_desc,item._id,item.TestQuestionKey.test_question_bloc_code,item.TestQuestionKey.test_level_code)" >
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </wid-scrollbar>
+
+    </ng-template>
+  </div>
+  </div>
+  </div>

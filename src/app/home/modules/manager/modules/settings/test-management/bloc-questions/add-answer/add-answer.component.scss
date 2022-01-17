@@ -1,0 +1,27 @@
+.answer-container {
+  border: 1px solid #e8f1f9;
+  box-shadow: 1px 1px 1px  #e8f1f9;
+  min-height: 90%;
+  justify-content: center;
+}
+.block-pos {
+  min-height: 40%;
+  align-items: center;
+  justify-content: center;
+}
+.correct-container {
+  background-color: #1bc5bd;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.false-container {
+  background-color: red;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
