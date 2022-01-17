@@ -102,11 +102,11 @@ await this.getData(0, this.nbtItems.getValue());
    *************************************************************************/
   switchAction(rowAction: any) {
      this.translateService.get(['resume-change-status', 'send-mail', 'export-pdf', 'downlaod-docx', 'resume-archive']).subscribe( (res) => {
-      switch (rowAction.actionType) {
+      switch (rowAction.actionType.name) {
         case (res['resume-change-status']):
           this.changeCandidateToCollaborator(rowAction.data);
           break;
-        case ('update'):
+        case (res['update']):
           this.updateResume(rowAction.data);
           break;
         case(res['send-mail']):

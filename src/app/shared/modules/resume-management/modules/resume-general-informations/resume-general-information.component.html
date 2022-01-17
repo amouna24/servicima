@@ -16,7 +16,7 @@
     </div>
     <div  fxLayout="row" fxFlex="88">
       <div fxLayout="column" fxFlexFill>
-        <div fxLayout="row" fxFlexFill *widDisabledForm="{'feature': 'RESUME_UPDATE_GENERAL_INFORMATION', 'form': CreationForm}">
+        <div fxLayout="row" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': CreationForm}">
           <form [formGroup]="CreationForm" fxLayout="column" fxFlex="94" >
             <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
               <div fxLayout="column" fxFlex="86">
@@ -128,7 +128,7 @@
                         [style]="{marginRight: '4%'}"
                         (click)="createUpdateResume()"
                         [disabled]="CreationForm.invalid"
-                        *canBeDisplayed="{ feature: 'RESUME_UPDATE_GENERAL_INFORMATION'}">
+                        *canBeDisplayed="{ feature: featureAddUpdate}">
                   {{ 'resume-next' | translate }}
                 </button>
                 <button mat-raised-button
@@ -137,7 +137,7 @@
                         class="white btn-medium"
                         [style]="{marginRight: '4%'}"
                         routerLink="/collaborator/resume/certifDiploma"
-                        *cantBeDisplayed="{ feature: 'RESUME_UPDATE_GENERAL_INFORMATION'}"
+                        *cantBeDisplayed="{ feature: featureAddUpdate}"
                         [disabled]="CreationForm.invalid"
                 >
                   {{ 'resume-next' | translate }}

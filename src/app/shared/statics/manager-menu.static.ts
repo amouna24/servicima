@@ -224,13 +224,13 @@ export const managerMenu: IMenu[] = [
     name: 'resume-management',
     type: 'sub',
     icon: 'wi-billings',
-    feature: 'RESUME_MANAGEMENT_ACCESS',
+    feature: 'EXPENSES_ACCESS',
     children: [
       {
         state: '',
         name: 'resume-list',
         icon: 'wi_dashboard',
-        feature: 'RESUME_LIST_MANAGEMENT',
+        feature: 'EXPENSES_ACCESS',
         type: 'link',
       },
       {

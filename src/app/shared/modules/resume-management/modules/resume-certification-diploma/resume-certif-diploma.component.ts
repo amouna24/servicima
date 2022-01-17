@@ -41,6 +41,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
   id: string;
   subscriptionModal: Subscription;
   showNumberError: boolean;
+  featureAddUpdate: string;
 
   /**********************************************************************
    * @description Resume Certifications and diplomas constructor
@@ -64,6 +65,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
     this.showNumberError = false;
     this.button = 'Add';
     this.certifDiplomaArray = [];
+    this.featureAddUpdate = 'RESUME_ADD_DIPLOMAS';
     this.initDate();
     this.getCertifDiplomaInfo();
     this.createForm();
@@ -183,7 +185,8 @@ export class ResumeCertifDiplomaComponent implements OnInit {
         this.button = 'Add';
       }
     }
-    this.sendCertifDiploma.reset();
+    this.featureAddUpdate = 'RESUME_ADD_DIPLOMAS';
+     this.sendCertifDiploma.reset();
     this.showNumberError = false;
   }
 
@@ -200,6 +203,7 @@ export class ResumeCertifDiplomaComponent implements OnInit {
       establishment: certifDiploma.establishment,
       certif_diploma_desc: certifDiploma.certif_diploma_desc,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_DIPLOMAS';
     this.certifDiplomaCode = certifDiploma.ResumeCertificationDiplomaKey.certif_diploma_code;
     this.id = certifDiploma._id;
     this.indexUpdate = pointIndex;

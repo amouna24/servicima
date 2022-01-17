@@ -32,7 +32,7 @@
                   <div fxLayout="row" fxLayoutAlign="center" class="font-size-24 font-medium cool-grey"><span>{{ 'resume-no-custom' | translate }}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="center">
-                    <button mat-raised-button (click)="showCustomSection()" color="primary" class="btn-large  white">
+                    <button mat-raised-button *canBeDisplayed="{ feature: featureAddUpdate}" (click)="showCustomSection()" color="primary" class="btn-large  white">
                       {{ 'resume-add-custom-section' | translate }}
                     </button>
                   </div>
@@ -58,46 +58,53 @@
                   </div>
                 </div>
               </div>
-              <form [formGroup]="sendSection" fxFlexFill>
-                <div fxLayout="column" fxFlex="8"></div>
-                <div fxLayout="column" fxFlex="80">
-                  <div fxLayout="column">
-                    <mat-label class="black font-size-12 required">
-                      {{ 'resume-section-title' | translate }}:
-                    </mat-label>
-                    <mat-form-field appearance="outline" class="full-width">
-                      <input formControlName="section_title" matInput placeholder="{{ 'resume-section-title' | translate }}" required>
-                      <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                      <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.pattern">
-                        {{ 'resume-numbers' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div fxLayout="column">
-                    <mat-label class="black font-size-12 required">
-                      {{ 'resume-cust-desc' | translate }}:
-                    </mat-label>
-                    <mat-form-field appearance="outline">
+              <div fxLayout="row" fxFlexFill>
+                <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': sendSection}">
+                  <form [formGroup]="sendSection" fxFlexFill>
+                    <div fxLayout="column" fxFlex="8"></div>
+                    <div fxLayout="column" fxFlex="80">
+                      <div fxLayout="column">
+                        <mat-label class="black font-size-12 required">
+                          {{ 'resume-section-title' | translate }}:
+                        </mat-label>
+                        <mat-form-field appearance="outline" class="full-width">
+                          <input formControlName="section_title" matInput placeholder="{{ 'resume-section-title' | translate }}" required>
+                          <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                          <mat-error class="red" *ngIf="sendSection.controls.section_title.errors?.pattern">
+                            {{ 'resume-numbers' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column">
+                        <mat-label class="black font-size-12 required">
+                          {{ 'resume-cust-desc' | translate }}:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
                               <textarea matInput placeholder="{{ 'resume-cust-desc' | translate }}" rows="7"
                                         formControlName="section_desc" required></textarea>
-                      <mat-error class="red" *ngIf="sendSection.controls.section_desc.errors?.required">
-                        {{ 'general.required' | translate }}</mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div fxLayout="row" fxLayoutAlign="end end">
-                    <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                         #add   (click)="createUpdateSection()" [disabled]="sendSection.invalid">
-                      <div *ngIf="button === 'Add';then addSection else save"></div>
-                      <ng-template #addSection>
-                        {{ 'resume-add' | translate }}
-                      </ng-template>
-                      <ng-template #save>
-                        {{ 'resume-save' | translate }}
-                      </ng-template>
-                    </button>
-                  </div>
+                          <mat-error class="red" *ngIf="sendSection.controls.section_desc.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="end end">
+                        <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                                #add   (click)="createUpdateSection()"
+                                *canBeDisplayed="{ feature: featureAddUpdate}"
+                                [disabled]="sendSection.invalid">
+                          <div *ngIf="button === 'Add';then addSection else save"></div>
+                          <ng-template #addSection>
+                            {{ 'resume-add' | translate }}
+                          </ng-template>
+                          <ng-template #save>
+                            {{ 'resume-save' | translate }}
+                          </ng-template>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
+
             </div>
           </div>
           </ng-template>

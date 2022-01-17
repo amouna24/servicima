@@ -30,15 +30,16 @@
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
+                        [disabled]="button === 'Save'" *canBeDisplayed="{'feature': 'RESUME_UPDATE_TECH_SKILL'}" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" *canBeDisplayed="{'feature': 'RESUME_UPDATE_TECH_SKILL'}" (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
             </div>
           </div>
             <div fxLayout="row" fxFlexFill>
-              <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': 'RESUME_UPDATE_TECHNICAL_SKILLS', 'form': sendTechSkill}">
+              <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': sendTechSkill}">
                 <form [formGroup]="sendTechSkill">
                   <div fxLayout="column" fxFlex="8"></div>
                   <div fxLayout="column" fxFlex="80">
@@ -67,7 +68,7 @@
                           {{ 'resume-numbers' | translate }}</mat-error>
                       </mat-form-field>
                     </div>
-                    <div fxLayout="row" fxLayoutAlign="end end">
+                    <div fxLayout="row" fxLayoutAlign="end end" *canBeDisplayed="{ feature: featureAddUpdate}">
                       <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
                               (click)="createUpdateTechnicalSkill()" [disabled]="sendTechSkill.invalid">
                         <div *ngIf="button === 'Add';then add else save"></div>
@@ -92,23 +93,13 @@
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}" >
           <button mat-raised-button
                   type="submit"
                   color="primary"
                   class="white  btn-medium"
-                  *canBeDisplayed="'RESUME_UPDATE_TECHNICAL_SKILLS'"
                   [style]="{marginRight: '4%'}"
                  (click)="checkFormValues('next')">
-            {{ 'resume-next' | translate }}
-          </button>
-          <button mat-raised-button
-                  type="submit"
-                  color="primary"
-                  class="white  btn-medium"
-                  routerLink="/manager/resume/functionnalSkills"
-                  [style]="{marginRight: '4%'}"
-                  *cantBeDisplayed="'RESUME_UPDATE_TECHNICAL_SKILLS'">
             {{ 'resume-next' | translate }}
           </button>
         </div>

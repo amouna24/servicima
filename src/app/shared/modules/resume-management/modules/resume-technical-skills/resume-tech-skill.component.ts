@@ -35,6 +35,7 @@ export class ResumeTechSkillComponent implements OnInit {
   showNumberError: boolean;
   skillIndex: string;
   companyUserType: string;
+  featureAddUpdate: string;
   /**********************************************************************
    * @description Resume Technical skills constructor
    *********************************************************************/
@@ -53,6 +54,7 @@ export class ResumeTechSkillComponent implements OnInit {
    *************************************************************************/
   ngOnInit(): void {
     this.showNumberError = false;
+    this.featureAddUpdate = 'RESUME_ADD_TECH_SKILLS';
     this.button = 'Add';
     this.techSkillArray = [];
     this.getTechnicalSkillsInfo();
@@ -160,6 +162,7 @@ export class ResumeTechSkillComponent implements OnInit {
         });
 this.button = 'Add'; }
     }
+    this.featureAddUpdate = 'RESUME_ADD_TECH_SKILL';
     this.sendTechSkill.reset();
     this.showNumberError = false;
   }
@@ -173,6 +176,7 @@ this.button = 'Add'; }
       technical_skill_desc: techSkill.technical_skill_desc,
       technologies: techSkill.technologies,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_TECH_SKILL';
     this.techSkillArray.splice(pointIndex, 1);
     this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;

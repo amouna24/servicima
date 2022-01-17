@@ -168,7 +168,7 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
     ConfirmListComponent,
     DisabledFormDirective,
     CanBeDisplayedDirective,
-    CantBeDisplayedDirective
+    CantBeDisplayedDirective,
   ]
 })
 export class SharedModule { }

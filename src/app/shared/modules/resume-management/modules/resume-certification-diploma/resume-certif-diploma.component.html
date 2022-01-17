@@ -37,15 +37,19 @@
                     </div>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex  >
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  [disabled]="button === 'Save'" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                    <button mat-raised-button
+                            class="steel-two btn-small bg-white border-radius-5"
+                            [disabled]="button === 'Save'"
+                            *canBeDisplayed="'RESUME_UPDATE_DIPLOMAS'"
+                            (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" *canBeDisplayed="'RESUME_DELETE_DIPLOMAS'" (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>
-              <div fxLayout="row" fxFlexFill>
-                <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': 'SOURCING_CAND_FILE_ACCESS', 'form': sendCertifDiploma}">
+              <div fxLayout="row"   fxFlexFill>
+                <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': sendCertifDiploma}">
                   <form [formGroup]="sendCertifDiploma" >
                     <div fxLayout="row" fxFlex="100" class="border-radius-10 pale-grey border-solid" fxLayoutAlign="space-arround center" >
                       <div fxLayout="column" fxFlex="90" class="full-height" fxLayoutAlign="center">
@@ -115,9 +119,11 @@
                           </div>
                         </div>
                         <div fxLayout="row" fxFlex="6">
-                          <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end">
+                          <div fxLayout="column" fxFlex="100" fxLayoutAlign="start end" *canBeDisplayed="{'feature':featureAddUpdate}">
                             <button mat-raised-button type="button" class="btn-small bg-pale-grey"
-                                    (click)="createUpdateCertifDiploma()" [disabled]="sendCertifDiploma.invalid">
+
+                                    (click)="createUpdateCertifDiploma()"
+                                    [disabled]="sendCertifDiploma.invalid">
                               <div *ngIf="button === 'Add';then add else save"></div>
                               <ng-template #add>
                                 {{ 'resume-add' | translate }}
@@ -150,16 +156,7 @@
                   class="white  btn-medium"
                   [style]="{marginRight: '4%'}"
                   (click)="checkFormValues('next')"
-                  *canBeDisplayed="'RESUME_UPDATE_DIPLOMAS'">
-            {{ 'resume-next' | translate }}
-          </button>
-          <button mat-raised-button
-                  type="submit"
-                  color="primary"
-                  class="white  btn-medium"
-                  [style]="{marginRight: '4%'}"
-                  routerLink="/collaborator/resume/certifications"
-                  *cantBeDisplayed="'RESUME_UPDATE_DIPLOMAS'">
+                  >
             {{ 'resume-next' | translate }}
           </button>
         </div>

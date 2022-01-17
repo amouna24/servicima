@@ -201,19 +201,19 @@
                   <ng-container [ngSwitch]="col.type">
                     <ng-container *ngSwitchCase="'image'">
 
-                      <td (click)="actionRowData('update', row)"  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                      <td (click)="actionRowData({'name': 'update'}, row)"  cdk-cell *cdkCellDef="let row" class="black-three font-size-12 font-light">
 
                         <img [src]=  "row[col.prop] ? env + row[col.prop] : 'assets/img/default.jpg'" alt=""  [style]=" {'height':'40px', 'width':'45px','border-radius': '50%'}">
                       </td>
                     </ng-container>
 
                     <ng-container *ngSwitchCase="'date'">
-                      <td cdk-cell (click)="actionRowData('update', row)"
+                      <td cdk-cell (click)="actionRowData({'name': 'update'}, row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date: 'dd/MM/yyyy' }}
                       </td>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
-                      <td cdk-cell (click)="actionRowData('update', row)"
+                      <td cdk-cell (click)="actionRowData({'name': 'update'}, row)"
                           *cdkCellDef="let row" class="black-three font-size-12 font-light" >
                         <div (mouseover)="showAllText=true"  (mouseout)="showAllText=false">
                                 <span matTooltip="{{showAllText ? row[col.prop] : ''}}"
