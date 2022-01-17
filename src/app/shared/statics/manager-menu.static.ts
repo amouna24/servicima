@@ -245,7 +245,7 @@ export const managerMenu: IMenu[] = [
     state: 'linkedin',
     name: 'share-on-social',
     icon: 'wi_dashboard',
-    feature: 'SOCIAL_NETWORK_ACCESS',
+    feature: 'EXPENSES_ACCESS',
     type: 'link',
   }
 ];

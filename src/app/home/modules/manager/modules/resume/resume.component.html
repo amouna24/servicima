@@ -8,8 +8,8 @@
   [colorObject]="sendColorObject()"
   (pagination)="loadMoreItems($event)"
   [allowedActions]="[{ name: 'resume-change-status', feature: 'RESUME_USER_STATUS'},
-                     {name:'downlaod-docx', feature: 'RESUME_DOCX_DOWNLOAD'},
+                     {name:'downlaod-docx', feature: 'EXPENSES_ACCESS'},
                      { name: 'export-pdf', feature: 'RESUME_PDF_EXPORT'},
-                      { name: 'send-mail', feature: 'RESUME_SEND_MAIL_CLIENT'},
+                      { name: 'send-mail', feature: 'EXPENSES_ACCESS'},
                        { name: 'resume-archive', feature: 'RESUME_ARCHIVE'}]">
 </wid-dynamic-data-table>

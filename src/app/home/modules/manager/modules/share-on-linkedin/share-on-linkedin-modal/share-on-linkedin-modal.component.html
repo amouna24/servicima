@@ -70,7 +70,7 @@
           </div>
           <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" fxLayoutAlign="center">
             <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70" fxLayoutAlign="center center">
+              <div fxLayout="column" fxFlex="70" *canBeDisplayed="{ feature: 'SOCIAL_NETWORK_SHARE_LINKEDIN'}" fxLayoutAlign="center center">
                 <button class="publish-button-linkedin"
                         (click)="publishOnLinkedin()"
                         fxLayoutAlign="center">
@@ -100,7 +100,7 @@
 
             </div>
             <div fxLayout="row" fxLayoutAlign="center" >
-              <div fxLayout="column" fxFlex="70"   fxLayoutAlign="center center" [matTooltip]=" data.imageObject?.fileType === 'pdf' ? cannotShareLabel : null">
+              <div fxLayout="column" fxFlex="70" *canBeDisplayed="{ feature: 'SOCIAL_NETWORK_SHARE_FACEBOOK'}"   fxLayoutAlign="center center" [matTooltip]=" data.imageObject?.fileType === 'pdf' ? cannotShareLabel : null">
                 <button class="publish-button-indeed" (click)="publishOnFacebook() "
                         [disabled]="data.imageObject?.fileType === 'pdf'"
                         matTooltipPosition="below"

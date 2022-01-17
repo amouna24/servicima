@@ -37,7 +37,7 @@
     </div>
     <div fxLayout="row" fxFlex="30" fxLayoutGap="2%"  fxLayoutAlign="center center">
       <div fxLayout="row">
-        <button *canBeDisplayed="{'feature':singleAction.feature}"  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="ActionClicked()">
+        <button *canBeDisplayed="{'feature':singleAction?.feature}"  mat-raised-button class="btn-medium bg-topaz overwrite-btn-medium" (click)="ActionClicked()">
           <span class="white font-size-11">{{singleAction.name | translate | capitalizeFirstLetter }}</span>
         </button>
       </div>
