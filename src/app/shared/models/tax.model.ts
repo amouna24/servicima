@@ -1,7 +1,7 @@
 import { ITaxKeyModel } from '@shared/models/taxKey.model';
 
 export interface ITaxModel {
-  TaxKey: ITaxKeyModel;
+  taxKey: ITaxKeyModel;
   _id: string;
   tax_desc: string;
   tax_rate: number;
