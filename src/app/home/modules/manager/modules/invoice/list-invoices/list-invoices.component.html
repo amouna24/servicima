@@ -3,7 +3,7 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'INVOICES-LIST'"
   [isLoading]="isLoading"
-  [header]="{ title: 'invoice.management.title' | translate, addActionURL: '/manager/invoices/add-invoice', feature:'INVOICING_ADD_BILLS', addActionText: 'invoice.management.add'}"
+  [header]="{ title: 'invoice.management.title', addActionURL: '/manager/invoices/add-invoice', feature:'INVOICING_SEND_BILLS', addActionText: 'invoice.management.add'}"
   [title]="'Invoices list'"
   [security] = true
   [singleAction]="{name:'invoice.management.import', feature: 'INVOICING_IMPORT_BILLS'}"

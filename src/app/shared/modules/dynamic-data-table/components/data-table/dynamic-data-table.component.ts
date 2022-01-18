@@ -656,7 +656,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @param action: name of action
    * @param rowData: list of row to do action
    *************************************************************************/
-  actionRowData(action: string, rowData: object) {
+  actionRowData(action: any, rowData: object) {
     this.rowActionData.emit({ actionType: action, data: rowData });
     this.closePanel.close();
     this.listChecked = [];

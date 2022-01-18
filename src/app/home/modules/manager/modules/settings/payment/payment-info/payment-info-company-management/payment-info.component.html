@@ -3,11 +3,11 @@
     [tableData]="ELEMENT_DATA"
     [isLoading]="isLoading"
     [tableCode]="'COMPANY_PAYMENT_TERMS'"
-    [header]="{ title: 'payment.info.title' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' }
-    , addActionText: 'add-new' | translate}"
+    [header]="{ title: 'payment.info.title',type:'dialog', feature: 'SETTINGS_ADD_PAYMENT_TERM', addActionDialog: { modalName: 'addPaymentTerms', modalComponent: 'AddPaymentInfoCompanyComponent', data: null, width: '657px', height: '396px' } , addActionText: 'payment.info.add' | translate}"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
-    [allowedActions]="['payment.info.delete']"
+    [singleAction]="{name:'payment.info.import', feature: 'SETTINGS_IMPORT_PAYMENT_TERM'}"
+    [allowedActions]="[{name:'payment.info.delete', feature:'SETTINGS_DELETE_PAYMENT_TERM'}]"
     [security] = false
   >
   </wid-dynamic-data-table>

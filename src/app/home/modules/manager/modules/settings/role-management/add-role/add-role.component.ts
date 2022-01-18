@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
@@ -20,10 +20,11 @@ import { IRoleFeaturesModel } from '@shared/models/roleFeatures.model';
   templateUrl: './add-role.component.html',
   styleUrls: ['./add-role.component.scss']
 })
-export class AddRoleComponent implements OnInit, OnDestroy {
+export class AddRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
   company: ICompanyModel;
   action: string;
+  addOrUpdateForm: string;
   languages = [];
   listRoleFeatures: IRoleFeaturesModel[] = [];
   listRemoveRole: string[] = [];
@@ -36,6 +37,9 @@ export class AddRoleComponent implements OnInit, OnDestroy {
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
   isLoading = new BehaviorSubject<boolean>(false);
+  removeFeature: boolean;
+  @ViewChild('feature') feature;
+
   constructor(public dialogRef: MatDialogRef<AddRoleComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private formBuilder: FormBuilder,
@@ -58,11 +62,18 @@ export class AddRoleComponent implements OnInit, OnDestroy {
     this.getLanguages();
      if (this.data) {
        this.action = 'Update';
+       this.addOrUpdateForm = 'SETTINGS_UPDATE_ROLE';
        this.getCompanyRoleFeatures();
 
      } else {
        this.action = 'Add';
+       this.addOrUpdateForm = 'SETTINGS_ADD_ROLE';
+       this.isLoading.next(false);
      }
+  }
+
+  ngAfterViewInit() {
+    this.removeFeature = !!this.feature;
   }
 
   /**

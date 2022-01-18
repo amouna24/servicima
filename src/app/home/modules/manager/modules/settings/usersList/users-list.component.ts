@@ -163,7 +163,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param rowAction: object
    */
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
+    switch (rowAction.actionType.name) {
       case ('show.user.action'): this.showUser(rowAction.data);
         break;
       case ('update'): this.updateUser(rowAction.data);

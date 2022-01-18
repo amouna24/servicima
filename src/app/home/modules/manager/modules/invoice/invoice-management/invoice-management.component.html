@@ -32,24 +32,20 @@
     <div fxLayout="column" fxFlex="100">
       <div fxLayout="row" fxLayoutAlign="center center" class="m-l-15 p-t-5" fxLayoutGap="10px">
         <div fxLayout="row" fxFlex="12"> <img [ngStyle]="{'width':'115px','border-radius': '5px',
-
     'border': '2px solid #707070'}" [src]="this.userInfo['photo'] ? avatar : 'assets/img/logoCompany.jpg'" alt="img" height="100px"></div>
         <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">{{'invoice.subtitle' | translate | capitalizeFirstLetter}}</h1> </div>
         <div fxLayout="row" fxFlex="65" fxLayoutAlign="flex-end flex-end" fxLayoutGap="6px" class="m-r-40 m-b-15 min-full-height" >
-          <div>
-            <button mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> {{'invoice.attach.file' | translate | capitalizeFirstLetter}}</button>
-          </div>
-          <div>
-            <button mat-raised-button  class="btn-small bg-pale-grey-four help-blue">{{'invoice.send' | translate | capitalizeFirstLetter}}</button>
-          </div>
-          <div>
-            <button mat-raised-button class="btn-small bg-pale-grey-four help-blue" (click)="toPay()"> {{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</button>
-          </div>
-          <div>
-            <button mat-raised-button class="btn-small bg-pale-grey-four help-blue"> {{'invoice.status' | translate | capitalizeFirstLetter}}</button>
-          </div>
 
-          <div fxLayout="row"  fxLayoutGap="4px" class="width-150">
+            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> {{'invoice.attach.file' | translate | capitalizeFirstLetter}}</button>
+
+            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button  class="btn-small bg-pale-grey-four help-blue">{{'invoice.send' | translate | capitalizeFirstLetter}}</button>
+
+            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue" (click)="toPay()"> {{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</button>
+
+            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue"> {{'invoice.status' | translate | capitalizeFirstLetter}}</button>
+
+
+          <div fxLayout="row"  fxLayoutGap="4px" class="width-150" *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi-credit-card">
             </mat-icon>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" class="cursor-pointer"> {{'invoice.payment' | translate | capitalizeFirstLetter}}
@@ -193,6 +189,7 @@
         </div>
       </div>
 
+    <div *widDisabledForm="{'feature':headerFeature, 'form': formHeader}">
       <div  [formGroup]="formHeader" fxLayout="row" fxFlex="87" fxLayoutGap="50px" class="p-20">
         <div fxLayout="column" fxFlex.gt-lg="28" fxFlex="20">
           <div class="font-bold">{{'invoice.sender' | translate | capitalizeFirstLetter}}</div>
@@ -232,7 +229,8 @@
             </div>
           </div>
 
-          <div *ngIf="contractor?.contractor_name && contractCode && !editContractors" class="cursor-pointer">
+         <div *ngIf="contractor?.contractor_name && contractCode && !editContractors" >
+          <div *canBeDisplayed="{'feature':editContractorFeature}" class="cursor-pointer">
             <div (mouseenter)="mouseEnter() " (click)="editContractor()" (mouseleave)="mouseLeave()">
               <div fxLayout="row" fxLayoutGap=" 50%">
                 <div class="font-bold">{{'invoice.invoice.to' | translate | capitalizeFirstLetter}}:</div>
@@ -248,27 +246,49 @@
 
             </div>
           </div>
+
+          <div  *widCanNotDisplay="{'feature':editContractorFeature}">
+
+            <div>
+              <div fxLayout="row" fxLayoutGap=" 50%">
+                <div class="font-bold">{{'invoice.invoice.to' | translate | capitalizeFirstLetter}}:</div>
+                <div *ngIf="iconVisible" class="edit">
+                  <mat-icon svgIcon="wi-pen" class="icon">
+                  </mat-icon>
+                </div>
+              </div>
+              <div>
+              </div>
+              <div class="font-bold">{{contractor?.contractor_name}}</div>
+              <div>{{contractor['address']}}</div>
+            </div>
+            </div>
+          </div>
           <div fxLayout="column" fxLayoutGap="10px" class="cerulean-blue">
 
             <div fxLayout="row" fxLayoutGap="10px" *ngIf='!contractor?.contractor_name'>
+            <div *canBeDisplayed="{'feature':'INVOICING_ADD_NEW_CUSTOMER'}">
               <div class="btn container-plus" fxLayout="row" fxLayoutAlign="flex-start center">
                 <button mat-flat-button mat-stroked-button class="topaz btn-plus" type="button">+</button>
               </div>
               <div> <a class="steel"
-                       [routerLink]="['/manager/contract-management/suppliers-contracts/suppliers-list']">{{'invoice.add.new.customer' | translate | capitalizeFirstLetter}} </a> </div>
+                     [routerLink]="['/manager/contract-management/suppliers-contracts/suppliers-list']">{{'invoice.add.new.customer' | translate | capitalizeFirstLetter}} </a> </div>
             </div>
+          </div>
             <div fxLayout="row" fxLayoutGap="10px" *ngIf='contractor?.contractor_name'  fxLayoutAlign="flex-start center" class="cursor-pointer">
+            <div style="display: flex;flex-direction: row; align-items: center;" *canBeDisplayed="{'feature':'INVOICING_SEE_CLIENT_FILE'}">
               <mat-icon class="icon material-icons-outlined eye-icon" svgIcon="wi-eye">
               </mat-icon>
               <div class="steel" (click)="showInfoContractor()"> {{'invoice.see.client.file' | translate | capitalizeFirstLetter}}</div>
             </div>
           </div>
+        </div>
           <div>
             <br>
             <div *ngIf='contractCode' ngClass.gt-lg="adress">
               <div class="font-bold"> {{'invoice.addressed.to' | translate | capitalizeFirstLetter}}</div>
               <mat-form-field appearance="outline">
-                <textarea name="" id="" cols="25" rows="7" matInput></textarea>
+                <textarea name="" id="" cols="25" rows="7" matInput formControlName="invoiceAddress"></textarea>
               </mat-form-field>
             </div>
 
@@ -287,7 +307,7 @@
             <div fxFlex="40" class="font-bold">{{'invoice.purchase.order' | translate | capitalizeFirstLetter}}</div>
             <div fxFlex="60" >
               <mat-form-field appearance="outline">
-                <input matInput type="text">
+                <input matInput type="text" formControlName="invoicePurchaseOrder">
               </mat-form-field>
             </div>
           </div>
@@ -295,7 +315,7 @@
             <div fxFlex="40" class="font-bold">{{'invoice.date' | translate | capitalizeFirstLetter}}</div>
             <div fxFlex="60">
               <mat-form-field appearance="outline">
-                <input matInput formControlName="invoiceDate" type="text">
+                <input matInput formControlName="invoiceDate" type="date">
               </mat-form-field>
             </div>
           </div>
@@ -303,7 +323,7 @@
             <div fxFlex="40" class="font-bold">{{'invoice.due.date' | translate | capitalizeFirstLetter}}</div>
             <div fxFlex="60">
               <mat-form-field appearance="outline">
-                <input matInput formControlName="invoiceDelay" type="text">
+                <input matInput formControlName="invoiceDelay" type="date">
               </mat-form-field>
             </div>
           </div>
@@ -311,7 +331,7 @@
             <div fxFlex="40" class="font-bold">{{'invoice.project' | translate | capitalizeFirstLetter}}</div>
             <div fxFlex="60">
               <mat-form-field appearance="outline">
-                <input matInput type="text">
+                <input matInput type="text" formControlName="invoiceProject">
               </mat-form-field>
             </div>
           </div>
@@ -319,16 +339,17 @@
             <div fxFlex="40" class="font-bold">{{'invoice.description' | translate | capitalizeFirstLetter}}</div>
             <div fxFlex="60">
               <mat-form-field appearance="outline">
-                <textarea class="overflow-hidden" name="description" id="description" cols="22" rows="5" matInput></textarea>
+                <textarea formControlName="invoiceDescription" class="overflow-hidden" name="description" id="description" cols="22" rows="5" matInput></textarea>
               </mat-form-field>
             </div>
           </div>
         </div>
+    </div>
       </div>
       <br>
       <mat-divider *ngIf="contractor?.contractor_name && contractCode && !editContractors" [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
 
-
+  <div *widDisabledForm="{'feature':'INVOICING_UPDATE_LINE', 'form': form}">
       <div [formGroup]="form" [ngStyle]="{ 'margin-left': '2%','width': '96%'}" *ngIf="contractor?.contractor_name && contractCode && !editContractors">
 
       <div class="p-t-20 p-b-20">
@@ -387,8 +408,12 @@
                 <td  class="vat_mount">
                   {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
                 </td>
-                <td class="cursor-pointer icon-trash"  (click)='delete(i)' id="delete">
-                  <mat-icon svgIcon="wi-trash" class="icon">
+                <td  *widCanNotDisplay="{'feature':deleteInvoiceLineFeature}" class="icon-trash" style="background: white !important; color: white !important">
+                  <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer"   (click)='delete(i)' id="deleteUpdate" *canBeDisplayed="{'feature':'SOURCING_ACCESSs'}">
+                  </mat-icon>
+                </td>
+                <td  class="icon-trash" *canBeDisplayed="{'feature':deleteInvoiceLineFeature}">
+                  <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer"   (click)='delete(i)' id="deleteUpdate1" *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
                   </mat-icon>
                 </td>
               </tr>
@@ -399,7 +424,7 @@
         </div>
         <div *ngIf='getListRole().controls.length >0' class="btn-add-line" fxLayout="row"
              fxLayoutAlign="flex-start center">
-          <button #buttonAddLine [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-small bg-cerulean-blue white" (click)="onAddAnotherLine()"> <span
+          <button *canBeDisplayed="{'feature':addLineFeature}" #buttonAddLine [disabled]="form.invalid || (form.value?.input[getListRole().controls.length - 1]?.vat_amount =='error') || (form.value?.input[getListRole().controls.length -1]?.invoice_line_total_amount == 'error') " mat-raised-button class="btn-small bg-cerulean-blue white" (click)="onAddAnotherLine()"> <span
             class="btn-plus">+</span>  {{'invoice.add.new.line' | translate | capitalizeFirstLetter}}</button>
 
 
@@ -410,7 +435,7 @@
                  [ngStyle]="{border: 'solid 3px #707070',  height: '200px','border-top': 'none'}" >
               <div fxLayout="column" fxLayoutAlign="center center">
                 <div class="font-size-24 line-height-3" style="color:#afb1b8; font-weight: 500">  {{'invoice.no.row' | translate | capitalizeFirstLetter}}</div>
-                <button mat-raised-button class="btn-medium bg-cerulean-blue">
+                <button mat-raised-button class="btn-medium bg-cerulean-blue" *canBeDisplayed="{'feature':addLineFeature}">
                   <span  class="white font-normal" (click)="onAddAnotherLine()"> {{'invoice.add.new.line' | translate | capitalizeFirstLetter}}</span>
                 </button>
               </div>
@@ -418,8 +443,8 @@
           </div>
         </div>
       </div>
-        <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
-
+      <mat-divider [ngStyle]="{ 'width': '95%', borderTopWidth: '5px','margin-left': '2%', 'color':'#f3f6f9' }"></mat-divider>
+      <div *widDisabledForm="{'feature':companyBankingInfoFeature, 'form': formCompanyBanking}">
         <div fxLayout="row" class="p-t-20" flexLayoutGap="30px" [formGroup]="formCompanyBanking">
           <div fxFlex="100">
             <div fxFlex="50"> <span>{{'invoice.condition.and.modality' | translate | capitalizeFirstLetter}}</span>
@@ -429,14 +454,18 @@
                     ></textarea>
                 </mat-form-field>
               </div>
-              <div [formGroup]="formFactor" class="m-l-10">
+              <div>
+                <div [formGroup]="formFactor" class="m-l-10">
+                  <div *canBeDisplayed="{'feature':factorFeature}" class="cursor-pointer">
                 <mat-checkbox   class="example-margin" (click)='setCompanyBankingInfo()' formControlName="factorInvoice">{{'invoice.factor' | translate | capitalizeFirstLetter}}
                 </mat-checkbox>
               </div>
             </div>
           </div>
+            </div>
+          </div>
           <div fxFlex="60" fxFlex.gt-lg="95"  [ngStyle]="{'height': '200px','padding-left': '16%','line-height':'2'}" fxLayout="column"
-               fxLayoutAlign="center center" fxLayoutAlign.gt-lg="center flex-end" >
+                fxLayoutAlign="center center" fxLayoutAlign.gt-lg="center flex-end" >
 
             <div fxLayout="row" class="flex-wrap" [ngStyle.gt-lg]="{'margin-left':'30px','width':'300px'}" [ngStyle]="{'margin-left':'30px','width':'266px'}">
               <div class="width-100"> {{'invoice.subtotal' | translate | capitalizeFirstLetter}}: </div>
@@ -463,9 +492,9 @@
             </div>
           </div>
         </div>
-
+      </div>
         <div fxLayout="column" class="min-height-25">
-          <div fxFlex="55" class="p-b-5" fxLayout="column" fxLayoutAlign="center">
+          <div fxFlex="55" class="p-b-5 m-t-30" fxLayout="column" fxLayoutAlign="center">
             <div fxLayout="row" class="flex-wrap">
               <div class="width-100"> {{'invoice.phone' | translate | capitalizeFirstLetter}}: </div>
               <div> {{this.userInfo['phone_nbr1']}} </div>
@@ -482,13 +511,13 @@
             </div>
           </div>
           <div   fxFlex="35"  fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px"
-               class="m-r-10">
+               class="m-r-10 m-t-30 m-b-20">
             <div class="full-width">
               <button mat-raised-button class="btn-small bg-pale-grey black-three">{{'invoice.cancel' | translate | capitalizeFirstLetter}}</button>
             </div>
             <button [disabled] = "formHeader.invalid" *ngIf="!statusInvoice" mat-raised-button class="btn-small bg-pale-grey black-three" (click)="generateInvoice('DRAFT')">{{'invoice.draft' | translate | capitalizeFirstLetter}}</button>
-            <button  [disabled] = "(!!formHeader.invalid  || getListRole().controls.length ==0 )|| isLoad.getValue()"  mat-raised-button class="btn-small bg-ocean-blue white"
-                     (click)="generateInvoice('PENDING')"  >
+            <button  *canBeDisplayed="{'feature':addOrUpdateFeature}"    [disabled] = "(!!formHeader.invalid  || getListRole().controls.length ==0 )|| isLoad.getValue()"  mat-raised-button class="btn-small bg-ocean-blue white"
+                    (click)="generateInvoice('PENDING')"  >
               <ng-template [ngIf]="!isLoad.getValue()"  [ngIfElse]="loading">
                 {{'invoice.confirm' | translate | capitalizeFirstLetter}}
               </ng-template>
@@ -505,6 +534,7 @@
 
 
               </button>
+            </div>
           </div>
         </div>
       </div>

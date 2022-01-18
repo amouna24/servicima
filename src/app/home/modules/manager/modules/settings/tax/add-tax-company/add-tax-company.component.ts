@@ -20,7 +20,7 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
   form: FormGroup;
   company: ICompanyModel;
   languages: IViewParam[] = [];
-
+  addOrUpdateForm: string;
   public filteredLanguage = new ReplaySubject(1);
 
   /** subscription */
@@ -41,9 +41,11 @@ export class AddTaxCompanyComponent implements OnInit , OnDestroy {
     this.initForm();
     if (this.data) {
       this.action = 'update';
+      this.addOrUpdateForm = 'SETTINGS_ADD_ROLE';
       this.setForm();
     } else {
       this.action = 'add';
+      this.addOrUpdateForm = 'SETTINGS_UPDATE_ROLE';
     }
   }
 

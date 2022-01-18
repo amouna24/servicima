@@ -2,10 +2,11 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'ROLE'"
     [isLoading]="isLoading"
-    [header]="{ title: 'payment.methods.title' | translate,type:'dialog', addActionDialog: { modalName: 'addPaymentTermsMethode', modalComponent: 'AddPaymentMethodComponent', data: null, width: '657px', height: '276px' }, addActionText: 'add-new' | translate}"
+    [header]="{ title: 'payment.methods.title',type:'dialog', addActionDialog: { modalName: 'addPaymentTermsMethode', modalComponent: 'AddPaymentMethodComponent', data: null, width: '657px', height: '276px' }, feature: 'SETTINGS_ADD_PAYMENT', addActionText: 'payment.methods.add'}"
     [title]="'Payment terms list'"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
-    [allowedActions]="['payment.methods.delete']"
+    [singleAction]="{name:'payment.methods.import', feature: 'SETTINGS_IMPORT_PAYMENT'}"
+    [allowedActions]="[{name:'payment.methods.delete', feature:'SETTINGS_DELETE_PAYMENT'}]"
   >
   </wid-dynamic-data-table>

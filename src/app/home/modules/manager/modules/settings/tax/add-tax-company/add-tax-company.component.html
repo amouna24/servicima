@@ -1,5 +1,5 @@
 <div class="full-height">
-  <div  fxLayout="column" fxFlex="100" >
+  <div  fxLayout="column" fxFlex="100"  >
     <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
       <div fxLayout="column" fxFlex="67">
         <h1 class="steel font-size-24 font-medium" *ngIf="action === 'update'">	{{'company.tax.management.update.title' | translate | capitalizeFirstLetter}} </h1>
@@ -12,72 +12,75 @@
     <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
-    <div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12 m-l-60 m-t-15">
-      <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
-        <div fxLayout="column" fxFlex="40">
-          <label class="font-size-12 black-three required">{{'company.tax.management.starting.date' | translate | capitalizeFirstLetter}} </label>
-          <mat-form-field appearance="outline">
-            <input [matDatepicker]="picker2" class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.tax.management.starting.date' | translate | capitalizeFirstLetter"
-                   formControlName="startingDate" [ngStyle.xs]="{'font-size': '15px'}" />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker2"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-            <mat-error class="wid-error-messages" *ngIf="form.controls.startingDate?.errors?.required">
-              {{ 'general.required' | translate }}</mat-error>
-          </mat-form-field>
+    <div *widDisabledForm="{'feature':addOrUpdateForm, 'form': form}">
+      <div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class=" font-size-12 m-l-60 m-t-15">
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+          <div fxLayout="column" fxFlex="40">
+            <label class="font-size-12 black-three required">{{'company.tax.management.starting.date' | translate | capitalizeFirstLetter}} </label>
+            <mat-form-field appearance="outline">
+              <input [matDatepicker]="picker2" autocomplete="off" matInput required [placeholder]=" 'company.tax.management.starting.date' | translate | capitalizeFirstLetter"
+                     formControlName="startingDate" [ngStyle.xs]="{'font-size': '15px'}" />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.startingDate?.errors?.required">
+                {{ 'general.required' | translate }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="40" >
+            <label class="font-size-12 black-three  required">{{'company.tax.management.tax.rate' | translate | capitalizeFirstLetter}} </label>
+            <mat-form-field appearance="outline">
+              <input type="number"  autocomplete="off" matInput required [placeholder]=" 'company.tax.management.tax.rate' | translate | capitalizeFirstLetter"
+                     formControlName="taxRate" [ngStyle.xs]="{'font-size': '15px'}" />
+              <mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
+                {{ 'general.required' | translate }}</mat-error>
+            </mat-form-field>
+          </div>
         </div>
-        <div fxLayout="column" fxFlex="40" >
-          <label class="font-size-12 black-three  required">{{'company.tax.management.tax.rate' | translate | capitalizeFirstLetter}} </label>
-          <mat-form-field appearance="outline">
-            <input type="number" class="black-three" autocomplete="off" matInput required [placeholder]=" 'company.tax.management.tax.rate' | translate | capitalizeFirstLetter"
-                   formControlName="taxRate" [ngStyle.xs]="{'font-size': '15px'}" />
-            <mat-error class="wid-error-messages" *ngIf="form.controls.taxRate?.errors?.required">
-              {{ 'general.required' | translate }}</mat-error>
-          </mat-form-field>
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+          <div fxLayout="column" fxFlex="40">
+            <label class="font-size-12 black-three">{{'company.tax.management.inactive.date' | translate | capitalizeFirstLetter}} </label>
+            <mat-form-field appearance="outline">
+              <input [matDatepicker]="picker1"   autocomplete="off"  matInput  [placeholder]=" 'company.tax.management.inactive.date' | translate | capitalizeFirstLetter"
+                     formControlName="inactiveDate" [ngStyle.xs]="{'font-size': '15px'}" />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="40">
+            <label class="font-size-12 black-three">{{'company.tax.management.fiscal.comment' | translate | capitalizeFirstLetter}} </label>
+            <mat-form-field appearance="outline">
+              <input autocomplete="off"  matInput [placeholder]=" 'company.tax.management.fiscal.comment' | translate | capitalizeFirstLetter"
+                     formControlName="fiscalComment" [ngStyle.xs]="{'font-size': '15px'}" />
+            </mat-form-field>
+          </div>
         </div>
-      </div>
-      <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
-        <div fxLayout="column" fxFlex="40">
-        <label class="font-size-12 black-three">{{'company.tax.management.inactive.date' | translate | capitalizeFirstLetter}} </label>
-        <mat-form-field appearance="outline">
-          <input [matDatepicker]="picker1"   autocomplete="off" class="black-three" matInput  [placeholder]=" 'company.tax.management.inactive.date' | translate | capitalizeFirstLetter"
-                 formControlName="inactiveDate" [ngStyle.xs]="{'font-size': '15px'}" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker1"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
-      </div>
-        <div fxLayout="column" fxFlex="40">
-          <label class="font-size-12 black-three">{{'company.tax.management.fiscal.comment' | translate | capitalizeFirstLetter}} </label>
-          <mat-form-field appearance="outline">
-            <input autocomplete="off" class="black-three" matInput [placeholder]=" 'company.tax.management.fiscal.comment' | translate | capitalizeFirstLetter"
-                   formControlName="fiscalComment" [ngStyle.xs]="{'font-size': '15px'}" />
-          </mat-form-field>
-        </div>
-      </div>
-      <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
-        <div fxLayout="column" fxFlex="90">
-          <label class="font-size-12 black-three  required">{{'company.tax.management.description' | translate | capitalizeFirstLetter}} </label>
-          <mat-form-field appearance="outline">
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+          <div fxLayout="column" fxFlex="90">
+            <label class="font-size-12 black-three  required">{{'company.tax.management.description' | translate | capitalizeFirstLetter}} </label>
+            <mat-form-field appearance="outline">
              <textarea [placeholder]=" 'company.tax.management.description' | translate" rows="7"
                        formControlName="description" autocomplete="off" matInput
-                       [ngStyle.xs]="{'font-size': '15px'}" class="black-three">
+                       [ngStyle.xs]="{'font-size': '15px'}">
                   </textarea>
-            <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
-              {{ 'general.required' | translate }}</mat-error>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
+                {{ 'general.required' | translate }}</mat-error>
 
-          </mat-form-field>
+            </mat-form-field>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10" >
+    <div  *canBeDisplayed="{'feature':addOrUpdateForm}" class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10" >
+
       <button mat-raised-button class="btn-small bg-pale-grey black-three" (click)="onNotify(false)">{{'company.tax.management.cancel' | translate | capitalizeFirstLetter}}</button>
-      <button mat-raised-button [disabled]="form.invalid" class="btn-small bg-ocean-blue white" (click)="onNotify(true)">{{'company.tax.management.confirm' | translate | capitalizeFirstLetter}}</button>
+      <button mat-raised-button color="primary"  [disabled]="form.invalid" class="btn-small white" (click)="onNotify(true)">{{'company.tax.management.confirm' | translate | capitalizeFirstLetter}}</button>
     </div>
 
   </div>

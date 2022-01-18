@@ -23,8 +23,10 @@
       ></wid-skeleton-loader>
       <div fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 " *ngIf="!isLoading" form
         [formGroup]="form"  >
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'INVOICING_SEND_BILLS', 'form': form}">
-          <wid-scrollbar class="scrollbar">
+        <wid-scrollbar class="scrollbar" style="width: 100%">
+        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':addOrUpdateFeature, 'form': form}">
+
+
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
@@ -75,8 +77,6 @@
                 </div>
                 </div>
           </div>
-
-
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <label class="font-size-12 required">{{'user.gender' | translate | capitalizeFirstLetter}} </label>
@@ -223,8 +223,8 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <div fxLayout="column" fxFlex="80" class="line-height-2">
-                <a (click)="onChangePassword()" class="topaz decoration"> {{ 'user.changepwd' | translate}}</a>
-                <a (click)="deactivateAccount()" class="topaz decoration"> {{ 'user.deactivate' | translate}}</a>
+                <a *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" (click)="onChangePassword()" class="topaz decoration"> {{ 'user.changepwd' | translate}}</a>
+                <a *canBeDisplayed="{'feature':'SOURCING_ACCESSs'}" (click)="deactivateAccount()" class="topaz decoration"> {{ 'user.deactivate' | translate}}</a>
               </div>
             </div>
           </div>
@@ -233,8 +233,8 @@
 
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
-              <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
-                <div *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
+              <div *canBeDisplayed="{'feature':addOrUpdateFeature}" fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
+                <div >
                 <button  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14"> {{ 'user.reset' | translate}}</span>
@@ -250,9 +250,11 @@
               </div>
             </div>
           </div>
+
           <br>
-          </wid-scrollbar>
+
         </div>
+        </wid-scrollbar>
       </div>
     </div>
 

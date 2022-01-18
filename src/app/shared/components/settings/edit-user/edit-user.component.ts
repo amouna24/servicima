@@ -53,6 +53,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   id: string;
   isLoading: boolean;
   add: string;
+  addOrUpdateFeature: string;
   showList: INetworkSocial[] = [];
   profileUserType = userType.UT_USER;
   /** subscription */
@@ -124,6 +125,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
       this.isLoading = false;
+      this.addOrUpdateFeature = 'SOURCING_ACCESSs';
       /***************** go to page Update user by id *****************
        ****************************************************************/
     } else if (this.id) {
@@ -142,6 +144,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
             this.form.controls['emailAddress'].disable();
             this.form.controls['homeCompany'].disable();
             this.setForm();
+            this.addOrUpdateFeature = 'SOURCING_ACCESSs';
             this.isLoading = false;
           });
       }));
@@ -160,6 +163,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.userInfo = connectedUser['user'][0];
       this.emailAddress = connectedUser['user'][0]['userKey'].email_address;
       this.setForm();
+     // this.addOrUpdateFeature = 'Update1 feature';
+        this.addOrUpdateFeature = 'SOURCING_ACCESSs';
       this.form.controls['emailAddress'].disable();
       this.form.controls['userType'].disable();
       this.form.controls['homeCompany'].disable();

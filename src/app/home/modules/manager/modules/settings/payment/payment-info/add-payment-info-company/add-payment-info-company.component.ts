@@ -21,6 +21,7 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
   action: string;
   company: ICompanyModel;
   languages: IViewParam[] = [];
+  addOrUpdateForm: string;
   public filteredLanguage = new ReplaySubject(1);
   /** subscription */
   subscriptionModal: Subscription;
@@ -43,9 +44,11 @@ export class AddPaymentInfoCompanyComponent implements OnInit, OnDestroy {
     this.initForm();
      if (this.data) {
        this.action = 'update';
+       this.addOrUpdateForm = 'SETTINGS_UPDATE_PAYMENT_TERM';
        this.setForm();
      } else {
        this.action = 'add';
+       this.addOrUpdateForm = 'SETTINGS_ADD_PAYMENT_TERM';
      }
   }
 
