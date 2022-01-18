@@ -14,7 +14,7 @@
 
   </div>
   <div  [formGroup]="form" class="full-width" fxFlex fxLayoutGap="10px" fxLayoutAlign="start start" fxLayout="row">
-    <div fxFlex="100" class="full-height" fxLayout="column" fxLayoutAlign="start start"  fxLayoutGap="10px" >
+    <div  *widDisabledForm="{'feature': 'SETTINGS_UPDATE_TIMESHEET', 'form': form}" fxFlex="100" class="full-height" fxLayout="column" fxLayoutAlign="start start"  fxLayoutGap="10px" >
       <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="90"
            fxLayout="column" fxLayoutAlign="start start">
         <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
@@ -91,13 +91,13 @@
     max-height: 40%;
     width: 100%;
     align-items: flex-end;">
-          <div fxLayout="row" fxLayoutGap="20px" >
-            <button  mat-button mat-raised-button class="btn-small bg-denim white" >
+          <div fxLayout="row" fxLayoutGap="20px"  *canBeDisplayed="{'feature':'SETTINGS_UPDATE_TIMESHEET'}"  >
+            <button  mat-button mat-raised-button color="primary"  class="btn-small white" >
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                 <span class="font-size-14" (click)="updateTimesheetSetting()">{{'timesheet.settings.save' | translate}}</span>
               </div>
             </button>
-          <button  mat-button mat-raised-button (click)="cancel()"  class="btn-small bg-pale-grey black-three"
+           <button  mat-button mat-raised-button (click)="cancel()"  class="btn-small bg-pale-grey black-three"
           >
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
               <span class="font-size-14">{{'timesheet.settings.cancel' | translate}}</span>
@@ -108,4 +108,4 @@
       </div>
     </div>
   </div>
-</div>
+  </div>

@@ -1,13 +1,13 @@
 <div class="container-show">
     <div fxLayout="row" fxFlexOffset="20px" fxFlex="96">
-        <div fxLayout="column" fxFlex="100" fxLayoutAlign="start" fxLayoutGap="20px" class="bg-white border-radius-20"
+        <div fxLayout="column" fxFlex="100" fxLayoutAlign="center" fxLayoutGap="20px" class="bg-white border-radius-20"
             fxFlexOffset="50px" style="min-height: 100% !important;">
             <ng-container *ngIf="companyBankingInfoExist == 'no data'">
                 <h1 class="steel" style="text-align: center;">{{'company.banking.info.title' | translate}}</h1>
                 <div fxLayout="row" fxLayoutAlign="center start">
                     <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" class="border-none"
                         [style]="{border: 'solid 3px #e8f1f9',  height: '250px'}">
-                        <div fxFlex="15" fxLayout="row">
+                        <div fxFlex="15" fxLayout="row" *canBeDisplayed="{'feature':addOrUpdateForm}">
                             <button mat-raised-button class="btn-medium bg-cerulean-blue"
                                 (click)="addCompanyBankingInfo()">
                                 <span class="white font-normal">{{'company.banking.info.add' | translate}}</span>

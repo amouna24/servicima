@@ -1,32 +1,20 @@
 import { Directive, ElementRef, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import * as _ from 'lodash';
 import { UserService } from '@core/services/user/user.service';
+import * as _ from 'lodash';
 
 @Directive({
-  selector: '[widDisabledForm]'
+  selector: '[widCanNotDisplay]'
 })
-export class DisabledFormDirective implements OnInit {
+export class CanNotDisplayDirective implements OnInit {
   private currentUser: any; // todo: use the right type when ready
-  availableFeature = [];
   feature: string;
-  form: any;
-
-  constructor(   private element: ElementRef,
-                 private templateRef: TemplateRef<any>,
-                 private viewContainer: ViewContainerRef,
-                 private userService: UserService, ) {
-  }
-
-  @Input()
-  set widDisabledForm(params: any) {
-    if (params) {
-      this.feature = params.feature;
-      this.form = params.form;
-      this.viewContainer.clear();
-      this.viewContainer.createEmbeddedView(this.templateRef);
-
-    }
-  }
+  availableFeature = [];
+  constructor(
+    private element: ElementRef,
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef,
+    private userService: UserService,
+  ) { }
 
   /**
    * @description Loaded when component in init state
@@ -48,15 +36,21 @@ export class DisabledFormDirective implements OnInit {
     };
     this.updateView();
   }
-
+  @Input()
+  set widCanNotDisplay(params: any) {
+    if (params) {
+      this.feature = params.feature;
+    }
+  }
   /**
    * Insert or remove the html element from the DOM
    */
   updateView() {
     if (!this.isDisplayed()) {
-      this.form.disable();
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);
+    } else {
+      this.viewContainer.clear();
     }
   }
 

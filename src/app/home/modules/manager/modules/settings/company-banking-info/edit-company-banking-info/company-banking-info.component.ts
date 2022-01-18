@@ -16,6 +16,7 @@ export class CompanyBankingInfoComponent implements OnInit {
   companyEmail: string;
   companyName: string;
   companyBankingInfo: ICompanyBankingInfoModel;
+  addOrUpdateForm: string;
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
               private router: Router,
@@ -109,7 +110,10 @@ export class CompanyBankingInfoComponent implements OnInit {
    if (data.length > 0) {
       this.companyBankingInfo = data[0];
       this.setForm();
-}
+      this.addOrUpdateForm = 'SETTINGS_UPDATE_COMPANY_BANKING';
+   } else {
+      this.addOrUpdateForm = 'SETTINGS_ADD_COMPANY_BANKING';
+   }
     });
 
   }

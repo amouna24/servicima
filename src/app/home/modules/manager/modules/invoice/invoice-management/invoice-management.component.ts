@@ -80,7 +80,13 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
   listContract: IContract[];
   listProject: IContractProject[];
   currencyCode: string;
-
+  headerFeature: string;
+  companyBankingInfoFeature: string;
+  addLineFeature: string;
+  deleteInvoiceLineFeature: string;
+  editContractorFeature: string;
+  addOrUpdateFeature: string;
+  factorFeature: string;
   /**************************************************************************
    *  Initialise invoice
    *************************************************************************/
@@ -199,6 +205,10 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
       invoiceNbr: ['', [Validators.required]],
       invoiceDelay: ['', [Validators.required]],
       invoiceDate: ['', [Validators.required]],
+      invoiceAddress: [''],
+      invoicePurchaseOrder: [''],
+      invoiceProject: [''],
+      invoiceDescription: [''],
     });
 
     this.form = this.formBuilder.group({
@@ -482,8 +492,12 @@ RIB:${this.companyBankingInfos?.rib}`);
       contractor: this.invoiceHeader['contractor_code'],
       contract: this.invoiceHeader['contract_code'],
       invoiceNbr: this.invoiceNbr,
-      invoiceDate: this.datePipe.transform(this.invoiceHeader['invoice_date']),
-      invoiceDelay: this.datePipe.transform(this.invoiceHeader['invoice_delay']),
+      invoiceAddress: this.invoiceHeader['address'],
+      invoicePurchaseOrder: this.invoiceHeader['purchase_order'],
+      invoiceDescription: this.invoiceHeader['description'],
+      invoiceProject: this.invoiceHeader['project'],
+      invoiceDate: new Date(this.invoiceHeader['invoice_date']).toISOString().split('T')[0],
+      invoiceDelay: new Date((this.invoiceHeader['invoice_delay'])).toISOString().split('T')[0],
     });
 
     this.form = this.formBuilder.group({
@@ -548,16 +562,30 @@ RIB:${this.companyBankingInfos?.rib}`);
       await this.getAttachmentInvoice();
       this.refreshInvoiceAttachment();
       await this.setForm();
+      this.headerFeature = 'INVOICING_UPDATE_HEADER';
+      this.companyBankingInfoFeature = 'INVOICING_UPDATE_COMPANY_BANKING';
+      this.addLineFeature = 'INVOICING_ADD_LINE_UPDATE';
+      this.deleteInvoiceLineFeature = 'INVOICING_DELETE_INVOICE_LINE_UPDATE';
+      this.editContractorFeature = 'INVOICING_EDIT_CONTRACTOR_UPDATE';
+      this.addOrUpdateFeature = 'INVOICING_UPDATE';
+      this.factorFeature = 'INVOICING_FACTOR_UPDATE';
       this.formHeader.get('invoiceNbr').disable();
       this.formHeader.patchValue({ invoiceNbr: this.invoiceNbr });
       this.isLoading.next(false);
     } else {
       this.isLoading.next(false);
       this.updateOrAddInvoice = 'add';
+      this.headerFeature = 'INVOICING_ADD_HEADER';
+      this.companyBankingInfoFeature = 'INVOICING_UPDATE_COMPANY_BANKING';
+      this.addLineFeature = 'INVOICING_ADD_LINE';
+      this.deleteInvoiceLineFeature = 'INVOICING_DELETE_INVOICE_LINE_ADD';
+      this.editContractorFeature = 'INVOICING_EDIT_CONTRACTOR_ADD';
+      this.addOrUpdateFeature = 'INVOICING_ADD';
+      this.factorFeature = 'INVOICING_FACTOR_ADD';
       const maxInvoiceNbr = await this.getMaxHeaderInvoiceNbr() as string;
       this.invoiceNbr = maxInvoiceNbr ? parseInt(maxInvoiceNbr, 10) + 1 : 1;
       this.formHeader.controls['invoiceNbr'].setValue(this.invoiceNbr);
-      this.formHeader.controls['invoiceDate'].setValue(this.datePipe.transform(new Date()));
+      this.formHeader.controls['invoiceDate'].setValue(new Date().toISOString().split('T')[0]);
     }
   }
 
@@ -655,9 +683,9 @@ RIB:${this.companyBankingInfos?.rib}`);
     this.paymentTermsService.getCompanyPaymentTerms(`${this.companyEmail}`)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        this.paymentTerms = data.find(value => value.companyPaymentTermsKey.payment_terms_code === this.contract['payment_terms']).delay;
+        this.paymentTerms = data['results'].find(value => value.companyPaymentTermsKey.payment_terms_code === this.contract['payment_terms']).delay;
         this.formHeader.controls['invoiceDelay'].
-          setValue(this.paymentTerms ? this.datePipe.transform(new Date().setDate(new Date().getDate() + this.paymentTerms)) : null);
+          setValue(this.paymentTerms ? new Date(new Date().setDate(new Date().getDate() + this.paymentTerms)).toISOString().split('T')[0] : null);
       }, (error => {
         console.error(error);
       }));
