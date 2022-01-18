@@ -36,19 +36,19 @@
         <div fxLayout="row" fxFlex="15"> <h1 fxFlex="85" class="steel font-medium font-size-28">{{'invoice.subtitle' | translate | capitalizeFirstLetter}}</h1> </div>
         <div fxLayout="row" fxFlex="65" fxLayoutAlign="flex-end flex-end" fxLayoutGap="6px" class="m-r-40 m-b-15 min-full-height" >
 
-            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> {{'invoice.attach.file' | translate | capitalizeFirstLetter}}</button>
+            <button *canBeDisplayed="{'feature':'INVOICING_SHOW_ATTACH_FILE'}" mat-raised-button class="btn-small" [ngClass]="{'btn-active': this.showAttachmentFile === true, 'btn-no-active': this.showAttachmentFile === false}" (click)="showAttach()"> {{'invoice.attach.file' | translate | capitalizeFirstLetter}}</button>
 
-            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button  class="btn-small bg-pale-grey-four help-blue">{{'invoice.send' | translate | capitalizeFirstLetter}}</button>
+            <button *canBeDisplayed="{'feature':'INVOICING_SEND_BILLS'}" mat-raised-button  class="btn-small bg-pale-grey-four help-blue">{{'invoice.send' | translate | capitalizeFirstLetter}}</button>
 
-            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue" (click)="toPay()"> {{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</button>
+            <button *canBeDisplayed="{'feature':'INVOICING_ADD_PAYMENT'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue" (click)="toPay()"> {{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</button>
 
-            <button *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue"> {{'invoice.status' | translate | capitalizeFirstLetter}}</button>
+            <button *canBeDisplayed="{'feature':'INVOICING_STATUS'}" mat-raised-button class="btn-small bg-pale-grey-four help-blue"> {{'invoice.status' | translate | capitalizeFirstLetter}}</button>
 
 
-          <div fxLayout="row"  fxLayoutGap="4px" class="width-150" *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
+          <div fxLayout="row"  fxLayoutGap="4px" class="width-150" *canBeDisplayed="{'feature':'INVOICING_SHOW_PAYMENT'}">
             <mat-icon class="icon material-icons-outlined" svgIcon="wi-credit-card">
             </mat-icon>
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" class="cursor-pointer"> {{'invoice.payment' | translate | capitalizeFirstLetter}}
+            <div fxLayout="row"  fxLayoutAlign="center center" fxLayoutGap="3px" (click)="enterPayment()" class="cursor-pointer"> {{'invoice.payment' | translate | capitalizeFirstLetter}}
               {{totalPayments}}$
               <span *ngIf="showPayment" class="material-icons">keyboard_arrow_down</span>
               <span *ngIf="!showPayment" class="material-icons">keyboard_arrow_up</span>
@@ -66,7 +66,7 @@
             <div fxLayout="row" fxLayoutAlign="center start">
               <div fxFlex="93" fxLayout="column" fxLayoutAlign="center center" class="border-none"
                    [ngStyle]="{border: 'solid 3px #e8f1f9',  height: '170px', 'margin-top': '15px'}" >
-                <div fxFlex="15" fxLayout="row">
+                <div fxFlex="15" fxLayout="row" *canBeDisplayed="{'feature':'INVOICING_ADD_ATTACH_FILE'}">
                   <button mat-raised-button class="btn-medium bg-cerulean-blue">
                     <span class="white font-normal" (click)="viewData()"> {{'invoice.attachment' | translate | capitalizeFirstLetter}}</span>
                   </button>
@@ -96,7 +96,7 @@
             <ng-container matColumnDef="Action">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let row">
-                <button mat-icon-button id="deleteAttachment" (click)="deleteAttachment(row,row.attachment)">
+                <button *canBeDisplayed="{'feature':'INVOICING_DELETE_ATTACH_FILE'}" mat-icon-button id="deleteAttachment" (click)="deleteAttachment(row,row.attachment)">
                   <mat-icon >
                     delete
                   </mat-icon>
@@ -113,7 +113,7 @@
       <div fxFlex="50" [ngStyle]="{'padding-right': '7%','height': '140px','line-height': 2}" class="m-t-10" fxLayout="column"
            fxLayoutAlign="flex-start" >
         <div  class="width-210" *ngIf="showAttachmentFile && invoiceAttachment.length > 0">
-          <div fxLayout="row" class="flex-wrap m-l-30">
+          <div fxLayout="row" class="flex-wrap m-l-30" *canBeDisplayed="{'feature':'INVOICING_ADD_ATTACH_FILE'}" >
              <button  (click)="viewData()" mat-raised-button class="btn-small bg-cerulean-blue white">{{'invoice.add.file' | translate | capitalizeFirstLetter}}</button>
           </div>
         </div>
@@ -125,7 +125,7 @@
             <div fxLayout="row" fxLayoutAlign="center start">
               <div fxFlex="93" fxLayout="column" fxLayoutAlign="center center" class="border-none"
                    [ngStyle]="{border: 'solid 3px #e8f1f9',  height: '170px', 'margin-top': '15px'}" >
-                <div fxFlex="15" fxLayout="row">
+                <div fxFlex="15" fxLayout="row" *canBeDisplayed="{'feature':'INVOICING_ADD_PAYMENT'}">
                   <button mat-raised-button class="btn-medium bg-cerulean-blue">
                     <span class="white font-normal" (click)="toPay()">{{'invoice.enter.payment' | translate | capitalizeFirstLetter}}</span>
                   </button>
@@ -163,7 +163,7 @@
             <ng-container matColumnDef="Action">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let row">
-                <button mat-icon-button (click)="deletePayment(row)"  [disabled]="row.disabled">
+                <button *canBeDisplayed="{'feature':'INVOICING_DELETE_PAYMENT'}" mat-icon-button (click)="deletePayment(row)"  [disabled]="row.disabled">
                   <mat-icon>delete</mat-icon>
                 </button>
               </td>
@@ -408,12 +408,10 @@
                 <td  class="vat_mount">
                   {{form.value.input[i].invoice_line_total_amount ? form.value.input[i].invoice_line_total_amount: 0 }}
                 </td>
-                <td  *widCanNotDisplay="{'feature':deleteInvoiceLineFeature}" class="icon-trash" style="background: white !important; color: white !important">
-                  <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer"   (click)='delete(i)' id="deleteUpdate" *canBeDisplayed="{'feature':'SOURCING_ACCESSs'}">
-                  </mat-icon>
+                <td  *widCanNotDisplay="{'feature':deleteInvoiceLineFeature}" class="icon-trash clean-red">
                 </td>
                 <td  class="icon-trash" *canBeDisplayed="{'feature':deleteInvoiceLineFeature}">
-                  <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer"   (click)='delete(i)' id="deleteUpdate1" *canBeDisplayed="{'feature':'SOURCING_ACCESS'}">
+                  <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer"   (click)='delete(i)' id="deleteUpdate1">
                   </mat-icon>
                 </td>
               </tr>

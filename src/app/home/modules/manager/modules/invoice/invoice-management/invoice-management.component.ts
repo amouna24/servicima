@@ -563,26 +563,25 @@ RIB:${this.companyBankingInfos?.rib}`);
       this.refreshInvoiceAttachment();
       await this.setForm();
       this.headerFeature = 'INVOICING_UPDATE_HEADER';
-      this.companyBankingInfoFeature = 'INVOICING_UPDATE_HEADER';
-      this.addLineFeature = 'INVOICING_UPDATE_HEADER';
-      this.deleteInvoiceLineFeature = 'INVOICING_UPDATE_HEADER';
-      this.editContractorFeature = 'INVOICING_UPDATE_HEADER';
-      this.addOrUpdateFeature = 'INVOICING_UPDATE_HEADER';
-      this.factorFeature = 'INVOICING_UPDATE_HEADER';
+      this.companyBankingInfoFeature = 'INVOICING_UPDATE_COMPANY_BANKING';
+      this.addLineFeature = 'INVOICING_ADD_LINE_UPDATE';
+      this.deleteInvoiceLineFeature = 'INVOICING_DELETE_INVOICE_LINE_UPDATE';
+      this.editContractorFeature = 'INVOICING_EDIT_CONTRACTOR_UPDATE';
+      this.addOrUpdateFeature = 'INVOICING_UPDATE';
+      this.factorFeature = 'INVOICING_FACTOR_UPDATE';
       this.formHeader.get('invoiceNbr').disable();
       this.formHeader.patchValue({ invoiceNbr: this.invoiceNbr });
       this.isLoading.next(false);
     } else {
       this.isLoading.next(false);
       this.updateOrAddInvoice = 'add';
-      this.headerFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-      this.companyBankingInfoFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-      this.addLineFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-      this.editContractorFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-      this.addOrUpdateFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-      this.factorFeature = 'SOURCING_ACCESS'; // INVOICING_ADD_HEADER
-
-      this.deleteInvoiceLineFeature = 'SOURCING_ACCESS';
+      this.headerFeature = 'INVOICING_ADD_HEADER';
+      this.companyBankingInfoFeature = 'INVOICING_UPDATE_COMPANY_BANKING';
+      this.addLineFeature = 'INVOICING_ADD_LINE';
+      this.deleteInvoiceLineFeature = 'INVOICING_DELETE_INVOICE_LINE_ADD';
+      this.editContractorFeature = 'INVOICING_EDIT_CONTRACTOR_ADD';
+      this.addOrUpdateFeature = 'INVOICING_ADD';
+      this.factorFeature = 'INVOICING_FACTOR_ADD';
       const maxInvoiceNbr = await this.getMaxHeaderInvoiceNbr() as string;
       this.invoiceNbr = maxInvoiceNbr ? parseInt(maxInvoiceNbr, 10) + 1 : 1;
       this.formHeader.controls['invoiceNbr'].setValue(this.invoiceNbr);
