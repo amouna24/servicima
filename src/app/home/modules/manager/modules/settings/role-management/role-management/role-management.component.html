@@ -2,10 +2,11 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'ROLE'"
     [isLoading]="isLoading"
-    [header]="{ title: 'role.management.title' | translate, addActionText: 'add-new' | translate,type:'dialog',
+    [header]="{ title: 'role.management.title', addActionText: 'role.management.add',type:'dialog', feature: 'SETTINGS_ADD_ROLE',
         addActionDialog: { modalName: 'addRole', modalComponent: 'AddRoleComponent', data: null, width: '657px', height: '565px' }}"
-    [allowedActions]="['role.management.delete']"
-    [title]="'Role list'"
+    [allowedActions]="[  {name:'role.management.delete', feature: 'SETTINGS_DELETE_ROLE'}]"
+    [singleAction]="{name:'role.management.import', feature: 'SETTINGS_IMPORT_ROLE'}"
+    [title]="'role.management.title' | translate"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
   >

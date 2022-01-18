@@ -108,8 +108,8 @@
 
 
   .small-col {
-    width: 8% !important;
-    min-width: 8% !important;
+    width: 10% !important;
+    min-width: 10% !important;
     font-weight: normal;
   }
   .large-col {
@@ -260,4 +260,8 @@ button[disabled]{
 
 .line-height-1-4{
   line-height: 1.4 !important;
+}
+.clean-red{
+  background: white !important;
+  color: white !important;
 }

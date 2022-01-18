@@ -13,25 +13,25 @@
   <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
     <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
   </div>
-  <div class="container-role">
+  <div class="container-role" *widDisabledForm="{'feature':addOrUpdateForm, 'form': form}">
   <wid-scrollbar class="scrollbar">
-<div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="cool-grey font-size-12 m-l-60 m-t-15">
+<div modal-body fxFlex="100" fxFlex.xs="50" [formGroup]="form" fxLayout="column" class="font-size-12 m-l-60 m-t-15">
 
   <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
     <div fxLayout="column" fxFlex="40">
-      <label class="font-size-12 black-three required">{{'role.management.company' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12 required">{{'role.management.company' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
         <input autocomplete="off" matInput required [placeholder]=" 'role.management.company' | translate | capitalizeFirstLetter"
-               formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" class="black-three" />
+               formControlName="company" [ngStyle.xs]="{'font-size': '15px'}" />
         <mat-error class="wid-error-messages" *ngIf="form.controls.company?.errors?.required">
           {{ 'general.required' | translate }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="40" >
-      <label class="font-size-12 black-three  required">{{'role.management.role.name' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12  required">{{'role.management.role.name' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
         <input autocomplete="off" matInput required [placeholder]=" 'role.management.role.name' | translate | capitalizeFirstLetter"
-               formControlName="roleName" class="black-three" [ngStyle.xs]="{'font-size': '15px'}" />
+               formControlName="roleName" [ngStyle.xs]="{'font-size': '15px'}" />
         <mat-error class="wid-error-messages" *ngIf="form.controls.roleName?.errors?.required">
           {{ 'general.required' | translate }}</mat-error>
       </mat-form-field>
@@ -42,7 +42,7 @@
       <div [formGroupName]="i">
         <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
           <div fxLayout="column" fxFlex="40">
-            <label class="font-size-12 black-three required">{{'role.management.language' | translate | capitalizeFirstLetter}} </label>
+            <label class="font-size-12 required">{{'role.management.language' | translate | capitalizeFirstLetter}} </label>
             <mat-form-field appearance="outline">
               <mat-select formControlName="language"  [placeholder]=" 'role.management.language' | translate | capitalizeFirstLetter">
                 <ng-container *ngFor="let language of languages">
@@ -58,9 +58,9 @@
             </mat-form-field>
           </div>
           <div fxLayout="column" fxFlex="40">
-            <label class="font-size-12 black-three required">{{'role.management.translate' | translate | capitalizeFirstLetter}} </label>
+            <label class="font-size-12 required">{{'role.management.translate' | translate | capitalizeFirstLetter}} </label>
             <mat-form-field appearance="outline">
-              <input  class="black-three" autocomplete="off" matInput required [placeholder]=" 'role.management.translate' | translate | capitalizeFirstLetter"
+              <input  autocomplete="off" matInput required [placeholder]=" 'role.management.translate' | translate | capitalizeFirstLetter"
                       formControlName='desc' [ngStyle.xs]="{'font-size': '15px'}" />
               <mat-error class="wid-error-messages" *ngIf="form.controls.methodName?.errors?.required">
                 {{ 'general.required' | translate }}</mat-error>
@@ -73,12 +73,12 @@
   <div class="btn container-plus"  fxLayout="row" fxLayoutAlign="flex-end" >
     <button [disabled]="getListRole().length >= languages.length - 1 " mat-flat-button mat-stroked-button class="topaz btn-plus" type="button" (click)= "onAddAnotherRoleName()" >+</button>
   </div>
-  <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+  <div #feature fxLayout="row" fxFlex="100" fxLayoutGap="10%" *canBeDisplayed="{'feature':addOrUpdateForm}">
 
     <div fxLayout="column" fxFlex="90" >
-      <label class="font-size-12 black-three  required">{{'role.management.features' | translate | capitalizeFirstLetter}} </label>
+      <label class="font-size-12  required">{{'role.management.features' | translate | capitalizeFirstLetter}} </label>
       <mat-form-field appearance="outline">
-        <mat-select [placeholder]=" 'role.management.features' | translate" [formControl]="roleFeatureControl"   multiple
+        <mat-select  [placeholder]=" 'role.management.features' | translate" [formControl]="roleFeatureControl"   multiple
                     #singleSelect>
           <mat-option >
             <ngx-mat-select-search placeholderLabel="{{ 'general.search' | translate }}"
@@ -95,7 +95,7 @@
   </div>
   <div fxLayout="column" fxFlex="100" fxLayoutGap="10px" fxlayoutgap="20px">
     <div fxLayout="row">
-    <label class="font-size-12 black-three  required">{{'role.management.roles.features' | translate | capitalizeFirstLetter}}  </label>
+    <label class="font-size-12 required">{{'role.management.roles.features' | translate | capitalizeFirstLetter}}  </label>
     </div>
     <div fxLayout="row" class="container-role-feature">
       <div  *ngIf="isLoading.getValue();"  class="min-full-width">
@@ -111,8 +111,8 @@
 
     <mat-select-trigger>
       <mat-chip-list>
-        <mat-chip *ngFor="let roleFeature of roleFeatureControl.value"
-                  [removable]="true" (removed)="onRoleFeatureRemoved(roleFeature)">
+        <mat-chip  *ngFor="let roleFeature of roleFeatureControl.value"
+                  [removable]="removeFeature" (removed)="onRoleFeatureRemoved(roleFeature)">
 
           <ng-template  [ngIf]="!getDescription(roleFeature)" [ngIfElse]= "data" class="min-full-width">
             <div fxLayoutAlign="center center">
@@ -140,9 +140,9 @@
   </wid-scrollbar>
   </div>
   <br/>
-  <div class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10">
+  <div  *canBeDisplayed="{'feature':addOrUpdateForm}" class="modal-footer" fxFlex="35" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-10">
     <button mat-raised-button class="btn-small bg-pale-grey black-three"(click)="onNotify(false)">{{'role.management.cancel' | translate | capitalizeFirstLetter}}</button>
-    <button mat-raised-button class="btn-small bg-ocean-blue white" [disabled]="form.invalid" (click)="onNotify(true)">{{'role.management.confirm' | translate | capitalizeFirstLetter}}</button>
+    <button mat-raised-button color="primary" class="btn-small white" [disabled]="form.invalid" (click)="onNotify(true)">{{'role.management.confirm' | translate | capitalizeFirstLetter}}</button>
   </div>
   <br/>
 </div>

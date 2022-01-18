@@ -47,7 +47,7 @@
           <div  fxFlex="25">
             {{typeLicence | titlecase}} pack <sup class="denim font-size-8">({{periodicity}})</sup>
           </div>
-          <div fxLayout="column" fxFlex="30">
+          <div fxLayout="column" fxFlex="30" *canBeDisplayed="{'feature':'SETTINGS_LICENCE_EDIT-SUBSCRIPTION'}">
             <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn-renew">
               {{'licence.management.renew-subscription' | translate}}</button>
           </div>
@@ -67,7 +67,7 @@
               </mat-icon>
             </div>
 
-            <div  fxLayout="column" class="font-size-8"> {{"licence.management.history" | translate}}</div>
+            <a *canBeDisplayed="{'feature':'SETTINGS_LICENCE_HISTORY'}" fxLayout="column" class="font-size-8"> {{"licence.management.history" | translate}}</a>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
             30 <sup  class="font-size-8 denim m-l-20 " > (free 25 + extra 5) </sup>
 
           </div>
-          <div fxLayout="column" fxFlex="30">
+          <div fxLayout="column" fxFlex="30" *canBeDisplayed="{'feature':'SETTINGS_LICENCE_USERS-MANAGEMENT'}">
             <button mat-raised-button class="btn-small bg-pale-grey denim font-size-11 overwrite-btn">{{'licence.management.list.users' | translate}}
             </button>
           </div>
@@ -100,7 +100,7 @@
               </mat-icon>
             </div>
 
-            <div  fxLayout="column" class="font-size-8"> {{'licence.management.next-invoice' | translate}} </div>
+            <a *canBeDisplayed="{'feature':'SETTINGS_LICENCE_NEXT_INVOICE'}" fxLayout="column" class="font-size-8"> {{'licence.management.next-invoice' | translate}} </a>
           </div>
 
         </div>
@@ -114,7 +114,7 @@
             <div fxLayout="column"  fxFlex="50">1411 12/2022</div>
             </div>
           </div>
-          <div  fxLayout="column" fxFlex="30" >
+          <div  fxLayout="column" fxFlex="30" *canBeDisplayed="{'feature':'SETTINGS_LICENCE_EDIT-CREDIT-CARD'}" >
             <button mat-raised-button class="btn-small bg-pale-grey font-size-11 denim overwrite-btn" >
               {{'licence.management.edit.credit.card' | translate}}
             </button>

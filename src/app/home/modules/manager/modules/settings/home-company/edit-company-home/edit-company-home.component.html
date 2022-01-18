@@ -21,8 +21,9 @@
     ></wid-skeleton-loader>
     <div fxLayout="row" fxFlex="89" class="p-t-20 font-size-12" *ngIf="!isLoading" form
          [formGroup]="form">
-      <div fxLayout="column" fxFlex="100" fxFlexOffset="50px">
-        <wid-scrollbar >
+      <wid-scrollbar style="width: 100%;">
+      <div *widDisabledForm="{'feature':'SETTINGS_UPDATE_COMPANY', 'form': form}" fxLayout="column" fxFlex="100" fxFlexOffset="50px">
+
           <div fxLayout="row">
             <div fxLayout="column" fxFlex="50">
               <div fxLayout="row">
@@ -377,7 +378,7 @@
             <div fxLayout="column" fxFlex="50">
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
-              <div fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
+              <div *canBeDisplayed="{'feature':'SETTINGS_UPDATE_COMPANY'}" fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
                 <button  mat-raised-button class="btn-medium bg-pale-grey black-three"  (click)="reset()">
                   <span class="font-size-14"> {{ 'homecompany.reset' | translate}}</span>
                 </button>
@@ -390,10 +391,11 @@
               </div>
               <br>
             </div>
-          </div>
-        </wid-scrollbar>
-      </div>
 
+          </div>
+
+      </div>
+      </wid-scrollbar>
     </div>
 
   </div>

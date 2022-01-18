@@ -75,7 +75,7 @@ export class TaxComponent implements OnInit , OnDestroy {
    * @param rowAction: object
    */
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
+    switch (rowAction.actionType.name) {
       /* case ('show'): this.showUser(rowAction.data);
         break; */
        case ('update'): this.updateTax(rowAction.data);

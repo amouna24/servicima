@@ -19,6 +19,7 @@ export class AddPaymentMethodComponent implements OnInit, OnDestroy {
   companyId: string;
   language: string;
   languages = [];
+  addOrUpdateForm: string;
   /** subscription */
   subscriptionModal: Subscription;
   private subscriptions: Subscription[] = [];
@@ -42,8 +43,10 @@ export class AddPaymentMethodComponent implements OnInit, OnDestroy {
     this.initForm();
     if (this.data) {
       this.action = 'update';
+      this.addOrUpdateForm = 'SETTINGS_UPDATE_PAYMENT';
     } else {
       this.action = 'add';
+      this.addOrUpdateForm = 'SETTINGS_ADD_PAYMENT';
     }
   }
   /**

@@ -19,6 +19,7 @@ export class ShowCompanyBankingInfoComponent implements OnInit {
   bankAddress: string;
   factorInformation: string;
   bankDomiciliation: string;
+  addOrUpdateForm: string;
   bankName: string;
   companyBankingInfoExist = 'spinner';
   companyBankingInfo: ICompanyBankingInfoModel;
@@ -38,8 +39,10 @@ export class ShowCompanyBankingInfoComponent implements OnInit {
       if (data.length > 0) {
         this.companyBankingInfoExist = 'company Banking Info';
         this.companyBankingInfo = data[0];
+        this.addOrUpdateForm = 'SETTINGS_UPDATE_COMPANY_BANKING';
         this.setForm();
       } else {
+        this.addOrUpdateForm = 'SETTINGS_ADD_COMPANY_BANKING';
         this.companyBankingInfoExist = 'no data';
       }
     });

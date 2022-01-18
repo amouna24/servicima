@@ -65,7 +65,7 @@ export class RoleManagementComponent implements OnInit, OnDestroy {
    * @param rowAction: object
    */
   switchAction(rowAction: any) {
-  switch (rowAction.actionType) {
+  switch (rowAction.actionType.name) {
        case ('update'): this.updateRole(rowAction.data);
          break;
        case('delete.user.action'): this.onChangeStatus(rowAction.data);

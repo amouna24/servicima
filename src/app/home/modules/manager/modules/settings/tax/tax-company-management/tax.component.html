@@ -3,11 +3,12 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'COMPANY_TAX'"
     [isLoading]="isLoading"
-    [header]="{ title: 'company.tax.management.title' | translate,type:'dialog', addActionText: 'add-new' | translate,
+    [header]="{ title: 'company.tax.management.title',type:'dialog', feature: 'SETTINGS_ADD_ROLE', addActionText: 'company.tax.management.add',
     addActionDialog: { modalName: 'addTax', modalComponent: 'AddTaxCompanyComponent', data: null, width: '657px', height: '480px' }}"
     [title]="'COMPANY TAX list'"
+    [singleAction]="{name:'company.tax.management.import', feature: 'SETTINGS_IMPORT_TAX'}"
     (rowActionData)="switchAction($event)"
     (pagination)="loadMoreItems($event)"
-    [allowedActions]="['company.tax.management.delete']"
+    [allowedActions]="[{name:'company.tax.management.delete',feature:'SETTINGS_DELETE_TAX'}]"
   >
   </wid-dynamic-data-table>
