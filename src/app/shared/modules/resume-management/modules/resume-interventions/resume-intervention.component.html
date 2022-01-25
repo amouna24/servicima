@@ -29,40 +29,52 @@
                 <p class="font-normal font-size-15">{{item.level_of_intervention_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20"  fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button
+                        class="steel-two btn-small bg-white border-radius-5"
+                        [disabled]="button === 'Save'"
+                        *canBeDisplayed="{ feature: 'RESUME_UPDATE_INTERVENTION'}"
+                        (click)="EditForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                <button mat-raised-button
+                        class="steel-two btn-small bg-white border-radius-5"
+                        *canBeDisplayed="{ feature: 'RESUME_DELETE_INTERVENTION'}"
+                        (click)="deleteIntervention(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
             </div>
           </div>
-          <form [formGroup]="sendIntervention" fxFlex="100" class="width-86" fxLayout="row">
-            <div fxLayout="column" fxFlex="90">
-              <mat-label class="black font-size-12 required">
-                {{ 'resume-lvl-intervention' | translate }}:
-              </mat-label>
-              <mat-form-field appearance="outline">
+          <div fxLayout="row" fxFlexFill>
+            <div fxLayout="column" fxFlexFill fxLayoutAlign=" center" *widDisabledForm="{'feature': featureAddUpdate, 'form': sendIntervention}">
+              <form [formGroup]="sendIntervention" fxFlex="100" class="width-86" fxLayout="row">
+                <div fxLayout="column" fxFlex="90">
+                  <mat-label class="black font-size-12 required">
+                    {{ 'resume-lvl-intervention' | translate }}:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
                               <textarea matInput placeholder=" {{ 'resume-lvl-intervention' | translate }}" rows="7"
                                         formControlName="level_of_intervention_desc" required></textarea>
-                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.required">
-                  {{ 'general.required' | translate }}</mat-error>
-                <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.pattern">
-                  {{ 'resume-numbers' | translate }}</mat-error>
-              </mat-form-field>
-              <div fxLayout="row" fxLayoutAlign="end end">
-                <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                        (click)="createUpdateIntervention()" [disabled]="sendIntervention.invalid">
-                  <div *ngIf="button === 'Add';then add else save"></div>
-                  <ng-template #add>
-                    {{ 'resume-add' | translate }}
-                  </ng-template>
-                  <ng-template #save>
-                    {{ 'resume-save' | translate }}
-                  </ng-template>
-                </button>
-              </div>
+                    <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                    <mat-error class="red" *ngIf="sendIntervention.controls.level_of_intervention_desc.errors?.pattern">
+                      {{ 'resume-numbers' | translate }}</mat-error>
+                  </mat-form-field>
+                  <div fxLayout="row" fxLayoutAlign="end end" *canBeDisplayed="{ feature: featureAddUpdate}">
+                    <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                            (click)="createUpdateIntervention()" [disabled]="sendIntervention.invalid">
+                      <div *ngIf="button === 'Add';then add else save"></div>
+                      <ng-template #add>
+                        {{ 'resume-add' | translate }}
+                      </ng-template>
+                      <ng-template #save>
+                        {{ 'resume-save' | translate }}
+                      </ng-template>
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
+
         </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">

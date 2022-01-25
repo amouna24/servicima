@@ -31,52 +31,65 @@
                     <mat-label>{{item.resume_language_code | titlecase}}</mat-label>
                   </div>
                   <div fxLayout="column" fxFlex="30">
-                    <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
-                      <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"  (click)="updateLanguage(i+1,pointIndex,item)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+                    <div fxLayout="row" fxLayoutAlign="center"  fxFlexFill>
+                      <div fxLayout="row" fxFlexFill *canBeDisplayed="{ feature: 'RESUME_UPDATE_LANGUAGE'}">
+                        <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"   (click)="updateLanguage(i+1,pointIndex,item)" [matTooltip]="ratingId+1" matTooltipPosition="above">
                           <img src="{{showIconDisabled(ratingEdit[pointIndex],i)}}">
-                      </button>
+                        </button>
+                      </div>
+                      <div fxLayout="row" fxFlexFill *cantBeDisplayed="{ feature: 'RESUME_UPDATE_LANGUAGE'}">
+                        <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i"   [matTooltip]="ratingId+1" matTooltipPosition="above">
+                          <img src="{{showIconDisabled(ratingEdit[pointIndex],i)}}">
+                        </button>
+                      </div>
+
                     </div>
                   </div>
                   <div fxLayout="column" fxFlex="40"  fxLayoutAlign=" center"  >
-                    <button  mat-raised-button type="button"  class="bg-white btn-medium black"  (click)="deleteLanguage(item._id, pointIndex)">{{ 'resume-delete' | translate }}</button>
+                    <button  mat-raised-button type="button"  class="bg-white btn-medium black"  *canBeDisplayed="'RESUME_DELETE LANGUAGE'" (click)="deleteLanguage(item._id, pointIndex)">{{ 'resume-delete' | translate }}</button>
                   </div>
               </div>
 
                 </div></div>
-          <form [formGroup]="sendLanguage" class="full-width full-height p-t-30" fxLayout="row" fxLayoutAlign="center">
-            <div fxLayout="column"   fxFlex="80" >
-            <div fxLayout="row" fxLayoutAlign=" center" >
-                <div fxLayout="column" fxFlex="30"  >
-                  <mat-label class="black font-size-12 required">
-                    {{'resume-language' | translate}}:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
-                    <mat-select disableOptionCentering panelClass="panelColor" formControlName="resume_language_code"
-                                placeholder="{{ 'resume-language' | translate }}" required>
-                      <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
-                    </mat-select>
-                    <mat-error class="red" *ngIf="sendLanguage.controls.resume_language_code.errors?.required">
-                      {{ 'general.required' | translate }}</mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="column" fxFlex="30" >
-                  <div fxLayout="row" fxFlexFill fxLayoutAlign="center">
-                    <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)">
-                      <img src="{{showIcon(i)}}">
-                    </button>
+            <div fxLayout="row" fxFlexFill>
+              <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': sendLanguage}">
+                <form [formGroup]="sendLanguage" class="full-width full-height p-t-30" fxLayout="row" fxLayoutAlign="center">
+                  <div fxLayout="column"   fxFlex="80" >
+                    <div fxLayout="row" fxLayoutAlign=" center" >
+                      <div fxLayout="column" fxFlex="30"  *canBeDisplayed="{ feature: 'RESUME_ADD_LANGUAGE'}">
+                        <mat-label class="black font-size-12 required">
+                          {{'resume-language' | translate}}:
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-select disableOptionCentering panelClass="panelColor" formControlName="resume_language_code"
+                                      placeholder="{{ 'resume-language' | translate }}" required>
+                            <mat-option *ngFor="let v of langList" [value]="v.value">{{v.viewValue}}</mat-option>
+                          </mat-select>
+                          <mat-error class="red" *ngIf="sendLanguage.controls.resume_language_code.errors?.required">
+                            {{ 'general.required' | translate }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="column" fxFlex="30" >
+                        <div fxLayout="row" fxFlexFill fxLayoutAlign="center" *canBeDisplayed="{ feature: 'RESUME_ADD_LANGUAGE'}">
+                          <button mat-icon-button *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i"  (click)="onClick(i+1)">
+                            <img src="{{showIcon(i)}}">
+                          </button>
+                        </div>
+                        <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="showLevelError && rating == 0" >
+                          Please select a level
+                        </mat-error>
+
+
+                      </div>
+                      <div fxLayout="column" fxFlex="40" fxLayoutAlign=" center"   >
+                        <button  mat-raised-button type="button"  *canBeDisplayed="{ feature: featureAddUpdate}"  class="bg-pale-grey btn-medium black" [disabled]="sendLanguage.invalid" (click)="createLanguage()">Add</button>
+                      </div>
+                    </div>
                   </div>
-                  <mat-error class="red font-size-8 font-normal p-l-10" *ngIf="showLevelError && rating == 0" >
-                        Please select a level
-                  </mat-error>
-
-
-                </div>
-                <div fxLayout="column" fxFlex="40" fxLayoutAlign=" center"   >
-                <button  mat-raised-button type="button"  class="bg-pale-grey btn-medium black" [disabled]="sendLanguage.invalid" (click)="createLanguage()">Add</button>
+                </form>
               </div>
             </div>
-            </div>
-          </form>
+
           </div>
         </wid-scrollbar>
       <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">

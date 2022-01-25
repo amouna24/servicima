@@ -34,6 +34,7 @@ export class ResumeInterventionComponent implements OnInit {
   subscriptionModal: Subscription;
   showNumberError: boolean;
   companyUserType: string;
+  featureAddUpdate: string;
   /**********************************************************************
    * @description Resume Level of intervention constructor
    *********************************************************************/
@@ -54,6 +55,7 @@ export class ResumeInterventionComponent implements OnInit {
   ngOnInit(): void {
     this.interventionArray = [];
     this.button = 'Add';
+    this.featureAddUpdate = 'RESUME_ADD_INTERVENTION';
     this.showNumberError = false;
     this.getInterventionInfo();
     this.createForm();
@@ -165,7 +167,7 @@ export class ResumeInterventionComponent implements OnInit {
         this.button = 'Add';
       }
     }
-
+    this.featureAddUpdate = 'RESUME_ADD_INTERVENTION';
     this.sendIntervention.reset();
     this.showNumberError = false;
   }
@@ -179,6 +181,7 @@ export class ResumeInterventionComponent implements OnInit {
     this.sendIntervention.patchValue({
       level_of_intervention_desc: intervention.level_of_intervention_desc,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_INTERVENTION';
     this.interventionArray.splice(index, 1, );
     this.id = intervention._id;
     this.intervention_code = intervention.ResumeInterventionKey.intervention_code;

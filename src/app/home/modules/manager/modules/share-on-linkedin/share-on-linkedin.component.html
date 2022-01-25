@@ -18,7 +18,7 @@
         <form [formGroup]="linkedinForm" fxLayout="column">
           <div fxLayout="row" fxFlex="100" fxLayoutAlign="center">
             <div fxLayout="column" fxFlex="82">
-              <div fxLayout="row" fxFlex="30" fxLayoutAlign=" end">
+              <div fxLayout="row" fxFlex="35" fxLayoutAlign=" end">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     {{'manager.socialnetwork.offer_title' | translate}}:
@@ -31,7 +31,7 @@
                 </div>
 
               </div>
-              <div fxLayout="row" fxFlex="48" fxLayoutAlign=" center">
+              <div fxLayout="row" fxFlex="60" fxLayoutAlign=" center">
                 <div fxLayout="column" fxFlex="65">
                   <mat-label class="black font-size-12 required">
                     {{'manager.socialnetwork.offer_description' | translate}}:
@@ -43,14 +43,14 @@
                 </div>
               </div>
               <div fxLayout="row" fxFlex="24">
-                <div fxLayout="column" fxFlex="65">
+                <div fxLayout="column" fxFlex="65" *canBeDisplayed="{'feature':'SOCIAL_NETWORK_IMPORT IMAGE'}">
                   <mat-label class="black font-size-12 ">
                     {{'manager.socialnetwork.image' | translate}}:
                   </mat-label>
                   <mat-form-field appearance="outline"  >
                     <div >
-                      <input matInput matSuffix formControlName="image" [placeholder]="'manager.socialnetwork.image' | translate"  >
-                      <button  class="buttonImage" type="button">
+                      <input matInput matSuffix formControlName="image"  [placeholder]="'manager.socialnetwork.image' | translate"  >
+                      <button  class="buttonImage"  type="button">
                         <input type="file"
                                id="upload"
                                accept="image/png, image/gif, image/jpeg, application/pdf"
@@ -70,7 +70,8 @@
     <div fxLayout="column" fxFlex="96" fxLayoutAlign=" end">
       <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="column" >
-            <button mat-raised-button type="button" color="primary" class="white  btn-small"(click)="routeToShareDialog()" [disabled]="linkedinForm.invalid">
+
+            <button mat-raised-button type="button" *canBeDisplayed="{ feature: 'SOCIAL_NETWORK_SHARE_POST'}"   color="primary" class="white  btn-small"(click)="routeToShareDialog()" [disabled]="linkedinForm.invalid">
               <span class="white font-size-11">{{'manager.socialnetwork.publish' | translate}}</span>
             </button>
           </div>

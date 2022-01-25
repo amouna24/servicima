@@ -15,45 +15,47 @@
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
     <div  fxLayout="row" fxFlex="88">
-            <form [formGroup]="CreationForm" fxLayout="column" fxFlex="94"  >
-              <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
-                <div fxLayout="column" fxFlex="86">
-                  <h4 class="steel font-size-18 font-small">{{ 'resume-general-info' | translate }}</h4>
-                </div>
+      <div fxLayout="column" fxFlexFill>
+        <div fxLayout="row" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': CreationForm}">
+          <form [formGroup]="CreationForm" fxLayout="column" fxFlex="94" >
+            <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
+              <div fxLayout="column" fxFlex="86">
+                <h4 class="steel font-size-18 font-small">{{ 'resume-general-info' | translate }}</h4>
               </div>
-              <div fxLayout="row" fxFlex="84" @dataAppearance fxLayoutAlign="center" >
-                <wid-scrollbar fxFlexFill >
-                  <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around ">
-                    <div   fxLayout="column" fxFlex="18"   fxLayoutGap="10px" fxLayoutAlign=" start" >
-                      <div fxlayout="row"  class="full-width">
-                        <mat-label class="black font-size-12 required">
-                          {{ 'resume-name' | translate }}:
-                        </mat-label>
-                        <mat-form-field appearance="outline" class="full-width">
-                          <input    formControlName="init_name" matInput placeholder="{{ 'resume-name' | translate }}" >
-                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.required">
-                            {{ 'general.required' | translate }}:</mat-error>
-                          <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.pattern">
-                            {{ 'resume-numbers' | translate }}</mat-error>
-                        </mat-form-field></div>
-                      <div  class="full-width" >
-                        <mat-label class="black font-size-12 required">
-                          {{ 'resume-actual-job' | translate }}:
-                        </mat-label>
-                        <mat-form-field appearance="outline">
-                          <input    formControlName="actual_job" matInput placeholder="{{ 'resume-actual-job' | translate }}">
-                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.required">
-                            {{ 'general.required' | translate }}</mat-error>
-                          <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.pattern">
-                            {{ 'resume-numbers' | translate }}</mat-error>
-                        </mat-form-field></div>
-                      <div class="full-width">
+            </div>
+            <div fxLayout="row" fxFlex="84" @dataAppearance fxLayoutAlign="center" >
+              <wid-scrollbar fxFlexFill >
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-around ">
+                  <div   fxLayout="column" fxFlex="18"   fxLayoutGap="10px" fxLayoutAlign=" start" >
+                    <div fxlayout="row"  class="full-width">
+                      <mat-label class="black font-size-12 required">
+                        {{ 'resume-name' | translate }}:
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <input    formControlName="init_name" matInput placeholder="{{ 'resume-name' | translate }}" >
+                        <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.required">
+                          {{ 'general.required' | translate }}:</mat-error>
+                        <mat-error class="red" *ngIf="CreationForm.controls.init_name.errors?.pattern">
+                          {{ 'resume-numbers' | translate }}</mat-error>
+                      </mat-form-field></div>
+                    <div  class="full-width" >
+                      <mat-label class="black font-size-12 required">
+                        {{ 'resume-actual-job' | translate }}:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <input    formControlName="actual_job" matInput placeholder="{{ 'resume-actual-job' | translate }}">
+                        <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                        <mat-error class="red" *ngIf="CreationForm.controls.actual_job.errors?.pattern">
+                          {{ 'resume-numbers' | translate }}</mat-error>
+                      </mat-form-field></div>
+                    <div class="full-width">
                       <mat-label class="black font-size-12 required">
                         {{ 'resume-language' | translate }}:
                       </mat-label>
                       <mat-form-field appearance="outline">
                         <mat-select  formControlName="language_id" disableOptionCentering panelClass="panelColor"
-                                        placeholder=" {{ 'resume-language' | translate }}" value="language_id">
+                                     placeholder=" {{ 'resume-language' | translate }}" value="language_id">
                           <ng-container *ngFor="let v of langList.getValue()">
                             <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
                           </ng-container>
@@ -61,70 +63,90 @@
                         <mat-error class="red" *ngIf="CreationForm.invalid">
                           {{'general.select_tem' | translate}}</mat-error>
                       </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxFlex="10">
+                      <section class="example-section">
+                        <mat-checkbox class="check" (change)="showHideYears()" [checked]="showYears" > {{ 'resume-set-years' | translate }}:</mat-checkbox>
+                      </section></div>
+                    <div fxLayout="row" fxFlex class="full-width">
+                      <div>
+                        <mat-label *ngIf="showYears" @dataAppearance class="black font-size-12">
+                          {{ 'resume-yrs-of-experience' | translate }}:
+                        </mat-label>
+                        <mat-form-field *ngIf="showYears" @dataAppearance appearance="outline" class="full-width">
+                          <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder=" {{ 'resume-yrs-of-experience' | translate }}" >
+                          <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
+                            {{'resume-limit-numbers' | translate}}</mat-error>
+                        </mat-form-field>
                       </div>
-                      <div fxLayout="row" fxFlex="10">
-                        <section class="example-section">
-                          <mat-checkbox class="check" (change)="showHideYears()" [checked]="showYears" > {{ 'resume-set-years' | translate }}:</mat-checkbox>
-                        </section></div>
-                      <div fxLayout="row" fxFlex class="full-width">
-                       <div>
-                         <mat-label *ngIf="showYears" @dataAppearance class="black font-size-12">
-                           {{ 'resume-yrs-of-experience' | translate }}:
-                         </mat-label>
-                         <mat-form-field *ngIf="showYears" @dataAppearance appearance="outline" class="full-width">
-                           <input   matInput  formControlName="years_of_experience" type="number" [min]="0" [max]="25" placeholder=" {{ 'resume-yrs-of-experience' | translate }}" >
-                           <mat-error class="red" *ngIf="CreationForm.controls.years_of_experience.errors?.pattern">
-                             {{'resume-limit-numbers' | translate}}</mat-error>
-                         </mat-form-field>
-                       </div>
 
-                  </div>
-                    </div>
-                    <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" >
-                      <div fxLayout="row"  fxFlex="45" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
-                          <div  fxLayout="column" class="profile-image">
-                            <ng-template [ngIf]="!isLoadingImage">
-                              <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
-                                                 [haveImage]="haveImage"
-                                                 [avatar]="avatar"
-                                                 [modelObject]="user"
-                                                 [singleUpload]="false"
-                                                 [userType]="profileUserType"
-                                                 [diameter]="140"
-                                                 height="147"
-                                                 width="122"
-                                                 (newFile)="getFile($event)"
-                              ></wid-profile-image>
-                            </ng-template>
-                            <ng-template [ngIf]="isLoadingImage">
-                              <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
-                                <mat-spinner color="primary"></mat-spinner>
-                                <div style="position: fixed; font-size: 11px">{{'resume-load-image-gen-info' | translate}}</div>
-                              </div>
-                            </ng-template>
-
-                          </div>
-                          <div fxLayout="column" fxLayoutAlign="start" fxFlex="55">
-                            <div fxLayout="row">
-                              <p class="font-normal font-size-12" >  {{ 'resume-first-name' | translate }}: </p>  <p class="font-light font-size-12 p-l-5" > {{firstname}}</p></div>
-                            <div fxLayout="row">
-                              <p class="font-normal font-size-12" >  {{ 'resume-last-name' | translate }}:  </p> <p class="font-light font-size-12 p-l-5" > {{lastname}}</p></div>
-                            <div fxLayout="row">
-                              <p class="font-normal font-size-12" >  {{ 'resume-company' | translate }}:  </p> <p class="font-light font-size-12 p-l-5" > {{companyName}}</p></div>
-                          </div>
-                    </div>
                     </div>
                   </div>
-                </wid-scrollbar>
-              </div>
-              <div fxLayout="row" fxFlex="6" fxLayoutAlign="center " >
-                <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-                  <button mat-raised-button type="submit" color="primary" class="white btn-medium" [style]="{marginRight: '4%'}" (click)="createUpdateResume()" [disabled]="CreationForm.invalid">
-                    {{ 'resume-next' | translate }}
-                  </button>
+                  <div   fxLayout="column" fxFlex="55"  fxLayoutAlign="start end" >
+                    <div fxLayout="row"  fxFlex="45" class="bg-pale-grey border-radius-10 width-83" fxLayoutAlign="space-evenly center">
+                      <div  fxLayout="column" class="profile-image">
+                        <ng-template [ngIf]="!isLoadingImage">
+                          <wid-profile-image fxLayoutAlign="start start" class="full-height full-width"
+                                             [haveImage]="haveImage"
+                                             [avatar]="avatar"
+                                             [modelObject]="user"
+                                             [singleUpload]="false"
+                                             [userType]="profileUserType"
+                                             [diameter]="140"
+                                             height="147"
+                                             width="122"
+                                             (newFile)="getFile($event)"
+                          ></wid-profile-image>
+                        </ng-template>
+                        <ng-template [ngIf]="isLoadingImage">
+                          <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+                            <mat-spinner color="primary"></mat-spinner>
+                            <div style="position: fixed; font-size: 11px">{{'resume-load-image-gen-info' | translate}}</div>
+                          </div>
+                        </ng-template>
+
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="start" fxFlex="55">
+                        <div fxLayout="row">
+                          <p class="font-normal font-size-12" >  {{ 'resume-first-name' | translate }}: </p>  <p class="font-light font-size-12 p-l-5" > {{firstname}}</p></div>
+                        <div fxLayout="row">
+                          <p class="font-normal font-size-12" >  {{ 'resume-last-name' | translate }}:  </p> <p class="font-light font-size-12 p-l-5" > {{lastname}}</p></div>
+                        <div fxLayout="row">
+                          <p class="font-normal font-size-12" >  {{ 'resume-company' | translate }}:  </p> <p class="font-light font-size-12 p-l-5" > {{companyName}}</p></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </wid-scrollbar>
+            </div>
+            <div fxLayout="row" fxFlex="6" fxLayoutAlign="center " >
+              <div fxLayout="column" fxFlex="100" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+                <button mat-raised-button
+                        type="submit"
+                        color="primary"
+                        class="white btn-medium"
+                        [style]="{marginRight: '4%'}"
+                        (click)="createUpdateResume()"
+                        [disabled]="CreationForm.invalid"
+                        *canBeDisplayed="{ feature: featureAddUpdate}">
+                  {{ 'resume-next' | translate }}
+                </button>
+                <button mat-raised-button
+                        type="button"
+                        color="primary"
+                        class="white btn-medium"
+                        [style]="{marginRight: '4%'}"
+                        routerLink="/collaborator/resume/certifDiploma"
+                        *cantBeDisplayed="{ feature: featureAddUpdate}"
+                        [disabled]="CreationForm.invalid"
+                >
+                  {{ 'resume-next' | translate }}
+                </button>
               </div>
-            </form>
+            </div>
+          </form>
+        </div>
+      </div>
             <div fxLayout="column" fxLayoutAlign="start start" fxFlex="6">
               <div fxLayout="row" fxFlex="93" fxLayoutAlign=" end">
                 <div fxLayout="column" fxLayoutAlign="end" fxFlexFill>

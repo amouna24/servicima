@@ -55,6 +55,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   lastNameManager: string;
   isLoadingImage = true;
   generalInfoCandidate: IResumeModel;
+  featureAddUpdate: string;
   /**********************************************************************
    * @description Resume general information constructor
    *********************************************************************/
@@ -109,6 +110,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
         );
       }
       await this.updateForm(this.generalInfoManager);
+      this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
       this.update = true;
     } else if (this.resumeCode) {
       await this.resumeService.getResume(
@@ -140,6 +142,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   );
                 }
                 this.updateForm(generalInfo[0]);
+                this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
                 this.generalInfoManager = generalInfo[0];
                 this.update = true;
               }
@@ -161,6 +164,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   this.avatar = avatar;
                 }
               );
+              this.featureAddUpdate = 'RESUME_ADD_GENERAL_INFO';
             }
           }
         );
@@ -201,6 +205,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   }
                   this.generalInfoCandidate = generalInfo[0];
                   this.updateForm(generalInfo[0]);
+                  this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
                   this.update = true;
                 }
               } else {
@@ -221,6 +226,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
                     this.avatar = avatar;
                   }
                 );
+                this.featureAddUpdate = 'RESUME_ADD_GENERAL_INFO';
+
               }
             }
           );

@@ -7,5 +7,9 @@
   (rowActionData)="switchAction($event)"
   [colorObject]="sendColorObject()"
   (pagination)="loadMoreItems($event)"
-  [allowedActions]="['resume-change-status' | translate, 'downlaod-docx' | translate, 'export-pdf' | translate, 'send-mail' | translate, 'resume-archive' | translate]">
+  [allowedActions]="[{ name: 'resume-change-status', feature: 'RESUME_USER_STATUS'},
+                     {name:'downlaod-docx', feature: 'EXPENSES_ACCESS'},
+                     { name: 'export-pdf', feature: 'RESUME_PDF_EXPORT'},
+                      { name: 'send-mail', feature: 'EXPENSES_ACCESS'},
+                       { name: 'resume-archive', feature: 'RESUME_ARCHIVE'}]">
 </wid-dynamic-data-table>

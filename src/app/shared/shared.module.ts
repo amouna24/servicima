@@ -60,6 +60,7 @@ import { SignatureCertificateComponent } from './modules/work-certificates/signa
 import { ConfirmListComponent } from './components/confirm-list/confirm-list.component';
 import { DisabledFormDirective } from './directives/disabled-form.directive';
 import { CanNotDisplayDirective } from './directives/can-not-display.directive';
+import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directive';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { CanNotDisplayDirective } from './directives/can-not-display.directive';
     SpliceText,
     ConfirmListComponent,
     DisabledFormDirective,
+    CantBeDisplayedDirective,
     CanNotDisplayDirective,
   ],
   imports: [
@@ -168,6 +170,7 @@ import { CanNotDisplayDirective } from './directives/can-not-display.directive';
     ConfirmListComponent,
     DisabledFormDirective,
     CanBeDisplayedDirective,
+    CantBeDisplayedDirective,
     CanNotDisplayDirective,
   ]
 })
