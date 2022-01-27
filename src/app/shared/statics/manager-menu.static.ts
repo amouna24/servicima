@@ -16,13 +16,6 @@ export const managerMenu: IMenu[] = [
         feature: 'SOURCING_ACCESS',
     },
   {
-    state: 'payslip',
-    name: 'payslip',
-    type: 'link',
-    icon: 'wi-recruitment',
-    feature: 'SOURCING_ACCESS',
-  },
-  {
     state: 'timesheet',
     name: 'timesheet',
     type: 'sub',
@@ -72,6 +65,13 @@ export const managerMenu: IMenu[] = [
         icon: '',
         feature: 'HR_ACCESS',
         type: 'link',
+      },
+      {
+        state: 'payslip',
+        name: 'manager.menu.hr.payslip',
+        type: 'link',
+        icon: 'wi-recruitment',
+        feature: 'SOURCING_ACCESS',
       },
     ]
   },

@@ -2,12 +2,12 @@
   <wid-confirm-list
     fxFlex class="full-width"
     [DATA]="selectedFiles"
-    [title]="'Import Payslip'"
+    [title]="'hr.payslip.import.payslip'"
     [selectAllBtn]="true"
-    [btnLabel]="'Associate'"
+    [btnLabel]="'hr.payslip.import.associate'"
     [requiredFields]="['email_address', 'collaboratorName']"
     [selectList]=" { data: collaboratorList, selected: 'email_address' , value: ['userKey', 'email_address'], text: 'first_name', placeHolder: 'Collaborator'}"
-    [message]="{ field: 'collaboratorName', message: 'The name [$VALUE] here was found in the payslip'}"
+    [message]="{ field: 'collaboratorName', message: 'hr.payslip.import.message'}"
     (action)="associate($event)"
     (dialogAction)="modalActions($event)"
   ></wid-confirm-list>

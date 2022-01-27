@@ -164,17 +164,17 @@ export class PayslipListComponent implements OnInit {
     });
   }
   async switchAction(rowAction): Promise<void> {
-    switch (rowAction.actionType) {
+    switch (rowAction.actionType.name) {
       case ('update'):
         this.openFile(rowAction.data.file_name);
         break;
-      case ('Delete'):
+      case ('hr.payslip.delete'):
         this.deletePayslip(rowAction.data);
         break;
-      case ('Download'):
+      case ('hr.payslip.download'):
         this.downloadFile(rowAction.data);
         break;
-      case ('Import'):
+      case ('hr.payslip.import'):
         await this.importPayslip();
         break;
     }

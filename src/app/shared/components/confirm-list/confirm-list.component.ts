@@ -29,7 +29,7 @@ export class ConfirmListComponent implements OnInit {
   showList = new BehaviorSubject<any[]>([]);
   unknownList = new BehaviorSubject<any[]>([]);
   async ngOnInit(): Promise<void> {
-    this.btnLabel = this.btnLabel ? this.btnLabel : 'Confirm';
+    this.btnLabel = this.btnLabel ? this.btnLabel : 'confrim.list.confirm';
     await this.initData();
   }
 
@@ -115,8 +115,8 @@ export class ConfirmListComponent implements OnInit {
     }
   }
 
-  setMessage(file: any): string {
-    const field = '<span class="decoration golden-yellow cursor-pointer">' + file[this.message.field] + '</span>';
-    return this.message.message.replace('[$VALUE]', field);
+  setMessage(messageFiled: string, message: string): string {
+    const field = '<span class="decoration golden-yellow cursor-pointer">' + messageFiled + '</span>';
+    return message.replace('[$VALUE]', field);
   }
 }
