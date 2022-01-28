@@ -101,28 +101,27 @@ await this.getData(0, this.nbtItems.getValue());
    To change
    *************************************************************************/
   switchAction(rowAction: any) {
-     this.translateService.get(['resume-change-status', 'send-mail', 'export-pdf', 'downlaod-docx', 'resume-archive']).subscribe( (res) => {
-      switch (rowAction.actionType) {
-        case (res['resume-change-status']):
+       console.log('name:', rowAction.actionType.name);
+      switch (rowAction.actionType.name) {
+        case ('resume-change-status'):
           this.changeCandidateToCollaborator(rowAction.data);
           break;
         case ('update'):
           this.updateResume(rowAction.data);
           break;
-        case(res['send-mail']):
+        case('send-mail'):
           this.sendMail(rowAction.data);
           break;
-        case(res['export-pdf']):
+        case('export-pdf'):
           this.exportPdf(rowAction.data);
           break;
-        case(res['downlaod-docx']):
+        case('downlaod-docx'):
           this.downloadDocx(rowAction.data);
           break;
-        case(res['resume-archive']):
+        case('resume-archive'):
           this.archiveUser(rowAction.data);
           break;
       }
-    });
 
   }
   /**************************************************************************

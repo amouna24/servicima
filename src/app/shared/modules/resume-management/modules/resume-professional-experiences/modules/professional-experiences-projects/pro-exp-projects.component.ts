@@ -56,6 +56,7 @@ export class ProExpProjectsComponent implements OnInit {
   myDisabledDayFilter: any;
   openExpansion: boolean;
   hasChildren: any;
+  featureAddUpdate: string;
 
   /**********************************************************************
    * @description Resume Professional experience constructor
@@ -77,6 +78,7 @@ export class ProExpProjectsComponent implements OnInit {
     this.hasChildren = (_: number, node: IMyTreeNode) => {
       return node.children && node.children.length > 0;
     };
+    this.featureAddUpdate = 'RESUME_ADD_PROJECT';
     this.createForm();
     this.ProjectArray = [];
     this.showProject = false;
@@ -191,6 +193,7 @@ export class ProExpProjectsComponent implements OnInit {
           console.log('project updated =', data);
           this.ProjectArray.splice( this.indexUpdate, 0, data);
         });
+        this.featureAddUpdate = 'RESUME_ADD_PROJECT';
         this.button = 'Add';
         this.showForm = false;
       }
@@ -229,6 +232,7 @@ export class ProExpProjectsComponent implements OnInit {
       client: oneProject.client,
       position: oneProject.position,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_PROJECT';
     this.myDisabledDayFilter = null;
     this.projectCode = oneProject.ResumeProjectKey.project_code;
     this.id = oneProject._id.toString();
