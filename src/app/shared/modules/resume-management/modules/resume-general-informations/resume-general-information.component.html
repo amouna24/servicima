@@ -136,7 +136,7 @@
                         color="primary"
                         class="white btn-medium"
                         [style]="{marginRight: '4%'}"
-                        routerLink="/collaborator/resume/certifDiploma"
+                        (click)="featureBlockedRoute()"
                         *cantBeDisplayed="{ feature: featureAddUpdate}"
                         [disabled]="CreationForm.invalid"
                 >

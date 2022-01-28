@@ -374,7 +374,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
                 companyUserType: this.companyUserType,
 
               }
-            });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+            });
+          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
               state: {
                 resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
@@ -441,5 +442,26 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
     this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.user_type;
+  }
+  featureBlockedRoute() {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/diploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+          companyUserType: this.companyUserType,
+        }
+      });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      this.router.navigate(['/candidate/resume/certifDiploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/collaborator/resume/certifDiploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+        }
+      });
+    }
   }
 }
