@@ -2,9 +2,9 @@
   [tableData]="tableData"
   [tableCode]="'TEST-BLOC-QUESTIONS'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Bloc Question List', addActionURL: '/manager/settings/bloc-question/add', addActionText: 'Add'}"
+  [header]="{ title: 'Bloc Question List', addActionURL: '/manager/settings/bloc-question/add', addActionText: 'Add', feature: 'CONTRACT_ACCESS'}"
   [title]="'Skills list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="{ update: true, delete: true, show: true }"
+  [allowedActions]="[{ name: 'show', feature: 'CONTRACT_ACCESS'}, { name: 'delete', feature: 'CONTRACT_ACCESS'}]"
 >
 </wid-dynamic-data-table>

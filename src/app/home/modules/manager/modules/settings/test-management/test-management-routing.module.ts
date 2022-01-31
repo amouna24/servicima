@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'skills',
+    path: '',
     loadChildren: () => import('./skills/skills.module').then(m => m.SkillsModule),
     data: {
       breadcrumb: 'Skills'

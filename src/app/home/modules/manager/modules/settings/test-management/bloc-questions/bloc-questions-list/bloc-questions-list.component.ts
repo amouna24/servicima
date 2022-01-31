@@ -99,7 +99,7 @@ export class BlocQuestionsListComponent implements OnInit {
     return code;
   }
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
+    switch (rowAction.actionType.name) {
       case ('show'): this.showBloc(rowAction.data);
         break;
       case ('update'): this.updateBloc(rowAction.data);
@@ -111,12 +111,12 @@ export class BlocQuestionsListComponent implements OnInit {
   private showBloc(data) {
     this.router.navigate(['/manager/settings/bloc-question/details'],
       { state: {
-          test_bloc_title: data.test_bloc_title,
-          test_bloc_technology: data.test_bloc_technology,
-          test_bloc_total_number: data.test_bloc_total_number,
-          test_question_bloc_desc: data.test_question_bloc_desc,
-          _id: data._id,
-          test_question_bloc_code: data.test_question_bloc_code,
+          test_bloc_title: data[0].test_bloc_title,
+          test_bloc_technology: data[0].test_bloc_technology,
+          test_bloc_total_number: data[0].test_bloc_total_number,
+          test_question_bloc_desc: data[0].test_question_bloc_desc,
+          _id: data[0]._id,
+          test_question_bloc_code: data[0].test_question_bloc_code,
         }
       });
   }
@@ -135,27 +135,28 @@ export class BlocQuestionsListComponent implements OnInit {
   }
 
   private deleteBloc(data) {
-    const confirmation = {
-      code: 'delete',
-      title: 'Delete This Bloc ?',
-      status: data['_id'],
-      description: 'Are you sure to delete this Bloc?',
-    };
-    console.log('_id=', data);
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .subscribe(
-        (res) => {
-          if (res === true) {
-            this.testService.deleteQuestionBloc(data['_id']).subscribe(dataBloc => {
-              console.log('Deleted');
-              this.getTableData().then((dataTable) => {
-                this.tableData.next(dataTable);
-              });
+    data.map( (deletedObject) => {
+      const confirmation = {
+        code: 'delete',
+        title: 'Delete This Bloc ?',
+        description: 'Are you sure to delete this Bloc?',
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (res) => {
+            if (res === true) {
+              this.testService.deleteQuestionBloc(deletedObject['_id']).subscribe(dataBloc => {
+                console.log('Deleted');
+                this.getTableData().then((dataTable) => {
+                  this.tableData.next(dataTable);
+                });
 
-            });
+              });
+            }
+            this.subscriptionModal.unsubscribe();
           }
-          this.subscriptionModal.unsubscribe();
-        }
-      );
+        );
+    });
+
   }
 }

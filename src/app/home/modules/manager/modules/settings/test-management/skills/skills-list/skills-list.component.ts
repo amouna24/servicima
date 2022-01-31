@@ -94,48 +94,35 @@ export class SkillsListComponent implements OnInit {
     });
   }
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('show'): this.showSkill(rowAction.data);
-        break;
+    switch (rowAction.actionType.name) {
       case ('update'): this.updateSkill(rowAction.data);
         break;
-      case('delete'): this.deleteSkill(rowAction.data);
+      case('Delete'): this.deleteSkill(rowAction.data);
     }
   }
-  deleteSkill(id: string) {
-    const confirmation = {
-      code: 'delete',
-      title: 'Delete This Skills ?',
-      status: id['_id'],
-      description: 'Are you sure ? '
-    };
-    this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .subscribe(
-        (res) => {
-          if (res === true) {
-            this.testService.deleteSkills(id['_id']).subscribe(() => {
-              console.log('Deleted');
-              this.getTableData().then((data) => {
-                console.log('data', data);
-                this.tableData.next(data);
+  deleteSkill(data: any) {
+    data.map( (deletedObject) => {
+      const confirmation = {
+        code: 'delete',
+        title: 'Delete This Skills ?',
+        description: 'Are you sure ? '
+      };
+      this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
+        .subscribe(
+          (resModal) => {
+            if (resModal === true) {
+              this.testService.deleteSkills(deletedObject['_id']).subscribe(() => {
+                console.log('Deleted');
+                this.getTableData().then((res) => {
+                  this.tableData.next(res);
+                });
               });
-            });
+            }
+            this.subscriptionModal.unsubscribe();
           }
-          this.subscriptionModal.unsubscribe();
-        }
-      );
-  }
-  private showSkill(data) {
-    console.log('show techno ', this.tableData['skill_title'].technology);
-    this.router.navigate(['/manager/settings/skills/edit'],
-      { state: {
-          id: data._id,
-          skill_title: data.skill_title,
-          test_level_code: data.test_level_code,
-          test_skill_code: data.test_skill_code,
-          technology: this.tableData[data['_id']].technology,
-        }
-      });
+        );
+    });
+
   }
   /**
    * @description : update role

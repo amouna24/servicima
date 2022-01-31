@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'dash',
+    path: '',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
     data: {
       breadcrumb: ''
@@ -93,8 +93,15 @@ const routes: Routes = [
     },
   },
   {
-    path: '',
-    loadChildren: () => import('./test-management/test-management.module').then(m => m.TestManagementModule),
+    path: 'skills',
+    loadChildren: () => import('./test-management/skills/skills.module').then(m => m.SkillsModule),
+    data: {
+      breadcrumb: 'Test'
+    },
+  },
+  {
+    path: 'bloc-question',
+    loadChildren: () => import('./test-management/bloc-questions/bloc-questions.module').then(m => m.BlocQuestionsModule),
     data: {
       breadcrumb: 'Test'
     },

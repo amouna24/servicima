@@ -30,7 +30,7 @@
                     Question title:
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">
-                    <input formControlName="test_question_title" matInput placeholder="Bloc title" required>
+                    <input formControlName="test_question_title" matInput placeholder="Question title" required>
                     <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.required">
                       {{ 'general.required' | translate }}</mat-error>
                     <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.pattern">
@@ -86,10 +86,10 @@
                     </div>
                     <div fxLayout="column" fxFlex>
                       <mat-label class="black font-size-12 required">
-                        Duration:
+                        Duration(minute):
                       </mat-label>
                       <mat-form-field appearance="outline" class="full-width">
-                        <input formControlName="duration" matInput placeholder="Bloc title"  type="time" required>
+                        <input formControlName="duration" matInput placeholder="Duration(minute)" max="59" min="0"  type="number" required>
                         <mat-error class="red" *ngIf="sendAddQuestion.controls.duration.errors?.required">
                           {{ 'general.required' | translate }}</mat-error>
                       </mat-form-field>
