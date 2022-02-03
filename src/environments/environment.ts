@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   env: 'local',
-  /************************** ADMINISTRATION *****************************/
+   /************************** ADMINISTRATION *****************************/
   translateApiUrl: 'http://213.136.74.202/translates',
   languageApiUrl: 'http://213.136.74.202/languages',
   refDataApiUrl: 'http://213.136.74.202/refdatas',
