@@ -44,6 +44,7 @@
             </mat-list-item>
             <mat-accordion multi="false">
               <ng-container *ngFor=" let subMenuItem of subMenu; let pointIndex=index">
+                <div *canBeDisplayed="{'feature':subMenuItem.feature}">
                 <ng-container *ngIf=" subMenuItem.type === 'link'; else accordion">
                   <a mat-list-item routerLinkActive="active-list-item"
                      [routerLink]="subMenuItem.state === '' ? ['/', moduleName, parentMenu] : ['/', moduleName, parentMenu, subMenuItem.state]"
@@ -76,6 +77,7 @@
                     </a>
                   </mat-expansion-panel>
                 </ng-template>
+                </div>
               </ng-container>
             </mat-accordion>
           </div>

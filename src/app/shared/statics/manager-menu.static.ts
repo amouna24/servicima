@@ -230,7 +230,7 @@ export const managerMenu: IMenu[] = [
         state: '',
         name: 'resume-list',
         icon: 'wi_dashboard',
-        feature: 'EXPENSES_ACCESS',
+        feature: 'RESUME_LIST_MANAGEMENT',
         type: 'link',
       },
       {
