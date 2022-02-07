@@ -61,10 +61,11 @@ await this.getData(0, this.nbtItems.getValue());
          this.resumeService
           .getResumeDataTable(`?company_email=${userInfo?.company[0].companyKey.email_address}&beginning=${offset}&number=${limit}`)
           .subscribe((resume) => {
-            resume['results'].map( (oneResume: IResumeModel) => {
-              this.userService
-                .getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}&email_address=${oneResume.ResumeKey.email_address}`)
-                .subscribe(async (user) => {
+            if (resume['results'].length !== 0) {
+              resume['results'].map( (oneResume: IResumeModel) => {
+                this.userService
+                  .getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}&email_address=${oneResume.ResumeKey.email_address}`)
+                  .subscribe(async (user) => {
                     return new Promise((resolve) => {
                       if (user['msg_code'] !== '0004') {
                         blocData.push({
@@ -93,7 +94,12 @@ await this.getData(0, this.nbtItems.getValue());
                     });
 
                   });
-                });
+              });
+            } else {
+              this.isLoading.next(false);
+              this.tableData.next([]);
+            }
+
             });
           });
   }
