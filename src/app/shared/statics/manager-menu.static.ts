@@ -27,27 +27,27 @@ export const managerMenu: IMenu[] = [
     name: 'timesheet',
     type: 'sub',
     icon: 'wi_timesheet',
-    feature: 'CONTRACT_ACCESS',
+    feature: 'TIMESHEET_ACCESS',
     children: [
       {
         state: 'Pending',
         name: 'timesheet-pending',
         icon: '',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'TIMESHEET_PENDING_ACCESS',
         type: 'link',
       },
       {
         state: 'Rejected',
         name: 'timeshhet-rejected',
         icon: '',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'TIMESHETT_REJECTED_ACCESS',
         type: 'link',
       },
       {
         state: 'Approved',
         name: 'timesheet-approved',
         icon: '',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'TIMESHEET_APPROVED_ACCESS',
         type: 'link',
       },
     ]
@@ -75,7 +75,6 @@ export const managerMenu: IMenu[] = [
       },
     ]
   },
-
     {
         state: 'placements',
         name: 'manager.menu.static.placements',
@@ -225,20 +224,20 @@ export const managerMenu: IMenu[] = [
     name: 'resume-management',
     type: 'sub',
     icon: 'wi-billings',
-    feature: 'CONTRACT_ACCESS',
+    feature: 'EXPENSES_ACCESS',
     children: [
       {
         state: '',
         name: 'resume-list',
         icon: 'wi_dashboard',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'RESUME_LIST_MANAGEMENT',
         type: 'link',
       },
       {
         state: 'history',
         name: 'mailing_history',
         icon: 'wi-user',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'RESUME_MAILING_HISTORY',
         type: 'link',
   }
 ]},
@@ -246,7 +245,7 @@ export const managerMenu: IMenu[] = [
     state: 'linkedin',
     name: 'share-on-social',
     icon: 'wi_dashboard',
-    feature: 'CONTRACT_ACCESS',
+    feature: 'EXPENSES_ACCESS',
     type: 'link',
   }
 ];

@@ -30,57 +30,60 @@
                 <p class="font-normal font-size-15">{{item.technical_skill_desc}}</p>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" [disabled]="button === 'Save'" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"
+                        [disabled]="button === 'Save'" *canBeDisplayed="{'feature': 'RESUME_UPDATE_TECH_SKILL'}" (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5"  (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" *canBeDisplayed="{'feature': 'RESUME_UPDATE_TECH_SKILL'}" (click)="deleteTechSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
             </div>
           </div>
-          <div>
-            <form [formGroup]="sendTechSkill">
-              <div fxLayout="column" fxFlex="8"></div>
-              <div fxLayout="column" fxFlex="80">
-                <div fxLayout="column">
-                  <mat-label class="black font-size-12 required">
-                    {{ 'resume-skill-title' | translate }}:
-                  </mat-label>
-                  <mat-form-field appearance="outline" class="full-width">
-                    <input formControlName="technical_skill_desc" matInput placeholder="{{ 'resume-skill-title' | translate }}" required>
-                    <mat-error class="red" *ngIf="sendTechSkill.controls.technical_skill_desc.errors?.required">
-                      {{ 'general.required' | translate }}</mat-error>
-                    <mat-error class="red" *ngIf="sendTechSkill.controls.technical_skill_desc.errors?.pattern">
-                      {{ 'resume-numbers' | translate }}</mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="column">
-                  <mat-label class="black font-size-12 required">
-                    {{ 'resume-technologies' | translate }}:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
+            <div fxLayout="row" fxFlexFill>
+              <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': sendTechSkill}">
+                <form [formGroup]="sendTechSkill">
+                  <div fxLayout="column" fxFlex="8"></div>
+                  <div fxLayout="column" fxFlex="80">
+                    <div fxLayout="column">
+                      <mat-label class="black font-size-12 required">
+                        {{ 'resume-skill-title' | translate }}:
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <input formControlName="technical_skill_desc" matInput placeholder="{{ 'resume-skill-title' | translate }}" required>
+                        <mat-error class="red" *ngIf="sendTechSkill.controls.technical_skill_desc.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                        <mat-error class="red" *ngIf="sendTechSkill.controls.technical_skill_desc.errors?.pattern">
+                          {{ 'resume-numbers' | translate }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column">
+                      <mat-label class="black font-size-12 required">
+                        {{ 'resume-technologies' | translate }}:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
                     <textarea matInput formControlName="technologies" placeholder="{{ 'resume-technologies' | translate }}"
                               rows="7" required></textarea>
-                    <mat-error class="red" *ngIf="sendTechSkill.controls.technologies.errors?.required">
-                      {{ 'general.required' | translate }}</mat-error>
-                    <mat-error class="red" *ngIf="sendTechSkill.controls.technologies.errors?.pattern">
-                      {{ 'resume-numbers' | translate }}</mat-error>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="end end">
-                  <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
-                          (click)="createUpdateTechnicalSkill()" [disabled]="sendTechSkill.invalid">
-                    <div *ngIf="button === 'Add';then add else save"></div>
-                    <ng-template #add>
-                      {{ 'resume-add' | translate }}
-                    </ng-template>
-                    <ng-template #save>
-                      {{ 'resume-save' | translate }}
-                    </ng-template>
-                  </button>
-                </div>
+                        <mat-error class="red" *ngIf="sendTechSkill.controls.technologies.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                        <mat-error class="red" *ngIf="sendTechSkill.controls.technologies.errors?.pattern">
+                          {{ 'resume-numbers' | translate }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end end" *canBeDisplayed="{ feature: featureAddUpdate}">
+                      <button mat-raised-button type="button" class="bg-pale-grey btn-medium black"
+                              (click)="createUpdateTechnicalSkill()" [disabled]="sendTechSkill.invalid">
+                        <div *ngIf="button === 'Add';then add else save"></div>
+                        <ng-template #add>
+                          {{ 'resume-add' | translate }}
+                        </ng-template>
+                        <ng-template #save>
+                          {{ 'resume-save' | translate }}
+                        </ng-template>
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
+            </div>
         </div>
       </wid-scrollbar>
       <div fxLayout="row" fxFlex="6" fxLayoutAlign="center ">
@@ -90,8 +93,12 @@
             <span class="cool-grey">{{ 'resume-previous' | translate }}</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [style]="{marginRight: '4%'}"
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}" >
+          <button mat-raised-button
+                  type="submit"
+                  color="primary"
+                  class="white  btn-medium"
+                  [style]="{marginRight: '4%'}"
                  (click)="checkFormValues('next')">
             {{ 'resume-next' | translate }}
           </button>

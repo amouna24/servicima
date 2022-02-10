@@ -55,6 +55,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   lastNameManager: string;
   isLoadingImage = true;
   generalInfoCandidate: IResumeModel;
+  featureAddUpdate: string;
   /**********************************************************************
    * @description Resume general information constructor
    *********************************************************************/
@@ -109,6 +110,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
         );
       }
       await this.updateForm(this.generalInfoManager);
+      this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
       this.update = true;
     } else if (this.resumeCode) {
       await this.resumeService.getResume(
@@ -140,6 +142,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   );
                 }
                 this.updateForm(generalInfo[0]);
+                this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
                 this.generalInfoManager = generalInfo[0];
                 this.update = true;
               }
@@ -161,6 +164,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   this.avatar = avatar;
                 }
               );
+              this.featureAddUpdate = 'RESUME_ADD_GENERAL_INFO';
             }
           }
         );
@@ -201,6 +205,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
                   }
                   this.generalInfoCandidate = generalInfo[0];
                   this.updateForm(generalInfo[0]);
+                  this.featureAddUpdate = 'RESUME_UPDATE_GENERAL_INFO';
                   this.update = true;
                 }
               } else {
@@ -221,6 +226,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
                     this.avatar = avatar;
                   }
                 );
+                this.featureAddUpdate = 'RESUME_ADD_GENERAL_INFO';
+
               }
             }
           );
@@ -367,7 +374,8 @@ export class ResumeGeneralInformationComponent implements OnInit {
                 companyUserType: this.companyUserType,
 
               }
-            });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+            });
+          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
             this.router.navigate(['/candidate/resume/certifDiploma'], {
               state: {
                 resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
@@ -434,5 +442,26 @@ export class ResumeGeneralInformationComponent implements OnInit {
     this.firstNameManager = this.router.getCurrentNavigation()?.extras?.state?.firstName;
     this.lastNameManager = this.router.getCurrentNavigation()?.extras?.state?.lastName;
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.user_type;
+  }
+  featureBlockedRoute() {
+    if (this.userService.connectedUser$.getValue().user[0].user_type === 'COMPANY') {
+      this.router.navigate(['/manager/resume/diploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode,
+          companyUserType: this.companyUserType,
+        }
+      });          } else if (this.userService.connectedUser$.getValue().user[0].user_type === 'CANDIDATE') {
+      this.router.navigate(['/candidate/resume/certifDiploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+        }
+      });
+    } else {
+      this.router.navigate(['/collaborator/resume/certifDiploma'], {
+        state: {
+          resumeCode: this.generalInfoManager ? this.generalInfoManager.resume_code : this.resumeCode
+        }
+      });
+    }
   }
 }

@@ -1,31 +1,21 @@
 import { Directive, ElementRef, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import * as _ from 'lodash';
 import { UserService } from '@core/services/user/user.service';
+import * as _ from 'lodash';
 
 @Directive({
-  selector: '[widDisabledForm]'
+  selector: '[cantBeDisplayed]'
 })
-export class DisabledFormDirective implements OnInit {
+export class CantBeDisplayedDirective implements OnInit {
+
   private currentUser: any; // todo: use the right type when ready
-  availableFeature = [];
   feature: string;
-  form: any;
-
-  constructor(   private element: ElementRef,
-                 private templateRef: TemplateRef<any>,
-                 private viewContainer: ViewContainerRef,
-                 private userService: UserService, ) {
-  }
-
-  @Input()
-   set widDisabledForm(params: any) {
-    console.log('paramssssssssssss=', params);
-    if (params) {
-      this.feature = params.feature;
-      this.form = params.form;
-      this.updateView(params.feature);
-    }
-  }
+  availableFeature = [];
+  constructor(
+    private element: ElementRef,
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef,
+    private userService: UserService,
+  ) { }
 
   /**
    * @description Loaded when component in init state
@@ -45,34 +35,36 @@ export class DisabledFormDirective implements OnInit {
     this.currentUser = {
       features: this.availableFeature
     };
-    this.updateView(this.feature);
+    this.updateView();
   }
-
+  @Input()
+  set cantBeDisplayed(params: any) {
+    if (params) {
+      this.feature = params.feature;
+    }
+  }
   /**
    * Insert or remove the html element from the DOM
    */
-  updateView(feature) {
-    console.log('feature =', feature);
-    if (!this.isDisplayed(feature)) {
-      this.form.disable();
+  updateView() {
+    if (!this.isDisplayed()) {
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
-      this.form.enable();
       this.viewContainer.clear();
-      this.viewContainer.createEmbeddedView(this.templateRef);
     }
   }
 
   /**
    * if the HTML element can be displayed or not depending on the connected user
    */
-  isDisplayed(feature): boolean {
-    if (!this.userService.licenceFeature.includes(feature)) {
+  isDisplayed(): boolean {
+    if (!this.userService.licenceFeature.includes(this.feature)) {
       return false;
     }
     return this.currentUser &&
       this.currentUser.features &&
-      this.currentUser.features.includes(feature);
+      this.currentUser.features.includes(this.feature);
   }
+
 }

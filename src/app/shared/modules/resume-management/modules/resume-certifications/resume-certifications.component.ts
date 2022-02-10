@@ -42,6 +42,7 @@ oldImage: string;
 display_image: boolean;
 dispayedImagesSum = 0;
 imageFile: File;
+featureAddUpdate: string;
   /**********************************************************************
    * @description Resume Certification constructor
    *********************************************************************/
@@ -60,6 +61,7 @@ imageFile: File;
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.featureAddUpdate = 'RESUME_ADD_CERTIFICATIONS';
     this.button = 'Add';
     this.certificationArray = [];
     this.showExpireDatePicker = true;
@@ -128,6 +130,7 @@ imageFile: File;
         this.updateCertification(this.certificationUpdate).then( (res) => {
         });
       }
+      this.featureAddUpdate = 'RESUME_ADD_CERTIFICATIONS';
       this.display_image = false;
       this.button = 'Add';
     }
@@ -258,6 +261,7 @@ imageFile: File;
       certif_url: certification.certif_url,
       image: certification.image,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_CERTIFICATIONS';
     this.display_image = certification.display_image;
     this.oldImage = this.certifForm.controls.image.value;
     this.id = certification._id;

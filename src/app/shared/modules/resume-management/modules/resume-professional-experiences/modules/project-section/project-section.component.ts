@@ -47,6 +47,7 @@ export class ProjectSectionComponent implements OnInit {
   button = 'Add';
   showDesc: boolean;
   showSec: boolean;
+  featureAddUpdate: string;
   constructor(
     private refDataService: RefdataService,
     private utilService: UtilsService,
@@ -59,6 +60,7 @@ export class ProjectSectionComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.featureAddUpdate = 'RESUME_ADD_PROJECT_DETAILS';
     this.select = 'PARAGRAPH';
     this.list = '';
     this.desc = '';
@@ -211,6 +213,7 @@ export class ProjectSectionComponent implements OnInit {
           this.proDetailsArray.splice( this.indexUpdate, 0, data);
           this.refreshTree.emit(true);
         });
+        this.featureAddUpdate = 'RESUME_ADD_PROJECT_DETAILS';
         this.button = 'Add';
       }   }
       this.proSectionAddArray = [];
@@ -245,6 +248,7 @@ export class ProjectSectionComponent implements OnInit {
       project_detail_desc: projectDetail.project_detail_desc,
       select: this.select
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_PROJECT_DETAILS';
     this.proDetailsArray.splice( pointIndex, 1);
     if (projectDetail.project_detail_desc === null || projectDetail.project_detail_desc === '') {
       this.resumeService.getProjectDetailsSection(

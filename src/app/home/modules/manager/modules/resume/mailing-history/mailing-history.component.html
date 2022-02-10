@@ -7,7 +7,7 @@
   [header]="{ title:  'manager.mailing_history.title' | translate}"
   (pagination)="loadMoreItems($event)"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="['Resend', Archive]">
+  [allowedActions]="[{ name: 'manager.resume.mailing_history.resend', feature: 'RESUME_MAILING_HISTORY_RESEND'},{ name: Archive, feature: 'RESUME_MAILING_HISTORY_DISABLE'}]">
 </wid-dynamic-data-table>
 
 

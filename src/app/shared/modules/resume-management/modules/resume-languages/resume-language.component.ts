@@ -46,6 +46,7 @@ export class ResumeLanguageComponent implements OnInit {
   subscriptionModal: Subscription;
   button: string;
   companyUserType: string;
+  featureAddUpdate: any;
   constructor(
     private utilService: UtilsService,
     private fb: FormBuilder,
