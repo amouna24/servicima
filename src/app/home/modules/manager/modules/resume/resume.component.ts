@@ -61,7 +61,6 @@ await this.getData(0, this.nbtItems.getValue());
          this.resumeService
           .getResumeDataTable(`?company_email=${userInfo?.company[0].companyKey.email_address}&beginning=${offset}&number=${limit}`)
           .subscribe((resume) => {
-            console.log('resume length=', resume['results']);
             if (resume['results'].length !== 0) {
               resume['results'].map( (oneResume: IResumeModel) => {
                 this.userService

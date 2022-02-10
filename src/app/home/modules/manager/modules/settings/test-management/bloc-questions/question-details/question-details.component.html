@@ -1,0 +1,121 @@
+<div fxLayout="column" fxFlexFill>
+  <div fxLayout="row" fxFlex="10" style="align-items: center">
+    <div fxLayout="column"  fxFlex="40" style="align-items: center" >
+      <div class="tech-container">
+  <span class="font-light font-size-10 steel p-l-10">{{technology}}</span>
+    </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="8" style="justify-content: center">
+    <div fxLayout="column" >
+      <span>{{test_question_title}}</span>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="12" >
+    <div fxLayout="column" style="align-items: center" fxFlex>
+      <div fxLayout="row" fxFlex="80" style="justify-content: center;align-items: center" class="det-container">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <span class="font-light black font-size-12">Mark</span>
+          </div>
+          <div fxLayout="row">
+            <span class="font-light steel font-size-10">{{mark}}pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" style="align-items: center" fxFlex>
+      <div fxLayout="row" fxFlex="80" style="justify-content: center;align-items: center" class="det-container">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <span class="font-light black font-size-12">Level</span>
+          </div>
+          <div fxLayout="row">
+            <span class="font-light steel font-size-10">{{test_level_code}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" style="align-items: center" fxFlex>
+      <div fxLayout="row" fxFlex="80" style="justify-content: center;align-items: center" class="det-container">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <span class="font-light black font-size-12">Time</span>
+          </div>
+          <div fxLayout="row">
+            <span class="font-light steel font-size-10">{{duration}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" style="align-items: center" fxFlex>
+      <div fxLayout="row" fxFlex="80" style="justify-content: center;align-items: center" class="det-container">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <span class="font-light black font-size-12">Type</span>
+          </div>
+          <div fxLayout="row">
+            <span class="font-light steel font-size-10">{{question_type}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="20">
+    <div fxLayout="column" fxFlexFill class="p-l-20">
+      <div fxLayout="row" fxFlex="10">
+        <span class="font-normal font-size-12 black">Description:</span>
+      </div>
+      <div fxLayout="row">
+        <p  class="font-extra-light font-size-12 black">{{test_question_desc}}</p>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="40">
+    <div fxLayout="column" fxFlexFill class="p-l-20">
+      <div fxLayout="row" fxFlex="10">
+        <span class="font-normal font-size-12 black">Answers:</span>
+      </div>
+      <div fxLayout="row" fxFlex="80">
+        <wid-scrollbar class="full-height full-width" >
+          <div fxLayout="column" fxFlexFill fxLayoutGap="5px">
+          <div *ngFor="let item of AnswerDetails; let pointIndex=index" fxLayout="row" class="block-pos" >
+            <div fxLayout="column" fxFlex="93" class="answer-container"     >
+              <div fxLayout="row" fxFlexFill style="justify-content: center">
+                <div fxLayout="column" fxFlex="85" style="justify-content: center" >
+                  <div class="font-extra-light black font-size-12">{{item.choice_title}}</div>
+                </div>
+                <div fxLayout="column" fxFlex="10" style="justify-content: center">
+                  <ng-container *ngIf="item.correct_choice === 'True'">
+                    <div fxLayout="row"  class="correct-container">
+                      <span  class="font-light white font-size-8">{{item.correct_choice}}</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="item.correct_choice === 'False'">
+                    <div fxLayout="row"  class="false-container">
+                      <span  class="font-light white font-size-8">{{item.correct_choice}}</span>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </wid-scrollbar>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="10" style="justify-content: flex-end">
+    <div fxLayout="column" style="align-items: center" fxFlex="23">
+      <button mat-raised-button type="submit"  style="background-color: #fc0f3b;align-items: center" class="white  btn-small "  mat-dialog-close="{{id}}"   [style]="{marginRight: '4%'}">
+        Delete
+      </button>
+    </div>
+    <div fxLayout="column" style="align-items: center" fxFlex="21">
+      <button mat-raised-button type="submit" style="background-color: #f3f6f9;" class="black  btn-small " (click)="routeToQuestion()" mat-dialog-close="{{false}}" [style]="{marginRight: '4%'}">
+        Edit
+      </button>
+
+    </div>
+  </div>
+</div>

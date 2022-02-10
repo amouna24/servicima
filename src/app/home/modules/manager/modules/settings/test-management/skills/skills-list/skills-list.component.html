@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="tableData"
+  [tableCode]="'TEST_SKILLS'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Skills List', addActionURL: '/manager/settings/skills/add', addActionText: 'Add', feature: 'CONTRACT_ACCESS'}"
+  [title]="'Skills list'"
+  (rowActionData)="switchAction($event)"
+  [allowedActions]="[ { name:'Delete', feature: 'CONTRACT_ACCESS'}]"
+>
+</wid-dynamic-data-table>

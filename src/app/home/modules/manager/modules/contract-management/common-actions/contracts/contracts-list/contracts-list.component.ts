@@ -52,7 +52,6 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description search Criteria
    *************************************************************************/
   searchCriteria: string;
-
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
 
