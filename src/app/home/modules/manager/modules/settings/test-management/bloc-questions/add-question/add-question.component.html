@@ -1,0 +1,130 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="4" fxLayoutAlign="space-around center ">
+      </div>
+      <wid-scrollbar fxFlex="80" class="full-width" fxLayout="row">
+        <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+          <form [formGroup]="sendAddQuestion" fxLayout="row" fxFlex="100" style="justify-content: space-around">
+            <div fxLayout="column" fxFlex="82" >
+              <div fxLayout="row"  class="full-width">
+                <div fxLayout="column" fxFlex="60">
+                  <div fxLayout="row" >
+                    <div fxLayout="column" fxFlexFill>
+                  <mat-label class="black font-size-12 required">
+                    Question title:
+                  </mat-label>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input formControlName="test_question_title" matInput placeholder="Question title" required>
+                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_question_title.errors?.pattern">
+                      Numbers not allowed</mat-error>
+                  </mat-form-field>
+                    </div>
+                    </div>
+                  <div fxLayout="row" fxFlex="20" fxLayoutGap="15px">
+                    <div fxLayout="column" fxFlex>
+                  <mat-label class="black font-size-12 required">
+                    Level:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select  formControlName="test_level_code" disableOptionCentering panelClass="panelColor"
+                                 placeholder="Level" >
+                      <ng-container *ngFor="let v of LevelList">
+                        <mat-option [value]="v.TestLevelKey.test_level_code">{{v.test_level_title}}</mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-error class="red" *ngIf="sendAddQuestion.controls.test_level_code.errors?.required">
+                      Please select an item in the list</mat-error>
+                  </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex>
+                      <mat-label class="black font-size-12 required">
+                        Mark:
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <input   matInput  formControlName="mark" type="number" placeholder="Mark" >
+                        <mat-error class="red" *ngIf="sendAddQuestion.controls.mark.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                        <mat-error class="red" *ngIf="sendAddQuestion.controls.mark.errors?.pattern">
+                          Select a number between 1 and 100</mat-error>
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="15px">
+                    <div fxLayout="column" fxFlex>
+                      <mat-label class="black font-size-12 required">
+                        Type:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-select  formControlName="question_type" disableOptionCentering panelClass="panelColor"
+                                     placeholder="Type" >
+                          <mat-option [value]="'multiple'">Multi Answers</mat-option>
+                          <mat-option [value]="'single'" >Single Answer</mat-option>
+
+                        </mat-select>
+                        <mat-error class="red" *ngIf="sendAddQuestion.controls.question_type.errors?.required">
+                          Please select an item in the list</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex>
+                      <mat-label class="black font-size-12 required">
+                        Duration(minute):
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <input formControlName="duration" matInput placeholder="Duration(minute)" max="59" min="0"  type="number" required>
+                        <mat-error class="red" *ngIf="sendAddQuestion.controls.duration.errors?.required">
+                          {{ 'general.required' | translate }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxFlex="30">
+                    <div fxLayout="column" fxFlexFill>
+                  <mat-label class="black font-size-12 ">
+                    Description:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                              <textarea matInput placeholder="Description" rows="7"
+                                        formControlName="test_question_desc" ></textarea>
+                  </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </wid-scrollbar>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
+        <div fxLayout="column" fxFlex="77" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/manager/settings/bloc-question/">
+            <span class="cool-grey">Cancel</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="16" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddQuestion.invalid" [style]="{marginRight: '4%'}"
+                  (click)="createQuestion()">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
