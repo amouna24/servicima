@@ -41,9 +41,10 @@ export class SkillsListComponent implements OnInit {
       this.testService.getSkills(`?application_id=5eac544a92809d7cd5dae21f`)
         .subscribe(
           (response) => {
-            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            this.isLoading.next(true);
             if (response['msg_code'] === '0004') {
-              resolve(response['results']);
+              resolve([]);
+              this.isLoading.next(false);
             } else {
             response['results'].map(
               async (value) => {
@@ -61,6 +62,7 @@ export class SkillsListComponent implements OnInit {
                 if (response['results'].length === tableRes.length) {
                   response['results'] = tableRes;
                   resolve(response['results']);
+                  this.isLoading.next(false);
                 }
               }
             );
