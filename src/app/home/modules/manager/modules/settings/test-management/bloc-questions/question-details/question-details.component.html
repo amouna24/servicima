@@ -1,9 +1,14 @@
 <div fxLayout="column" fxFlexFill>
   <div fxLayout="row" fxFlex="10" style="align-items: center">
-    <div fxLayout="column"  fxFlex="40" style="align-items: center" >
-      <div class="tech-container">
-  <span class="font-light font-size-10 steel p-l-10">{{technology}}</span>
+    <div fxLayout="column"   fxLayoutAlign="center" class="p-l-30" f>
+      <div class="tech-container" fxLayout="row" fxLayoutAlign="center center">
+  <span class="font-light font-size-10 steel " >{{technology}}</span>
     </div>
+    </div>
+    <div fxLayout="column" fxFlex="82" fxLayoutAlign=" end">
+      <button class="close-container" fxLayout="row" fxLayoutAlign="center center" mat-dialog-close="closeDialog">
+        <span class="font-light font-size-11 steel " >X</span>
+      </button>
     </div>
   </div>
   <div fxLayout="row" fxFlex="8" style="justify-content: center">
@@ -105,13 +110,13 @@
       </div>
     </div>
   </div>
-  <div fxLayout="row" fxFlex="10" style="justify-content: flex-end">
-    <div fxLayout="column" style="align-items: center" fxFlex="23">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="end" fxLayoutGap="20px" class="p-r-15">
+    <div fxLayout="column" >
       <button mat-raised-button type="submit"  style="background-color: #fc0f3b;align-items: center" class="white  btn-small "  mat-dialog-close="{{id}}"   [style]="{marginRight: '4%'}">
         Delete
       </button>
     </div>
-    <div fxLayout="column" style="align-items: center" fxFlex="21">
+    <div fxLayout="column">
       <button mat-raised-button type="submit" style="background-color: #f3f6f9;" class="black  btn-small " (click)="routeToQuestion()" mat-dialog-close="{{false}}" [style]="{marginRight: '4%'}">
         Edit
       </button>

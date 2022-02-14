@@ -58,7 +58,7 @@ getAnswers() {
         this.AnswerDetails = value;
       });
 }
-/*deleteQuestions() {
+deleteQuestions() {
   const confirmation = {
     code: 'delete',
     title: 'Delete This Question ?',
@@ -76,7 +76,7 @@ getAnswers() {
         this.subscriptionModal.unsubscribe();
       }
     );
-}*/
+}
   routeToQuestion() {
     this.router.navigate(['/manager/settings/bloc-question/edit-question'],
       { state: {

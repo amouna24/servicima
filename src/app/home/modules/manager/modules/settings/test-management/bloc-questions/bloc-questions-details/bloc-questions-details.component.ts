@@ -93,7 +93,7 @@ export class BlocQuestionsDetailsComponent implements OnInit {
       }
     }).afterClosed().subscribe((id) => {
       console.log('id=', id);
-      if ((id !== undefined) && (id !== 'false')) {
+      if ((id !== undefined) && (id !== 'false') && (id !== 'closeDialog')) {
         const confirmation = {
         code: 'delete',
         title: 'Delete This Question ?',
