@@ -74,13 +74,13 @@
           </form>
         </div>
       </wid-scrollbar>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="75" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end " class="p-r-15" fxLayoutGap="20px">
+        <div fxLayout="column"  fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/manager/settings/bloc-question/">
             <span class="cool-grey">Cancel</span>
           </button>
         </div>
-        <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
+        <div fxLayout="column"  fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddTestBloc.invalid" [style]="{marginRight: '4%'}"
                   (click)="createBlocQuestion()">
             Save

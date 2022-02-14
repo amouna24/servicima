@@ -4,6 +4,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-skills-list',
@@ -27,6 +28,7 @@ export class SkillsListComponent implements OnInit {
     private testService: TestService,
     private router: Router,
     private modalServices: ModalService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class SkillsListComponent implements OnInit {
     const tableRes = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getSkills(`?application_id=5eac544a92809d7cd5dae21f`)
+      this.testService.getSkills(`?application_id=${this.utilsService.getApplicationID('SERVICIMA')}`)
         .subscribe(
           (response) => {
             this.isLoading.next(true);
