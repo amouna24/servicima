@@ -14,4 +14,5 @@ export interface ITestQuestionModel {
   test_question_bloc_code: string;
   application_id: string;
   test_level_code: string;
+  company_email: string;
 }

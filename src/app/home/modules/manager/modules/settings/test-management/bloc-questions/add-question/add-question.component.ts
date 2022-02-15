@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
 import { ITestQuestionModel } from '@shared/models/testQuestion.model';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-add-question',
@@ -11,23 +13,39 @@ import { Router } from '@angular/router';
 })
 export class AddQuestionComponent implements OnInit {
   sendAddQuestion: FormGroup;
-  LevelList = [];
-  MarkList = [];
-  TypeQuestionList = [];
+  LevelList =  [];
   question: ITestQuestionModel;
+  applicationId: string;
+  companyEmailAddress: string;
   test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
   test_question_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-QUESTION`;
   constructor(
     private fb: FormBuilder,
     private testService: TestService,
     private router: Router,
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
-    console.log('test quesyion bloc code', this.test_question_bloc_code);
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.getLevel();
     this.createForm();
+    this.getConnectedUser();
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   createForm() {
     this.sendAddQuestion = this.fb.group({
       test_question_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -39,7 +57,7 @@ export class AddQuestionComponent implements OnInit {
     });
   }
   getLevel() {
-    this.testService.getLevel(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
            this.LevelList = response;
@@ -54,14 +72,13 @@ export class AddQuestionComponent implements OnInit {
   createQuestion() {
     this.question = this.sendAddQuestion.value;
     this.question.test_question_code =  this.test_question_code;
-    this.question.application_id = '5eac544a92809d7cd5dae21f';
+    this.question.application_id = this.applicationId;
+    this.question.company_email = this.companyEmailAddress;
     this.question.order = '';
     this.question.test_question_bloc_code = this.test_question_bloc_code;
     this.question.to_display = '';
     if (this.sendAddQuestion.valid) {
-      console.log('question form', this.question);
-      this.testService.addQuestion(this.question).subscribe(data => {
-        console.log('question created=', data);
+      this.testService.addQuestion(this.question).subscribe(() => {
         this.router.navigate(['/manager/settings/bloc-question/add-answer'],
           { state: {
               test_question_title: this.sendAddQuestion.controls.test_question_title.value,
