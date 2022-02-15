@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ITestLevelModel } from '@shared/models/testLevel.model';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Subscription } from 'rxjs';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
 
 import { QuestionDetailsComponent } from '../question-details/question-details.component';
 
@@ -25,21 +27,40 @@ export class BlocQuestionsDetailsComponent implements OnInit {
   levelList: ITestLevelModel[] = [];
   showQuestionList = false;
   subscriptionModal: Subscription;
+  applicationId: string;
+  companyEmailAddress: string;
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private testService: TestService,
     private modalServices: ModalService,
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
 
   ) { }
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.getLevelAll();
     this.getQuestionsInfo();
-    console.log('question bloc code=', this.test_question_bloc_code);
+    this.getConnectedUser();
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   getQuestionsInfo() {
-    this.testService.getQuestion(`?test_question_bloc_code=${this.test_question_bloc_code}`).subscribe((value) => {
+    // tslint:disable-next-line:max-line-length
+    this.testService.getQuestion(`?test_question_bloc_code=${this.test_question_bloc_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).subscribe((value) => {
       if (value.length > 0) {
         this.questionsList = value;
         this.showQuestionList = true;
@@ -48,12 +69,13 @@ export class BlocQuestionsDetailsComponent implements OnInit {
     );
   }
   getLevelAll() {
-    this.testService.getLevel(`?application_id=5eac544a92809d7cd5dae21f`).subscribe((value) => {
+    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).subscribe((value) => {
       this.levelList = value;
     });
     }
+
     getLevel(code) {
-    let level = '';
+    let level: string;
     let i = 0;
     while ((this.levelList.length > i) && (level !== this.levelList[i].test_level_title)) {
       if (this.levelList[i].TestLevelKey.test_level_code === code) {
@@ -73,8 +95,9 @@ export class BlocQuestionsDetailsComponent implements OnInit {
       });
   }
 
-  // tslint:disable-next-line:max-line-length
-  ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string, mark: string, duration: string, question_type: string, test_question_desc: string, _id: string, test_question_bloc_code: string, code_level: string) {
+  ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string,
+                     mark: string, duration: string, question_type: string, test_question_desc: string,
+                     _id: string, test_question_bloc_code: string, code_level: string) {
     this.dialog.open(QuestionDetailsComponent, {
       height: '90vh',
       width: '85vh',
@@ -92,7 +115,6 @@ export class BlocQuestionsDetailsComponent implements OnInit {
         code_level,
       }
     }).afterClosed().subscribe((id) => {
-      console.log('id=', id);
       if ((id !== undefined) && (id !== 'false') && (id !== 'closeDialog')) {
         const confirmation = {
         code: 'delete',
@@ -111,14 +133,11 @@ export class BlocQuestionsDetailsComponent implements OnInit {
                   this.questionsList.splice(0, 1);
                   this.showQuestionList = false;
                 }
-                console.log('Deleted');
               });
             }
             this.subscriptionModal.unsubscribe();
           }
         );
     } });
-    console.log('question list', this.questionsList);
-    console.log('after closed');
   }
 }

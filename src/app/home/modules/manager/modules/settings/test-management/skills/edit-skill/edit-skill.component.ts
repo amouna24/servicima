@@ -11,6 +11,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { HelperService } from '@core/services/helper/helper.service';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-edit-skill',
@@ -31,7 +32,9 @@ export class EditSkillComponent implements OnInit {
   _id = this.router.getCurrentNavigation().extras.state?.id;
   test_skill_code = this.router.getCurrentNavigation().extras.state?.test_skill_code;
   technology  = this.router.getCurrentNavigation().extras.state?.technology;
-  private canDelete = false;
+  applicationId: string;
+  companyEmailAddress: string;
+
   constructor(
     private fb: FormBuilder,
     private dynamicDataTableService: DynamicDataTableService,
@@ -40,10 +43,13 @@ export class EditSkillComponent implements OnInit {
     private helperService: HelperService,
     private testService: TestService,
     private router: Router,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.createForm();
+    this.getConnectedUser();
     this.getTechnologiesInfo();
     this.getDisplayedColumns();
     this.displayedColumnsForm = new FormGroup({
@@ -53,6 +59,19 @@ export class EditSkillComponent implements OnInit {
       canBeDisplayedColumns: new FormArray([])
     });
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   /**
    * @description Inisialization of the Add test skill form
    */
@@ -64,7 +83,7 @@ export class EditSkillComponent implements OnInit {
   }
 
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -93,7 +112,7 @@ export class EditSkillComponent implements OnInit {
       );
   }
   getDisplayedColumns() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -106,7 +125,6 @@ export class EditSkillComponent implements OnInit {
                       type: 'text',
                     }
                   );
-                  console.log('tech code', res.TestTechnologyKey.test_technology_code);
                 }
               }
             );
@@ -203,14 +221,13 @@ export class EditSkillComponent implements OnInit {
     let deletedItems ;
     return new Promise<boolean>(
       async (resolve) => {
-        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}`)
+        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}&company_email=${this.companyEmailAddress}`)
           .toPromise()
           .then(
             dataTechSkill => {
               deletedItems = dataTechSkill.length;
               dataTechSkill.forEach((resTech) => {
                 this.testService.deleteTechnologySkills(resTech._id).subscribe((data) => {
-                  console.log('deleted', data);
                   deletedItems--;
                   if (deletedItems === 0) {
                     resolve(true);
@@ -229,10 +246,10 @@ export class EditSkillComponent implements OnInit {
    * @description check display column
    *************************************************************************/
   async addTech() {
-    console.log('displayed columns', this.displayedColumns);
     await this.displayedColumns.forEach(res => {
       this.skillTech = {
-        application_id: '5eac544a92809d7cd5dae21f',
+        application_id: this.applicationId,
+        company_email: this.companyEmailAddress,
         test_skill_code: this.test_skill_code,
         test_technology_code: res.prop,
       };
@@ -243,14 +260,14 @@ export class EditSkillComponent implements OnInit {
   updateSkill() {
     this.testSkill = this.sendUpdateTestSkill.value;
     this.testSkill.test_skill_code =  this.test_skill_code;
-    this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
+    this.testSkill.application_id = this.applicationId;
+    this.testSkill.company_email = this.companyEmailAddress;
     this.testSkill._id = this._id;
       this.testService.updateSkills(this.testSkill).subscribe( async data => {
         console.log(data);
       });
       this.deleteTechno().then(
         (dataB) => {
-          console.log('dataB', dataB);
           if (dataB) {
             this.addTech();
           }

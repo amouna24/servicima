@@ -7,4 +7,5 @@ export interface ITestSkillsModel {
   test_level_code: string;
   test_skill_code: string;
   application_id: string;
+  company_email: string;
 }
