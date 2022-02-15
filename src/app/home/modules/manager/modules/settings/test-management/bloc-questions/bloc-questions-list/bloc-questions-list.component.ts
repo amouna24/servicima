@@ -54,9 +54,10 @@ export class BlocQuestionsListComponent implements OnInit {
       this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
         .subscribe(
           (response) => {
-            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            this.isLoading.next(true);
             if (response['msg_code'] === '0004') {
-              resolve(response['results']);
+              resolve([]);
+              this.isLoading.next(false);
             } else {
             response['results'].map(async res => {
               this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
@@ -73,6 +74,7 @@ export class BlocQuestionsListComponent implements OnInit {
                   if (response['results'].length === this.blocData.length) {
                     response['results'] = this.blocData;
                     resolve(response['results']);
+                    this.isLoading.next(false);
                   }
                 }
               );
