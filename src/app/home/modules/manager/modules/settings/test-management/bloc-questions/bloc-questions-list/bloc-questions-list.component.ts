@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IConfig } from '@shared/models/configDataTable.model';
-import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
 import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-bloc-questions-list',
@@ -21,16 +21,15 @@ export class BlocQuestionsListComponent implements OnInit {
     title: string, addActionURL: string, addActionText: string, type: string,
     addActionDialog: { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
+  applicationId: string;
+  companyEmailAddress: string;
   columns: IConfig[] = [];
   columnsList: string[] = [];
   modalConfiguration: object[];
   displayedColumns: IConfig[] = [];
   canBeDisplayedColumns: IConfig[] = [];
-  canBeFilteredColumns: IConfig[] = [];
   blocData = [];
   subscriptionModal: Subscription;
-
-  private code = '';
 
   constructor(
     private modalService: ModalService,
@@ -39,19 +38,34 @@ export class BlocQuestionsListComponent implements OnInit {
     private testService: TestService,
     private router: Router,
     private modalServices: ModalService,
+    private userService: UserService,
   ) {
   }
 
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.getConnectedUser();
     this.getTableData().then((data) => {
       this.tableData.next(data);
     });  }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
 
   getTableData() {
     this.blocData = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
+      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
         .subscribe(
           (response) => {
             this.isLoading.next(true);
@@ -87,19 +101,20 @@ export class BlocQuestionsListComponent implements OnInit {
             }
           },
         );
-      console.log('data table=', this.tableData);
     });
   }
 
   async getTechTitle(tech_code): Promise<string> {
     let code: string;
-    const get = this.testService.getTechnologies(`?test_technology_code=${tech_code}`).toPromise();
+    const get = this.testService.
+    getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).toPromise();
     await get.then((data) => {
       console.log(data[0]);
       code = data[0].technology_title;
     });
     return code;
   }
+
   switchAction(rowAction: any) {
     switch (rowAction.actionType.name) {
       case ('show'): this.showBloc(rowAction.data);
@@ -147,8 +162,7 @@ export class BlocQuestionsListComponent implements OnInit {
         .subscribe(
           (res) => {
             if (res === true) {
-              this.testService.deleteQuestionBloc(deletedObject['_id']).subscribe(dataBloc => {
-                console.log('Deleted');
+              this.testService.deleteQuestionBloc(deletedObject['_id']).subscribe(() => {
                 this.getTableData().then((dataTable) => {
                   this.tableData.next(dataTable);
                 });

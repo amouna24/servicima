@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
 import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-edit-bloc',
@@ -19,19 +21,38 @@ export class EditBlocComponent implements OnInit {
   test_question_bloc_desc = this.router.getCurrentNavigation().extras.state?.test_question_bloc_desc;
   test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
   _id = this.router.getCurrentNavigation().extras.state?._id;
+  applicationId: string;
+  companyEmailAddress: string;
 
   constructor(
     private fb: FormBuilder,
     private testService: TestService,
     private router: Router,
-    ) { }
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.getTechnologiesInfo();
     this.createForm();
+    this.getConnectedUser();
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -50,6 +71,7 @@ export class EditBlocComponent implements OnInit {
         },
       );
   }
+
   createForm() {
     this.sendUpdateBloc = this.fb.group({
       test_question_bloc_title :  [this.test_question_bloc_title, [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
@@ -58,15 +80,15 @@ export class EditBlocComponent implements OnInit {
       test_question_bloc_desc: this.test_question_bloc_desc,
     });
   }
+
   UpdateBlocQuestion() {
     this.testBlocQuestion = this.sendUpdateBloc.value;
     this.testBlocQuestion.test_question_bloc_code =  this.test_question_bloc_code;
-    this.testBlocQuestion.application_id = '5eac544a92809d7cd5dae21f';
+    this.testBlocQuestion.application_id = this.applicationId;
+    this.testBlocQuestion.company_email = this.companyEmailAddress;
     this.testBlocQuestion._id = this._id;
-    console.log('testBloc=', this.testBlocQuestion);
     if (this.sendUpdateBloc.valid) {
       this.testService.updateQuestionBloc(this.testBlocQuestion).subscribe(data => {
-        console.log('bloc updated=', data);
         this.router.navigate(['/manager/settings/bloc-question/']);
       });
     }
