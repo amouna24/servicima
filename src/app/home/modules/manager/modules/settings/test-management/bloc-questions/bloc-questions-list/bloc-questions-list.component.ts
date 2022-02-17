@@ -69,7 +69,6 @@ export class BlocQuestionsListComponent implements OnInit {
         .subscribe(
           (response) => {
             this.isLoading.next(true);
-            console.log(response['msg_code']);
             if (response['msg_code'] === '0004') {
               resolve([]);
               this.isLoading.next(false);
@@ -110,7 +109,6 @@ export class BlocQuestionsListComponent implements OnInit {
     const get = this.testService.
     getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).toPromise();
     await get.then((data) => {
-      console.log(data[0]);
       code = data[0]?.technology_title;
     });
     return code;

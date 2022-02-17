@@ -48,7 +48,6 @@ export class AddQuestionComponent implements OnInit {
         (userInfo) => {
           if (userInfo) {
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
-            console.log('user info', userInfo['company']);
           }
         });
   }
