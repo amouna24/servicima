@@ -5,6 +5,7 @@ import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-edit-question',
@@ -15,15 +16,15 @@ export class EditQuestionComponent implements OnInit {
   sendUpdateQuestion: FormGroup;
   LevelList = [];
   question: ITestQuestionModel;
-  test_question_title = this.router.getCurrentNavigation().extras.state?.test_question_title;
-  mark = this.router.getCurrentNavigation().extras.state?.mark;
-  duration = this.router.getCurrentNavigation().extras.state?.duration;
-  question_type = this.router.getCurrentNavigation().extras.state?.question_type;
-  test_level_code = this.router.getCurrentNavigation().extras.state?.test_level_code;
-  test_question_desc = this.router.getCurrentNavigation().extras.state?.test_question_desc;
-  test_question_code = this.router.getCurrentNavigation().extras.state?.test_question_code;
-  test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
-  id = this.router.getCurrentNavigation().extras.state?._id;
+  test_question_title: string;
+  mark: string;
+  duration: string;
+  question_type: string;
+  test_level_code: string;
+  test_question_desc: string;
+  test_question_code: string;
+  test_question_bloc_code: string;
+  id: string;
   applicationId: string;
   companyEmailAddress: string;
 
@@ -33,14 +34,17 @@ export class EditQuestionComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private userService: UserService,
+    private utilsService: UtilsService
 
-  ) { }
+  ) {
+    this.loadData();
+  }
 
   ngOnInit(): void {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.getConnectedUser();
     this.getLevel();
     this.createForm();
-    this.getConnectedUser();
   }
 
   /**
@@ -93,5 +97,18 @@ export class EditQuestionComponent implements OnInit {
         this.router.navigate(['/manager/settings/bloc-question/']);
       });
     }
+  }
+  loadData() {
+    this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
+      this.test_question_title = atob(data.test_question_title);
+      this.mark = atob(data.mark);
+      this.duration = atob(data.duration);
+      this.question_type = atob(data.question_type);
+      this.test_level_code = atob(data.test_level_code);
+      this.test_question_desc = atob(data.test_question_desc);
+      this.test_question_code = atob(data.test_question_code);
+      this.test_question_bloc_code = atob(data.test_question_bloc_code);
+      this.id = atob(data._id);
+    });
   }
 }

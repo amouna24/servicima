@@ -65,8 +65,10 @@ export class SkillsListComponent implements OnInit {
               resolve([]);
               this.isLoading.next(false);
             } else {
+              console.log('result', response['results']);
             response['results'].map(
               async (value) => {
+                console.log('value=', value);
                 let object: object;
                 object = {
                   skill_title: value.skill_title,
@@ -77,7 +79,7 @@ export class SkillsListComponent implements OnInit {
                   test_skill_code: value.TestSkillsKey.test_skill_code,
                 };
                 tableRes.push(object);
-
+                console.log('response[\'results\'].length === tableRes.length', response['results'].length, tableRes.length);
                 if (response['results'].length === tableRes.length) {
                   response['results'] = tableRes;
                   resolve(response['results']);
@@ -100,6 +102,7 @@ export class SkillsListComponent implements OnInit {
       this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}&company_email=${this.companyEmailAddress}`)
         .subscribe(resTechSkill => {
           resTechSkill.map( async TechSkill => {
+            console.log('tech skill', TechSkill);
             // tslint:disable-next-line:max-line-length
             this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}&company_email=${this.companyEmailAddress}`)
               .subscribe(resTech => {
@@ -152,7 +155,7 @@ export class SkillsListComponent implements OnInit {
    */
   updateSkill(data) {
     this.router.navigate(['/manager/settings/skills/edit'],
-      { state: {
+      { queryParams: {
           id: data._id,
           skill_title: data.skill_title,
           test_level_code: data.level,

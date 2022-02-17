@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-edit-bloc',
@@ -15,14 +16,15 @@ export class EditBlocComponent implements OnInit {
   sendUpdateBloc: FormGroup;
   TechList = [];
   testBlocQuestion: ITestQuestionBlocModel;
-  test_question_bloc_title = this.router.getCurrentNavigation().extras.state?.test_bloc_title;
-  test_technology_code = this.router.getCurrentNavigation().extras.state?.test_bloc_technology;
-  question_nbr = this.router.getCurrentNavigation().extras.state?.test_bloc_total_number;
-  test_question_bloc_desc = this.router.getCurrentNavigation().extras.state?.test_question_bloc_desc;
-  test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
-  _id = this.router.getCurrentNavigation().extras.state?._id;
+
   applicationId: string;
   companyEmailAddress: string;
+  test_question_bloc_title: string;
+  test_technology_code: string;
+  question_nbr: string;
+  test_question_bloc_desc: string;
+  test_question_bloc_code: string;
+  _id: string;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +32,13 @@ export class EditBlocComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private userService: UserService,
-  ) { }
+    private utilsService: UtilsService,
+    private route: ActivatedRoute
+  ) {
+    console.log(this.router.getCurrentNavigation());
+    this.utilsService.verifyCurrentRoute();
+    this.loadData();
+  }
 
   ngOnInit(): void {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
@@ -92,5 +100,16 @@ export class EditBlocComponent implements OnInit {
         this.router.navigate(['/manager/settings/bloc-question/']);
       });
     }
+  }
+  loadData() {
+    this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
+      console.log('query params data ', data);
+       this.test_question_bloc_title = atob(data.test_bloc_title);
+      this.test_technology_code = atob(data.test_bloc_technology);
+       this.question_nbr = atob(data.test_bloc_total_number);
+       this.test_question_bloc_desc = atob(data.test_question_bloc_desc);
+       this.test_question_bloc_code = atob(data.test_question_bloc_code);
+       this._id = atob(data.test_bloc_title);
+    });
   }
 }
