@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
 import { ITestQuestionModel } from '@shared/models/testQuestion.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-add-question',
@@ -17,7 +18,7 @@ export class AddQuestionComponent implements OnInit {
   question: ITestQuestionModel;
   applicationId: string;
   companyEmailAddress: string;
-  test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
+  test_question_bloc_code: string;
   test_question_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-QUESTION`;
   constructor(
     private fb: FormBuilder,
@@ -25,13 +26,17 @@ export class AddQuestionComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private userService: UserService,
-  ) { }
+    private utilsService: UtilsService,
+    private route: ActivatedRoute,
+  ) {
+    this.loadData();
+  }
 
   ngOnInit(): void {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.getConnectedUser();
     this.getLevel();
     this.createForm();
-    this.getConnectedUser();
   }
 
   /**
@@ -42,7 +47,8 @@ export class AddQuestionComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
         });
   }
 
@@ -80,15 +86,20 @@ export class AddQuestionComponent implements OnInit {
     if (this.sendAddQuestion.valid) {
       this.testService.addQuestion(this.question).subscribe(() => {
         this.router.navigate(['/manager/settings/bloc-question/add-answer'],
-          { state: {
-              test_question_title: this.sendAddQuestion.controls.test_question_title.value,
-              test_question_desc: this.sendAddQuestion.controls.test_question_desc.value,
-              test_question_code: this.test_question_code,
-              question_type: this.sendAddQuestion.controls.question_type.value,
+          { queryParams: {
+              test_question_title: btoa(this.sendAddQuestion.controls.test_question_title.value),
+              test_question_desc: btoa(this.sendAddQuestion.controls.test_question_desc.value),
+              test_question_code: btoa(this.test_question_code),
+              question_type: btoa(this.sendAddQuestion.controls.question_type.value),
             }
           });
       });
     }
+  }
+  loadData() {
+   this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
+     this.test_question_bloc_code = atob(data.test_question_bloc_code);
+   });
   }
 
 }

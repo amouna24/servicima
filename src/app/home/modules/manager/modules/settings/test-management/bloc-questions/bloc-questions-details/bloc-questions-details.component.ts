@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ITestQuestionModel } from '@shared/models/testQuestion.model';
 import { TestService } from '@core/services/test/test.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ITestLevelModel } from '@shared/models/testLevel.model';
 import { ModalService } from '@core/services/modal/modal.service';
@@ -17,12 +18,12 @@ import { QuestionDetailsComponent } from '../question-details/question-details.c
   styleUrls: ['./bloc-questions-details.component.scss']
 })
 export class BlocQuestionsDetailsComponent implements OnInit {
-  test_bloc_title = this.router.getCurrentNavigation().extras.state?.test_bloc_title;
-  test_bloc_technology = this.router.getCurrentNavigation().extras.state?.test_bloc_technology;
-  test_bloc_total_number = this.router.getCurrentNavigation().extras.state?.test_bloc_total_number;
-  test_question_bloc_desc = this.router.getCurrentNavigation().extras.state?.test_question_bloc_desc;
-  _id = this.router.getCurrentNavigation().extras.state?._id;
-  test_question_bloc_code = this.router.getCurrentNavigation().extras.state?.test_question_bloc_code;
+  test_bloc_title: string;
+  test_bloc_technology: string;
+  test_bloc_total_number: string;
+  test_question_bloc_desc: string;
+  _id: string;
+  test_question_bloc_code: string;
   questionsList: ITestQuestionModel[] = [];
   levelList: ITestLevelModel[] = [];
   showQuestionList = false;
@@ -37,13 +38,16 @@ export class BlocQuestionsDetailsComponent implements OnInit {
     private modalServices: ModalService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
-
-  ) { }
+    private utilsService: UtilsService,
+    private route: ActivatedRoute,
+  ) {
+    this.loadData();
+  }
   ngOnInit(): void {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.getConnectedUser();
     this.getLevelAll();
     this.getQuestionsInfo();
-    this.getConnectedUser();
   }
 
   /**
@@ -89,8 +93,8 @@ export class BlocQuestionsDetailsComponent implements OnInit {
 
   routeToAdd() {
     this.router.navigate(['/manager/settings/bloc-question/add-question'],
-      { state: {
-          test_question_bloc_code: this.test_question_bloc_code,
+      { queryParams: {
+          test_question_bloc_code: btoa(this.test_question_bloc_code),
         }
       });
   }
@@ -139,5 +143,15 @@ export class BlocQuestionsDetailsComponent implements OnInit {
           }
         );
     } });
+  }
+  loadData() {
+    this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
+      this.test_bloc_title = atob(data.test_bloc_title);
+      this.test_bloc_technology = atob(data.test_bloc_technology);
+      this.test_bloc_total_number = atob(data.test_bloc_total_number);
+      this.test_question_bloc_desc = atob(data.test_question_bloc_desc);
+      this._id = atob(data._id);
+      this.test_question_bloc_code = atob(data.test_question_bloc_code);
+    });
   }
 }

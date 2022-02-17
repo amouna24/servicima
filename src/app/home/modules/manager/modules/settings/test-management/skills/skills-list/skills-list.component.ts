@@ -77,7 +77,6 @@ export class SkillsListComponent implements OnInit {
                   test_skill_code: value.TestSkillsKey.test_skill_code,
                 };
                 tableRes.push(object);
-
                 if (response['results'].length === tableRes.length) {
                   response['results'] = tableRes;
                   resolve(response['results']);
@@ -152,7 +151,7 @@ export class SkillsListComponent implements OnInit {
    */
   updateSkill(data) {
     this.router.navigate(['/manager/settings/skills/edit'],
-      { state: {
+      { queryParams: {
           id: data._id,
           skill_title: data.skill_title,
           test_level_code: data.level,

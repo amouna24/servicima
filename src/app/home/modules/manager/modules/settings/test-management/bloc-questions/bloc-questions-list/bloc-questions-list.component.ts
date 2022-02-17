@@ -68,9 +68,10 @@ export class BlocQuestionsListComponent implements OnInit {
       this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
         .subscribe(
           (response) => {
-            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            this.isLoading.next(true);
             if (response['msg_code'] === '0004') {
-              resolve(response['results']);
+              resolve([]);
+              this.isLoading.next(false);
             } else {
             response['results'].map(async res => {
               this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
@@ -87,6 +88,7 @@ export class BlocQuestionsListComponent implements OnInit {
                   if (response['results'].length === this.blocData.length) {
                     response['results'] = this.blocData;
                     resolve(response['results']);
+                    this.isLoading.next(false);
                   }
                 }
               );
@@ -107,8 +109,7 @@ export class BlocQuestionsListComponent implements OnInit {
     const get = this.testService.
     getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).toPromise();
     await get.then((data) => {
-      console.log(data[0]);
-      code = data[0].technology_title;
+      code = data[0]?.technology_title;
     });
     return code;
   }
@@ -125,27 +126,27 @@ export class BlocQuestionsListComponent implements OnInit {
 
   private showBloc(data) {
     this.router.navigate(['/manager/settings/bloc-question/details'],
-      { state: {
-          test_bloc_title: data[0].test_bloc_title,
-          test_bloc_technology: data[0].test_bloc_technology,
-          test_bloc_total_number: data[0].test_bloc_total_number,
-          test_question_bloc_desc: data[0].test_question_bloc_desc,
-          _id: data[0]._id,
-          test_question_bloc_code: data[0].test_question_bloc_code,
+      { queryParams: {
+          test_bloc_title: btoa(data[0].test_bloc_title),
+          test_bloc_technology: btoa(data[0].test_bloc_technology),
+          test_bloc_total_number: btoa(data[0].test_bloc_total_number),
+          test_question_bloc_desc: btoa(data[0].test_question_bloc_desc),
+          _id: btoa(data[0]._id),
+          test_question_bloc_code: btoa(data[0].test_question_bloc_code),
         }
       });
   }
 
   private updateBloc(data) {
     this.router.navigate(['/manager/settings/bloc-question/edit'],
-      { state: {
-          test_bloc_title: data.test_bloc_title,
-          test_bloc_technology: data.technology_code,
-          test_bloc_total_number: data.test_bloc_total_number,
-          test_question_bloc_desc: data.test_question_bloc_desc,
-          _id: data._id,
-          test_question_bloc_code: data.test_question_bloc_code,
-        }
+      { queryParams: {
+          test_bloc_title: btoa(data.test_bloc_title),
+          test_bloc_technology: btoa(data.technology_code),
+          test_bloc_total_number: btoa(data.test_bloc_total_number),
+          test_question_bloc_desc: btoa(data.test_question_bloc_desc),
+          _id: btoa(data._id),
+          test_question_bloc_code: btoa(data.test_question_bloc_code),
+        },
       });
   }
 

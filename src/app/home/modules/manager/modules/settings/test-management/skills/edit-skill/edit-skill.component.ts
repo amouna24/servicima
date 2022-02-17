@@ -10,8 +10,9 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { HelperService } from '@core/services/helper/helper.service';
 import { TestService } from '@core/services/test/test.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-edit-skill',
@@ -27,11 +28,11 @@ export class EditSkillComponent implements OnInit {
   canBeDisplayedColumns: IConfig[] = [];
   canBeDisplayedColumnsForm: FormGroup;
   skillTech: ITestTechnologySkillsModel;
-  skill_title = this.router.getCurrentNavigation().extras.state?.skill_title;
-  test_level_code = this.router.getCurrentNavigation().extras.state?.test_level_code;
-  _id = this.router.getCurrentNavigation().extras.state?.id;
-  test_skill_code = this.router.getCurrentNavigation().extras.state?.test_skill_code;
-  technology  = this.router.getCurrentNavigation().extras.state?.technology;
+  skill_title: string;
+  test_level_code: string;
+  _id: string;
+  test_skill_code: string;
+  technology: any;
   applicationId: string;
   companyEmailAddress: string;
 
@@ -44,7 +45,11 @@ export class EditSkillComponent implements OnInit {
     private testService: TestService,
     private router: Router,
     private userService: UserService,
-  ) { }
+    private utilsService: UtilsService,
+    private route: ActivatedRoute
+  ) {
+    this.loadData();
+  }
 
   ngOnInit(): void {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
@@ -276,7 +281,15 @@ export class EditSkillComponent implements OnInit {
       );
 
   }
-
+  loadData() {
+    if (this.utilsService.verifyCurrentRoute('/manager/settings/skills')) {
+      this.skill_title = this.route.snapshot.queryParams.skill_title;
+      this.test_level_code = this.route.snapshot.queryParams.test_level_code;
+      this._id = this.route.snapshot.queryParams.id;
+      this.test_skill_code = this.route.snapshot.queryParams.test_skill_code;
+      this.technology  = this.route.snapshot.queryParams.technology;
+    }
+  }
   testButton() {
     return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;
   }

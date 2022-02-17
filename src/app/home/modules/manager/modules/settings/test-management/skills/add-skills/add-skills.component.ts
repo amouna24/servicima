@@ -46,8 +46,8 @@ export class AddSkillsComponent implements OnInit {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.displayedColumns = [];
     this.createForm();
-    this.getTechnologiesInfo();
     this.getConnectedUser();
+    this.getTechnologiesInfo();
     this.displayedColumnsForm = new FormGroup({
       displayedColumns: new FormArray([])
     });
