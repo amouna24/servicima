@@ -83,7 +83,6 @@ export class AddQuestionComponent implements OnInit {
     this.question.order = '';
     this.question.test_question_bloc_code = this.test_question_bloc_code;
     this.question.to_display = '';
-    console.log(this.question);
     if (this.sendAddQuestion.valid) {
       this.testService.addQuestion(this.question).subscribe(() => {
         this.router.navigate(['/manager/settings/bloc-question/add-answer'],

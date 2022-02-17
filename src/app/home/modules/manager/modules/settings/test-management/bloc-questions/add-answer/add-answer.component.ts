@@ -85,7 +85,6 @@ export class AddAnswerComponent implements OnInit {
 
   saveAnswers() {
     this.AnswerList.forEach(res => {
-      console.log('list of answer', res);
       this.testService.addChoice(res).subscribe((resAnswer) => {
         console.log('answer added', resAnswer);
       });

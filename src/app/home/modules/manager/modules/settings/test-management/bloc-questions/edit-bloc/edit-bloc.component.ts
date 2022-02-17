@@ -33,10 +33,7 @@ export class EditBlocComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilsService: UtilsService,
-    private route: ActivatedRoute
   ) {
-    console.log(this.router.getCurrentNavigation());
-    this.utilsService.verifyCurrentRoute();
     this.loadData();
   }
 
@@ -103,7 +100,6 @@ export class EditBlocComponent implements OnInit {
   }
   loadData() {
     this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-      console.log('query params data ', data);
        this.test_question_bloc_title = atob(data.test_bloc_title);
       this.test_technology_code = atob(data.test_bloc_technology);
        this.question_nbr = atob(data.test_bloc_total_number);
