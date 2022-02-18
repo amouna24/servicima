@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-question-details',
@@ -36,6 +37,7 @@ export class QuestionDetailsComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
     private userService: UserService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit(): void {
@@ -96,18 +98,17 @@ deleteQuestions() {
     );
 }
   routeToQuestion() {
-    this.router.navigate(['/manager/settings/bloc-question/edit-question'],
-      { queryParams: {
-          test_question_title:  btoa(this.testQuestionTitle),
-          mark: btoa(this.mark),
-          duration: btoa(this.duration),
-          question_type: btoa(this.questionType),
-          test_level_code: btoa(this.codeLevel),
-          test_question_desc: btoa(this.testQuestionDesc),
-          test_question_code: btoa(this.testQuestionCode),
-          test_question_bloc_code: btoa(this.testQuestionBlocCode),
-          _id: btoa(this.id)
-        }
-      });
+    const queryObject = {
+      test_question_title:  this.testQuestionTitle,
+      mark: this.mark,
+      duration: this.duration,
+      question_type: this.questionType,
+      test_level_code: this.codeLevel,
+      test_question_desc: this.testQuestionDesc,
+      test_question_code: this.testQuestionCode,
+      test_question_bloc_code: this.testQuestionBlocCode,
+      _id: this.id
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/edit-question', queryObject);
   }
 }

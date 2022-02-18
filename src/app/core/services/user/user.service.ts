@@ -14,6 +14,7 @@ import { ILanguageModel } from '@shared/models/language.model';
 import { ILicenceModel } from '@shared/models/licence.model';
 import { ICountry } from '@shared/models/countries.model';
 import { IUserModel } from '@shared/models/user.model';
+import { CryptoService } from '@core/services/crypto/crypto.service';
 
 import { LocalStorageService } from '../storage/local-storage.service';
 import { AppInitializerService } from '../app-initializer/app-initializer.service';
@@ -50,6 +51,7 @@ export class UserService {
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer,
     private appInitializerService: AppInitializerService,
+    private cryptoService: CryptoService,
   ) {
     this.getDataFromLocalStorage();
     this.setupData();
@@ -128,8 +130,8 @@ export class UserService {
       if (currentState.split('?')[1]) {
        const listKey = currentState.split('?')[1].split('&');
        listKey.map((element) => {
-         const key = element.split('=')[0];
-         const value = element.split('=')[1];
+         const key = decodeURIComponent(element.split('=')[0].trim().toString());
+         const value = decodeURIComponent(element.split('=')[1].trim().toString());
          queryParamObject[key] = value;
        });
       }

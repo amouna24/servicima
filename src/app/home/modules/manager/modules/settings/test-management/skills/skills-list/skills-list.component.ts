@@ -102,13 +102,14 @@ export class SkillsListComponent implements OnInit {
             // tslint:disable-next-line:max-line-length
             this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}&company_email=${this.companyEmailAddress}`)
               .subscribe(resTech => {
-
-                resTech.map( Tech => {
-                  techList.push(Tech.technology_title);
-                  if (techList.length === resTechSkill.length) {
-                    resolve (techList);
-                  }
-                });
+                if (resTech['msg_code'] !== '0004') {
+                  resTech.map( Tech => {
+                    techList.push(Tech.technology_title);
+                    if (techList.length === resTechSkill.length) {
+                      resolve (techList);
+                    }
+                  });
+                }
               });
           });
         });
@@ -150,14 +151,13 @@ export class SkillsListComponent implements OnInit {
    * @param data: object to update
    */
   updateSkill(data) {
-    this.router.navigate(['/manager/settings/skills/edit'],
-      { queryParams: {
-          id: data._id,
-          skill_title: data.skill_title,
-          test_level_code: data.level,
-          test_skill_code: data.test_skill_code,
-          technology:  data.technology,
-        }
-      });
+    const queryObject = {
+      id: data._id,
+      skill_title: data.skill_title,
+      test_level_code: data.level,
+      test_skill_code: data.test_skill_code,
+      technology:  data.technology,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/skills/edit', queryObject);
   }
 }

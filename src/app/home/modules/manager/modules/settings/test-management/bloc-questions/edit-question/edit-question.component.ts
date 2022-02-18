@@ -93,22 +93,21 @@ export class EditQuestionComponent implements OnInit {
     this.question.to_display = '';
     if (this.sendUpdateQuestion.valid) {
       this.testService.updateQuestion(this.question).subscribe(data => {
-        console.log('question updated=', data);
         this.router.navigate(['/manager/settings/bloc-question/']);
       });
     }
   }
   loadData() {
     this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-      this.test_question_title = atob(data.test_question_title);
-      this.mark = atob(data.mark);
-      this.duration = atob(data.duration);
-      this.question_type = atob(data.question_type);
-      this.test_level_code = atob(data.test_level_code);
-      this.test_question_desc = atob(data.test_question_desc);
-      this.test_question_code = atob(data.test_question_code);
-      this.test_question_bloc_code = atob(data.test_question_bloc_code);
-      this.id = atob(data._id);
+      this.test_question_title = data.test_question_title;
+      this.mark = data.mark;
+      this.duration = data.duration;
+      this.question_type = data.question_type;
+      this.test_level_code = data.test_level_code;
+      this.test_question_desc = data.test_question_desc;
+      this.test_question_code = data.test_question_code;
+      this.test_question_bloc_code = data.test_question_bloc_code;
+      this.id = data._id;
     });
   }
 }

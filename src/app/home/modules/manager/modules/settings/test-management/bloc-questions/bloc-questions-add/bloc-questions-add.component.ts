@@ -48,14 +48,15 @@ export class BlocQuestionsAddComponent implements OnInit {
     this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
-          response.forEach(res => {
-            console.log('res = ', res.TestTechnologyKey.test_technology_code);
-            this.TechList.push(
-              {
-                code: res.TestTechnologyKey.test_technology_code,
-                title: res.technology_title,
-              });
-          });
+          if (response['msg_code'] !== '0004') {
+            response.forEach( (res) => {
+              this.TechList.push(
+                {
+                  code: res.TestTechnologyKey.test_technology_code,
+                  title: res.technology_title,
+                });
+            });
+          }
         },
         (error) => {
           if (error.error.msg_code === '0004') {

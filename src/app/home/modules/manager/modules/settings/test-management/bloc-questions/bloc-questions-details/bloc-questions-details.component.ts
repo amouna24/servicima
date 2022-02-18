@@ -92,11 +92,10 @@ export class BlocQuestionsDetailsComponent implements OnInit {
     }
 
   routeToAdd() {
-    this.router.navigate(['/manager/settings/bloc-question/add-question'],
-      { queryParams: {
-          test_question_bloc_code: btoa(this.test_question_bloc_code),
-        }
-      });
+    const queryObject = {
+      test_question_bloc_code: this.test_question_bloc_code,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/add-question', queryObject);
   }
 
   ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string,
@@ -129,7 +128,6 @@ export class BlocQuestionsDetailsComponent implements OnInit {
         .subscribe(
           (res) => {
             if (res === true) {
-              console.log(id);
               this.testService.deleteQuestion(id).subscribe(dataBloc => {
                 this.getLevelAll();
                 this.getQuestionsInfo();
@@ -146,12 +144,12 @@ export class BlocQuestionsDetailsComponent implements OnInit {
   }
   loadData() {
     this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-      this.test_bloc_title = atob(data.test_bloc_title);
-      this.test_bloc_technology = atob(data.test_bloc_technology);
-      this.test_bloc_total_number = atob(data.test_bloc_total_number);
-      this.test_question_bloc_desc = atob(data.test_question_bloc_desc);
-      this._id = atob(data._id);
-      this.test_question_bloc_code = atob(data.test_question_bloc_code);
+      this.test_bloc_title = data.test_bloc_title;
+      this.test_bloc_technology = data.test_bloc_technology;
+      this.test_bloc_total_number = data.test_bloc_total_number;
+      this.test_question_bloc_desc = data.test_question_bloc_desc;
+      this._id = data._id;
+      this.test_question_bloc_code = data.test_question_bloc_code;
     });
   }
 }

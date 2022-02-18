@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CryptoService } from '@core/services/crypto/crypto.service';
 
 import { IError } from '@shared/models/error.model';
 import { IViewParam } from '@shared/models/view.model';
@@ -37,6 +38,7 @@ export class UtilsService {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private router: Router,
+    private cryptoService: CryptoService
   ) {
 
   }
@@ -298,16 +300,25 @@ export class UtilsService {
       });
     } else {
       return new Observable<any>( (observer) => {
-        observer.next(this.correctQueryParamsValue(this.route.snapshot.queryParams));
+        observer.next(this.decryptObject(this.route.snapshot.queryParams));
       });
     }
   }
-  correctQueryParamsValue(queryObject: object) {
+  decryptObject(queryObject) {
     const newObject: object = { };
     Object.keys(queryObject).map( (key) => {
-      newObject[key] = queryObject[key].split('25').join('').split('%3D').join('=');
+      newObject[key] = this.cryptoService.decrypt( environment.cryptoKeyCode, queryObject[key]);
     });
     return newObject;
+  }
+  navigateWithQueryParam(path, queryObject) {
+    const newObject: object = { };
+    Object.keys(queryObject).map( (key) => {
+      newObject[key] = this.cryptoService.encrypt( environment.cryptoKeyCode, queryObject[key]);
+    });
+    this.router.navigate([path], {
+      queryParams: newObject
+    });
   }
 
 }
