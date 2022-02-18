@@ -76,6 +76,12 @@ export class AddQuestionComponent implements OnInit {
       );
   }
   createQuestion() {
+    const queryObject = {
+        test_question_title: this.sendAddQuestion.controls.test_question_title.value,
+          test_question_desc: this.sendAddQuestion.controls.test_question_desc.value,
+        test_question_code: this.test_question_code,
+        question_type: this.sendAddQuestion.controls.question_type.value,
+    };
     this.question = this.sendAddQuestion.value;
     this.question.test_question_code =  this.test_question_code;
     this.question.application_id = this.applicationId;
@@ -85,20 +91,13 @@ export class AddQuestionComponent implements OnInit {
     this.question.to_display = '';
     if (this.sendAddQuestion.valid) {
       this.testService.addQuestion(this.question).subscribe(() => {
-        this.router.navigate(['/manager/settings/bloc-question/add-answer'],
-          { queryParams: {
-              test_question_title: btoa(this.sendAddQuestion.controls.test_question_title.value),
-              test_question_desc: btoa(this.sendAddQuestion.controls.test_question_desc.value),
-              test_question_code: btoa(this.test_question_code),
-              question_type: btoa(this.sendAddQuestion.controls.question_type.value),
-            }
-          });
+        this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/add-answer', queryObject);
       });
     }
   }
   loadData() {
    this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-     this.test_question_bloc_code = atob(data.test_question_bloc_code);
+     this.test_question_bloc_code = data.test_question_bloc_code;
    });
   }
 

@@ -94,10 +94,10 @@ export class AddAnswerComponent implements OnInit {
 
   loadData() {
     this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-      this.test_question_title = atob(data.test_question_title);
-      this.test_question_desc = atob(data.test_question_desc);
-      this.test_question_code = atob(data.test_question_code);
-      this.question_type = atob(data.question_type);
+      this.test_question_title = data.test_question_title;
+      this.test_question_desc = data.test_question_desc;
+      this.test_question_code = data.test_question_code;
+      this.question_type = data.question_type;
     });
   }
 }

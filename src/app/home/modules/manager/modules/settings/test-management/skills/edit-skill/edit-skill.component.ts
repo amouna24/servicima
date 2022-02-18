@@ -282,13 +282,13 @@ export class EditSkillComponent implements OnInit {
 
   }
   loadData() {
-    if (this.utilsService.verifyCurrentRoute('/manager/settings/skills')) {
-      this.skill_title = this.route.snapshot.queryParams.skill_title;
-      this.test_level_code = this.route.snapshot.queryParams.test_level_code;
-      this._id = this.route.snapshot.queryParams.id;
-      this.test_skill_code = this.route.snapshot.queryParams.test_skill_code;
-      this.technology  = this.route.snapshot.queryParams.technology;
-    }
+    this.utilsService.verifyCurrentRoute('/manager/settings/skills').subscribe( (data) => {
+      this.skill_title = data.skill_title;
+      this.test_level_code = data.test_level_code;
+      this._id = data.id;
+      this.test_skill_code = data.test_skill_code;
+      this.technology  = data.technology;
+    });
   }
   testButton() {
     return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;

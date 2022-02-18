@@ -6,6 +6,7 @@ import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { CryptoService } from '@core/services/crypto/crypto.service';
 
 @Component({
   selector: 'wid-edit-bloc',
@@ -33,6 +34,7 @@ export class EditBlocComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilsService: UtilsService,
+    private cryptoService: CryptoService
   ) {
     this.loadData();
   }
@@ -60,14 +62,15 @@ export class EditBlocComponent implements OnInit {
     this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
-          response.forEach(res => {
-            console.log('res = ', res.TestTechnologyKey.test_technology_code);
-            this.TechList.push(
-              {
-                code: res.TestTechnologyKey.test_technology_code,
-                title: res.technology_title,
-              });
-          });
+          if (response['msg_code'] !== '0004') {
+            response.forEach(res => {
+              this.TechList.push(
+                {
+                  code: res.TestTechnologyKey.test_technology_code,
+                  title: res.technology_title,
+                });
+            });
+          }
         },
         (error) => {
           if (error.error.msg_code === '0004') {
@@ -100,12 +103,12 @@ export class EditBlocComponent implements OnInit {
   }
   loadData() {
     this.utilsService.verifyCurrentRoute('/manager/settings/bloc-question').subscribe( (data) => {
-       this.test_question_bloc_title = atob(data.test_bloc_title);
-      this.test_technology_code = atob(data.test_bloc_technology);
-       this.question_nbr = atob(data.test_bloc_total_number);
-       this.test_question_bloc_desc = atob(data.test_question_bloc_desc);
-       this.test_question_bloc_code = atob(data.test_question_bloc_code);
-       this._id = atob(data.test_bloc_title);
+       this.test_question_bloc_title = data.test_bloc_title;
+      this.test_technology_code = data.test_bloc_technology;
+       this.question_nbr = data.test_bloc_total_number;
+       this.test_question_bloc_desc =  data.test_question_bloc_desc;
+       this.test_question_bloc_code =  data.test_question_bloc_code;
+       this._id =  data.test_bloc_title;
     });
   }
 }

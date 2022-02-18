@@ -34,14 +34,36 @@
     </p>
   </div>
   </div>
-  <div fxLayout="row">
-    <div fxLayout="column" fxFlex="65">
-      <div fxLayout="column" >
-        <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 20.5%">
-          Answer :
-        </mat-label>
-        <div *ngFor="let item of AnswerList; let pointIndex=index" fxLayout="row"  class="block-pos" >
-          <div fxLayout="column" fxFlex="71" class="answer-container"     >
+  <div fxLayout="row" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlex="80">
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="row">
+          <mat-label class="black font-size-12 required" fxLayout="row" style="justify-content: flex-end; max-width: 20.5%">
+            Answer :
+          </mat-label>
+        </div>
+        <div *ngFor="let item of AnswerList; let pointIndex=index" fxLayout="row"   >
+          <div fxLayout="column" fxFlex="60"   >
+            <div fxLayout="row" class="answer-container" >
+              <div fxLayout="column" fxFlex="85" fxLayoutAlign="center">
+                <div class="font-extra-light black font-size-12 ">{{item.choice_title}}</div>
+              </div>
+              <div fxLayout="column" fxFlex="10" fxLayoutAlign="center end" >
+                <ng-container *ngIf="item.correct_choice === 'True'" >
+                  <div fxLayout="row"  class="correct-container">
+                    <span  class="font-light white font-size-8 ">{{item.correct_choice}}</span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="item.correct_choice === 'False'" >
+                  <div fxLayout="row"  class="false-container">
+                    <span  class="font-light white font-size-8 ">{{item.correct_choice}}</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+          </div>
+<!--          <div fxLayout="column" fxFlex="71" class="answer-container"     >
             <div fxLayout="row" fxFlexFill style="justify-content: center">
               <div fxLayout="column" fxFlex="85" >
                <div class="font-extra-light black font-size-12">{{item.choice_title}}</div>
@@ -59,36 +81,38 @@
                 </ng-container>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
-        <form  [formGroup]="sendAddAnswer" fxFlexFill class="p-t-10" fxLayoutGap="15px" fxLayout="row">
-          <div fxLayout="column" fxFlex="80" fxLayoutAlign=" end"  >
-            <div fxLayout="row" fxFlexFill  style="justify-content: flex-end">
-              <div fxLayout="column" fxFlex="79">
-                <mat-form-field appearance="outline">
-                  <input formControlName="choice_title" matInput placeholder="Title" >
-                  <mat-error class="red" *ngIf="sendAddAnswer.controls.choice_title.errors?.required">
-                    {{ 'general.required' | translate }}</mat-error>
-                </mat-form-field>
+        <div fxLayout="row">
+          <form  [formGroup]="sendAddAnswer" fxFlexFill class="p-t-10" fxLayoutGap="15px" fxLayout="row">
+            <div fxLayout="column" fxFlex="60" sqdsq >
+              <div fxLayout="row" fxFlexFill  >
+                <div fxLayout="column" fxFlex="100">
+                  <mat-form-field appearance="outline">
+                    <input formControlName="choice_title" matInput placeholder="Title" >
+                    <mat-error class="red" *ngIf="sendAddAnswer.controls.choice_title.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
               </div>
             </div>
-          </div>
-          <div fxLayout="column" fxFlex="14">
-            <mat-form-field appearance="outline">
-              <mat-select  formControlName="correct_choice" disableOptionCentering panelClass="panelColor"
-                           placeholder="Type" >
-                <ng-container *ngFor="let v of QuestionList">
-                  <mat-option [value]="v">{{v}}</mat-option>
-                </ng-container>
-              </mat-select>
-              <mat-error class="red" *ngIf="sendAddAnswer.controls.correct_choice.errors?.required">
-                Please select an item in the list</mat-error>
-            </mat-form-field>
-          </div>
-          <div fxLayout="column" class="p-l-10 p-t-10">
-            <button mat-raised-button color="primary" class="btn-small "  style="border: none; color: white" (click)="createAnswer()"  [disabled]="sendAddAnswer.invalid">Add</button>
-          </div>
-        </form></div>
+            <div fxLayout="column" fxFlex="18">
+              <mat-form-field appearance="outline">
+                <mat-select  formControlName="correct_choice" disableOptionCentering panelClass="panelColor"
+                             placeholder="Type" >
+                  <ng-container *ngFor="let v of QuestionList">
+                    <mat-option [value]="v">{{v}}</mat-option>
+                  </ng-container>
+                </mat-select>
+                <mat-error class="red" *ngIf="sendAddAnswer.controls.correct_choice.errors?.required">
+                  Please select an item in the list</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" class="p-t-10">
+              <button mat-raised-button color="primary" class="btn-small "  style="border: none; color: white" (click)="createAnswer()"  [disabled]="sendAddAnswer.invalid">Add</button>
+            </div>
+          </form></div>
+      </div>
 
 
     </div>

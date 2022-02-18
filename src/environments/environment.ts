@@ -100,6 +100,7 @@ export const environment = {
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',
+  cryptoKeyCode: 'RfUjXn2r'
 };
 
 /*
