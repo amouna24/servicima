@@ -1,0 +1,42 @@
+@import "src/assets/styles/variables";
+.bloc-list-card-vertical {
+  height: 230px;
+  width: 230px;
+}
+.bloc-list-card-horizontal {
+  height: 128px;
+}
+.mat-card{
+  border: 1px !important;
+  border-radius: 15px !important;
+  border: #e8f1f9 !important;
+  padding: 0 !important;
+}
+.bloc-type-free {
+  border-radius: 15px;
+  background-color: $topaz;
+  height: 17px;
+  min-width: 38px;
+}
+.bloc-type-purchased {
+  border-radius: 15px;
+  background-color: $dark-grey-blue;
+  height: 17px;
+  min-width: 64px;
+}
+.bloc-type-label {
+  font-size: 8px;
+  color: $white;
+}
+.bloc-price {
+  border-radius: 15px;
+  background-color: #fc0f3b;
+  height: 17px;
+  min-width: 50px;
+}
+.bloc-buy {
+  border-radius: 15px;
+  background-color: $golden-yellow;
+  height: 17px;
+  min-width: 54px;
+}
