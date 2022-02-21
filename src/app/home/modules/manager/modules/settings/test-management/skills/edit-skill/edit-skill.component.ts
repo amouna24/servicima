@@ -32,7 +32,7 @@ export class EditSkillComponent implements OnInit {
   test_level_code: string;
   _id: string;
   test_skill_code: string;
-  technology: any;
+  technology = [];
   applicationId: string;
   companyEmailAddress: string;
 
@@ -51,18 +51,19 @@ export class EditSkillComponent implements OnInit {
     this.loadData();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.createForm();
     this.getConnectedUser();
-    this.getTechnologiesInfo();
-    this.getDisplayedColumns();
     this.displayedColumnsForm = new FormGroup({
       displayedColumns: new FormArray([])
     });
     this.canBeDisplayedColumnsForm = new FormGroup({
       canBeDisplayedColumns: new FormArray([])
     });
+    await this.getTechnologiesInfo();
+    this.getDisplayedColumns();
+
   }
 
   /**
@@ -87,7 +88,8 @@ export class EditSkillComponent implements OnInit {
     });
   }
 
-  getTechnologiesInfo() {
+  async getTechnologiesInfo() {
+    this.technology = await this.getSelectedSkills();
     this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
@@ -281,16 +283,39 @@ export class EditSkillComponent implements OnInit {
       );
 
   }
-  loadData() {
-    this.utilsService.verifyCurrentRoute('/manager/settings/skills').subscribe( (data) => {
+   loadData() {
+    this.utilsService.verifyCurrentRoute('/manager/settings/skills').subscribe( async (data) => {
       this.skill_title = data.skill_title;
       this.test_level_code = data.test_level_code;
       this._id = data.id;
       this.test_skill_code = data.test_skill_code;
-      this.technology  = data.technology;
     });
   }
   testButton() {
     return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;
+  }
+  getSelectedSkills() {
+    const technoArray = [];
+    return new Promise( (resolve) => {
+      this.testService
+        .getTechnologySkills(
+          `?test_skill_code=${this.test_skill_code}`)
+        .subscribe( (data) => {
+          data.map( (dataTechnoSkill) => {
+            this.testService.getTechnologies(`?test_technology_code=${dataTechnoSkill.TestTechnologySkillKey.test_technology_code}`)
+              .subscribe( (technoData) => {
+                technoData.forEach( (oneTechnoData) => {
+                  technoArray.push(oneTechnoData.technology_title);
+                  if (technoArray.length === data.length) {
+                    resolve(technoArray);
+                  }
+                });
+              });
+          });
+
+        });
+    }).then( (result: any[]) => {
+      return result;
+    });
   }
 }
