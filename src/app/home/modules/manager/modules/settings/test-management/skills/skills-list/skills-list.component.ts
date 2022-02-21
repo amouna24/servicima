@@ -156,7 +156,6 @@ export class SkillsListComponent implements OnInit {
       skill_title: data.skill_title,
       test_level_code: data.level,
       test_skill_code: data.test_skill_code,
-      technology:  data.technology,
     };
     this.utilsService.navigateWithQueryParam('/manager/settings/skills/edit', queryObject);
   }
