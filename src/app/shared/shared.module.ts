@@ -61,6 +61,8 @@ import { ConfirmListComponent } from './components/confirm-list/confirm-list.com
 import { DisabledFormDirective } from './directives/disabled-form.directive';
 import { CanNotDisplayDirective } from './directives/can-not-display.directive';
 import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directive';
+import { AlertRequiredDataComponent } from './components/alert-required-data/alert-required-data.component';
+import { CompleteRequiredInformationComponent } from './components/complete-required-information/complete-required-information.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +108,8 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
     DisabledFormDirective,
     CantBeDisplayedDirective,
     CanNotDisplayDirective,
+    AlertRequiredDataComponent,
+    CompleteRequiredInformationComponent,
   ],
   imports: [
     CommonModule,
