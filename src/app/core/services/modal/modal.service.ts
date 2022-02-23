@@ -24,7 +24,7 @@ export class ModalService {
     return modal.modalComponent;
   }
 
-  displayModal(modalName: string, modalData?: object, modalWidth?: string, modalHeight?: string): Observable<any> {
+  displayModal(modalName: string, modalData?: object, modalWidth?: string, modalHeight?: string, panelClass?: any, position?: any): Observable<any> {
     const modalComponent = this.getModalComponentRef(modalName);
     const initialState = modalData;
     if (modalWidth === undefined || modalWidth === null) {
@@ -37,6 +37,8 @@ export class ModalService {
       height: modalHeight,
       width: modalWidth,
       data: initialState,
+      panelClass,
+      position,
       disableClose: true
     });
     return dialogRef.afterClosed();

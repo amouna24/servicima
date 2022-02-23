@@ -1,4 +1,4 @@
-<div class="dynamic-component-container bg-white border-radius-20 m-l-30">
+<div class="border-radius-20 dynamic-component-container m-l-30 ">
 
     <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
       <div fxFlex="7"  fxLayout="row" class="line-height-2">
@@ -21,9 +21,10 @@
         *ngIf="isLoading" nbrRow=8
         nbrColumn=2
       ></wid-skeleton-loader>
-      <form fxLayout="row" fxFlex="87" class="p-t-20 font-size-12 " *ngIf="!isLoading"
+      <wid-scrollbar class="scrollbar" style="width: 100%">
+      <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 " *ngIf="!isLoading"
         [formGroup]="form"  >
-        <wid-scrollbar class="scrollbar" style="width: 100%">
+
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':addOrUpdateFeature, 'form': form}">
 
 
@@ -60,20 +61,23 @@
                   </wid-profile-image>
                 </div>
               </div>
-                <div fxLayout="row" [ngStyle]="{'width': '80%'}" [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'" fxFlex="100" fxLayoutGap="25px" class="m-t-20"  >
-                  <div  fxLayout="column" *ngFor=" let list of showList; let index = index"
-                        [fxFlex]="showList.length ===3 ? 33 : 40" >
-                  <button  mat-button mat-raised-button class="btn-small white overwrite-btn-small" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
-                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" >
-                        <div fxLayout="column" fxFlex="10">
-                          <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
+                <div fxLayout="row" [ngStyle]="{'width': '80%'}" [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'" fxFlex="100" fxLayoutGap="3%" class="m-t-20"  >
+                  <div   fxLayout="column" *ngFor=" let list of showList.slice(0, 3); let index = index"
+                        [fxFlex]="showList.slice(0, 3).length === 3 ? 33 : 48" [ngStyle]="{'width': showList.slice(0, 3).length === 3 ? '30%' : '40%'}"  >
+
+
+                      <button  mat-button mat-raised-button class="btn-small white overwrite-btn-small" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }"  >
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" >
+                          <div fxLayout="column" fxFlex="5">
+                            <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
+                          </div>
+                          <div fxLayout="column" fxFlex="95">
+                            <span class="font-size-10">{{list.value | spliceText: 15}}</span>
+                          </div>
                         </div>
-                        <div fxLayout="column" fxFlex="80">
-                          <span class="font-size-10">{{list.value | spliceText: 10}}</span>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
+                      </button>
+
+                   </div>
                 </div>
                 </div>
           </div>
@@ -254,8 +258,8 @@
           <br>
 
         </div>
-        </wid-scrollbar>
       </form>
+        </wid-scrollbar>
     </div>
 
 </div>

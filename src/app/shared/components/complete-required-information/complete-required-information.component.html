@@ -1,0 +1,36 @@
+<div class="container-required-data">
+  <div class="required-user-info">
+    <div fxFlex="2" class="container-required-info"
+      [ngClass]="userInformation ? 'border-completed' : 'border-no-completed'">
+    </div>
+    <div fxFlex="98" class='container-info' [ngClass]="userInformation ? 'completed-info' : 'no-completed-info'">
+      <div [mat-dialog-close]="true" (click)="goToUserInfo()" class="go-to-url"
+        [ngClass]="userInformation ? 'topaz' : 'steel'">
+        Complete your profile information
+      </div>
+    </div>
+  </div>
+  <mat-divider class="mat-divider-alert"></mat-divider>
+  <div class="required-company-info">
+    <div fxFlex="2" class="container-required-info"
+      [ngClass]="companyInformation ? 'border-completed' : 'border-no-completed'"> </div>
+    <div fxFlex="98" class="container-info" [ngClass]="companyInformation ? 'completed-info' : 'no-completed-info'">
+      <div class="go-to-url" [mat-dialog-close]="true" [ngClass]="companyInformation ? 'topaz' : 'steel'"
+        (click)="goToCompanyInformation()">
+        Complete your company information
+      </div>
+    </div>
+
+  </div>
+  <mat-divider class="mat-divider-alert"></mat-divider>
+  <div class="required-banking-info">
+    <div fxFlex="2" class="container-required-info"
+      [ngClass]="companyBankingInformation ? 'border-completed' : 'border-no-completed'">
+    </div>
+    <div fxFlex="98" class="container-info"
+      [ngClass]="companyBankingInformation ? 'completed-info' : 'no-completed-info'">
+      <div class="go-to-url" [mat-dialog-close]="true" [ngClass]="companyBankingInformation ? 'topaz' : 'steel'"
+        (click)="goToCompanyBankingInformation()"> Complete your company banking information</div>
+    </div>
+  </div>
+</div>

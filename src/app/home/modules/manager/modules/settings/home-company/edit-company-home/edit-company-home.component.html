@@ -19,7 +19,7 @@
       *ngIf="isLoading" nbrRow=8
       nbrColumn=2
     ></wid-skeleton-loader>
-    <div fxLayout="row" fxFlex="89" class="p-t-20 font-size-12" *ngIf="!isLoading" form
+    <div fxLayout="row" fxFlex="89" class="p-t-20 font-size-12" *ngIf="!isLoading"
          [formGroup]="form">
       <wid-scrollbar style="width: 100%;">
       <div *widDisabledForm="{'feature':'SETTINGS_UPDATE_COMPANY', 'form': form}" fxLayout="column" fxFlex="100" fxFlexOffset="50px">
@@ -53,14 +53,15 @@
                   </wid-profile-image>
                 </div>
               </div>
-              <div fxLayout="row"   fxFlex="100" fxLayoutGap="10px" class="m-t-20" style="width: 80%;"  [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'"  >
-                <div fxLayout="column"  *ngFor=" let list of showList; let index = index" [fxFlex]="showList.length ===3 ? 33 : 40">
+              <div fxLayout="row" [ngStyle]="{'width': '80%'}" [fxLayoutAlign]="showList.length ==1 ? 'center center' : 'stretch'" fxFlex="100" fxLayoutGap="3%" class="m-t-20"  >
+                <div   fxLayout="column" *ngFor=" let list of showList.slice(0, 3); let index = index"
+                       [fxFlex]="showList.slice(0, 3).length === 3 ? 33 : 48" [ngStyle]="{'width': showList.slice(0, 3).length === 3 ? '30%' : '40%'}"  >
                   <button mat-button mat-raised-button class="btn-small white overwrite-btn-small" [ngStyle]="{'background-color':list.color,'pointer-events': list.lien === null ? 'none' : 'auto' }" *ngIf="index<3" >
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                      <div fxLayout="column" fxFlex="20">
+                      <div fxLayout="column" fxFlex="8">
                         <mat-icon class="icon material-icons-outlined" svgIcon='{{list.icon}}'> </mat-icon>
                       </div>
-                      <div fxLayout="column" fxFlex="80">
+                      <div fxLayout="column" fxFlex="92">
                         <span class="font-size-10">{{list.value | spliceText: 15}}</span>
                       </div>
                     </div>

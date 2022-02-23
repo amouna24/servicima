@@ -1,5 +1,40 @@
 
-  @mixin button($height,$width,$border-radius,$background-color,$color,$font-size,$line-height,$text-align) {
+
+@mixin requireInitializeInformation($display,$position,$left,$top,
+                                    $content,$font-size,$border-radius,$border,
+                                    $width,$height, $line-height,$text-align, $color,$font-weight  ) {
+  display: $display;
+  position: $position;
+  left: $left;
+  top: $top;
+  content: $content;
+  font-size: $font-size;
+  border-radius: $border-radius;
+  border: $border;
+  width: $width;
+  height: $height;
+  line-height: $line-height;
+  text-align: $text-align;
+  color: $color;
+  font-weight: $font-weight;
+}
+
+
+@mixin requireInformation($padding,$line-height,$position,$font-family,
+                                    $color,$font-weight,$font-size,$height,$width
+                                   ) {
+  padding: $padding;
+  line-height: $line-height;
+  position: $position;
+  font-family: $font-family;
+  color: $color;
+  font-weight: $font-weight;
+  font-size: $font-size;
+  height: $height;
+  width: $width;
+}
+
+@mixin button($height,$width,$border-radius,$background-color,$color,$font-size,$line-height,$text-align) {
     height: $height !important;
     width: $width !important;
     border-radius: $border-radius !important;
