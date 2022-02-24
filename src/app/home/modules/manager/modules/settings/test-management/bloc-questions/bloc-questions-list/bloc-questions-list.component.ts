@@ -72,6 +72,7 @@ export class BlocQuestionsListComponent implements OnInit {
       this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
         .subscribe(
           (response) => {
+            console.log('response=', response);
             this.isLoading.next(true);
             if (response['msg_code'] === '0004') {
               resolve([]);
@@ -88,6 +89,9 @@ export class BlocQuestionsListComponent implements OnInit {
                     _id: res._id,
                     test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
                     technology_code: res.TestQuestionBlocKey.test_technology_code,
+                    image: res.image,
+                    free:  res.free,
+                    price: res.price
                   });
                   if (response['results'].length === this.blocData.length) {
                     response['results'] = this.blocData;
@@ -102,6 +106,8 @@ export class BlocQuestionsListComponent implements OnInit {
           (error) => {
             if (error.error.msg_code === '0004') {
               console.log('empty table');
+              resolve([]);
+              this.isLoading.next(false);
             }
           },
         );
@@ -148,6 +154,9 @@ export class BlocQuestionsListComponent implements OnInit {
       test_question_bloc_desc:  data.test_question_bloc_desc,
       _id:  data._id,
       test_question_bloc_code:  data.test_question_bloc_code,
+      free: data.free,
+      price: data.price,
+      image: data.image,
     };
     this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/edit', queryParamObject);
   }

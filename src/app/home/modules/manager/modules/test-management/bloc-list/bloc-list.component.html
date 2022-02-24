@@ -68,7 +68,7 @@
           </div>
         </div>
       </div>
-      <wid-scrollbar fxLayout="row" fxFlex="88">
+      <wid-scrollbar fxLayout="row" fxFlex="80">
         <div fxLayout="column" fxFlexFill>
           <div fxLayout="row" style="min-height: 8%" fxLayoutAlign="space-around center ">
             <div fxLayout="column" fxFlex="96">
@@ -81,150 +81,68 @@
                 <div fxLayout="column" fxFlex="97">
                   <ng-template [ngIf]="showVertical" >
                   <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://devfacts.com/wp-content/uploads/2018/06/angular.jpg" width="220px" height="108px" style="border-radius: 15px">
+                      <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList" >
+                          <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkBoxEvent['checked'] ? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
+                            <div fxLayout="column" fxFlexFill>
+                              <div fxLayout="row" >
+                                <div fxLayout="column" class="p-5">
+                                  <div fxLayout="column" [style.width.px]="220" [style.height.px]="108"  [style.background-image]="'url('+ imageUrl + oneAvailableBloc.image+ ')'" style="border-radius: 15px; background-size: cover">
+                                    <div fxLayout="row" fxFlex="10" fxLayoutAlign="end">
+                                      <div fxLayout="column"  class="p-r-12 rounded-check-box colored-check-box">
+                                        <mat-checkbox class="custom-frame" #checkBoxEvent ></mat-checkbox>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="5px">
-                                  <div fxLayout="column" class="bloc-type-free" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Free</span>
+                              <div fxLayout="row" fxFlex="10">
+                                <mat-card-title class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</mat-card-title>
+                              </div>
+                              <div fxLayout="row" fxFlex="25">
+                                <mat-card-content class="p-l-15">
+                                  <p class="font-size-10 steel font-extra-light limit-text-height">
+                                    {{oneAvailableBloc.test_question_bloc_desc.length < 120 ? oneAvailableBloc.test_question_bloc_desc : oneAvailableBloc.test_question_bloc_desc | slice:0:100}}
+                                    <span *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 120">...</span>
+                                    <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 120" (click)="openDescriptionDialog(oneAvailableBloc)"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
+                                  </p>
+                                </mat-card-content>
+                              </div>
+                              <div fxLayout="row" fxFlex="15">
+                                <div  fxLayout="column" class="p-l-15" fxFlexFill>
+                                  <div fxLayout="row" fxLayoutGap="5px">
+                                    <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
+                                      <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.softfluent.fr/wp-content/uploads/2019/10/javascript.png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="5px">
-                                  <div fxLayout="column" class="bloc-type-free" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Free</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://devfacts.com/wp-content/uploads/2018/06/angular.jpg" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="5px">
-                                  <div fxLayout="column" class="bloc-type-purchased" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Purchased</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.softfluent.fr/wp-content/uploads/2019/10/javascript.png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="5px">
-                                  <div fxLayout="column" class="bloc-type-purchased" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Purchased</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
+                          </mat-card>
                       </div>
                   </div>
                     </ng-template>
                     <ng-template [ngIf]="!showVertical" >
                       <div fxLayout="row" fxFlexFill @blocQuestionsAppearance>
                         <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
+                          <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList">
+                            <mat-card [ngClass]="checkBoxOtherEvent['checked'] ? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'">
                               <div fxLayout="row" fxFlexFill>
                                 <div fxLayout="column" fxLayoutAlign="center">
                                   <div fxLayout="column" class="p-5">
-                                    <img src="https://devfacts.com/wp-content/uploads/2018/06/angular.jpg" width="200px" height="108px" style="border-radius: 15px">
+                                    <img [src]="imageUrl+oneAvailableBloc.image" width="200px" height="108px" style="border-radius: 15px">
                                   </div>
                                 </div>
                                 <div fxLayout="column">
                                   <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
+                                    <span class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</span>
                                   </div>
                                   <div fxLayout="row" fxFlex="55">
                                     <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
                                     <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
+                                      <p class="font-size-10 steel font-extra-light ">
+                                        {{oneAvailableBloc.test_question_bloc_desc.length < 300 ? oneAvailableBloc.test_question_bloc_desc : oneAvailableBloc.test_question_bloc_desc | slice:0:250}}
+                                        <span *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 300">...</span>
+                                  <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 300" (click)="openDescriptionDialog(oneAvailableBloc)"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
                                       </p>
                                     </span>
                                     </div>
@@ -233,126 +151,15 @@
                                   <div fxLayout="row" fxFlex="25">
                                     <div  fxLayout="column" class="p-l-15" fxFlexFill>
                                       <div fxLayout="row" fxLayoutGap="5px">
-                                        <div fxLayout="column" class="bloc-type-free" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Free</span>
+                                        <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
+                                          <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://www.softfluent.fr/wp-content/uploads/2019/10/javascript.png" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="5px">
-                                        <div fxLayout="column" class="bloc-type-free" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Free</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://devfacts.com/wp-content/uploads/2018/06/angular.jpg" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="5px">
-                                        <div fxLayout="column" class="bloc-type-purchased" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Purchased</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://www.softfluent.fr/wp-content/uploads/2019/10/javascript.png" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="5px">
-                                        <div fxLayout="column" class="bloc-type-purchased" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Purchased</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                <div fxLayout="column" fxFlex="27" fxLayoutAlign=" end" class="rounded-check-box">
+                                  <mat-checkbox class="custom-frame" #checkBoxOtherEvent></mat-checkbox>
                                 </div>
 
                               </div>
@@ -361,8 +168,6 @@
                         </div>
                       </div>
                     </ng-template>
-
-
                   </div>
               </div>
 
@@ -379,21 +184,23 @@
                 <div fxLayout="column" fxFlex="97">
                   <ng-template [ngIf]="showVertical" >
                     <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
-                      <div fxLayout="column" >
+                      <div fxLayout="column" *ngFor="let oneOtherBloc of otherBlocQuestionsList">
                         <mat-card class="bloc-list-card-vertical">
                           <div fxLayout="column" fxFlexFill>
                             <div fxLayout="row" >
                               <div fxLayout="column" class="p-5">
-                                <img src="https://www.tremplin-numerique.org/wp-content/uploads/2021/09/Ou-sont-stockes-les-images-et-les-conteneurs-Docker-sur-2027844..png" width="220px" height="108px" style="border-radius: 15px">
+                                <img [src]="imageUrl+oneOtherBloc.image" width="220px" height="108px" style="border-radius: 15px">
                               </div>
                             </div>
                             <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
+                              <mat-card-title class="black font-size-12 font-medium p-l-15">{{oneOtherBloc.test_question_bloc_title}}</mat-card-title>
                             </div>
                             <div fxLayout="row" fxFlex="25">
                               <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
+                                <p class="font-size-10 steel font-extra-light limit-text-height">
+                                  {{oneOtherBloc.test_question_bloc_desc.length < 120 ? oneOtherBloc.test_question_bloc_desc : oneOtherBloc.test_question_bloc_desc | slice:0:100}}
+                                  <span *ngIf="oneOtherBloc.test_question_bloc_desc.length >= 120">...</span>
+                                  <button class="font-size-10 steel font-extra-light transparent-button" (click)="openDescriptionDialog(oneOtherBloc)"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
                                 </p>
                               </mat-card-content>
                             </div>
@@ -401,271 +208,7 @@
                               <div  fxLayout="column" class="p-l-15" fxFlexFill>
                                 <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
                                   <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190531152042/node1.png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.243tech.com/tout-savoir-sur-php/php-code.jpg" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.tremplin-numerique.org/wp-content/uploads/2021/09/Ou-sont-stockes-les-images-et-les-conteneurs-Docker-sur-2027844..png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190531152042/node1.png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.243tech.com/tout-savoir-sur-php/php-code.jpg" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.tremplin-numerique.org/wp-content/uploads/2021/09/Ou-sont-stockes-les-images-et-les-conteneurs-Docker-sur-2027844..png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column" >
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190531152042/node1.png" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
-                                  </div>
-                                  <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">Buy now</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </mat-card>
-                      </div>
-                      <div fxLayout="column">
-                        <mat-card class="bloc-list-card-vertical">
-                          <div fxLayout="column" fxFlexFill>
-                            <div fxLayout="row" >
-                              <div fxLayout="column" class="p-5">
-                                <img src="https://www.243tech.com/tout-savoir-sur-php/php-code.jpg" width="220px" height="108px" style="border-radius: 15px">
-                              </div>
-                            </div>
-                            <div fxLayout="row" fxFlex="10">
-                              <mat-card-title class="black font-size-12 font-medium p-l-15">Angular 2+</mat-card-title>
-                            </div>
-                            <div fxLayout="row" fxFlex="25">
-                              <mat-card-content class="p-l-15">
-                                <p class="font-size-10 steel font-extra-light">
-                                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..
-                                </p>
-                              </mat-card-content>
-                            </div>
-                            <div fxLayout="row" fxFlex="15">
-                              <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                <div fxLayout="row" fxLayoutGap="100px" fxFlexFill>
-                                  <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                    <span class="bloc-type-label">9.99$</span>
+                                    <span class="bloc-type-label">{{oneOtherBloc.price}}$</span>
                                   </div>
                                   <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
                                     <span class="bloc-type-label">Buy now</span>
@@ -681,25 +224,25 @@
                   <ng-template [ngIf]="!showVertical">
                       <div fxLayout="row" fxFlexFill  @blocQuestionsAppearance>
                         <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
-                          <div fxLayout="row" >
+                          <div fxLayout="row" *ngFor="let oneOtherBloc of otherBlocQuestionsList">
                             <mat-card class="bloc-list-card-horizontal">
                               <div fxLayout="row" fxFlexFill>
                                 <div fxLayout="column" fxLayoutAlign="center">
                                   <div fxLayout="column" class="p-5">
-                                    <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190531152042/node1.png" width="200px" height="108px" style="border-radius: 15px">
+                                    <img [src]="imageUrl+oneOtherBloc.image" width="200px" height="108px" style="border-radius: 15px">
                                   </div>
                                 </div>
                                 <div fxLayout="column">
                                   <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
+                                    <span class="black font-size-12 font-medium p-l-15">{{oneOtherBloc.test_question_bloc_title}}</span>
                                   </div>
                                   <div fxLayout="row" fxFlex="55">
                                     <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
                                     <span class="p-l-15">
                                       <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
+                                        {{oneOtherBloc.test_question_bloc_desc.length < 300 ? oneOtherBloc.test_question_bloc_desc : oneOtherBloc.test_question_bloc_desc | slice:0:250}}
+                                        <span *ngIf="oneOtherBloc.test_question_bloc_desc.length >= 300">...</span>
+                                  <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneOtherBloc.test_question_bloc_desc.length >= 300" (click)="openDescriptionDialog(oneOtherBloc)"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
                                       </p>
                                     </span>
                                     </div>
@@ -709,130 +252,7 @@
                                     <div  fxLayout="column" class="p-l-15" fxFlexFill>
                                       <div fxLayout="row" fxLayoutGap="670px" fxFlexFill>
                                         <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">9.99$</span>
-                                        </div>
-                                        <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Buy now</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://www.softfluent.fr/wp-content/uploads/2019/10/javascript.png" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="670px" fxFlexFill>
-                                        <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">9.99$</span>
-                                        </div>
-                                        <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Buy now</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://www.243tech.com/tout-savoir-sur-php/php-code.jpg" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="670px" fxFlexFill>
-                                        <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">9.99$</span>
-                                        </div>
-                                        <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">Buy now</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </mat-card>
-                          </div>
-                          <div fxLayout="row" >
-                            <mat-card class="bloc-list-card-horizontal">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxLayoutAlign="center">
-                                  <div fxLayout="column" class="p-5">
-                                    <img src="https://www.tremplin-numerique.org/wp-content/uploads/2021/09/Ou-sont-stockes-les-images-et-les-conteneurs-Docker-sur-2027844..png" width="200px" height="108px" style="border-radius: 15px">
-                                  </div>
-                                </div>
-                                <div fxLayout="column">
-                                  <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                    <span class="black font-size-12 font-medium p-l-15">Angular 2+</span>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="55">
-                                    <div fxLayout="column" fxFlex="70" fxLayoutAlign="center">
-                                    <span class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light">
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                                        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur....
-                                      </p>
-                                    </span>
-                                    </div>
-
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="670px" fxFlexFill>
-                                        <div fxLayout="column" class="bloc-price" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">9.99$</span>
+                                          <span class="bloc-type-label">{{oneOtherBloc.price}}$</span>
                                         </div>
                                         <div fxLayout="column" class="bloc-buy" fxLayoutAlign="center center">
                                           <span class="bloc-type-label">Buy now</span>
@@ -856,6 +276,22 @@
           </div>
         </div>
       </wid-scrollbar>
+      <div fxLayout="row" fxFlex="8" fxLayoutAlign="end">
+        <div fxLayout="column" fxLayoutAlign=" end"  fxFlex="100">
+              <div fxLayout="row" fxFlexFill fxLayoutGap="10px" fxLayoutAlign="end">
+                <div fxLayout="column">
+                  <button mat-raised-button class="btn-small " color="primary">
+                    <span class="white">Next</span>
+                  </button>
+                </div>
+                <div fxLayout="column">
+                  <button mat-raised-button class="btn-small bg-pale-grey">
+                    <span class="black">Cancel</span>
+                  </button>
+                </div>
+              </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

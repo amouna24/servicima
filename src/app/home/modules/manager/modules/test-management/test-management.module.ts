@@ -4,9 +4,10 @@ import { SharedModule } from '@shared/shared.module';
 
 import { TestManagementRoutingModule } from './test-management-routing.module';
 import { BlocListComponent } from './bloc-list/bloc-list.component';
+import { BlocListModalComponent } from './bloc-list-modal/bloc-list-modal.component';
 
 @NgModule({
-  declarations: [BlocListComponent],
+  declarations: [BlocListComponent, BlocListModalComponent],
   imports: [
     CommonModule,
     TestManagementRoutingModule,

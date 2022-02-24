@@ -74,7 +74,7 @@ export const environment = {
   timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
   testChoicesApiUrl: 'http://213.136.74.202/testchoices',
   testQuestionApiUrl: 'http://213.136.74.202/testquestion',
-  testQuestionBlocApiUrl: 'http://213.136.74.202/testquestionbloc',
+  testQuestionBlocApiUrl: 'http://127.0.0.1:8099/servicima/testquestionbloc/v1',
   testTechnologiesApiUrl: 'http://213.136.74.202/testtechnology',
   testSkillsApiUrl: 'http://213.136.74.202/testskills',
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',

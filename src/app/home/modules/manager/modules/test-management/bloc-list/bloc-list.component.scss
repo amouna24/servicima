@@ -3,14 +3,17 @@
   height: 230px;
   width: 230px;
 }
+.selected-card {
+  border: 1px solid $topaz;
+}
 .bloc-list-card-horizontal {
   height: 128px;
+  min-width: 100%;
 }
 .mat-card{
-  border: 1px !important;
   border-radius: 15px !important;
-  border: #e8f1f9 !important;
   padding: 0 !important;
+
 }
 .bloc-type-free {
   border-radius: 15px;
@@ -40,3 +43,35 @@
   height: 17px;
   min-width: 54px;
 }
+.limit-text-height {
+  height: 47px;
+  overflow: hidden;
+}
+.transparent-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.p-r-12 {
+  padding-right: 12px;
+}
+.rounded-check-box {
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 50% !important;
+      border-color: $cool-grey;
+    }
+
+}
+.colored-check-box {
+    ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+      background-color: black !important;
+    }
+    ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+      background-color: black !important;
+    }
+}
+
+
+  }

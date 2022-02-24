@@ -10,4 +10,8 @@ export interface ITestQuestionBlocModel {
   test_technology_code: string;
   application_id: string;
   company_email: string;
+  image?: string;
+  free: boolean;
+  devise?: string;
+  price?: number;
 }
