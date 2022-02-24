@@ -10,7 +10,7 @@ export class CryptoService {
   encrypt(keys, value) {
     const key = CryptoJS.enc.Utf8.parse(keys);
     const iv = CryptoJS.enc.Utf8.parse(keys);
-    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(value.toString()), key,
+    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(value), key,
       {
         keySize: 128 / 8,
         iv,

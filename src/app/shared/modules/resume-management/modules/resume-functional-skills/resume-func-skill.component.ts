@@ -18,7 +18,6 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@sha
     downLine,
     showBloc,
     dataAppearance,
-
   ]
 })
 export class ResumeFuncSkillComponent implements OnInit {

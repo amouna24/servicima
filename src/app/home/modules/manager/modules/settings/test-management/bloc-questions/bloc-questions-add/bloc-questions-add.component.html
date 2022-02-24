@@ -58,7 +58,37 @@
                       Select a number between 1 and 100</mat-error>
 
                   </mat-form-field>
+                      <mat-checkbox  class="black font-size-12 " formControlName="free"  (change)="verifyChecked($event)">
+                        Free</mat-checkbox>
+                        <div fxLayout="row" *ngIf="displayPrice">
+                          <div fxLayout="column">
+                            <mat-label class="black font-size-12 required">
+                              Price:
+                            </mat-label>
+                            <mat-form-field appearance="outline" >
+                              <input formControlName="price" matInput type="number" min="0" placeholder="$" required>
+                              <mat-error class="red" *ngIf="sendAddTestBloc.controls.test_question_bloc_title.errors?.required">
+                                {{ 'general.required' | translate }}</mat-error>
+                            </mat-form-field>
+                          </div>
 
+                        </div>
+
+                  <mat-label class="black font-size-12 ">
+                    {{'manager.socialnetwork.image' | translate}}:
+                  </mat-label>
+                  <mat-form-field appearance="outline"  >
+                    <div >
+                      <input matInput matSuffix formControlName="image"  [placeholder]="'manager.socialnetwork.image' | translate"  >
+                      <button  class="buttonImage"  type="button">
+                        <input type="file"
+                               id="upload"
+                               accept="image/png, image/gif, image/jpeg, application/pdf"
+                               (change)="setValueToImageField($event)"
+                               hidden/>
+                        <label for="upload">{{'manager.socialnetwork.upload' | translate}}</label></button>
+                    </div>
+                  </mat-form-field>
                   <mat-label class="black font-size-12 ">
                     Description:
                   </mat-label>

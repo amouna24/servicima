@@ -268,12 +268,12 @@ mat-dialog-container {
 }
 
 .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
-    background: $thirdColor !important;
+    background: $secondaryColor !important;
 }
 
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
 .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-    background-color: $thirdColor !important;
+    background-color: $secondaryColor !important;
 }
 
 #table-config-tabs {
