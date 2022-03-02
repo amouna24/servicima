@@ -66,6 +66,10 @@ const routes: Routes = [
         loadChildren: () => import('@shared/components/settings/user.module').then(m => m.UserModule)
       },
       {
+        path: 'test',
+        loadChildren: () => import('./modules/test-management/test-management.module').then(m => m.TestManagementModule),
+      },
+      {
         path: 'resume',
         loadChildren: () => import('./modules/resume/resume.module').then(m => m.ResumeModule),
       },

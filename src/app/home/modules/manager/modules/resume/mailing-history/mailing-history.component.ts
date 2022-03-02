@@ -71,8 +71,8 @@ export class MailingHistoryComponent implements OnInit {
   }
 
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('Resend'):
+    switch (rowAction.actionType.name) {
+      case ('manager.resume.mailing_history.resend'):
         this.resendMail(rowAction.data);
         break;
       case ('update'):

@@ -617,6 +617,9 @@ html body {
 .steel-two {
   color: $steel-two;
 }
+.warm-grey {
+  color: $warm-grey;
+}
 .warning-yellow{
   color: $warning-yellow !important;
 }
@@ -938,6 +941,14 @@ wid-upload-sheet {
     width: 10px;
     height: 10px;
   }
+
+}
+.close-container {
+  border: none;
+  min-width: 21px;
+  min-height: 21px;
+  border-radius: 5px;
+  background-color: $pale-grey-three;
 }
 
 

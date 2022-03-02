@@ -1,0 +1,118 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Resume</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/manager/settings/skills/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">back</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlex="4" fxLayoutAlign="space-around center ">
+      </div>
+      <wid-scrollbar fxFlex="80" class="full-width" fxLayout="row">
+        <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+          <form [formGroup]="sendUpdateTestSkill" fxLayout="row" fxFlex="100" style="justify-content: space-around">
+            <div fxLayout="column" fxFlex="82" >
+              <div fxLayout="row"  class="full-width">
+                <div fxLayout="column" fxFlex="60">
+                  <mat-label class="black font-size-12 required" >
+                    Skill Name:
+                  </mat-label>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input formControlName="skill_title" matInput placeholder="Skill title" required>
+                    <mat-error class="red" *ngIf="sendUpdateTestSkill.controls.skill_title.errors?.required">
+                      {{ 'general.required' | translate }}</mat-error>
+                    <mat-error class="red" *ngIf="sendUpdateTestSkill.controls.skill_title.errors?.pattern">
+                      Numbers not allowed</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row" fxFlex="18"  >
+                <div fxLayout="column" fxFlex="61">
+                  <mat-label class="black font-size-12 required">
+                    Level:
+                  </mat-label>
+                  <mat-radio-group formControlName="test_level_code" style="min-height: 60%" aria-label="Select an option" >
+                    <mat-radio-button fxLayout="row" fxFlex="40"  class="full-width font-normal font-size-12 black" value="junior">Junior</mat-radio-button>
+                    <mat-radio-button fxLayout="row" fxFlex="40" class="font-normal font-size-12 black" value="senior">Senior</mat-radio-button>
+                    <mat-radio-button fxLayout="row" fxFlex="20" class="font-normal font-size-12 black" value="expert">Expert</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div fxLayout="row"  fxFlex="46" class="config-wrapper"  >
+                <div fxLayout="column" fxFlex="61">
+
+                  <mat-label class="black font-size-12 required">
+                    Technology:
+                  </mat-label>
+                  <div fxLayout="row" fxFlex="100">
+                    <div fxFlex="40" class="config-container">
+                      <div class="font-normal font-size-12"><span>Available</span></div>
+                      <div class="list-content full-height" >
+                        <form [formGroup]="canBeDisplayedColumnsForm">
+                          <div cdkDropList class="example-list" (cdkDropListDropped)="onDropCanBeDisplayed($event)"  style="display: flex;
+              flex-direction: column;">
+                            <mat-checkbox cdkDrag *ngFor="let columns of canBeDisplayedColumns; let i = index" [value]="columns"
+                                          (change)="checkCanBeDisplayedColumn($event)">
+                              <span>{{columns.name}}</span>
+                            </mat-checkbox>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="switch-buttons" fxFlex="20">
+                      <button mat-icon-button tabindex="-1" (click)="addToDisplayColumn()"
+                              [disabled]="canBeDisplayedColumnsForm.get('canBeDisplayedColumns').value.length <= 0">
+                        <mat-icon class="icon material-icons-outlined">keyboard_arrow_right</mat-icon>
+                      </button>
+                      <button mat-icon-button tabindex="-1" (click)="addToCanBeDisplayColumn()"
+                              [disabled]="displayedColumnsForm.get('displayedColumns').value.length <= 0">
+                        <mat-icon class="icon material-icons-outlined">keyboard_arrow_left</mat-icon>
+                      </button>
+                    </div>
+                    <div fxFlex="40" class="config-container">
+                      <div class="font-normal font-size-12"><span>Displayed</span></div>
+                      <div class="list-content">
+                        <form [formGroup]="displayedColumnsForm">
+                          <div cdkDropList class="example-list" (cdkDropListDropped)="onDropDisplayed($event)" style="display: flex;
+              flex-direction: column;">
+                            <mat-checkbox cdkDrag *ngFor="let columns of displayedColumns; let i = index" [value]="columns"
+                                          (change)=checkDisplayedColumn($event)>
+                              <span>{{columns.name}}</span>
+                            </mat-checkbox>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </wid-scrollbar>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end " fxLayoutGap="20px" class="p-r-15">
+        <div fxLayout="column"  fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/manager/settings/skills/">
+            <span class="cool-grey">Cancel</span>
+          </button>
+        </div>
+        <div fxLayout="column"   fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="testButton()" [style]="{marginRight: '4%'}"
+                  (click)="updateSkill()">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

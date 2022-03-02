@@ -18,7 +18,6 @@ import { blueToGrey, downLine, GreyToBlue, showBloc, dataAppearance } from '@sha
     downLine,
     showBloc,
     dataAppearance,
-
   ]
 })
 export class ResumeFuncSkillComponent implements OnInit {
@@ -35,6 +34,7 @@ export class ResumeFuncSkillComponent implements OnInit {
   subscriptionModal: Subscription;
   showNumberError: boolean;
   companyUserType: string;
+  featureAddUpdate: string;
 
   /**********************************************************************
    * @description Resume Functional skills constructor
@@ -55,6 +55,7 @@ export class ResumeFuncSkillComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
+    this.featureAddUpdate = 'RESUME_ADD_FUNC_SKILL';
     this.button = 'Add';
     this.showNumberError = false;
     this.funcSkillArray = [];
@@ -201,6 +202,7 @@ export class ResumeFuncSkillComponent implements OnInit {
         this.button = 'Add';
       }
     }
+    this.featureAddUpdate = 'RESUME_ADD_FUNC_SKILL';
     this.sendFuncSkill.reset();
     this.showNumberError = false;
   }
@@ -214,6 +216,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.sendFuncSkill.patchValue({
       skill: functionalSkill.skill,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_FUNC_SKILL';
     this.funcSkillArray.splice( index, 1);
     this.id = functionalSkill._id;
     this.functionalSkillCode = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;

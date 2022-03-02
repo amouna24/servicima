@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-sheet.component';
 import { SheetService } from '@core/services/sheet/sheet.service';
 import { takeUntil } from 'rxjs/operators';
@@ -22,6 +22,7 @@ const FileSaver = require('file-saver');
 })
 export class PayslipListComponent implements OnInit {
   public ELEMENT_DATA = new BehaviorSubject<any[]>([]);
+  private payslipList: any[];
   public isLoading = new BehaviorSubject<boolean>(true);
   private destroy$: Subject<boolean> = new Subject<boolean>();
   private companyEmail: string;
@@ -34,12 +35,19 @@ export class PayslipListComponent implements OnInit {
               private modalServices: ModalService) {
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.getData('ACTIVE');
-    this.sheetService.registerSheets([{ sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent}]);
-    this.modalServices.registerModals({ modalName: 'importPayslip', modalComponent: PayslipImportComponent});
+  ngOnInit() {
+    this.getData('ACTIVE').then(
+      () => {
+        this.sheetService.registerSheets([{ sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent}]);
+        this.modalServices.registerModals({ modalName: 'importPayslip', modalComponent: PayslipImportComponent});
+      });
+
   }
 
+  checkLoad() {
+    this.isLoading.next(this.ELEMENT_DATA.value.length !== this.payslipList.length);
+    return this.isLoading;
+  }
   getCollaboratorName(email_address: string): Promise<string> {
     return new Promise(
       resolve => {
@@ -54,20 +62,24 @@ export class PayslipListComponent implements OnInit {
     );
   }
   async fillDataTable(status: string): Promise<any[]> {
-    this.isLoading.next(true);
     if (!this.companyEmail) {
       await this.getUserInfo();
     }
     return new Promise(
-      resolve => {
+      async resolve => {
         this.uploadPayslipService.getAssociatedPayslip(
           `?company_address=${this.companyEmail}&application_id=${this.userService.applicationId}&status=${status}`
         ).toPromise().then(
-          (res) => this.loadDataTable(res).then(
-            (resp) => {
-              this.ELEMENT_DATA.next(resp);
-              resolve(resp);
-            }));
+          async (res) => {
+            if (!!res) {
+              this.payslipList = res;
+              await this.loadDataTable(res).then(
+                (resp) => {
+                  this.ELEMENT_DATA.next(resp);
+                  resolve(resp);
+                });
+            }
+          });
       });
 
   }
@@ -141,13 +153,10 @@ export class PayslipListComponent implements OnInit {
   }
 
   deletePayslip(data: any[]): void {
-    this.isLoading.next(true);
     data.map((row) => {
       this.uploadPayslipService.disableAssociatedPayslip(row._id).toPromise().then(
         async () => {
-          this.getData('ACTIVE').then( () => {
-            this.isLoading.next(false);
-          });
+          await this.getData('ACTIVE');
         });
     });
   }
@@ -181,11 +190,7 @@ export class PayslipListComponent implements OnInit {
   }
 
   async getData(event) {
-    await this.fillDataTable(event).then( (res) => {
-      if (!!res) {
-        this.isLoading.next(false);
-      }
-    });
+    await Promise.all([this.fillDataTable(event)]);
   }
 
 }

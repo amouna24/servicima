@@ -1,5 +1,6 @@
 .mat-icon{
   height: 17px !important;
+  width: 14px !important;
 }
 .material-icons-outlined {
   line-height: 0 !important;
@@ -7,4 +8,7 @@
 .overwrite-btn-small{
   width: auto !important;
   height: 30px !important;
+}
+.mat-raised-button {
+  padding: 4px !important;
 }

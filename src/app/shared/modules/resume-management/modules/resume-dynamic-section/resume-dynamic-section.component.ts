@@ -36,6 +36,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   subscriptionModal: Subscription;
   showEmpty = true;
   companyUserType: string;
+  featureAddUpdate: string;
 
   /**********************************************************************
    * @description Resume Dynamic Section constructor
@@ -56,6 +57,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
   ngOnInit(): void {
     this.showNumberError = false;
     this.SectionArray = [];
+    this.featureAddUpdate = 'RESUME_ADD_CUSTOM_SECTION';
     this.button = 'Add';
     this.getDynamicSectionInfo();
     this.createForm();
@@ -180,6 +182,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
         });
         this.button = 'Add';
       }
+      this.featureAddUpdate = 'RESUME_ADD_CUSTOM_SECTION';
     }
     this.sendSection.reset();
     this.showNumberError = false;
@@ -194,6 +197,7 @@ export class ResumeDynamicSectionComponent implements OnInit {
       section_title: dynamicSection.section_title,
       section_desc: dynamicSection.section_desc,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_CUSTOM_SECTION';
     this.SectionArray.splice(pointIndex, 1);
     this.id = dynamicSection._id;
     this.section_code = dynamicSection.ResumeSectionKey.section_code;

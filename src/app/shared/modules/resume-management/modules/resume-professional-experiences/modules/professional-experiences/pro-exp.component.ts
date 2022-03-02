@@ -49,6 +49,7 @@ export class ProExpComponent implements OnInit {
   myDisabledDayFilter;
  placeHolderEndDate: string;
   companyUserType: string;
+  featureAddUpdate: string;
   /**********************************************************************
    * @description Resume Professional experience constructor
    *********************************************************************/
@@ -62,7 +63,6 @@ export class ProExpComponent implements OnInit {
   ) {
     this.resumeCode = this.router.getCurrentNavigation()?.extras?.state?.resumeCode;
     this.companyUserType = this.router.getCurrentNavigation()?.extras?.state?.companyUserType;
-
   }
 
   /**************************************************************************
@@ -70,6 +70,7 @@ export class ProExpComponent implements OnInit {
    *************************************************************************/
   ngOnInit(): void {
     this.checkedBox = false;
+    this.featureAddUpdate = 'RESUME_ADD_PRO_EXP';
     this.placeHolderEndDate = 'resume-end-date';
     this.button = 'Add';
     this.initBooleanVars();
@@ -232,6 +233,8 @@ export class ProExpComponent implements OnInit {
         this.sendProExp.controls.end_date.enable();
         this.disableDate = false;
       }
+      this.featureAddUpdate = 'RESUME_ADD_PRO_EXP';
+
     }
     this.createForm();
     this.initDates();
@@ -249,6 +252,7 @@ export class ProExpComponent implements OnInit {
       position: professionalExp.position,
       customer: professionalExp.customer,
     });
+    this.featureAddUpdate = 'RESUME_UPDATE_PRO_EXP';
     this.startDateUpdate = this.sendProExp.controls.start_date.value;
     this.endDAteUpdate = this.sendProExp.controls.end_date.value;
     this.sendProExp.controls.start_date.disable();

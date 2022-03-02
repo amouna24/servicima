@@ -61,10 +61,11 @@ await this.getData(0, this.nbtItems.getValue());
          this.resumeService
           .getResumeDataTable(`?company_email=${userInfo?.company[0].companyKey.email_address}&beginning=${offset}&number=${limit}`)
           .subscribe((resume) => {
-            resume['results'].map( (oneResume: IResumeModel) => {
-              this.userService
-                .getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}&email_address=${oneResume.ResumeKey.email_address}`)
-                .subscribe(async (user) => {
+            if (resume['results'].length !== 0) {
+              resume['results'].map( (oneResume: IResumeModel) => {
+                this.userService
+                  .getAllUsers(`?company_email=${userInfo?.company[0].companyKey.email_address}&email_address=${oneResume.ResumeKey.email_address}`)
+                  .subscribe(async (user) => {
                     return new Promise((resolve) => {
                       if (user['msg_code'] !== '0004') {
                         blocData.push({
@@ -93,7 +94,12 @@ await this.getData(0, this.nbtItems.getValue());
                     });
 
                   });
-                });
+              });
+            } else {
+              this.isLoading.next(false);
+              this.tableData.next([]);
+            }
+
             });
           });
   }
@@ -101,28 +107,27 @@ await this.getData(0, this.nbtItems.getValue());
    To change
    *************************************************************************/
   switchAction(rowAction: any) {
-     this.translateService.get(['resume-change-status', 'send-mail', 'export-pdf', 'downlaod-docx', 'resume-archive']).subscribe( (res) => {
-      switch (rowAction.actionType) {
-        case (res['resume-change-status']):
+       console.log('name:', rowAction.actionType.name);
+      switch (rowAction.actionType.name) {
+        case ('resume-change-status'):
           this.changeCandidateToCollaborator(rowAction.data);
           break;
         case ('update'):
           this.updateResume(rowAction.data);
           break;
-        case(res['send-mail']):
+        case('send-mail'):
           this.sendMail(rowAction.data);
           break;
-        case(res['export-pdf']):
+        case('export-pdf'):
           this.exportPdf(rowAction.data);
           break;
-        case(res['downlaod-docx']):
+        case('downlaod-docx'):
           this.downloadDocx(rowAction.data);
           break;
-        case(res['resume-archive']):
+        case('resume-archive'):
           this.archiveUser(rowAction.data);
           break;
       }
-    });
 
   }
   /**************************************************************************

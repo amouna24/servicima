@@ -18,13 +18,12 @@ export class DisabledFormDirective implements OnInit {
   }
 
   @Input()
-  set widDisabledForm(params: any) {
+   set widDisabledForm(params: any) {
+    console.log('paramssssssssssss=', params);
     if (params) {
       this.feature = params.feature;
       this.form = params.form;
-      this.viewContainer.clear();
-      this.viewContainer.createEmbeddedView(this.templateRef);
-
+      this.updateView(params.feature);
     }
   }
 
@@ -46,15 +45,20 @@ export class DisabledFormDirective implements OnInit {
     this.currentUser = {
       features: this.availableFeature
     };
-    this.updateView();
+    this.updateView(this.feature);
   }
 
   /**
    * Insert or remove the html element from the DOM
    */
-  updateView() {
-    if (!this.isDisplayed()) {
+  updateView(feature) {
+    console.log('feature =', feature);
+    if (!this.isDisplayed(feature)) {
       this.form.disable();
+      this.viewContainer.clear();
+      this.viewContainer.createEmbeddedView(this.templateRef);
+    } else {
+      this.form.enable();
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);
     }
@@ -63,12 +67,12 @@ export class DisabledFormDirective implements OnInit {
   /**
    * if the HTML element can be displayed or not depending on the connected user
    */
-  isDisplayed(): boolean {
-    if (!this.userService.licenceFeature.includes(this.feature)) {
+  isDisplayed(feature): boolean {
+    if (!this.userService.licenceFeature.includes(feature)) {
       return false;
     }
     return this.currentUser &&
       this.currentUser.features &&
-      this.currentUser.features.includes(this.feature);
+      this.currentUser.features.includes(feature);
   }
 }

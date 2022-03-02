@@ -1,0 +1,37 @@
+.tech-container {
+  background-color: #e8f1f9;
+  border-radius: 15px;
+  height: 31px;
+  width: 82px;
+}
+.det-container {
+  background-color: #e8f1f9;
+  border-radius: 15px;
+  height: 50%;
+  width: 66%;
+}
+.answer-container {
+  border: 1px solid #e8f1f9;
+  box-shadow: 1px 1px 1px  #e8f1f9;
+  min-height: 90%;
+  justify-content: center;
+}
+.block-pos {
+  min-height: 20%;
+}
+.correct-container {
+  background-color: #1bc5bd;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  width: 100%;
+}
+.false-container {
+  background-color: red;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  width: 100%;
+}

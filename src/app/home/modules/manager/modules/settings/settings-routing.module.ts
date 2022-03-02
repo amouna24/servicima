@@ -92,6 +92,20 @@ const routes: Routes = [
       breadcrumb: 'calendar'
     },
   },
+  {
+    path: 'skills',
+    loadChildren: () => import('./test-management/skills/skills.module').then(m => m.SkillsModule),
+    data: {
+      breadcrumb: 'Test'
+    },
+  },
+  {
+    path: 'bloc-question',
+    loadChildren: () => import('./test-management/bloc-questions/bloc-questions.module').then(m => m.BlocQuestionsModule),
+    data: {
+      breadcrumb: 'Test'
+    },
+  },
 ];
 
 @NgModule({
