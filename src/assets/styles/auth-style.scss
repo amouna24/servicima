@@ -91,6 +91,78 @@ Input Outline Color on error
     border-top-right-radius: $border-radius-15;
     border-bottom-right-radius: $border-radius-15;
   }
+
+@media screen and (max-width: 520px) {
+  .col-right {
+    border-radius: 0 !important;
+  }
+}
+
+
 .mat-form-field-appearance-fill .mat-form-field-flex{
   background-color: inherit !important;
 }
+
+
+.auth-content {
+  input::selection {
+    background: #1bc5bd !important;
+    text-decoration: none !important;
+  }
+
+  input::-moz-selection{
+    background: #1bc5bd !important;
+  }
+}
+
+.title-auth {
+  margin-top: 26px !important;
+  margin-bottom: 26px !important;
+  line-height:1 !important;
+}
+
+.m-b-35{
+  margin-bottom: 35px !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+/*******************
+   input style
+*******************/
+.mat-input-element::placeholder{
+  color: #f3f6f9 !important;
+  font-weight: 200;
+}
+
+/*******************
+   input style
+*******************/
+.stepper {
+  .mat-input-element::placeholder {
+    color: #afb1b8 !important;
+  }
+}
+
+  /*******************
+     input style
+  *******************/
+  .auth-content {
+    .mat-input-element{
+      font-weight: 500 !important;
+    }
+  }
+
+
+//input outline color
+.auth-content {
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: white!important;
+  }
+}
+
+
+

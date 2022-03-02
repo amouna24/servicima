@@ -35,7 +35,7 @@
 		"REF_DATA_DESC": "SAS"
 	},
 	{
-    	"Language_CODE":"FR",
+    "Language_CODE":"FR",
 		"REF_TYPE_CODE": "LEGAL_FORM",
 		"REF_DATA_CODE": "SASU",
 		"REF_DATA_DESC": "SASU"
@@ -62,6 +62,7 @@
     	"REF_DATA_CODE": "SARL",
     	"REF_DATA_DESC": "SARL"
     },
+
     { 	"Language_CODE":"EN",
 		"REF_TYPE_CODE": "LEGAL_FORM",
 		"REF_DATA_CODE": "SAS",
