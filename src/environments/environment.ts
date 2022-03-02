@@ -71,7 +71,7 @@ export const environment = {
   invoiceAttachmentApiUrl: 'http://213.136.74.202/invoiceattachment',
   companyBankingInfoApiUrl: 'http://213.136.74.202/companybankinginfo',
   timesheetApiUrl: 'http://213.136.74.202/timesheet',
-  timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
+  timesheetHolidayApiUrl: 'http://127.0.0.1:8110/servicima/timesheetholiday/v1',
   testChoicesApiUrl: 'http://213.136.74.202/testchoices',
   testQuestionApiUrl: 'http://213.136.74.202/testquestion',
   testQuestionBlocApiUrl: 'http://213.136.74.202/testquestionbloc',

@@ -41,11 +41,10 @@ export class PayslipListComponent implements OnInit {
         this.sheetService.registerSheets([{ sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent}]);
         this.modalServices.registerModals({ modalName: 'importPayslip', modalComponent: PayslipImportComponent});
       });
-
   }
 
   checkLoad() {
-    this.isLoading.next(this.ELEMENT_DATA.value.length !== this.payslipList.length);
+    this.isLoading.next(this.ELEMENT_DATA.value?.length !== this.payslipList?.length);
     return this.isLoading;
   }
   getCollaboratorName(email_address: string): Promise<string> {

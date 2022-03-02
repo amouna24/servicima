@@ -2,9 +2,12 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'TIMESHEET'"
   [isLoading]="isLoading"
-  [header]="{ title: 'timesheet-manag' | translate, addActionURL: '#', addActionText: ''}"
+  [header]="{ title: 'timesheet-manag' | translate }"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="['Approve', 'Reject', 'Delete']"
+  [allowedActions]="[
+  {name: 'Approve', feature: 'TIMESHEET_ACCESS'},
+  {name: 'Reject', feature: 'TIMESHEET_ACCESS'},
+  {name: 'Delete', feature: 'TIMESHEET_ACCESS'}]"
   [buttonAdd]="false"
   (pagination)="loadMoreItems($event)"
   [setAvatar]="{columnCode:'profile', imgSrc: 'photo' }"

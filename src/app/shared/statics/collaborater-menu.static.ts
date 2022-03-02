@@ -34,20 +34,20 @@ export const collaboraterMenu: IMenu[] = [
     name: 'template.timesheet',
     type: 'sub',
     icon: 'wi_timesheet',
-    feature: 'SOURCING_CAND_FILE_ACCESS',
+    feature: 'HR_FOLDER_ACCESS',
     children: [
       {
         state: 'TIMESHEET',
         name: 'template.timesheet',
         icon: 'wi_timesheet',
-        feature: 'SOURCING_CAND_FILE_ACCESS',
+        feature: 'HR_FOLDER_ACCESS',
         type: 'link',
       },
       {
         state: 'TIMESHEET_EXTRA',
         name: 'timesheet.extra',
         icon: 'wi_timesheet',
-        feature: 'SOURCING_CAND_FILE_ACCESS',
+        feature: 'HR_FOLDER_ACCESS',
         type: 'link',
       },
     ]

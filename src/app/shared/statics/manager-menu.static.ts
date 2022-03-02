@@ -23,24 +23,24 @@ export const managerMenu: IMenu[] = [
     feature: 'TIMESHEET_ACCESS',
     children: [
       {
-        state: 'Pending',
-        name: 'timesheet-pending',
+        state: 'PENDING',
+        name: 'manager.menu.static.timesheet.pending',
         icon: '',
-        feature: 'TIMESHEET_PENDING_ACCESS',
+        feature: 'TIMESHEET_ACCESS',
         type: 'link',
       },
       {
-        state: 'Rejected',
-        name: 'timeshhet-rejected',
+        state: 'REJECTED',
+        name: 'manager.menu.static.timesheet.rejected',
         icon: '',
-        feature: 'TIMESHETT_REJECTED_ACCESS',
+        feature: 'TIMESHEET_ACCESS',
         type: 'link',
       },
       {
-        state: 'Approved',
-        name: 'timesheet-approved',
+        state: 'APPROVED',
+        name: 'manager.menu.static.timesheet.approved',
         icon: '',
-        feature: 'TIMESHEET_APPROVED_ACCESS',
+        feature: 'TIMESHEET_ACCESS',
         type: 'link',
       },
     ]

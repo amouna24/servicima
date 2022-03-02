@@ -23,8 +23,6 @@ export class TimesheetsListComponent implements OnInit {
   subscriptions: Subscription;
   userInfo: IUserInfo;
   redirectUrl: string;
-  addButtonLabel: string;
-  flag: boolean;
   typeTimesheet: string;
   subscriptionModal: Subject<boolean>;
   subscriptionDeleteModal: Subscription;
@@ -98,7 +96,6 @@ getTimesheetParams(): void {
    */
   addNewTimesheet(): void {
     this.redirectUrl = '/collaborator/timesheet/add/' + this.typeTimesheet;
-    this.addButtonLabel = 'New';
   }
 
   /**

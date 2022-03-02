@@ -56,7 +56,7 @@
                </mat-form-field>
              </div>
              <div fxLayout="column">
-               <label class="font-size-12 required"> {{ 'timesheet.comment' | translate }} : </label>
+               <label class="font-size-12"> {{ 'timesheet.comment' | translate }} : </label>
                <mat-form-field appearance="outline">
                  <textarea rows="3" placeholder="comment ..." matInput formControlName="comment"></textarea>
                </mat-form-field>
@@ -77,7 +77,7 @@
                      <mat-error class="wid-error-messages">
                        {{dayValidator(day.name)}}
                      </mat-error>
-                     <mat-hint *ngIf="day.hasHoliday" >{{day.holiday.name}}</mat-hint>
+                     <mat-hint *ngIf="day.hasHoliday" >{{day.holiday.name | translate}}</mat-hint>
                    </mat-form-field>
                  </div>
                </ng-container>

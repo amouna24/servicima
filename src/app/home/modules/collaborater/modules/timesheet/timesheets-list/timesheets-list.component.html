@@ -2,10 +2,17 @@
   [tableData]="ELEMENT_DATA"
   [tableCode]="'TIMESHEET_COLLABORATOR'"
   [isLoading]="isLoading"
-  [header]="{ title: 'Timesheet management', addActionURL: redirectUrl, addActionText: addButtonLabel}"
+  [header]="{
+  title: 'Timesheet management',
+  addActionURL: redirectUrl,
+  addActionText: 'New',
+  feature: 'HR_FOLDER_ACCESS'
+  }"
   [title]="'Timesheet list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="['export','delete']"
+  [allowedActions]="[
+  {name: 'export', feature: 'HR_FOLDER_ACCESS'},
+  {name: 'delete', feature: 'HR_FOLDER_ACCESS'}]"
   [colorObject]="sendColorObject()"
 >
 </wid-dynamic-data-table>

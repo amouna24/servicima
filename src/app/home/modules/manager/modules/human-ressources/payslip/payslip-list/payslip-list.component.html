@@ -2,7 +2,9 @@
     [tableData]="ELEMENT_DATA"
     [tableCode]="'PAYSLIP_MANAGER'"
     [isLoading]="checkLoad()"
-    [header]="{ title: 'hr.payslip.list'}"
+    [header]=" {
+    title: 'hr.payslip.list'
+    }"
     [buttonAdd]="false"
     (rowActionData)="switchAction($event)"
     [allowedActions]="[
