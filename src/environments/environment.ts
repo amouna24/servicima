@@ -73,7 +73,7 @@ export const environment = {
   timesheetApiUrl: 'http://213.136.74.202/timesheet',
   timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
   testChoicesApiUrl: 'http://213.136.74.202/testchoices',
-  testQuestionApiUrl: 'http://213.136.74.202/testquestion',
+  testQuestionApiUrl: 'http://127.0.0.1:8098/servicima/testquestion/v1',
   testQuestionBlocApiUrl: 'http://213.136.74.202/testquestionbloc',
   testTechnologiesApiUrl: 'http://213.136.74.202/testtechnology',
   testSkillsApiUrl: 'http://213.136.74.202/testskills',

@@ -3,10 +3,8 @@ import { IUserModel } from '@shared/models/user.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -62,9 +60,7 @@ export class ResumeGeneralInformationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
-    private authService: AuthService,
     private router: Router,
-    private sidenavService: SidenavService,
     private userService: UserService,
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
