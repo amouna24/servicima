@@ -6,11 +6,13 @@ import { ChartsModule } from 'ng2-charts';
 import { TestManagementRoutingModule } from './test-management-routing.module';
 import { BlocListComponent } from './bloc-list/bloc-list.component';
 import { BlocListModalComponent } from './bloc-list-modal/bloc-list-modal.component';
+import { SessionInfoComponent } from './session-info/session-info.component';
 import { CustomizeSessionComponent } from './customize-session/customize-session.component';
 import { LevelBlocComponent } from './customize-session/level-bloc/level-bloc.component';
 
 @NgModule({
   declarations: [BlocListComponent, BlocListModalComponent, CustomizeSessionComponent, LevelBlocComponent],
+  declarations: [BlocListComponent, BlocListModalComponent, SessionInfoComponent],
   imports: [
     CommonModule,
     TestManagementRoutingModule,
