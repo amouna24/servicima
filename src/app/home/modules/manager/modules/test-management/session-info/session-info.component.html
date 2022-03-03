@@ -118,8 +118,8 @@
                     <mat-select-trigger>
 
                       <mat-chip-list>
-                        <mat-chip *ngFor="let roleFeature of ['Angular 2', 'nodejs']" [removable]="false">
-                          {{roleFeature}}
+                        <mat-chip *ngFor="let blocTitle of blocTitles" [removable]="false">
+                          {{blocTitle.title}}
                           <mat-icon matChipRemove>cancel</mat-icon>
                         </mat-chip>
                       </mat-chip-list>

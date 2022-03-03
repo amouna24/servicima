@@ -37,7 +37,6 @@ constructor(
   async ngOnInit(): Promise<void> {
     await this.getBlocQuestionsData();
     this.getBlocTitleAndPoints();
-    this.getChartParams();
   }
   getBlocQuestionsData() {
     this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe( (resNode) => {
@@ -103,7 +102,6 @@ constructor(
     const randomNumber = Math.floor(Math.random() * this.blocQuestionsList.length);
     this.sessionQuestionsList.push(this.blocQuestionsList[randomNumber]);
     this.blocQuestionsList.splice(randomNumber, 1);
-    this.getChartParams();
   }
   setDuration(duration) {
     const displayedHours = Math.floor(duration / 3600) <= 9 ? '0' + Math.floor(duration / 3600) : Math.floor(duration / 3600);
@@ -145,12 +143,6 @@ constructor(
   getChartTitle() {
     return this.blocTitlesAndPointsList.map( (oneBloc) => {
       return oneBloc.title;
-    });
-  }
-  getChartColor() {
-    return this.blocTitlesAndPointsList.map( (oneBloc, index) => {
-      console.log('index=', index, this.getColors(0));
-      return this.getColors(index);
     });
   }
   getChartParams() {

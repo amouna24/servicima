@@ -11,8 +11,7 @@ import { CustomizeSessionComponent } from './customize-session/customize-session
 import { LevelBlocComponent } from './customize-session/level-bloc/level-bloc.component';
 
 @NgModule({
-  declarations: [BlocListComponent, BlocListModalComponent, CustomizeSessionComponent, LevelBlocComponent],
-  declarations: [BlocListComponent, BlocListModalComponent, SessionInfoComponent],
+  declarations: [BlocListComponent, BlocListModalComponent, CustomizeSessionComponent, LevelBlocComponent, SessionInfoComponent],
   imports: [
     CommonModule,
     TestManagementRoutingModule,

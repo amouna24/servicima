@@ -7,6 +7,8 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { ITestSessionModel } from '@shared/models/testSession.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -33,6 +35,7 @@ export class BlocListComponent implements OnInit {
     private userService: UserService,
     private utilsService: UtilsService,
     private dialog: MatDialog,
+    private localStorageService: LocalStorageService
   ) {
   }
 
@@ -67,7 +70,6 @@ export class BlocListComponent implements OnInit {
         `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
         getApplicationID('SERVICIMA')}`)
       .subscribe( (resBlocQuestions) => {
-        console.log('bloc lists=', resBlocQuestions['results']);
         resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel) => {
           if (oneBloc.free) {
             this.availableBlocQuestionsList.push(oneBloc);
@@ -76,9 +78,7 @@ export class BlocListComponent implements OnInit {
           }
         });
     });
-    console.log(this.availableBlocQuestionsList);
   }
-
   openDescriptionDialog(blocQuestion, available: string) {
     const dialogRef = this.dialog.open(BlocListModalComponent, {
       height: '344px',
@@ -110,10 +110,10 @@ export class BlocListComponent implements OnInit {
       this.selectedBlocs.splice(this.selectedBlocs.indexOf(blocQuestionCode), 1);
     }
   }
-   moveToNextPage() {
-    const queryObject = {
-      selectedBlocs: this.selectedBlocs,
-    };
-    this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
+  moveToInfoSessionPage() {
+         const queryObject = {
+        selectedBlocs: this.selectedBlocs,
+      };
+      this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
   }
 }
