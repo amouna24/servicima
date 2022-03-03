@@ -9,6 +9,7 @@ import { ITestLevelModel } from '@shared/models/testLevel.model';
 import { ITestTechnologiesModel } from '@shared/models/testTechnologies.model';
 import { ITestSkillsModel } from '@shared/models/testSkills.model';
 import { ITestTechnologySkillsModel } from '@shared/models/testTechnologySkills.model';
+import { ITestSessionInfoModel } from '@shared/models/testSessionInfo.model';
 
 import { environment } from '../../../../environments/environment';
 
@@ -248,6 +249,14 @@ export class TestService {
    *************************************************************************/
   deleteChoice(id: string): Observable<any> {
     return this.httpClient.delete<ITestChoicesModel>(`${environment.testChoicesApiUrl}/?_id=${id}`);
+  }
+
+  /**************************************************************************
+   * @description add test session info
+   * @param sessionInfo: session information
+   *************************************************************************/
+  addTestSessionInfo(sessionInfo): Observable<any> {
+    return this.httpClient.post<ITestSessionInfoModel>(`${environment.testSessionInfoApiUrl}`, sessionInfo);
   }
 
 }

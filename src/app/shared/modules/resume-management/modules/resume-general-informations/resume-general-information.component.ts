@@ -3,7 +3,6 @@ import { IUserModel } from '@shared/models/user.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-import { AuthService } from '@widigital-group/auth-npm-front';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
@@ -62,7 +61,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private resumeService: ResumeService,
-    private authService: AuthService,
     private router: Router,
     private sidenavService: SidenavService,
     private userService: UserService,
