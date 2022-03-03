@@ -14,13 +14,18 @@ import { environment } from 'src/environments/environment';
 import { MatSelectChange } from '@angular/material/select';
 import { IHrContract } from '@shared/models/hrContract.model';
 import { IBanking } from '@shared/models/banking.model';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { ICollaborator } from '@shared/models/collaborator.model';
 import { IUserModel } from '@shared/models/user.model';
+import { dataAppearance } from '@shared/animations/animations';
+
 @Component({
   selector: 'wid-collaborator-list',
   templateUrl: './collaborator-list.component.html',
-  styleUrls: ['./collaborator-list.component.scss']
+  styleUrls: ['./collaborator-list.component.scss'],
+  animations: [
+    dataAppearance
+  ]
 })
 export class CollaboratorListComponent implements OnInit, OnDestroy {
   usersInfo = [];
@@ -30,15 +35,22 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
   avatar: any;
   filterArray = [];
   uploadURL = environment.uploadFileApiUrl + '/image/';
-  nbtItems = new BehaviorSubject<number>(8);
+  nbtItems = new BehaviorSubject<number>(10);
+  itemsPerPage = [5, 10, 25, 100];
+  currentPage = 1;
+  itemsPerPageControl = new FormControl(5);
+  totalItems: number;
+  countedItems = 0;
+  totalCountedItems = null;
+  offset: number;
+  limit: number;
+  nbrPages: number[];
   collaborator: ICollaborator;
   userInfo: IUserModel = null;
   contract: IHrContract;
   banking: IBanking;
   sortedby = new FormControl('', Validators.required);
   isLoading = new BehaviorSubject<boolean>(false);
-  length = 0;
-  lengthPage = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   device: string;
   constructor( private hrService: HumanRessourcesService,
@@ -53,13 +65,13 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
   ) {
   }
   async ngOnInit(): Promise<void> {
-    await this.getCollaboratorList();
+    await this.getCollaboratorList(this.nbtItems.getValue(), 0);
   }
   /**************************************************************************
    * @description: Function getList of collaborator
    * @return: Updated filterArray
    *************************************************************************/
-  async getCollaboratorList(offset? , limit ?) {
+  async getCollaboratorList(limit?, offset?) {
     const cred = this.localStorageService.getItem('userCredentials');
     this.applicationId = cred['application_id'];
     this.companyEmail = cred['email_address'];
@@ -70,9 +82,18 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
     );
     this.profileService.getAllUser(this.companyEmail, 'COLLABORATOR', limit ? limit : 8, offset ? offset : 0)
       .subscribe(async data => {
-        this.length = await this.profileService.countCollaborator(this.companyEmail);
-        this.lengthPage = Math.round(this.length / this.nbtItems.getValue());
-        this.usersInfo = data['results'].map(
+        this.totalItems = data['total'] ? data['total'] : null;
+        this.countedItems = data['count'] ? data['total'] : null;
+        console.log('data ', data);
+        this.offset = data['offset'];
+        this.currentPage = this.offset === 1 ? 1 : this.currentPage;
+        console.log('my offset ', this.offset);
+        this.currentPage = this.offset === 1 ? 1 : this.currentPage;
+        this.limit = data['limit'] ? Number(data['limit']) : null;
+        this.nbrPages = data['total'] ? Array(Math.ceil(Number(data['total']) / this.nbtItems.getValue()))  .fill(null)
+            .map((x, i) => i + 1) : null;
+
+            this.usersInfo = data['results'].map(
           (obj) => {
             return {
               _id: obj._id,
@@ -162,18 +183,55 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
     this.filterArray = this.usersInfo;
   }
   /**
-   * @params event: PageEvent
-   * @description page change when link clicked
-   */
-  async onPaginateChange(event: PageEvent) {
-    await this.getCollaboratorList(event.pageIndex * this.nbtItems.getValue(), this.nbtItems.getValue());
-  }
-  /**
    * @params value: number
    * @description number of paggination clicked
    */
   async loadData(value: number) {
-    await  this.getCollaboratorList(value * this.nbtItems.getValue(), this.nbtItems.getValue());
+    await  this.getCollaboratorList(this.nbtItems.getValue(), (value - 1) * this.nbtItems.getValue());
+  }
+
+  /**************************************************************************
+   * @description Get next, previous or specific page
+   * @params type : next / previous / specific
+   * @params pageNumber : number of specific page
+   *************************************************************************/
+  async getItemsPerPage(type: string, pageNumber?: number) {
+    switch (type) {
+      case 'first-page' : {
+        this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'previous-page' : {
+
+        this.currentPage -= 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'specific-page' : {
+        this.currentPage = pageNumber;
+        console.log('current page', this.currentPage);
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'next-page' : {
+
+        this.currentPage += 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'last-page' : {
+
+        this.currentPage = this.nbrPages[this.nbrPages.length - 1];
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+    }
   }
 
 }
