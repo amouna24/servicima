@@ -7,6 +7,7 @@ import { ILanguageModel } from '@shared/models/language.model';
 import { ITestLevelModel } from '@shared/models/testLevel.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '@core/services/user/user.service';
+import { ITestSessionModel } from '@shared/models/testSession.model';
 
 @Component({
   selector: 'wid-session-info',
@@ -20,12 +21,15 @@ export class SessionInfoComponent implements OnInit {
  applicationId: string;
  companyEmailAddress: string;
  languageId: string;
-
+  selectedBlocArray = [];
+  blocTitles = [];
   constructor(private testService: TestService,
               private utilsService: UtilsService,
               private userService: UserService,
               private localStorageService: LocalStorageService,
-              private formBuilder: FormBuilder, ) { }
+              private formBuilder: FormBuilder, ) {
+    this.getSelectedBlocArray();
+  }
 
   ngOnInit(): void {
     this.getDataFromLocalStorage();
@@ -69,6 +73,7 @@ export class SessionInfoComponent implements OnInit {
       copyPaste: ['', [Validators.required]],
       sendReport: ['', [Validators.required]],
     });
+    this.getBlocsArray();
   }
 
   /**
@@ -82,23 +87,54 @@ export class SessionInfoComponent implements OnInit {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
     } else {
-      const testSessionInfo = {
+      const sessionObject: ITestSessionModel = {
+        application_id: this.localStorageService.getItem('userCredentials').application_id,
         company_email: this.companyEmailAddress,
-        application_id: this.applicationId,
-        session_code: 'session-code', // à modifier
-        test_session_info_code:  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-INFO`,
-        session_name: this.form.controls.sessionName.value,
-        level_code: this.form.controls.experienceRequired.value,
-        language_id: this.form.controls.language.value,
-        copy_paste: this.form.controls.copyPaste.value,
-        send_report: this.form.controls.sendReport.value
+        session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION`,
+        block_questions_code: this.selectedBlocArray.map( (oneBloc) => oneBloc).join(','),
       };
-     this.testService.addTestSessionInfo(testSessionInfo).subscribe((data) => {
-       console.log(data, 'data');
-     }, error => {
-       console.error(error);
-     });
+      this.testService.addSession(sessionObject).subscribe( (session) => {
+        console.log('session created');
+        const testSessionInfo = {
+          company_email: this.companyEmailAddress,
+          application_id: this.applicationId,
+          session_code: sessionObject.session_code, // à modifier
+          test_session_info_code:  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-INFO`,
+          session_name: this.form.controls.sessionName.value,
+          level_code: this.form.controls.experienceRequired.value,
+          language_id: this.form.controls.language.value,
+          copy_paste: this.form.controls.copyPaste.value,
+          send_report: this.form.controls.sendReport.value
+        };
+        this.testService.addTestSessionInfo(testSessionInfo).subscribe((data) => {
+          const queryObject = {
+            selectedBlocs: this.selectedBlocArray,
+            sessionCode: sessionObject.session_code
+          };
+          this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
+          console.log(data, 'data');
+        }, error => {
+          console.error(error);
+        });
+      });
+
     }
   }
+  getSelectedBlocArray() {
+    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe( (data) => {
+      this.selectedBlocArray = data.selectedBlocs.split(',');
+    });
+  }
+  getBlocsArray() {
+      this.selectedBlocArray.forEach( (blocQuestionCode) => {
+        this.testService.getQuestionBloc(`?test_question_bloc_code=${blocQuestionCode}`)
+          .subscribe( (resNode) => {
+                this.blocTitles.push({
+                  title: resNode['results'][0].test_question_bloc_title,
+                  code: blocQuestionCode
+                });
+              });
+          });
+    }
 
 }

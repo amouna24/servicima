@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { BlocListComponent } from './bloc-list/bloc-list.component';
+import { CustomizeSessionComponent } from './customize-session/customize-session.component';
 import { SessionInfoComponent } from './session-info/session-info.component';
 
 const routes: Routes = [
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'session-info',
     component: SessionInfoComponent
+  },
+  {
+    path: 'customize-session',
+    component: CustomizeSessionComponent
   }
 ];
 

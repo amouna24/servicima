@@ -507,6 +507,9 @@ html body {
 .font-size-12 {
     font-size: 12px !important;
 }
+.font-size-13 {
+  font-size: 13px !important;
+}
 .font-size-14 {
     font-size: 14px !important;
 }
@@ -599,6 +602,9 @@ html body {
 .cerulean-blue{
   color: $cerulean-blue !important;
 }
+.primaryColor {
+  color: $primaryColor !important;
+}
 .steel{
   color: $steel !important;
 }
@@ -637,6 +643,9 @@ html body {
 }
 .bg-primaryColor {
   background-color: $primaryColor !important;
+}
+.bg-secondaryColor {
+  background-color: $secondaryColor !important;
 }
 .bg-pale-grey{
   background-color: $pale-grey !important;

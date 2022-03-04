@@ -15,3 +15,15 @@
   font-size: 8px;
   color: $white;
 }
+.bloc-price {
+  border-radius: 15px;
+  background-color: #fc0f3b;
+  height: 17px;
+  min-width: 50px;
+}
+.bloc-buy {
+  border-radius: 15px;
+  background-color: $golden-yellow;
+  height: 17px;
+  width: 54px;
+}

@@ -5,7 +5,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfileService } from '@core/services/profile/profile.service';
@@ -62,7 +61,6 @@ export class ResumeGeneralInformationComponent implements OnInit {
     private fb: FormBuilder,
     private resumeService: ResumeService,
     private router: Router,
-    private sidenavService: SidenavService,
     private userService: UserService,
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
