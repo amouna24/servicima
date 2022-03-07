@@ -1,0 +1,39 @@
+<div fxLayout="column" fxFlexFill class="p-l-15 p-r-15">
+  <div fxLayout="row" fxFlex="12" fxLayoutAlign=" center">
+    <div fxLayout="column" fxFlex="95">
+      <span class="font-medium black font-size-18">Angular 2+</span>
+    </div>
+    <div fxLayout="column">
+      <div fxLayout="row">
+        <button class="close-container" mat-dialog-close><img src="assets/icons/close_icon.svg"></button>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+      <img [src]="imageUrl + data.bloc_image" alt="bloc question image" height="108px" style="border-radius: 15px">
+    </div>
+  </div>
+  <wid-scrollbar fxLayout="row" fxFlex="40" fxLayoutAlign=" center">
+    <p class="font-size-10 steel font-extra-light">
+      {{data.bloc_desc}}
+    </p>
+  </wid-scrollbar>
+  <ng-template [ngIf]="data.pack_type === 'available'">
+    <div fxLayout="row" fxFlex="8" fxLayoutGap="5px" >
+      <div fxLayout="column" [ngClass]="data.bloc_free ? 'bloc-type-free' : 'bloc-type-purchased' " fxLayoutAlign="center center">
+        <span class="bloc-type-label">{{data.bloc_free ? 'Free' : 'Purchased'}}</span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="data.pack_type === 'other'">
+    <div fxLayout="row" fxFlex="8" fxLayoutGap="5px" >
+      <div fxLayout="column"  class="bloc-price" fxLayoutAlign="center center">
+        <span class="bloc-type-label">{{data.bloc_price}}$</span>
+      </div>
+      <div fxLayout="column"  class="bloc-buy" fxLayoutAlign="center center">
+        <span class="bloc-type-label">Buy now</span>
+      </div>
+    </div>
+  </ng-template>
+</div>

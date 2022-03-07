@@ -219,6 +219,22 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
     },
+    {
+    state: 'test',
+    name: 'Test management',
+    type: 'sub',
+    icon: 'wi-billings',
+    feature: 'EXPENSES_ACCESS',
+    children: [
+      {
+        state: 'bloc-list',
+        name: 'Bloc questions',
+        type: 'link',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+      }
+    ]
+    },
   {
     state: 'resume',
     name: 'resume-management',

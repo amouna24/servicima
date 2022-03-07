@@ -1,8 +1,7 @@
 {
 	"login.sellanguage":"Language",
-
-    "login.welcomeservicima": "Welcome To Servicima",
-	"login.loginnow":"One of us",
+  "login.welcomeservicima": "Welcome To Servicima",
+	"login.loginnow":"Be one of us",
 	"login.createacc":"Sign up",
 	"login.loginto":"Login to your account",
 	"login.invalidcredentials":"Invalid email or password",

@@ -3,7 +3,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CryptoService } from '@core/services/crypto/crypto.service';
 
 import { IError } from '@shared/models/error.model';
 import { IViewParam } from '@shared/models/view.model';
@@ -20,7 +23,6 @@ import { environment } from '../../../../environments/environment';
 import { AbstractControl } from '@angular/forms';
 // tslint:disable-next-line:origin-ordered-imports
 import { TranslateService } from '@ngx-translate/core';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +35,10 @@ export class UtilsService {
     private domSanitizer: DomSanitizer,
     private matSnackBar: MatSnackBar,
     private httpClient: HttpClient,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cryptoService: CryptoService
   ) {
 
   }
@@ -286,6 +291,34 @@ export class UtilsService {
   checkFormGroup(form: AbstractControl, columnFields: string[]): boolean {
     const isValueValid = (field) => form['controls'][field].value !== '' && form['controls'][field].value ;
     return columnFields.every(isValueValid);
+  }
+  verifyCurrentRoute(previousRoute?: string): Observable<any> {
+    if ( Object.keys(this.route.snapshot.queryParams).length === 0) {
+      this.router.navigate([`${previousRoute ? previousRoute : '/'}`]);
+      return new Observable<any>( (observer) => {
+        observer.error((new Error('page is not refreshable')));
+      });
+    } else {
+      return new Observable<any>( (observer) => {
+        observer.next(this.decryptObject(this.route.snapshot.queryParams));
+      });
+    }
+  }
+  decryptObject(queryObject) {
+    const newObject: object = { };
+    Object.keys(queryObject).map( (key) => {
+      newObject[key] = this.cryptoService.decrypt( environment.cryptoKeyCode, queryObject[key]);
+    });
+    return newObject;
+  }
+  navigateWithQueryParam(path, queryObject) {
+    const newObject: object = { };
+    Object.keys(queryObject).map( (key) => {
+      newObject[key] = this.cryptoService.encrypt( environment.cryptoKeyCode, queryObject[key]);
+    });
+    this.router.navigate([path], {
+      queryParams: newObject
+    });
   }
 
 }

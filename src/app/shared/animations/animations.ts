@@ -168,3 +168,9 @@ export let showBloc = trigger('showBloc', [
     animate(500, style({ height: 0})),
   ]),
 ]);
+export let blocQuestionsAppearance = trigger('blocQuestionsAppearance', [
+  transition('void => *',  [
+    style({ opacity: 0}),
+    animate(1000),
+  ]),
+]);

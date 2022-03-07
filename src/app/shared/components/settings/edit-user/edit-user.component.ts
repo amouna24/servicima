@@ -125,7 +125,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.showCompany = false;
       this.form.controls['homeCompany'].setValue(this.companyName);
       this.isLoading = false;
-      this.addOrUpdateFeature = 'SETTINGS_UPDATE_ADD_ACCOUNT';
+      this.addOrUpdateFeature = 'SETTINGS_ADD_USER';
       /***************** go to page Update user by id *****************
        ****************************************************************/
     } else if (this.id) {

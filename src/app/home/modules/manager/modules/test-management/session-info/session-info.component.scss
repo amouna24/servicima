@@ -1,0 +1,43 @@
+.name-session {
+  ::ng-deep .mat-form-field-wrapper{
+    padding: 0;
+  }
+}
+.container-role-feature{
+  border: 2px solid #afb1b8;
+  padding-bottom: 15px;
+  border-radius: 4px;
+  padding-left: 8px;
+  padding-top: 15px;
+  width: 70%;
+  height: 108px;
+}
+
+mat-chip {
+ font-size: 12px!important;
+}
+
+.mat-input-element::placeholder{
+  color: #afb1b8 !important;
+}
+
+.mat-radio-button {
+  width: 160px !important;
+}
+
+.form-session-info {
+  padding-left: 7%;
+  padding-top: 2%;
+  min-width: 100%;
+}
+
+.block{
+  display: block !important;
+}
+
+.form-session-info {
+  ::ng-deep .mat-radio-outer-circle {
+     border-color: #afb1b8 !important;
+     border-width: 1px !important;
+  }
+}

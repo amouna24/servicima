@@ -4,6 +4,8 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-skills-list',
@@ -20,25 +22,42 @@ export class SkillsListComponent implements OnInit {
   modalConfiguration: object[];
   displayedColumns: IConfig[]  = [];
   canBeDisplayedColumns: IConfig[] = [];
-  SkillsList = [];
   subscriptionModal: Subscription;
   subscriptions: Subscription[] = [];
+  companyEmailAddress: string;
+
   constructor(
     private testService: TestService,
     private router: Router,
     private modalServices: ModalService,
+    private utilsService: UtilsService,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
+    this.getConnectedUser();
     this.getTableData().then((data) => {
       this.tableData.next(data);
     });
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   getTableData() {
     const tableRes = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getSkills(`?application_id=5eac544a92809d7cd5dae21f`)
+      this.testService.getSkills(`?application_id=${this.utilsService.getApplicationID('SERVICIMA')}&company_email=${this.companyEmailAddress}`)
         .subscribe(
           (response) => {
             this.isLoading.next(true);
@@ -58,7 +77,6 @@ export class SkillsListComponent implements OnInit {
                   test_skill_code: value.TestSkillsKey.test_skill_code,
                 };
                 tableRes.push(object);
-
                 if (response['results'].length === tableRes.length) {
                   response['results'] = tableRes;
                   resolve(response['results']);
@@ -78,18 +96,20 @@ export class SkillsListComponent implements OnInit {
   getTechno(test_skill_code) {
     const techList = [];
     return  new Promise<any>(resolve => {
-      this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}`)
+      this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}&company_email=${this.companyEmailAddress}`)
         .subscribe(resTechSkill => {
           resTechSkill.map( async TechSkill => {
-            this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}`)
+            // tslint:disable-next-line:max-line-length
+            this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}&company_email=${this.companyEmailAddress}`)
               .subscribe(resTech => {
-
-                resTech.map( Tech => {
-                  techList.push(Tech.technology_title);
-                  if (techList.length === resTechSkill.length) {
-                    resolve (techList);
-                  }
-                });
+                if (resTech['msg_code'] !== '0004') {
+                  resTech.map( Tech => {
+                    techList.push(Tech.technology_title);
+                    if (techList.length === resTechSkill.length) {
+                      resolve (techList);
+                    }
+                  });
+                }
               });
           });
         });
@@ -131,14 +151,12 @@ export class SkillsListComponent implements OnInit {
    * @param data: object to update
    */
   updateSkill(data) {
-    this.router.navigate(['/manager/settings/skills/edit'],
-      { state: {
-          id: data._id,
-          skill_title: data.skill_title,
-          test_level_code: data.level,
-          test_skill_code: data.test_skill_code,
-          technology:  data.technology,
-        }
-      });
+    const queryObject = {
+      id: data._id,
+      skill_title: data.skill_title,
+      test_level_code: data.level,
+      test_skill_code: data.test_skill_code,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/skills/edit', queryObject);
   }
 }

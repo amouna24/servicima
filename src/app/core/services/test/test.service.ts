@@ -9,6 +9,8 @@ import { ITestLevelModel } from '@shared/models/testLevel.model';
 import { ITestTechnologiesModel } from '@shared/models/testTechnologies.model';
 import { ITestSkillsModel } from '@shared/models/testSkills.model';
 import { ITestTechnologySkillsModel } from '@shared/models/testTechnologySkills.model';
+import { ITestSessionInfoModel } from '@shared/models/testSessionInfo.model';
+import { ITestSessionModel } from '@shared/models/testSession.model';
 
 import { environment } from '../../../../environments/environment';
 
@@ -249,5 +251,65 @@ export class TestService {
   deleteChoice(id: string): Observable<any> {
     return this.httpClient.delete<ITestChoicesModel>(`${environment.testChoicesApiUrl}/?_id=${id}`);
   }
+  /*------------------------------------ Test Session Info --------------------------------------*/
+  /**************************************************************************
+   * @description add test session info
+   * @param sessionInfo: session information
+   *************************************************************************/
+  addTestSessionInfo(sessionInfo): Observable<any> {
+    return this.httpClient.post<ITestSessionInfoModel>(`${environment.testSessionInfoApiUrl}`, sessionInfo);
+  }
+  /**************************************************************************
+   * @description Get Session info List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Test Choices Observable<ITestInfo[]>
+   *************************************************************************/
+  getSessionInfo(filter: string): Observable<ITestSessionInfoModel[]> {
+    return this.httpClient.get<ITestSessionInfoModel[]>(`${environment.testSessionInfoApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Update choice Status
+   * @param choice: updated choice Object
+   *************************************************************************/
+  updateSessionInfo(sessionInfo: ITestSessionInfoModel): Observable<any> {
+    return this.httpClient.put<ITestSessionInfoModel>(`${environment.testSessionInfoApiUrl}`, sessionInfo);
+  }
+  /**************************************************************************
+   * @description Delete test choice Status
+   * @param id: Delete test choice Object
+   *************************************************************************/
+  deleteSessionInfo(id: string): Observable<any> {
+    return this.httpClient.delete<ITestSessionModel>(`${environment.testSessionInfoApiUrl}/?_id=${id}`);
+  }
+  /*------------------------------------ Test Session --------------------------------------*/
+  /**************************************************************************
+   * @description Get Session List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Test Choices Observable<ITestChoices[]>
+   *************************************************************************/
+  getSession(filter: string): Observable<ITestSessionModel[]> {
+    return this.httpClient.get<ITestSessionModel[]>(`${environment.testSessionApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new session
+   * @param  session: session Model
+   *************************************************************************/
+  addSession(session: ITestSessionModel): Observable<any> {
+    return this.httpClient.post<ITestSessionModel>(`${environment.testSessionApiUrl}`, session);
+  }
 
+  /**************************************************************************
+   * @description Update choice Status
+   * @param choice: updated choice Object
+   *************************************************************************/
+  updateSession(session: ITestSessionModel): Observable<any> {
+    return this.httpClient.put<ITestSessionModel>(`${environment.testSessionApiUrl}`, session);
+  }
+  /**************************************************************************
+   * @description Delete test choice Status
+   * @param id: Delete test choice Object
+   *************************************************************************/
+  deleteSession(id: string): Observable<any> {
+    return this.httpClient.delete<ITestSessionModel>(`${environment.testSessionApiUrl}/?_id=${id}`);
+  }
 }

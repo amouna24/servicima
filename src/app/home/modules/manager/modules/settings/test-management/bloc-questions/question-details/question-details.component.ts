@@ -5,6 +5,8 @@ import { TestService } from '@core/services/test/test.service';
 import { Subscription } from 'rxjs';
 import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-question-details',
@@ -12,20 +14,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./question-details.component.scss']
 })
 export class QuestionDetailsComponent implements OnInit {
-  test_question_title = '';
-  test_level_code = '';
-  test_question_code = '';
-  mark = '';
-  duration = '';
-  question_type = '';
-  test_question_desc = '';
-  technology = '';
+  testQuestionTitle: string;
+  testLevelCode: string;
+  testQuestionCode: string;
+  mark: string;
+  duration: string;
+  questionType: string;
+  testQuestionDesc: string;
+  technology: string;
   id: string;
-  test_question_bloc_code = '';
+  testQuestionBlocCode: string;
   AnswerDetails: ITestChoicesModel[] = [];
   subscriptionModal: Subscription;
   closeDialog: boolean;
-  code_level = '';
+  codeLevel: string;
+  companyEmailAddress: string;
 
   constructor(
     private dialogRef: MatDialogRef<QuestionDetailsComponent>,
@@ -33,32 +36,49 @@ export class QuestionDetailsComponent implements OnInit {
     private testService: TestService,
     private modalServices: ModalService,
     private router: Router,
+    private userService: UserService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit(): void {
+    this.getConnectedUser();
     this.initQuestionValues();
     this.getAnswers();
+
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
 initQuestionValues() {
-  this.test_question_title = this.data.test_question_title;
-  this.test_level_code = this.data.test_level_code;
-  this.test_question_code = this.data.test_question_code;
+  this.testQuestionTitle = this.data.test_question_title;
+  this.testLevelCode = this.data.test_level_code;
+  this.testQuestionCode = this.data.test_question_code;
   this.mark = this.data.mark;
   this.duration = this.data.duration;
-  this.question_type = this.data.question_type;
-  this.test_question_desc = this.data.test_question_desc;
+  this.questionType = this.data.question_type;
+  this.testQuestionDesc = this.data.test_question_desc;
   this.technology = this.data.technology;
   this.id = this.data.id;
-  this.test_question_bloc_code = this.data.test_question_bloc_code;
-  this.code_level = this.data.code_level;
+  this.testQuestionBlocCode = this.data.test_question_bloc_code;
+  this.codeLevel = this.data.code_level;
 }
 getAnswers() {
-    this.testService.getChoices(`?test_question_code=${this.data.test_question_code}`)
+    this.testService.getChoices(`?test_question_code=${this.data.test_question_code}&company_email=${this.companyEmailAddress}`)
       .subscribe((value) => {
         this.AnswerDetails = value;
       });
 }
-/*deleteQuestions() {
+deleteQuestions() {
   const confirmation = {
     code: 'delete',
     title: 'Delete This Question ?',
@@ -76,20 +96,19 @@ getAnswers() {
         this.subscriptionModal.unsubscribe();
       }
     );
-}*/
+}
   routeToQuestion() {
-    this.router.navigate(['/manager/settings/bloc-question/edit-question'],
-      { state: {
-          test_question_title:  this.test_question_title,
-          mark: this.mark,
-          duration: this.duration,
-          question_type: this.question_type,
-          test_level_code: this.code_level,
-          test_question_desc: this.test_question_desc,
-          test_question_code: this.test_question_code,
-          test_question_bloc_code: this.test_question_bloc_code,
-          _id: this.id
-        }
-      });
+    const queryObject = {
+      test_question_title:  this.testQuestionTitle,
+      mark: this.mark,
+      duration: this.duration,
+      question_type: this.questionType,
+      test_level_code: this.codeLevel,
+      test_question_desc: this.testQuestionDesc,
+      test_question_code: this.testQuestionCode,
+      test_question_bloc_code: this.testQuestionBlocCode,
+      _id: this.id
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/edit-question', queryObject);
   }
 }

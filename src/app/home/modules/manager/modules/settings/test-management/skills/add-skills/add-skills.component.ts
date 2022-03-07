@@ -1,7 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ITestSkillsModel } from '@shared/models/testSkills.model';
-import { IDataListModel } from '@shared/models/dataList.model';
 import * as _ from 'lodash';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
@@ -12,6 +11,7 @@ import { HelperService } from '@core/services/helper/helper.service';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
 import { ITestTechnologySkillsModel } from '@shared/models/testTechnologySkills.model';
+import { UserService } from '@core/services/user/user.service';
 
 @Component({
   selector: 'wid-add-skills',
@@ -28,6 +28,9 @@ export class AddSkillsComponent implements OnInit {
   canBeDisplayedColumns: IConfig[] = [];
   canBeDisplayedColumnsForm: FormGroup;
   skillTech: ITestTechnologySkillsModel;
+  applicationId: string;
+  companyEmailAddress: string;
+
   constructor(
     private fb: FormBuilder,
     private dynamicDataTableService: DynamicDataTableService,
@@ -36,11 +39,14 @@ export class AddSkillsComponent implements OnInit {
     private helperService: HelperService,
     private testService: TestService,
     private router: Router,
+    private userService: UserService,
     ) { }
 
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.displayedColumns = [];
     this.createForm();
+    this.getConnectedUser();
     this.getTechnologiesInfo();
     this.displayedColumnsForm = new FormGroup({
       displayedColumns: new FormArray([])
@@ -49,6 +55,19 @@ export class AddSkillsComponent implements OnInit {
       canBeDisplayedColumns: new FormArray([])
     });
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   /**
    * @description Inisialization of the Add test skill form
    */
@@ -59,11 +78,10 @@ export class AddSkillsComponent implements OnInit {
     });
   }
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
-            console.log('res = ', res.TestTechnologyKey.test_technology_code);
             this.canBeDisplayedColumns.push(
               {
                 prop: res.TestTechnologyKey.test_technology_code,
@@ -78,7 +96,6 @@ export class AddSkillsComponent implements OnInit {
           }
         },
       );
-    console.log('can be displayed =', this.canBeDisplayedColumns);
   }
   /**************************************************************************
    * @description display table config
@@ -157,24 +174,19 @@ export class AddSkillsComponent implements OnInit {
     }
   }
   createSkill() {
-    console.log('length', this.displayedColumns.length);
     this.testSkill = this.sendAddTestSkill.value;
     this.testSkill.test_skill_code =  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SKILL`;
-    this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
-    console.log('testSkill=', this.testSkill);
-    console.log('LENGTH DISPLAYED', this.displayedColumns.length);
+    this.testSkill.application_id = this.applicationId;
+    this.testSkill.company_email = this.companyEmailAddress;
     if (this.sendAddTestSkill.valid && this.displayedColumns.length > 0) {
       this.testService.addSkills(this.testSkill).subscribe(data => {
-        console.log('skill created=', data);
-        console.log('displayed columns', this.displayedColumns);
         this.displayedColumns.forEach(res => {
-          console.log(res);
           this.skillTech = {
-          application_id: '5eac544a92809d7cd5dae21f',
+          application_id: this.applicationId,
+          company_email: this.companyEmailAddress,
           test_skill_code: this.testSkill.test_skill_code,
           test_technology_code: res.prop,
           };
-          console.log('skill tech before added', this.skillTech);
           this.testService.addTechnologySkills(this.skillTech).subscribe(dataSkillTech => {
             console.log('skill tech added', dataSkillTech);
           });

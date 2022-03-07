@@ -15,8 +15,8 @@ import { EditBlocComponent } from './edit-bloc/edit-bloc.component';
 import { EditQuestionComponent } from './edit-question/edit-question.component';
 
 @NgModule({
-  // tslint:disable-next-line:max-line-length
-  declarations: [BlocQuestionsListComponent, BlocQuestionsAddComponent, BlocQuestionsDetailsComponent, AddQuestionComponent, AddAnswerComponent, QuestionDetailsComponent, EditBlocComponent, EditQuestionComponent],
+  declarations: [BlocQuestionsListComponent, BlocQuestionsAddComponent, BlocQuestionsDetailsComponent,
+    AddQuestionComponent, AddAnswerComponent, QuestionDetailsComponent, EditBlocComponent, EditQuestionComponent],
   imports: [
     CommonModule,
     BlocQuestionsRoutingModule,

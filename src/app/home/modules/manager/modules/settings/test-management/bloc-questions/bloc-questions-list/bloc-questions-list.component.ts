@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { IConfig } from '@shared/models/configDataTable.model';
-import { DataTableConfigComponent } from '@shared/modules/dynamic-data-table/components/data-table-config/data-table-config.component';
 import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { DynamicDataTableService } from '@shared/modules/dynamic-data-table/services/dynamic-data-table.service';
 import { TestService } from '@core/services/test/test.service';
 import { Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
+import { CryptoService } from '@core/services/crypto/crypto.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-bloc-questions-list',
@@ -21,16 +23,15 @@ export class BlocQuestionsListComponent implements OnInit {
     title: string, addActionURL: string, addActionText: string, type: string,
     addActionDialog: { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
+  applicationId: string;
+  companyEmailAddress: string;
   columns: IConfig[] = [];
   columnsList: string[] = [];
   modalConfiguration: object[];
   displayedColumns: IConfig[] = [];
   canBeDisplayedColumns: IConfig[] = [];
-  canBeFilteredColumns: IConfig[] = [];
   blocData = [];
   subscriptionModal: Subscription;
-
-  private code = '';
 
   constructor(
     private modalService: ModalService,
@@ -39,24 +40,43 @@ export class BlocQuestionsListComponent implements OnInit {
     private testService: TestService,
     private router: Router,
     private modalServices: ModalService,
+    private userService: UserService,
+    private cryptoService: CryptoService,
+    private utilsService: UtilsService,
   ) {
   }
 
   ngOnInit(): void {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
+    this.getConnectedUser();
     this.getTableData().then((data) => {
       this.tableData.next(data);
     });  }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
 
   getTableData() {
     this.blocData = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getQuestionBloc(`?application_id=5eac544a92809d7cd5dae21f`)
+      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
         .subscribe(
           (response) => {
-            response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            console.log('response=', response);
+            this.isLoading.next(true);
             if (response['msg_code'] === '0004') {
-              resolve(response['results']);
+              resolve([]);
+              this.isLoading.next(false);
             } else {
             response['results'].map(async res => {
               this.getTechTitle(res.TestQuestionBlocKey.test_technology_code).then(
@@ -69,10 +89,14 @@ export class BlocQuestionsListComponent implements OnInit {
                     _id: res._id,
                     test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
                     technology_code: res.TestQuestionBlocKey.test_technology_code,
+                    image: res.image,
+                    free:  res.free,
+                    price: res.price
                   });
                   if (response['results'].length === this.blocData.length) {
                     response['results'] = this.blocData;
                     resolve(response['results']);
+                    this.isLoading.next(false);
                   }
                 }
               );
@@ -82,22 +106,24 @@ export class BlocQuestionsListComponent implements OnInit {
           (error) => {
             if (error.error.msg_code === '0004') {
               console.log('empty table');
+              resolve([]);
+              this.isLoading.next(false);
             }
           },
         );
-      console.log('data table=', this.tableData);
     });
   }
 
   async getTechTitle(tech_code): Promise<string> {
     let code: string;
-    const get = this.testService.getTechnologies(`?test_technology_code=${tech_code}`).toPromise();
+    const get = this.testService.
+    getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).toPromise();
     await get.then((data) => {
-      console.log(data[0]);
-      code = data[0].technology_title;
+      code = data[0]?.technology_title;
     });
     return code;
   }
+
   switchAction(rowAction: any) {
     switch (rowAction.actionType.name) {
       case ('show'): this.showBloc(rowAction.data);
@@ -109,29 +135,30 @@ export class BlocQuestionsListComponent implements OnInit {
   }
 
   private showBloc(data) {
-    this.router.navigate(['/manager/settings/bloc-question/details'],
-      { state: {
-          test_bloc_title: data[0].test_bloc_title,
-          test_bloc_technology: data[0].test_bloc_technology,
-          test_bloc_total_number: data[0].test_bloc_total_number,
-          test_question_bloc_desc: data[0].test_question_bloc_desc,
-          _id: data[0]._id,
-          test_question_bloc_code: data[0].test_question_bloc_code,
-        }
-      });
+    const queryObject = {
+      test_bloc_title: data[0].test_bloc_title,
+      test_bloc_technology: data[0].test_bloc_technology,
+      test_bloc_total_number: data[0].test_bloc_total_number,
+      test_question_bloc_desc: data[0].test_question_bloc_desc,
+      _id: data[0]._id,
+      test_question_bloc_code: data[0].test_question_bloc_code,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/details', queryObject);
   }
 
   private updateBloc(data) {
-    this.router.navigate(['/manager/settings/bloc-question/edit'],
-      { state: {
-          test_bloc_title: data.test_bloc_title,
-          test_bloc_technology: data.technology_code,
-          test_bloc_total_number: data.test_bloc_total_number,
-          test_question_bloc_desc: data.test_question_bloc_desc,
-          _id: data._id,
-          test_question_bloc_code: data.test_question_bloc_code,
-        }
-      });
+    const queryParamObject =  {
+      test_bloc_title:  data.test_bloc_title,
+      test_bloc_technology:  data.technology_code,
+      test_bloc_total_number:  data.test_bloc_total_number,
+      test_question_bloc_desc:  data.test_question_bloc_desc,
+      _id:  data._id,
+      test_question_bloc_code:  data.test_question_bloc_code,
+      free: data.free,
+      price: data.price,
+      image: data.image,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/edit', queryParamObject);
   }
 
   private deleteBloc(data) {
@@ -145,8 +172,7 @@ export class BlocQuestionsListComponent implements OnInit {
         .subscribe(
           (res) => {
             if (res === true) {
-              this.testService.deleteQuestionBloc(deletedObject['_id']).subscribe(dataBloc => {
-                console.log('Deleted');
+              this.testService.deleteQuestionBloc(deletedObject['_id']).subscribe(() => {
                 this.getTableData().then((dataTable) => {
                   this.tableData.next(dataTable);
                 });

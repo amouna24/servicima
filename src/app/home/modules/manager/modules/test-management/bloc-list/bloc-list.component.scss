@@ -1,0 +1,77 @@
+@import "src/assets/styles/variables";
+.bloc-list-card-vertical {
+  height: 230px;
+  width: 230px;
+}
+.selected-card {
+  border: 1px solid $topaz;
+}
+.bloc-list-card-horizontal {
+  height: 128px;
+  width: 100%;
+}
+.mat-card{
+  border-radius: 15px !important;
+  padding: 0 !important;
+
+}
+.bloc-type-free {
+  border-radius: 15px;
+  background-color: $topaz;
+  height: 17px;
+  min-width: 38px;
+}
+.bloc-type-purchased {
+  border-radius: 15px;
+  background-color: $dark-grey-blue;
+  height: 17px;
+  min-width: 64px;
+}
+.bloc-type-label {
+  font-size: 8px;
+  color: $white;
+}
+.bloc-price {
+  border-radius: 15px;
+  background-color: #fc0f3b;
+  height: 17px;
+  min-width: 50px;
+}
+.bloc-buy {
+  border-radius: 15px;
+  background-color: $golden-yellow;
+  height: 17px;
+  width: 54px;
+}
+.limit-text-height {
+  height: 47px;
+  overflow: hidden;
+}
+.transparent-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.p-r-12 {
+  padding-right: 12px;
+}
+.rounded-check-box {
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 50% !important;
+      border-color: $cool-grey;
+    }
+
+}
+.colored-check-box {
+    ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+      background-color: black !important;
+    }
+    ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+      background-color: black !important;
+    }
+}
+
+
+  }

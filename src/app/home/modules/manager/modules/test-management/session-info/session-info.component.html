@@ -1,0 +1,166 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Session Information</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{"back" | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" class="font-size-12 black">
+
+    <form class="form-session-info" [formGroup]="form" fxLayout="column">
+      <div fxLayout="column" fxFlex="90" class="p-b-25">
+        <wid-scrollbar class="scrollbar">
+
+
+          <div fxLayout="column" fxLayoutGap="25px">
+
+            <div fxLayout="column" class="name-session">
+              <mat-label class="font-size-12 black font-normal">
+                Session Name:
+              </mat-label>
+              <mat-form-field [style]="{'width': '70%', 'height': '80%', 'fontSize': '11px'}" appearance="outline">
+                <input matInput placeholder="Session Name" formControlName="sessionName"
+                  class="font-extra-light font-size-12">
+              </mat-form-field>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.sessionName?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
+
+            <div fxLayout="column" fxLayoutGap="15px">
+              <div fxLayout="row">
+                <div>Experience required :</div>
+              </div>
+              <div fxLayout="row">
+                <!--   <mat-checkbox formControlName="experienceRequired"  class="custom-frame">{{level.test_level_title}}</mat-checkbox> -->
+                <mat-radio-group formControlName="experienceRequired" aria-label="Select an option">
+                  <mat-radio-button class="p-r-15" *ngFor="let level of listLevel;let index = index"
+                    [value]="level.TestLevelKey.test_level_code">{{level.test_level_title}}</mat-radio-button>
+                </mat-radio-group>
+
+              </div>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.experienceRequired?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
+
+
+            <div fxLayout="column" fxLayoutGap="15px">
+
+              <div fxLayout="row">
+                <div> In which language the questions should be ?</div>
+              </div>
+
+              <div fxLayout="row">
+                <!--     <mat-checkbox formControlName="language"  class="custom-frame">{{language.language_desc}}</mat-checkbox> -->
+                <mat-radio-group formControlName="language" aria-label="Select an option">
+                  <mat-radio-button class="p-r-15" *ngFor="let language of listLanguage;" [value]="language._id">
+                    {{language.language_desc}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.language?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
+
+
+            <div fxLayout="column" fxLayoutGap="15px">
+              <div fxLayout="row">
+                <div>Do you want to prevent the use of copy paste during the test?</div>
+              </div>
+              <div fxLayout="row">
+                <mat-radio-group formControlName="copyPaste" aria-label="Select an option">
+                  <mat-radio-button value="true">Prevent</mat-radio-button>
+                  <mat-radio-button value="false">Allow</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.copyPaste?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
+
+            <div fxLayout="column" fxLayoutGap="15px">
+              <div fxLayout="row">
+                <div>Do you want to send the simplified report to the candidate at the end of his test ?</div>
+              </div>
+              <div fxLayout="row" class="rounded-check-box">
+                <mat-radio-group formControlName="sendReport" aria-label="Select an option">
+                  <mat-radio-button value="true">Yes</mat-radio-button>
+                  <mat-radio-button value="false">No</mat-radio-button>
+                </mat-radio-group>
+
+              </div>
+
+              <mat-error class="wid-error-messages" *ngIf="form.controls.sendReport?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
+
+            <div fxLayout="column" fxLayoutGap="10px">
+              <div fxLayout="row">Selected blocs</div>
+              <div fxLayout="row">
+                <div fxLayout="row" class="container-role-feature">
+                  <wid-scrollbar class="scrollbar block" >
+                    <mat-select-trigger>
+
+                      <mat-chip-list>
+                        <mat-chip *ngFor="let blocTitle of blocTitles" [removable]="false">
+                          {{blocTitle.title}}
+                          <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                      </mat-chip-list>
+
+                    </mat-select-trigger>
+                  </wid-scrollbar>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </wid-scrollbar>
+      </div>
+
+      <div fxLayout="row" fxFlex="8" fxLayoutAlign="end">
+        <div fxLayout="column" fxLayoutAlign=" end" fxFlex="100">
+          <div fxLayout="row" fxFlexFill fxLayoutGap="25px" fxLayoutAlign="space-between">
+            <div fxLayout="column">
+
+              <button mat-raised-button class="btn-small bg-pale-grey">
+                <span class="black">Back</span>
+              </button>
+
+            </div>
+            <div fxLayout="column" class="m-r-40">
+              <div fxLayout="row" fxLayoutGap="25px">
+                <button mat-raised-button class="btn-small bg-pale-grey">
+                  <span class="black">Cancel</span>
+                </button>
+                <button mat-raised-button class="btn-small " color="primary" (click)="addSessionInformation()">
+                  <span class="white">Next</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>

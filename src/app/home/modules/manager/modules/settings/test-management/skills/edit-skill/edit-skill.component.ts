@@ -10,7 +10,9 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { HelperService } from '@core/services/helper/helper.service';
 import { TestService } from '@core/services/test/test.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-edit-skill',
@@ -26,12 +28,14 @@ export class EditSkillComponent implements OnInit {
   canBeDisplayedColumns: IConfig[] = [];
   canBeDisplayedColumnsForm: FormGroup;
   skillTech: ITestTechnologySkillsModel;
-  skill_title = this.router.getCurrentNavigation().extras.state?.skill_title;
-  test_level_code = this.router.getCurrentNavigation().extras.state?.test_level_code;
-  _id = this.router.getCurrentNavigation().extras.state?.id;
-  test_skill_code = this.router.getCurrentNavigation().extras.state?.test_skill_code;
-  technology  = this.router.getCurrentNavigation().extras.state?.technology;
-  private canDelete = false;
+  skill_title: string;
+  test_level_code: string;
+  _id: string;
+  test_skill_code: string;
+  technology = [];
+  applicationId: string;
+  companyEmailAddress: string;
+
   constructor(
     private fb: FormBuilder,
     private dynamicDataTableService: DynamicDataTableService,
@@ -40,19 +44,40 @@ export class EditSkillComponent implements OnInit {
     private helperService: HelperService,
     private testService: TestService,
     private router: Router,
-  ) { }
+    private userService: UserService,
+    private utilsService: UtilsService,
+    private route: ActivatedRoute
+  ) {
+    this.loadData();
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.createForm();
-    this.getTechnologiesInfo();
-    this.getDisplayedColumns();
+    this.getConnectedUser();
     this.displayedColumnsForm = new FormGroup({
       displayedColumns: new FormArray([])
     });
     this.canBeDisplayedColumnsForm = new FormGroup({
       canBeDisplayedColumns: new FormArray([])
     });
+    await this.getTechnologiesInfo();
+    this.getDisplayedColumns();
+
   }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+
   /**
    * @description Inisialization of the Add test skill form
    */
@@ -63,8 +88,9 @@ export class EditSkillComponent implements OnInit {
     });
   }
 
-  getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+  async getTechnologiesInfo() {
+    this.technology = await this.getSelectedSkills();
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -93,7 +119,7 @@ export class EditSkillComponent implements OnInit {
       );
   }
   getDisplayedColumns() {
-    this.testService.getTechnologies(`?application_id=5eac544a92809d7cd5dae21f`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -106,7 +132,6 @@ export class EditSkillComponent implements OnInit {
                       type: 'text',
                     }
                   );
-                  console.log('tech code', res.TestTechnologyKey.test_technology_code);
                 }
               }
             );
@@ -203,14 +228,13 @@ export class EditSkillComponent implements OnInit {
     let deletedItems ;
     return new Promise<boolean>(
       async (resolve) => {
-        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}`)
+        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}&company_email=${this.companyEmailAddress}`)
           .toPromise()
           .then(
             dataTechSkill => {
               deletedItems = dataTechSkill.length;
               dataTechSkill.forEach((resTech) => {
                 this.testService.deleteTechnologySkills(resTech._id).subscribe((data) => {
-                  console.log('deleted', data);
                   deletedItems--;
                   if (deletedItems === 0) {
                     resolve(true);
@@ -229,10 +253,10 @@ export class EditSkillComponent implements OnInit {
    * @description check display column
    *************************************************************************/
   async addTech() {
-    console.log('displayed columns', this.displayedColumns);
     await this.displayedColumns.forEach(res => {
       this.skillTech = {
-        application_id: '5eac544a92809d7cd5dae21f',
+        application_id: this.applicationId,
+        company_email: this.companyEmailAddress,
         test_skill_code: this.test_skill_code,
         test_technology_code: res.prop,
       };
@@ -243,14 +267,14 @@ export class EditSkillComponent implements OnInit {
   updateSkill() {
     this.testSkill = this.sendUpdateTestSkill.value;
     this.testSkill.test_skill_code =  this.test_skill_code;
-    this.testSkill.application_id = '5eac544a92809d7cd5dae21f';
+    this.testSkill.application_id = this.applicationId;
+    this.testSkill.company_email = this.companyEmailAddress;
     this.testSkill._id = this._id;
       this.testService.updateSkills(this.testSkill).subscribe( async data => {
         console.log(data);
       });
       this.deleteTechno().then(
         (dataB) => {
-          console.log('dataB', dataB);
           if (dataB) {
             this.addTech();
           }
@@ -259,8 +283,39 @@ export class EditSkillComponent implements OnInit {
       );
 
   }
-
+   loadData() {
+    this.utilsService.verifyCurrentRoute('/manager/settings/skills').subscribe( async (data) => {
+      this.skill_title = data.skill_title;
+      this.test_level_code = data.test_level_code;
+      this._id = data.id;
+      this.test_skill_code = data.test_skill_code;
+    });
+  }
   testButton() {
     return this.sendUpdateTestSkill.invalid || this.displayedColumns.length <= 0;
+  }
+  getSelectedSkills() {
+    const technoArray = [];
+    return new Promise( (resolve) => {
+      this.testService
+        .getTechnologySkills(
+          `?test_skill_code=${this.test_skill_code}`)
+        .subscribe( (data) => {
+          data.map( (dataTechnoSkill) => {
+            this.testService.getTechnologies(`?test_technology_code=${dataTechnoSkill.TestTechnologySkillKey.test_technology_code}`)
+              .subscribe( (technoData) => {
+                technoData.forEach( (oneTechnoData) => {
+                  technoArray.push(oneTechnoData.technology_title);
+                  if (technoArray.length === data.length) {
+                    resolve(technoArray);
+                  }
+                });
+              });
+          });
+
+        });
+    }).then( (result: any[]) => {
+      return result;
+    });
   }
 }
