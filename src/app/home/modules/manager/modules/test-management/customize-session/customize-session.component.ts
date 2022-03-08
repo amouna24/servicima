@@ -6,6 +6,7 @@ import { colorList } from '@shared/statics/testTechnologiesColorList';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { Color } from 'ng2-charts';
 import { ChartType } from 'chart.js';
+import { ITestSessionQuestionModel } from '@shared/models/testSessionQuestion.model';
 @Component({
   selector: 'wid-customize-session',
   templateUrl: './customize-session.component.html',
@@ -16,55 +17,71 @@ export class CustomizeSessionComponent implements OnInit {
   blocTitlesAndPointsList = [];
   totalPoints = 0;
   options = { };
-   doughnutChartType: ChartType = 'doughnut';
+  doughnutChartType: ChartType = 'doughnut';
   doughnutChartColors: Color[] = [];
   selectedBlocsStringFormat: string;
+  technologiesList = [];
+  sessionCode: string;
+  constructor(
+    private testService: TestService,
+    private utilsService: UtilsService,
+  ) {
+    this.getChartParams();
+    this.getSelectedBlocArray();
+  }
 
-constructor(
-  private testService: TestService,
-  private utilsService: UtilsService,
-) {
-  this.getChartParams();
-  this.getSelectedBlocArray();
-}
   blocQuestionsList: Array<{
     questionDetails: ITestQuestionModel,
     bloc_title: string,
+    technology?: string
     color: string
   }> = [];
 
-  sessionQuestionsList = [];
+  sessionQuestionsList: Array<{
+  questionDetails: ITestQuestionModel,
+  bloc_title: string,
+  technology?: string
+  color: string
+}> = [];
+  searchField = '';
+  selectSearchField = '';
+
   async ngOnInit(): Promise<void> {
     await this.getBlocQuestionsData();
     this.getBlocTitleAndPoints();
+    this.getTechnologies();
   }
   getBlocQuestionsData() {
-    this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe( (resNode) => {
+    this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe((resNode) => {
       const quartLength = Math.ceil(resNode.length / 3);
-      resNode.map( (resOneNode, index) => {
+      console.log('quart length', quartLength);
+      resNode.map((resOneNode, index) => {
         this.testService
           .getQuestionBloc(`?test_question_bloc_code=${resOneNode.TestQuestionKey.test_question_bloc_code}`)
-          .subscribe( (resBlocQuestion) => {
+          .subscribe((resBlocQuestion) => {
             if
-            (this.blocQuestionsList.length - this.sessionQuestionsList.length > quartLength
-              &&
-              resBlocQuestion['results'][0]?.test_question_bloc_title !== this.sessionQuestionsList[index - 1]?.bloc_title) {
+            (this.sessionQuestionsList.length <= quartLength - 1) {
               this.sessionQuestionsList.push({
                 questionDetails: resOneNode,
                 bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
                 color: colorList[index]
               });
             } else {
-              this.blocQuestionsList.push({
-                questionDetails: resOneNode,
-                bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
-                color: colorList[index]
-              });
+              this.testService
+                .getTechnologies(`?test_technology_code=${resBlocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
+                .subscribe((oneBlocItem) => {
+                  this.blocQuestionsList.push({
+                    questionDetails: resOneNode,
+                    bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
+                    technology: oneBlocItem[0].technology_title,
+                    color: colorList[index]
+                  });
+                });
             }
             this.totalPoints += Number(resOneNode.mark);
-        });
+          });
       });
-      });
+    });
   }
   dragAndDrop(event: CdkDragDrop<Array<{ questionDetails: ITestQuestionModel; bloc_title: string; color: string }>, any>) {
     if (event.previousContainer === event.container) {
@@ -81,23 +98,29 @@ constructor(
   getLevel(levelCode) {
     switch (levelCode) {
       case 'TestLevel00001' : {
-        return  1;
+        return 1;
       }
-      default: return 4;
+      default:
+        return 4;
     }
   }
   getColors(index) {
-      switch (index) {
-        case this.selectedBlocArray[0]: {
-          return colorList[0];
-        }
-        case this.selectedBlocArray[1]: return colorList[1];
-        case this.selectedBlocArray[2]: return colorList[2];
-        case this.selectedBlocArray[3]: return colorList[3];
-        case this.selectedBlocArray[4]: return colorList[4];
-        case this.selectedBlocArray[5]: return colorList[5];
+    switch (index) {
+      case this.selectedBlocArray[0]: {
+        return colorList[0];
       }
+      case this.selectedBlocArray[1]:
+        return colorList[1];
+      case this.selectedBlocArray[2]:
+        return colorList[2];
+      case this.selectedBlocArray[3]:
+        return colorList[3];
+      case this.selectedBlocArray[4]:
+        return colorList[4];
+      case this.selectedBlocArray[5]:
+        return colorList[5];
     }
+  }
   addRandomQuestion() {
     const randomNumber = Math.floor(Math.random() * this.blocQuestionsList.length);
     this.sessionQuestionsList.push(this.blocQuestionsList[randomNumber]);
@@ -109,39 +132,40 @@ constructor(
     const displayedSeconds = Math.floor(duration % 3600 % 60) <= 9 ? '0' + Math.floor(duration % 60) : Math.floor(duration % 60);
     return displayedHours !== 0 ? displayedMinutes + ':' + displayedSeconds : displayedHours + ':' + displayedMinutes + ':' + displayedSeconds;
   }
-  getBlocTitleAndPoints()  {
-       this.selectedBlocArray.forEach( (blocQuestionCode) => {
-        let totalPoints = 0;
-         this.testService.getQuestionBloc(`?test_question_bloc_code=${blocQuestionCode}`)
-          .subscribe( (resNode) => {
-            this.testService
-              .getQuestion(`?test_question_bloc_code=${blocQuestionCode}`)
-              .subscribe( (resQuestion) => {
-                resQuestion.map( (resOneQuestion) => {
-                  totalPoints += Number(resOneQuestion.mark);
-                });
-                this.blocTitlesAndPointsList.push({
-                  title: resNode['results'][0].test_question_bloc_title,
-                  points: totalPoints,
-                  code: blocQuestionCode
-                });
+  getBlocTitleAndPoints() {
+    this.selectedBlocArray.forEach((blocQuestionCode) => {
+      let totalPoints = 0;
+      this.testService.getQuestionBloc(`?test_question_bloc_code=${blocQuestionCode}`)
+        .subscribe((resNode) => {
+          this.testService
+            .getQuestion(`?test_question_bloc_code=${blocQuestionCode}`)
+            .subscribe((resQuestion) => {
+              resQuestion.map((resOneQuestion) => {
+                totalPoints += Number(resOneQuestion.mark);
               });
-          });
-      });
-    }
+              this.blocTitlesAndPointsList.push({
+                title: resNode['results'][0].test_question_bloc_title,
+                points: totalPoints,
+                code: blocQuestionCode
+              });
+            });
+        });
+    });
+  }
   getSelectedBlocArray() {
-    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe( (data) => {
+    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
       this.selectedBlocsStringFormat = data.selectedBlocs;
+      this.sessionCode = data.sessionCode;
       this.selectedBlocArray = data.selectedBlocs.split(',');
     });
-    }
+  }
   getChartPercentage() {
-      return this.blocTitlesAndPointsList.map( (oneBloc) => {
-        return Number((oneBloc.points * 100) / this.totalPoints);
-      });
-    }
+    return this.blocTitlesAndPointsList.map((oneBloc) => {
+      return Number((oneBloc.points * 100) / this.totalPoints);
+    });
+  }
   getChartTitle() {
-    return this.blocTitlesAndPointsList.map( (oneBloc) => {
+    return this.blocTitlesAndPointsList.map((oneBloc) => {
       return oneBloc.title;
     });
   }
@@ -150,10 +174,68 @@ constructor(
     this.options = {
       cutoutPercentage: 70,
       cutout: 70,
-      legend: { display: false }
+      legend: { display: false}
     };
     this.doughnutChartColors = [{
       backgroundColor: colorList
     }];
+  }
+  getTechnologies() {
+    this.selectedBlocArray.map((oneItem) => {
+      this.testService.getQuestionBloc(`?test_question_bloc_code=${oneItem}`)
+        .subscribe((resBlocQuestion) => {
+          this.testService
+            .getTechnologies(`?test_technology_code=${resBlocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
+            .subscribe((oneBlocItem) => {
+              this.technologiesList.push(oneBlocItem[0].technology_title);
+            });
+        });
+    });
+  }
+  getTotalTime() {
+    let sumTime = 0;
+    this.sessionQuestionsList.map( (oneItem) => {
+      sumTime += Number(oneItem.questionDetails.duration);
+    });
+    const displayedHours = Math.floor(sumTime / 3600) <= 9 ? '0' + Math.floor(sumTime / 3600) : Math.floor(sumTime / 3600);
+    const displayedMinutes = Math.floor(sumTime % 3600 / 60) <= 9 ? '0' + Math.floor(sumTime / 60) : Math.floor(sumTime / 60);
+    const displayedSeconds = Math.floor(sumTime % 3600 % 60) <= 9 ? '0' + Math.floor(sumTime % 60) : Math.floor(sumTime % 60);
+    return  {
+      time: displayedHours !== '00' ? displayedHours :  displayedMinutes !== '00' ? displayedMinutes : displayedSeconds,
+      type: sumTime < 60 ? 'sec'  : sumTime < 3600 ? 'min' : 'h',
+    };
+  }
+
+  getTotalPoints(): number {
+    let totalPoint = 0;
+    this.sessionQuestionsList.forEach( (oneQuestion) => {
+      totalPoint += Number(oneQuestion.questionDetails.mark);
+    });
+    return totalPoint;
+  }
+  addSessionQuestions() {
+    let addedQuestion = 1;
+    this.sessionQuestionsList.map( (oneQuestion, index) => {
+      const testSessionObject: ITestSessionQuestionModel = {
+        application_id: oneQuestion.questionDetails.TestQuestionKey.application_id,
+        company_email: oneQuestion.questionDetails.TestQuestionKey.company_email,
+        session_code: this.sessionCode,
+        bloc_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_bloc_code,
+        test_session_questions_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-QUESTION`,
+        test_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_code,
+      };
+      this.testService.addTestSessionQuestion(testSessionObject).subscribe( (result) => {
+        addedQuestion += 1;
+        console.log(`question ${oneQuestion.questionDetails.test_question_title} added=`, result);
+      });
+    });
+      const queryObject = {
+        totalQuestion: this.sessionQuestionsList.length,
+        totalTime: this.getTotalTime().time,
+        totalTimeType: this.getTotalTime().type,
+        totalPoints: this.getTotalPoints(),
+        sessionCode: this.sessionCode,
+      };
+      this.utilsService.navigateWithQueryParam('/manager/test/session-timer', queryObject);
   }
 }

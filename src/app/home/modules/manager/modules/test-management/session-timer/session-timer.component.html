@@ -1,0 +1,133 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Session timer</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{"back" | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlex="82" fxLayoutAlign=" center">
+      <div fxLayout="row" fxFlexFill>
+        <div fxLayout="column" fxFlexFill>
+          <div fxLayout="row" fxFlex="10" fxLayoutAlign=" center">
+            <span>How would you like the candidate to be timed ?</span>
+          </div>
+          <mat-radio-group (change)="chosenTime($event)" [(ngModel)]="selectedTimerValue" fxLayout="row" fxFlex="33" fxLayoutAlign="center" >
+            <div fxLayout="column" fxFlex="90" fxLayoutAlign=" center">
+              <div fxLayout="row" fxFlexFill fxLayoutGap="60px">
+                <div fxLayout="column" fxFlex class="timer-bloc" fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="80">
+                    <div fxLayout="column" fxFlex="12" class="white-line rounded-check-box" fxLayoutAlign="center center">
+                      <mat-radio-button  value="time_per_question"></mat-radio-button>
+                    </div>
+                    <div fxLayout="column" fxFlex="85" class="p-l-20">
+                      <div fxLayout="row" fxFlex="20">
+                        <div fxLayout="column" fxLayoutAlign="center">
+                          <span class="font-size-15 black">Timer per question</span>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxFlex="80">
+                        <div fxLayout="column" fxFlexFill>
+                          <wid-scrollbar>
+                            <div  fxLayout="column" fxFlex="90" class="black font-size-12 font-extra-light" style="display: block">
+                              each question will be timed.
+                              once the test starts the questions
+                              will follow one another according to
+                              the defined order. the candidate will
+                              not be able to return to a previous
+                              question. we recommend
+                              this mode to get an overview
+                              of the theoretical and practical
+                              knowledge of the candidates
+                            </div>
+                          </wid-scrollbar>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex class="timer-bloc" fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="80">
+                    <div fxLayout="column" fxFlex="12" class="white-line rounded-check-box" fxLayoutAlign="center center">
+                      <mat-radio-button value="time_overall" (change)="chooseOverallTime()"></mat-radio-button>
+                    </div>
+                    <div fxLayout="column" fxFlex="85" class="p-l-20">
+                      <div fxLayout="row" fxFlex="20">
+                        <div fxLayout="column" fxLayoutAlign="center">
+                          <span class="font-size-15 black">Overall timer</span>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxFlex="80">
+                        <div fxLayout="column" fxFlexFill>
+                          <wid-scrollbar>
+                            <div  fxLayout="column" fxFlex="90" class="black font-size-12 font-extra-light" style="display: block">
+                              An overall time is allocated to the candidate to complete the entire test.
+                              the candidate can manage his time as he sees fit: he can answer the questions
+                              in any order and modify them several times.
+                              we recommend this mode to evaluate, only, the practical knowledge of the candidates
+                            </div>
+                          </wid-scrollbar>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </mat-radio-group>
+          <div fxLayout="row" fxFlex="45">
+            <div fxLayout="column" fxFlexFill fxLayoutAlign="center center" fxLayoutGap="20px">
+              <div fxLayout="row" fxLayoutAlign=" center">
+                <span class="font-size-18 black">Number of questions : {{totalQuestion}} questions</span>
+              </div>
+              <div fxLayout="row"  fxLayoutAlign=" center">
+                <span class="font-size-18 black">Minimal score expected : 60%</span>
+              </div>
+              <div fxLayout="row"  fxLayoutAlign=" center">
+                <span class="font-size-18 black">Total points : {{totalPoints}}pts</span>
+              </div>
+              <div fxLayout="row"  fxLayoutAlign=" center">
+                <span class="font-size-18 black">Overall test time : {{totalTime}} {{totalTimeType}}</span>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxFlex="10" fxLayoutAlign=" center">
+            <div fxLayout="column" fxFlex="50">
+                <button mat-raised-button class="btn-small bg-pale-grey" >
+                  <span class="black">Back</span>
+                </button>
+            </div>
+            <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end">
+              <div fxLayout="row" fxLayoutGap="20px">
+                <div fxLayout="column">
+                  <button mat-raised-button class="btn-small bg-pale-grey" >
+                    <span class="black"> Cancel</span>
+                  </button>
+                </div>
+                <div fxLayout="column">
+                  <button mat-raised-button class="btn-small" color="primary" (click)="setSessionTime()">
+                    <span class="white"> Next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+    </div>
+  </div>
+</div>

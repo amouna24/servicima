@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { BlocListComponent } from './bloc-list/bloc-list.component';
 import { CustomizeSessionComponent } from './customize-session/customize-session.component';
 import { SessionInfoComponent } from './session-info/session-info.component';
+import { SessionTimerComponent } from './session-timer/session-timer.component';
+import { SessionListComponent } from './session-list/session-list.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,14 @@ const routes: Routes = [
   {
     path: 'customize-session',
     component: CustomizeSessionComponent
+  },
+  {
+    path: 'session-timer',
+    component: SessionTimerComponent
+  },
+  {
+    path: 'session-list',
+    component: SessionListComponent
   }
 ];
 

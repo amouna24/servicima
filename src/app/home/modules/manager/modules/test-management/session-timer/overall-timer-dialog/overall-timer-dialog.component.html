@@ -1,0 +1,46 @@
+
+<div fxLayout="row" fxFlexFill fxLayoutAlign="center">
+  <div fxLayout="column"  fxFlex="90" >
+    <div fxLayout="row" fxFlexFill>
+      <div fxLayout="column" fxFlexFill>
+        <div fxLayout="row" fxFlex="12" fxLayoutAlign="end end">
+          <div fxLayout="column"  >
+            <button class="close-container" mat-dialog-close>
+              <img src="assets/icons/close_icon.svg">
+            </button>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="12">
+          <div fxLayout="column"  fxLayoutAlign="end">
+            <span class="font-size-17 steel">Overall timer :</span>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="20" fxLayoutAlign="center">
+          <div fxLayout="column" fxFlex="85" fxLayoutAlign="center center" >
+           <span class="text-center black font-light">Please set an overall time allocated to the candidate to complete the entire test per minute</span>
+          </div>
+          <span></span>
+        </div>
+        <div fxLayout="row" fxFlex="23" fxLayoutAlign="center end">
+          <div fxLayout="column" fxFlex="25" fxLayoutAlign="center center" >
+            <mat-form-field appearance="outline" class="full-width font-size-12">
+            <input [(ngModel)]="totalTime" matInput placeholder="40min">
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="22" fxLayoutGap="44px" fxLayoutAlign="center">
+          <div fxLayout="column" fxLayoutAlign="center">
+            <button mat-raised-button class="btn-medium" color="primary"> <span class="white" [mat-dialog-close]="totalTime">Submit</span></button>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center">
+            <button mat-raised-button class="btn-medium bg-pale-grey" mat-dialog-close> <span class="black">Cancel</span></button>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
