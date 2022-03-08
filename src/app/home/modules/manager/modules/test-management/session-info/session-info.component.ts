@@ -101,6 +101,7 @@ export class SessionInfoComponent implements OnInit {
           session_code: sessionObject.session_code, // à modifier
           test_session_info_code:  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-INFO`,
           session_name: this.form.controls.sessionName.value,
+          test_session_timer_type: 'time_per_question',
           level_code: this.form.controls.experienceRequired.value,
           language_id: this.form.controls.language.value,
           copy_paste: this.form.controls.copyPaste.value,

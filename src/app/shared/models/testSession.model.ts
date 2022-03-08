@@ -2,7 +2,7 @@ import { ITestSessionKeyModel } from '@shared/models/testSessionKey.model';
 
 export interface ITestSessionModel {
   _id?: string;
-  TestSessionKeyModel?: ITestSessionKeyModel;
+  TestSessionKey?: ITestSessionKeyModel;
   application_id: string;
   company_email: string;
   session_code: string;
