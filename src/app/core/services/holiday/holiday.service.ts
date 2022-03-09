@@ -41,7 +41,7 @@ export class HolidayService {
       console.log(this.localStorageService.getItem('userCredentials')['application_id']);
       this.refdataService.getRefData(
         this.utilService.getCompanyId( companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
-        this.localStorageService.getItem('userCredentials')['application_id'], ['WEEK_DAYS'], false).then(
+        this.localStorageService.getItem('userCredentials')['application_id'], ['WEEK_DAYS'], true).then(
         (res) => { resolve(res); }
       );
     });
