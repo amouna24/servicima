@@ -19,73 +19,105 @@
 		"REF_DATA_CODE": "F",
 		"REF_DATA_DESC": "Female"
 	},
+
+	{  	"Language_CODE":"EN",
+    	"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "SE",
+		"REF_DATA_DESC": "SE"
+	},
+
 	{  	"Language_CODE":"FR",
     	"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "EURL",
-		"REF_DATA_DESC": "EURL"
+		"REF_DATA_CODE": "SE",
+		"REF_DATA_DESC": "AE"
 	},
-	{  	"Language_CODE":"FR",
-    	"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SARL",
-		"REF_DATA_DESC": "SARL"
-	},
+
+
+
 	{ 	"Language_CODE":"FR",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SAS",
-		"REF_DATA_DESC": "SAS"
+		"REF_DATA_CODE": "AllC",
+		"REF_DATA_DESC": "EARL"
 	},
 	{
-    "Language_CODE":"FR",
+    "Language_CODE":"EN",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SASU",
-		"REF_DATA_DESC": "SASU"
+		"REF_DATA_CODE": "AllC",
+		"REF_DATA_DESC": "AllC"
 	},
+
+
 	{
    	    "Language_CODE":"FR",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "EIRL",
-		"REF_DATA_DESC": "EIRL"
+		"REF_DATA_CODE": "SMLLC",
+		"REF_DATA_DESC": "EURL"
 	},
 	{
-    	"Language_CODE":"FR",
+    	"Language_CODE":"EN",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SA",
-		"REF_DATA_DESC": "SA"
+		"REF_DATA_CODE": "SMLLC",
+		"REF_DATA_DESC": "SMLLC"
 	},
- 	{ 	"Language_CODE":"EN",
+
+
+
+ 	{ 	"Language_CODE":"FR",
     	"REF_TYPE_CODE": "LEGAL_FORM",
-    	"REF_DATA_CODE": "EURL",
-    	"REF_DATA_DESC": "EURL"
+    	"REF_DATA_CODE": "LLC",
+    	"REF_DATA_DESC": "SARL/SCRL"
   	},
   	{  	"Language_CODE":"EN",
     	"REF_TYPE_CODE": "LEGAL_FORM",
-    	"REF_DATA_CODE": "SARL",
-    	"REF_DATA_DESC": "SARL"
+    	"REF_DATA_CODE": "LLC",
+    	"REF_DATA_DESC": "LLC"
     },
 
-    { 	"Language_CODE":"EN",
+
+
+
+    { 	"Language_CODE":"FR",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SAS",
-		"REF_DATA_DESC": "SAS"
+		"REF_DATA_CODE": "CTG",
+		"REF_DATA_DESC": "SASU"
     },
     {	"Language_CODE":"EN",
     	"REF_TYPE_CODE": "LEGAL_FORM",
-    	"REF_DATA_CODE": "SASU",
-    	"REF_DATA_DESC": "SASU"
+    	"REF_DATA_CODE": "CTG",
+    	"REF_DATA_DESC": "CTG"
 	},
+
+
+
 	{
-		"Language_CODE":"EN",
+		"Language_CODE":"FR",
 		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "EIRL",
-		"REF_DATA_DESC": "EIRL"
-	},
-	{
-		"Language_CODE":"EN",
-		"REF_TYPE_CODE": "LEGAL_FORM",
-		"REF_DATA_CODE": "SA",
+		"REF_DATA_CODE": "AS",
 		"REF_DATA_DESC": "SA"
 	},
-	{   "Language_CODE":"FR",
+	{
+		"Language_CODE":"EN",
+		"REF_TYPE_CODE": "LEGAL_FORM",
+		"REF_DATA_CODE": "AS",
+		"REF_DATA_DESC": "AS"
+	},
+
+  {
+    "Language_CODE":"FR",
+    "REF_TYPE_CODE": "LEGAL_FORM",
+    "REF_DATA_CODE": "SML",
+    "REF_DATA_DESC": "SPRLU"
+  },
+  {
+    "Language_CODE":"EN",
+    "REF_TYPE_CODE": "LEGAL_FORM",
+    "REF_DATA_CODE": "SML",
+    "REF_DATA_DESC": "SML"
+  },
+
+
+
+  {   "Language_CODE":"FR",
 		"REF_TYPE_CODE": "PROF_TITLES",
 		"REF_DATA_CODE": "PRS",
 		"REF_DATA_DESC": "Président"
