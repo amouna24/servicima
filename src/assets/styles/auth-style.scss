@@ -133,19 +133,22 @@ input:-webkit-autofill:focus {
 /*******************
    input style
 *******************/
-.mat-input-element::placeholder{
-  color: #f3f6f9 !important;
-  font-weight: 200;
-}
-
-/*******************
-   input style
-*******************/
-.stepper {
+.auth-content {
   .mat-input-element::placeholder {
-    color: #afb1b8 !important;
+    color: #f3f6f9 !important;
+    font-weight: 200;
   }
 }
+
+
+  /*******************
+     input style
+  *******************/
+  .stepper {
+    .mat-input-element::placeholder {
+      color: #afb1b8 !important;
+    }
+  }
 
   /*******************
      input style
@@ -157,12 +160,13 @@ input:-webkit-autofill:focus {
   }
 
 
-//input outline color
-.auth-content {
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: white!important;
+  //input outline color
+  .auth-content {
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color: white!important;
+    }
   }
-}
+
 
 
 

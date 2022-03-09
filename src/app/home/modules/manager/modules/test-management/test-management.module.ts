@@ -14,6 +14,8 @@ import { LevelBlocComponent } from './customize-session/level-bloc/level-bloc.co
 import { SessionTimerComponent } from './session-timer/session-timer.component';
 import { OverallTimerDialogComponent } from './session-timer/overall-timer-dialog/overall-timer-dialog.component';
 import { SessionListComponent } from './session-list/session-list.component';
+import { InviteCandidatesComponent } from './invite-candidates/invite-candidates.component';
+import { ChooseCandidatesComponent } from './invite-candidates/choose-candidates/choose-candidates.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { SessionListComponent } from './session-list/session-list.component';
     SessionInfoComponent,
     SessionTimerComponent,
     OverallTimerDialogComponent,
-    SessionListComponent],
+    SessionListComponent,
+    InviteCandidatesComponent,
+    ChooseCandidatesComponent, ],
     imports: [
         CommonModule,
         TestManagementRoutingModule,
