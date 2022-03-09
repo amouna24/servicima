@@ -5,16 +5,18 @@
 }
 .container-role-feature{
   border: 2px solid #afb1b8;
-  padding-bottom: 15px;
   border-radius: 4px;
   padding-left: 8px;
-  padding-top: 15px;
   width: 70%;
   height: 108px;
 }
 
 mat-chip {
  font-size: 12px!important;
+}
+
+input.mat-chip-input {
+  height: 35px !important;
 }
 
 .mat-input-element::placeholder{
@@ -40,4 +42,11 @@ mat-chip {
      border-color: #afb1b8 !important;
      border-width: 1px !important;
   }
+}
+.demo-chip-list {
+  width: 100%;
+}
+
+.wid-error-messages{
+  font-size: 9px;
 }
