@@ -24,6 +24,7 @@ export class SessionTimerComponent implements OnInit {
    companyEmailAddress: string;
    applicationId: string;
    languageId: string;
+  selectedBlocArray = [];
   constructor(
     private dialog: MatDialog,
     private utilsService: UtilsService,
@@ -36,7 +37,7 @@ export class SessionTimerComponent implements OnInit {
     this.getData();
     this.getConnectedUser();
     this.getDataFromLocalStorage();
-    this.selectedTimerValue = 'time_per_question';
+    this.getSessionTimeData();
   }
 
   chooseOverallTime() {
@@ -65,6 +66,7 @@ export class SessionTimerComponent implements OnInit {
       this.totalTimePerQuestionsType = data.totalTimeType;
       this.totalTimeType = data.totalTimeType;
       this.totalPoints =   data.totalPoints;
+      this.selectedBlocArray = data.selectedBlocs;
     });
   }
   chosenTime(event: any) {
@@ -110,4 +112,42 @@ export class SessionTimerComponent implements OnInit {
         });
     });
     }
+  cancelOverallTime() {
+    this.selectedTimerValue = 'time_per_question';
+    this.totalTime = this.totalTimePerQuestions;
+    this.totalTimeType = this. totalTimePerQuestionsType;
+  }
+  backToPreviousPage() {
+    const queryObject = {
+      sessionCode: this.sessionCode,
+      selectedBlocs: this.selectedBlocArray,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
+  }
+  getSessionTimeData() {
+    if (this.sessionCode && this.sessionCode !== 'undefined') {
+      this.testService
+        .getSessionInfo(`?company_email=${
+          this.companyEmailAddress}&application_id=${
+          this.applicationId}&session_code=${
+          this.sessionCode}`)
+        .subscribe((sessionInfo) => {
+          this.selectedTimerValue = sessionInfo[0].test_session_timer_type;
+          if (this.selectedTimerValue === 'time_overall') {
+            console.log(this.getTime(Number(sessionInfo[0].test_session_time)).time);
+            this.totalTime = this.getTime(Number(sessionInfo[0].test_session_time)).time;
+            this.totalTimeType = this.getTime(sessionInfo[0].test_session_time).type;
+          }
+        });
+    }
+  }
+  getTime(sumTime) {
+    const displayedHours = Math.floor(sumTime / 3600) <= 9 ? Math.floor(sumTime / 3600) : Math.floor(sumTime / 3600);
+    const displayedMinutes = Math.floor(sumTime % 3600 / 60) <= 9 ? Math.floor(sumTime / 60) : Math.floor(sumTime / 60);
+    const displayedSeconds = Math.floor(sumTime % 3600 % 60) <= 9 ? Math.floor(sumTime % 60) : Math.floor(sumTime % 60);
+    return  {
+      time: displayedHours !== 0 ? displayedHours :  displayedMinutes !== 0 ? displayedMinutes : displayedSeconds,
+      type: sumTime < 60 ? 'sec'  : sumTime < 3600 ? 'min' : 'h',
+    };
+  }
 }

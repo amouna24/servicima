@@ -36,20 +36,20 @@ export const candidateMenu: IMenu[] = [
     name: 'cand.menu.static.res-mng',
     type: 'sub',
     icon: 'wi_dashboard',
-    feature: 'SOURCING_CAND_FILE_ACCESS',
+    feature: 'RESUME_MANAGEMENT_ACCESS',
     children: [
       {
         state: '',
         name: 'cand.menu.static-gen-info',
         icon: 'wi_res_general_info',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
       {
         state: 'certifDiploma',
         name: 'cand.menu.static.diploma',
         icon: 'wi_res_certif',
-        feature: 'CONTRACT_ACCESS',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
       {

@@ -292,12 +292,18 @@ export class UtilsService {
     const isValueValid = (field) => form['controls'][field].value !== '' && form['controls'][field].value ;
     return columnFields.every(isValueValid);
   }
-  verifyCurrentRoute(previousRoute?: string): Observable<any> {
+  verifyCurrentRoute(previousRoute?: string, noRefreshable?: boolean): Observable<any> {
     if ( Object.keys(this.route.snapshot.queryParams).length === 0) {
       this.router.navigate([`${previousRoute ? previousRoute : '/'}`]);
-      return new Observable<any>( (observer) => {
-        observer.error((new Error('page is not refreshable')));
-      });
+      if (!noRefreshable) {
+        return new Observable<any>( (observer) => {
+          observer.error((new Error('page is not refreshable')));
+        });
+      } else {
+        return new Observable<any>( (observer) => {
+          observer.unsubscribe();
+        });
+        }
     } else {
       return new Observable<any>( (observer) => {
         observer.next(this.decryptObject(this.route.snapshot.queryParams));
