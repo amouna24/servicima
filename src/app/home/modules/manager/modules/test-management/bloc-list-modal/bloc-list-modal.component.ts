@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { environment } from '@environment/environment';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'wid-bloc-list-modal',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bloc-list-modal.component.scss']
 })
 export class BlocListModalComponent implements OnInit {
-
-  constructor() { }
+  imageUrl: string;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
   ngOnInit(): void {
+    this.imageUrl = `${environment.uploadFileApiUrl}/image/`;
   }
 
 }

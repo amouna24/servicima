@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="this.tableData"
+  [tableCode]="'TEST_SESSION_LIST'"
+  [isLoading]="isLoading"
+  [buttonAdd]="false"
+  [header]="{ title: 'Test session list'}"
+  (rowActionData)="switchAction($event)"
+  (pagination)="loadMoreItems($event)"
+  [allowedActions]="[]">
+</wid-dynamic-data-table>

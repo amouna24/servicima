@@ -6,6 +6,9 @@ import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environment/environment';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ITestSessionModel } from '@shared/models/testSession.model';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -26,11 +29,13 @@ export class BlocListComponent implements OnInit {
   availableBlocQuestionsList: ITestQuestionBlocModel[] = [];
   otherBlocQuestionsList: ITestQuestionBlocModel[] = [];
   imageUrl: string;
+  selectedBlocs = [];
   constructor(
     private testService: TestService,
     private userService: UserService,
     private utilsService: UtilsService,
     private dialog: MatDialog,
+    private localStorageService: LocalStorageService
   ) {
   }
 
@@ -65,8 +70,7 @@ export class BlocListComponent implements OnInit {
         `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
         getApplicationID('SERVICIMA')}`)
       .subscribe( (resBlocQuestions) => {
-        console.log('bloc lists=', resBlocQuestions['results']);
-        resBlocQuestions['results'].map( (oneBloc) => {
+        resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel) => {
           if (oneBloc.free) {
             this.availableBlocQuestionsList.push(oneBloc);
           } else {
@@ -74,9 +78,8 @@ export class BlocListComponent implements OnInit {
           }
         });
     });
-    console.log(this.availableBlocQuestionsList);
   }
-  openDescriptionDialog(blocQuestion) {
+  openDescriptionDialog(blocQuestion, available: string) {
     const dialogRef = this.dialog.open(BlocListModalComponent, {
       height: '344px',
       width: '607px',
@@ -84,11 +87,33 @@ export class BlocListComponent implements OnInit {
         bloc_title: blocQuestion.test_question_bloc_title,
         bloc_image: blocQuestion.image,
         bloc_desc: blocQuestion.test_question_bloc_desc,
-        bloc_free: blocQuestion.free},
+        bloc_free: blocQuestion.free,
+        bloc_price: blocQuestion.price,
+        pack_type: available,
+      },
     });
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+  checkSelectedBloc(blocCode) {
+    let checked = false;
+    this.selectedBlocs.map( (oneBloc) => {
+        if (oneBloc === blocCode) { checked  = true; }
+    });
+    return checked;
+  }
+  addRemoveSelectedBloc(event: MatCheckbox, blocQuestionCode: string) {
+    if (event.checked) {
+      this.selectedBlocs.push(blocQuestionCode);
+    } else {
+      this.selectedBlocs.splice(this.selectedBlocs.indexOf(blocQuestionCode), 1);
+    }
+  }
+  moveToInfoSessionPage() {
+         const queryObject = {
+        selectedBlocs: this.selectedBlocs,
+      };
+      this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
   }
 }

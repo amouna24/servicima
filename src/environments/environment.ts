@@ -78,8 +78,11 @@ export const environment = {
   testTechnologiesApiUrl: 'http://213.136.74.202/testtechnology',
   testSkillsApiUrl: 'http://213.136.74.202/testskills',
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',
+  testSessionInfoApiUrl: 'http://213.136.74.202/testsessioninfo',
   testLevelApiUrl: 'http://213.136.74.202/testlevel',
-
+  testSessionQuestionsApiUrl: 'http://213.136.74.202/testsessionquestions',
+  testInviteCandidatesApiUrl: 'http://213.136.74.202/testinvitecandidates',
+  testSessionApiUrl: 'http://213.136.74.202/testsession',
   projectCollaboratorApiUrl: 'http://213.136.74.202/projectcollaborator',
   linkedInOauthApiUrl: 'http://213.136.74.202/socialnetwork',
   servicmaUrl: 'http://localhost:4200',

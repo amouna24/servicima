@@ -8,7 +8,7 @@
 }
 .bloc-list-card-horizontal {
   height: 128px;
-  min-width: 100%;
+  width: 100%;
 }
 .mat-card{
   border-radius: 15px !important;
@@ -41,7 +41,7 @@
   border-radius: 15px;
   background-color: $golden-yellow;
   height: 17px;
-  min-width: 54px;
+  width: 54px;
 }
 .limit-text-height {
   height: 47px;
@@ -64,14 +64,4 @@
     }
 
 }
-.colored-check-box {
-    ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-      background-color: black !important;
-    }
-    ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
-      background-color: black !important;
-    }
-}
-
-
   }

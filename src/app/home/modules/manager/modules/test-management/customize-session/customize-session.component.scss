@@ -1,0 +1,34 @@
+@import "src/assets/styles/variables";
+.bloc-session-stats {
+  background-color: $pale-grey-four;
+  border-radius: 10px;
+}
+.white-line-bloc-session-stats {
+  border-right: 2px solid white;
+}
+.dark-grey-blue {
+  color: $dark-grey-blue;
+}
+.purpley {
+  color: $purpley;
+}
+.secondary-color {
+  color: $secondaryColor;
+}
+.border-other-position {
+  border: solid 2px $pale-grey;
+  border-radius: 10px 10px 0 0;
+}
+.border-session-questions {
+  border: solid 2px $pale-grey;
+  border-radius: 0 0 10px 10px;
+}
+.question-bloc {
+  background-color: $pale-grey;
+  border-radius: 5px;
+  max-height: 45px;
+  min-height: 45px;
+}
+.min-width-100 {
+  min-width: 100px;
+}

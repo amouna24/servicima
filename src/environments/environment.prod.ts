@@ -71,6 +71,7 @@ export const environment = {
   testSkillsApiUrl: 'http://213.136.74.202/testskills',
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',
   testLevelApiUrl: 'http://213.136.74.202/testlevel',
+  testSessionInfoApiUrl: 'http://213.136.74.202/testsessioninfo',
   companyBankingInfoApiUrl: 'http://213.136.74.202/companybankinginfo',
   timesheetApiUrl: 'http://213.136.74.202/timesheet',
   timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
@@ -94,4 +95,5 @@ export const environment = {
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',
+  cryptoKeyCode: 'RfUjXn2r',
 };

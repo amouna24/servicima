@@ -1,0 +1,234 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Customize Session</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{"back" | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="row" fxFlex="88" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlex="91" fxLayoutGap="10px">
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center">
+        <div fxLayout="column" fxFlex="95">
+          <div fxLayout="row" fxFlexFill class="bloc-session-stats p-5">
+              <div fxLayout="column" fxFlex="25" class="white-line-bloc-session-stats" >
+                    <div fxLayout="row" fxFlex="100">
+                      <div fxLayout="column" fxFlex="50"  >
+                        <canvas baseChart
+                                width="1"
+                                height="0.5"
+                                [data]="getChartPercentage()"
+                                [labels]="getChartTitle()"
+                                [legend]="false"
+                                [chartType]="doughnutChartType"
+                                [colors]="doughnutChartColors"
+                                [options]="options">
+                        </canvas>
+                      </div>
+                      <div fxLayout="column" fxLayoutAlign="center" fxFlex="50" fxLayoutGap="4px">
+                        <div fxLayout="row" *ngFor="let item of blocTitlesAndPointsList">
+                          <span class="font-size-8 font-extra-light" [ngStyle]="{'color': getColors(item.code)}">{{item.title}}</span>
+                       </div>
+                     </div>
+                    </div>
+              </div>
+              <div fxLayout="column" fxFlex="25" class="white-line-bloc-session-stats" fxLayoutAlign="center center">
+                <div fxLayout="row" class="dark-grey-blue font-size-18">
+                  <div fxLayout="column" fxLayoutAlign="center">
+                    <span class="">{{totalPoints}}</span>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="end">
+                    <div fxLayout="row" fxFlex="45">
+                      <span class="font-size-8">pts</span>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <span class="font-size-18 dark-grey-blue"></span>
+                </div>
+              </div>
+              <div fxLayout="column"  class="white-line-bloc-session-stats" fxLayoutAlign="center">
+                <div fxLayout="row" fxFlex="80" fxLayoutAlign="center center">
+                  <div fxLayout="column" fxFlex="90" fxLayoutAlign="center center">
+                    <div fxLayout="row" style="min-width: 100%" fxLayoutAlign="center">
+                      <div fxLayout="column" class="min-width-100" *ngFor="let item of blocTitlesAndPointsList; let pointIndex=index" fxFlex>
+                        <div fxLayout="row"  >
+                          <div fxLayout="column"  fxFlex [ngClass]="pointIndex + 1 < blocTitlesAndPointsList.length ?  'white-line-bloc-session-stats' : ''"  fxFlexFill >
+                            <div fxLayout="row" fxLayoutAlign="center" fxFlex>
+                              <span class="font-size-12 " [ngStyle]="{'color': getColors(item.code)}" >{{item.title}}</span>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="center" fxFlex>
+                              <span class="dark-grey-blue font-size-10">{{item.points}}pts</span>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="25" class="white-line-bloc-session-stats">
+                <div fxLayout="row" fxLayoutAlign="center end" fxFlex="40"><span class="font-size-10 font-extra-light dark-grey-blue" >Minimal score</span></div>
+                <div fxLayout="row" fxLayoutAlign="center" fxFlex="60"><span class="font-size-60 golden-yellow" >60%</span></div>
+
+              </div>
+              <div fxLayout="column" fxFlex="25">
+                <div fxLayout="row" fxLayoutAlign="center end" fxFlex="40"><span class="font-size-10 font-extra-light dark-grey-blue" >Total Time</span></div>
+                <div fxLayout="row" fxLayoutAlign="center" fxFlex="60" class="font-light dark-grey-blue purpley">
+                  <div fxLayout="column" fxLayoutAlign="center">
+                    <span class="font-size-15">{{getTotalTime().time}}</span>
+                  </div>
+                    <div fxLayout="column" fxLayoutAlign="end">
+                      <div fxLayout="row" fxFlex="45">
+                        <span class="font-size-8">{{getTotalTime().type}}</span>
+                      </div>
+                    </div>
+                  </div></div>
+              </div>
+
+
+          </div>
+        </div>
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center" fxLayoutGap="10px">
+        <div fxLayout="column" class="border-other-position" fxFlex="47">
+          <div fxLayout="row" fxFlexFill fxLayoutGap="15px">
+            <div fxLayout="column" fxFlex="40" fxLayoutAlign="center">
+              <span class="p-l-15 font-size-18 black">Other position</span>
+            </div>
+            <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+              <mat-form-field [style]="{'width': '100%', 'height': '50%', 'fontSize': '5px'}" appearance="outline">
+                <!--(blur)="searchData($event)"-->
+                <input  matInput type="search" placeholder="Search ..." [(ngModel)]="searchField" class="font-extra-light font-size-12">
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+              <mat-form-field [style]="{'width': '100%', 'height': '50%', 'fontSize': '5px'}" appearance="outline">
+                <mat-select   placeholder="Skill" class="font-light font-size-12" [(ngModel)]="selectSearchField">
+                  <mat-option *ngFor="let item of technologiesList" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" class="border-other-position" fxFlex="47">
+          <div fxLayout="row" fxFlexFill fxLayoutGap="15px">
+            <div fxLayout="column" fxFlex="40" fxLayoutAlign="center">
+              <span class="p-l-15 font-size-18 black">Your position</span>
+            </div>
+            <div fxLayout="column" fxFlex="60" fxLayoutAlign="center end" class="p-r-15">
+              <button class="btn-small bg-pale-grey-four" >
+                <span class="primaryColor" (click)="addRandomQuestion()">Add Random</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="65" fxLayoutAlign="center" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex="47" class="border-session-questions " >
+          <wid-scrollbar fxLayout="row" fxFlexFill>
+            <div fxLayout="column"
+                 fxFlexFill
+                 fxLayoutGap="10px"
+                 class="p-t-20 p-b-20 p-r-10 p-l-10"
+                 cdkDropList
+                 #blocList="cdkDropList"
+                 [cdkDropListConnectedTo]="[sessionList]"
+                 [cdkDropListData]="blocQuestionsList"
+                 (cdkDropListDropped)="dragAndDrop($event)">
+              <div fxLayout="row" class="question-bloc"
+                   *ngFor=" let item of blocQuestionsList |
+                   filterData: searchField: 'questionDetails.test_question_title' |
+                   filterData: selectSearchField: 'technology';
+                    index as indexPoint"
+                    cdkDrag>
+                <div fxLayout="column" fxFlexFill>
+                  <div fxLayout="row" fxFlexFill>
+                    <div fxLayout="column" fxFlex="18" [ngStyle]="{'background-color': getColors(item.questionDetails.TestQuestionKey.test_question_bloc_code)}" style="border-radius: 5px 0 0 5px"
+                         fxLayoutAlign="center center">
+                      <span class="font-size-11 white font-light">{{item.bloc_title}}</span>
+                    </div>
+                    <div fxLayout="column" fxFlex="55" class="p-l-5" fxLayoutAlign="center">
+                      <p class="font-size-9 font-light black">{{item.questionDetails.test_question_title}}</p>
+                    </div>
+                    <div fxLayout="column" fxFlex="18" fxLayoutAlign="center end">
+                      <div fxLayout="row" fxFlex="75">
+                        <div fxLayout="column" fxFlexFill class="white-line-bloc-session-stats" fxLayoutAlign="center">
+                          <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.test_level_code)"></wid-level-bloc>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="10" fxLayoutAlign="center center">
+                      <span class="font-size-11 help-blue">{{setDuration(item.questionDetails.duration)}}</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </wid-scrollbar>
+        </div>
+        <div fxLayout="column" fxFlex="47" class="border-session-questions">
+          <wid-scrollbar fxLayout="row" fxFlexFill >
+            <div fxLayout="column"
+                 fxFlexFill
+                 #sessionList="cdkDropList"
+                 fxLayoutGap="10px"
+                 class="p-t-20 p-b-20 p-r-10 p-l-10"
+                 cdkDropList
+                 [cdkDropListConnectedTo]="[blocList]"
+                 [cdkDropListData]="sessionQuestionsList"
+                 (cdkDropListDropped)="dragAndDrop($event)"
+                  >
+              <div fxLayout="row" class="question-bloc" *ngFor=" let item of sessionQuestionsList"  cdkDrag>
+                <div fxLayout="column" fxFlexFill>
+                  <div fxLayout="row" fxFlexFill>
+                <div fxLayout="column" fxFlex="18" [ngStyle]="{'background-color': getColors(item.questionDetails.TestQuestionKey.test_question_bloc_code)}" style="border-radius: 5px 0 0 5px" fxLayoutAlign="center center">
+                  <span class="font-size-11 white font-light">{{item.bloc_title}}</span>
+                </div>
+                <div fxLayout="column" fxFlex="55" class="p-l-5" fxLayoutAlign="center">
+                  <p class="font-size-9 font-light black">{{item.questionDetails.test_question_title}}</p>
+                </div>
+                <div fxLayout="column" fxFlex="18"  fxLayoutAlign="center end">
+                  <div fxLayout="row" fxFlex="75">
+                    <div fxLayout="column" fxFlexFill class="white-line-bloc-session-stats" fxLayoutAlign="center">
+                      <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.test_level_code)"></wid-level-bloc>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="10" fxLayoutAlign="center center">
+                  <span class="font-size-11 help-blue">{{setDuration(item.questionDetails.duration)}}</span>
+                </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </wid-scrollbar>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="15" fxLayoutAlign=" center">
+        <div fxLayout="column" fxFlex="50">
+          <button class="btn-small bg-pale-grey">
+            <span class="black font-size-11 font-normal">Back</span>
+          </button>
+        </div>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end">
+          <button mat-raised-button color="primary" class="btn-small">
+            <span class="font-size-11 white" (click)="addSessionQuestions()">Next</span>
+          </button>
+        </div>
+      </div>
+      </div>
+    </div>
+</div>
