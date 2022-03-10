@@ -15,7 +15,7 @@
       <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
     </div>
     <div  fxLayout="row" fxFlex="88">
-      <div fxLayout="column" fxFlexFill>
+      <div fxLayout="column" fxFlex="94">
         <div fxLayout="row" fxFlexFill *widDisabledForm="{'feature': featureAddUpdate, 'form': CreationForm}">
           <form [formGroup]="CreationForm" fxLayout="column" fxFlex="94" >
             <div fxLayout="row" fxFlex="6" fxLayoutAlign="space-around center ">
@@ -147,7 +147,7 @@
           </form>
         </div>
       </div>
-            <div fxLayout="column" fxLayoutAlign="start start" fxFlex="6">
+      <div fxLayout="column" fxLayoutAlign="start start" fxFlex="6">
               <div fxLayout="row" fxFlex="93" fxLayoutAlign=" end">
                 <div fxLayout="column" fxLayoutAlign="end" fxFlexFill>
                   <div fxLayout="row"  *ngFor="let item of addIndexation()">
