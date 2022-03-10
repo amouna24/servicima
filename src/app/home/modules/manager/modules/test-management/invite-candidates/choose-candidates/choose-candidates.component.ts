@@ -23,7 +23,6 @@ export class ChooseCandidatesComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    console.log(this.selection, 'selection by dhia ');
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSourceInvoiceAttachment.data.forEach(row => this.selection.select(row));

@@ -69,7 +69,6 @@ export class CustomizeSessionComponent implements OnInit {
   getBlocQuestionsData() {
     this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe((resNode) => {
       const quartLength = Math.ceil(resNode.length / 3);
-      console.log('quart length', quartLength);
       resNode.map((resOneNode, index) => {
         let addSessionQuestion = false;
         this.testService
@@ -318,12 +317,9 @@ export class CustomizeSessionComponent implements OnInit {
           addQuestion = false;
         }
       });
-      console.log(this.oldSessionQuestionList);
-      console.log('add question', addQuestion);
       if (addQuestion) {
         this.testService.addTestSessionQuestion(testSessionObject).subscribe( (result) => {
           addedQuestion += 1;
-          console.log(`question ${oneQuestion.questionDetails.test_question_title} added=`, result);
         });
       }
     });

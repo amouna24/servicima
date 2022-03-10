@@ -207,7 +207,6 @@ export class SessionInfoComponent implements OnInit {
 
       const index = this.allTechnology.indexOf(event.option);
       if (index === -1) {
-        console.log(this.allTechnology, '0');
         this.allTechnology = this.allTechnology.filter((data) => {
           if (data.value !== event.option.value) {
             return data;
@@ -236,13 +235,11 @@ export class SessionInfoComponent implements OnInit {
             this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`)
               .subscribe((questions) => {
                 i++;
-                console.log(questions, 'questions');
                 if (!questions['msg_code']) {
                   if (oneBloc.free) {
                     this.availableBlocQuestionsList.push(oneBloc);
                   }
                 }
-                console.log(i, 'index', resBlocQuestions['results'].length + 1, 'length');
                 if (i === resBlocQuestions['results'].length) {
                   resolve(this.availableBlocQuestionsList);
                 }
@@ -344,7 +341,6 @@ export class SessionInfoComponent implements OnInit {
    */
   getSelectedBlocArray() {
       this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
-        console.log('data=', data.route);
         this.selectedBlocArray = data.selectedBlocs.split(',');
         this.sessionCode = data.sessionCode;
       });
@@ -367,7 +363,6 @@ export class SessionInfoComponent implements OnInit {
     });
   }
   getSessionInfoData() {
-      console.log('session code', this.sessionCode);
     if (this.sessionCode && this.sessionCode !== 'undefined') {
       this.testService
         .getSessionInfo(`?company_email=${
@@ -375,7 +370,6 @@ export class SessionInfoComponent implements OnInit {
           this.applicationId}&session_code=${
           this.sessionCode}`)
         .subscribe( (sessionInfo) => {
-          console.log('copy paste=', sessionInfo[0].send_report);
           this.sessionInfo = sessionInfo[0];
           this.form.patchValue(
             {

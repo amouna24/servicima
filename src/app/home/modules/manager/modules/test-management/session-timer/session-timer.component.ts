@@ -49,7 +49,6 @@ export class SessionTimerComponent implements OnInit {
       data: { totalTime: this.totalTime },
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.totalTime = result;
         this.totalTimeType = 'min';
@@ -76,7 +75,6 @@ export class SessionTimerComponent implements OnInit {
       this.totalTime = this.totalTimePerQuestions;
       this.totalTimeType = this.totalTimePerQuestionsType;
     }
-    console.log('event=', event);
   }
   /**
    * @description Get connected user
@@ -98,7 +96,6 @@ export class SessionTimerComponent implements OnInit {
     this.testService
       .getSessionInfo(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&session_code=${this.sessionCode}`)
       .subscribe( (result) => {
-        console.log(result);
         const updateObject = result[0];
           updateObject.company_email =  this.companyEmailAddress;
           updateObject.application_id = this.applicationId;
@@ -108,7 +105,6 @@ export class SessionTimerComponent implements OnInit {
         updateObject.test_session_time = this.totalTimeType === 'h' ?
           this.totalTime  * 3600 : this.totalTimeType === 'min' ?
             this.totalTime * 60 : this.totalTime;
-        console.log('updated object', updateObject);
         this.testService.updateSessionInfo(updateObject).subscribe( (updatedSessionInfo) => {
          this.route.navigate(['/manager/test/invite-candidates']);
         });
@@ -136,7 +132,6 @@ export class SessionTimerComponent implements OnInit {
         .subscribe((sessionInfo) => {
           this.selectedTimerValue = sessionInfo[0].test_session_timer_type;
           if (this.selectedTimerValue === 'time_overall') {
-            console.log(this.getTime(Number(sessionInfo[0].test_session_time)).time);
             this.totalTime = this.getTime(Number(sessionInfo[0].test_session_time)).time;
             this.totalTimeType = this.getTime(sessionInfo[0].test_session_time).type;
           }

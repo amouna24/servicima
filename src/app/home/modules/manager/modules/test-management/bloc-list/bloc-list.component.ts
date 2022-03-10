@@ -9,6 +9,7 @@ import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { Router } from '@angular/router';
+import { ChangeDetectorRef  } from '@angular/core';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -43,10 +44,10 @@ export class BlocListComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private router: Router
   ) {
-    this.getSelectedBlocArray();
   }
 
   ngOnInit(): void {
+    this.getSelectedBlocArray();
     this.getConnectedUser();
     this.getDataFromLocalStorage();
     this.getTechnologies();
@@ -157,7 +158,6 @@ export class BlocListComponent implements OnInit {
   }
   getSelectedBlocArray() {
     this.utilsService.verifyCurrentRoute('/manager/test/bloc-list', true).subscribe( (data) => {
-      console.log('data', data);
       this.selectedBlocs = data.selectedBlocs.split(',');
       this.sessionCode = data.sessionCode;
     });

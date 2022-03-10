@@ -45,7 +45,6 @@ export class InviteCandidatesComponent implements OnInit {
      this.listCandidates = data['results'];
       this.listCandidates = _.orderBy(this.listCandidates, [user => user.fullName.toLowerCase()], ['asc']);
 
-      console.log(this.listCandidates, 'list candidates');
    });
   }
 

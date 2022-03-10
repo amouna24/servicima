@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column" *ngIf="selectedBlocs.length > 0"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Questions bloc</h1>
@@ -75,7 +75,7 @@
                           <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
                                    filterData: searchField: 'test_question_bloc_title' |
                                    filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
-                            <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkBoxEvent['checked'] ? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
+                            <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
                               <div fxLayout="column" fxFlexFill>
                                 <div fxLayout="row" >
                                   <div fxLayout="column" class="p-5">
