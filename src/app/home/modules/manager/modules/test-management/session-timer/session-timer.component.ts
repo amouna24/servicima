@@ -4,6 +4,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { TestService } from '@core/services/test/test.service';
+import { Router } from '@angular/router';
 
 import { OverallTimerDialogComponent } from './overall-timer-dialog/overall-timer-dialog.component';
 
@@ -31,6 +32,7 @@ export class SessionTimerComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private testService: TestService,
+    private route: Router,
   ) { }
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class SessionTimerComponent implements OnInit {
             this.totalTime * 60 : this.totalTime;
         console.log('updated object', updateObject);
         this.testService.updateSessionInfo(updateObject).subscribe( (updatedSessionInfo) => {
-          console.log(updatedSessionInfo , 'updated session');
+         this.route.navigate(['/manager/test/invite-candidates']);
         });
     });
     }

@@ -111,7 +111,7 @@ export class BlocListComponent implements OnInit {
     });
   }
   checkSelectedBloc(blocCode) {
-    let checked = false;
+    let checked;
     this.selectedBlocs.map( (oneBloc) => {
         if (oneBloc === blocCode) { checked  = true; }
     });
