@@ -1,4 +1,4 @@
-<div class="dynamic-component-container border-radius-20" fxLayout="column"  fxFlex="100">
+<div class="dynamic-component-container border-radius-20" fxLayout="column" *ngIf="selectedBlocs.length > 0"  fxFlex="100">
   <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">Questions bloc</h1>
@@ -27,7 +27,7 @@
                   </mat-label>
                   <mat-form-field [style]="{'width': '100%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
                     <!--(blur)="searchData($event)"-->
-                    <input  matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
+                    <input  matInput type="search" [(ngModel)]="searchField" placeholder="Search ..." class="font-extra-light font-size-12" [ngModelOptions]="{standalone: true}">
 
                   </mat-form-field>
                 </div>
@@ -36,19 +36,11 @@
                     Skills:
                   </mat-label>
                   <mat-form-field [style]="{'width': '100%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
-                    <mat-select   placeholder="Skill" class="font-light font-size-12">
+                    <mat-select     placeholder="Skill" [(ngModel)]="selectSearchField" class="font-light font-size-12" [ngModelOptions]="{standalone: true}">
+                      <mat-option *ngFor="let item of technologiesList" [value]="item.code">
+                        {{item.title}}
+                      </mat-option>
                     </mat-select>
-                  </mat-form-field>
-                </div>
-                <div fxLayout="column" fxFlex="8">
-                  <mat-label class="font-size-12 black font-normal">
-                    Level:
-                  </mat-label>
-                  <mat-form-field [style]="{'width': '100%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
-                    <mat-select   placeholder="Level" class="font-light font-size-12">
-
-                    </mat-select>
-
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" fxFlex="72">
@@ -80,8 +72,10 @@
                     <div fxLayout="column" fxFlex="97">
                       <ng-template [ngIf]="showVertical" >
                         <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
-                          <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList" >
-                            <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkBoxEvent['checked'] ? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
+                          <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
+                                   filterData: searchField: 'test_question_bloc_title' |
+                                   filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
+                            <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
                               <div fxLayout="column" fxFlexFill>
                                 <div fxLayout="row" >
                                   <div fxLayout="column" class="p-5">
@@ -126,7 +120,9 @@
                       <ng-template [ngIf]="!showVertical" >
                         <div fxLayout="row" fxFlexFill @blocQuestionsAppearance>
                           <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
-                            <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList">
+                            <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
+                                   filterData: searchField: 'test_question_bloc_title' |
+                                   filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
                               <mat-card [ngClass]="checkBoxOtherEvent['checked'] ? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'" >
                                 <div fxLayout="row" fxFlexFill>
                                   <div fxLayout="column"  fxLayoutAlign="center">
@@ -193,7 +189,9 @@
                     <div fxLayout="column" fxFlex="97">
                       <ng-template [ngIf]="showVertical" >
                         <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
-                          <div fxLayout="column" *ngFor="let oneOtherBloc of otherBlocQuestionsList">
+                          <div fxLayout="column" *ngFor="let oneOtherBloc of otherBlocQuestionsList |
+                                   filterData: searchField: 'test_question_bloc_title' |
+                                   filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
                             <mat-card class="bloc-list-card-vertical">
                               <div fxLayout="column" fxFlexFill>
                                 <div fxLayout="row" >
@@ -233,7 +231,9 @@
                       <ng-template [ngIf]="!showVertical">
                         <div fxLayout="row" fxFlexFill  @blocQuestionsAppearance>
                           <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
-                            <div fxLayout="row" *ngFor="let oneOtherBloc of otherBlocQuestionsList">
+                            <div fxLayout="row" *ngFor="let oneOtherBloc of otherBlocQuestionsList |
+                                   filterData: searchField: 'test_question_bloc_title' |
+                                   filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
                               <mat-card class="bloc-list-card-horizontal" >
                                 <div fxLayout="row" fxFlex="100">
                                   <div fxLayout="column" fxLayoutAlign="center">
@@ -300,12 +300,12 @@
         <div fxLayout="column" fxLayoutAlign=" end"  fxFlex="100">
               <div fxLayout="row" fxFlexFill fxLayoutGap="10px" fxLayoutAlign="end">
                 <div fxLayout="column">
-                  <button mat-raised-button class="btn-small " color="primary" (click)="moveToInfoSessionPage()">
+                  <button mat-raised-button class="btn-small " [disabled]="selectedBlocs.length === 0" color="primary" (click)="moveToInfoSessionPage()">
                     <span class="white">Next</span>
                   </button>
                 </div>
                 <div fxLayout="column">
-                  <button mat-raised-button class="btn-small bg-pale-grey">
+                  <button mat-raised-button class="btn-small bg-pale-grey" (click)="cancelSelectedBlocs()">
                     <span class="black">Cancel</span>
                   </button>
                 </div>

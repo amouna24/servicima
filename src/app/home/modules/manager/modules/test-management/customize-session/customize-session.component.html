@@ -219,13 +219,13 @@
       </div>
       <div fxLayout="row" fxFlex="15" fxLayoutAlign=" center">
         <div fxLayout="column" fxFlex="50">
-          <button class="btn-small bg-pale-grey">
+          <button class="btn-small bg-pale-grey" (click)="backToPreviousPage()">
             <span class="black font-size-11 font-normal">Back</span>
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end">
           <button mat-raised-button color="primary" class="btn-small">
-            <span class="font-size-11 white" (click)="addSessionQuestions()">Next</span>
+            <span class="font-size-11 white" (click)="saveAndMoveToTimerPage()">Next</span>
           </button>
         </div>
       </div>

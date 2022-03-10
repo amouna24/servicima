@@ -105,14 +105,14 @@
           </div>
           <div fxLayout="row" fxFlex="10" fxLayoutAlign=" center">
             <div fxLayout="column" fxFlex="50">
-                <button mat-raised-button class="btn-small bg-pale-grey" >
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="backToPreviousPage()">
                   <span class="black">Back</span>
                 </button>
             </div>
             <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end">
               <div fxLayout="row" fxLayoutGap="20px">
                 <div fxLayout="column">
-                  <button mat-raised-button class="btn-small bg-pale-grey" >
+                  <button mat-raised-button class="btn-small bg-pale-grey" (click)="cancelOverallTime()">
                     <span class="black"> Cancel</span>
                   </button>
                 </div>
