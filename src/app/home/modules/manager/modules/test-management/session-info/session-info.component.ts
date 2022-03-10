@@ -14,6 +14,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { ITestSessionInfoModel } from '@shared/models/testSessionInfo.model';
 
 import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
 import { IViewParam } from '@shared/models/view.model';
@@ -45,13 +47,15 @@ export class SessionInfoComponent implements OnInit {
 
   @ViewChild('technologyInput') technologyInput: ElementRef;
 
+  sessionInfo: ITestSessionInfoModel;
+  sessionCode: string;
   constructor(private testService: TestService,
-    private utilsService: UtilsService,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private formBuilder: FormBuilder, ) {
+              private utilsService: UtilsService,
+              private userService: UserService,
+              private localStorageService: LocalStorageService,
+              private formBuilder: FormBuilder,
+              private router: Router) {
     this.getSelectedBlocArray();
-
     this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
       startWith(null as any),
       map((technology: string | null) => technology ? this.filter(technology) : this.allTechnology.slice()));
@@ -69,6 +73,7 @@ export class SessionInfoComponent implements OnInit {
     this.testService.getLevel(`?application_id=${this.applicationId}&language_id=${this.languageId}`).subscribe(data => {
       this.listLevel = data;
     });
+    this.getSessionInfoData();
     await this.getBlocQuestions();
     this.mapQuestion();
   }
@@ -115,7 +120,6 @@ export class SessionInfoComponent implements OnInit {
   getLanguages(): IAppLanguage[] {
     return this.localStorageService.getItem('languages');
   }
-
   /**
    * @description : Add technology
    * @param event: MatChipInputEvent
@@ -262,53 +266,83 @@ export class SessionInfoComponent implements OnInit {
   /**
    * @description : add session information
    */
-  addSessionInformation() {
+  addOrUpdateSessionInformation() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
     } else {
-      const sessionObject: ITestSessionModel = {
-        application_id: this.localStorageService.getItem('userCredentials').application_id,
-        company_email: this.companyEmailAddress,
-        session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION`,
-        block_questions_code: this.technologies.map((oneBloc) => oneBloc.value).join(','),
-      };
-
-      this.testService.addSession(sessionObject).subscribe((session) => {
-        const testSessionInfo = {
+      if (!this.sessionInfo) {
+        const sessionObject: ITestSessionModel = {
+          application_id: this.localStorageService.getItem('userCredentials').application_id,
+          company_email: this.companyEmailAddress,
+          session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION`,
+          block_questions_code: this.technologies.map((oneBloc) => oneBloc.value).join(','),
+        };
+        this.testService.addSession(sessionObject).subscribe( (session) => {
+          const testSessionInfo = {
+            company_email: this.companyEmailAddress,
+            application_id: this.applicationId,
+            session_code: sessionObject.session_code, // à modifier
+            test_session_info_code:  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-INFO`,
+            session_name: this.form.controls.sessionName.value,
+            test_session_timer_type: 'time_per_question',
+            level_code: this.form.controls.experienceRequired.value,
+            language_id: this.form.controls.language.value,
+            copy_paste: this.form.controls.copyPaste.value,
+            send_report: this.form.controls.sendReport.value
+          };
+          this.testService.addTestSessionInfo(testSessionInfo).subscribe((data) => {
+            const queryObject = {
+              selectedBlocs: this.technologies.map( (tech) =>  tech.value),
+              sessionCode: sessionObject.session_code
+            };
+            this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
+            console.log(data, 'data');
+          }, error => {
+            console.error(error);
+          });
+        });
+      } else {
+        const updateSessionInfoObject: ITestSessionInfoModel = {
+          _id: this.sessionInfo._id,
+          TestSessionInfoKey: this.sessionInfo.TestSessionInfoKey,
           company_email: this.companyEmailAddress,
           application_id: this.applicationId,
-          session_code: sessionObject.session_code, // à modifier
-          test_session_info_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-INFO`,
+          session_code: this.sessionInfo.TestSessionInfoKey.session_code, // à modifier
+          test_session_info_code:  this.sessionInfo.TestSessionInfoKey.test_session_info_code,
           session_name: this.form.controls.sessionName.value,
-          test_session_timer_type: 'time_per_question',
+          test_session_timer_type: this.sessionInfo.test_session_timer_type,
           level_code: this.form.controls.experienceRequired.value,
+          test_session_time: this.sessionInfo.test_session_time,
           language_id: this.form.controls.language.value,
           copy_paste: this.form.controls.copyPaste.value,
           send_report: this.form.controls.sendReport.value
         };
-
-        this.testService.addTestSessionInfo(testSessionInfo).subscribe((data) => {
+        this.testService.updateSessionInfo(updateSessionInfoObject).subscribe( (sessionInfo) => {
           const queryObject = {
-            selectedBlocs: this.selectedBlocArray,
-            sessionCode: sessionObject.session_code
+            selectedBlocs: this.technologies.map( (tech) =>  tech.value),
+            sessionCode: updateSessionInfoObject.session_code
           };
           this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
-          console.log(data, 'data');
-        }, error => {
-          console.error(error);
         });
-      });
-
+      }
     }
+  }
+  backToPreviousPage() {
+      const queryObject = {
+        selectedBlocs: this.technologies.map( (tech) =>  tech.value),
+        sessionCode: this.sessionCode
+      };
+      this.utilsService.navigateWithQueryParam('/manager/test/bloc-list', queryObject);
   }
 
   /**
    * @description : get selected block
    */
   getSelectedBlocArray() {
-    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
-      this.selectedBlocArray = data.selectedBlocs.split(',');
-    });
+      this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
+        this.selectedBlocArray = data.selectedBlocs.split(',');
+        this.sessionCode = data.sessionCode;
+      });
   }
 
   /**
@@ -327,5 +361,24 @@ export class SessionInfoComponent implements OnInit {
 
     });
   }
-
+  getSessionInfoData() {
+    if (this.sessionCode && this.sessionCode !== 'undefined') {
+      this.testService
+        .getSessionInfo(`?company_email=${
+          this.companyEmailAddress}&application_id=${
+          this.applicationId}&session_code=${
+          this.sessionCode}`)
+        .subscribe( (sessionInfo) => {
+          this.sessionInfo = sessionInfo[0];
+          this.form.patchValue(
+            {
+              sessionName: sessionInfo[0].session_name,
+              experienceRequired: sessionInfo[0].level_code,
+              language: sessionInfo[0].language_id,
+              copyPaste: sessionInfo[0].copy_paste,
+              sendReport: sessionInfo[0].send_report,
+            });
+        });
+    }
+    }
 }

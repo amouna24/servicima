@@ -1,6 +1,7 @@
 import { ITestSessionQuestionKeyModel } from '@shared/models/testSessionQuestionKey.model';
 
 export interface ITestSessionQuestionModel {
+  _id?: string;
   TestSessionQuestionsKey?: ITestSessionQuestionKeyModel;
   application_id: string;
   company_email: string;

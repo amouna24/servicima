@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterDataPipe implements PipeTransform {
 
   transform(list: any[], filters: string, filterField: string) {
-    if (filters.length !== 0) {
+    if (filters && filters.length !== 0) {
       const objectKeysArray = filterField.split('.');
       return list.filter( (data) => {
         let selectField = data;
