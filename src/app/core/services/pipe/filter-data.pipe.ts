@@ -7,7 +7,6 @@ export class FilterDataPipe implements PipeTransform {
 
   transform(list: any[], filters: string, filterField: string) {
     if (filters && filters.length !== 0) {
-      console.log('filters=', filters);
       const objectKeysArray = filterField.split('.');
       return list.filter( (data) => {
         let selectField = data;
