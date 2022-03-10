@@ -42,7 +42,7 @@
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "4.0.0",
     "@swimlane/ngx-datatable": "17.0.0",
-    "@widigital-group/auth-npm-front": "^0.2.29",
+    "@widigital-group/auth-npm-front": "^0.2.31",
     "angular-password-strength-meter": "2.0.0",
     "angular2-signaturepad": "^3.0.4",
     "chart.js": "^2.9.3",

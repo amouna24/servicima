@@ -53,8 +53,7 @@ export class SessionInfoComponent implements OnInit {
     this.getSelectedBlocArray();
 
     this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
-      // @ts-ignore
-      startWith(null),
+      startWith(null as any),
       map((technology: string | null) => technology ? this.filter(technology) : this.allTechnology.slice()));
 
   }
@@ -203,7 +202,6 @@ export class SessionInfoComponent implements OnInit {
 
       const index = this.allTechnology.indexOf(event.option);
       if (index === -1) {
-        console.log(this.allTechnology, '0');
         this.allTechnology = this.allTechnology.filter((data) => {
           if (data.value !== event.option.value) {
             return data;
@@ -232,13 +230,11 @@ export class SessionInfoComponent implements OnInit {
             this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`)
               .subscribe((questions) => {
                 i++;
-                console.log(questions, 'questions');
                 if (!questions['msg_code']) {
                   if (oneBloc.free) {
                     this.availableBlocQuestionsList.push(oneBloc);
                   }
                 }
-                console.log(i, 'index', resBlocQuestions['results'].length + 1, 'length');
                 if (i === resBlocQuestions['results'].length) {
                   resolve(this.availableBlocQuestionsList);
                 }
