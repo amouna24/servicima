@@ -9,7 +9,6 @@ import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { Router } from '@angular/router';
-import { ChangeDetectorRef  } from '@angular/core';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
