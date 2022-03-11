@@ -98,7 +98,7 @@ export const candidateMenu: IMenu[] = [
         state: 'language',
         name: 'cand.menu.static.lang',
         icon: 'wi_res_language',
-        feature: 'RESUME_ACCESS_LANGAGE',
+        feature: 'RESUME_ACCESS_LANGUAGE',
         type: 'link',
       },
       {
