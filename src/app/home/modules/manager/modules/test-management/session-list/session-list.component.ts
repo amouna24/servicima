@@ -203,8 +203,4 @@ export class SessionListComponent implements OnInit {
           });
     });
    }
-  removeItemFromSessionArray(sessionCode) {
-    const newTableData = this.tableData.getValue();
-    this.tableData.next([]);
-  }
 }
