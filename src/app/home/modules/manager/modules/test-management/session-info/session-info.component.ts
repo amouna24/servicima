@@ -57,8 +57,7 @@ export class SessionInfoComponent implements OnInit {
               private router: Router) {
     this.getSelectedBlocArray();
     this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
-      // @ts-ignore
-      startWith(null),
+      startWith(null as any),
       map((technology: string | null) => technology ? this.filter(technology) : this.allTechnology.slice()));
 
   }

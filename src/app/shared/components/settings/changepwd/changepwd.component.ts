@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { CrossFieldErrorMatcher } from '@core/services/utils/validatorPassword';
 import { ProfileService } from '@core/services/profile/profile.service';
-import { AuthService } from '@widigital-group/auth-npm-front';
+import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
 import { UserService } from '@core/services/user/user.service';
 
 // import { AuthService } from '../../../../../../projects/auth-front-lib/src/public-api';
@@ -54,6 +54,7 @@ export class ChangePwdComponent implements OnInit, OnDestroy {
               private profileService: ProfileService,
               private localStorageService: LocalStorageService,
               private authService: AuthService,
+              private fingerPrintService: FingerPrintService,
               private userService: UserService,
               private router: Router,
               public  dialogRef: MatDialogRef<ChangePwdComponent>) { }
@@ -111,7 +112,9 @@ export class ChangePwdComponent implements OnInit, OnDestroy {
     };
     this.subscriptions.push(this.profileService.changePassword(newPassword).subscribe(
       () => {
-        this.subscriptions.push(this.authService.logout().subscribe(() => {
+        this.fingerPrintService.generateFingerPrint(btoa(this.localStorageService.getItem('userCredentials')['email_address']))
+        .then((result) => {
+        this.subscriptions.push(this.authService.logout(result).subscribe(() => {
             localStorage.removeItem('userCredentials');
             localStorage.removeItem('currentToken');
             this.userService.connectedUser$.next(null);
@@ -122,6 +125,7 @@ export class ChangePwdComponent implements OnInit, OnDestroy {
             console.error(err);
 
           }));
+        });
       },
       error => {
         alert('error , try it later');
