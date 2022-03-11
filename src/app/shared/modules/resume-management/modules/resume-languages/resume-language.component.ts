@@ -72,6 +72,7 @@ export class ResumeLanguageComponent implements OnInit {
     this.ratingEdit = [];
     this.langListRes = [];
     this.showLevelError = false;
+    this.featureAddUpdate = 'RESUME_ADD_LANGUAGE';
     this.getConnectedUser();
     this.createForm();
     await this.getLanguageRefData();
