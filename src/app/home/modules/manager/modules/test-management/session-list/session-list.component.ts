@@ -26,7 +26,9 @@ export class SessionListComponent implements OnInit {
   ngOnInit(): void {
     this.getConnectedUser();
     this.getDataFromLocalStorage();
-    this.getData(0, this.nbtItems.getValue());
+    this.getData(0, this.nbtItems.getValue()).then( (result) => {
+      this.tableData.next(result);
+    });
   }
   /**
    * @description Get connected user
@@ -47,51 +49,58 @@ export class SessionListComponent implements OnInit {
     this.isLoading.next(true);
     const blocData = [];
     let index = 1;
-    this.testService
-      .getSessionDataTable(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&beginning=${offset}&number=${limit}`)
-      .subscribe( (listSessions) => {
-        if (listSessions['results'].length !== 0) {
-          listSessions['results'].forEach((oneSession) => {
-            this.testService.getSessionQuestion(`?session_code=${
-              oneSession.TestSessionKey.session_code}&company_email=${
-              this.companyEmailAddress}&application_id=${
-              this.applicationId}`).subscribe((questionsList) => {
-              this.testService
-                .getSessionInfo(`?company_email=${
-                  this.companyEmailAddress}&application_id=${
-                  this.applicationId}&session_code=${
-                  oneSession.TestSessionKey.session_code}`).subscribe(async (oneSessionInfo) => {
-                return new Promise(async (resolve) => {
-                  blocData.push({
-                    session_code: oneSession.TestSessionKey.session_code,
-                    session_technologies: await this.getTechnologies(oneSession.TestSessionKey.block_questions_code),
-                    session_points: await this.getSessionPoints(questionsList),
-                    session_questions: questionsList.length,
-                    session_time: this.convertSessionTime(oneSessionInfo[0].test_session_time),
-                    level: await this.getLevel(oneSessionInfo[0].level_code),
-                    session_name: oneSessionInfo[0].session_name,
+    return new Promise( (resolve) => {
+      this.testService
+        .getSessionDataTable(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&beginning=${offset}&number=${limit}`)
+        .subscribe( (listSessions) => {
+          if (listSessions['results'].length !== 0) {
+            listSessions['results'].forEach((oneSession) => {
+              this.testService.getSessionQuestion(`?session_code=${
+                oneSession.TestSessionKey.session_code}&company_email=${
+                this.companyEmailAddress}&application_id=${
+                this.applicationId}`).subscribe((questionsList) => {
+                this.testService
+                  .getSessionInfo(`?company_email=${
+                    this.companyEmailAddress}&application_id=${
+                    this.applicationId}&session_code=${
+                    oneSession.TestSessionKey.session_code}`).subscribe(async (oneSessionInfo) => {
+                  return new Promise(async (resolveTwo) => {
+                    blocData.push({
+                      session_code: oneSession.TestSessionKey.session_code,
+                      session_technologies: await this.getTechnologies(oneSession.TestSessionKey.block_questions_code),
+                      session_points: await this.getSessionPoints(questionsList),
+                      session_questions: questionsList.length ? questionsList.length : 0,
+                      session_time: this.convertSessionTime(oneSessionInfo[0].test_session_time),
+                      level: await this.getLevel(oneSessionInfo[0].level_code),
+                      session_name: oneSessionInfo[0].session_name,
+                    });
+                    index++;
+                    if (index > listSessions['results'].length) {
+                      listSessions['results'] = blocData;
+                      resolveTwo(listSessions);
+                    }
+                  }).then((result) => {
+                    this.isLoading.next(false);
+                    resolve(result);
                   });
-                  index++;
-                  if (index > listSessions['results'].length) {
-                    listSessions['results'] = blocData;
-                    resolve(listSessions);
-                  }
-                }).then((result) => {
-                  this.isLoading.next(false);
-                  this.tableData.next(result);
-                });
 
+                });
               });
             });
-          });
-        } else {
-          this.isLoading.next(false);
-          this.tableData.next([]);
-        }
-          });
+          } else {
+            this.isLoading.next(false);
+            resolve([]);
+          }
+        });
+    });
   }
 
   switchAction(event: any) {
+    switch (event.actionType.name) {
+      case ('Delete session'):
+        this.deleteSession(event.data);
+        break;
+    }
   }
   getTechnologies(sessionBlocCodes) {
     const technologiesArray = [];
@@ -153,4 +162,45 @@ export class SessionListComponent implements OnInit {
     const displayedSeconds = Math.floor(time % 3600 % 60) <= 9 ? '0' + Math.floor(time % 60) : Math.floor(time % 60);
     return displayedHours !== '00' ? displayedHours + 'h' :  displayedMinutes !== '00' ? displayedMinutes + 'min' : displayedSeconds + 'sec';
   }
+
+   deleteSession(data) {
+    data.map( (oneSession) => {
+        this.testService
+          .getSessionInfo(`?company_email=${
+            this.companyEmailAddress}&application_id=${
+            this.applicationId}&session_code=${
+            oneSession.session_code}`)
+          .subscribe( (sessionInfo) => {
+            if (sessionInfo['msg_code'] !== '0004') {
+              this.testService.deleteSessionInfo(sessionInfo[0]._id).subscribe( (deletedSessionInfo) => {
+                console.log(`session info deleted`, deletedSessionInfo);
+                this.testService
+                  .getSession(`?company_email=${
+                    this.companyEmailAddress}&application_id=${
+                    this.applicationId}&session_code=${
+                    oneSession.session_code}`).subscribe( (session) => {
+                  this.testService.deleteSession(session[0]._id).subscribe( (deletedSession) => {
+                    this.testService
+                      .getSessionQuestion(`?company_email=${
+                        this.companyEmailAddress}&application_id=${
+                        this.applicationId}&session_code=${
+                        oneSession.session_code}`)
+                      .subscribe( (questions) => {
+                        if (questions['msg_code'] !== '0004') {
+                          questions.map( (oneQuestion, index) => {
+                            this.testService.deleteSessionQuestion(oneQuestion._id).subscribe( (deletedQuestion) => {
+                            });
+                          });
+                        }
+                      });
+                    this.getData(0, this.nbtItems.getValue()).then( (result) => {
+                      this.tableData.next(result);
+                    });
+                  });
+                });
+              });
+            }
+          });
+    });
+   }
 }

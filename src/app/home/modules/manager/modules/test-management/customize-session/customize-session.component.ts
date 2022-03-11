@@ -267,6 +267,7 @@ export class CustomizeSessionComponent implements OnInit {
   saveAndMoveToTimerPage() {
     this.addNewQuestions();
     this.deleteOldQuestions();
+    this.updateSessionTime();
       const queryObject = {
         selectedBlocs: this.selectedBlocArray,
         totalQuestion: this.sessionQuestionsList.length,
@@ -346,5 +347,27 @@ export class CustomizeSessionComponent implements OnInit {
           });
       }
     });
+  }
+  updateSessionTime() {
+    let sumTime = 0;
+    this.testService
+      .getSessionInfo(`?company_email=${
+        this.companyEmailAddress}&application_id=${
+        this.applicationId}&session_code=${
+        this.sessionCode}`)
+      .subscribe((sessionInfo) => {
+        if (sessionInfo[0].test_session_timer_type === 'time_per_question') {
+          this.sessionQuestionsList.map((oneQuestion) => sumTime += Number(oneQuestion.questionDetails.duration));
+          const newSessionObject = sessionInfo[0];
+          newSessionObject.session_code = newSessionObject.TestSessionInfoKey.session_code;
+          newSessionObject.test_session_info_code = newSessionObject.TestSessionInfoKey.test_session_info_code;
+          newSessionObject.company_email = newSessionObject.TestSessionInfoKey.company_email;
+          newSessionObject.application_id = newSessionObject.TestSessionInfoKey.application_id;
+          newSessionObject.test_session_time = sumTime;
+          this.testService.updateSessionInfo(newSessionObject).subscribe(( newInfo) => {
+            console.log('time updated to', sumTime);
+          });
+        }
+      });
   }
 }
