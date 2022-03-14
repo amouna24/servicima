@@ -40,11 +40,11 @@
                     <button mat-raised-button
                             class="steel-two btn-small bg-white border-radius-5"
                             [disabled]="button === 'Save'"
-                            *canBeDisplayed="'RESUME_UPDATE_DIPLOMAS'"
+                            *canBeDisplayed="{ feature: 'RESUME_UPDATE_DIPLOMAS' }"
                             (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
-                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" *canBeDisplayed="'RESUME_DELETE_DIPLOMAS'" (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
+                    <button mat-raised-button class="steel-two btn-small bg-white border-radius-5" *canBeDisplayed="{ feature: 'RESUME_DELETE_DIPLOMAS'}" (click)="deleteCertif(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
                   </div>
                 </div>
               </div>

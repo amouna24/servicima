@@ -7,8 +7,8 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { ITestSessionModel } from '@shared/models/testSession.model';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { Router } from '@angular/router';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -30,17 +30,26 @@ export class BlocListComponent implements OnInit {
   otherBlocQuestionsList: ITestQuestionBlocModel[] = [];
   imageUrl: string;
   selectedBlocs = [];
+  searchField = '';
+  selectSearchField: string;
+  applicationId: string;
+  technologiesList = [];
+  sessionCode: string;
   constructor(
     private testService: TestService,
     private userService: UserService,
     private utilsService: UtilsService,
     private dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private router: Router
   ) {
   }
 
   ngOnInit(): void {
+    this.getSelectedBlocArray();
     this.getConnectedUser();
+    this.getDataFromLocalStorage();
+    this.getTechnologies();
     this.showVertical = true;
     this.imageUrl = `${environment.uploadFileApiUrl}/image/`;
     this.gridIcon = 'assets/icons/tabler-icon-grid-dots.svg';
@@ -71,11 +80,16 @@ export class BlocListComponent implements OnInit {
         getApplicationID('SERVICIMA')}`)
       .subscribe( (resBlocQuestions) => {
         resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel) => {
-          if (oneBloc.free) {
-            this.availableBlocQuestionsList.push(oneBloc);
-          } else {
-            this.otherBlocQuestionsList.push(oneBloc);
-          }
+          this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`).subscribe( (questions) => {
+            if (!questions['msg_code']) {
+              if (oneBloc.free) {
+                this.availableBlocQuestionsList.push(oneBloc);
+              } else {
+                this.otherBlocQuestionsList.push(oneBloc);
+              }
+            }
+          });
+
         });
     });
   }
@@ -97,7 +111,7 @@ export class BlocListComponent implements OnInit {
     });
   }
   checkSelectedBloc(blocCode) {
-    let checked = false;
+    let checked;
     this.selectedBlocs.map( (oneBloc) => {
         if (oneBloc === blocCode) { checked  = true; }
     });
@@ -113,7 +127,38 @@ export class BlocListComponent implements OnInit {
   moveToInfoSessionPage() {
          const queryObject = {
         selectedBlocs: this.selectedBlocs,
+        sessionCode: this.sessionCode,
+        route: this.router.url.split('?')[0],
       };
       this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
+  }
+  getDataFromLocalStorage(): void {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
+  }
+  getTechnologies() {
+    this.technologiesList.push({
+      title: 'All',
+      code: '',
+    });
+          this.testService
+            .getTechnologies(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}`)
+            .subscribe((technoList) => {
+              technoList.map( (oneTechno) => {
+                this.technologiesList.push({
+                  title: oneTechno.technology_title,
+                  code: oneTechno.TestTechnologyKey.test_technology_code,
+                });
+              });
+            });
+  }
+  cancelSelectedBlocs() {
+    this.selectedBlocs = [];
+  }
+  getSelectedBlocArray() {
+    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list', true).subscribe( (data) => {
+      this.selectedBlocs = data.selectedBlocs.split(',');
+      this.sessionCode = data.sessionCode;
+    });
   }
 }
