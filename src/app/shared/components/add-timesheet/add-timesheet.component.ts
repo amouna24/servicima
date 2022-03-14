@@ -61,7 +61,7 @@ export class AddTimesheetComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.weekDays = this.holidayServices.initWeekDay();
+    this.weekDays = this.holidayServices.weekDays;
     this.getData().then((res) => this.isLoading.next(res));
   }
   /**
@@ -245,11 +245,11 @@ export class AddTimesheetComponent implements OnInit {
       }
       const statut = () => {
         if (value === 'submit') {
-          return 'Pending';
+          return 'PENDING';
         } else if (value === 'save') {
-          return 'Draft';
+          return 'DRAFT';
         } else if (value === 'approve' && this.formType.managerMode) {
-          return 'Approved';
+          return 'APPROVED';
         }
       };
       await this.initialForm.patchValue({
@@ -295,7 +295,7 @@ export class AddTimesheetComponent implements OnInit {
     ).toPromise().then(
       (data) => {
         if (this.formType.managerMode) {
-          this.router.navigate(['/manager/timesheet/Pending']);
+          this.router.navigate(['/manager/timesheet/PENDING']);
         } else {
           this.router.navigate(['/collaborator/timesheet/', this.formType.type]);
         }

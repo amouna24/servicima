@@ -4,7 +4,7 @@ import { ITimesheetModel } from '@shared/models/timesheet.model';
 
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '@environment/environment';
 
 @Injectable({
   providedIn: 'root'

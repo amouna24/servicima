@@ -6,10 +6,10 @@
   </div>
   <div fxLayout="row"  fxFlex="10" fxLayoutAlign="start start" class="p-0 p-l-15">
     <p class="font-size-17 steel m-0">
-      {{title ? title : 'Import'}}
+        {{title | translate }}
     </p>
   </div>
-  <div  fxLayout="column" fxFlex="80"  class="p-10 p-t-0">
+  <div  fxLayout="column" fxFlex="72"  class="p-10 p-t-0">
     <ng-template *ngIf="!isLoaded() else loaded">
       <wid-skeleton-loader fxFlex="100"
                            [nbrColumn]="3"
@@ -28,7 +28,7 @@
           <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100" class="full-height">
             <button (click)="selectAll()" type="submit"
                     class="btn-small pale-grey-four cursor-pointer bg-cerulean-blue m-b-10">
-              {{btnLabel}} All
+              <span>{{btnLabel | translate}} {{'confirm.list.all'}}</span>
             </button>
           </div>
         </div>
@@ -38,7 +38,7 @@
                   (ngSubmit)="actionClick(file)">
               <div class="p-b-10" fxFlex="55">
                 <ng-container *ngIf="!missingField(file) else nameNotFound">
-                  <p class="font-size-12 font-light p-0" [innerHTML]="setMessage(file)"
+                  <p class="font-size-12 font-light p-0" [innerHTML]="setMessage(file[message.field], this.message.message | translate)"
                      [ngClass]="file.selected ? 'steel' : 'black-three'">
                   </p>
                 </ng-container>
@@ -63,31 +63,31 @@
               <ng-container *ngIf="file.selected else selectBtn">
                 <div style="width: 109px">
                   <p class="font-size-11 font-normal cool-grey text-center" [ngStyle]="{'color': file['btnColor'] ? file['btnColor'] : '#afb1b8' }">
-                    {{file['btnLabel'] ? file['btnLabel'] : btnLabel}}
+                    {{file['btnLabel'] ? file['btnLabel'] : btnLabel | translate}}
                   </p>
                 </div>
               </ng-container>
               <ng-template #selectBtn>
                 <button type="submit" [disabled]="file.selected"
                         class="btn-small bg-pale-grey-four cursor-pointer cerulean-blue m-b-10" [ngStyle]="{'color': file['btnColor'] ? file['btnColor'] : '#afb1b8' }">
-                  {{file['btnLabel'] ? file['btnLabel'] : btnLabel}}
+                  {{file['btnLabel'] ? file['btnLabel'] : btnLabel | translate}}
                 </button>
               </ng-template>
             </form>
           </ng-container>
       </wid-scrollbar>
       </div>
-      <div *ngIf="detectUnknownFile()" fxFlex="8" fxFlexAlign="end end"
-           fxLayout="row" fxLayoutAlign="start center"
-           class="full-width bg-light-khaki border-radius-5 p-10">
-        <mat-icon svgIcon="wi_alert_warning" class="m-0 m-l-5 fill-golden-yellow"></mat-icon>
-        <p class="font-size-11 font-light black m-0 p-5">
-          <span class="golden-yellow font-normal font-size-12">Warning: </span>{{detectUnknownFile()}}
-        </p>
-
-      </div>
 
     </ng-template>
+
+  </div>
+  <div *ngIf="detectUnknownFile()" fxFlex="8" fxFlexAlign="end end"
+       fxLayout="row" fxLayoutAlign="start center"
+       class="full-width bg-light-khaki border-radius-5 p-10">
+    <mat-icon svgIcon="wi_alert_warning" class="m-0 m-l-5 fill-golden-yellow"></mat-icon>
+    <p class="font-size-11 font-light black m-0 p-5">
+      <span class="golden-yellow font-normal font-size-12">{{'confrim.list.warning' | translate}}: </span>{{detectUnknownFile()}}
+    </p>
 
   </div>
 </div>

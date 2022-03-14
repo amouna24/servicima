@@ -26,6 +26,10 @@ const routes: Routes = [
     path: 'collaborator',
     component: CollaboratorComponent
   },
+  {
+    path: 'payslip',
+    loadChildren: () => import('./payslip/payslip.module').then(m => m.PayslipModule),
+  },
 ];
 
 @NgModule({
