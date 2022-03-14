@@ -6,6 +6,7 @@ import { CustomizeSessionComponent } from './customize-session/customize-session
 import { SessionInfoComponent } from './session-info/session-info.component';
 import { SessionTimerComponent } from './session-timer/session-timer.component';
 import { SessionListComponent } from './session-list/session-list.component';
+import { InviteCandidatesComponent } from './invite-candidates/invite-candidates.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
   {
     path: 'session-list',
     component: SessionListComponent
+  },
+
+  {
+    path: 'invite-candidates',
+    component: InviteCandidatesComponent
   }
 ];
 

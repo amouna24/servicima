@@ -16,7 +16,7 @@ import { UserService } from '@core/services/user/user.service';
   styleUrls: ['./show-timesheet.component.scss']
 })
 export class ShowTimesheetComponent implements OnInit {
-  timesheet: any;
+  timesheet: ITimesheetModel | any;
   avatar: SafeUrl;
   user: IUserModel;
   id: string;
@@ -106,13 +106,22 @@ export class ShowTimesheetComponent implements OnInit {
   }
 
   getJobTitle() {
-    this.userService.connectedUser$.subscribe(
-      (data) => {
-          this.refData.getRefData(data.company._id, this.userService.applicationId, ['PROF_TITLES']).then(
+    const find = (refData, refCode) =>
+      refData.some( (col) => col.value === refCode) ?
+        refData.find( (col) => col.value === refCode) : refCode;
+    if (this.timesheet) {
+      this.userService.connectedUser$.subscribe(
+        (data) => {
+          this.refData.getRefData(data.company._id, this.userService.applicationId, ['TIMESHEET_TYPE']).then(
             (res) => {
-              this.userPosition = res['PROF_TITLES'].find( (col) => col.value === this.timesheet.user_position).viewValue;
+              this.userPosition = find(res['PROF_TITLES'], this.timesheet.user_position).viewValue;
+              this.timesheet.type_timesheet = find(res['TIMESHEET_TYPE'], this.timesheet.type_timeshee);
+              console.log(res);
             }
           );
-  });
+        });
+    } else {
+      this.getJobTitle();
+    }
   }
 }

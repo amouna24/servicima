@@ -204,6 +204,43 @@ export const iconsList: IIcon[] = [
     path: 'assets/icons/arrow-back.svg',
     viewBox: '0 0 25 11.811'
   },
+
+  {
+    name: 'cercle-done',
+    path: 'assets/icons/done-circle.svg',
+    viewBox: '0 0 25 11.811'
+  },
+
+  {
+    name: 'wi-phone',
+    path: 'assets/icons/phone-call.svg',
+    viewBox: '0 0 22 24.811'
+  },
+
+  {
+    name: 'email',
+    path: 'assets/icons/mail.svg',
+    viewBox: '0 0 22 24.811'
+  },
+
+  {
+    name: 'wi-sort-asc',
+    path: 'assets/icons/sort-ascending.svg',
+    viewBox: '0 0 25 11.811'
+  },
+
+  {
+    name: 'wi-sort-desc',
+    path: 'assets/icons/sort-descending.svg',
+    viewBox: '0 0 25 11.811'
+  },
+
+  /* search */
+  {
+    name: 'wi_search',
+    path: 'assets/icons/Iconly_Light_Search.svg',
+    viewBox: '0 0 22 7.811'
+  },
   /* Dynamic Data Table */
   {
     name: 'wi_add_user',

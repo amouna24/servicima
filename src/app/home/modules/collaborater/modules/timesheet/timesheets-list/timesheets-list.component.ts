@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { TimesheetService } from '@core/services/timesheet/timesheet.service';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./timesheets-list.component.scss']
 })
 
-export class TimesheetsListComponent implements OnInit {
+export class TimesheetsListComponent implements OnInit, OnDestroy {
 
   ELEMENT_DATA = new BehaviorSubject<ITimesheetModel[]>([]);
   isLoading = new BehaviorSubject<boolean>(true);
@@ -26,10 +26,7 @@ export class TimesheetsListComponent implements OnInit {
   typeTimesheet: string;
   subscriptionModal: Subject<boolean>;
   subscriptionDeleteModal: Subscription;
-
-  /**************************************************************************
-   * @description Variable used to destroy all subscriptions
-   *************************************************************************/
+  nbtItems = new BehaviorSubject<number>(5);
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private timesheetService: TimesheetService,
@@ -57,7 +54,7 @@ export class TimesheetsListComponent implements OnInit {
 getTimesheetParams(): void {
     this.route.params.subscribe(params => {
           this.typeTimesheet = params.type_timesheet;
-          this.getAllTimesheet();
+          this.getAllTimesheet(this.nbtItems.getValue(), 0);
       });
   }
 
@@ -77,13 +74,13 @@ getTimesheetParams(): void {
   /**
    * @description : get all timesheet of collaborator
    */
-  getAllTimesheet(): void {
-      this.timesheetService.getTimesheet(
+  getAllTimesheet(limit: number, offset: number): void {
+      this.timesheetService.getTimesheetPaginator(
         `?application_id=${this.userService.applicationId}` +
         `&company_email=${this.companyEmail}` +
         `&email_address=${this.userService.emailAddress}` +
         `&type_timesheet=${this.typeTimesheet}` +
-        `&status=ACTIVE`)
+        `&status=ACTIVE&beginning=${offset}&number=${limit}`)
         .toPromise().then((res) => {
           if (res) {
             this.ELEMENT_DATA.next(res);
@@ -152,7 +149,7 @@ getTimesheetParams(): void {
                   }
                 }
               });
-            this.getAllTimesheet();
+            this.getAllTimesheet(this.nbtItems.getValue(), 0);
             this.subscriptionDeleteModal.unsubscribe();
           }
         );
@@ -164,7 +161,7 @@ getTimesheetParams(): void {
    * @param rowAction: object
    */
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
+    switch (rowAction.actionType.name) {
       case ('update'):
         this.updateTimesheet(rowAction.data);
         break;
@@ -191,7 +188,18 @@ getTimesheetParams(): void {
     }];
   }
 
+  loadMoreItems(params) {
+    this.nbtItems.next(params.limit);
+    this.getAllTimesheet(params.limit, params.offset);
+  }
+
   modalData(code: string, title: string, description: string): any {
     return { code, title, description};
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 }

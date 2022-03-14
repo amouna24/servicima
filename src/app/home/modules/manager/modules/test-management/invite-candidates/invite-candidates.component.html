@@ -1,0 +1,29 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Session Information</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{"back" | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="column" fxFlex="88" class="font-size-12 black">
+    <div fxFlex="28"  fxLayoutAlign="center center" fxLayout="row"  class="session-ready">
+       your session is ready
+    </div>
+    <div fxFlex="20" fxLayoutAlign="center center">
+    <img  src="assets/icons/done-circle.svg" alt="" height="85px">
+  </div>
+    <div fxFlex="28" fxLayoutAlign="center center" class="font-size-18"> It's time to invite some candidates </div>
+    <div fxFlex="20" fxLayoutAlign="center center" >
+      <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+    </div>
+  </div>
+</div>

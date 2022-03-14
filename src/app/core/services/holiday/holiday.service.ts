@@ -13,7 +13,6 @@ import { UserService } from '@core/services/user/user.service';
   providedIn: 'root'
 })
 export class HolidayService {
-  private refData: IRefdataModel[];
   public weekDays: Array<{
     name: string,
     desc: string,
