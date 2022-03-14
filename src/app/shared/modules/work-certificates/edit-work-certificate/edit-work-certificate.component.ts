@@ -7,7 +7,6 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
-import { INationality } from '@shared/models/nationality.model';
 import { ILanguageModel } from '@shared/models/language.model';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';

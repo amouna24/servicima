@@ -10,9 +10,14 @@ import { CollaboratorComponent } from './collaborator/collaborator.component';
 import { SharedModule } from '@shared/shared.module';
 // tslint:disable-next-line:origin-ordered-imports
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
+import { ListOfCertificationComponent } from './certifications/list-of-certification/list-of-certification.component';
 
 @NgModule({
-    declarations: [HumanRessourcesComponent, CertificationListComponent, CollaboratorListComponent, CollaboratorComponent],
+    declarations: [HumanRessourcesComponent,
+        CertificationListComponent,
+        CollaboratorListComponent,
+        CollaboratorComponent,
+        ListOfCertificationComponent],
     exports: [
         CertificationListComponent
     ],

@@ -1,18 +1,18 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { IContractor } from '@shared/models/contractor.model';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { ContractorsService } from '@core/services/contractors/contractors.service';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { ModalService } from '@core/services/modal/modal.service';
-import { IContractorContact } from '@shared/models/contractorContact.model';
 import { takeUntil } from 'rxjs/operators';
+import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { IContractor } from '@shared/models/contractor.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { IContractorContact } from '@shared/models/contractorContact.model';
 import { UserService } from '@core/services/user/user.service';
-// tslint:disable-next-line:origin-ordered-imports
 import { ContractsService } from '@core/services/contracts/contracts.service';
+import { ModalService } from '@core/services/modal/modal.service';
+// tslint:disable-next-line:origin-ordered-imports
+import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { ShowModalComponent } from '../show-modal/show-modal.component';
 
 @Component({
@@ -33,6 +33,9 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   redirectUrl: string;
   addButtonLabel: string;
+  featureAccess: string;
+  tabFeatureAccess = [{ name: '', feature: ''}];
+  // featureImport: string;
 
   /**************************************************************************
    * @description DATA_TABLE paginations
@@ -64,11 +67,11 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, { static: true}) sort: MatSort;
 
   constructor(
-    private contractorService: ContractorsService,
-    private contractService: ContractsService,
-    private userService: UserService,
-    private router: Router,
-    private modalsServices: ModalService,
+      private contractorService: ContractorsService,
+      private contractService: ContractsService,
+      private userService: UserService,
+      private router: Router,
+      private modalsServices: ModalService,
   ) {
   }
 
@@ -98,15 +101,15 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   getInitialData() {
     this.subscriptions.push(
-      this.userService.connectedUser$.subscribe((data) => {
-      if (!!data) {
-        this.userInfo = data;
-        this.getContractors(this.nbtItems.getValue(), 0);
-      }
-    })
+        this.userService.connectedUser$.subscribe((data) => {
+          if (!!data) {
+            this.userInfo = data;
+            this.getContractors(this.nbtItems.getValue(), 0);
+          }
+        })
     );
     this.modalsServices.registerModals(
-      { modalName: 'showContact', modalComponent: ShowModalComponent });
+        { modalName: 'showContact', modalComponent: ShowModalComponent });
   }
 
   /**************************************************************************
@@ -140,22 +143,22 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   getContractors(limit, offset) {
     this.isLoading.next(true);
     this.contractorService.getContractors(
-      // tslint:disable-next-line:max-line-length
-      `?beginning=${offset}&number=${limit}&contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
+        // tslint:disable-next-line:max-line-length
+        `?beginning=${offset}&number=${limit}&contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
     ).pipe(
         takeUntil(this.destroy$)
-      )
-      .subscribe(
-      (response) => {
-        this.blocData = response['results'];
-        this.ELEMENT_DATA.next(this.blocData);
+    )
+        .subscribe(
+            (response) => {
+              this.blocData = response['results'];
+              this.ELEMENT_DATA.next(this.blocData);
 
-        response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
-      },
-      (error) => {
-        this.isLoading.next(true);
-      },
-    );
+              response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            },
+            (error) => {
+              this.isLoading.next(true);
+            },
+        );
   }
 
   /**************************************************************************
@@ -164,11 +167,27 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   addNewContractors() {
     if ( this.type === 'SUPPLIER') {
       this.redirectUrl = '/manager/contract-management/suppliers-contracts/suppliers';
-      this.addButtonLabel = 'New Supllier';
+      this.addButtonLabel = 'contractor.supp.add';
+       this.featureAccess = 'CONTRACT_ADD_CLIENT';
+      this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
+      this.tabFeatureAccess = [
+        { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_SUPPLIER'},
+        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'},
+        { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_SUPPLIER'},
+      ];
     } else {
       this.redirectUrl = '/manager/contract-management/clients-contracts/clients';
-      this.addButtonLabel = 'New Client';
+      this.addButtonLabel = 'contractor.client.add';
+       this.featureAccess = 'CONTRACT_ADD_SUPPLIER';
+      this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
+      this.tabFeatureAccess = [
+        { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_CLIENT'},
+        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'},
+        { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_CLIENT'},
+      ];
+      this.featureAccess = 'CONTRACT_IMPORT_CLIENT';
     }
+    console.log('tab contractor ', this.tabFeatureAccess);
   }
 
   /**************************************************************************
@@ -182,48 +201,48 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       description: `Are you sure you want to change status ?`,
     };
     this.subscriptionModal = this.modalsServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(
-        (res) => {
-          if (res === true) {
+        .pipe(
+            takeUntil(this.destroy$)
+        )
+        .subscribe(
+            (res) => {
+              if (res === true) {
 
-            const element = this.blocData.filter(x => x._id === Contractor._id)[0];
-            const index = this.ELEMENT_DATA.value.indexOf(element);
-            if (status === 'DISABLED') {
-              if (index !== -1) {
-                this.blocData.splice(index, 1);
-                this.ELEMENT_DATA.next(this.blocData.slice());
-                this.contractorService.disableContractor(Contractor._id)
-                  .pipe(
-                    takeUntil(this.destroy$)
-                  )
-                  .subscribe(
-                    (res1) => {
+                const element = this.blocData.filter(x => x._id === Contractor._id)[0];
+                const index = this.ELEMENT_DATA.value.indexOf(element);
+                if (status === 'DISABLED') {
+                  if (index !== -1) {
+                    this.blocData.splice(index, 1);
+                    this.ELEMENT_DATA.next(this.blocData.slice());
+                    this.contractorService.disableContractor(Contractor._id)
+                        .pipe(
+                            takeUntil(this.destroy$)
+                        )
+                        .subscribe(
+                            (res1) => {
 
-                    }
-                  );
+                            }
+                        );
+                  }
+
+                } else if (Contractor.status === 'ACTIVE') {
+                  if (index !== -1) {
+                    this.contractorService.enableContractor(Contractor._id)
+                        .pipe(
+                            takeUntil(this.destroy$)
+                        )
+                        .subscribe(
+                            (res1) => {
+                              this.getContractors(this.nbtItems.getValue(), 0);
+                            }
+                        );
+                  }
+
+                }
+                this.subscriptionModal.unsubscribe();
               }
-
-            } else if (Contractor.status === 'ACTIVE') {
-              if (index !== -1) {
-                this.contractorService.enableContractor(Contractor._id)
-                  .pipe(
-                    takeUntil(this.destroy$)
-                  )
-                  .subscribe(
-                    (res1) => {
-                      this.getContractors(this.nbtItems.getValue(), 0);
-                    }
-                  );
-              }
-
             }
-            this.subscriptionModal.unsubscribe();
-          }
-        }
-      );
+        );
   }
 
   /**************************************************************************
@@ -240,13 +259,13 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     }
     console.log('url ', url);
     this.router.navigate(
-      [url],
-      { queryParams: {
-          id: btoa(Contractor._id),
-          cc: btoa(Contractor.contractorKey.contractor_code),
-          ea: btoa(Contractor.contractorKey.email_address)
-      }
-      });
+        [url],
+        { queryParams: {
+            id: btoa(Contractor._id),
+            cc: btoa(Contractor.contractorKey.contractor_code),
+            ea: btoa(Contractor.contractorKey.email_address)
+          }
+        });
   }
   /**************************************************************************
    * @description: Function to call updateMail Dialog with current data
@@ -260,20 +279,20 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       description: `Are you sure you want to delete ?`,
     };
     this.subscriptionModal = this.modalsServices.displayConfirmationModal(confirmation, '560px', '300px')
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe((res) => {
-          if (res === true) {
-             this.contractorService.disableContractor(Contractor._id).pipe(
-               takeUntil(this.destroy$)
-             ).subscribe(
+        .pipe(
+            takeUntil(this.destroy$)
+        )
+        .subscribe((res) => {
+              if (res === true) {
+                this.contractorService.disableContractor(Contractor._id).pipe(
+                    takeUntil(this.destroy$)
+                ).subscribe(
 
-             );
-          }
-      }
+                );
+              }
+            }
 
-      );
+        );
   }
   /**************************************************************************
    * @description: Show Contact
@@ -281,34 +300,34 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Contact of Contractor
    *************************************************************************/
   async showContact(Contractor: IContractor) {
-      this.contractorService.getContractorsContact(
+    this.contractorService.getContractorsContact(
         `?contractor_code=${Contractor.contractorKey.contractor_code}&email_address=${Contractor.contractorKey.email_address}`
-      )
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe(
-        (res) => {
-          this.contractorContactInfo = res[0];
-          this.modalsServices.displayModal(
-            'showContact',
-            {
-              contractor: Contractor,
-              contractorInfo: this.contractorContactInfo,
+    )
+        .pipe(
+            takeUntil(this.destroy$),
+        )
+        .subscribe(
+            (res) => {
+              this.contractorContactInfo = res[0];
+              this.modalsServices.displayModal(
+                  'showContact',
+                  {
+                    contractor: Contractor,
+                    contractorInfo: this.contractorContactInfo,
+                  },
+                  '55%')
+                  .pipe(
+                      takeUntil(this.destroy$)
+                  )
+                  .subscribe(
+                      (resp) => {
+                      }
+                  );
             },
-            '55%')
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-            (resp) => {
+            (error) => {
+              console.log(error);
             }
-          );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        );
   }
 
   /**************************************************************************
@@ -318,15 +337,16 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    * rowAction [show, update, delete]
    *************************************************************************/
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('show'): this.showContact(rowAction.data);
-      break;
-      case ('update'): this.updateContractor(rowAction.data);
-      break;
-     case('disabled'): this.onStatusChange(rowAction.data, 'DISABLED');
-     break;
-      case('active'): this.onStatusChange(rowAction.data, 'ACTIVE');
-      break;
+    switch (rowAction.actionType.name) {
+      case (this.tabFeatureAccess[0].name): this.updateContractor(rowAction.data);
+        break;
+      case (this.tabFeatureAccess[1].name): this.showContact(rowAction.data);
+        break;
+      case(this.tabFeatureAccess[2].name): this.onStatusChange(rowAction.data, 'ACTIVE');
+        break;
+      case('update'):
+        this.updateContractor(rowAction.data);
+        break;
     }
   }
 

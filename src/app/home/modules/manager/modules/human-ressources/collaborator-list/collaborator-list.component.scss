@@ -71,7 +71,13 @@
 ::ng-deep .mat-paginator-page-size{
   display: none !important;
 }
+.mat-list-base {
+  padding-top: 4px !important;
+}
 
+.mat-list-base .mat-list-item {
+  height: 35px !important;
+}
 
 
 

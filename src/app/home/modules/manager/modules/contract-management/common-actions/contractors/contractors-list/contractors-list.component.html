@@ -1,13 +1,15 @@
 <!-- DYNAMIC DATA TABLE -->
 <wid-dynamic-data-table
-  [tableData]="ELEMENT_DATA"
-  [tableCode]="'CONTRACTOR_S'"
-  [isLoading]="isLoading"
-  [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel}"
-  [allowedActions]="['update', 'disabled','active']"
-  (rowActionData)="switchAction($event)"
-  (pagination)="loadMoreItems($event)"
-  [setAvatar]="{columnCode:'email_address', imgSrc: 'photo' }"
+        [tableData]="ELEMENT_DATA"
+        [tableCode]="'CONTRACTOR_S'"
+        [isLoading]="isLoading"
+        [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel,feature: 'CONTRACT_ADD_CLIENT'}"
+        [singleAction]="{name:'certification.import', feature: 'HR_IMPORT_CERTIF'}"
+        [allowedActions]="tabFeatureAccess"
+        (rowActionData)="switchAction($event)"
+        (pagination)="loadMoreItems($event)"
+        [setAvatar]="{columnCode:'email_address', imgSrc: 'photo' }"
 >
 </wid-dynamic-data-table>
 <!--         END        -->
+

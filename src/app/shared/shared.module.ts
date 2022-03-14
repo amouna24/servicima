@@ -176,6 +176,7 @@ import { CompleteRequiredInformationComponent } from './components/complete-requ
     CanBeDisplayedDirective,
     CantBeDisplayedDirective,
     CanNotDisplayDirective,
+
   ]
 })
 export class SharedModule { }

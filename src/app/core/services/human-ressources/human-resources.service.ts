@@ -57,11 +57,18 @@ export class HumanRessourcesService {
   }
   /*------------------------------------ CONTRACT --------------------------------------*/
   /**************************************************************************
-   * @description Add new Bank
-   * @param contract: Banking Model
+   * @description Add new contract
+   * @param contract: ContractHR Model
    *************************************************************************/
   addContract(contract: IHrContract): Observable<any> {
     return this.httpClient.post<IHrContract>(`${environment.hrContractApiUrl}`, contract);
+  }
+  /**************************************************************************
+   * @description Add new Bank
+   * @param contract: Banking Model
+   *************************************************************************/
+  getContractById(ID: string): Observable<any> {
+    return this.httpClient.get<IHrContract>(`${environment.hrContractApiUrl}?_id=${ID}`);
   }
 
   /**************************************************************************
@@ -444,7 +451,7 @@ export class HumanRessourcesService {
    * @param certificate : certification want to generating
    *************************************************************************/
   generateCertif(certificate: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.pdfFileApiUrl}`, certificate);
+    return this.httpClient.post<any>(`${environment.workCertificateApiUrl}/pdf`, certificate);
   }
   /**************************************************************************
    * @description Delete workcertificate

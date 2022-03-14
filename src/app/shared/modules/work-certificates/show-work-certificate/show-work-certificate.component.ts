@@ -8,14 +8,15 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 // tslint:disable-next-line:origin-ordered-imports
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalService } from '@core/services/modal/modal.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subject, Subscription } from 'rxjs';
 import { SignatureCertificateComponent } from '@shared/modules/work-certificates/signature-certificate/signature-certificate.component';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { IViewParam } from '@shared/models/view.model';
 import {  dataAppearance, showBloc } from '@shared/animations/animations';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-show-work-certificate',
@@ -47,6 +48,7 @@ export class ShowWorkCertificateComponent implements OnInit {
   companyName: string;
   infoUser: IUserInfo;
   nationalitiesList: IViewParam[] = [];
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   /**************************************************************************
    * @description get initial data
@@ -60,21 +62,43 @@ export class ShowWorkCertificateComponent implements OnInit {
     private location: Location,
     private router: Router,
     private modalService: ModalService,
+    private route: ActivatedRoute,
 
-) {
-    this.getData();
+  ) {
+
   }
   /**************************************************************************
    * @description init form
    *************************************************************************/
-  async ngOnInit() {
-    this.modalService.registerModals(this.modals);
+  async ngOnInit(): Promise<void> {
+    await this.route.queryParams
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(async (params) => {
+          const idCertif = params.idCertif;
+          this.collaborator = params.collaborator;
+          await this.getWorkCertificate(idCertif);
+          console.log('my certificate ', this.certificate);
+        });
     await this.getConnectedUser();
 
-    if (this.certificate.request_type === 'CERT') {
-      this.requestType = 'rh_title_certif';
-    } else { this.requestType = 'rh_exp_certif'; }
+    this.modalService.registerModals(this.modals);
+
     await  this.getRefData();
+  }
+ async getWorkCertificate(ID) {
+    forkJoin([
+      this.hrService.getWorkCertificate(ID)
+    ])
+        .pipe(
+            takeUntil(this.destroy$),
+        )
+        .subscribe(async res => {
+     this.certificate = await res[0]['results'][0];
+            if (this.certificate.request_type === 'CERT') {
+                this.requestType = 'rh_title_certif';
+            } else { this.requestType = 'rh_exp_certif'; }
+      console.log('my work certificate' , this.certificate);
+        });
   }
   /**************************************************************************
    * @description get Ref data
@@ -147,6 +171,7 @@ export class ShowWorkCertificateComponent implements OnInit {
     this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.infoUser = data;
+        console.log('get info user ', this.infoUser);
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
         this.companyEmail = data['company'][0]['companyKey']['email_address'];
@@ -159,13 +184,6 @@ export class ShowWorkCertificateComponent implements OnInit {
    *************************************************************************/
   backClicked() {
     this.location.back();
-  }
-  /**************************************************************************
-   * @description get data from the previous route
-   *************************************************************************/
-  getData() {
-    this.certificate = this.router.getCurrentNavigation()?.extras?.state?.certificate;
-    this.collaborator = this.router.getCurrentNavigation()?.extras.state?.collaborator;
   }
   /**************************************************************************
    * @description on sign click
