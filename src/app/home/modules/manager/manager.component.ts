@@ -49,7 +49,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
               'vat_nbr', 'phone_nbr1', 'phone_nbr2', 'fax_nbr', 'contact_email', 'currency_id', 'employee_nbr', 'capital'];
             this.completeRequiredInformation.userInformation = this.ValidateRequiredInformation(data['user'][0], requiredFieldUser);
             this.completeRequiredInformation.companyInformation = this.ValidateRequiredInformation(data['company'][0], requiredFieldCompany);
-           // this.showPopRequiredInformation();
+            this.showPopRequiredInformation();
           }
         );
       }

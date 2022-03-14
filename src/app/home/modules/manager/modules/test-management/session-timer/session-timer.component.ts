@@ -25,6 +25,7 @@ export class SessionTimerComponent implements OnInit {
    companyEmailAddress: string;
    applicationId: string;
    languageId: string;
+  selectedBlocArray = [];
   constructor(
     private dialog: MatDialog,
     private utilsService: UtilsService,
@@ -38,7 +39,7 @@ export class SessionTimerComponent implements OnInit {
     this.getData();
     this.getConnectedUser();
     this.getDataFromLocalStorage();
-    this.selectedTimerValue = 'time_per_question';
+    this.getSessionTimeData();
   }
 
   chooseOverallTime() {
@@ -48,7 +49,6 @@ export class SessionTimerComponent implements OnInit {
       data: { totalTime: this.totalTime },
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.totalTime = result;
         this.totalTimeType = 'min';
@@ -67,6 +67,7 @@ export class SessionTimerComponent implements OnInit {
       this.totalTimePerQuestionsType = data.totalTimeType;
       this.totalTimeType = data.totalTimeType;
       this.totalPoints =   data.totalPoints;
+      this.selectedBlocArray = data.selectedBlocs;
     });
   }
   chosenTime(event: any) {
@@ -74,7 +75,6 @@ export class SessionTimerComponent implements OnInit {
       this.totalTime = this.totalTimePerQuestions;
       this.totalTimeType = this.totalTimePerQuestionsType;
     }
-    console.log('event=', event);
   }
   /**
    * @description Get connected user
@@ -96,7 +96,6 @@ export class SessionTimerComponent implements OnInit {
     this.testService
       .getSessionInfo(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&session_code=${this.sessionCode}`)
       .subscribe( (result) => {
-        console.log(result);
         const updateObject = result[0];
           updateObject.company_email =  this.companyEmailAddress;
           updateObject.application_id = this.applicationId;
@@ -106,10 +105,46 @@ export class SessionTimerComponent implements OnInit {
         updateObject.test_session_time = this.totalTimeType === 'h' ?
           this.totalTime  * 3600 : this.totalTimeType === 'min' ?
             this.totalTime * 60 : this.totalTime;
-        console.log('updated object', updateObject);
         this.testService.updateSessionInfo(updateObject).subscribe( (updatedSessionInfo) => {
          this.route.navigate(['/manager/test/invite-candidates']);
         });
     });
     }
+  cancelOverallTime() {
+    this.selectedTimerValue = 'time_per_question';
+    this.totalTime = this.totalTimePerQuestions;
+    this.totalTimeType = this. totalTimePerQuestionsType;
+  }
+  backToPreviousPage() {
+    const queryObject = {
+      sessionCode: this.sessionCode,
+      selectedBlocs: this.selectedBlocArray,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
+  }
+  getSessionTimeData() {
+    if (this.sessionCode && this.sessionCode !== 'undefined') {
+      this.testService
+        .getSessionInfo(`?company_email=${
+          this.companyEmailAddress}&application_id=${
+          this.applicationId}&session_code=${
+          this.sessionCode}`)
+        .subscribe((sessionInfo) => {
+          this.selectedTimerValue = sessionInfo[0].test_session_timer_type;
+          if (this.selectedTimerValue === 'time_overall') {
+            this.totalTime = this.getTime(Number(sessionInfo[0].test_session_time)).time;
+            this.totalTimeType = this.getTime(sessionInfo[0].test_session_time).type;
+          }
+        });
+    }
+  }
+  getTime(sumTime) {
+    const displayedHours = Math.floor(sumTime / 3600) <= 9 ? Math.floor(sumTime / 3600) : Math.floor(sumTime / 3600);
+    const displayedMinutes = Math.floor(sumTime % 3600 / 60) <= 9 ? Math.floor(sumTime / 60) : Math.floor(sumTime / 60);
+    const displayedSeconds = Math.floor(sumTime % 3600 % 60) <= 9 ? Math.floor(sumTime % 60) : Math.floor(sumTime % 60);
+    return  {
+      time: displayedHours !== 0 ? displayedHours :  displayedMinutes !== 0 ? displayedMinutes : displayedSeconds,
+      type: sumTime < 60 ? 'sec'  : sumTime < 3600 ? 'min' : 'h',
+    };
+  }
 }

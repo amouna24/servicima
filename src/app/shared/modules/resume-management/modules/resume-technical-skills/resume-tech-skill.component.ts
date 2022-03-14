@@ -176,7 +176,7 @@ this.button = 'Add'; }
       technical_skill_desc: techSkill.technical_skill_desc,
       technologies: techSkill.technologies,
     });
-    this.featureAddUpdate = 'RESUME_UPDATE_TECH_SKILL';
+    this.featureAddUpdate = 'RESUME_UPDATE_TECH_SKILLS';
     this.techSkillArray.splice(pointIndex, 1);
     this.technicalSkillCode = techSkill.ResumeTechnicalSkillsKey.technical_skill_code;
     this.id = techSkill._id;

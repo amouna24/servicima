@@ -7,6 +7,9 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { Color } from 'ng2-charts';
 import { ChartType } from 'chart.js';
 import { ITestSessionQuestionModel } from '@shared/models/testSessionQuestion.model';
+import { Router } from '@angular/router';
+import { UserService } from '@core/services/user/user.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 @Component({
   selector: 'wid-customize-session',
   templateUrl: './customize-session.component.html',
@@ -22,9 +25,14 @@ export class CustomizeSessionComponent implements OnInit {
   selectedBlocsStringFormat: string;
   technologiesList = [];
   sessionCode: string;
+  applicationId: string;
+  companyEmailAddress: string;
   constructor(
     private testService: TestService,
     private utilsService: UtilsService,
+    private router: Router,
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
   ) {
     this.getChartParams();
     this.getSelectedBlocArray();
@@ -36,7 +44,12 @@ export class CustomizeSessionComponent implements OnInit {
     technology?: string
     color: string
   }> = [];
-
+  oldSessionQuestionList: Array<{
+    questionDetails: ITestQuestionModel,
+    bloc_title: string,
+    technology?: string
+    color: string
+  }> = [];
   sessionQuestionsList: Array<{
   questionDetails: ITestQuestionModel,
   bloc_title: string,
@@ -47,6 +60,8 @@ export class CustomizeSessionComponent implements OnInit {
   selectSearchField = '';
 
   async ngOnInit(): Promise<void> {
+    this.getDataFromLocalStorage();
+    this.getConnectedUser();
     await this.getBlocQuestionsData();
     this.getBlocTitleAndPoints();
     this.getTechnologies();
@@ -54,30 +69,66 @@ export class CustomizeSessionComponent implements OnInit {
   getBlocQuestionsData() {
     this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe((resNode) => {
       const quartLength = Math.ceil(resNode.length / 3);
-      console.log('quart length', quartLength);
       resNode.map((resOneNode, index) => {
+        let addSessionQuestion = false;
         this.testService
           .getQuestionBloc(`?test_question_bloc_code=${resOneNode.TestQuestionKey.test_question_bloc_code}`)
           .subscribe((resBlocQuestion) => {
-            if
-            (this.sessionQuestionsList.length <= quartLength - 1) {
-              this.sessionQuestionsList.push({
-                questionDetails: resOneNode,
-                bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
-                color: colorList[index]
-              });
-            } else {
-              this.testService
-                .getTechnologies(`?test_technology_code=${resBlocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
-                .subscribe((oneBlocItem) => {
-                  this.blocQuestionsList.push({
-                    questionDetails: resOneNode,
-                    bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
-                    technology: oneBlocItem[0].technology_title,
-                    color: colorList[index]
+            this.testService
+              .getSessionQuestion(`?company_email=${
+                this.companyEmailAddress}&application_id=${
+                this.applicationId}&session_code=${
+                this.sessionCode}`)
+              .subscribe( (questionsList) => {
+                if (questionsList['msg_code'] !== '0004') {
+                  questionsList.forEach( (oneQuestion) => {
+                    if (oneQuestion.TestSessionQuestionsKey.test_question_code === resOneNode.TestQuestionKey.test_question_code) {
+                      addSessionQuestion = true;
+                    }
                   });
-                });
-            }
+                          if (addSessionQuestion) {
+                          this.sessionQuestionsList.push({
+                            questionDetails: resOneNode,
+                            bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
+                            color: colorList[index]
+                          });
+                        } else {
+                          this.testService
+                            .getTechnologies(`?test_technology_code=${resBlocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
+                            .subscribe((oneBlocItem) => {
+                              this.blocQuestionsList.push({
+                                questionDetails: resOneNode,
+                                bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
+                                technology: oneBlocItem[0].technology_title,
+                                color: colorList[index]
+                              });
+                            });
+                        }
+                  this.oldSessionQuestionList = [...this.sessionQuestionsList];
+                } else {
+                  if
+                  (this.sessionQuestionsList.length <= quartLength - 1) {
+                    this.sessionQuestionsList.push({
+                      questionDetails: resOneNode,
+                      bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
+                      color: colorList[index]
+                    });
+                  } else {
+                    this.testService
+                      .getTechnologies(`?test_technology_code=${resBlocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
+                      .subscribe((oneBlocItem) => {
+                        this.blocQuestionsList.push({
+                          questionDetails: resOneNode,
+                          bloc_title: resBlocQuestion['results'][0]?.test_question_bloc_title,
+                          technology: oneBlocItem[0].technology_title,
+                          color: colorList[index]
+                        });
+                      });
+                  }
+                }
+
+              });
+
             this.totalPoints += Number(resOneNode.mark);
           });
       });
@@ -213,9 +264,47 @@ export class CustomizeSessionComponent implements OnInit {
     });
     return totalPoint;
   }
-  addSessionQuestions() {
+  saveAndMoveToTimerPage() {
+    this.addNewQuestions();
+    this.deleteOldQuestions();
+    this.updateSessionTime();
+      const queryObject = {
+        selectedBlocs: this.selectedBlocArray,
+        totalQuestion: this.sessionQuestionsList.length,
+        totalTime: this.getTotalTime().time,
+        totalTimeType: this.getTotalTime().type,
+        totalPoints: this.getTotalPoints(),
+        sessionCode: this.sessionCode,
+      };
+      this.utilsService.navigateWithQueryParam('/manager/test/session-timer', queryObject);
+  }
+  getDataFromLocalStorage(): void {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
+  }
+
+  /**
+   * @description Get connected user
+   */
+  getConnectedUser() {
+    this.userService.connectedUser$
+      .subscribe(
+        (userInfo) => {
+          if (userInfo) {
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+        });
+  }
+  backToPreviousPage() {
+    const queryObject = {
+      sessionCode: this.sessionCode,
+      selectedBlocs: this.selectedBlocArray,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
+  }
+  addNewQuestions() {
     let addedQuestion = 1;
     this.sessionQuestionsList.map( (oneQuestion, index) => {
+      let addQuestion = true;
       const testSessionObject: ITestSessionQuestionModel = {
         application_id: oneQuestion.questionDetails.TestQuestionKey.application_id,
         company_email: oneQuestion.questionDetails.TestQuestionKey.company_email,
@@ -224,18 +313,61 @@ export class CustomizeSessionComponent implements OnInit {
         test_session_questions_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-QUESTION`,
         test_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_code,
       };
-      this.testService.addTestSessionQuestion(testSessionObject).subscribe( (result) => {
-        addedQuestion += 1;
-        console.log(`question ${oneQuestion.questionDetails.test_question_title} added=`, result);
+      this.oldSessionQuestionList.map( (oneOldQuestion) => {
+        if (oneOldQuestion.questionDetails.TestQuestionKey.test_question_code === oneQuestion.questionDetails.TestQuestionKey.test_question_code) {
+          addQuestion = false;
+        }
       });
+      if (addQuestion) {
+        this.testService.addTestSessionQuestion(testSessionObject).subscribe( (result) => {
+          addedQuestion += 1;
+        });
+      }
     });
-      const queryObject = {
-        totalQuestion: this.sessionQuestionsList.length,
-        totalTime: this.getTotalTime().time,
-        totalTimeType: this.getTotalTime().type,
-        totalPoints: this.getTotalPoints(),
-        sessionCode: this.sessionCode,
-      };
-      this.utilsService.navigateWithQueryParam('/manager/test/session-timer', queryObject);
+  }
+  deleteOldQuestions() {
+    this.oldSessionQuestionList.map( (oldQuestion) => {
+      let deleteQuestion = true;
+      this.sessionQuestionsList.map( (oneQuestion) => {
+        if (oldQuestion.questionDetails.TestQuestionKey.test_question_code === oneQuestion.questionDetails.TestQuestionKey.test_question_code) {
+          deleteQuestion = false;
+        }
+      });
+      if (deleteQuestion) {
+        this.testService
+          .getSessionQuestion(`?test_question_code=${
+            oldQuestion.questionDetails.TestQuestionKey.test_question_code}&session_code=${
+            this.sessionCode}&company_email=${
+            this.companyEmailAddress}&application_id=${
+            this.applicationId}`)
+          .subscribe( (question) => {
+            this.testService.deleteSessionQuestion(question[0]._id).subscribe( (oneQuestion) => {
+              console.log('deleted question', oneQuestion);
+            });
+          });
+      }
+    });
+  }
+  updateSessionTime() {
+    let sumTime = 0;
+    this.testService
+      .getSessionInfo(`?company_email=${
+        this.companyEmailAddress}&application_id=${
+        this.applicationId}&session_code=${
+        this.sessionCode}`)
+      .subscribe((sessionInfo) => {
+        if (sessionInfo[0].test_session_timer_type === 'time_per_question') {
+          this.sessionQuestionsList.map((oneQuestion) => sumTime += Number(oneQuestion.questionDetails.duration));
+          const newSessionObject = sessionInfo[0];
+          newSessionObject.session_code = newSessionObject.TestSessionInfoKey.session_code;
+          newSessionObject.test_session_info_code = newSessionObject.TestSessionInfoKey.test_session_info_code;
+          newSessionObject.company_email = newSessionObject.TestSessionInfoKey.company_email;
+          newSessionObject.application_id = newSessionObject.TestSessionInfoKey.application_id;
+          newSessionObject.test_session_time = sumTime;
+          this.testService.updateSessionInfo(newSessionObject).subscribe(( newInfo) => {
+            console.log('time updated to', sumTime);
+          });
+        }
+      });
   }
 }

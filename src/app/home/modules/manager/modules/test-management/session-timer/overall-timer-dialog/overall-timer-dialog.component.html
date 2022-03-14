@@ -24,7 +24,7 @@
         <div fxLayout="row" fxFlex="23" fxLayoutAlign="center end">
           <div fxLayout="column" fxFlex="25" fxLayoutAlign="center center" >
             <mat-form-field appearance="outline" class="full-width font-size-12">
-            <input [(ngModel)]="totalTime" matInput placeholder="40min">
+            <input [(ngModel)]="totalTime" type="number" min="0" matInput placeholder="40min">
             </mat-form-field>
           </div>
         </div>

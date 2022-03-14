@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { SidenavService } from '@core/services/sidenav/sidenav.service';
 import { UserService } from '@core/services/user/user.service';
-import { AuthService } from '@widigital-group/auth-npm-front';
+import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
 
 import { ProfileService } from '@core/services/profile/profile.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -19,7 +19,7 @@ import { ITheme } from '@shared/models/theme.model';
 import { userType } from '@shared/models/userProfileType.model';
 import { IUserModel } from '@shared/models/user.model';
 
-// import { AuthService } from '../../../../../projects/auth-front-lib/src/public-api';
+// import { AuthService, FingerPrintService } from '../../../../../projects/auth-front-lib/src/public-api';
 
 import {
   accordionAnimation,
@@ -75,6 +75,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
     private utilService: UtilsService,
     private themeService: ThemeService,
     private uploadService: UploadService,
+    private fingerPrintService: FingerPrintService,
 
   ) {
     this.menu = sidenavRightMenu;
@@ -177,7 +178,9 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
    * navigate from login
    */
   logout(): void {
-    this.authService.logout().pipe(
+    this.fingerPrintService.generateFingerPrint(btoa(this.localStorageService.getItem('userCredentials')['email_address']))
+      .then((result) => {
+    this.authService.logout(result).pipe(
       takeUntil(this.destroy$)
     ).subscribe(() => {
         this.sidenavService.toggleRightSideNav();
@@ -194,6 +197,7 @@ export class RightSidenaveComponent implements OnInit, OnDestroy {
       },
       (err) => {
         console.error(err);
+      });
       });
   }
 

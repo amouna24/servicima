@@ -45,8 +45,8 @@
 
                     </div>
                   </div>
-                  <div fxLayout="column" fxFlex="40"  fxLayoutAlign=" center"  >
-                    <button  mat-raised-button type="button"  class="bg-white btn-medium black"  *canBeDisplayed="'RESUME_DELETE LANGUAGE'" (click)="deleteLanguage(item._id, pointIndex)">{{ 'resume-delete' | translate }}</button>
+                  <div fxLayout="column" fxFlex="40"  fxLayoutAlign=" center"  *canBeDisplayed="{ feature: 'RESUME_DELETE_LANGUAGE' }" >
+                    <button  mat-raised-button type="button"  class="bg-white btn-medium black"  (click)="deleteLanguage(item._id, pointIndex)">{{ 'resume-delete' | translate }}</button>
                   </div>
               </div>
 

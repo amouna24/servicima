@@ -251,7 +251,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * @description logout: remove fingerprint and local storage
    */
-  logout(): void {
+  /*logout(): void {
     this.authService.logout().pipe(
       takeUntil(this.destroy$)
     ).subscribe(() => {
@@ -263,7 +263,7 @@ export class BuyLicenceComponent implements OnInit, OnDestroy, AfterViewInit {
       (err) => {
         console.error(err);
       });
-  }
+  }*/
 
   /**
    * @description Destroy All subscriptions declared with takeUntil operator

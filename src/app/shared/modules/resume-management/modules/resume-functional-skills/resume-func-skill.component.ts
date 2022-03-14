@@ -55,7 +55,7 @@ export class ResumeFuncSkillComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   ngOnInit(): void {
-    this.featureAddUpdate = 'RESUME_ADD_FUNC_SKILL';
+    this.featureAddUpdate = 'RESUME_ADD_FUNCTIONAL_SKILLS';
     this.button = 'Add';
     this.showNumberError = false;
     this.funcSkillArray = [];
@@ -202,7 +202,7 @@ export class ResumeFuncSkillComponent implements OnInit {
         this.button = 'Add';
       }
     }
-    this.featureAddUpdate = 'RESUME_ADD_FUNC_SKILL';
+    this.featureAddUpdate = 'RESUME_ADD_FUNCTIONAL_SKILLS';
     this.sendFuncSkill.reset();
     this.showNumberError = false;
   }
@@ -216,7 +216,7 @@ export class ResumeFuncSkillComponent implements OnInit {
     this.sendFuncSkill.patchValue({
       skill: functionalSkill.skill,
     });
-    this.featureAddUpdate = 'RESUME_UPDATE_FUNC_SKILL';
+    this.featureAddUpdate = 'RESUME_UPDATE_FUNCTIONAL_SKILLS';
     this.funcSkillArray.splice( index, 1);
     this.id = functionalSkill._id;
     this.functionalSkillCode = functionalSkill.ResumeFunctionalSkillsKey.functional_skills_code;
