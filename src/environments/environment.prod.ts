@@ -53,7 +53,7 @@ export const environment = {
   evaluationApiUrl: 'http://213.136.74.202/hrevaluation',
   evaluationGoalApiUrl: 'http://213.136.74.202/hrevaluationgoals',
   identityDocumentApiUrl: 'http://213.136.74.202/hridentitydocument',
-  payslipApiUrl: 'http://213.136.74.202/hrpayslip',
+  payslipApiUrl: 'http://213.136.74.202/payslip',
   hrContractApiUrl: 'http://213.136.74.202/hrcontract',
   hrContractExtension: 'http://213.136.74.202/hrcontractextension',
   hrPreviousContractApiUrl: 'http://213.136.74.202/hrcontractprevious',

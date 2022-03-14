@@ -4,6 +4,7 @@ import { TestService } from '@core/services/test/test.service';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ITestSessionQuestionModel } from '@shared/models/testSessionQuestion.model';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-session-list',
@@ -20,7 +21,8 @@ export class SessionListComponent implements OnInit {
   constructor(
     private testService: TestService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private utilsService: UtilsService,
   ) { }
 
   ngOnInit(): void {
@@ -97,9 +99,13 @@ export class SessionListComponent implements OnInit {
 
   switchAction(event: any) {
     switch (event.actionType.name) {
+      case ('update'):
+        this.updateSession(event.data);
+        break;
       case ('Delete session'):
         this.deleteSession(event.data);
         break;
+
     }
   }
   getTechnologies(sessionBlocCodes) {
@@ -202,5 +208,28 @@ export class SessionListComponent implements OnInit {
             }
           });
     });
+   }
+   getBlocQuestionsCode(sessionCode) {
+    return new Promise( (resolve) => {
+      this.testService
+        .getSession(`?company_email=${
+          this.companyEmailAddress}&application_id=${
+          this.applicationId}&session_code=${
+          sessionCode}`)
+        .subscribe( (session) => {
+        resolve(session[0].TestSessionKey.block_questions_code);
+      });
+    }).then( (result: string) => {
+      return result.split(',');
+    });
+   }
+
+   async updateSession(data) {
+     const queryObject = {
+       selectedBlocs: await this.getBlocQuestionsCode(data.session_code),
+       sessionCode: data.session_code,
+       mode: 'update',
+     };
+     this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
    }
 }

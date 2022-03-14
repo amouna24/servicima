@@ -174,9 +174,9 @@
       <div fxLayout="row" fxFlex="8" fxLayoutAlign="end">
         <div fxLayout="column" fxLayoutAlign=" end" fxFlex="100">
           <div fxLayout="row" fxFlexFill fxLayoutGap="25px" fxLayoutAlign="space-between">
-            <div fxLayout="column">
+            <div fxLayout="column" >
 
-              <button mat-raised-button class="btn-small bg-pale-grey">
+              <button mat-raised-button *ngIf="mode !== 'update'" class="btn-small bg-pale-grey">
                 <span class="black" (click)="backToPreviousPage()">Back</span>
               </button>
 
