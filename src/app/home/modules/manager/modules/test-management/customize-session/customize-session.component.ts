@@ -27,6 +27,7 @@ export class CustomizeSessionComponent implements OnInit {
   sessionCode: string;
   applicationId: string;
   companyEmailAddress: string;
+  mode: string;
   constructor(
     private testService: TestService,
     private utilsService: UtilsService,
@@ -204,10 +205,11 @@ export class CustomizeSessionComponent implements OnInit {
     });
   }
   getSelectedBlocArray() {
-    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
+    this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe((data) => {
       this.selectedBlocsStringFormat = data.selectedBlocs;
       this.sessionCode = data.sessionCode;
       this.selectedBlocArray = data.selectedBlocs.split(',');
+      this.mode = data.mode;
     });
   }
   getChartPercentage() {
@@ -256,7 +258,6 @@ export class CustomizeSessionComponent implements OnInit {
       type: sumTime < 60 ? 'sec'  : sumTime < 3600 ? 'min' : 'h',
     };
   }
-
   getTotalPoints(): number {
     let totalPoint = 0;
     this.sessionQuestionsList.forEach( (oneQuestion) => {
@@ -275,6 +276,7 @@ export class CustomizeSessionComponent implements OnInit {
         totalTimeType: this.getTotalTime().type,
         totalPoints: this.getTotalPoints(),
         sessionCode: this.sessionCode,
+        mode: this.mode,
       };
       this.utilsService.navigateWithQueryParam('/manager/test/session-timer', queryObject);
   }
@@ -282,7 +284,6 @@ export class CustomizeSessionComponent implements OnInit {
     const userCredentials = this.localStorageService.getItem('userCredentials');
     this.applicationId = userCredentials?.application_id;
   }
-
   /**
    * @description Get connected user
    */
@@ -298,6 +299,7 @@ export class CustomizeSessionComponent implements OnInit {
     const queryObject = {
       sessionCode: this.sessionCode,
       selectedBlocs: this.selectedBlocArray,
+      mode: this.mode
     };
     this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
   }

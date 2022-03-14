@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
-import { Router } from '@angular/router';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -41,7 +40,6 @@ export class BlocListComponent implements OnInit {
     private utilsService: UtilsService,
     private dialog: MatDialog,
     private localStorageService: LocalStorageService,
-    private router: Router
   ) {
   }
 
@@ -68,7 +66,6 @@ export class BlocListComponent implements OnInit {
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
         });
   }
-
   changeDisplaying() {
     this.showVertical = !this.showVertical;
     this.displayingIcon = this.displayingIcon === this.listIcon ? this.gridIcon : this.listIcon;
@@ -128,8 +125,8 @@ export class BlocListComponent implements OnInit {
          const queryObject = {
         selectedBlocs: this.selectedBlocs,
         sessionCode: this.sessionCode,
-        route: this.router.url.split('?')[0],
-      };
+        mode: 'create',
+         };
       this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
   }
   getDataFromLocalStorage(): void {
