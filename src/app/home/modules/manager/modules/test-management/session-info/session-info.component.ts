@@ -49,6 +49,7 @@ export class SessionInfoComponent implements OnInit {
 
   sessionInfo: ITestSessionInfoModel;
   sessionCode: string;
+  mode: string;
   constructor(private testService: TestService,
               private utilsService: UtilsService,
               private userService: UserService,
@@ -294,7 +295,8 @@ export class SessionInfoComponent implements OnInit {
           this.testService.addTestSessionInfo(testSessionInfo).subscribe((data) => {
             const queryObject = {
               selectedBlocs: this.technologies.map( (tech) =>  tech.value),
-              sessionCode: sessionObject.session_code
+              sessionCode: sessionObject.session_code,
+              mode: this.mode,
             };
             this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
             console.log(data, 'data');
@@ -321,7 +323,8 @@ export class SessionInfoComponent implements OnInit {
         this.testService.updateSessionInfo(updateSessionInfoObject).subscribe( (sessionInfo) => {
           const queryObject = {
             selectedBlocs: this.technologies.map( (tech) =>  tech.value),
-            sessionCode: updateSessionInfoObject.session_code
+            sessionCode: updateSessionInfoObject.session_code,
+            mode: this.mode
           };
           this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
         });
@@ -340,9 +343,10 @@ export class SessionInfoComponent implements OnInit {
    * @description : get selected block
    */
   getSelectedBlocArray() {
-      this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe((data) => {
+      this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe((data) => {
         this.selectedBlocArray = data.selectedBlocs.split(',');
         this.sessionCode = data.sessionCode;
+        this.mode = data.mode;
       });
   }
 

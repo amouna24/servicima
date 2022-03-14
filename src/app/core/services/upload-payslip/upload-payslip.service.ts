@@ -30,4 +30,7 @@ export class UploadPayslipService {
   disableAssociatedPayslip(ID: string): Observable<IAssociatePayslip> {
     return this.http.delete<IAssociatePayslip>(`${environment.payslipAssociateApiUrl}?_id=${ID}`);
   }
+  getAssociatedPayslipPaginator(filter: string): Observable<IAssociatePayslip[]> {
+    return this.http.get<IAssociatePayslip[]>(`${environment.payslipAssociateApiUrl}/datatable${filter}`);
+  }
 }

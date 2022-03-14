@@ -25,7 +25,8 @@ export class SessionTimerComponent implements OnInit {
    companyEmailAddress: string;
    applicationId: string;
    languageId: string;
-  selectedBlocArray = [];
+   selectedBlocArray = [];
+   mode: string;
   constructor(
     private dialog: MatDialog,
     private utilsService: UtilsService,
@@ -59,7 +60,7 @@ export class SessionTimerComponent implements OnInit {
     });
   }
   getData() {
-    this.utilsService.verifyCurrentRoute('/manager/test/bloc-list').subscribe( (data) => {
+    this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe( (data) => {
       this.sessionCode = data.sessionCode;
       this.totalQuestion = data.totalQuestion;
       this.totalTime =   data.totalTime;
@@ -68,6 +69,7 @@ export class SessionTimerComponent implements OnInit {
       this.totalTimeType = data.totalTimeType;
       this.totalPoints =   data.totalPoints;
       this.selectedBlocArray = data.selectedBlocs;
+      this.mode = data.mode;
     });
   }
   chosenTime(event: any) {
@@ -106,7 +108,11 @@ export class SessionTimerComponent implements OnInit {
           this.totalTime  * 3600 : this.totalTimeType === 'min' ?
             this.totalTime * 60 : this.totalTime;
         this.testService.updateSessionInfo(updateObject).subscribe( (updatedSessionInfo) => {
-         this.route.navigate(['/manager/test/invite-candidates']);
+          const queryObject = {
+            sessionCode: this.sessionCode,
+            mode: this.mode
+          };
+          this.utilsService.navigateWithQueryParam('/manager/test/invite-candidates', queryObject);
         });
     });
     }
@@ -119,6 +125,7 @@ export class SessionTimerComponent implements OnInit {
     const queryObject = {
       sessionCode: this.sessionCode,
       selectedBlocs: this.selectedBlocArray,
+      mode: this.mode
     };
     this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
   }

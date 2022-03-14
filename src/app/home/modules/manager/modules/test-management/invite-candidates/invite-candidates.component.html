@@ -16,14 +16,19 @@
   </div>
   <div fxLayout="column" fxFlex="88" class="font-size-12 black">
     <div fxFlex="28"  fxLayoutAlign="center center" fxLayout="row"  class="session-ready">
-       your session is ready
+       {{ mode === 'update' ? 'your session is updated' : 'your session is ready'}}
     </div>
-    <div fxFlex="20" fxLayoutAlign="center center">
+    <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center center">
     <img  src="assets/icons/done-circle.svg" alt="" height="85px">
   </div>
-    <div fxFlex="28" fxLayoutAlign="center center" class="font-size-18"> It's time to invite some candidates </div>
-    <div fxFlex="20" fxLayoutAlign="center center" >
-      <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+    <div fxFlex="28" fxLayout="row"  fxLayoutAlign="center center" class="font-size-18"> It's time to invite some candidates </div>
+    <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
+      <div fxLayout="column" fxFlex *ngIf="mode === 'update'" fxLayoutAlign=" end">
+        <button mat-button class="btn-medium bg-cerulean-blue white" routerLink="/manager/test/session-list">Done</button>
+      </div>
+      <div fxLayout="column" fxFlex fxLayoutAlign=" start">
+        <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+      </div>
     </div>
   </div>
 </div>
