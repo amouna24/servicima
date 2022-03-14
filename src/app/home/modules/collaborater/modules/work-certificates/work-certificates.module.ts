@@ -10,7 +10,7 @@ import { HumanRessourcesModule } from '../../../manager/modules/human-ressources
     imports: [
         CommonModule,
         WorkCertificatesRoutingModule,
-        HumanRessourcesModule
+        HumanRessourcesModule,
     ]
 })
 export class WorkCertificatesModule { }

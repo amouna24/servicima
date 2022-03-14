@@ -168,7 +168,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     if ( this.type === 'SUPPLIER') {
       this.redirectUrl = '/manager/contract-management/suppliers-contracts/suppliers';
       this.addButtonLabel = 'contractor.supp.add';
-      // this.featureAccess = 'CONTRACT_ADD_CLIENT';
+       this.featureAccess = 'CONTRACT_ADD_CLIENT';
       this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
       this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_SUPPLIER'},
@@ -178,7 +178,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.redirectUrl = '/manager/contract-management/clients-contracts/clients';
       this.addButtonLabel = 'contractor.client.add';
-      // this.featureAccess = 'CONTRACT_ADD_SUPPLIER';
+       this.featureAccess = 'CONTRACT_ADD_SUPPLIER';
       this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
       this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_CLIENT'},
