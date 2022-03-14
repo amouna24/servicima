@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,12 +21,12 @@ import { IViewParam } from '@shared/models/view.model';
   templateUrl: './list-of-certification.component.html',
   styleUrls: ['./list-of-certification.component.scss']
 })
-export class ListOfCertificationComponent implements OnInit, OnChanges, OnDestroy {
+export class ListOfCertificationComponent  implements OnInit, OnChanges, OnDestroy {
 
   /**************************************************************************
    * @description Input from child's Components [SUPPLIERS, CLIENTS]
    *************************************************************************/
-  @Input() type: string ;
+  @Input() type: string;
   @Input() title: string;
   @Input() email: string;
   @Input() collaboratorAction = false;
@@ -491,4 +491,5 @@ export class ListOfCertificationComponent implements OnInit, OnChanges, OnDestro
       ],
     }];
   }
+
 }
