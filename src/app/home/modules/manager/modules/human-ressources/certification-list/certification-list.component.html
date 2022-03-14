@@ -1,15 +1,1 @@
-<wid-dynamic-data-table
-  [tableData]="ELEMENT_DATA"
-  [tableCode]="'WORK_CERTIFICATE'"
-  [isLoading]="isLoading"
-  [header]="header"
-  [buttonAdd]="collaboratorAction"
-  (rowActionData)="switchAction($event)"
-  [colorObject]="colorCheck()"
-  [allowedActions]="['show','delete','download', 'activate']"
-  [setAvatar]="{columnCode:'full_name', imgSrc: 'photo' }"
-  (pagination)="loadMoreItems($event)"
-
->
-
-</wid-dynamic-data-table>
+<wid-list-of-certification></wid-list-of-certification>

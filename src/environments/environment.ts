@@ -62,7 +62,6 @@ export const environment = {
   hrContractExtension: 'http://213.136.74.202/hrcontractextension',
   hrPreviousContractApiUrl: 'http://213.136.74.202/hrcontractprevious',
   workCertificateApiUrl: 'http://213.136.74.202/hrworkcertificate',
-  workCertificateUrl: 'http://213.136.74.202/hrworkcertificate',
   payslipAssociateApiUrl: 'http://213.136.74.202/payslipassociate',
   invoiceGenerateApiUrl: 'http://213.136.74.202/invoicegenerate',
   invoiceLineApiUrl: 'http://213.136.74.202/invoiceline',
@@ -96,8 +95,6 @@ export const environment = {
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://213.136.74.202/uploadfiles',
-  /************************* GENERATE CERTIFICATION ******************************/
-  pdfFileApiUrl: 'http://213.136.74.202:8104/servicima/hrworkcertificate/pdf/v1',
   /************************* UPLOAD RESUME FILE ************************/
   uploadResumeFileApiUrl: 'http://213.136.74.202/uploadresumefile',
   /*************************** OTHERS ************************************/

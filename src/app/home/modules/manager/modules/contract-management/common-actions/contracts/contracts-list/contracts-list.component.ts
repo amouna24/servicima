@@ -40,6 +40,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   redirectUrl: string;
   addButtonLabel: string;
+  tabFeatureAccess = [{ name: '', feature: ''}];
 
   /**************************************************************************
    * @description DATA_TABLE paginations
@@ -52,15 +53,16 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @description search Criteria
    *************************************************************************/
   searchCriteria: string;
+
   @ViewChild(MatPaginator, { static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true}) sort: MatSort;
 
   constructor(
-    private contractService: ContractsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private modalsServices: ModalService,
-    private userService: UserService,
+      private contractService: ContractsService,
+      private router: Router,
+      private route: ActivatedRoute,
+      private modalsServices: ModalService,
+      private userService: UserService,
   ) {
   }
 
@@ -72,21 +74,21 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParams
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(params => {
-        if (!!params.contract_status) {
-          this.searchCriteria = params.contract_status;
-          this.getContracts(this.nbtItems.getValue(), 0);
-        } else {
-          this.searchCriteria = '';
-          this.getContracts(this.nbtItems.getValue(), 0);
-        }
-      });
+        .pipe(
+            takeUntil(this.destroy$)
+        )
+        .subscribe(params => {
+          if (!!params.contract_status) {
+            this.searchCriteria = params.contract_status;
+            this.getContracts(this.nbtItems.getValue(), 0);
+          } else {
+            this.searchCriteria = '';
+            this.getContracts(this.nbtItems.getValue(), 0);
+          }
+        });
     this.addNewContract();
     this.modalsServices.registerModals(
-      { modalName: 'showExtension', modalComponent: ShowExtensionComponent });
+        { modalName: 'showExtension', modalComponent: ShowExtensionComponent });
   }
 
   /**
@@ -95,25 +97,24 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   getContracts(limit, offset) {
     this.isLoading.next(true);
     this.contractService.getContracts(
-      // tslint:disable-next-line:max-line-length
-      `?beginning=${offset}&number=${limit}&contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
-      )
-      .pipe(
-        takeUntil(
-          this.destroy$
+        // tslint:disable-next-line:max-line-length
+        `?beginning=${offset}&number=${limit}&contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
+    )
+        .pipe(
+            takeUntil(
+                this.destroy$
+            )
         )
-      )
-      .subscribe(
-      (response) => {
-        this.ELEMENT_DATA.next(response);
-        response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
-      },
-      (error) => {
-        this.isLoading.next(true);
-      },
-    );
+        .subscribe(
+            (response) => {
+              this.ELEMENT_DATA.next(response);
+              response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
+            },
+            (error) => {
+              this.isLoading.next(true);
+            },
+        );
   }
-
   /**
    * @description Navigate to ADD NEW CONTRACT Components
    */
@@ -125,6 +126,11 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       this.redirectUrl = '/manager/contract-management/clients-contracts/contracts';
       this.addButtonLabel = 'New Contract';
     }
+    this.tabFeatureAccess = [
+      { name: 'contracts.show', feature: 'CONTRACT_DISPLAY'},
+      { name: 'contracts.delete', feature: 'CONTRACT_DELETE'},
+      { name: 'contracts.archive', feature: 'CONTRACT_ARCHIVE'},
+    ];
   }
 
   /**************************************************************************
@@ -134,35 +140,35 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   showContract(Contract: IContract): void {
     this.contractService.getContractExtension(
-      `?contract_code=${Contract.contractKey.contract_code}&email_address=${Contract.contractKey.email_address}`
+        `?contract_code=${Contract.contractKey.contract_code}&email_address=${Contract.contractKey.email_address}`
     )
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe(
-        (res) => {
-          this.contactExtensionInfo = res[0];
-          this.modalsServices.displayModal(
-            'showExtension',
-            {
-              contract: Contract,
-              ext : this.contactExtensionInfo,
-              file: Contract.attachments
+        .pipe(
+            takeUntil(this.destroy$),
+        )
+        .subscribe(
+            (res) => {
+              this.contactExtensionInfo = res[0];
+              this.modalsServices.displayModal(
+                  'showExtension',
+                  {
+                    contract: Contract,
+                    ext : this.contactExtensionInfo,
+                    file: Contract.attachments
+                  },
+                  '55%')
+                  .pipe(
+                      takeUntil(this.destroy$)
+                  )
+                  .subscribe(
+                      (resp) => {
+                        console.log(resp);
+                      }
+                  );
             },
-            '55%')
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-              (resp) => {
-                console.log(resp);
-              }
-            );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+            (error) => {
+              console.log(error);
+            }
+        );
   }
 
   /**************************************************************************
@@ -173,18 +179,18 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   updateContract(Contract: IContract): void {
     let url = '';
     if (Contract.contractKey.contract_type === 'SUPPLIER') {
-        url = '/manager/contract-management/suppliers-contracts/contracts';
+      url = '/manager/contract-management/suppliers-contracts/contracts';
     } else {
       url = '/manager/contract-management/clients-contracts/contracts';
     }
     this.router.navigate(
-      [url],
-      { queryParams: {
-          id: btoa(Contract._id),
-          cc: btoa(Contract.contractKey.contract_code),
-          ea: btoa(Contract.contractKey.email_address)
-        }
-      });
+        [url],
+        { queryParams: {
+            id: btoa(Contract._id),
+            cc: btoa(Contract.contractKey.contract_code),
+            ea: btoa(Contract.contractKey.email_address)
+          }
+        });
   }
   /**************************************************************************
    * @description: Function to call updateMail Dialog with current data
@@ -192,12 +198,16 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    * @return: Updated Table
    *************************************************************************/
   switchAction(rowAction: any) {
-    switch (rowAction.actionType) {
-      case ('show'): this.showContract(rowAction.data);
+    switch (rowAction.actionType.name) {
+      case ('contracts.show'): this.showContract(rowAction.data);
         break;
-      case ('update'): this.updateContract(rowAction.data);
+      case('contracts.delete'): console.log('EDIT ME');
         break;
-      case('delete'): console.log('EDIT ME');
+      case('contracts.archive'): console.log('EDIT ME');
+        break;
+      case('update'):
+        this.updateContract(rowAction.data);
+        break;
     }
   }
 

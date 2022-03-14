@@ -122,28 +122,21 @@ export class CollaboratorListComponent implements OnInit, OnDestroy {
   collaboratorDetails(id: string, email: string) {
     this.hrService.getContract(`?collaborator_email=${email}`).subscribe(async ( contract) => {
       this.contract = contract[0];
-      this.hrService.getBanking(`?email_address=${email}`).subscribe(async (banking) => {
-        this.banking = banking[0];
+      console.log('my contract Collaborator details ', this.contract);
         this.profileService.getUserById(id).subscribe(async ( user) => {
           this.userInfo = user['results'][0];
           this.hrService.getCollaborators(`?email_address=${email}`)
             .subscribe(async collaborator => {
               this.collaborator = collaborator[0];
-              await  this.router.navigate(
-                ['/manager/human-ressources/collaborator'],
-                { state: {
-                    _id: id,
-                    contract: this.contract,
-                    banking: this.banking,
-                    userInfo: this.userInfo,
-                    collaborator: this.collaborator
-                  }
-                });
+              const queryObject = {
+                _id: id,
+                idContract: this.contract._id,
+              };
+              this.utilsService.navigateWithQueryParam('/manager/human-ressources/collaborator', queryObject);
             });
 
         });
 
-      });
     });
 
   }

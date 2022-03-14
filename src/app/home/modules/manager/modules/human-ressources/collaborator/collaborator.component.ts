@@ -28,7 +28,7 @@ import { map, takeUntil } from 'rxjs/operators';
   templateUrl: './collaborator.component.html',
   styleUrls: ['./collaborator.component.scss']
 })
-export class CollaboratorComponent implements OnInit, OnChanges {
+export class CollaboratorComponent implements OnInit {
   /**************************************************************************
    * @description Form Group
    *************************************************************************/
@@ -137,6 +137,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   companyEmail: string;
   applicationId: string;
   emailAddress: string;
+  selectedBloc: any;
 
   /**************************************************************************
    * @description Dynamic Component
@@ -223,12 +224,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
 
   ) {
     this.initProfileForm();
-    this.id = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state._id : null;
-    this.contract = this.router.getCurrentNavigation().extras.state.contract ? this.router.getCurrentNavigation().extras.state.contract : null;
-    this.bankingInfo = this.router.getCurrentNavigation().extras.state.banking ? this.router.getCurrentNavigation().extras.state.banking : null;
-    this.userInfo = this.router.getCurrentNavigation().extras.state.userInfo ? this.router.getCurrentNavigation().extras.state.userInfo : null;
-    this.collaborator =
-      this.router.getCurrentNavigation().extras.state.collaborator ? this.router.getCurrentNavigation().extras.state.collaborator : null;
 
     this.dynamicForm = new BehaviorSubject<IDynamicForm[]>([
       {
@@ -1151,13 +1146,34 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     ]);
 
   }
+  async getDataFromPreviousRoute() {
+    await  this.utilsService.verifyCurrentRoute('/manager/human-ressources/collaborator-list').subscribe( (data) => {
+      this.selectedBloc = data._id;
+      this.id = data._id;
+      this.profileService.getUserById(this.id).subscribe((collab) => {
+        this.collaborator = collab['results'][0];
+        this.userInfo = collab['results'][0];
+        console.log('user info ', this.userInfo);
+        this.hrService.getBanking(`?email_address=${this.userInfo.userKey.email_address}`).subscribe(async (banking) => {
+          this.bankingInfo = banking[0];
+        });
+      });
+      this.hrService.getContractById(data.idContract).subscribe((contrat) => {
+        this.contract = contrat[0];
+      });
+
+    });
+  }
   /**************************************************************************
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
-   await this.profileService
+    await this.getDataFromPreviousRoute();
+
+   this.profileService
       .getUserById(this.id)
       .subscribe(async (user) => {
+        console.log('get user connected ', user);
         this.userInfo = user['results'][0];
         this.haveImage.next(user['results'][0]['photo']);
         this.avatar.next(await this.uploadService.getImage(user['results'][0]['photo']));
@@ -1166,7 +1182,8 @@ export class CollaboratorComponent implements OnInit, OnChanges {
    this.subscriptions = this.userService.connectedUser$.subscribe(async (data) => {
      if (!!data) {
        this.initProfileForm();
-       await this.getRefData(this.userInfo.company_email);
+       console.log('data ', data);
+       await this.getRefData(data['user'][0]['company_email']);
        await this.getInitialData();
      }
    });
@@ -1288,7 +1305,7 @@ export class CollaboratorComponent implements OnInit, OnChanges {
     this.profileService
       .getUserById(this.id)
       .subscribe(async user => {
-
+          await this.getDataFromPreviousRoute();
           await this.getDataByEmail(this.emailAddress);
           this.hrService.getCollaborators(`?email_address=${this.emailAddress}`)
             .subscribe(async collaborator => {
@@ -1990,7 +2007,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-    this.subscriptions.unsubscribe();
 
   }
   /**************************************************************************
@@ -2217,11 +2233,6 @@ export class CollaboratorComponent implements OnInit, OnChanges {
       this.filteredNationalities
     );
 
-  }
-  ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
-    if (this.profileForm.controls.CONTRACT['controls'].contract_type === 'CDI') {
-      this.profileForm.controls.CONTRACT['controls'].contract_end_date.disable();
-    }
   }
 
 }

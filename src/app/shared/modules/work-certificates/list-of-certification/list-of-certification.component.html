@@ -1,0 +1,17 @@
+<wid-dynamic-data-table
+        [tableData]="ELEMENT_DATA"
+        [tableCode]="'WORK_CERTIFICATE'"
+        [isLoading]="isLoading"
+        [header]="{title: 'certification.title' | translate , addActionURL: '/collaborator/work-certificates/addCertif', feature: featureAdd ,addActionText: 'certification.request' }"
+        [buttonAdd]="collaboratorAction"
+        (rowActionData)="switchAction($event)"
+        [colorObject]="colorCheck()"
+        [singleAction]="{name:'certification.import', feature: 'HR_IMPORT_CERTIF'}"
+        [allowedActions]="tabFeatureAccess"
+        [setAvatar]="{columnCode:'full_name', imgSrc: 'photo' }"
+        (pagination)="loadMoreItems($event)"
+
+>
+
+</wid-dynamic-data-table>
+
