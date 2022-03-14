@@ -64,6 +64,7 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
 import { AlertRequiredDataComponent } from './components/alert-required-data/alert-required-data.component';
 import { CompleteRequiredInformationComponent } from './components/complete-required-information/complete-required-information.component';
 import { ListOfCertificationComponent } from './modules/work-certificates/list-of-certification/list-of-certification.component';
+// tslint:disable-next-line:origin-ordered-imports
 import { DynamicDataTableComponent } from '@shared/modules/dynamic-data-table/components/data-table/dynamic-data-table.component';
 
 @NgModule({
