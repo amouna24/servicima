@@ -1,0 +1,16 @@
+ <wid-dynamic-data-table
+    [tableData]="ELEMENT_DATA"
+    [tableCode]="'PAYSLIP_MANAGER'"
+    [isLoading]="checkLoad()"
+    [header]=" {
+    title: 'hr.payslip.list'
+    }"
+    [buttonAdd]="false"
+    (rowActionData)="switchAction($event)"
+    (pagination)="loadMoreItems($event)"
+    [allowedActions]="[
+    {name:'hr.payslip.import', feature: 'SOURCING_ACCESS'},
+    {name:'hr.payslip.delete', feature: 'SOURCING_ACCESS'},
+    {name:'hr.payslip.download', feature: 'SOURCING_ACCESS'}]"
+  >
+  </wid-dynamic-data-table>

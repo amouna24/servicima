@@ -1,0 +1,60 @@
+<ng-container *ngIf="loaded() else loading">
+  <div fxLayout="column" fxLayoutAlign="start start" class="full-height full-width">
+    <wid-confirm-list
+      fxFlex class="full-width"
+      [DATA]="selectedFiles"
+      [title]="'hr.payslip.import.payslip'"
+      [selectAllBtn]="true"
+      [btnLabel]="'hr.payslip.import.associate'"
+      [requiredFields]="['email_address', 'collaboratorName']"
+      [selectList]=" { data: collaboratorList, selected: 'email_address' , value: ['userKey', 'email_address'], text: 'first_name', placeHolder: 'hr.payslip.import.collaborator' | translate}"
+      [message]="{ field: 'collaboratorName', message: 'hr.payslip.import.message'}"
+      (action)="associate($event)"
+      (dialogAction)="modalActions($event)"
+    ></wid-confirm-list>
+    <div fxFlex="8" fxLayout="row" fxLayoutAlign="start center"
+         class="full-width p-10 p-t-5">
+      <p class="font-size-12 black m-0 m-b-10 m-r-15">Pay period :</p>
+      <mat-form-field appearance="outline" style="width: 100px" class="m-r-15 font-size-8">
+        <mat-select [(ngModel)]="this.payslipMonth" placeholder="Month">
+          <ng-container *ngFor="let month of months; let index = index">
+            <mat-option [value]="index + 1">
+              {{month}}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error class="wid-error-messages">
+          {{'hr.payslip.import.requiredfield' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 100px" class="font-size-8">
+        <mat-select [(ngModel)]="this.payslipYear"  placeholder="Year" class="m-0 p-0">
+          <ng-container *ngFor="let year of years ">
+            <mat-option [value]="year" class="m-0 p-0">
+              {{ year }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error class="wid-error-messages">
+          {{'hr.payslip.import.requiredfield' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="full-width full-height" fxLayout="column" fxLayoutAlign="center center">
+    <wid-skeleton-loader
+      class="full-width"
+      [nbrColumn]="1"
+      [nbrRow]="totalFiles"
+      [marginTop]="10"
+      [marginBottom]="1"
+      [height]="50"
+      [width]="500"
+    >
+    </wid-skeleton-loader>
+  </div>
+</ng-template>

@@ -35,6 +35,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
     title: string, addActionURL?: string, addActionText?: string,
     type?: string,
     feature?: string,
+    actionFunction?: () => void;
     addActionDialog?:
       { modalName: string, modalComponent: string, data: object, width: string, height: string }
   };
@@ -714,7 +715,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         this.utilService.getCompanyId(
             this.companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
       this.localStorageService.getItem('userCredentials')['application_id'],
-      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE'],
+      ['LEGAL_FORM', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES', 'PAYMENT_MODE', 'PROFILE_TYPE', 'TIMESHEET_STATE'],
       false
     );
   }
@@ -797,6 +798,16 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         dataS['user_type'] = this.refData['PROFILE_TYPE'].find((type) =>
           type.value === dataS['user_type']) ? this.refData['PROFILE_TYPE'].find((type) =>
           type.value === dataS['user_type'])?.viewValue : dataS['user_type'];
+      }
+      if (dataS['timesheet_status']) {
+        dataS['timesheet_status'] = this.refData['TIMESHEET_STATE'].some((type) =>
+          type.value === dataS['timesheet_status']) ? this.refData['TIMESHEET_STATE'].find((type) =>
+          type.value === dataS['timesheet_status'])?.viewValue : dataS['timesheet_status'];
+      }
+      if (dataS['user_position']) {
+        dataS['user_position'] = this.refData['PROF_TITLES'].some((type) =>
+          type.value === dataS['user_position']) ? this.refData['PROF_TITLES'].find((type) =>
+          type.value === dataS['user_position'])?.viewValue : dataS['user_position'];
       }
     });
   }

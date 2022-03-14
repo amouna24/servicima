@@ -3,12 +3,17 @@ import { IHoliday } from '@shared/models/holiday.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '@environment/environment';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { IRefdataModel } from '@shared/models/refdata.model';
+import { UtilsService } from '@core/services/utils/utils.service';
+import { UserService } from '@core/services/user/user.service';
 @Injectable({
   providedIn: 'root'
 })
 export class HolidayService {
-  private weekDays: Array<{
+  public weekDays: Array<{
     name: string,
     desc: string,
     holiday: IHoliday,
@@ -16,14 +21,38 @@ export class HolidayService {
   }> = [];
   constructor(
     private httpClient: HttpClient,
+    private localStorageService: LocalStorageService,
+    private refdataService: RefdataService,
+    private userService: UserService,
+    private utilService: UtilsService
   ) {
-    this.weekDays = this.initWeekDay();
+    this.userService.connectedUser$.subscribe(
+      (data) => {
+        if (!!data) {
+          this.weekDays = this.initWeekDay(data.user[0]['company_email']);
+        }
+      });
+  }
+
+  getRefData(companyEmail): Promise<IRefdataModel[]> {
+    // tslint:disable-next-line:no-shadowed-variable
+    return new Promise( resolve => {
+      console.log(this.localStorageService.getItem('userCredentials')['application_id']);
+      this.refdataService.getRefData(
+        this.utilService.getCompanyId( companyEmail, this.localStorageService.getItem('userCredentials')['application_id']),
+        this.localStorageService.getItem('userCredentials')['application_id'], ['WEEK_DAYS'], true).then(
+        (res) => { resolve(res); }
+      );
+    });
   }
   /**
    * @description: initialize the week's days
    * @return: array of any
    */
-  initWeekDay(): any[] {
+  private initWeekDay(companyEmail): any[] {
+    this.getRefData(companyEmail).then(
+      (res) => { console.log(res); }
+    );
     return [
       {
         name: 'monday',

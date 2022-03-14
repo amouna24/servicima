@@ -4,6 +4,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import * as _ from 'lodash';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 import { ChooseCandidatesComponent } from './choose-candidates/choose-candidates.component';
 
@@ -19,16 +20,23 @@ export class InviteCandidatesComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   companyEmailAddress: string;
   listCandidates: any;
+  mode: string;
+  sessionCode: string;
 
-  constructor(private modalService: ModalService,
-              private userService: UserService, ) { }
+  constructor(
+    private modalService: ModalService,
+    private userService: UserService,
+    private utilsService: UtilsService
+  ) {
+  }
 
   /**
    * @description Loaded when component in init state
    */
   ngOnInit(): void {
+    this.getData();
     this.modalService.registerModals(
-      { modalName: 'inviteCandidate', modalComponent: ChooseCandidatesComponent });
+      { modalName: 'inviteCandidate', modalComponent: ChooseCandidatesComponent});
     this.getConnectedUser();
     this.getAllUsers();
   }
@@ -40,12 +48,12 @@ export class InviteCandidatesComponent implements OnInit {
     this.userService.getAllUsers(`?company_email=${this.companyEmailAddress}&user_type=CANDIDATE`).subscribe((data) => {
       data['results'].map((candidate) => {
         candidate['email_address'] = candidate['userKey']['email_address'];
-        candidate['fullName'] =  candidate['first_name'] + ' ' + candidate['last_name'];
+        candidate['fullName'] = candidate['first_name'] + ' ' + candidate['last_name'];
       });
-     this.listCandidates = data['results'];
+      this.listCandidates = data['results'];
       this.listCandidates = _.orderBy(this.listCandidates, [user => user.fullName.toLowerCase()], ['asc']);
 
-   });
+    });
   }
 
   /**
@@ -56,7 +64,8 @@ export class InviteCandidatesComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
         });
   }
 
@@ -70,9 +79,17 @@ export class InviteCandidatesComponent implements OnInit {
       .subscribe(async (res) => {
         if (res) {
           console.log(res, 'res');
-      }}, (error => {
+        }
+      }, (error => {
         console.error(error);
       }));
 
-      }
+  }
+
+  getData() {
+    this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe((data) => {
+      this.sessionCode = data.sessionCode;
+      this.mode = data.mode;
+    });
+  }
 }
