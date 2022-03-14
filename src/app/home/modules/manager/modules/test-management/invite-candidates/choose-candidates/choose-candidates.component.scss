@@ -1,0 +1,71 @@
+.selected {
+  width: 80px !important;
+}
+::ng-deep.setting .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+::ng-deep mat-footer-row, mat-header-row, mat-row {
+  border-bottom-width: 10px;
+  border-radius: 5em !important;
+}
+
+
+/*::ng-deep thead {
+ // position: fixed !important;
+}*/
+
+.full-width-table {
+  height: 400px;
+  overflow: auto;
+}
+
+
+.choose-candidates {
+  height: 500px !important;
+  ::ng-deep .mat-form-field-wrapper{
+    padding: 0;
+  }
+}
+.choose-candidates {
+  ::ng-deep .mat-checkbox-frame {
+    border-color: #afb1b8 !important;
+    border-width: 2px !important;
+  }
+}
+.container-button-candidates{
+  min-height: 77px !important;
+}
+.width-full-name{
+  min-width: 220px !important;
+}
+.width-email{
+  min-width: 300px !important;
+}
+.width-phone{
+  min-width: 231px !important;
+}
+
+::ng-deep .sel {
+  background: #e8f1f9 !important;
+}
+
+.choose-candidates {
+  ::ng-deep .mat-form-field-outline-start,
+  ::ng-deep .mat-form-field-outline-end {
+    border-width: 2px !important;
+    color: #afb1b8 !important;
+  }
+}
+
+.container-choose-candidate {
+  min-height: 83% !important;
+}
+
+.width-no-data {
+  width: 831px !important;
+}

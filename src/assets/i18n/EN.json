@@ -51,7 +51,7 @@
 	"activation.confirm":"Confirm",
 	"activation.followinstruc":"Please follow the instructions we just emailed to",
 	"activation.invalidcode": "invalid code",
-
+  "activation.reqfield": "Required field",
 	"general.search":" Search",
 	"general.email":"Email",
 	"general.companyname":"Company name",
@@ -79,5 +79,11 @@
 	"stepper.welcome": "Welcome",
 	"stepper.general": "Generale",
 	"stepper.manager": "Manager",
-	"stepper.done": "Done"
+	"stepper.done": "Done",
+  "stepper.button.previous": "Previous",
+  "stepper.button.done": "Done",
+  "stepper.button.submit": "Submit",
+  "stepper.button.next": "Next"
+
+
 }

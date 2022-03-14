@@ -52,7 +52,7 @@
     "activation.tryagain":"Réessayer",
     "activation.confirm":"Confirmer",
     "activation.followinstruc":"Veuillez suivre les instructions que nous venons d'envoyer par email",
-
+    "activation.reqfield": "Champ obligatoire",
     "general.email":"Courriel",
     "general.search":"Recherche",
     "general.companyname":"Nom de l'entreprise",
@@ -81,5 +81,13 @@
     "stepper.welcome": "Bienvenue",
     "stepper.done": "Terminé",
     "stepper.manager": "Directeur",
-    "stepper.general": "Général"
+    "stepper.general": "Général",
+    "stepper.button.previous": "Précédente",
+    "stepper.button.done": "Terminé",
+    "stepper.button.submit": "soumettre",
+    "stepper.button.next": "Suivante"
+
+
+
+
 }

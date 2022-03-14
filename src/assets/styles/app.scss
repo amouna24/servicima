@@ -903,6 +903,14 @@ wid-upload-sheet {
   .mat-form-field-no-padding .mat-form-field-wrapper {
     padding-bottom: 0 !important;
   }
+  //input outline color
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: $cool-grey;
+  }
+  /* Font color */
+  input.mat-input-element {
+    color: $cool-grey;
+  }
 
   .next-previous-page {
     border-radius: 3px;

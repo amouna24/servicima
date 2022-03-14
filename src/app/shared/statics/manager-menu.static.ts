@@ -227,12 +227,19 @@ export const managerMenu: IMenu[] = [
     feature: 'EXPENSES_ACCESS',
     children: [
       {
-        state: 'bloc-list',
-        name: 'Bloc questions',
+        state: 'session-list',
+        name: 'Sessions list',
         type: 'link',
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
-      }
+      },
+      {
+        state: 'bloc-list',
+        name: 'New session',
+        type: 'link',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+      },
     ]
     },
   {

@@ -1,10 +1,16 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FilterDataPipe } from './services/pipe/filter-data.pipe';
+
 @NgModule({
-  imports: [
-    CommonModule,
-  ]
+    imports: [
+        CommonModule,
+    ],
+    exports: [
+        FilterDataPipe
+    ],
+    declarations: [FilterDataPipe]
 })
 export class CoreModule {
   // CoreModule must be imported only by one NgModule the AppModule

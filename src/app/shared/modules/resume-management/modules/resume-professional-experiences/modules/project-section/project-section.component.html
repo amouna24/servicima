@@ -101,7 +101,7 @@
                 </div>
               </div>
               <div fxLayout="row" fxFlexFill>
-                <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': 'RESUME_ADD_PROJECT_DET_SECTION', 'form': sendProSectionDetails}">
+                <div fxLayout="column" fxFlexFill *widDisabledForm="{'feature': 'RESUME_ADD_PROJECT_DETAILS_SECTION', 'form': sendProSectionDetails}">
                   <form  [formGroup]="sendProSectionDetails" fxLayout="row" >
                     <div fxLayout="column" fxFlex="47" fxLayoutAlign=" end"  >
                       <div fxLayout="row" fxFlexFill >
@@ -115,7 +115,7 @@
                       </div>
                     </div>
                     <div fxLayout="column" style="justify-content: space-around" class="p-l-10">
-                      <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()" *canBeDisplayed="{'feature': 'RESUME_ADD_PROJECT_DET_SECTION'}"  [disabled]="sendProSectionDetails.invalid">
+                      <button class="btn-small bg-cool-grey" style="border: none" (click)="createProSectionDetails()" *canBeDisplayed="{'feature': 'RESUME_ADD_PROJECT_DETAILS_SECTION'}"  [disabled]="sendProSectionDetails.invalid">
                         {{ 'resume-add' | translate }}</button>
                     </div>
                   </form>

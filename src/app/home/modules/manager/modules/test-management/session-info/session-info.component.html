@@ -82,8 +82,8 @@
               </div>
               <div fxLayout="row">
                 <mat-radio-group formControlName="copyPaste" aria-label="Select an option">
-                  <mat-radio-button value="true">Prevent</mat-radio-button>
-                  <mat-radio-button value="false">Allow</mat-radio-button>
+                  <mat-radio-button [value]="true">Prevent</mat-radio-button>
+                  <mat-radio-button [value]="false">Allow</mat-radio-button>
                 </mat-radio-group>
               </div>
               <mat-error class="wid-error-messages" *ngIf="form.controls.copyPaste?.errors?.required &&
@@ -98,14 +98,14 @@
               </div>
               <div fxLayout="row" class="rounded-check-box">
                 <mat-radio-group formControlName="sendReport" aria-label="Select an option">
-                  <mat-radio-button value="true">Yes</mat-radio-button>
-                  <mat-radio-button value="false">No</mat-radio-button>
+                  <mat-radio-button [value]="true">Yes</mat-radio-button>
+                  <mat-radio-button [value]="false">No</mat-radio-button>
                 </mat-radio-group>
 
               </div>
 
               <mat-error class="wid-error-messages" *ngIf="form.controls.sendReport?.errors?.required &&
-               form.controls.copyPaste.touched">
+               form.controls.sendReport.touched">
                 {{ 'general.required' | translate }}
               </mat-error>
             </div>
@@ -114,8 +114,40 @@
               <div fxLayout="row">Selected blocs</div>
               <div fxLayout="row">
                 <div fxLayout="row" class="container-role-feature">
-                  <wid-scrollbar class="scrollbar block" >
-                    <mat-select-trigger>
+
+              <div fxLayout="column" style="min-width: 100%">
+                <wid-scrollbar class="scrollbar" >
+                  <mat-form-field class="demo-chip-list">
+                      <mat-chip-list #chipList>
+                        <mat-chip
+                          *ngFor="let technology of technologies"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="remove(technology)">
+                          {{technology.viewValue}}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input
+                          #technologyInput
+                          [formControl]="technologyCtrl"
+                          [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event)"
+                        />
+                      </mat-chip-list>
+
+                 <!--     <div >errror</div> -->
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let technology of filteredTechnology | async" [value]="technology.value">
+                          {{ technology.viewValue }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                </wid-scrollbar>
+              </div>
+                <!--    <mat-select-trigger>
 
                       <mat-chip-list>
                         <mat-chip *ngFor="let blocTitle of blocTitles" [removable]="false">
@@ -124,11 +156,14 @@
                         </mat-chip>
                       </mat-chip-list>
 
-                    </mat-select-trigger>
-                  </wid-scrollbar>
-                  <br />
+                    </mat-select-trigger> -->
+
                 </div>
+
               </div>
+              <div class="red">{{msgCodeError}}</div>
+              <br />
+
             </div>
 
           </div>
@@ -142,16 +177,16 @@
             <div fxLayout="column">
 
               <button mat-raised-button class="btn-small bg-pale-grey">
-                <span class="black">Back</span>
+                <span class="black" (click)="backToPreviousPage()">Back</span>
               </button>
 
             </div>
             <div fxLayout="column" class="m-r-40">
               <div fxLayout="row" fxLayoutGap="25px">
-                <button mat-raised-button class="btn-small bg-pale-grey">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="initForm()">
                   <span class="black">Cancel</span>
                 </button>
-                <button mat-raised-button class="btn-small " color="primary" (click)="addSessionInformation()">
+                <button mat-raised-button class="btn-small " color="primary" (click)="addOrUpdateSessionInformation()">
                   <span class="white">Next</span>
                 </button>
               </div>

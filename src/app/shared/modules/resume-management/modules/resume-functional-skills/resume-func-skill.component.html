@@ -32,13 +32,13 @@
                 <button mat-raised-button
                         class="steel-two btn-small bg-white border-radius-5"
                         [disabled]="button === 'Save'"
-                        *canBeDisplayed="{ feature: 'RESUME_UPDATE_FUNC_SKILL'}"
+                        *canBeDisplayed="{ feature: 'RESUME_UPDATE_FUNCTIONAL_SKILLS'}"
                         (click)="editForm(item,pointIndex)">{{ 'resume-edit' | translate }}</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="center end" class="p-r-20" fxFlex>
                 <button mat-raised-button
                         class="steel-two btn-small bg-white border-radius-5"
-                        *canBeDisplayed="{ feature: 'RESUME_DELETE_FUNC_SKILL'}"
+                        *canBeDisplayed="{ feature: 'RESUME_DELETE_FUNCTIONAL_SKILLS'}"
                         (click)="deleteFuncSkill(item._id,pointIndex)" >{{ 'resume-delete' | translate }}</button>
               </div>
             </div>
