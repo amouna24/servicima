@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IUserModel } from '@shared/models/user.model';
 import { HumanRessourcesService } from '@core/services/human-ressources/human-resources.service';
 import { UserService } from '@core/services/user/user.service';
@@ -24,6 +24,7 @@ import { IViewParam } from '@shared/models/view.model';
 })
 export class EditWorkCertificateComponent implements OnInit {
 
+  @Input() collaborator: boolean;
   certificate: any;
   user: IUserModel;
   position: string;
@@ -34,7 +35,6 @@ export class EditWorkCertificateComponent implements OnInit {
   role = 'Collaborator';
   editForm: FormGroup;
   languageList: ILanguageModel[];
-  collaborator = false;
   applicationId: string;
   companyId: string;
   companyEmail: string;
