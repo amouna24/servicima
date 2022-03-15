@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('@shared/modules/resume-management/resume-management.module').then(m => m.ResumeManagementModule)
       },
       {
+        path: 'test-management',
+        loadChildren: () => import('./modules/test-management/test-management.module').then(m => m.TestManagementModule)
+      },
+      {
         path: 'user',
         data: {
           breadcrumb: 'user'

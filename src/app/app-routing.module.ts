@@ -16,7 +16,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
     },
-   {
+     {
         path: 'auth',
         canActivate: [AuthGuard],
         loadChildren: () => import('@widigital-group/auth-npm-front').then(m => m.AuthLibModule),

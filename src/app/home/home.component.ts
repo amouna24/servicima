@@ -263,4 +263,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   displaySidenavSetting(): boolean {
     return this.router.url.startsWith('/manager/settings');
   }
+  dontDisplaySidenav(): boolean {
+    return this.router.url.startsWith('/candidate/test-management');
+  }
 }
