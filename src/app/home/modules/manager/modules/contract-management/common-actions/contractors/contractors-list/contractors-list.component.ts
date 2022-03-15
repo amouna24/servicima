@@ -35,6 +35,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
   addButtonLabel: string;
   featureAccess: string;
   tabFeatureAccess = [{ name: '', feature: ''}];
+  featureImport = '';
   // featureImport: string;
 
   /**************************************************************************
@@ -168,26 +169,25 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     if ( this.type === 'SUPPLIER') {
       this.redirectUrl = '/manager/contract-management/suppliers-contracts/suppliers';
       this.addButtonLabel = 'contractor.supp.add';
-       this.featureAccess = 'CONTRACT_ADD_CLIENT';
-      this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
-      this.tabFeatureAccess = [
+        this.featureAccess = 'CONTRACT_ADD_SUPPLIER';
+        this.featureImport = 'CONTRACT_IMPORT_SUPPLIER';
+        this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_SUPPLIER'},
-        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'},
+        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'}, // archive
         { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_SUPPLIER'},
       ];
     } else {
       this.redirectUrl = '/manager/contract-management/clients-contracts/clients';
       this.addButtonLabel = 'contractor.client.add';
-       this.featureAccess = 'CONTRACT_ADD_SUPPLIER';
-      this.featureAccess = 'SOURCING_CAND_FILE_ACCESS';
-      this.tabFeatureAccess = [
+        this.featureAccess = 'CONTRACT_ADD_CLIENT';
+        this.featureImport = 'CONTRACT_IMPORT_CLIENT';
+
+        this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_CLIENT'},
-        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'},
+        { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_CLIENT'},
         { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_CLIENT'},
       ];
-      this.featureAccess = 'CONTRACT_IMPORT_CLIENT';
     }
-    console.log('tab contractor ', this.tabFeatureAccess);
   }
 
   /**************************************************************************
@@ -257,7 +257,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       url = '/manager/contract-management/clients-contracts/clients';
     }
-    console.log('url ', url);
     this.router.navigate(
         [url],
         { queryParams: {

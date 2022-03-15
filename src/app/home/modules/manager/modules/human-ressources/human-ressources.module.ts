@@ -11,15 +11,20 @@ import { SharedModule } from '@shared/shared.module';
 // tslint:disable-next-line:origin-ordered-imports
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { ListOfCertificationComponent } from './certifications/list-of-certification/list-of-certification.component';
+import { EditCertificationComponent } from './certifications/edit-certification/edit-certification.component';
+import { ShowCertificationComponent } from './certifications/show-certification/show-certification.component';
 
 @NgModule({
     declarations: [HumanRessourcesComponent,
         CertificationListComponent,
         CollaboratorListComponent,
         CollaboratorComponent,
-        ListOfCertificationComponent],
+        ListOfCertificationComponent,
+        EditCertificationComponent,
+        ShowCertificationComponent],
     exports: [
-        CertificationListComponent
+        CertificationListComponent,
+        ListOfCertificationComponent
     ],
   imports: [
     CommonModule,
