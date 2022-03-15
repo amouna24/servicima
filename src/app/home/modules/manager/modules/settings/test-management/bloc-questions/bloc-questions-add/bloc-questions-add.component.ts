@@ -95,7 +95,7 @@ export class BlocQuestionsAddComponent implements OnInit {
       test_question_bloc_title :  ['', [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       test_technology_code: ['', [Validators.required]],
       question_nbr: ['', [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
-      image: '',
+      image: ['', [Validators.required]],
       test_question_bloc_desc: '',
       free: true,
       price: null,
