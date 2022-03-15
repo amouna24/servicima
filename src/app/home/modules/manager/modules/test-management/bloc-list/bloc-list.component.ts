@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { blocQuestionsAppearance } from '@shared/animations/animations';
 import { TestService } from '@core/services/test/test.service';
 import { ITestQuestionBlocModel } from '@shared/models/testQuestionBloc.model';
@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environment/environment';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { BehaviorSubject } from 'rxjs';
 
 import { BlocListModalComponent } from '../bloc-list-modal/bloc-list-modal.component';
 
@@ -34,6 +35,7 @@ export class BlocListComponent implements OnInit {
   applicationId: string;
   technologiesList = [];
   sessionCode: string;
+  isLoading = new BehaviorSubject<boolean>(false);
   constructor(
     private testService: TestService,
     private userService: UserService,
@@ -71,6 +73,7 @@ export class BlocListComponent implements OnInit {
     this.displayingIcon = this.displayingIcon === this.listIcon ? this.gridIcon : this.listIcon;
   }
   getBlocQuestions() {
+    this.isLoading.next(true);
     this.testService
       .getQuestionBloc(
         `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
@@ -86,8 +89,8 @@ export class BlocListComponent implements OnInit {
               }
             }
           });
-
         });
+        this.isLoading.next(false);
     });
   }
   openDescriptionDialog(blocQuestion, available: string) {

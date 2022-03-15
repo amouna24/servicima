@@ -96,7 +96,7 @@ export class EditBlocComponent implements OnInit {
       test_technology_code: [this.test_technology_code, [Validators.required]],
       question_nbr: [this.question_nbr, [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       test_question_bloc_desc: this.test_question_bloc_desc,
-      image: this.image,
+      image:  [this.image, [ Validators.required]],
       free: this.free,
       price: this.price,
     });
