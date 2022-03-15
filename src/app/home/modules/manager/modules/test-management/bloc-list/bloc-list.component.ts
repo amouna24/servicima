@@ -79,18 +79,22 @@ export class BlocListComponent implements OnInit {
         `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
         getApplicationID('SERVICIMA')}`)
       .subscribe( (resBlocQuestions) => {
-        resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel) => {
+        resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel, index) => {
           this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`).subscribe( (questions) => {
             if (!questions['msg_code']) {
               if (oneBloc.free) {
                 this.availableBlocQuestionsList.push(oneBloc);
+                this.isLoading.next(false);
               } else {
                 this.otherBlocQuestionsList.push(oneBloc);
               }
             }
+            if ( (index + 1) === resBlocQuestions['results'].length) {
+              this.isLoading.next(false);
+            }
           });
+
         });
-        this.isLoading.next(false);
     });
   }
   openDescriptionDialog(blocQuestion, available: string) {

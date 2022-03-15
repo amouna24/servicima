@@ -70,8 +70,17 @@
                 <div fxLayout="column" fxFlex="96" >
                   <div fxLayout="row" fxFlex="100" fxLayoutAlign="end">
                     <div fxLayout="column" fxFlex="97" fxLayoutAlign="center">
-                      <ng-template [ngIf]="availableBlocQuestionsList.length === 0">
-                        <div fxLayout="row" fxFlex="70" class="empty-available-bloc">
+                      <ng-template  [ngIf]="isLoading.getValue()">
+                        <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
+                          <mat-progress-spinner
+                            color="primary"
+                            mode="indeterminate">
+                          </mat-progress-spinner>
+                        </div>
+                      </ng-template>
+                      <ng-template [ngIf]="!isLoading.getValue()">
+                        <ng-template [ngIf]="availableBlocQuestionsList.length === 0">
+                          <div fxLayout="row" fxFlex="70" class="empty-available-bloc">
                             <div fxLayout="column" fxFlexFill  fxLayoutGap="20px">
                               <div fxLayout="row" fxFlex="50" fxLayoutAlign="center end">
                                 <span class="cool-grey font-medium font-size-24">There is no bloc questions available</span>
@@ -81,77 +90,77 @@
                                   <span class="white font-size-14 font-medium">Add Bloc questions</span></button>
                               </div>
                             </div>
-                        </div>
-                      </ng-template>
-                      <ng-template [ngIf]="availableBlocQuestionsList.length !== 0">
-                        <ng-template [ngIf]="showVertical" >
-                          <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
-                            <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
+                          </div>
+                        </ng-template>
+                        <ng-template [ngIf]="availableBlocQuestionsList.length !== 0">
+                          <ng-template [ngIf]="showVertical" >
+                            <div fxLayout="row wrap"  fxLayoutGap="15px grid" fxFlex="100" @blocQuestionsAppearance>
+                              <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
                                    filterData: searchField: 'test_question_bloc_title' |
                                    filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
-                              <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
-                                <div fxLayout="column" fxFlexFill>
-                                  <div fxLayout="row" >
-                                    <div fxLayout="column" class="p-5">
-                                      <div fxLayout="column" [style.width.px]="220" [style.height.px]="108"  [style.background-image]="'url('+ imageUrl + oneAvailableBloc.image+ ')'" style="border-radius: 15px; background-size: cover">
-                                        <div fxLayout="row" fxFlex="10" fxLayoutAlign="end">
-                                          <div fxLayout="column"  class="p-r-12 rounded-check-box colored-check-box">
-                                            <mat-checkbox class="custom-frame"
-                                                          #checkBoxEvent
-                                                          [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
-                                                          (change)="addRemoveSelectedBloc(checkBoxEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"></mat-checkbox>
+                                <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
+                                  <div fxLayout="column" fxFlexFill>
+                                    <div fxLayout="row" >
+                                      <div fxLayout="column" class="p-5">
+                                        <div fxLayout="column" [style.width.px]="220" [style.height.px]="108"  [style.background-image]="'url('+ imageUrl + oneAvailableBloc.image+ ')'" style="border-radius: 15px; background-size: cover">
+                                          <div fxLayout="row" fxFlex="10" fxLayoutAlign="end">
+                                            <div fxLayout="column"  class="p-r-12 rounded-check-box colored-check-box">
+                                              <mat-checkbox class="custom-frame"
+                                                            #checkBoxEvent
+                                                            [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
+                                                            (change)="addRemoveSelectedBloc(checkBoxEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"></mat-checkbox>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div fxLayout="row" fxFlex="10">
+                                      <mat-card-title class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</mat-card-title>
+                                    </div>
+                                    <div fxLayout="row" fxFlex="25">
+                                      <mat-card-content class="p-l-15">
+                                        <p class="font-size-10 steel font-extra-light limit-text-height">
+                                          {{oneAvailableBloc.test_question_bloc_desc.length < 100 ? oneAvailableBloc.test_question_bloc_desc : oneAvailableBloc.test_question_bloc_desc | slice:0:100}}
+                                          <span *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 100">...</span>
+                                          <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 100" (click)="openDescriptionDialog(oneAvailableBloc,'available')"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
+                                        </p>
+                                      </mat-card-content>
+                                    </div>
+                                    <div fxLayout="row" fxFlex="15">
+                                      <div  fxLayout="column" class="p-l-15" fxFlexFill>
+                                        <div fxLayout="row" fxLayoutGap="5px">
+                                          <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
+                                            <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                  <div fxLayout="row" fxFlex="10">
-                                    <mat-card-title class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</mat-card-title>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="25">
-                                    <mat-card-content class="p-l-15">
-                                      <p class="font-size-10 steel font-extra-light limit-text-height">
-                                        {{oneAvailableBloc.test_question_bloc_desc.length < 100 ? oneAvailableBloc.test_question_bloc_desc : oneAvailableBloc.test_question_bloc_desc | slice:0:100}}
-                                        <span *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 100">...</span>
-                                        <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 100" (click)="openDescriptionDialog(oneAvailableBloc,'available')"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
-                                      </p>
-                                    </mat-card-content>
-                                  </div>
-                                  <div fxLayout="row" fxFlex="15">
-                                    <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                      <div fxLayout="row" fxLayoutGap="5px">
-                                        <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
-                                          <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </mat-card>
+                                </mat-card>
+                              </div>
                             </div>
-                          </div>
-                        </ng-template>
-                        <ng-template [ngIf]="!showVertical" >
-                          <div fxLayout="row" fxFlexFill @blocQuestionsAppearance>
-                            <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
-                              <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
+                          </ng-template>
+                          <ng-template [ngIf]="!showVertical" >
+                            <div fxLayout="row" fxFlexFill @blocQuestionsAppearance>
+                              <div fxLayout="column wrap"  fxFlex="100" fxLayoutGap="10px grid">
+                                <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
                                    filterData: searchField: 'test_question_bloc_title' |
                                    filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
-                                <mat-card [ngClass]="checkBoxOtherEvent['checked'] ? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'" >
-                                  <div fxLayout="row" fxFlexFill>
-                                    <div fxLayout="column"  fxLayoutAlign="center">
-                                      <div fxLayout="column" class="p-5">
-                                        <img [src]="imageUrl+oneAvailableBloc.image" width="200px" height="108px" style="border-radius: 15px">
+                                  <mat-card [ngClass]="checkBoxOtherEvent['checked'] ? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'" >
+                                    <div fxLayout="row" fxFlexFill>
+                                      <div fxLayout="column"  fxLayoutAlign="center">
+                                        <div fxLayout="column" class="p-5">
+                                          <img [src]="imageUrl+oneAvailableBloc.image" width="200px" height="108px" style="border-radius: 15px">
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div fxLayout="column" fxFlex="100">
-                                      <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
-                                        <span class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</span>
-                                      </div>
-                                      <div fxLayout="row" fxFlex="55">
-                                        <div fxLayout="column" fxFlex="80">
-                                          <wid-scrollbar fxLayout="row" >
-                                            <div fxLayout="column"  fxLayoutAlign="center">
+                                      <div fxLayout="column" fxFlex="100">
+                                        <div fxLayout="row" fxFlex="20" fxLayoutAlign=" end">
+                                          <span class="black font-size-12 font-medium p-l-15">{{oneAvailableBloc.test_question_bloc_title}}</span>
+                                        </div>
+                                        <div fxLayout="row" fxFlex="55">
+                                          <div fxLayout="column" fxFlex="80">
+                                            <wid-scrollbar fxLayout="row" >
+                                              <div fxLayout="column"  fxLayoutAlign="center">
                                     <span class="p-l-15">
                                       <p class="font-size-10 steel font-extra-light ">
                                         {{oneAvailableBloc.test_question_bloc_desc.length < 220 ? oneAvailableBloc.test_question_bloc_desc : oneAvailableBloc.test_question_bloc_desc | slice:0:250}}
@@ -159,36 +168,36 @@
                                   <button class="font-size-10 steel font-extra-light transparent-button" *ngIf="oneAvailableBloc.test_question_bloc_desc.length >= 220" (click)="openDescriptionDialog(oneAvailableBloc, 'available')"><span style="border-bottom: 1px solid #7b7e8a">Read more</span></button>
                                       </p>
                                     </span>
-                                            </div>
+                                              </div>
 
-                                          </wid-scrollbar>
+                                            </wid-scrollbar>
 
+                                          </div>
                                         </div>
-                                      </div>
-                                      <div fxLayout="row" fxFlex="25">
-                                        <div  fxLayout="column" class="p-l-15" fxFlexFill>
-                                          <div fxLayout="row" fxLayoutGap="5px">
-                                            <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
-                                              <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
+                                        <div fxLayout="row" fxFlex="25">
+                                          <div  fxLayout="column" class="p-l-15" fxFlexFill>
+                                            <div fxLayout="row" fxLayoutGap="5px">
+                                              <div fxLayout="column" [ngClass]="oneAvailableBloc.free ? 'bloc-type-free' : 'bloc-type-purchased'" fxLayoutAlign="center center">
+                                                <span class="bloc-type-label">{{oneAvailableBloc.free ? 'Free' : 'purchased'}}</span>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
+                                      <div fxLayout="column" fxLayoutAlign=" end" class="rounded-check-box p-r-12" >
+                                        <mat-checkbox class="custom-frame"
+                                                      [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
+                                                      (change)="addRemoveSelectedBloc(checkBoxOtherEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
+                                                      #checkBoxOtherEvent></mat-checkbox>
+                                      </div>
                                     </div>
-                                    <div fxLayout="column" fxLayoutAlign=" end" class="rounded-check-box p-r-12" >
-                                      <mat-checkbox class="custom-frame"
-                                                    [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
-                                                    (change)="addRemoveSelectedBloc(checkBoxOtherEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
-                                                    #checkBoxOtherEvent></mat-checkbox>
-                                    </div>
-                                  </div>
-                                </mat-card>
+                                  </mat-card>
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          </ng-template>
                         </ng-template>
                       </ng-template>
-
                     </div>
                   </div>
 
