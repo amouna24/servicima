@@ -351,4 +351,29 @@ export class TestService {
   deleteSessionQuestion(id: string): Observable<any> {
     return this.httpClient.delete<ITestSessionQuestionModel>(`${environment.testSessionQuestionsApiUrl}/?_id=${id}`);
   }
+
+  /**************************************************************************
+   * @description Get Test Invite Candidates
+   * @param filter search query like [ ?id=123 ]
+   * @returns  invited candidate
+   *************************************************************************/
+  getTestInviteCandidates(filter: string): Observable<any> {
+    return this.httpClient.get<any>(`${environment.testInviteCandidatesApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description add test invite candidates
+   * @param inviteCandidate: invite candidates
+   *************************************************************************/
+  addTestInviteCandidates(inviteCandidate): Observable<any> {
+    return this.httpClient.post<any>(`${environment.testInviteCandidatesApiUrl}`, inviteCandidate);
+  }
+
+  /**************************************************************************
+   * @description Update choice Status
+   * @param choice: updated choice Object
+   *************************************************************************/
+  updateInviteCandidates(inviteCandidate): Observable<any> {
+    return this.httpClient.put<any>(`${environment.testInviteCandidatesApiUrl}`, inviteCandidate);
+  }
 }

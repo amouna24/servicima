@@ -1,0 +1,24 @@
+ .mat-form-field-appearance-outline:is(.mat-form-field-disabled)  .mat-form-field-outline-start  {
+  background: #e8f1f9 !important;
+}
+ .mat-form-field-appearance-outline:is(.mat-form-field-disabled)   .mat-form-field-outline-end {
+  background: #e8f1f9 !important;
+}
+.mat-form-field-appearance-outline:not(.mat-form-field-disabled) .mat-form-field-flex:hover .mat-form-field-outline {
+  opacity: 0;
+  transition: opacity .6s cubic-bezier(.25,.8,.25,1);
+}
+ .mat-form-field-outline-start,
+  .mat-form-field-outline-end {
+  border-width: 2px !important;
+  color: #afb1b8 !important;
+;
+}
+ .header .mat-form-field-outline-start {
+  border-radius: 4px 0 0 4px !important;
+  min-width: 4px !important;
+}
+
+ .header .mat-form-field-outline-end {
+  border-radius: 0 4px 4px 0 !important;
+}

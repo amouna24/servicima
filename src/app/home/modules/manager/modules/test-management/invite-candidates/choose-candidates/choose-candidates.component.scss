@@ -13,17 +13,26 @@
   border-bottom-width: 10px;
   border-radius: 5em !important;
 }
-
-
-/*::ng-deep thead {
- // position: fixed !important;
-}*/
+.sort-invite-candidate{
+  width: 35px;
+  height: 35px;
+  border: 2px solid #afb1b8;
+  border-radius: 4px;
+  background-color: white;
+  color: gray;
+}
 
 .full-width-table {
   height: 400px;
   overflow: auto;
 }
 
+.input-width-delay {
+  width: 70px;
+}
+.container-mat-error{
+  height: 20px !important;
+}
 
 .choose-candidates {
   height: 500px !important;

@@ -227,6 +227,11 @@ export class UserService {
   getAllUsers(filter: string) {
     return this.httpClient.get(`${environment.userApiUrl}/${filter}`);
   }
+
+  sendMail(mailing) {
+    return this.httpClient.post(`${environment.mailingApiUrl}`, mailing);
+}
+
   updateUser(User: IUserModel): Observable<any> {
     return this.httpClient.put<IUserModel>(`${environment.userApiUrl}`, User);
   }}

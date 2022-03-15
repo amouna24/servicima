@@ -1,0 +1,15 @@
+<div fxLayout="column" fxFlex="100" class="font-size-12 black">
+  <div fxFlex="28"   fxLayoutAlign="center center" fxLayout="row"  [ngStyle]="{'color': title.color }" class="session-ready  font-size-24">
+    {{title.name}}
+  </div>
+  <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center center">
+    <img  [src]="'assets/img/' + image.path" alt="" >
+  </div>
+  <div fxFlex="28" fxLayout="row"  fxLayoutAlign="center center" class="font-size-18 font-extra-light black-three" > {{message}} </div>
+  <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
+
+    <div fxLayout="column" fxFlex fxLayoutAlign=" center">
+      <button (click)="clickButton()" mat-button [ngStyle]="{'color': button.color, 'background': button.background }" class="btn-large font-medium"> {{button.name}} </button>
+    </div>
+  </div>
+</div>

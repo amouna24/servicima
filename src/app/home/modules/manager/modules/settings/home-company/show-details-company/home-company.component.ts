@@ -35,7 +35,7 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
               private refdataService: RefdataService,
 ) { }
 
-  company: ICompanyModel;
+  company: any;
   userInfo: IUserInfo;
   companyId: string;
   applicationId: string;
@@ -65,11 +65,11 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /**
    * @description Loaded when component in init state
    */
-  ngOnInit(): void {
+ async ngOnInit() {
     this.modalService.registerModals(
       { modalName: 'AddLink', modalComponent: ModalSocialWebsiteComponent});
     this.mapData();
-    this.getRefData();
+  await  this.getRefData();
     this.getDetailsCompany();
   }
 
@@ -101,9 +101,9 @@ export class HomeCompanyComponent implements OnInit, OnDestroy {
   /**
    * @description : get the refData from local storage
    */
-  getRefData(): void {
+ async getRefData() {
     const list = ['VAT', 'LEGAL_FORM'];
-    const refData = this.refdataService.getRefData(this.companyId, this.applicationId,
+    const refData = await this.refdataService.getRefData(this.companyId, this.applicationId,
       list);
     this.legalFormList = refData['LEGAL_FORM'];
     this.vatList = refData['VAT'];
