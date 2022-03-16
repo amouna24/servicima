@@ -1,1 +1,48 @@
-<p>test-qcm works!</p>
+<div fxLayout="column" fxFlexFill >
+  <div fxLayout="row" fxFlex="97">
+    <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+      <div fxLayout="row" fxFlex="25" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex="66" class="white-bloc">
+            <div fxLayout="row" fxFlexFill fxLayoutAlign="center" class="p-t-10 p-b-10">
+              <div fxLayout="column" fxFlex="100">
+                <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
+                  <button class="transparent-button" (click)="addIndex()">
+                    <div class="triangle-button-arrow-up"></div>
+                  </button>
+                </div>
+                <div fxLayout="row" fxFlex="22"  fxLayoutAlign="center center">
+                  <span class="font-medium font-size-12 steel opacity-23"
+                        [@questionCurrentToNext]="animationStateNext.toString()"
+                        [@questionDisplayNewPrevious]="animationStatePrevious.toString()">{{showQuestion(index - 1)}}</span>
+                </div>
+                <div fxLayout="row" fxFlex="35"  fxLayoutAlign="center center">
+                  <span class="font-medium font-size-28 primaryColor"
+                        [@questionPreviousToCurrent]="animationStateNext.toString()"
+                        [@questionNextToCurrent]="animationStatePrevious.toString()" >{{showQuestion(index)}}</span>
+                </div>
+                <div fxLayout="row" fxFlex="22"  fxLayoutAlign="center center">
+                  <span
+                        [@questionCurrentToPrevious]="animationStatePrevious.toString()"
+                        [@questionDisplayNewNext]="animationStateNext.toString()"
+                        class="font-medium font-size-12 steel opacity-23">{{showQuestion(index + 1)}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
+                  <button class="transparent-button" (click)="reduceIndex()">
+                    <div class="triangle-button-arrow-down"></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div fxLayout="column" fxFlex="33" class="white-bloc">
+
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="70">
+        <div fxLayout="column" fxFlex="100" class="white-bloc" (click)="test()"></div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
