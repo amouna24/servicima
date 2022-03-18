@@ -19,7 +19,6 @@ export class DisabledFormDirective implements OnInit {
 
   @Input()
    set widDisabledForm(params: any) {
-    console.log('paramssssssssssss=', params);
     if (params) {
       this.feature = params.feature;
       this.form = params.form;
@@ -52,7 +51,6 @@ export class DisabledFormDirective implements OnInit {
    * Insert or remove the html element from the DOM
    */
   updateView(feature) {
-    console.log('feature =', feature);
     if (!this.isDisplayed(feature)) {
       this.form.disable();
       this.viewContainer.clear();

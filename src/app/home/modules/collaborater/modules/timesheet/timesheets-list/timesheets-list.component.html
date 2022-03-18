@@ -6,13 +6,11 @@
   title: 'Timesheet management',
   addActionURL: redirectUrl,
   addActionText: 'New',
-  feature: 'HR_FOLDER_ACCESS'
+  feature: typeTimesheet === TIMESHEET ? 'TIMESHEET_ADD' : 'TIMESHEET_EXTRAS_ADD'
   }"
   [title]="'Timesheet list'"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="[
-  {name: 'export', feature: 'HR_FOLDER_ACCESS'},
-  {name: 'delete', feature: 'HR_FOLDER_ACCESS'}]"
+  [allowedActions]="[{name: 'delete', feature: typeTimesheet === TIMESHEET ? 'TIMESHEET_DELETE' : 'TIMESHEET_EXTRAS_DELETE'}]"
   [colorObject]="sendColorObject()"
   (pagination)="loadMoreItems($event)"
 >

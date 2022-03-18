@@ -58,7 +58,7 @@ export const environment = {
   hrContractExtension: 'http://213.136.74.202/hrcontractextension',
   hrPreviousContractApiUrl: 'http://213.136.74.202/hrcontractprevious',
   workCertificateApiUrl: 'http://213.136.74.202/hrworkcertificate',
-  payslipAssociateApiUrl: 'http://213.136.74.202/payslipassociate',
+  payslipAssociateApiUrl: 'http://213.136.74.202/payslip',
   invoiceGenerateApiUrl: 'http://213.136.74.202/invoicegenerate',
   invoiceLineApiUrl: 'http://213.136.74.202/invoiceline',
   invoiceHeaderApiUrl: 'http://213.136.74.202/invoiceheader',
