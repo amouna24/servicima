@@ -1147,20 +1147,25 @@ export class CollaboratorComponent implements OnInit {
 
   }
   async getDataFromPreviousRoute() {
-    await  this.utilsService.verifyCurrentRoute('/manager/human-ressources/collaborator-list').subscribe( (data) => {
+    await  this.utilsService.verifyCurrentRoute('/manager/human-ressources/collaborator-list').subscribe( async (data) => {
       this.selectedBloc = data._id;
       this.id = data._id;
       this.profileService.getUserById(this.id).subscribe((collab) => {
-        this.collaborator = collab['results'][0];
         this.userInfo = collab['results'][0];
         console.log('user info ', this.userInfo);
         this.hrService.getBanking(`?email_address=${this.userInfo.userKey.email_address}`).subscribe(async (banking) => {
           this.bankingInfo = banking[0];
         });
+        this.hrService.getCollaborators(`?email_address=${this.userInfo.userKey.email_address}`).subscribe( async (collaborator) => {
+          this.collaborator = collaborator[0];
+        });
       });
+
       this.hrService.getContractById(data.idContract).subscribe((contrat) => {
         this.contract = contrat[0];
       });
+      console.log('user ', this.userInfo, this.bankingInfo, this.contract);
+      await this.initForm();
 
     });
   }
@@ -1168,8 +1173,8 @@ export class CollaboratorComponent implements OnInit {
    * @description Set all functions that needs to be loaded on component init
    *************************************************************************/
   async ngOnInit() {
+    await this.initProfileForm();
     await this.getDataFromPreviousRoute();
-
    this.profileService
       .getUserById(this.id)
       .subscribe(async (user) => {
@@ -1181,7 +1186,7 @@ export class CollaboratorComponent implements OnInit {
       });
    this.subscriptions = this.userService.connectedUser$.subscribe(async (data) => {
      if (!!data) {
-       this.initProfileForm();
+
        console.log('data ', data);
        await this.getRefData(data['user'][0]['company_email']);
        await this.getInitialData();
@@ -1196,28 +1201,28 @@ export class CollaboratorComponent implements OnInit {
   /**************************************************************************
    * @description Init form with initial data
    *************************************************************************/
-  initProfileForm() {
+  async initProfileForm() {
     this.profileForm = this.formBuilder.group({
       PERSONAL_DATA: this.formBuilder.group({
-        first_name: [this.userInfo === null ? '' : this.userInfo.first_name, Validators.required],
-        last_name: [this.userInfo === null ? '' : this.userInfo.last_name, Validators.required],
-        email_address: [this.collaborator === null ? '' : this.collaborator.collaboratorKey.email_address, Validators.required],
-        phone: [this.userInfo === null ? '' : this.userInfo.cellphone_nbr, Validators.required],
-        birth_date: [this.collaborator === null ? '' : this.collaborator.birth_date, Validators.required],
-        gender_id: [this.userInfo === null ? '' : this.userInfo.gender_id, Validators.required],
-        birth_country_id: [this.collaborator === null ? '' : this.collaborator.birth_country_id, Validators.required],
-        birth_city: [this.collaborator === null ? '' : this.collaborator.birth_city, Validators.required],
-        adress: [this.collaborator === null ? '' : this.collaborator.adress, Validators.required],
-        country_id: [this.collaborator === null ? '' : this.collaborator.country_id, Validators.required],
+        first_name: [''],
+        last_name: [''],
+        email_address: [''],
+        phone: [''],
+        birth_date: [''],
+        gender_id: [''],
+        birth_country_id: [''],
+        birth_city: [''],
+        adress: [''],
+        country_id: [''],
         countryFilterCtrl: [''],
         countryBirthFilterCtrl: [''],
-        zip_code: [this.collaborator === null ? '' : this.collaborator.zip_code, Validators.required],
-        family_situation_id: [this.collaborator === null ? '' : this.collaborator.family_situation_id, Validators.required],
-        nationality_id: [this.collaborator === null ? '' : this.collaborator.nationality_id, Validators.required],
+        zip_code: [''],
+        family_situation_id: [''],
+        nationality_id: [''],
         nationalityFilterCtrl: [''],
-        registration_number: [this.collaborator === null ? '' : this.collaborator.registration_number, Validators.required],
-        social_secu_nbr: [this.collaborator === null ? '' : this.collaborator.social_secu_nbr, Validators.required],
-        medical_exam_date: [this.collaborator === null ? '' : this.collaborator.medical_exam_date, Validators.required],
+        registration_number: [''],
+        social_secu_nbr: [''],
+        medical_exam_date: [''],
       }),
       IDENTITY_DOCUMENT: this.formBuilder.group({
         identity_document_code: [''],
@@ -1226,14 +1231,14 @@ export class CollaboratorComponent implements OnInit {
         file: [''],
       }),
       CONTRACT: this.formBuilder.group({
-        contract_rate: [this.contract !== null ? this.contract.contract_rate : '', Validators.min(0)],
-        currency_cd: [this.contract !== null ? this.contract.currency_cd : null],
+        contract_rate: [''],
+        currency_cd: [''],
         currencyFilter: [''],
-        contract_start_date:  [this.contract !== null ? this.contract.contract_start_date : ''],
-        contract_end_date:   [this.contract !== null ? this.contract.contract_end_date : ''],
-        contract_date: [this.contract !== null ? this.contract.contract_date : ''],
-        attachments: [this.contract !== null ? this.contract.attachments : ''],
-        contract_type: [this.contract !== null ? this.contract.HRContractKey.contract_type : ''],
+        contract_start_date:  [''],
+        contract_end_date:   [''],
+        contract_date: [''],
+        attachments: [''],
+        contract_type: [''],
       }),
       PREVIOUS_CONTRACT: this.formBuilder.group({
         contract_code: [''],
@@ -1283,9 +1288,9 @@ export class CollaboratorComponent implements OnInit {
         phone:  [''],
       }),
       BANKING: this.formBuilder.group({
-        bank_name: [this.bankingInfo === null ? '' : this.bankingInfo.bank_name],
-        iban: [this.bankingInfo === null ? '' : this.bankingInfo.iban],
-        rib: [this.bankingInfo === null ? '' : this.bankingInfo.rib],
+        bank_name: [''],
+        iban: [''],
+        rib: [''],
       }),
       EQUIPMENT: this.formBuilder.group({
         equipment_code: [''],
@@ -1388,6 +1393,41 @@ export class CollaboratorComponent implements OnInit {
     this.documentTypeList.next(this.refData['IDENTITY_TYPE']);
     this.jobTitleList.next(this.refData['PROF_TITLES']);
 
+  }
+  async initForm() {
+  await  this.profileForm.patchValue({
+      PERSONAL_DATA: {
+        first_name: this.userInfo.first_name,
+        last_name: this.userInfo.last_name,
+        email_address: this.userInfo.userKey.email_address,
+        phone: this.userInfo.prof_phone,
+        birth_date: this.collaborator.birth_date,
+        gender_id: this.userInfo.gender_id,
+        birth_country_id: this.collaborator.birth_country_id,
+        birth_city: this.collaborator.birth_city,
+        adress: this.collaborator.adress,
+        country_id: this.collaborator.country_id,
+        zip_code: this.collaborator.zip_code,
+        family_situation_id: this.collaborator.family_situation_id,
+        nationality_id: this.collaborator.nationality_id,
+        registration_number: this.collaborator.registration_number,
+        social_secu_nbr: this.collaborator.social_secu_nbr,
+        medical_exam_date: this.collaborator.medical_exam_date,
+      },
+      BANKING: {
+        bank_name: this.bankingInfo?.bank_name,
+        iban: this.bankingInfo?.iban,
+        rib: this.bankingInfo?.rib,
+      },
+      CONTRACT: {
+        contract_start_date: this.contract?.contract_start_date,
+        contract_end_date: this.contract?.contract_end_date,
+        contract_date: this.contract?.contract_date,
+        contract_rate: this.contract?.contract_rate,
+        currency_cd: this.contract?.currency_cd,
+        contract_type: this.contract?.HRContractKey.contract_type,
+      }
+    });
   }
 
   async getDataByEmail(email: string) {

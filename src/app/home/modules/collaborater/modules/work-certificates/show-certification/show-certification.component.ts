@@ -4,12 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'wid-edit-certification',
-  templateUrl: './edit-certification.component.html',
-  styleUrls: ['./edit-certification.component.scss']
+  selector: 'wid-show-certification',
+  templateUrl: './show-certification.component.html',
+  styleUrls: ['./show-certification.component.scss']
 })
-export class EditCertificationComponent implements OnInit {
-  collaborator = false;
+export class ShowCertificationComponent implements OnInit {
+
+  collaborator = true;
   idCertif = '';
   destroy$: Subject<boolean> = new Subject<boolean>();
   constructor(
