@@ -94,7 +94,7 @@ export class TestQcmComponent implements OnInit {
                    this.paddingTopSeconds =  `animation: secondsAnimation 1000ms infinite`;
                  }
                } else {
-               this.paddingTopMinutes = `animation: lastSecondAnimation 500ms; animation-iteration-count: 1;`;
+               this.paddingTopMinutes = ``;
                this.paddingTopSeconds = 'animation: lastSecondAnimation 500ms; animation-iteration-count: 1;';
              }
            }, 1);
