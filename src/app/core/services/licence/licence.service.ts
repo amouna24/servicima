@@ -6,7 +6,7 @@ import { ILicenceFeatureModel } from '@shared/models/licenceFeature.model';
 import { ICompanyLicenceModel } from '@shared/models/companyLicence.model';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '@environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +43,16 @@ export class LicenceService {
     return  this.httpClient
       .get<ILicenceFeatureModel[]>(environment.licenceFeaturesApiUrl + '?licence_code=' + licenceCode + '&display=' + true );
   }
+
+  /*------------------------------------ COMPANY LICENCE --------------------------------------*/
+  /**************************************************************************
+   * @description Update licence company
+   * @return licence
+   *************************************************************************/
+  updateCompanyLicence(companyLicence: any): Observable<ICompanyLicenceModel> {
+    return this.httpClient.put<ICompanyLicenceModel>(environment.companyLicenceApiUrl , companyLicence);
+  }
+
   /*------------------------------------ COMPANY LICENCE --------------------------------------*/
   /**************************************************************************
    * @description Add licence company
@@ -58,5 +68,12 @@ export class LicenceService {
   disableCompanyLicence(id: string): Observable<ICompanyLicenceModel> {
     return this.httpClient.delete<ICompanyLicenceModel>(
       environment.companyLicenceApiUrl + '/disable?_id=' + id );
+  }
+  /**************************************************************************
+   * @description Get company licence
+   * @returns All company licence <list>
+   *************************************************************************/
+  getCompanyLicence(filter: string): Observable<ICompanyLicenceModel[]> {
+    return this.httpClient.get<ICompanyLicenceModel[]>(`${environment.companyLicenceApiUrl}/${filter}`);
   }
 }

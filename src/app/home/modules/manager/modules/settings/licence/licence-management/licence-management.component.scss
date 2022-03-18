@@ -20,3 +20,9 @@
 .licence-container .mat-form-field {
   font-size: 9px;
 }
+::ng-deep .licence-container .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding: 0!important;
+}
+::ng-deep .licence-type .mat-form-field-appearance-outline .mat-form-field-flex {
+  width: 70% !important;
+}

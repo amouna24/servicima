@@ -24,6 +24,7 @@ export class CompanyBankingInfoComponent implements OnInit {
               private companyBankingInfoService: CompanyBankingInfoService) { }
 
   ngOnInit(): void {
+    this.addOrUpdateForm = 'SETTINGS_ADD_COMPANY_BANKING';
     this.getConnectedUser();
     this.getCompanyBankingInfo();
     this.initForm();
