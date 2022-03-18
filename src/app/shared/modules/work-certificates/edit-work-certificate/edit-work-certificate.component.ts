@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import {  dataAppearance } from '@shared/animations/animations';
 import { IViewParam } from '@shared/models/view.model';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wid-edit-work-certificate',
@@ -25,6 +27,7 @@ import { IViewParam } from '@shared/models/view.model';
 export class EditWorkCertificateComponent implements OnInit {
 
   @Input() collaborator: boolean;
+  @Input() _id: string;
   certificate: any;
   user: IUserModel;
   position: string;
@@ -42,9 +45,9 @@ export class EditWorkCertificateComponent implements OnInit {
   companyName: string;
   infoUser: IUserInfo;
   nationalitiesList: IViewParam[] = [];
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-
     private hrService: HumanRessourcesService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
@@ -56,7 +59,6 @@ export class EditWorkCertificateComponent implements OnInit {
     private router: Router,
 
   ) {
-    this.getData();
   }
   /**************************************************************************
    * @description on keyup button confirm appear
@@ -81,25 +83,41 @@ export class EditWorkCertificateComponent implements OnInit {
       comment: [certificate.comment ? certificate.comment : '' ]
 
     });
+    this.editForm.controls['request_date'].disable();
+    this.editForm.controls['request_response'].disable();
+    this.editForm.controls['request_status'].disable();
+    this.editForm.controls['request_type'].disable();
 
   }
   /**************************************************************************
    * @description Initialize data
    *************************************************************************/
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    await this.getWorkCertificate(this._id);
     this.languageList = this.appInitializer.languageList;
     await this.getConnectedUser();
-    await this.initForm(this.certificate);
-    this.editForm.controls['request_date'].disable();
-    this.editForm.controls['request_response'].disable();
-    this.editForm.controls['request_status'].disable();
-    this.editForm.controls['request_type'].disable();
-    // this.editForm.controls['language'].disable();
-    if (this.certificate.request_type === 'CERT') {
-      this.requestType = 'rh_title_certif';
-    } else { this.requestType = 'rh_exp_certif'; }
+
     await  this.getRefData();
-    console.log('my certificate want to updated ', this.certificate);
+  }
+  /**************************************************************************
+   * @description Get work certification
+   * @Param ID
+   *************************************************************************/
+  async getWorkCertificate(ID) {
+    forkJoin([
+      this.hrService.getWorkCertificate(ID)
+    ])
+        .pipe(
+            takeUntil(this.destroy$),
+        )
+        .subscribe(async res => {
+          this.certificate = await res[0]['results'][0];
+          if (this.certificate.request_type === 'CERT') {
+            this.requestType = 'rh_title_certif';
+          } else { this.requestType = 'rh_exp_certif'; }
+          console.log('my work certificate' , this.certificate);
+          await this.initForm(this.certificate);
+        });
   }
   /**************************************************************************
    * @description Confirm Edit certificate
@@ -177,15 +195,6 @@ export class EditWorkCertificateComponent implements OnInit {
    *************************************************************************/
   backClicked() {
     this.location.back();
-  }
-  /**************************************************************************
-   * @description Get data from previous route
-   *************************************************************************/
-  getData() {
-    this.certificate = this.router.getCurrentNavigation()?.extras?.state?.certificate;
-    this.collaborator = this.router.getCurrentNavigation()?.extras.state?.collaborator;
-
-    console.log('certificate ', this.certificate);
   }
 
 }

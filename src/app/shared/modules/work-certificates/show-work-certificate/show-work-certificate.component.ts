@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IUserModel } from '@shared/models/user.model';
 import { HumanRessourcesService } from '@core/services/human-ressources/human-resources.service';
 import { UserService } from '@core/services/user/user.service';
@@ -29,6 +29,8 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ShowWorkCertificateComponent implements OnInit {
 
+  @Input() collaborator: boolean;
+  @Input() _id: string;
   certificate: any;
   nationality = '';
   user: IUserModel;
@@ -38,7 +40,6 @@ export class ShowWorkCertificateComponent implements OnInit {
   showBtnEdit = 'Edit';
   refData = { };
   role = 'Collaborator';
-  collaborator = false;
   modals = { modalName: 'signature', modalComponent: SignatureCertificateComponent };
   subscriptionModal: Subscription;
   applicationId: string;
@@ -62,7 +63,6 @@ export class ShowWorkCertificateComponent implements OnInit {
     private location: Location,
     private router: Router,
     private modalService: ModalService,
-    private route: ActivatedRoute,
 
   ) {
 
@@ -71,21 +71,16 @@ export class ShowWorkCertificateComponent implements OnInit {
    * @description init form
    *************************************************************************/
   async ngOnInit(): Promise<void> {
-    await this.route.queryParams
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(async (params) => {
-          const idCertif = params.idCertif;
-          this.collaborator = params.collaborator;
-          await this.getWorkCertificate(idCertif);
-          console.log('my certificate ', this.certificate);
-        });
+      await this.getWorkCertificate(this._id);
     await this.getConnectedUser();
-
     this.modalService.registerModals(this.modals);
-
     await  this.getRefData();
   }
- async getWorkCertificate(ID) {
+    /**************************************************************************
+     * @description Get work certification
+     * @Param ID
+     *************************************************************************/
+    async getWorkCertificate(ID) {
     forkJoin([
       this.hrService.getWorkCertificate(ID)
     ])
@@ -97,7 +92,6 @@ export class ShowWorkCertificateComponent implements OnInit {
             if (this.certificate.request_type === 'CERT') {
                 this.requestType = 'rh_title_certif';
             } else { this.requestType = 'rh_exp_certif'; }
-      console.log('my work certificate' , this.certificate);
         });
   }
   /**************************************************************************
@@ -156,10 +150,10 @@ export class ShowWorkCertificateComponent implements OnInit {
   update() {
     this.router.navigate(
       ['/collaborator/work-certificates/editCertif'],
-      { state: {
-            certificate: this.certificate
-        }
-      });
+        { queryParams: {
+            idCertif: btoa(this._id)
+          }
+        });
   }
   /**
    * @description: get connected user
@@ -171,7 +165,6 @@ export class ShowWorkCertificateComponent implements OnInit {
     this.userService.connectedUser$.subscribe(async (data) => {
       if (!!data) {
         this.infoUser = data;
-        console.log('get info user ', this.infoUser);
         this.companyName = data['company'][0]['company_name'];
         this.companyId = data['company'][0]['_id'];
         this.companyEmail = data['company'][0]['companyKey']['email_address'];

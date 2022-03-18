@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
 
 import { WorkCertificatesComponent } from './work-certificates.component';
-// tslint:disable-next-line:origin-ordered-imports
-import { EditWorkCertificateComponent } from '@shared/modules/work-certificates/edit-work-certificate/edit-work-certificate.component';
-// tslint:disable-next-line:origin-ordered-imports
-import { ShowWorkCertificateComponent } from '@shared/modules/work-certificates/show-work-certificate/show-work-certificate.component';
-// tslint:disable-next-line:origin-ordered-imports
-import { RequestWorkCertificateComponent } from '@shared/modules/work-certificates/request-work-certificate/request-work-certificate.component';
+
+import { ShowCertificationComponent } from './show-certification/show-certification.component';
+import { EditCertificationComponent } from './edit-certification/edit-certification.component';
 
 const routes: Routes = [
   {
@@ -20,11 +18,11 @@ const routes: Routes = [
   },
   {
     path: 'editCertif',
-    component: EditWorkCertificateComponent
+    component: EditCertificationComponent
   },
   {
     path: 'showCertif',
-    component: ShowWorkCertificateComponent
+    component: ShowCertificationComponent
   }
 ];
 
