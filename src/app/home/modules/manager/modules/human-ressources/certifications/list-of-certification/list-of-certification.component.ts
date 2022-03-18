@@ -179,14 +179,21 @@ export class ListOfCertificationComponent  implements OnInit, OnChanges, OnDestr
   showCertificate(certificate: any) {
 
     certificate ?
+        !this.collaboratorAction ?
         this.router.navigate(
-            ['/manager/contract-management/suppliers-contracts/showCertif'],
+            ['/manager/human-ressources/show-certif'],
             { queryParams: {
-                idCertif: certificate._id,
-                collaborator: this.collaboratorAction,
+                idCertif: btoa(certificate._id),
+              }
+            }) :
+            this.router.navigate(
+            ['/collaborator/work-certificates/showCertif'],
+            { queryParams: {
+                idCertif: btoa(certificate._id),
               }
             })
-        :
+
+  :
         this.utilsService.openSnackBar('you must select one certification', 'close');
 
   }

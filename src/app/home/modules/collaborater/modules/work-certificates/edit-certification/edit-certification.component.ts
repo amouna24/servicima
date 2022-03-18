@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./edit-certification.component.scss']
 })
 export class EditCertificationComponent implements OnInit {
+
   collaborator = false;
   idCertif = '';
   destroy$: Subject<boolean> = new Subject<boolean>();

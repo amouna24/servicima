@@ -9,7 +9,7 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatSelectChange } from '@angular/material/select';
 import { IHrContract } from '@shared/models/hrContract.model';
