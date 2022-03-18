@@ -1170,13 +1170,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               () => {
                 itemsFetched += 1;
                 if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-                  if (this.type === 'CLIENT') {
-                    this.router.navigate(
-                      ['/manager/contract-management/clients-contracts/contracts-list']);
-                  } else if (this.type === 'SUPPLIER') {
-                    this.router.navigate(
-                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                  }
+
                 }
               }
             );
@@ -1225,13 +1219,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               () => {
                 itemsFetched += 1;
                 if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-                  if (this.type === 'CLIENT') {
-                    this.router.navigate(
-                      ['/manager/contract-management/clients-contracts/contracts-list']);
-                  } else if (this.type === 'SUPPLIER') {
-                    this.router.navigate(
-                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                  }
+
                 }
               }
             );
@@ -1278,13 +1266,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               () => {
                 itemsFetched += 1;
                 if (itemsFetched === this.projectCollaboratorInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-                  if (this.type === 'CLIENT') {
-                    this.router.navigate(
-                      ['/manager/contract-management/clients-contracts/contracts-list']);
-                  } else if (this.type === 'SUPPLIER') {
-                    this.router.navigate(
-                      ['/manager/contract-management/suppliers-contracts/contracts-list']);
-                  }
+
                 }
               }
             );
