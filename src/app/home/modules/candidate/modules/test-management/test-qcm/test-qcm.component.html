@@ -34,8 +34,66 @@
               </div>
             </div>
         </div>
-        <div fxLayout="column" fxFlex="33" class="white-bloc">
+        <div fxLayout="column" fxFlex="33" class="white-bloc" fxLayoutAlign="center">
+          <div fxLayout="row" fxFlex="80">
+            <div fxLayout="column" fxFlex="50" fxLayoutAlign="center">
+                  <div fxLayout="row" fxFlex="60" fxLayoutAlign="center">
+                      <div fxLayout="column" fxFlex="40" >
+                        <svg class="right-to-left-timer" style="width: 100px; height: 100px"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                          <g class="structure-circle ">
+                            <circle class="gray-ring" cx="50" cy="50" r="45"></circle>
 
+                            <path
+                              [attr.stroke-dasharray]="setCircleDasharray()"
+                              class="deg-90 {{timeRing}} {{setRemainingPathColor(timeLeft)}}"
+                              d=" M 50, 50
+                                  m -45, 0
+                                  a 45,45 0 1,0 90,0
+                                  a 45,45 0 1,0 -90,0
+                                "
+                            ></path>
+                          </g>
+                        </svg>
+                        <div fxLayout="row" class="height-width-10 font-size-23 steel font-medium" fxLayoutAlign="center">
+                           <span   fxLayoutAlign="center center" style="{{paddingTopMinutes}}">
+                        {{formatTimeLeftMinutes(timeLeft)}}.
+                         </span>
+                           <span  style="{{paddingTopSeconds}}" fxLayoutAlign="center center" >
+                        {{formatTimeLeftSeconds(timeLeft)}}
+                         </span>
+                        </div>
+                        <div fxLayout="row"  class="height-width-6" fxLayoutAlign="center end">
+                          <span class="font-size-9 font-medium cool-grey">minute</span>
+                        </div>
+
+
+
+<!--                            <div fxLayout="row" fxLayoutAlign="center center">
+                              <span class="font-size-23 steel font-medium">15.23</span>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="center center">
+                              <span class="cool-grey font-size-9 font-medium">
+                                minutes
+                              </span>
+                            </div>-->
+                      </div>
+                  </div>
+            </div>
+            <div fxLayout="column" fxFlex="50" class="steel font-size-10 font-medium" fxLayoutAlign="center">
+              <div fxLayout="row">
+                Answered questions: 4
+              </div>
+              <div fxLayout="row">
+                Skipped questions: 4
+              </div>
+              <div fxLayout="row">
+                Remainder questions: 32
+              </div>
+              <div fxLayout="row">
+                Total questions: 40
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div fxLayout="row" fxFlex="70">
