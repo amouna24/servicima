@@ -1152,7 +1152,6 @@ export class CollaboratorComponent implements OnInit {
       this.id = data._id;
       this.profileService.getUserById(this.id).subscribe((collab) => {
         this.userInfo = collab['results'][0];
-        console.log('user info ', this.userInfo);
         this.hrService.getBanking(`?email_address=${this.userInfo.userKey.email_address}`).subscribe(async (banking) => {
           this.bankingInfo = banking[0];
         });
@@ -1164,7 +1163,6 @@ export class CollaboratorComponent implements OnInit {
       this.hrService.getContractById(data.idContract).subscribe((contrat) => {
         this.contract = contrat[0];
       });
-      console.log('user ', this.userInfo, this.bankingInfo, this.contract);
       await this.initForm();
 
     });
@@ -1178,7 +1176,6 @@ export class CollaboratorComponent implements OnInit {
    this.profileService
       .getUserById(this.id)
       .subscribe(async (user) => {
-        console.log('get user connected ', user);
         this.userInfo = user['results'][0];
         this.haveImage.next(user['results'][0]['photo']);
         this.avatar.next(await this.uploadService.getImage(user['results'][0]['photo']));
@@ -1186,8 +1183,6 @@ export class CollaboratorComponent implements OnInit {
       });
    this.subscriptions = this.userService.connectedUser$.subscribe(async (data) => {
      if (!!data) {
-
-       console.log('data ', data);
        await this.getRefData(data['user'][0]['company_email']);
        await this.getInitialData();
      }
