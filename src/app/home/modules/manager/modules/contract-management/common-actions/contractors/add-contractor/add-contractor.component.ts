@@ -87,7 +87,6 @@ private subscriptions: Subscription;
   legalList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   profileTitleList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   currencyList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  statusList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   companyTaxList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   contactList: BehaviorSubject<any> = new BehaviorSubject<any>(this.contractorContactInfo);
@@ -866,6 +865,7 @@ private subscriptions: Subscription;
       .subscribe(
         async (res) => {
           this.contractorInfo = res[0]['results'][0];
+          console.log('my contractor info');
           this.haveImage.next(res[0]['results'][0]['photo']);
           const av = await this.uploadService.getImage(res[0]['results'][0]['photo']);
           this.avatar.next(av);
@@ -1032,13 +1032,7 @@ private subscriptions: Subscription;
         }
       );
       this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
-      if (this.type === 'CLIENT') {
-        this.router.navigate(
-          ['/manager/contract-management/clients-contracts/clients-list']);
-      } else if (this.type === 'SUPPLIER') {
-        this.router.navigate(
-          ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-      }
+
     } else {
       /*** CONTRACTOR KEY ***/
       Contractor.application_id = this.userInfo.company[0].companyKey.application_id;
@@ -1107,13 +1101,7 @@ private subscriptions: Subscription;
               }
             );
             this.utilsService.openSnackBarWithTranslate('general.add ', null, 5000);
-            if (this.type === 'CLIENT') {
-              this.router.navigate(
-                ['/manager/contract-management/clients-contracts/clients-list']);
-            } else if (this.type === 'SUPPLIER') {
-              this.router.navigate(
-                ['/manager/contract-management/suppliers-contracts/suppliers-list']);
-            }
+
           },
 
           (error) => {

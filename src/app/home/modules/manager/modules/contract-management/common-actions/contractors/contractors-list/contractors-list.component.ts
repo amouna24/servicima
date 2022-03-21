@@ -252,11 +252,12 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   updateContractor(Contractor: IContractor): void {
     let url = '';
-    if (Contractor.contractor_type === 'SUPPLIER') {
+    if (Contractor.contractorKey.contractor_type === 'SUPPLIER') {
       url = '/manager/contract-management/suppliers-contracts/suppliers';
     } else {
       url = '/manager/contract-management/clients-contracts/clients';
     }
+
     this.router.navigate(
         [url],
         { queryParams: {
@@ -344,7 +345,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
       case(this.tabFeatureAccess[2].name): this.onStatusChange(rowAction.data, 'ACTIVE');
         break;
       case('update'):
-        this.updateContractor(rowAction.data);
+        this.updateContractor(rowAction.data as any);
         break;
     }
   }
