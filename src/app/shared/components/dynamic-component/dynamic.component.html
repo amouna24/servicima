@@ -70,8 +70,8 @@
                   <!--------------------------------------------------------->
 
                   <wid-skeleton-loader
-                    *ngIf="isLoading.getValue()"
-                    height="25" width="250"
+                          *ngIf="isLoading.getValue()"
+                          height="25" width="250"
                   ></wid-skeleton-loader>
 
                   <ng-container *ngIf="!isLoading.getValue()">
@@ -816,9 +816,9 @@
                 </div>
                 <!--------------------------------------------------------->
                 <wid-skeleton-loader
-                  *ngIf="isLoading.getValue()"
-                  height="25"
-                  width="250"
+                        *ngIf="isLoading.getValue()"
+                        height="25"
+                        width="250"
                 ></wid-skeleton-loader>
 
                 <ng-container *ngIf="!isLoading.getValue()">
@@ -920,20 +920,21 @@
                               {{sf.label | translate }}:
                             </mat-label>
                             <div fxLayout="row" fxFlex="100">
-                            <wid-scrollbar   class="full-width resume-container">
-                             <mat-radio-group fxLayout="row" fxFlexFill fxLayoutGap="10px"  formControlName="{{sf.formControlName}}">
-                               <div fxLayout="column"  *ngFor="let oneObject of sf.selectFieldList.getValue()" class="resume-container-column" fxLayoutAlign=" center">
-                                 <div fxLayout="row" fxFlex="70" >
-                                   <img class="resume-icon" width="84.5x" height="120px" src="{{oneObject.icon}}">
-                                 </div>
-                                 <mat-radio-button fxLayout="row" fxFlex="30"   [value]="oneObject.value ? oneObject.value : 'DEFAULT'"  class="black font-size-8 font-normal">
-                                   {{oneObject.viewValue}}
-                                 </mat-radio-button>
-                               </div>
-                               </mat-radio-group>
-                            </wid-scrollbar>
+                              <wid-scrollbar   class="full-width resume-container">
+                                <mat-radio-group fxLayout="row" fxFlexFill fxLayoutGap="10px"  formControlName="{{sf.formControlName}}">
+                                  <div fxLayout="column"  *ngFor="let oneObject of sf.selectFieldList.getValue()" class="resume-container-column" fxLayoutAlign=" center">
+                                    <div >
+                                      <img  width="48px" height="80px" src="{{oneObject.icon}}">
+                                    </div>
+                                    <mat-radio-button fxLayout="row" fxFlex="30"   [value]="oneObject.value ? oneObject.value : 'DEFAULT'"  class="black font-size-8 font-normal">
+                                      {{oneObject.viewValue}}
+                                    </mat-radio-button>
+                                  </div>
+                                </mat-radio-group>
+                              </wid-scrollbar>
                             </div>
-                            </div>
+
+                          </div>
                         </ng-container>
                       </div>
                     </ng-container>
@@ -1236,76 +1237,76 @@
                           </div>
                           <div *ngIf="sf.type === 'dataTable'" fxLayout="column" fxFlex="87">
                             <table cdk-table [style]="{'width': '100%', height: '100%'}" [dataSource]="sf.dataTable.dataSource.getValue()" [trackBy]="identify">
-                                <ng-container *ngFor="let col of sf.dataTable.columns;" >
-                                  <ng-container [ngSwitch]="col.type">
+                              <ng-container *ngFor="let col of sf.dataTable.columns;" >
+                                <ng-container [ngSwitch]="col.type">
 
-                                    <ng-container *ngSwitchCase="'rowItem'">
+                                  <ng-container *ngSwitchCase="'rowItem'">
 
-                                      <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
-                                        <th cdk-header-cell
-                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                                        </th>
-                                        <td cdk-cell
-                                            *cdkCellDef="let row" class="black-three font-size-12 font-light">
-                                          <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
-                                        </td>
+                                    <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
+                                      <th cdk-header-cell
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                      </th>
+                                      <td cdk-cell
+                                          *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                                        <mat-icon class="icon material-icons-outlined steel" svgIcon="wi_row_polygon"></mat-icon>
+                                      </td>
 
-                                      </ng-container>
-
-                                    </ng-container>
-
-                                    <ng-container *ngSwitchCase="'Actions'">
-
-                                      <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
-
-                                        <th cdk-header-cell
-                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                                        </th>
-                                        <td cdk-cell
-                                            *cdkCellDef="let row" class="black-three font-size-12 font-light">
-                                          <div fxLayout="row"
-                                               fxFlex
-                                               fxLayoutAlign="center">
-                                            <button mat-icon-button (click)="actionRowData('update', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.update">
-                                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
-                                            </button>
-                                            <button mat-icon-button (click)="actionRowData('delete', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.delete">
-                                              <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
-                                            </button>
-                                            <button mat-icon-button (click)="actionRowData('show', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.show">
-                                              <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
-                                            </button>
-
-                                          </div>
-                                        </td>
-
-                                      </ng-container>
-
-                                    </ng-container>
-
-                                    <ng-container *ngSwitchDefault >
-                                      <ng-container cdkColumnDef="{{ col.prop }}">
-                                        <th cdk-header-cell
-                                            *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
-                                        </th>
-                                        <ng-container [ngSwitch]="col.type">
-                                          <ng-container *ngSwitchCase="'date'">
-                                            <td cdk-cell
-                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'shortDate' }}
-                                            </td>
-                                          </ng-container>
-                                          <ng-container *ngSwitchDefault>
-                                            <td cdk-cell
-                                                *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
-                                            </td>
-                                          </ng-container>
-                                        </ng-container>
-                                      </ng-container>
                                     </ng-container>
 
                                   </ng-container>
 
+                                  <ng-container *ngSwitchCase="'Actions'">
+
+                                    <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
+
+                                      <th cdk-header-cell
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                      </th>
+                                      <td cdk-cell
+                                          *cdkCellDef="let row" class="black-three font-size-12 font-light">
+                                        <div fxLayout="row"
+                                             fxFlex
+                                             fxLayoutAlign="center">
+                                          <button mat-icon-button (click)="actionRowData('update', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.update">
+                                            <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-marker"></mat-icon>
+                                          </button>
+                                          <button mat-icon-button (click)="actionRowData('delete', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.delete">
+                                            <mat-icon  class="icon material-icons-outlined steel" svgIcon="wi_user"></mat-icon>
+                                          </button>
+                                          <button mat-icon-button (click)="actionRowData('show', row, mi.titleKey)" type="button" *ngIf="allowedTableActions.show">
+                                            <mat-icon class="icon material-icons-outlined steel" svgIcon="wi-eye"></mat-icon>
+                                          </button>
+
+                                        </div>
+                                      </td>
+
+                                    </ng-container>
+
+                                  </ng-container>
+
+                                  <ng-container *ngSwitchDefault >
+                                    <ng-container cdkColumnDef="{{ col.prop }}">
+                                      <th cdk-header-cell
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                      </th>
+                                      <ng-container [ngSwitch]="col.type">
+                                        <ng-container *ngSwitchCase="'date'">
+                                          <td cdk-cell
+                                              *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | date:'shortDate' }}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container *ngSwitchDefault>
+                                          <td cdk-cell
+                                              *cdkCellDef="let row" class="black-three font-size-12 font-light"> {{ row[col.prop] | spliceText: 40 }}
+                                          </td>
+                                        </ng-container>
+                                      </ng-container>
+                                    </ng-container>
+                                  </ng-container>
+
                                 </ng-container>
+
+                              </ng-container>
                               <tr cdk-header-row *cdkHeaderRowDef="sf.dataTable.displayedColumns; sticky: true"></tr>
                               <tr cdk-row *cdkRowDef="let row; columns: sf.dataTable.displayedColumns;"></tr>
                             </table>
@@ -1627,11 +1628,11 @@
                             <div *ngIf="sf.type === 'image'" fxLayout="column" fxFlex="100" fxLayoutAlign="center center"
                                  class="profile-image">
                               <ng-template [ngIf]="!sf.imageInputs.imageLoading.getValue()">
-                              <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
-                                                 [modelObject]="sf.imageInputs.modelObject"
-                                                 [singleUpload]="sf.imageInputs.singleUpload"
-                                                 [userType]="sf.imageInputs.userType"
-                                                 (newFile)="getFile($event)"></wid-profile-image>
+                                <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
+                                                   [modelObject]="sf.imageInputs.modelObject"
+                                                   [singleUpload]="sf.imageInputs.singleUpload"
+                                                   [userType]="sf.imageInputs.userType"
+                                                   (newFile)="getFile($event)"></wid-profile-image>
                               </ng-template>
 
                               <ng-template [ngIf]="sf.imageInputs.imageLoading.getValue()">
