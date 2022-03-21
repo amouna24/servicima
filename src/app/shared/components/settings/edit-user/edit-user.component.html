@@ -25,7 +25,7 @@
       <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 " *ngIf="!isLoading"
         [formGroup]="form"  >
 
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':addOrUpdateFeature, 'form': form}">
+        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'SOURCING_ACCESS', 'form': form}">
 
 
           <div fxLayout="row">
@@ -237,7 +237,7 @@
 
             </div>
             <div fxLayout="column" fxFlex="40" fxFlexAlign="center center">
-              <div *canBeDisplayed="{'feature':addOrUpdateFeature}" fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
+              <div *canBeDisplayed="{'feature':'SOURCING_ACCESS'}" fxLayout="row" fxLayoutGap="50px" fxFlexAlign="center">
                 <div >
                 <button  mat-button mat-raised-button class="btn-medium bg-pale-grey black-three" (click)="reset()" >
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
@@ -245,7 +245,7 @@
                   </div>
                 </button>
                 </div>
-                <button [disableControl]="{'feature':'SETTINGS_UPDATE_USER', 'validator': form.valid}"  mat-raised-button  class="btn-medium white" color="primary"
+                <button [disableControl]="{'feature':'SOURCING_ACCESS', 'validator': form.valid}"  mat-raised-button  class="btn-medium white" color="primary"
                   (click)="addOrUpdate()">
                   <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span class="font-size-14">{{ 'user.save' | translate}}</span>

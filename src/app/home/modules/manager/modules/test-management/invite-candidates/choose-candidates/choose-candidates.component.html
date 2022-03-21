@@ -1,7 +1,7 @@
 <div class="dynamic-component-container border-radius-20 choose-candidates" fxLayout="column" fxFlex="100">
   <div fxLayout="row" fxFlex="15" fxLayoutAlign="space-around center">
     <div fxLayout="column" fxFlex="90">
-      <h1 class="steel font-size-24 font-medium" style="font-size: 29px;margin-left: 25px;">Invite Candidates</h1>
+      <h1 class="steel font-size-28 font-medium m-l-20" >Invite Candidates</h1>
     </div>
     <div fxLayout="column">
       <div fxLayout="row">
@@ -27,7 +27,7 @@
 
 
       <div fxLayout="column" fxFlex="6" fxLayoutAlign="center">
-        <button (click)="sort()" fxLayout="row" style="width: 35px; height: 35px; border: 2px solid #afb1b8;border-radius: 4px; background-color: white; color: gray"  fxLayoutAlign="center center">
+        <button (click)="sort()" fxLayout="row"  class="sort-invite-candidate"  fxLayoutAlign="center center">
           <img  [src]="displayIcon ? 'assets/icons/sort-ascending.svg' :'assets/icons/sort-descending.svg'" alt="list icon" width="24px" height="24px">
         </button>
       </div>
@@ -35,7 +35,6 @@
     </div>
 
     <div fxLayout="row"  fxFlex="82" class="example-container mat-elevation-z8"
-
           [ngStyle]=" {'width': '97%', 'box-shadow': 'none !important,','margin-left': '2%', 'border': '1px solid #e8f1f9','border-radius': '7px',
      'overflow': 'hidden'}"
     >
@@ -62,7 +61,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="Full Name" sticky>
-        <th mat-header-cell *matHeaderCellDef style="color: #afb1b8;font-size: 9px"> {{this.selection['_selected']? this.selection['_selected'].length : 0}} Collaborator selected</th>
+        <th mat-header-cell *matHeaderCellDef class="cool-grey font-size-9"> {{this.selection['_selected']? this.selection['_selected'].length : 0}} Collaborator selected</th>
         <td  class="width-full-name" mat-cell *matCellDef="let element">
         <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="column">
@@ -130,13 +129,33 @@
           </div>
         </div>
      </wid-scrollbar>
-</div>
+
+
+
+
+
+    </div>
 
 
 
 
   </div>
+
    <div fxLayout="row" fxFlex="8" fxLayoutAlign="center"  class="container-button-candidates">
+     <div fxFlex="8" fxLayout="row" fxLayoutAlign="start center"
+          class="full-width p-10 p-t-5">
+       <p class="font-size-12 black m-0 m-r-15">Delay(day):</p>
+       <div>
+       <mat-form-field appearance="outline"   class="m-r-15 m-t-15 font-size-8 input-width-delay">
+         <input matInput [(ngModel)]="expiredDay" type="number" class="text-center font-size-12">
+       </mat-form-field>
+         <div class="container-mat-error">
+       <mat-error *ngIf="!expiredDay" class="wid-error-messages font-size-9 m-l-5">
+         required
+       </mat-error>
+         </div>
+       </div>
+     </div>
     <div fxLayout="column" fxLayoutAlign=" center" fxFlex="100">
       <div fxLayout="row" fxFlexFill fxLayoutGap="25px" fxLayoutAlign="flex-end center">
 
@@ -145,7 +164,7 @@
             <span class="black">Cancel</span>
           </button>
           <button mat-raised-button class="btn-small " color="primary"  (click)="sendMail()">
-            <span class="white">Next</span>
+            <span class="white">Invite</span>
           </button>
         </div>
 

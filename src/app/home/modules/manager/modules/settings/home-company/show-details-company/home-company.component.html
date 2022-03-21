@@ -21,7 +21,7 @@
       ></wid-skeleton-loader>
       <div fxLayout="column" fxLayoutGap="5px" fxFlex="15"  *ngIf="!isLoading" >
         <span class="brownish-grey font-size-25">{{user?.first_name | spliceText: 10}} {{ user?.last_name | spliceText: 10}}</span>
-        <span class="cool-grey font-size-10">{{this.company.companyKey.email_address}}</span>
+        <span class="cool-grey font-size-10">{{this.company?.companyKey?.email_address}}</span>
       </div>
       <wid-skeleton-loader
         height="25" width="250"
@@ -69,7 +69,7 @@
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.companyname' | translate}}: </span>
-                    <span class="steel"> {{this.company['company_name']}}</span>
+                    <span class="steel"> {{this.company?.company_name}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.lang'| translate}}: </span>
@@ -83,7 +83,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.registrationnumber' | translate}}: </span>
-                    <span class="steel"> {{this.company['reg_nbr'] ? this.company['reg_nbr'] : 'none'}}</span>
+                    <span class="steel"> {{(this.company?.reg_nbr) ? (this.company?.reg_nbr) : 'none'}}</span>
                   </div>
                 </div>
               </div>
@@ -96,7 +96,7 @@
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.activitycode' | translate}}: </span>
-                    <span class="steel"> {{this.company['activity_code'] ? this.company['activity_code'] :
+                    <span class="steel"> {{(this.company?.activity_code) ? (this.company?.activity_code) :
                       'none'}}</span>
                   </div>
                   <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
@@ -107,7 +107,7 @@
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="10px">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.activitydescription' | translate}}: </span>
-                    <span class="steel"> {{this.company['activity_desc'] ? this.company['activity_desc'] :
+                    <span class="steel"> {{(this.company?.activity_desc) ? (this.company?.activity_desc) :
                       'none'}}</span>
                   </div>
                 </div>
@@ -121,34 +121,34 @@
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.website' | translate}}: </span>
-                    <span class="steel"> {{this.company['web_site'] ? this.company['web_site'] : 'none'}} </span>
+                    <span class="steel"> {{(this.company?.web_site) ? (this.company?.web_site) : 'none'}} </span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="font-size-12">
                     <span> {{'homecompany.phone1' | translate}}: </span>
-                    <span class="steel">{{this.company['phone_nbr1'] ? this.company['phone_nbr1'] : 'none'}}</span>
+                    <span class="steel">{{this.company?.phone_nbr1 ? this.company?.phone_nbr1 : 'none'}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.fax' | translate}}: </span>
-                    <span class="steel">{{this.company['fax_nbr']? this.company['fax_nbr'] : 'none'}} </span>
+                    <span class="steel">{{(this.company?.fax_nbr)? (this.company?.fax_nbr) : 'none'}} </span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.city' | translate}}: </span>
-                    <span class="steel"> {{this.company['city']}}</span>
+                    <span class="steel"> {{this.company?.city}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.adress' | translate}}: </span>
-                    <span class="steel"> {{this.company['adress'] ? this.company['adress'] : 'none'}}</span>
+                    <span class="steel"> {{(this.company?.adress) ? this.company?.adress : 'none'}}</span>
                   </div>
                 </div>
                 <div fxLayout="column" fxFlex="50" fxLayoutGap="10px" class="font-size-12">
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.contactemail' | translate}}: </span>
-                    <span class="steel"> {{this.company['contact_email'] ? this.company['contact_email'] :
+                    <span class="steel"> {{(this.company?.contact_email) ? (this.company?.contact_email) :
                       'none'}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.phone2' | translate}}: </span>
-                    <span class="steel"> {{this.company['phone_nbr2'] ? this.company['phone_nbr2'] : 'none'}}</span>
+                    <span class="steel"> {{(this.company?.phone_nbr2) ? (this.company?.phone_nbr2) : 'none'}}</span>
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.country' | translate}}: </span>
@@ -156,7 +156,7 @@
                   </div>
                   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span> {{'homecompany.zipcode' | translate}}: </span>
-                    <span class="steel"> {{this.company['zip_code']}}</span>
+                    <span class="steel"> {{this.company?.zip_code}}</span>
                   </div>
                 </div>
               </div>
