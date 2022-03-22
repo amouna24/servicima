@@ -5,9 +5,9 @@
   [header]="{ title: 'timesheet-manag' | translate }"
   (rowActionData)="switchAction($event)"
   [allowedActions]="[
-  {name: 'Approve', feature: 'TIMESHEET_ACCESS'},
-  {name: 'Reject', feature: 'TIMESHEET_ACCESS'},
-  {name: 'Delete', feature: 'TIMESHEET_ACCESS'}]"
+  {name: 'Approve', feature: 'TIMESHEET_APPROVE'},
+  {name: 'Reject', feature: 'TIMESHEET_REJECT'},
+  {name: 'Delete', feature: 'TIMESHEET_DELETE'}]"
   [buttonAdd]="false"
   (pagination)="loadMoreItems($event)"
   [setAvatar]="{columnCode:'profile', imgSrc: 'photo' }"

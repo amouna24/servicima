@@ -16,7 +16,9 @@ import { ContractsService } from '@core/services/contracts/contracts.service';
 import { IContract } from '@shared/models/contract.model';
 import { ITimesheetModel } from '@shared/models/timesheet.model';
 import { IHoliday } from '@shared/models/holiday.model';
+import _ from 'lodash';
 const TIMESHEET_EXTRA = 'TIMESHEET_EXTRA';
+const TIMESHEET = 'TIMESHEET';
 @Component({
   selector: 'wid-add-timesheet',
   templateUrl: './add-timesheet.component.html',
@@ -34,6 +36,8 @@ export class AddTimesheetComponent implements OnInit {
   date: Date;
   contract: IContract;
   holidays: IHoliday;
+  private currentUser: any;
+  availableFeature = [];
   weekDays: any[] = [];
   @Input() formType: { add: boolean, edit: boolean, type: string, managerMode?: boolean};
    /** @description Variable used to destroy all subscriptions */
@@ -58,6 +62,7 @@ export class AddTimesheetComponent implements OnInit {
               private contractService: ContractsService,
               private holidayServices: HolidayService
   ) {
+    this.getUserConnected();
   }
 
   async ngOnInit() {
@@ -386,7 +391,7 @@ export class AddTimesheetComponent implements OnInit {
       }
       return Number(this.contract.working_hour_day);
     } else {
-      if (this.initialForm.controls[day].disabled) {
+      if (this.initialForm.controls[day].disabled && this.checkFeature(this.getFeature())) {
         this.initialForm.controls[day].enable();
       }
       return !!this.initialForm.value[day] ? this.initialForm.value[day] : '';
@@ -406,6 +411,42 @@ export class AddTimesheetComponent implements OnInit {
         saturday: this.checkDay( 5),
         sunday: this.checkDay( 6),
       });
+    }
+  }
+  getUserConnected() {
+    this.availableFeature = _.intersection(this.userService.licenceFeature, this.userService.companyRolesFeatures[0]);
+    this.currentUser = {
+      features: this.availableFeature
+    };
+  }
+  checkFeature(feature): boolean {
+    if (!this.userService.licenceFeature.includes(feature)) {
+      return false;
+    }
+    return this.currentUser &&
+      this.currentUser.features &&
+      this.currentUser.features.includes(feature);
+  }
+  getFeature(): string {
+    if (this.formType.add ) {
+      return  this.formType.type === TIMESHEET ?
+        'TIMESHEET_ADD' : 'TIMESHEET_EXTRAS_ADD';
+    } else {
+      return  this.formType.type === TIMESHEET ?
+        'TIMESHEET_UPDATE' : 'TIMESHEET_EXTRAS_UPDATE' ;
+    }
+  }
+  getActionFeautre(action: string): string {
+    const timesheet = this.formType.type === TIMESHEET;
+    switch (action) {
+      case ('approve'):
+        return timesheet ? 'TIMESHEET_APPROVE' : 'TIMESHEET_EXTRAS_APPROVE';
+      case ('submit'):
+        return timesheet ? 'TIMESHEET_SUBMIT' : 'TIMESHEET_EXTRAS_SUBMIT';
+      case ('save'):
+        return timesheet ? 'TIMESHEET_SAVE' : 'TIMESHEET_EXTRAS_SAVE';
+      case ('update'):
+        return timesheet ? 'TIMESHEET_UPDATE' : 'TIMESHEET_EXTRAS_UPDATE';
     }
   }
 }
