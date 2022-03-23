@@ -27,7 +27,6 @@ export class AddQuestionComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilsService: UtilsService,
-    private route: ActivatedRoute,
   ) {
     this.loadData();
   }
@@ -63,7 +62,10 @@ export class AddQuestionComponent implements OnInit {
     });
   }
   getLevel() {
-    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=ALL`)
+    this.testService
+      .getLevel(`?application_id=${
+        this.applicationId}&company_email=ALL&language_id=${
+        this.localStorageService.getItem('language').langId}`)
       .subscribe(
         (response) => {
            this.LevelList = response;
