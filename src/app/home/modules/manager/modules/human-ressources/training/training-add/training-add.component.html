@@ -1,0 +1,136 @@
+<div class="border-radius-20 dynamic-component-container m-l-30 ">
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+        <div fxFlex="7"  fxLayout="row" class="line-height-2">
+            <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+                    </mat-icon>
+                    <span class="cool-grey"> {{ 'user.back' | translate}} </span>
+                </button>
+            </div>
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+        </div>
+        <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 "
+              [formGroup]="form" >
+            <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" >
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Title' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input matInput autocomplete="off" required [placeholder]="'Title' | translate | capitalizeFirstLetter"
+                                           formControlName="title" [ngStyle.xs]="{'font-size': '15px'}" class="font-size-12">
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.title?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Domain' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input autocomplete="off" matInput required [placeholder]=" 'Domain' | translate | capitalizeFirstLetter"
+                                           formControlName="domain" [ngStyle.xs]="{'font-size': '15px'}" />
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.domain?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Organisation' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input matInput autocomplete="off" required [placeholder]="'Organisation' | translate | capitalizeFirstLetter"
+                                           formControlName="organisation_code" [ngStyle.xs]="{'font-size': '15px'}" class="font-size-12">
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.organisation_code?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Number of hours' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input autocomplete="off" matInput required [placeholder]=" 'Number of hours' | translate | capitalizeFirstLetter"
+                                           formControlName="hours" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" />
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.hours?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Start Date' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input matInput [matDatepicker]="datepicker"  [matDatepickerFilter]="" formControlName="start_date" placeholder="{{ 'Start date' | translate }}"
+                                           [ngStyle.xs]="{'font-size': '15px'}" class="font-size-12"
+                                    >
+                                    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #datepicker color="primary"></mat-datepicker>
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.start_date?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Domain' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input autocomplete="off" matInput required [placeholder]=" 'Domain' | translate | capitalizeFirstLetter"
+                                           formControlName="domain" [ngStyle.xs]="{'font-size': '15px'}" />
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.domain?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="50">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'End Date' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input matInput [matDatepicker]="datepicker1"  [matDatepickerFilter]="" formControlName="end_date" placeholder="{{ 'Start date' | translate }}"
+                                           [ngStyle.xs]="{'font-size': '15px'}" class="font-size-12"
+                                    >
+                                    <mat-datepicker-toggle matSuffix [for]="datepicker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #datepicker1 color="primary"></mat-datepicker>
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.end_date?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="80">
+                                <label class="font-size-12 required">{{'Number of Collaborator' | translate | capitalizeFirstLetter}} </label>
+                                <mat-form-field appearance="outline">
+                                    <input autocomplete="off" matInput required [placeholder]=" 'Number of Collaborator' | translate | capitalizeFirstLetter"
+                                           formControlName="warned_number" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" />
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.warned_number?.errors?.required">
+                                        {{ 'general.required' | translate }}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+</div>
+</div>

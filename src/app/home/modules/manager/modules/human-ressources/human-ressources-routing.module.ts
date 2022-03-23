@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'payslip',
     loadChildren: () => import('./payslip/payslip.module').then(m => m.PayslipModule),
   },
+  {
+    path: 'training',
+    loadChildren: () => import('./training/training.module').then(m => m.TrainingModule),
+  }
 ];
 
 @NgModule({
