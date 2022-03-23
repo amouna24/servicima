@@ -52,7 +52,6 @@ export class BlocQuestionsAddComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            console.log(userInfo['company'][0]);
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
         });
   }
