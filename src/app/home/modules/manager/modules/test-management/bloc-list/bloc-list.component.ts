@@ -76,7 +76,7 @@ export class BlocListComponent implements OnInit {
     this.isLoading.next(true);
     this.testService
       .getQuestionBloc(
-        `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
+        `?company_email=ALL&application_id=${this.utilsService.
         getApplicationID('SERVICIMA')}`)
       .subscribe( (resBlocQuestions) => {
         resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel, index) => {
@@ -146,7 +146,7 @@ export class BlocListComponent implements OnInit {
       code: '',
     });
           this.testService
-            .getTechnologies(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}`)
+            .getTechnologies(`?company_email=ALL&application_id=${this.applicationId}`)
             .subscribe((technoList) => {
               technoList.map( (oneTechno) => {
                 this.technologiesList.push({

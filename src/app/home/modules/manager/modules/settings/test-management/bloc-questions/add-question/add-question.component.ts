@@ -63,7 +63,7 @@ export class AddQuestionComponent implements OnInit {
     });
   }
   getLevel() {
-    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
            this.LevelList = response;
@@ -85,7 +85,7 @@ export class AddQuestionComponent implements OnInit {
     this.question = this.sendAddQuestion.value;
     this.question.test_question_code =  this.test_question_code;
     this.question.application_id = this.applicationId;
-    this.question.company_email = this.companyEmailAddress;
+    this.question.company_email = 'ALL';
     this.question.order = '';
     this.question.test_question_bloc_code = this.test_question_bloc_code;
     this.question.to_display = '';

@@ -228,7 +228,7 @@ export class SessionInfoComponent implements OnInit {
     return new Promise((resolve) => {
       let i = 0;
       this.testService.getQuestionBloc(
-        `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
+        `?company_email=ALL&application_id=${this.utilsService.
           getApplicationID('SERVICIMA')}`)
         .subscribe((resBlocQuestions) => {
           resBlocQuestions['results'].map((oneBloc: ITestQuestionBlocModel) => {

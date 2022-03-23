@@ -376,4 +376,19 @@ export class TestService {
   updateInviteCandidates(inviteCandidate): Observable<any> {
     return this.httpClient.put<any>(`${environment.testInviteCandidatesApiUrl}`, inviteCandidate);
   }
+  /**************************************************************************
+   * @description add test  candidates resposnse
+   * @param candidateResponse: candidate response
+   *************************************************************************/
+  addTestCandidateResponse(candidateResponse): Observable<any> {
+    return this.httpClient.post<any>(`${environment.testCandidateResponseApiUrl}`, candidateResponse);
+  }
+
+  /**************************************************************************
+   * @description add candidate result
+   * @param candidateResult: candidate result
+   *************************************************************************/
+  addTestCandidateResults(candidateResult): Observable<any> {
+    return this.httpClient.post<any>(`${environment.testCandidateResultApiUrl}`, candidateResult);
+  }
 }

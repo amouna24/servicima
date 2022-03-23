@@ -76,8 +76,9 @@ export class WelcomeToTestComponent implements OnInit {
    */
   getTotalQuestions() {
     this.testService
-      .getSessionQuestion(`?company_email=${this.emailAddress}&application_id=${this.applicationId}&session_code=WID-71220-TEST-SESSION`)
+      .getSessionQuestion(`?company_email=${this.emailAddress}&application_id=${this.applicationId}&session_code=${this.queryList?.session_code}`)
       .subscribe((data) => {
+        console.log('length', data);
       this.numberQuestion = data.length;
     });
   }
@@ -90,7 +91,7 @@ export class WelcomeToTestComponent implements OnInit {
       .getSessionInfo(`?company_email=${this.emailAddress}&application_id=${this.applicationId}&session_code=${this.queryList?.session_code}`)
       .subscribe((data) => {
       console.log(data[0]['test_session_time'], 'data');
-      this.totalTime = data[0]['test_session_time'];
+      this.totalTime = data[0]['test_session_time'] ;
       this.nameSession = data[0]['session_name'];
     });
   }
@@ -181,10 +182,11 @@ export class WelcomeToTestComponent implements OnInit {
     };
     this.testService.updateInviteCandidates(inviteCandidateSend).subscribe((updated) => {
       const queryObject = {
+        sessionCode: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
         sessionName: this.nameSession,
         companyName: this.nameCompany
       };
-      this.utilsService.navigateWithQueryParam('/candidate/test-management/test-done', queryObject);
+      this.utilsService.navigateWithQueryParam('/candidate/test-management/qcm', queryObject);
     });
   }
 

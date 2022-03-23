@@ -69,7 +69,7 @@ export class BlocQuestionsListComponent implements OnInit {
     this.blocData = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=ALL`)
         .subscribe(
           (response) => {
             console.log('response=', response);
@@ -117,7 +117,7 @@ export class BlocQuestionsListComponent implements OnInit {
   async getTechTitle(tech_code): Promise<string> {
     let code: string;
     const get = this.testService.
-    getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).toPromise();
+    getTechnologies(`?test_technology_code=${tech_code}&application_id=${this.applicationId}&company_email=ALL`).toPromise();
     await get.then((data) => {
       code = data[0]?.technology_title;
     });

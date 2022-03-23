@@ -25,6 +25,13 @@ export const candidateMenu: IMenu[] = [
         feature: 'SOURCING_CAND_FILE_ACCESS',
     },
     {
+    state: 'test-management',
+    name: 'Test management',
+    type: 'link',
+    icon: 'wi_dashboard',
+    feature: 'SOURCING_CAND_FILE_ACCESS',
+    },
+    {
         state: 'visa-files',
         name: 'visa files',
         type: 'link',

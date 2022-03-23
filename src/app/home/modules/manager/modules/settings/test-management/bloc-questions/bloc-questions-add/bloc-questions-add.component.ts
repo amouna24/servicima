@@ -58,7 +58,7 @@ export class BlocQuestionsAddComponent implements OnInit {
   }
 
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
@@ -82,7 +82,7 @@ export class BlocQuestionsAddComponent implements OnInit {
     this.testBlocQuestion = this.sendAddTestBloc.value;
     this.testBlocQuestion.test_question_bloc_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-QUESTION_BLOC`;
     this.testBlocQuestion.application_id = this.applicationId;
-    this.testBlocQuestion.company_email = this.companyEmailAddress;
+    this.testBlocQuestion.company_email = 'ALL';
     this.testBlocQuestion.image =  this.formDataImage ? await this.uploadFile(this.formDataImage) : undefined;
     if (this.sendAddTestBloc.valid) {
       this.testService.addQuestionBloc(this.testBlocQuestion).subscribe(data => {

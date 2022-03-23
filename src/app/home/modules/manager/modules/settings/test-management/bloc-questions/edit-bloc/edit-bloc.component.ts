@@ -68,7 +68,7 @@ export class EditBlocComponent implements OnInit {
   }
 
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL'`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
@@ -104,7 +104,7 @@ export class EditBlocComponent implements OnInit {
   getSelectedTechnologie() {
     return new Promise( (resolve) => {
       this.testService
-        .getTechnologies(`?test_technology_code=${this.test_technology_code}&company_email=${this.companyEmailAddress}`)
+        .getTechnologies(`?test_technology_code=${this.test_technology_code}&company_email=ALL`)
         .subscribe( (res) => {
           resolve(res[0].technology_title);
         });
@@ -117,7 +117,7 @@ export class EditBlocComponent implements OnInit {
     this.testBlocQuestion = this.sendUpdateBloc.value;
     this.testBlocQuestion.test_question_bloc_code = this.test_question_bloc_code;
     this.testBlocQuestion.application_id = this.applicationId;
-    this.testBlocQuestion.company_email = this.companyEmailAddress;
+    this.testBlocQuestion.company_email = 'ALL';
     this.testBlocQuestion._id = this._id;
     this.testBlocQuestion.image = this.testBlocQuestion.image === this.image ? this.image : await this.uploadFile(this.formDataImage);
     this.testBlocQuestion.price = this.testBlocQuestion.free ? null : this.testBlocQuestion.price;

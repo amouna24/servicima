@@ -80,6 +80,8 @@ export const environment = {
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',
   testSessionInfoApiUrl: 'http://213.136.74.202/testsessioninfo',
   testLevelApiUrl: 'http://213.136.74.202/testlevel',
+  testCandidateResponseApiUrl: 'http://213.136.74.202/testcandidateresponse',
+  testCandidateResultApiUrl: 'http://213.136.74.202/testcandidateresult',
   testSessionQuestionsApiUrl: 'http://213.136.74.202/testsessionquestions',
   testInviteCandidatesApiUrl: 'http://213.136.74.202/testinvitecandidates',
   testSessionApiUrl: 'http://213.136.74.202/testsession',

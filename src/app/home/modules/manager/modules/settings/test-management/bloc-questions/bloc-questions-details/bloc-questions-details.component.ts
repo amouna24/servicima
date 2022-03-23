@@ -64,7 +64,7 @@ export class BlocQuestionsDetailsComponent implements OnInit {
 
   getQuestionsInfo() {
     // tslint:disable-next-line:max-line-length
-    this.testService.getQuestion(`?test_question_bloc_code=${this.test_question_bloc_code}&application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).subscribe((value) => {
+    this.testService.getQuestion(`?test_question_bloc_code=${this.test_question_bloc_code}&application_id=${this.applicationId}&company_email=ALL`).subscribe((value) => {
       if (value.length > 0) {
         this.questionsList = value;
         this.showQuestionList = true;
