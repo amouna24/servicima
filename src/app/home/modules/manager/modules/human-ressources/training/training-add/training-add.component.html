@@ -13,6 +13,8 @@
         <div fxFlex="2" fxLayout="row">
             <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
         </div>
+        <wid-scrollbar class="scrollbar" style="width: 100%">
+
         <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 "
               [formGroup]="form" >
             <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" >
@@ -86,13 +88,21 @@
                         </div>
                         <div fxLayout="row">
                             <div fxLayout="column" fxFlex="80">
-                                <label class="font-size-12 required">{{'Domain' | translate | capitalizeFirstLetter}} </label>
-                                <mat-form-field appearance="outline">
-                                    <input autocomplete="off" matInput required [placeholder]=" 'Domain' | translate | capitalizeFirstLetter"
-                                           formControlName="domain" [ngStyle.xs]="{'font-size': '15px'}" />
-                                    <mat-error class="wid-error-messages" *ngIf="form.controls.domain?.errors?.required">
+                                <label class="font-size-12 required">{{'Price' | translate | capitalizeFirstLetter}} </label>
+                                <div fxLayout="row" fxFlex="100">
+                                <mat-form-field appearance="outline" >
+                                    <div>
+                                        <input autocomplete="off" matInput required [placeholder]=" 'Price' | translate | capitalizeFirstLetter"
+                                               formControlName="price" [ngStyle.xs]="{'font-size': '15px'}" />
+                                       <button class="buttonCurrency"> <label >USD</label></button>
+
+                                    </div>
+
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.price?.errors?.required">
                                         {{ 'general.required' | translate }}</mat-error>
                                 </mat-form-field>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -126,11 +136,56 @@
 
 
                 </div>
+<div fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="90">
+                <label class="font-size-12 required">{{'Description' | translate | capitalizeFirstLetter}} </label>
+                <mat-form-field appearance="outline">
+                    <textarea autocomplete="off" matInput required [placeholder]=" 'Description' | translate | capitalizeFirstLetter"
+                           formControlName="hours" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" rows="7"> </textarea>
+                    <mat-error class="wid-error-messages" *ngIf="form.controls.hours?.errors?.required">
+                        {{ 'general.required' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
 
+</div>
+<div fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="90">
+                <section >
+                    <mat-checkbox formControlName="online" >This training session is online</mat-checkbox>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+                <div class="row" [ngStyle]="{'margin-top': '4%'}">
+                    <div fxLayout="column" fxFlex="100">
+                        <div  fxLayout="row" fxLayoutAlign="space-between end" fxFlex="100"  >
+
+
+                            <button type="submit" mat-raised-button   class="black btn-small bg-white-two" (click)="cancel()" >
+                                <span class="font-size-11" >{{ 'Cancel' | translate }}</span>
+                            </button>
+                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="next()" [disabled]="!this.form.valid" >
+                                <span class="font-size-11 white">{{ 'Next' | translate }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
 
             </div>
 
 
         </form>
+        </wid-scrollbar>
 </div>
 </div>

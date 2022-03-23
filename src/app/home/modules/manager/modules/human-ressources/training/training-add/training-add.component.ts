@@ -71,4 +71,23 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
+  /**
+   * @description reset form
+   */
+  cancel() {
+    this.form.reset();
+  }
+
+  /**
+   * @description submit function
+   */
+  next() {
+    if (!this.form.valid) {
+      console.log('this form submitted successfully');
+      console.log('my form ', this.form.value);
+    } else {
+      console.log('form invalid');
+    }
+  }
+
 }
