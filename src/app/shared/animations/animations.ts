@@ -216,10 +216,3 @@ export let questionDisplayNewNext = trigger('questionDisplayNewNext', [
     animate(500),
   ]),
 ]);
-export let timeChange = trigger('timeChange', [
-  state('true', style(
-    { opacity: 0, transform: 'translateY(-20px)', color: '#7b7e8a'})),
-  transition('* => true',  [
-    animate(500),
-  ]),
-]);

@@ -143,10 +143,10 @@
             <div  fxFlex="15" fxLayout="row">
               <span class="cool-grey font-size-18">No Data Found</span>
             </div>
-            <div  fxFlex="15" fxLayout="row">
+            <div  fxFlex="15" fxLayout="row" *canBeDisplayed="{'feature': header.feature}">
               <div *ngIf="buttonAdd !== false">
                 <button  mat-raised-button  class="btn-medium bg-cerulean-blue" (click)="redirectToPageOrDialog(header.type)">
-                  <span class="white font-size-12 font-normal">{{ header.addActionText | spliceText: 20  }}</span>
+                  <span class="white font-size-12 font-normal">{{ header.addActionText | translate | spliceText: 20  }}</span>
                 </button>
               </div>
             </div>
@@ -259,9 +259,6 @@
           </mat-progress-spinner>
         </div>
       </div>
-
-
-
     </wid-scrollbar>
   <ng-template  [ngIf]="!!tableData.getValue()?.results && !!offset && (!!(totalCountedItems || countedItems) && !!totalItems)"  [ngIfElse]="loading">
   <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">

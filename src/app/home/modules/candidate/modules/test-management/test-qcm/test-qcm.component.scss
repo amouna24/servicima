@@ -34,18 +34,18 @@
   stroke: none;
 }
 .gray-ring {
-  stroke-width: 9px;
-  stroke: grey;
+  stroke-width: 10px;
+  stroke: $pale-grey;
 }
 .height-width-10 {
   position: absolute;
-  height: 10%;
-  width: 6%;
+  height: 14%;
+  width: 7%;
 }
 .height-width-6 {
   position: absolute;
-  height: 8%;
-  width: 6%;
+  height: 10.5%;
+  width: 7%;
 }
 .deg-90 {
   transform: rotate(90deg);
@@ -83,10 +83,36 @@ transform: scaleX(-1);
   width: 100px;
   height: 100px;
 }
-.element {
-  animation: secondsAnimation 1s infinite; animation-iteration-count: 1;
+.vertical-line {
+  width: 3px !important;
+  height: 50px !important;
+  background: #707070 !important;
 }
+.bloc-choice {
+  min-height: 50px;
+  border-radius: 5px;
+  border: 2px solid $pale-grey-four;
+}
+.border-left-secondary {
+  border-left: 10px solid $secondaryColor;
+  border-radius: 5px 5px;
+}
+.border-left-grey {
+  border-left: 10px solid $cool-grey;
+  border-radius: 5px 5px;
+}
+.bg-pale-grey-four {
+  background-color: $pale-grey-four;
+}
+.rounded-check-box {
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 50% !important;
+      border-color: $cool-grey;
+    }
 
+  }
+}
 @keyframes secondsAnimation {
   0% {
     transform: translateY(10px);

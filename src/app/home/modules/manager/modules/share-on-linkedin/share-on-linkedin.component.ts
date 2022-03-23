@@ -242,9 +242,9 @@ export class ShareOnLinkedinComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         if (params['code'] && params['state']) {
-          window.opener.location.href = `${environment.servicmaUrl}${this.router.url.split('?')[0]}?code=${params['code']}&state=${params['state']}`;
+          window.opener.location.href = `${environment.servicimaUrl}${this.router.url.split('?')[0]}?code=${params['code']}&state=${params['state']}`;
         } else {
-          window.opener.location.href = `${environment.servicmaUrl}${this.router.url.split('?')[0]}?code=${params['code']}`;
+          window.opener.location.href = `${environment.servicimaUrl}${this.router.url.split('?')[0]}?code=${params['code']}`;
         }
       });
     window.close();

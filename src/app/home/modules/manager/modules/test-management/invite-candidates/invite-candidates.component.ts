@@ -3,8 +3,9 @@ import { takeUntil } from 'rxjs/operators';
 import { ModalService } from '@core/services/modal/modal.service';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
-import * as _ from 'lodash';
 import { UtilsService } from '@core/services/utils/utils.service';
+
+import * as _ from 'lodash';
 
 import { ChooseCandidatesComponent } from './choose-candidates/choose-candidates.component';
 
@@ -23,11 +24,9 @@ export class InviteCandidatesComponent implements OnInit {
   mode: string;
   sessionCode: string;
 
-  constructor(
-    private modalService: ModalService,
-    private userService: UserService,
-    private utilsService: UtilsService
-  ) {
+  constructor(private modalService: ModalService,
+              private userService: UserService,
+              private utilsService: UtilsService) {
   }
 
   /**
@@ -73,7 +72,8 @@ export class InviteCandidatesComponent implements OnInit {
    * @description Open invite candidate
    */
   inviteCandidates() {
-    this.modalService.displayModal('inviteCandidate', this.listCandidates,
+    this.modalService.displayModal('inviteCandidate', { listCandidates: this.listCandidates,
+      sessionCode: this.sessionCode },
       '900px', '580px')
       .pipe(takeUntil(this.destroyed$))
       .subscribe(async (res) => {

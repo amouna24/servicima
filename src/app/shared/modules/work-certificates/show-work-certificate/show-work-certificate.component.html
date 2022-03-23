@@ -10,13 +10,13 @@
         </div>
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-            <mat-list role="list"    >
+            <mat-list role="list"   *ngIf="certificate"  >
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_contract_certif_start' | translate}} :</span> {{ certificate.contract_start_date | date: 'dd-MM-yyyy'}}  </mat-list-item>
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_contract_certif_end' | translate}} :</span>  {{ certificate.contract_end_date  | date: 'dd-MM-yyyy'}} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
-            <mat-list role="list">
+            <mat-list role="list" *ngIf="certificate">
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_address_certif' | translate}} :</span> {{ certificate.address ? certificate.address : 'no_address_all' | translate }}</mat-list-item>
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_nationality_certif' | translate}} :</span> {{ certificate.nationality_id ? nationality : 'no_natio_all' | translate }}</mat-list-item>
             </mat-list>
@@ -29,20 +29,20 @@
         </div>
         <div fxLayout="row" fxFlex="100">
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-            <mat-list role="list" >
+            <mat-list role="list" *ngIf="certificate" >
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_request_certif_date' | translate}} :</span> {{certificate.request_date | date: 'dd-MM-yyyy'}}</mat-list-item>
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_reponse_certif_date' | translate}} :</span> {{ certificate.request_response | date: 'longDate' }} {{ certificate.request_response? '' : certificate.request_status }} </mat-list-item>
             </mat-list>
           </div>
           <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-            <mat-list role="list" >
+            <mat-list role="list" *ngIf="certificate" >
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_request_type' | translate}} :</span> {{ requestType | translate }}</mat-list-item>
               <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'job_title_all' | translate}} :</span> {{ position }} </mat-list-item>
             </mat-list>
           </div>
         </div>
         <div fxLayout="column wrap"  fxLayout.xs="column" fxFlex="50" fxFlex.xs="50">
-          <mat-list role="list">
+          <mat-list role="list" *ngIf="certificate">
             <mat-list-item role="listitem" class="black font-size-12"><span class="font-semi-bold">{{ 'rh_comment_certif' | translate}} :</span> {{ certificate.comment }}</mat-list-item>
 
           </mat-list>
@@ -50,7 +50,7 @@
         </div>
       </section>
 
-      <section  [ngSwitch]="certificate.request_status" fxFlex="80" @showBloc>
+      <section *ngIf="certificate"  [ngSwitch]="certificate.request_status" fxFlex="80" @showBloc>
         <div  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="column" *ngSwitchCase="'Pending'" >
           <div  fxLayout="row" fxLayoutGap="16px" *ngIf="!collaborator">
             <div fxLayout="column wrap" fxLayout.xs="column" fxFlex="50" fxFlex.xs="50" >
