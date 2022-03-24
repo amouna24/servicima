@@ -73,7 +73,7 @@ export class BlocQuestionsDetailsComponent implements OnInit {
     );
   }
   getLevelAll() {
-    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`).subscribe((value) => {
+    this.testService.getLevel(`?application_id=${this.applicationId}&company_email=ALL`).subscribe((value) => {
       this.levelList = value;
     });
     }
@@ -94,6 +94,11 @@ export class BlocQuestionsDetailsComponent implements OnInit {
   routeToAdd() {
     const queryObject = {
       test_question_bloc_code: this.test_question_bloc_code,
+      test_bloc_title: this.test_bloc_title,
+      test_bloc_technology: this.test_bloc_technology,
+      test_bloc_total_number: this.test_bloc_total_number,
+      test_question_bloc_desc: this.test_question_bloc_desc,
+      _id: this._id,
     };
     this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/add-question', queryObject);
   }

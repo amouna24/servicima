@@ -23,7 +23,12 @@ export class AddAnswerComponent implements OnInit {
   answer: ITestChoicesModel;
   public QuestionList = [];
   companyEmailAddress: string;
-
+  test_bloc_title: string;
+  test_bloc_technology: string;
+  test_bloc_total_number: string;
+  test_question_bloc_desc: string;
+  _id: string;
+   test_question_bloc_code: string;
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -89,7 +94,15 @@ export class AddAnswerComponent implements OnInit {
         console.log('answer added', resAnswer);
       });
     });
-    this.router.navigate(['/manager/settings/bloc-question/']);
+    const queryObject = {
+      test_question_bloc_code: this.test_question_bloc_code,
+      test_bloc_title: this.test_bloc_title,
+      test_bloc_technology: this.test_bloc_technology,
+      test_bloc_total_number: this.test_bloc_total_number,
+      test_question_bloc_desc: this.test_question_bloc_desc,
+      _id: this._id,
+    };
+    this.utilsService.navigateWithQueryParam('/manager/settings/bloc-question/details', queryObject);
   }
 
   loadData() {
@@ -98,6 +111,12 @@ export class AddAnswerComponent implements OnInit {
       this.test_question_desc = data.test_question_desc;
       this.test_question_code = data.test_question_code;
       this.question_type = data.question_type;
+      this.test_question_bloc_code = data.test_question_bloc_code;
+      this.test_bloc_title = data.test_bloc_title;
+      this.test_bloc_technology = data.test_bloc_technology;
+      this.test_bloc_total_number = data.test_bloc_total_number;
+      this.test_question_bloc_desc = data.test_question_bloc_desc;
+      this._id = data._id;
     });
   }
 }

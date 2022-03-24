@@ -48,6 +48,19 @@
                       Please select an item in the list</mat-error>
                   </mat-form-field>
                   <mat-label class="black font-size-12 required">
+                    Language:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select  formControlName="language_id" disableOptionCentering panelClass="panelColor"
+                                 placeholder="language">
+                      <ng-container *ngFor="let v of langList.getValue()">
+                        <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-error class="red" *ngIf="sendAddTestBloc.controls.test_technology_code.errors?.required">
+                      Please select an item in the list</mat-error>
+                  </mat-form-field>
+                  <mat-label class="black font-size-12 required">
                     Questions total Numbers:
                   </mat-label>
                   <mat-form-field appearance="outline" class="full-width">

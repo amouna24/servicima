@@ -112,18 +112,14 @@
           </form>
         </div>
       </wid-scrollbar>
-      <div fxLayout="row" fxFlex="10" fxLayoutAlign="center ">
-        <div fxLayout="column" fxFlex="77" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
+      <div fxLayout="row" fxFlex="10" fxLayoutAlign="end " fxLayoutGap="20px" class="p-r-20">
           <button mat-raised-button class="btn-medium bg-pale-grey" routerLink="/manager/settings/bloc-question/">
             <span class="cool-grey">Cancel</span>
           </button>
-        </div>
-        <div fxLayout="column" fxFlex="16" fxLayoutAlign=" end" [style]="{ minHeight: '139px'}">
           <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendAddQuestion.invalid" [style]="{marginRight: '4%'}"
                   (click)="createQuestion()">
             Next
           </button>
-        </div>
       </div>
     </div>
   </div>

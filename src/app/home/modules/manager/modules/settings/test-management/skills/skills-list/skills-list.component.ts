@@ -57,7 +57,7 @@ export class SkillsListComponent implements OnInit {
     const tableRes = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getSkills(`?application_id=${this.utilsService.getApplicationID('SERVICIMA')}&company_email=${this.companyEmailAddress}`)
+      this.testService.getSkills(`?application_id=${this.utilsService.getApplicationID('SERVICIMA')}&company_email=ALL`)
         .subscribe(
           (response) => {
             this.isLoading.next(true);
@@ -96,11 +96,12 @@ export class SkillsListComponent implements OnInit {
   getTechno(test_skill_code) {
     const techList = [];
     return  new Promise<any>(resolve => {
-      this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}&company_email=${this.companyEmailAddress}`)
+      console.log('test skill code');
+      this.testService.getTechnologySkills(`?test_skill_code=${test_skill_code}&company_email=ALL`)
         .subscribe(resTechSkill => {
           resTechSkill.map( async TechSkill => {
             // tslint:disable-next-line:max-line-length
-            this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}&company_email=${this.companyEmailAddress}`)
+            this.testService.getTechnologies(`?test_technology_code=${TechSkill.TestTechnologySkillKey.test_technology_code}&company_email=ALL`)
               .subscribe(resTech => {
                 if (resTech['msg_code'] !== '0004') {
                   resTech.map( Tech => {
