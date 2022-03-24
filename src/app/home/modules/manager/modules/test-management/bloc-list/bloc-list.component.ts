@@ -77,7 +77,7 @@ export class BlocListComponent implements OnInit {
     this.testService
       .getQuestionBloc(
         `?company_email=ALL&application_id=${this.utilsService.
-        getApplicationID('SERVICIMA')}`)
+        getApplicationID('SERVICIMA')}&language_id=${this.localStorageService.getItem('language').langCode}`)
       .subscribe( (resBlocQuestions) => {
         resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel, index) => {
           this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`).subscribe( (questions) => {

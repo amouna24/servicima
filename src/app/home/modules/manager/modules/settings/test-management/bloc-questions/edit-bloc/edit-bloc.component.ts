@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TestService } from '@core/services/test/test.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,13 +10,16 @@ import { CryptoService } from '@core/services/crypto/crypto.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { map } from 'rxjs/internal/operators/map';
 import { UploadService } from '@core/services/upload/upload.service';
+import { BehaviorSubject } from 'rxjs';
+import { IViewParam } from '@shared/models/view.model';
+import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
 
 @Component({
   selector: 'wid-edit-bloc',
   templateUrl: './edit-bloc.component.html',
   styleUrls: ['./edit-bloc.component.scss']
 })
-export class EditBlocComponent implements OnInit {
+export class EditBlocComponent implements OnInit, AfterContentChecked {
   sendUpdateBloc: FormGroup;
   TechList = [];
   testBlocQuestion: ITestQuestionBlocModel;
@@ -32,8 +35,10 @@ export class EditBlocComponent implements OnInit {
   displayPrice: boolean;
   formDataImage: FormData;
   free: boolean;
+  langList: BehaviorSubject<IViewParam[]>;
   price: string;
   image: string;
+  language_id: string;
   selectedTech: string;
   constructor(
     private fb: FormBuilder,
@@ -42,7 +47,9 @@ export class EditBlocComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private userService: UserService,
     private utilsService: UtilsService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private appInitializerService: AppInitializerService,
+    private cdRef: ChangeDetectorRef,
   ) {
     this.loadData();
   }
@@ -51,8 +58,12 @@ export class EditBlocComponent implements OnInit {
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
     this.getTechnologiesInfo();
     this.createForm();
+    this.getLanguageList();
     this.getConnectedUser();
     await this.getSelectedTechnologie();
+  }
+  ngAfterContentChecked() {
+    this.cdRef.detectChanges();
   }
 
   /**
@@ -90,12 +101,12 @@ export class EditBlocComponent implements OnInit {
   }
 
   createForm() {
-    console.log('free=', this.free);
     this.sendUpdateBloc = this.fb.group({
       test_question_bloc_title :  [this.test_question_bloc_title, [Validators.required, Validators.pattern('(?!^\\d+$)^.+$')]],
       test_technology_code: [this.test_technology_code, [Validators.required]],
       question_nbr: [this.question_nbr, [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       test_question_bloc_desc: this.test_question_bloc_desc,
+      language_id: [this.language_id, [ Validators.required]],
       image:  [this.image, [ Validators.required]],
       free: this.free,
       price: this.price,
@@ -133,6 +144,7 @@ export class EditBlocComponent implements OnInit {
        this.test_question_bloc_title = data.test_bloc_title;
       this.test_technology_code = data.test_bloc_technology;
        this.question_nbr = data.test_bloc_total_number;
+       this.language_id = data.language_id;
        this.test_question_bloc_desc =  data.test_question_bloc_desc;
        this.test_question_bloc_code =  data.test_question_bloc_code;
        this._id =  data.test_bloc_title;
@@ -178,5 +190,16 @@ export class EditBlocComponent implements OnInit {
         free: event.checked,
       }
     );
+  }
+  /**************************************************************************
+   * @description Get Language list from RefData and RefType
+   *************************************************************************/
+  getLanguageList() {
+    this.langList = new BehaviorSubject<IViewParam[]>([]);
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
+      }
+    ));
   }
 }

@@ -70,6 +70,8 @@ export const environment = {
   testTechnologiesApiUrl: 'http://213.136.74.202/testtechnology',
   testSkillsApiUrl: 'http://213.136.74.202/testskills',
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',
+  testCandidateResponseApiUrl: 'http://213.136.74.202/testcandidateresponse',
+  testCandidateResultApiUrl: 'http://213.136.74.202/testcandidateresult',
   testLevelApiUrl: 'http://213.136.74.202/testlevel',
   testSessionInfoApiUrl: 'http://213.136.74.202/testsessioninfo',
   companyBankingInfoApiUrl: 'http://213.136.74.202/companybankinginfo',

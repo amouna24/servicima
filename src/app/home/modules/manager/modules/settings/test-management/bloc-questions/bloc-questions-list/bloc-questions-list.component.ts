@@ -69,7 +69,8 @@ export class BlocQuestionsListComponent implements OnInit {
     this.blocData = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=ALL`)
+      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=ALL&language_id=${
+        this.localStorageService.getItem('language').langCode}`)
         .subscribe(
           (response) => {
             console.log('response=', response);
@@ -90,6 +91,7 @@ export class BlocQuestionsListComponent implements OnInit {
                     test_question_bloc_code: res.TestQuestionBlocKey.test_question_bloc_code,
                     technology_code: res.TestQuestionBlocKey.test_technology_code,
                     image: res.image,
+                    language_id: res.TestQuestionBlocKey.language_id,
                     free:  res.free,
                     price: res.price
                   });
@@ -147,12 +149,14 @@ export class BlocQuestionsListComponent implements OnInit {
   }
 
   private updateBloc(data) {
+    console.log('data=', data);
     const queryParamObject =  {
       test_bloc_title:  data.test_bloc_title,
       test_bloc_technology:  data.technology_code,
       test_bloc_total_number:  data.test_bloc_total_number,
       test_question_bloc_desc:  data.test_question_bloc_desc,
       _id:  data._id,
+      language_id: data.language_id,
       test_question_bloc_code:  data.test_question_bloc_code,
       free: data.free,
       price: data.price,
