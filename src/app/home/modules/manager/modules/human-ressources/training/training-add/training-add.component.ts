@@ -5,6 +5,7 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
 import { ReplaySubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-training-add',
@@ -16,6 +17,7 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       private location: Location,
       private formBuilder: FormBuilder,
       private userService: UserService,
+      private router: Router
 
   ) { }
 
@@ -46,8 +48,8 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       title: ['', [Validators.required]],
       domain: ['', [Validators.required]],
       warned_number: [''],
-      start_date: ['', [Validators.required]],
-      end_date: ['', [Validators.required]],
+      start_date: [''],
+      end_date: [''],
       price: [''],
       hours: [''],
       description: ['', [Validators.required]],
@@ -82,12 +84,10 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
    * @description submit function
    */
   next() {
-    if (!this.form.valid) {
-      console.log('this form submitted successfully');
-      console.log('my form ', this.form.value);
-    } else {
-      console.log('form invalid');
-    }
+    console.log(this.form.valid);
+    console.log('value ', this.form.value);
+    this.router.navigate(['/manager/human-ressources/training/session-training']);
+
   }
 
 }

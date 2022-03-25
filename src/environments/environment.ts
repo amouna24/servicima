@@ -64,7 +64,7 @@ export const environment = {
   workCertificateApiUrl: 'http://213.136.74.202/hrworkcertificate',
   payslipAssociateApiUrl: 'http://213.136.74.202/payslipassociate',
   workCertificateUrl: 'http://213.136.74.202/hrworkcertificate',
-  hrTrainingApiUrl: 'http://213.136.74.202/hrtraining',
+  hrTrainingApiUrl: 'http://localhost:8113/servicima/training/v1',
   hrTrainingRequestApiUrl: 'http://213.136.74.202/hrtrainingrequest',
   hrTrainingSessionWeekApiUrl: 'http://213.136.74.202/trainingsessionweek',
   hrTrainingInviteCollaboratorApiUrl: 'http://213.136.74.202/hrtraininginvitecollaborator',
