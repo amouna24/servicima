@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { slideInOut } from '@shared/animations/animations';
+import { showMoreRule } from '@shared/animations/animations';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CryptoService } from '@core/services/crypto/crypto.service';
@@ -8,15 +8,17 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UserService } from '@core/services/user/user.service';
 import { environment } from '@environment/environment';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { IUserModel } from '@shared/models/user.model';
 
 @Component({
   selector: 'wid-welcome-to-test',
   templateUrl: './welcome-to-test.component.html',
   styleUrls: ['./welcome-to-test.component.scss'],
-  animations: [slideInOut]
+  animations: [
+    showMoreRule
+  ]
 })
 export class WelcomeToTestComponent implements OnInit {
-
   queryList: any;
   isLoading = new BehaviorSubject<boolean>(false);
   emailAddress: string;
@@ -27,9 +29,13 @@ export class WelcomeToTestComponent implements OnInit {
   nameCompany: string;
   nameSession: string;
   expiredDate: Date;
+  expiredDay: number;
   detailsCandidates: any;
   statusLink: string;
-
+  animationState = 'open';
+  photo: string;
+  helpMenuOpen: string;
+  env = environment.uploadFileApiUrl + '/show/';
   constructor(private route: ActivatedRoute,
               private cryptoService: CryptoService,
               private testService: TestService,
@@ -50,7 +56,7 @@ export class WelcomeToTestComponent implements OnInit {
     this.getTestInviteCandidate();
     this.getTotalQuestions();
     this.getSessionInfo();
-    this.expiredDate = this.addDays(new Date(this.queryList['send_date']), 5);
+    this.helpMenuOpen = 'out';
   }
 
   /**
@@ -63,11 +69,9 @@ export class WelcomeToTestComponent implements OnInit {
       const arrayOfCandidate = decryptQuery.split('&');
       arrayOfCandidate.map((candidate) => {
         const key = candidate.split('=')[0];
-        const value = candidate.split('=')[1];
-        queryParamObject[key] = value;
+        queryParamObject[key] = candidate.split('=')[1];
       });
       this.queryList = queryParamObject;
-
     });
   }
 
@@ -90,7 +94,6 @@ export class WelcomeToTestComponent implements OnInit {
     this.testService
       .getSessionInfo(`?company_email=${this.emailAddress}&application_id=${this.applicationId}&session_code=${this.queryList?.session_code}`)
       .subscribe((data) => {
-      console.log(data[0]['test_session_time'], 'data');
       this.totalTime = data[0]['test_session_time'] ;
       this.nameSession = data[0]['session_name'];
     });
@@ -106,6 +109,7 @@ export class WelcomeToTestComponent implements OnInit {
           if (userInfo) {
             this.emailAddress = userInfo['company'][0]['companyKey']['email_address'];
             this.nameCompany = userInfo['company'][0].company_name;
+            this.photo = userInfo['company'][0].photo;
           }
         });
   }
@@ -118,17 +122,19 @@ export class WelcomeToTestComponent implements OnInit {
       .getTestInviteCandidates(`?company_email=${this.emailAddress}&application_id=${this.applicationId}` +
         `&session_code=${this.queryList?.session_code}&candidate_email=${this.queryList?.candidate_email}`)
       .subscribe((data) => {
+        this.expiredDay = data[0]['expired_date'];
         this.detailsCandidates = data[0];
+        this.expiredDate = this.addDays(new Date(this.queryList['send_date']), this.expiredDay);
         this.isLoading.next(false);
         if (data[0].link_valid && this.calculateDiff(this.queryList['send_date']) < data[0]['expired_date']) {
          this.statusLink = 'link valid';
         } else if ( !data[0].link_valid ) {
           console.log('link invalid');
           this.statusLink = 'link invalid';
-          this.statusLink = 'link valid';
         } else if (this.calculateDiff(this.queryList['send_date']) >= data[0]['expired_date']) {
           console.log('link expired');
           this.statusLink = 'link expired';
+          this.router.navigate(['/expired-code']);
         }
       }, error => {
         this.isLoading.next(false);
@@ -160,12 +166,12 @@ export class WelcomeToTestComponent implements OnInit {
 
   /**
    * @description Add days to date
-   * @param theDate: date
+   * @param date: date
    * @param days: number day to add
    * @return new date
    */
-   addDays(theDate, days) {
-    return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
+   addDays(date: Date, days: number) {
+    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
   }
 
   /**
@@ -191,18 +197,18 @@ export class WelcomeToTestComponent implements OnInit {
   }
 
   /**
-   * @description: hide others parameters or not
-   * @param _div : id div
+   * @description: open ar close more details
    */
-  hideThis(_div) {
-    const obj = document.getElementById(_div);
-    if (obj.style.display === 'block') {
-      obj.style.display = 'none';
-      this.hidden = true;
-    } else {
-      obj.style.display = 'block';
-      this.hidden = false;
-    }
+  toggleRules(): void {
+    this.helpMenuOpen = this.helpMenuOpen === 'out' ? 'in' : 'out';
+    this.hidden = ! this.hidden;
   }
 
+  /**
+   * @description: back to home
+   */
+  backToHome(event: Event) {
+    console.log(event, 'event');
+   this.router.navigate(['/candidate']);
+  }
 }

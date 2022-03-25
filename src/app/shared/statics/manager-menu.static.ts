@@ -217,7 +217,7 @@ export const managerMenu: IMenu[] = [
         name: 'manager.menu.static.billings',
         type: 'link',
         icon: 'wi-billings',
-        feature: 'EXPENSES_ACCESS',
+        feature: 'INVOICING_ACCESS',
     },
     {
     state: 'test',

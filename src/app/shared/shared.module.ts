@@ -64,6 +64,7 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
 import { AlertRequiredDataComponent } from './components/alert-required-data/alert-required-data.component';
 import { CompleteRequiredInformationComponent } from './components/complete-required-information/complete-required-information.component';
 import { ComponentInfoComponent } from './components/component-info/component-info.component';
+import { DialogInviteComponent } from './components/dialog-invite/dialog-invite.component';
 import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive';
 
 @NgModule({
@@ -113,6 +114,7 @@ import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive
     AlertRequiredDataComponent,
     CompleteRequiredInformationComponent,
     ComponentInfoComponent,
+    DialogInviteComponent,
     BlockCopyPasteDirective,
   ],
   imports: [
@@ -183,6 +185,7 @@ import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive
     ShowWorkCertificateComponent,
     EditWorkCertificateComponent,
     ComponentInfoComponent,
+    DialogInviteComponent,
     BlockCopyPasteDirective
 
   ]

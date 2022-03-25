@@ -8,6 +8,7 @@ import { UserService } from '@core/services/user/user.service';
 // import { AuthModule } from '../../projects/auth-front-lib/src/public-api';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ServerErrorComponent } from './pages/server-error/server-error.component';
+import { ExpiredCodeComponent } from './pages/expired-code/expired-code.component';
 
 const routes: Routes = [
 
@@ -29,6 +30,11 @@ const routes: Routes = [
         path: 'error',
         component: ServerErrorComponent
     },
+
+    {
+    path: 'expired-code',
+    component: ExpiredCodeComponent
+   },
 
     {
         path: '**',

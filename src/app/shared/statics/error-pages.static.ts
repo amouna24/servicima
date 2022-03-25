@@ -3,41 +3,41 @@ import { IError } from '@shared/models/error.model';
 export  const errorPages: IError[] = [
   {
     code: '404',
-    title: 'ERROR 404',
-    subtitle: 'Ooops!! PAGE NOT FOUND',
-    description: 'The link you followed us probably broken or the page has been removed',
+    title: 'error.error404.name',
+    subtitle: 'error.error404.typeerror',
+    description: 'error.error404.link',
     img: '404illustration.png',
     backBtn: true
   },
   {
     code: '500',
-    title: 'ERROR 500',
-    subtitle: 'Internal Server Error',
-    description: 'The server has been deserted for a while. Please be patient or try again',
+    title: 'error.error500.name',
+    subtitle: 'error.error500.typeerror',
+    description: 'error.error500.link',
     img: '500illustration.png',
     backBtn: true
   },
   {
     code: '0005',
-    title: 'ERROR 403',
-    subtitle: 'Access Denied/Forbidden',
-    description: 'The page or resource you were trying to reach is absolutely forbidden for some reason',
+    title: 'error.error403.name',
+    subtitle: 'error.error403.typeerror',
+    description: 'error.error403.link',
     img: '403illustration.png',
     backBtn: true
   },
   {
     code: '0002',
-    title: 'ERROR 400',
-    subtitle: 'Bad Request',
-    description: 'Your browser has issued a malformed or illegal request',
+    title: 'error.error400.name',
+    subtitle: 'error.error400.typeerror',
+    description: 'error.error400.link',
     img: '400illustration.png',
     backBtn: true
   },
   {
     code: '0011',
-    title: 'ERROR',
-    subtitle: 'Validation Code Exipired',
-    description: 'Your validation code has expired, Please try again',
+    title: 'error.error.name',
+    subtitle: 'error.error.typeerror',
+    description: 'error.error.link',
     img: '0011illustration.png',
     backBtn: true
   }

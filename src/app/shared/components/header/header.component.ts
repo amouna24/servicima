@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   licenceCode: string;
   endLicence: number;
   haveImage: any;
+  @Input() showHeader = true;
   emailAddress: string;
   /** subscription */
   destroy$: Subject<boolean> = new Subject<boolean>();
