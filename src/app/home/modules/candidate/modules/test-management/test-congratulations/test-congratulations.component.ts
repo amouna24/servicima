@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-test-congratulations',
@@ -9,7 +10,8 @@ import { UtilsService } from '@core/services/utils/utils.service';
 export class TestCongratulationsComponent implements OnInit {
    companyName: string;
    sessionName: string;
-  constructor(private utilsService: UtilsService) { }
+  constructor(private utilsService: UtilsService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.utilsService.verifyCurrentRoute('/candidate/test-management/welcome-to-test').subscribe( (data) => {
@@ -17,8 +19,13 @@ export class TestCongratulationsComponent implements OnInit {
       this.sessionName =  data['sessionName'];
     });
   }
-  back(event) {
-    console.log('dhax', event);
+
+  /**
+   * @description: back to home
+   */
+  back(event: Event) {
+    console.log(event, 'event');
+    this.router.navigate(['/candidate']);
   }
 
 }

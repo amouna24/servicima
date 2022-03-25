@@ -216,3 +216,16 @@ export let questionDisplayNewNext = trigger('questionDisplayNewNext', [
     animate(500),
   ]),
 ]);
+export let showMoreRule = trigger('showMoreRules', [
+  state('in', style({
+    overflow: 'hidden',
+    height: '*',
+  })),
+  state('out', style({
+    opacity: '0',
+    overflow: 'hidden',
+    height: '0px',
+  })),
+  transition('in => out', animate('800ms ease-in-out')),
+  transition('out => in', animate('800ms ease-in-out'))
+]);

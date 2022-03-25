@@ -83,9 +83,11 @@ export class InviteCandidatesComponent implements OnInit {
       }, (error => {
         console.error(error);
       }));
-
   }
 
+  /**
+   * @description Get Data
+   */
   getData() {
     this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe((data) => {
       this.sessionCode = data.sessionCode;

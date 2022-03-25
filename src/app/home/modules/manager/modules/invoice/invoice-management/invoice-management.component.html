@@ -189,7 +189,7 @@
         </div>
       </div>
 
-    <div *widDisabledForm="{'feature':headerFeature, 'form': formHeader}">
+    <div *widDisabledForm="{'feature':headerFeature, disabledFields: (headerFeature === 'INVOICING_UPDATE_HEADER' ?  ['invoiceNbr', 'invoiceDate'] : []), 'form': formHeader}">
       <div  [formGroup]="formHeader" fxLayout="row" fxFlex="87" fxLayoutGap="50px" class="p-20">
         <div fxLayout="column" fxFlex.gt-lg="28" fxFlex="20">
           <div class="font-bold">{{'invoice.sender' | translate | capitalizeFirstLetter}}</div>

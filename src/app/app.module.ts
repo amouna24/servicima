@@ -23,6 +23,7 @@ import { AppComponent } from './app.component';
 
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ServerErrorComponent } from './pages/server-error/server-error.component';
+import { ExpiredCodeComponent } from './pages/expired-code/expired-code.component';
 
 export function setupApp(
   translationCustomLoaderService: TranslationCustomLoaderService,
@@ -37,6 +38,7 @@ export function setupApp(
     AppComponent,
     NotFoundComponent,
     ServerErrorComponent,
+    ExpiredCodeComponent,
 
   ],
   imports: [

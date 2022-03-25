@@ -25,7 +25,7 @@
       <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 " *ngIf="!isLoading"
         [formGroup]="form"  >
 
-        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'SOURCING_ACCESS', 'form': form}">
+        <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" *widDisabledForm="{'feature':'SOURCING_ACCESS','disabledFields': ['homeCompany', 'emailAddress'], 'form': form}">
 
 
           <div fxLayout="row">

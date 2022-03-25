@@ -4,19 +4,19 @@
 
   <div class="content-header p-t-20"
        fxLayout="column" fxLayoutAlign="start center">
-    <img src="assets/img/logoServicima.png" class="logo m-b-10">
-    <img src="assets/img/logo-title-dark.png" class="logoTiltle">
+    <img src="assets/img/logoServicima.png" class="logo m-b-10" alt="logo">
+    <img src="assets/img/logo-title-dark.png" class="logoTiltle" alt="title">
   </div>
 
   <div class="content full-width m-t-0"
        fxLayout="column" fxLayoutAlign="center start">
     <div class="body" fxLayout="column" fxLayoutAlign="start start">
-      <h1 class="red font-size-38 font-semi-bold">{{error.title}} </h1>
-      <h1 class="black font-normal font-size-38 m-b-10">{{error.subtitle}} </h1>
+      <h1 class="red font-size-38 font-semi-bold">{{error.title | translate}} </h1>
+      <h1 class="black font-normal font-size-38 m-b-10">{{error.subtitle | translate}} </h1>
       <div class="discription">
-        <h5 class="brownish-grey font-light m-0 line-height-2" >{{error.description}} </h5>
+        <h5 class="brownish-grey font-light m-0 line-height-2" >{{error.description | translate}} </h5>
       </div>
-      <button *ngIf="error.backBtn" mat-raised-button class="btn-large bg-cerulean-blue white m-t-40" routerLink="/">Back To Home</button>
+      <button *ngIf="error.backBtn" mat-raised-button class="btn-large bg-cerulean-blue white m-t-40" routerLink="/">{{"error.error.button" | translate}}</button>
     </div>
 
   </div>

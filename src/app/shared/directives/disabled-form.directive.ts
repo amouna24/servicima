@@ -10,7 +10,7 @@ export class DisabledFormDirective implements OnInit {
   availableFeature = [];
   feature: string;
   form: any;
-
+  disabledFields: any;
   constructor(   private element: ElementRef,
                  private templateRef: TemplateRef<any>,
                  private viewContainer: ViewContainerRef,
@@ -22,6 +22,7 @@ export class DisabledFormDirective implements OnInit {
     if (params) {
       this.feature = params.feature;
       this.form = params.form;
+      this.disabledFields = params?.disabledFields;
       this.updateView(params.feature);
     }
   }
@@ -57,6 +58,11 @@ export class DisabledFormDirective implements OnInit {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.form.enable();
+      if (this.disabledFields.length > 0) {
+      this.disabledFields.map((field) => {
+        this.form.controls[field].disable();
+      });
+      }
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);
     }

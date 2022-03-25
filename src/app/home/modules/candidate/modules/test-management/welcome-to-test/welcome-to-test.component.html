@@ -10,8 +10,8 @@
      fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
   <div fxLayout="row" fxFlex="15" fxLayoutGap="50px" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="row" fxFlex="50" fxLayoutGap="15px" class=" m-l-60">
-      <div fxLayout="column"> <img src="assets/img/500illustration.png" [width]='50'
-                 [height]='50' class="edit-img" alt=""></div>
+      <div fxLayout="column"> <img [src]="env + photo" [width]='50'
+                 [height]='50' class="edit-img" alt="" class="border-radius-50 "></div>
      <div fxLayout="column" fxLayoutAlign="center">
       <span  class="font-size-20 warm-grey"> {{nameCompany}}</span>
      </div>
@@ -22,35 +22,18 @@
     <div fxLayout="column" fxFlex="48" fxLayoutAlign="center start" class="font-size-20">
         <span  class="warm-grey"> {{nameSession}}</span>
     </div>
-
   </div>
-
-
-
-
      <div class="full-width bg-white border-radius-20 p-10 p-l-20" fxFlex="80"
            fxLayout="column" fxLayoutAlign="start"  >
 
-       <div class="full-height-test " *ngIf="statusLink == 'link expired'">
-
-         <wid-component-info style="height: 100%" [title]="{ name: ' Time Expired', color:'#fc4b6c'}"
-                             [image]= "{ path:'timeout.svg',height:'110px' }"
-                             [message] = "'The remaining time for the exam has expired.'"
-                             [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}">
-         </wid-component-info>
-
-       </div>
-
        <div class="full-height-test" *ngIf="statusLink == 'link invalid'">
-         <wid-component-info style="height: 100%" [title]="{ name: 'Test passed', color:'#f1c40f'}"
+         <wid-component-info class="full-height-test" [title]="{ name: 'Test passed', color:'#f1c40f'}"
                              [image]= "{ path:'warning-sign.svg',height:'110px' }"
                              [message] = "' You have already passed the exam.'"
-                             [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}">
+                             [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}"
+         (buttonAction)="backToHome($event)">
          </wid-component-info>
        </div>
-
-
-
 <div  *ngIf="statusLink === 'link valid'" class="full-height-test">
     <wid-scrollbar class="full-height-test full-width" >
              <div fxLayout="column" class="m-l-60 m-r-60 full-height-test ">
@@ -72,9 +55,7 @@
                <mat-card-title class="font-size-15 m-t-10 steel">Total time</mat-card-title>
              </mat-card-title-group>
              <mat-card-content class="text-center value-card purpley" fxLayout="row" fxLayoutAlign="center">
-
                <div>{{this.totalTime}}</div>
-
                <sup  class="font-size-8 denim sup">.00 mm </sup>
              </mat-card-content>
            </mat-card>
@@ -95,55 +76,42 @@
    <div fxFlex="50" fxLayout="row">
      <div fxLayout="column" class="full-width">
      <div fxLayout="row" class="p-10">Test rules:</div>
-      <div fxLayout="column" fxLayoutGap="7px" [ngClass]="hidden ? 'hidden-rules-container' : 'display-rules-container'" >
-
-         <div fxLayout="row" >Ce test vous permet d’évaluer vos compétences techniques selon votre niveau.</div>
-         <div fxLayout="row" >On distingue principalement les différents règles suivantes, répartis en trois états:</div>
-         <div>Avant l’ouverture du test    (En attente): </div>
-        <div>Vous avez x jours comme délai maximum afin de passer votre test si non votre session sera éliminée.</div>
+      <div  fxLayout="column"  fxLayoutGap="7px"  [ngClass]="hidden ? 'hidden-rules-container' : 'display-rules-container'"   >
+         <div fxLayout="row" >{{"test.evaluation.skills" | translate}}</div>
+         <div fxLayout="row" >{{"test.evaluation.rules" | translate}}</div>
+         <div>{{"test.evaluation.beforeopening" | translate}} </div>
          <div fxLayout="row" >
-           <div class="container-learn-more" >
-             <div [ngClass]="hidden ? 'hidden-rules' : 'display-rules'">X jours sera le délai maximum possible pour la passation du test</div>
-             <div class="hide learn-more" *ngIf="hidden" (click)="hideThis('divId')" >+ Learn more</div>
+           <div class="container-learn-more">
+             <div [ngClass]="hidden ? 'hidden-rules' : 'display-rules'">{{"test.evaluation.youhave" | translate}} {{expiredDay}} {{"test.evaluation.delay" | translate}}.</div>
+             <div class="hide learn-more" *ngIf="hidden"(click)="toggleRules()" >+ Learn more</div>
            </div>
-
          </div>
-         <div id="divId"  >
-           <div fxLayout="row">En cas de non-respect du délai, la session sera annulée  .</div>
-           <div fxLayout="row">En ouvrant le test :</div>
-           <div fxLayout="row">Votre test sera accessible suite à l’entrée de votre identifiant et votre mot de
-             passe.</div>
-           <div fxLayout="row">Choix du manager : Vous n'avez pas le droit de faire ni copier ni coller sur les
-             différentes questions du test.</div>
-           <div fxLayout="row">En cas de coupure d'internet, ou un autre évènement extérieur :</div>
-           <div fxLayout="row">Vous n'avez pas le droit ni de recommencer et ni de reprendre votre test, votre
-             session sera fermée et vos données seront enregistrées automatiquement.</div>
-           <div  fxLayout="row">  En fermeture de test :</div>
-           <div fxLayout="row"> La date de fermeture informe que votre test sera fermé pour la correction.</div>
-           <div fxLayout="row">  Après la fermeture du test :</div>
-           <div fxLayout="row">   Le candidat n’a pas le droit ni de recommencer ou ni de modifier le test déjà fait.</div>
-           <div fxLayout="row">   Temps disponible :</div>
-           <div fxLayout="row">   C’est le temps alloué pour répondre aux questions du test une fois ouvert.</div>
-           <div fxLayout="row">  Un chronomètre faisant un décompte s’affiche dans la fenêtre du test.</div>
-           <div fxLayout="row"> Quand le décompte est terminé, le test est automatiquement envoyé, peu importe le nombre de Questions répondues.</div>
-           <div fxLayout="row"> Selon le choix du manager le temps de test sera reparti :</div>
-           <div fxLayout="row"> Accorder pour chaque question un temps bien défini. Avec cette option
-             vous n’avez pas le droit de faire retourner aux questions précédentes </div>
-           <div fxLayout="row">Accorder le temps total pour tout le test. Avec cette option, vous avez le
-             droit de retourner aux questions précédentes </div>
-           <div fxLayout="row">Après la passation du test: </div>
-           <div fxLayout="row">Selon le choix de manager :</div>
-           <div fxLayout="row"> Il peut soit envoyer le résultat de candidat par email ou non.</div>
+         <div  id="divId" [@showMoreRules]="helpMenuOpen">
+           <div fxLayout="row"> {{"test.evaluation.byopening" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.access" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.copypaste" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.internetshutdown" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.recordedsession" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.closedsession" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.closingdate" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.postclosure" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.rightedit" | translate}} </div>
+           <div fxLayout="row">{{"test.evaluation.time" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.timeallotted" | translate}} </div>
+           <div fxLayout="row">{{"test.evaluation.stopwatch" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.count" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.splittime" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.definitetime" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.totaltime" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.afterpassing" | translate}}</div>
+           <div fxLayout="row">{{"test.evaluation.sendemail" | translate}}</div>
            <div class="hide">
-             <div *ngIf="hidden==false"  (click)="hideThis('divId')" class="cursor-pointer black-three font-normal">
+             <div *ngIf="hidden==false"  (click)="toggleRules()" class="cursor-pointer black-three font-normal">
                - show less
              </div>
            </div>
          </div>
-
-
-       </div>
-
+      </div>
        <div fxLayout="column" fxLayoutAlign="center center" class="m-t-30" fxLayoutGap="5">
          <div fxLayout="row" >
            <button (click)="startTest()" mat-button class="btn-large bg-golden-yellow pale-grey"> start now test</button>
@@ -154,13 +122,8 @@
          </div>
          <br>
        </div>
-
        </div>
-
-
-
    </div>
-
              </div>
            </wid-scrollbar>
    </div>
