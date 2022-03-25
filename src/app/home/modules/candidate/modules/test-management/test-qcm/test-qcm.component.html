@@ -6,17 +6,17 @@
             <div fxLayout="row" fxFlexFill fxLayoutAlign="center" class="p-t-10 p-b-10">
               <div fxLayout="column" fxFlex="100">
                 <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
-                  <button class="transparent-button"  (click)="addIndex()">
+                  <button class="transparent-button" [disabled]="durationType === 'time_per_question'" (click)="addIndex()">
                     <div class="triangle-button-arrow-up"></div>
                   </button>
                 </div>
                 <div fxLayout="row" fxFlex="22"  fxLayoutAlign="center center">
-                  <span class="font-medium font-size-12 steel opacity-23"
+                  <span class="font-medium font-size-12 steel opacity-23 text-center"
                         [@questionCurrentToNext]="animationStateNext.toString()"
                         [@questionDisplayNewPrevious]="animationStatePrevious.toString()">{{showQuestion(index - 1)}}</span>
                 </div>
-                <div fxLayout="row" fxFlex="35"  fxLayoutAlign="center center">
-                  <span class="font-medium font-size-28 primaryColor"
+                <div fxLayout="row" fxFlex="35"  fxLayoutAlign="center center" style="display: block">
+                  <span class="font-medium font-size-28 primaryColor text-center"
                         [@questionPreviousToCurrent]="animationStateNext.toString()"
                         [@questionNextToCurrent]="animationStatePrevious.toString()" >{{showQuestion(index)}}</span>
                 </div>
@@ -24,7 +24,7 @@
                   <span
                         [@questionCurrentToPrevious]="animationStatePrevious.toString()"
                         [@questionDisplayNewNext]="animationStateNext.toString()"
-                        class="font-medium font-size-12 steel opacity-23">{{showQuestion(index + 1)}}</span>
+                        class="font-medium font-size-12 steel opacity-23 text-center">{{showQuestion(index + 1)}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
                   <button class="transparent-button" [disabled]="durationType === 'time_per_question'" (click)="reduceIndex()">
@@ -87,7 +87,7 @@
           </div>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="73">
+      <div fxLayout="row" fxFlex="75">
         <div fxLayout="column" fxFlex="100" class="white-bloc p-l-30 p-t-25 p-b-25" fxLayoutGap="20px">
           <div fxLayout="row" fxFlex="25">
             <div fxLayout="column" fxFlexFill fxLayoutGap="10px">

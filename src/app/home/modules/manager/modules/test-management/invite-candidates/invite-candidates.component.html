@@ -22,13 +22,22 @@
     <img  src="assets/icons/done-circle.svg" alt="" height="85px">
   </div>
     <div fxFlex="28" fxLayout="row"  fxLayoutAlign="center center" class="font-size-18"> It's time to invite some candidates </div>
-    <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
-      <div fxLayout="column" fxFlex *ngIf="mode === 'update'" fxLayoutAlign=" end">
-        <button mat-button class="btn-medium bg-cerulean-blue white" routerLink="/manager/test/session-list">Done</button>
+    <ng-container *ngIf="mode === 'update'; else add">
+      <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
+        <div fxLayout="column" fxFlex fxLayoutAlign=" end">
+          <button mat-button class="btn-medium bg-cerulean-blue white" routerLink="/manager/test/session-list">Done</button>
+        </div>
+        <div fxLayout="column" fxFlex >
+          <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+        </div>
       </div>
-      <div fxLayout="column" fxFlex fxLayoutAlign=" center">
-        <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+    </ng-container>
+    <ng-template #add>
+      <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
+        <div fxLayout="column" fxFlex fxLayoutAlign=" center">
+          <button mat-button class="btn-medium bg-cerulean-blue white" (click)="inviteCandidates()"> Invite some candidates </button>
+        </div>
       </div>
-    </div>
+    </ng-template>
   </div>
 </div>
