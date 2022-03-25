@@ -112,6 +112,7 @@ export class SessionInfoComponent implements OnInit {
       copyPaste: ['', [Validators.required]],
       sendReport: ['', [Validators.required]],
     });
+    this.blocTitles = [];
     this.getBlocsArray();
   }
 
