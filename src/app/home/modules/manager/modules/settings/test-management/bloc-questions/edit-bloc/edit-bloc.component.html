@@ -38,9 +38,22 @@
                     Technologies:
                   </mat-label>
                   <mat-form-field appearance="outline">
-                    <mat-select  formControlName="test_technology_code" disableOptionCentering  panelClass="panelColor"
+                    <mat-select  formControlName="test_technology_code" [value]="test_technology_code" disableOptionCentering  panelClass="panelColor"
                                  placeholder="Technology" disabled>
                         <mat-option [value]="test_technology_code">{{selectedTech}}</mat-option>
+                    </mat-select>
+                    <mat-error class="red" *ngIf="sendUpdateBloc.controls.test_technology_code.errors?.required">
+                      Please select an item in the list</mat-error>
+                  </mat-form-field>
+                  <mat-label class="black font-size-12 required">
+                    Language:
+                  </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select  formControlName="language_id" disabled disableOptionCentering panelClass="panelColor"
+                                 [value]="language_id">
+                      <ng-container *ngFor="let v of langList.getValue()">
+                        <mat-option [value]="v.value">{{v.viewValue}}</mat-option>
+                      </ng-container>
                     </mat-select>
                     <mat-error class="red" *ngIf="sendUpdateBloc.controls.test_technology_code.errors?.required">
                       Please select an item in the list</mat-error>
@@ -108,7 +121,7 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="sendUpdateBloc.invalid" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium"  [style]="{marginRight: '4%'}"
                   (click)="UpdateBlocQuestion()">
             Save
           </button>

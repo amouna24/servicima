@@ -28,6 +28,7 @@ export class AuthGuard implements CanActivate {
   applicationId: string;
   i = 0;
   currentState: string;
+  lastUrl: string;
   /**********************************************************************
    * Guard constructor
    *********************************************************************/
@@ -84,9 +85,10 @@ export class AuthGuard implements CanActivate {
               if (! this.userService.userInfo || (this.userService.refresh && this.userService.userInfo))  {
                 this.userService.getUserInfo().then((data) => {
                   if (data) {
-                    this.userService.redirectUser(data['user'][0].user_type, this.currentState);
+                    this.userService.redirectUser(data['user'][0].user_type, this.lastUrl ? this.lastUrl : this.currentState);
                     this.utilService.getCompanies(data['company'][0]['companyKey']['email_address']);
                     this.userService.getRoleFeature(data, data.userroles[0].userRolesKey.role_code);
+                    this.lastUrl = '';
                     this.resolveValue = true;
                   }
 
@@ -99,6 +101,9 @@ export class AuthGuard implements CanActivate {
           } else {
             /* Autologin cannot be done (fingerprint doesn't exist) => Redirect to login page */
             this.router.navigate(['/auth/login']);
+            if (!this.lastUrl) {
+              this.lastUrl = state.url;
+            }
             this.resolveValue = true;
           }
     });

@@ -162,7 +162,7 @@ export let dataAppearance = trigger('dataAppearance', [
 export let showBloc = trigger('showBloc', [
   transition('void => *',  [
     style({ height: 0}),
-    animate(350),
+    animate(500),
   ]),
   transition('* => void',  [
     animate(500, style({ height: 0})),
@@ -171,6 +171,61 @@ export let showBloc = trigger('showBloc', [
 export let blocQuestionsAppearance = trigger('blocQuestionsAppearance', [
   transition('void => *',  [
     style({ opacity: 0}),
-    animate(1000),
+    animate(500),
   ]),
+]);
+export let questionNextToCurrent = trigger('questionNextToCurrent', [
+  state('true', style(
+    { fontSize: '12px', transform: 'translateY(-180%)', color: '#7b7e8a'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let questionPreviousToCurrent = trigger('questionPreviousToCurrent', [
+  state('true', style(
+    { fontSize: '12px', transform: 'translateY(+180%)', color: '#0067e0'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let questionCurrentToNext = trigger('questionCurrentToNext', [
+  state('true', style(
+    { fontSize: '28px', transform: 'translateY(80%)', color: '#7b7e8a', opacity: '23%'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let questionCurrentToPrevious = trigger('questionCurrentToPrevious', [
+  state('true', style(
+    { fontSize: '28px', transform: 'translateY(-80%)', color: '#0067e0', opacity: '23%'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let questionDisplayNewPrevious = trigger('questionDisplayNewPrevious', [
+  state('true', style(
+    { opacity: 0, transform: 'translateY(-100%)', color: '#7b7e8a'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let questionDisplayNewNext = trigger('questionDisplayNewNext', [
+  state('true', style(
+    { opacity: 0, transform: 'translateY(+100%)', color: '#7b7e8a'})),
+  transition('true => *',  [
+    animate(500),
+  ]),
+]);
+export let showMoreRule = trigger('showMoreRules', [
+  state('in', style({
+    overflow: 'hidden',
+    height: '*',
+  })),
+  state('out', style({
+    opacity: '0',
+    overflow: 'hidden',
+    height: '0px',
+  })),
+  transition('in => out', animate('800ms ease-in-out')),
+  transition('out => in', animate('800ms ease-in-out'))
 ]);

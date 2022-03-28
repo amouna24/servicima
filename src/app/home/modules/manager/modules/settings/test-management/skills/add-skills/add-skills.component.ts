@@ -78,7 +78,7 @@ export class AddSkillsComponent implements OnInit {
     });
   }
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -177,13 +177,13 @@ export class AddSkillsComponent implements OnInit {
     this.testSkill = this.sendAddTestSkill.value;
     this.testSkill.test_skill_code =  `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SKILL`;
     this.testSkill.application_id = this.applicationId;
-    this.testSkill.company_email = this.companyEmailAddress;
+    this.testSkill.company_email = 'ALL';
     if (this.sendAddTestSkill.valid && this.displayedColumns.length > 0) {
       this.testService.addSkills(this.testSkill).subscribe(data => {
         this.displayedColumns.forEach(res => {
           this.skillTech = {
           application_id: this.applicationId,
-          company_email: this.companyEmailAddress,
+          company_email: 'ALL',
           test_skill_code: this.testSkill.test_skill_code,
           test_technology_code: res.prop,
           };

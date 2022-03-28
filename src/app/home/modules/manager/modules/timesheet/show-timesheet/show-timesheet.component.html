@@ -27,9 +27,11 @@
       </div>
       <div fxLayout="column" fxLayoutAlign="space-between start" fxFlex class="full-height p-15 p-b-0">
         <p class="font-size-15 black-three font-normal m-0">{{userPosition}}</p>
-        <button *ngIf="timesheet.timesheet_status === 'Pending'" mat-button (click)="updateTimesheet()" class="btn-small bg-pale-grey">
-          {{'resume-edit' | translate}}
-        </button>
+        <ng-container *canBeDisplayed="'TIMESHEET_UPDATE'">
+          <button *ngIf="timesheet.timesheet_status === 'Pending'" mat-button (click)="updateTimesheet()" class="btn-small bg-pale-grey">
+            {{'resume-edit' | translate}}
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -91,8 +93,8 @@
   </div>
   <div fxFlex="10" class="full-width" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="25px">
     <ng-container *ngIf="timesheet.timesheet_status === 'Pending', else status">
-      <button mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">{{'timesheet-reject' | translate}}</button>
-      <button mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">{{'timesheet-approve' | translate}}</button>
+      <button *canBeDisplayed="'TIMESHEET_REJECT'" mat-flat-button (click)="modalActions('Rejected')" class="btn-small bg-error-red white">{{'timesheet-reject' | translate}}</button>
+      <button *canBeDisplayed="'TIMESHEET_APPROVE'" mat-flat-button (click)="modalActions('Approved')" class="btn-small bg-topaz white">{{'timesheet-approve' | translate}}</button>
     </ng-container>
     <ng-template #status>
       <span *ngIf="timesheet.timesheet_status === 'Approved'" class="topaz font-light font-size-12">{{'timesheet-approved' | translate}}</span>

@@ -76,8 +76,8 @@ export class BlocListComponent implements OnInit {
     this.isLoading.next(true);
     this.testService
       .getQuestionBloc(
-        `?company_email=${this.companyEmailAddress}&application_id=${this.utilsService.
-        getApplicationID('SERVICIMA')}`)
+        `?company_email=ALL&application_id=${this.utilsService.
+        getApplicationID('SERVICIMA')}&language_id=${this.localStorageService.getItem('language').langCode}`)
       .subscribe( (resBlocQuestions) => {
         resBlocQuestions['results'].map( (oneBloc: ITestQuestionBlocModel, index) => {
           this.testService.getQuestion(`?test_question_bloc_code=${oneBloc.TestQuestionBlocKey.test_question_bloc_code}`).subscribe( (questions) => {
@@ -146,7 +146,7 @@ export class BlocListComponent implements OnInit {
       code: '',
     });
           this.testService
-            .getTechnologies(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}`)
+            .getTechnologies(`?company_email=ALL&application_id=${this.applicationId}`)
             .subscribe((technoList) => {
               technoList.map( (oneTechno) => {
                 this.technologiesList.push({

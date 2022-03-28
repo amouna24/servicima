@@ -28,6 +28,7 @@ export class TimesheetsListComponent implements OnInit, OnDestroy {
   subscriptionDeleteModal: Subscription;
   nbtItems = new BehaviorSubject<number>(5);
   destroy$: Subject<boolean> = new Subject<boolean>();
+  TIMESHEET = 'TIMESHEET';
 
   constructor(private timesheetService: TimesheetService,
               private fb: FormBuilder,

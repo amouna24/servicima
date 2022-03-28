@@ -35,7 +35,7 @@ import { ChooseCandidatesComponent } from './invite-candidates/choose-candidates
         SharedModule,
         ChartsModule,
         CoreModule,
-        DynamicDataTableModule
+        DynamicDataTableModule,
     ]
 })
 export class TestManagementModule { }

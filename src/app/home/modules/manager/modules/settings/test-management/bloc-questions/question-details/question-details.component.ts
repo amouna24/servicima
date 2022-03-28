@@ -7,6 +7,7 @@ import { ModalService } from '@core/services/modal/modal.service';
 import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-question-details',
@@ -29,6 +30,7 @@ export class QuestionDetailsComponent implements OnInit {
   closeDialog: boolean;
   codeLevel: string;
   companyEmailAddress: string;
+  displayedLevel: string;
 
   constructor(
     private dialogRef: MatDialogRef<QuestionDetailsComponent>,
@@ -37,13 +39,15 @@ export class QuestionDetailsComponent implements OnInit {
     private modalServices: ModalService,
     private router: Router,
     private userService: UserService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
     this.getConnectedUser();
     this.initQuestionValues();
     this.getAnswers();
+    this.getLevel();
 
   }
 
@@ -72,8 +76,15 @@ initQuestionValues() {
   this.testQuestionBlocCode = this.data.test_question_bloc_code;
   this.codeLevel = this.data.code_level;
 }
+getLevel() {
+    this.testService
+      .getLevel(`?test_level_code=${this.codeLevel}&language_id=${this.localStorageService.getItem('language').langId}`)
+      .subscribe( (level) => {
+        this.displayedLevel = level[0].test_level_title;
+      });
+}
 getAnswers() {
-    this.testService.getChoices(`?test_question_code=${this.data.test_question_code}&company_email=${this.companyEmailAddress}`)
+    this.testService.getChoices(`?test_question_code=${this.data.test_question_code}&company_email=ALL`)
       .subscribe((value) => {
         this.AnswerDetails = value;
       });

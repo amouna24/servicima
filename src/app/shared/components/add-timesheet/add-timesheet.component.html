@@ -15,8 +15,8 @@
      </div>
    </div>
      <wid-scrollbar>
-       <ng-container *ngIf="isLoading.value else loading">
-       <form fxLayout="column" *ngIf="initialForm" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
+       <ng-container *ngIf="isLoading.value && initialForm else loading">
+       <form fxLayout="column" *widDisabledForm="{'feature':getFeature(), 'form': initialForm}" [formGroup]="initialForm" class="full-width p-l-40 p-r-40 p-t-10">
          <div  fxLayout="row" fxLayoutAlign="space-between start"  class="full-width">
            <!-- left column form -->
            <div fxFlex="28" fxLayout="column">
@@ -84,7 +84,7 @@
                <div fxLayout="column">
                  <label class="font-size-12">{{ 'timesheet.total' | translate }}: </label>
                  <mat-form-field appearance="outline" class="disabled">
-                   <input matInput [value]="totalWeekHours()" formControlName="total_week_hours" [readonly]="true">
+                   <input matInput [value]="totalWeekHours().toString()" formControlName="total_week_hours" [readonly]="true">
                  </mat-form-field>
                </div>
              </div>
@@ -94,11 +94,15 @@
            <button mat-flat-button [type]="formType.add ? 'reset' : 'button' " (click)="formType.edit ? updateForm() : '' " class="bg-pale-grey cool-grey btn-small">{{ 'timesheet.cancel' | translate }}</button>
            <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end center">
              <ng-container *ngIf="formType.managerMode else collaborator">
-               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">{{ 'timesheet.approve' | translate }}</button>
+               <button *canBeDisplayed="getActionFeautre('approve')" mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('approve')" class="btn-small bg-topaz white">
+                 {{ 'timesheet.approve' | translate }}
+               </button>
              </ng-container>
              <ng-template #collaborator>
-               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">{{ 'timesheet.submit' | translate }}</button>
-               <button mat-flat-button [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">
+               <button mat-flat-button *canBeDisplayed="getActionFeautre('submit')" [disabled]="initialForm.invalid" (click)="submitTimesheet('submit')" color="primary" class="btn-small white">
+                 {{ 'timesheet.submit' | translate }}
+               </button>
+               <button mat-flat-button *canBeDisplayed="getActionFeautre(formType.add ? 'save' : 'update')"  [disabled]="initialForm.invalid" (click)="submitTimesheet('save')" class="cerulean-blue bg-pale-grey btn-small">
                  {{formType.add ? ('timesheet.save' | translate ) : 'timesheet.update' | translate}}
                </button>
              </ng-template>

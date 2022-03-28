@@ -26,21 +26,21 @@ export const managerMenu: IMenu[] = [
         state: 'PENDING',
         name: 'manager.menu.static.timesheet.pending',
         icon: '',
-        feature: 'TIMESHEET_ACCESS',
+        feature: 'TIMESHEET_PENDING_ACCESS',
         type: 'link',
       },
       {
         state: 'REJECTED',
         name: 'manager.menu.static.timesheet.rejected',
         icon: '',
-        feature: 'TIMESHEET_ACCESS',
+        feature: 'TIMESHEET_REJECTED_ACESS',
         type: 'link',
       },
       {
         state: 'APPROVED',
         name: 'manager.menu.static.timesheet.approved',
         icon: '',
-        feature: 'TIMESHEET_ACCESS',
+        feature: 'TIMESHEET_APPROVED_ACESS',
         type: 'link',
       },
     ]
@@ -241,7 +241,7 @@ export const managerMenu: IMenu[] = [
         name: 'manager.menu.static.billings',
         type: 'link',
         icon: 'wi-billings',
-        feature: 'EXPENSES_ACCESS',
+        feature: 'INVOICING_ACCESS',
     },
     {
     state: 'test',

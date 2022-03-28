@@ -1,5 +1,5 @@
 <mat-toolbar fxFlexOffset="3" class="wid-header bg-white" fxLayout="row"
-             fxLayoutAlign="center center" fxFlex="94">
+             fxLayoutAlign="center center" fxFlex="94"  [ngStyle]="{'display':showHeader? 'flex' : 'none'}">
   <div fxFlex="60">
     <div  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="user['user_type']==='COMPANY'">
       <p class="font-semi-bold" >{{licenceCode }}</p>

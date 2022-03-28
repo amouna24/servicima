@@ -20,7 +20,7 @@
           <div class="full-width p-15" fxFlex fxLayout="column"
                fxLayoutAlign="center start" >
               <p class="font-size-19 black-three font-normal text-left m-0">
-                {{'	sure-reject-timesheet' | translate}}
+                {{'sure-reject-timesheet' | translate}}
               </p>
               <mat-label class="black font-size-12 m-t-10">
                 {{'leave-comm-timesheet' | translate}}
@@ -44,7 +44,7 @@
     </div>
     <!-- Button pop-up -->
     <div [fxFlex]="reject ? 20 : 40" class="full-width p-b-5" fxLayout="row" fxLayoutGap="25px" fxLayoutAlign="center center">
-      <button type="submit" mat-raised-button (click)="responseTimesheet()"
+      <button *canBeDisplayed="reject ? 'TIMESHEET_REJECT' : 'TIMESHEET_APPROVE'" type="submit" mat-raised-button (click)="responseTimesheet()"
               class="white" [ngClass]="reject ? 'bg-error-red btn-small' : 'bg-topaz btn-medium'">
         {{reject ? 'Reject' : 'Approve'}}
       </button>

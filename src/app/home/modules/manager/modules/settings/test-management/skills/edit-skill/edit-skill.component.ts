@@ -90,7 +90,7 @@ export class EditSkillComponent implements OnInit {
 
   async getTechnologiesInfo() {
     this.technology = await this.getSelectedSkills();
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -119,7 +119,7 @@ export class EditSkillComponent implements OnInit {
       );
   }
   getDisplayedColumns() {
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
           response.forEach(res => {
@@ -228,7 +228,7 @@ export class EditSkillComponent implements OnInit {
     let deletedItems ;
     return new Promise<boolean>(
       async (resolve) => {
-        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}&company_email=${this.companyEmailAddress}`)
+        await this.testService.getTechnologySkills(`?test_skill_code=${this.test_skill_code}&company_email=ALL`)
           .toPromise()
           .then(
             dataTechSkill => {
@@ -256,7 +256,7 @@ export class EditSkillComponent implements OnInit {
     await this.displayedColumns.forEach(res => {
       this.skillTech = {
         application_id: this.applicationId,
-        company_email: this.companyEmailAddress,
+        company_email: 'ALL',
         test_skill_code: this.test_skill_code,
         test_technology_code: res.prop,
       };
@@ -268,7 +268,7 @@ export class EditSkillComponent implements OnInit {
     this.testSkill = this.sendUpdateTestSkill.value;
     this.testSkill.test_skill_code =  this.test_skill_code;
     this.testSkill.application_id = this.applicationId;
-    this.testSkill.company_email = this.companyEmailAddress;
+    this.testSkill.company_email = 'ALL';
     this.testSkill._id = this._id;
       this.testService.updateSkills(this.testSkill).subscribe( async data => {
         console.log(data);

@@ -1,0 +1,174 @@
+@import "src/assets/styles/variables";
+.white-bloc {
+  background-color: white;
+  border-radius: 20px;
+}
+.triangle-button-arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid $pale-grey-four;
+}
+.triangle-button-arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid $pale-grey-four;
+}
+.transparent-button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+.opacity-23 {
+  opacity: 23% ;
+}
+
+.structure-circle {
+  fill: none;
+  stroke: none;
+}
+.gray-ring {
+  stroke-width: 10px;
+  stroke: $pale-grey;
+}
+.height-width-10 {
+  position: absolute;
+  height: 14%;
+  width: 7%;
+}
+.height-width-6 {
+  position: absolute;
+  height: 10.5%;
+  width: 7%;
+}
+.deg-90 {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+.time-ring {
+  /* Just as thick as the original ring */
+  stroke-width: 9px;
+  /* Rounds the line endings to create a seamless circle */
+  stroke-linecap: round;
+  /* Makes sure the animation starts at the top of the circle */
+
+  /* One second aligns with t he speed of the countdown timer */
+  transition-delay: 6s;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  /* Allows the ring to change color when the color value updates */
+  stroke: currentColor;
+}
+.right-to-left-timer {
+/* Flips the svg and makes the animation to move left-to-right*/
+transform: scaleX(-1);
+}
+.firstColor {
+  color: #1bc5bd;
+}
+.secondColor {
+  color: #ffad05;
+}
+.thirdColor {
+  color: #f5041e;
+}
+.base-timer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+.vertical-line {
+  width: 3px !important;
+  height: 50px !important;
+  background: #707070 !important;
+}
+.bloc-choice {
+  min-height: 50px;
+  border-radius: 5px;
+  border: 2px solid $pale-grey-four;
+}
+.border-left-secondary {
+  border-left: 10px solid $secondaryColor;
+  border-radius: 5px 5px;
+}
+.border-left-grey {
+  border-left: 10px solid $cool-grey;
+  border-radius: 5px 5px;
+}
+.bg-pale-grey-four {
+  background-color: $pale-grey-four;
+}
+.rounded-check-box {
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 50% !important;
+      border-color: $cool-grey;
+    }
+
+  }
+}
+@keyframes secondsAnimation {
+  0% {
+    transform: translateY(10px);
+    opacity: 25%;
+  }
+  50% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;  }
+}
+@keyframes lastMinuteAnimation {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+@keyframes newMinuteAnimation {
+  0% {
+    transform: translateY(10px);
+    opacity: 25%;
+  }
+  50% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;  }
+}
+@keyframes firstSecondAnimation {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+@keyframes lastSecondAnimation {
+  0% {
+    transform: translateY(10px);
+    opacity: 25%;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;  }
+}

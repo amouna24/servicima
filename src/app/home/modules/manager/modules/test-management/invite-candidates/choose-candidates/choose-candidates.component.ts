@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { environment } from '@environment/environment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import * as _ from 'lodash';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { UserService } from '@core/services/user/user.service';
@@ -17,8 +16,11 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./choose-candidates.component.scss']
 })
 export class ChooseCandidatesComponent implements OnInit {
-  tableColumnsInvoiceAttachment: string[] = ['select', 'Full Name', 'email', 'phone'];
-  dataSourceInvoiceAttachment: MatTableDataSource<any> = new MatTableDataSource([]);
+  tableColumns = [
+    { nameColumn: 'fullName', photo: 'photo'},
+    { nameColumn: 'email_address', iconColumn: 'email'},
+    { nameColumn: 'prof_phone', iconColumn: 'wi-phone'}];
+  dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   selection = new SelectionModel<any>(true, []);
   env: string;
   applicationId: string;
@@ -32,7 +34,9 @@ export class ChooseCandidatesComponent implements OnInit {
                        'sendmail.invitecandidate.passtest',
                        'sendmail.invitecandidate.session',
                        'sendmail.invitecandidate.luck',
-                       'sendmail.invitecandidate.Cordially'];
+                       'sendmail.invitecandidate.Cordially',
+                       'sendmail.invitecandidate.subject'];
+
   constructor( @Inject(MAT_DIALOG_DATA) public data: any,
                 private localStorageService: LocalStorageService,
                 private utilsService: UtilsService,
@@ -46,9 +50,11 @@ export class ChooseCandidatesComponent implements OnInit {
     this.displayIcon = true;
   }
 
+  /**************************************************************************
+   *  @description Get translate
+   *************************************************************************/
     getTranslate() {
       this.translate.get(this.listCodeTranslate).subscribe((data: string) => {
-        console.log(data, 'data');
         this.label = data;
       });
     }
@@ -57,19 +63,9 @@ export class ChooseCandidatesComponent implements OnInit {
    *  @description Loaded when component in init state
    *************************************************************************/
   ngOnInit(): void {
-    this.dataSourceInvoiceAttachment = new MatTableDataSource(
-      this.data.listCandidates
-    );
     this.getConnectedUser();
     this.getDataFromLocalStorage();
   }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSourceInvoiceAttachment.data.forEach(row => this.selection.select(row));
-}
 
   /**
    * @description Get connected user
@@ -83,13 +79,6 @@ export class ChooseCandidatesComponent implements OnInit {
         });
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSourceInvoiceAttachment.data.length;
-    return numSelected === numRows;
-  }
-
   /**
    * @description Get local storage
    */
@@ -99,27 +88,19 @@ export class ChooseCandidatesComponent implements OnInit {
   }
 
   /**
-   * @description search field
-   */
-  searchField(event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceInvoiceAttachment.filter = filterValue.trim().toLowerCase();
-  }
-
-  /**
    * @description send mail
    */
-  sendMail() {
-    if (!this.selection['_selected'] || !this.expiredDay) {
+  sendMail(event) {
+    if (!event || !this.expiredDay) {
       console.log('form invalid');
     } else {
       this.getTranslate();
-    this.selection['_selected'].map((candidat) => {
-      const cryptData = `?company_email=${candidat.company_email}&candidate_email=${candidat.userKey.email_address}` +
+      event.map((candidate) => {
+      const cryptData = `?company_email=${candidate.company_email}&candidate_email=${candidate.userKey.email_address}` +
         `&session_code=${this.data.sessionCode}&send_date=${new Date()}`;
       const idSessionCandidateLink = this.cryptoService.encrypt(environment.cryptoKeyCode, cryptData);
       const link = `${environment.servicimaUrl}/candidate/test-management/welcome-to-test/?id=${decodeURIComponent(idSessionCandidateLink)}`;
-      const header = `${this.label['sendmail.invitecandidate.hello']} ` + candidat.fullName + ' ,';
+      const header = `${this.label['sendmail.invitecandidate.hello']} ` + candidate.fullName + ' ,';
       const text1 = `${this.label['sendmail.invitecandidate.attention']} `;
       const text2 = `${this.label['sendmail.invitecandidate.evaltechnique']} `;
       const text3 = `${this.label['sendmail.invitecandidate.passtest']} `;
@@ -135,7 +116,7 @@ export class ChooseCandidatesComponent implements OnInit {
         company_email: this.companyEmailAddress,
         application_id: this.applicationId,
         session_code: this.data.sessionCode,
-        candidate_email: candidat.userKey.email_address,
+        candidate_email: candidate.userKey.email_address,
         expired_date: this.expiredDay
       };
       this.testService.addTestInviteCandidates(inviteCandidateSend).subscribe((data) => {
@@ -144,12 +125,12 @@ export class ChooseCandidatesComponent implements OnInit {
             {
               receiver: {
                 name: '',
-                email: candidat.email_address
+                email: candidate.email_address
               },
               sender: {
                 application: '',
                 name: 'No Reply',
-                email: candidat.email_address
+                email: candidate.email_address
               },
               modelCode: {
                 applicationName: '',
@@ -158,7 +139,7 @@ export class ChooseCandidatesComponent implements OnInit {
                 company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
               },
               text,
-              subject: 'Évaluation technique',
+              subject: this.label['sendmail.invitecandidate.subject'],
               attachement: [],
               emailcc: '',
               emailbcc: '',
@@ -181,15 +162,11 @@ export class ChooseCandidatesComponent implements OnInit {
     }
   }
 
-  sort() {
-    this.displayIcon = !this.displayIcon;
-    if (this.displayIcon) {
-      this.dataSourceInvoiceAttachment.data = _.orderBy(this.dataSourceInvoiceAttachment.data, [user => user.fullName.toLowerCase()], ['asc']);
-
-    } else {
-      this.dataSourceInvoiceAttachment.data = _.orderBy( this.dataSourceInvoiceAttachment.data , [user => user.fullName.toLowerCase()], ['desc']);
-
-    }
+  /**
+   * @description cancel
+   */
+  cancel() {
+   this.dialogRef.close(false);
   }
 
 }

@@ -149,8 +149,14 @@ export class CustomizeSessionComponent implements OnInit {
   }
   getLevel(levelCode) {
     switch (levelCode) {
-      case 'TestLevel00001' : {
+      case '1' : {
         return 1;
+      }
+      case '2' : {
+        return 2;
+      }
+      case '3' : {
+        return 3;
       }
       default:
         return 4;
@@ -309,7 +315,7 @@ export class CustomizeSessionComponent implements OnInit {
       let addQuestion = true;
       const testSessionObject: ITestSessionQuestionModel = {
         application_id: oneQuestion.questionDetails.TestQuestionKey.application_id,
-        company_email: oneQuestion.questionDetails.TestQuestionKey.company_email,
+        company_email: this.companyEmailAddress,
         session_code: this.sessionCode,
         bloc_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_bloc_code,
         test_session_questions_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-SESSION-QUESTION`,
@@ -363,7 +369,7 @@ export class CustomizeSessionComponent implements OnInit {
           const newSessionObject = sessionInfo[0];
           newSessionObject.session_code = newSessionObject.TestSessionInfoKey.session_code;
           newSessionObject.test_session_info_code = newSessionObject.TestSessionInfoKey.test_session_info_code;
-          newSessionObject.company_email = newSessionObject.TestSessionInfoKey.company_email;
+          newSessionObject.company_email = this.companyEmailAddress;
           newSessionObject.application_id = newSessionObject.TestSessionInfoKey.application_id;
           newSessionObject.test_session_time = sumTime;
           this.testService.updateSessionInfo(newSessionObject).subscribe(( newInfo) => {

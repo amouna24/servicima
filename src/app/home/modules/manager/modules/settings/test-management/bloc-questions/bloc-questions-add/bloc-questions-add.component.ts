@@ -11,6 +11,8 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { AppInitializerService } from '@core/services/app-initializer/app-initializer.service';
+import { BehaviorSubject } from 'rxjs';
+import { IViewParam } from '@shared/models/view.model';
 
 @Component({
   selector: 'wid-bloc-questions-add',
@@ -25,6 +27,7 @@ export class BlocQuestionsAddComponent implements OnInit {
   companyEmailAddress: string;
   formDataImage: FormData;
   displayPrice: boolean;
+  langList: BehaviorSubject<IViewParam[]>;
   free: boolean;
   constructor(
     private fb: FormBuilder,
@@ -32,8 +35,8 @@ export class BlocQuestionsAddComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private userService: UserService,
-    private uploadService: UploadService,
     private appInitializerService: AppInitializerService,
+    private uploadService: UploadService,
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +44,7 @@ export class BlocQuestionsAddComponent implements OnInit {
     this.displayPrice = false;
     this.getConnectedUser();
     this.createForm();
+    this.getLanguageList();
     this.getTechnologiesInfo();
   }
 
@@ -52,13 +56,12 @@ export class BlocQuestionsAddComponent implements OnInit {
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            console.log(userInfo['company'][0]);
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
         });
   }
 
   getTechnologiesInfo() {
-    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=${this.companyEmailAddress}`)
+    this.testService.getTechnologies(`?application_id=${this.applicationId}&company_email=ALL`)
       .subscribe(
         (response) => {
           if (response['msg_code'] !== '0004') {
@@ -82,7 +85,7 @@ export class BlocQuestionsAddComponent implements OnInit {
     this.testBlocQuestion = this.sendAddTestBloc.value;
     this.testBlocQuestion.test_question_bloc_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-QUESTION_BLOC`;
     this.testBlocQuestion.application_id = this.applicationId;
-    this.testBlocQuestion.company_email = this.companyEmailAddress;
+    this.testBlocQuestion.company_email = 'ALL';
     this.testBlocQuestion.image =  this.formDataImage ? await this.uploadFile(this.formDataImage) : undefined;
     if (this.sendAddTestBloc.valid) {
       this.testService.addQuestionBloc(this.testBlocQuestion).subscribe(data => {
@@ -96,6 +99,7 @@ export class BlocQuestionsAddComponent implements OnInit {
       test_technology_code: ['', [Validators.required]],
       question_nbr: ['', [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       image: ['', [Validators.required]],
+      language_id: ['', [Validators.required]],
       test_question_bloc_desc: '',
       free: true,
       price: null,
@@ -139,5 +143,13 @@ export class BlocQuestionsAddComponent implements OnInit {
         free: event.checked,
       }
     );
+  }
+  getLanguageList() {
+    this.langList = new BehaviorSubject<IViewParam[]>([]);
+    this.langList.next(this.appInitializerService.languageList.map(
+      (obj) => {
+        return { value: obj.LanguageKey.language_code, viewValue: obj.language_desc};
+      }
+    ));
   }
 }

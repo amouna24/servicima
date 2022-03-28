@@ -67,6 +67,7 @@ export class SessionListComponent implements OnInit {
                     this.applicationId}&session_code=${
                     oneSession.TestSessionKey.session_code}`).subscribe(async (oneSessionInfo) => {
                   return new Promise(async (resolveTwo) => {
+                    index++;
                     blocData.push({
                       session_code: oneSession.TestSessionKey.session_code,
                       session_technologies: await this.getTechnologies(oneSession.TestSessionKey.block_questions_code),
@@ -76,7 +77,6 @@ export class SessionListComponent implements OnInit {
                       level: await this.getLevel(oneSessionInfo[0].level_code),
                       session_name: oneSessionInfo[0].session_name,
                     });
-                    index++;
                     if (index > listSessions['results'].length) {
                       listSessions['results'] = blocData;
                       resolveTwo(listSessions);
@@ -115,11 +115,13 @@ export class SessionListComponent implements OnInit {
       const blocCodeArray = sessionBlocCodes.split(',');
       blocCodeArray.map( (blocCode) => {
         this.testService.getQuestionBloc(`?test_question_bloc_code=${blocCode}`).subscribe( (oneBloc) => {
-          this.testService.getTechnologies(`?test_technology_code=${oneBloc['results'][0].TestQuestionBlocKey.test_technology_code}`)
-            .subscribe( (oneTechnology) => {
-              technologiesArray.push(oneTechnology[0].technology_title);
-              index === blocCodeArray.length ? resolve(technologiesArray) : ++index;
-            });
+          if (oneBloc['results'].length > 0) {
+            this.testService.getTechnologies(`?test_technology_code=${oneBloc['results'][0].TestQuestionBlocKey.test_technology_code}`)
+              .subscribe( (oneTechnology) => {
+                  technologiesArray.push(oneTechnology[0].technology_title);
+                  index === blocCodeArray.length ? resolve(technologiesArray) : ++index;
+              });
+          }
         });
       });
     }).then( (result) => {
@@ -179,7 +181,6 @@ export class SessionListComponent implements OnInit {
           .subscribe( (sessionInfo) => {
             if (sessionInfo['msg_code'] !== '0004') {
               this.testService.deleteSessionInfo(sessionInfo[0]._id).subscribe( (deletedSessionInfo) => {
-                console.log(`session info deleted`, deletedSessionInfo);
                 this.testService
                   .getSession(`?company_email=${
                     this.companyEmailAddress}&application_id=${

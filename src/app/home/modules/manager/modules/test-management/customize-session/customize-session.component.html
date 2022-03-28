@@ -127,8 +127,8 @@
               <span class="p-l-15 font-size-18 black">Your position</span>
             </div>
             <div fxLayout="column" fxFlex="60" fxLayoutAlign="center end" class="p-r-15">
-              <button class="btn-small bg-pale-grey-four" >
-                <span class="primaryColor" (click)="addRandomQuestion()">Add Random</span>
+              <button class="btn-small bg-pale-grey-four" [disabled]="blocQuestionsList.length === 0" (click)="addRandomQuestion()">
+                <span class="primaryColor" >Add Random</span>
               </button>
             </div>
           </div>
@@ -155,8 +155,15 @@
                 <div fxLayout="column" fxFlexFill>
                   <div fxLayout="row" fxFlexFill>
                     <div fxLayout="column" fxFlex="18" [ngStyle]="{'background-color': getColors(item.questionDetails.TestQuestionKey.test_question_bloc_code)}" style="border-radius: 5px 0 0 5px"
-                         fxLayoutAlign="center center">
-                      <span class="font-size-11 white font-light">{{item.bloc_title}}</span>
+                         fxLayoutAlign="center">
+                      <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                        <div fxLayout="column" fxFlex="80" fxLayoutAlign="center center">
+                           <span  class="font-size-11 white font-light text-center">
+                          {{item.bloc_title}}</span>
+                        </div>
+
+                      </div>
+
                     </div>
                     <div fxLayout="column" fxFlex="55" class="p-l-5" fxLayoutAlign="center">
                       <p class="font-size-9 font-light black">{{item.questionDetails.test_question_title}}</p>
@@ -164,7 +171,7 @@
                     <div fxLayout="column" fxFlex="18" fxLayoutAlign="center end">
                       <div fxLayout="row" fxFlex="75">
                         <div fxLayout="column" fxFlexFill class="white-line-bloc-session-stats" fxLayoutAlign="center">
-                          <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.test_level_code)"></wid-level-bloc>
+                          <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.TestQuestionKey.test_level_code)"></wid-level-bloc>
                         </div>
                       </div>
                     </div>
@@ -195,7 +202,11 @@
                 <div fxLayout="column" fxFlexFill>
                   <div fxLayout="row" fxFlexFill>
                 <div fxLayout="column" fxFlex="18" [ngStyle]="{'background-color': getColors(item.questionDetails.TestQuestionKey.test_question_bloc_code)}" style="border-radius: 5px 0 0 5px" fxLayoutAlign="center center">
-                  <span class="font-size-11 white font-light">{{item.bloc_title}}</span>
+                  <div fxLayout="row" fxLayoutAlign="center" fxFlexFill>
+                    <div fxLayout="column" fxFlex="80" fxLayoutAlign="center center">
+                  <span class="font-size-11 white font-light text-center" >{{item.bloc_title}}</span>
+                    </div>
+                  </div>
                 </div>
                 <div fxLayout="column" fxFlex="55" class="p-l-5" fxLayoutAlign="center">
                   <p class="font-size-9 font-light black">{{item.questionDetails.test_question_title}}</p>
@@ -203,7 +214,7 @@
                 <div fxLayout="column" fxFlex="18"  fxLayoutAlign="center end">
                   <div fxLayout="row" fxFlex="75">
                     <div fxLayout="column" fxFlexFill class="white-line-bloc-session-stats" fxLayoutAlign="center">
-                      <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.test_level_code)"></wid-level-bloc>
+                      <wid-level-bloc class="p-r-10" [level]="getLevel(item.questionDetails.TestQuestionKey.test_level_code)"></wid-level-bloc>
                     </div>
                   </div>
                 </div>
@@ -224,8 +235,8 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="50" fxLayoutAlign=" end">
-          <button mat-raised-button color="primary" class="btn-small">
-            <span class="font-size-11 white" (click)="saveAndMoveToTimerPage()">Next</span>
+          <button mat-raised-button color="primary" class="btn-small" (click)="saveAndMoveToTimerPage()" [disabled]="sessionQuestionsList.length === 0">
+            <span class="font-size-11 white" >Next</span>
           </button>
         </div>
       </div>

@@ -22,7 +22,7 @@ const FileSaver = require('file-saver');
 })
 export class PayslipListComponent implements OnInit {
   public ELEMENT_DATA = new BehaviorSubject<any[]>([]);
-  private payslipList: any[];
+  private payslipList: any;
   public isLoading = new BehaviorSubject<boolean>(true);
   private destroy$: Subject<boolean> = new Subject<boolean>();
   private companyEmail: string;
@@ -45,8 +45,7 @@ export class PayslipListComponent implements OnInit {
   }
 
   checkLoad() {
-    this.isLoading.next(this.ELEMENT_DATA.value?.['results'].length !== this.payslipList?.['results'].length);
-    console.log('[DATA]', this.ELEMENT_DATA.value);
+    this.isLoading.next(this.ELEMENT_DATA.value['results']?.length !== this.payslipList?.results?.length);
     return this.isLoading;
   }
   getCollaboratorName(email_address: string): Promise<string> {
@@ -78,6 +77,7 @@ export class PayslipListComponent implements OnInit {
                 (resp) => {
                   this.payslipList['results'] = resp;
                   this.ELEMENT_DATA.next(this.payslipList);
+                  console.log(resp);
                   resolve(resp);
                 });
             }

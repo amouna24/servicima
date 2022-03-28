@@ -65,6 +65,8 @@ import { AlertRequiredDataComponent } from './components/alert-required-data/ale
 import { CompleteRequiredInformationComponent } from './components/complete-required-information/complete-required-information.component';
 import { ComponentInfoComponent } from './components/component-info/component-info.component';
 import { DoneCreationComponent } from './components/done-creation/done-creation.component';
+import { DialogInviteComponent } from './components/dialog-invite/dialog-invite.component';
+import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive';
 
 @NgModule({
   declarations: [
@@ -114,6 +116,8 @@ import { DoneCreationComponent } from './components/done-creation/done-creation.
     CompleteRequiredInformationComponent,
     ComponentInfoComponent,
     DoneCreationComponent,
+    DialogInviteComponent,
+    BlockCopyPasteDirective,
   ],
   imports: [
     CommonModule,
@@ -183,8 +187,9 @@ import { DoneCreationComponent } from './components/done-creation/done-creation.
         ShowWorkCertificateComponent,
         EditWorkCertificateComponent,
         ComponentInfoComponent,
+        DialogInviteComponent,
+        BlockCopyPasteDirective,
         DoneCreationComponent
-
-    ]
+  ]
 })
 export class SharedModule { }
