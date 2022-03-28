@@ -4,7 +4,7 @@ import { ITraining } from '@shared/models/training.model';
 import { TrainingService } from '@core/services/training/training.service';
 import { ITrainingSessionWeek } from '@shared/models/trainingSessionWeek.model';
 import { dataAppearance } from '@shared/animations/animations';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
@@ -12,6 +12,7 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-sessions-training',
@@ -34,6 +35,7 @@ export class SessionsTrainingComponent implements OnInit {
   weekDays: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   totalMinutesSessions = 0;
   timeDisplay: BehaviorSubject<string> = new BehaviorSubject<string>('00:00');
+  done = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -44,6 +46,7 @@ export class SessionsTrainingComponent implements OnInit {
       private refDataService: RefdataService,
       private userService: UserService,
       private utilsService: UtilsService,
+      private router: Router
 
   ) {
     this.initForm();
@@ -149,7 +152,7 @@ export class SessionsTrainingComponent implements OnInit {
    * @description : next step of add training
    */
   next() {
-
+  this.done = true;
   }
   /**
    * @description :  cancel function
@@ -178,6 +181,12 @@ export class SessionsTrainingComponent implements OnInit {
     }
    return hoursString + ':' + minutesString;
 
+  }
+  back(event) {
+    this.router.navigate(['/manager/human-ressources/training/training-list']);
+  }
+  invite(event) {
+    console.log('invite collaborator');
   }
 
 }

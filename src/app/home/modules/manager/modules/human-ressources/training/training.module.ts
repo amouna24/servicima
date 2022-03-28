@@ -7,10 +7,9 @@ import { TrainingRoutingModule } from './training-routing.module';
 import { TrainingAddComponent } from './training-add/training-add.component';
 import { TrainingListComponent } from './training-list/training-list.component';
 import { SessionsTrainingComponent } from './sessions-training/sessions-training.component';
-import { TrainingDoneCreatedComponent } from './training-done-created/training-done-created.component';
 
 @NgModule({
-  declarations: [TrainingAddComponent, TrainingListComponent, SessionsTrainingComponent, TrainingDoneCreatedComponent],
+  declarations: [TrainingAddComponent, TrainingListComponent, SessionsTrainingComponent],
     imports: [
         CommonModule,
         TrainingRoutingModule,

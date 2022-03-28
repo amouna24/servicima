@@ -64,6 +64,7 @@ import { CantBeDisplayedDirective } from './directives/cant-be-displayed.directi
 import { AlertRequiredDataComponent } from './components/alert-required-data/alert-required-data.component';
 import { CompleteRequiredInformationComponent } from './components/complete-required-information/complete-required-information.component';
 import { ComponentInfoComponent } from './components/component-info/component-info.component';
+import { DoneCreationComponent } from './components/done-creation/done-creation.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { ComponentInfoComponent } from './components/component-info/component-in
     AlertRequiredDataComponent,
     CompleteRequiredInformationComponent,
     ComponentInfoComponent,
+    DoneCreationComponent,
   ],
   imports: [
     CommonModule,
@@ -180,7 +182,8 @@ import { ComponentInfoComponent } from './components/component-info/component-in
         CanNotDisplayDirective,
         ShowWorkCertificateComponent,
         EditWorkCertificateComponent,
-        ComponentInfoComponent
+        ComponentInfoComponent,
+        DoneCreationComponent
 
     ]
 })
