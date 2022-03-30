@@ -20,7 +20,9 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { TestService } from '@core/services/test/test.service';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
+import { Router } from '@angular/router';
 import { environment } from '@environment/environment';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
 
 @Component({
   selector: 'wid-test-qcm',
@@ -47,6 +49,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       color: 'thirdColor',
     }
   };
+  env = environment.uploadFileApiUrl + '/show/';
   paddingTopSeconds = '';
   timeRing = '';
   infoCircleClass = 'deg 90';
@@ -59,12 +62,14 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   timerInterval = null;
   timeLeft = this.maxTime;
   skippedQuestions = [];
-  env = environment.uploadFileApiUrl + '/show/';
   companyEmailAddress = '';
   paddingTopMinutes = '';
   checkedChoices = [];
   timerPerQuestionTimePassed = 0;
   sessionCode: string;
+  applicationId: string;
+  expiredDate: number;
+  photo: string;
   @Input() isLoading = new BehaviorSubject<boolean>(true);
   @HostListener('window:beforeunload')
   disableCopyPaste: boolean;
@@ -79,24 +84,52 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   disableChoices =  false;
   enableNextButton = false;
   finalResult = 0;
-  photo: string;
+  candidateEmail: string;
 
   constructor(
     private utilsService: UtilsService,
     private testService: TestService,
     private cdRef: ChangeDetectorRef,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private router: Router,
   ) {
     this.getSessionCode();
+    this.getDataFromLocalStorage();
   }
 
   ngOnInit(): void {
     this.getConnectedUser();
     this.getQuestions();
+    this.startTest();
   }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
+  }
+
+  /**
+   * @description start test(change status link to false)
+   */
+  startTest() {
+    const inviteCandidateSend = {
+      company_email: this.companyEmailAddress,
+      application_id: this.applicationId,
+      session_code:  this.sessionCode ,
+      candidate_email: this.candidateEmail,
+      link_valid: false,
+      expired_date: this.expiredDate
+    };
+    this.testService.updateInviteCandidates(inviteCandidateSend).subscribe((updated) => {
+      console.log(updated, 'updated');
+    });
+  }
+  /**************************************************************************
+   * @description get data from local storage
+   *************************************************************************/
+  getDataFromLocalStorage(): void {
+    const userCredentials = this.localStorageService.getItem('userCredentials');
+    this.applicationId = userCredentials?.application_id;
   }
 
   ngAfterViewInit() {
@@ -241,6 +274,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       this.sessionCode = data.sessionCode;
       this.companyName = data.companyName;
       this.sessionName = data.sessionName;
+      this.candidateEmail = data.candidateEmail;
+      this.expiredDate = data.expiredDate;
     });
   }
 
@@ -407,4 +442,12 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       });
     });
   }
+
+  /**
+   * @description: back to home
+   */
+  backToHome() {
+    this.router.navigate(['/candidate']);
+  }
+
 }

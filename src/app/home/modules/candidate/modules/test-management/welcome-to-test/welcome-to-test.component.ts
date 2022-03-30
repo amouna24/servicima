@@ -133,7 +133,6 @@ export class WelcomeToTestComponent implements OnInit {
           this.statusLink = 'link invalid';
         } else if (this.calculateDiff(this.queryList['send_date']) >= data[0]['expired_date']) {
           console.log('link expired');
-          this.statusLink = 'link expired';
           this.router.navigate(['/expired-code']);
         }
       }, error => {
@@ -186,14 +185,15 @@ export class WelcomeToTestComponent implements OnInit {
       link_valid: false,
       expired_date: this.detailsCandidates['expired_date']
     };
-    this.testService.updateInviteCandidates(inviteCandidateSend).subscribe((updated) => {
       const queryObject = {
         sessionCode: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
         sessionName: this.nameSession,
-        companyName: this.nameCompany
+        companyName: this.nameCompany,
+        candidateEmail: this.queryList?.candidate_email,
+        sendDate: this.queryList?.send_date,
+        expiredDate: this.expiredDay
       };
       this.utilsService.navigateWithQueryParam('/candidate/test-management/qcm', queryObject);
-    });
   }
 
   /**

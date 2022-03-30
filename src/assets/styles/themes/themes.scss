@@ -17,42 +17,12 @@ $foreground: map-get($theme, foreground);
 @include angular-material-theme($theme);
 
 
-
-// Green Theme
-.green {
-  @import 'green';
-  @include angular-material-theme($app-theme);
-}
-
-// Black yellow Theme
-.blackYellow {
-  @import 'black-yellow';
-  @include angular-material-theme($app-theme);
-}
-
-// Black green Theme
-.blackGreen{
-  @import 'black-green';
-  @include angular-material-theme($app-theme);
-}
-
 // Blue berry Theme
 .blueBerry{
   @import 'blueberry';
   @include angular-material-theme($app-theme);
 }
 
-// Cobalt Theme
-.cobalt{
-  @import 'cobalt';
-  @include angular-material-theme($app-theme);
-}
-
-// Darkish blue Theme
-.darkishBlue{
-  @import 'darkish-blue';
-  @include angular-material-theme($app-theme);
-}
 
 // Evergreen Theme
 .everGreen{
@@ -66,11 +36,6 @@ $foreground: map-get($theme, foreground);
   @include angular-material-theme($app-theme);
 }
 
-// Lighter purple Theme
-.lighterPurple{
-  @import 'lighter-purple';
-  @include angular-material-theme($app-theme);
-}
 
 // Mango Theme
 .mango{
@@ -78,17 +43,6 @@ $foreground: map-get($theme, foreground);
   @include angular-material-theme($app-theme);
 }
 
-// White green Theme
-.whiteGreen{
-  @import 'white-green';
-  @include angular-material-theme($app-theme);
-}
-
-// White orange Theme
-.whiteOrange{
-  @import 'white-orange';
-  @include angular-material-theme($app-theme);
-}
 
 // White red Theme
 .whiteRed{
