@@ -230,7 +230,10 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.animationStatePrevious = false;
         this.index = this.index - 1;
       }, 1);
-      return this.index;
+      if (this.skippedQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index)) {
+        this.skippedQuestions.splice(this.index - 1, 1);
+      }
+        return this.index;
     } else {
       return this.index;
     }
@@ -317,12 +320,11 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
             this.companyEmailAddress}&application_id=${
             this.utilsService.getApplicationID('SERVICIMA')}&session_code=${
             this.sessionCode}`).subscribe((sessionQuestions) => {
-        sessionQuestions.map((oneSessionQuestion) => {
+        sessionQuestions.map((oneSessionQuestion, index) => {
           this.testService
             .getQuestion(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
             .subscribe((question) => {
-            this.questionsList.push(question[0]);
-            this.testService.getChoices(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
+            this.testService.getChoices(`?test_question_code=${question[0].TestQuestionKey.test_question_code}`)
               .subscribe((choices) => {
                 const correctChoice = [];
                 choices.map( (oneChoice) => {
@@ -330,6 +332,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                     correctChoice.push(oneChoice.TestChoicesKey.test_choices_code);
                   }
                 });
+                this.questionsList.push(question[0]);
                 this.choicesList.push({
                   questionCode: oneSessionQuestion.TestSessionQuestionsKey.test_question_code,
                   questionType: question[0].question_type,
@@ -370,16 +373,14 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     });
     return checkedChoice;
   }
-
   setSkippedQuestions() {
-    if (this.checkedChoices.length === 0) {
+    if (!this.answeredQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index + 1)) {
       this.skippedQuestions.push({
         questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
         questionNumber: this.index + 1
       });
-    }
   }
-
+  }
   initTimerParams(maxTime) {
     if (this.durationType === 'time_per_question') {
       this.timerPerQuestionTimePassed += this.timePassed;
@@ -388,7 +389,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       this.timeLeft = maxTime;
     }
   }
-
   testExpiredTime() {
     if (this.timeLeft === 0) {
       if (this.durationType === 'time_per_question') {

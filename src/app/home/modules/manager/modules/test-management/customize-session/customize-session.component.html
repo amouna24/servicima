@@ -43,7 +43,7 @@
               <div fxLayout="column" fxFlex="25" class="white-line-bloc-session-stats" fxLayoutAlign="center center">
                 <div fxLayout="row" class="dark-grey-blue font-size-18">
                   <div fxLayout="column" fxLayoutAlign="center">
-                    <span class="">{{totalPoints}}</span>
+                    <span class="">{{getTotalPoints()}}</span>
                   </div>
                   <div fxLayout="column" fxLayoutAlign="end">
                     <div fxLayout="row" fxFlex="45">
@@ -66,7 +66,7 @@
                               <span class="font-size-12 " [ngStyle]="{'color': getColors(item.code)}" >{{item.title}}</span>
                             </div>
                             <div fxLayout="row" fxLayoutAlign="center" fxFlex>
-                              <span class="dark-grey-blue font-size-10">{{item.points}}pts</span>
+                              <span class="dark-grey-blue font-size-10">{{getBlocTotalPoints(item.code)}}pts</span>
                             </div>
                           </div>
 

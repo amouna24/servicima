@@ -271,6 +271,15 @@ export class CustomizeSessionComponent implements OnInit {
     });
     return totalPoint;
   }
+  getBlocTotalPoints(blocQuestionsCode: string) {
+    let totalPoints = 0;
+    this.sessionQuestionsList.forEach( (question) => {
+      if (question.questionDetails.TestQuestionKey.test_question_bloc_code === blocQuestionsCode) {
+        totalPoints += Number(question.questionDetails.mark);
+      }
+    });
+    return totalPoints;
+  }
   saveAndMoveToTimerPage() {
     this.addNewQuestions();
     this.deleteOldQuestions();

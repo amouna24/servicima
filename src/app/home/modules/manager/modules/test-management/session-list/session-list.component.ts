@@ -56,7 +56,7 @@ export class SessionListComponent implements OnInit {
         .getSessionDataTable(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&beginning=${offset}&number=${limit}`)
         .subscribe( (listSessions) => {
           if (listSessions['results'].length !== 0) {
-            listSessions['results'].forEach((oneSession) => {
+            listSessions['results'].forEach((oneSession, indexSession) => {
               this.testService.getSessionQuestion(`?session_code=${
                 oneSession.TestSessionKey.session_code}&company_email=${
                 this.companyEmailAddress}&application_id=${
@@ -77,13 +77,17 @@ export class SessionListComponent implements OnInit {
                       level: await this.getLevel(oneSessionInfo[0].level_code),
                       session_name: oneSessionInfo[0].session_name,
                     });
+                    console.log(index, listSessions['results'].length);
                     if (index > listSessions['results'].length) {
                       listSessions['results'] = blocData;
                       resolveTwo(listSessions);
                     }
                   }).then((result) => {
-                    this.isLoading.next(false);
-                    resolve(result);
+                    if (listSessions['results'].length <= indexSession + 1) {
+                      resolve(result);
+                      console.log('result=', result);
+                      this.isLoading.next(false);
+                    }
                   });
 
                 });
