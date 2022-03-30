@@ -22,7 +22,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex="6" fxLayoutAlign="center">
-        <button (click)="sort(column)" fxLayout="row"  class="sort-invite-candidate"  fxLayoutAlign="center center">
+        <button (click)="sort(sortColumn)" fxLayout="row"  class="sort-invite-candidate"  fxLayoutAlign="center center">
           <img  [src]="displayIcon ? 'assets/icons/sort-ascending.svg' :'assets/icons/sort-descending.svg'" alt="list icon" width="24px" height="24px">
         </button>
       </div>
@@ -42,7 +42,7 @@
                               [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </th>
-              <td [ngStyle] = "{'min-width':'10%', 'max-width':'10%','width': '10%'}"  mat-cell *matCellDef="let row">
+              <td [ngStyle] = "{'width': '6%'}"  mat-cell *matCellDef="let row">
                 <mat-checkbox (click)="$event.stopPropagation()"
                               (change)="$event ? selection.toggle(row) : null"
                               [checked]="selection.isSelected(row)">
@@ -50,8 +50,8 @@
               </td>
             </ng-container>
             <ng-container [matColumnDef]="tableColumns[1].nameColumn">
-              <th [ngStyle] = "{'max-width':numberColumn, 'min-width':numberColumn, 'width': numberColumn}" mat-header-cell *matHeaderCellDef class="cool-grey font-size-9"> {{this.selection['_selected']? this.selection['_selected'].length : 0}} Collaborator selected</th>
-              <td [ngStyle] = "{'max-width':numberColumn, 'min-width':numberColumn, 'width': numberColumn}"  mat-cell *matCellDef="let element">
+              <th [ngStyle] = "{ 'width': tableColumns[1].width}" mat-header-cell *matHeaderCellDef class="cool-grey font-size-9"> {{this.selection['_selected']? this.selection['_selected'].length : 0}} Collaborator selected</th>
+              <td [ngStyle] = "{ 'width': tableColumns[1].width}"  mat-cell *matCellDef="let element">
                 <div fxLayout="row" fxLayoutGap="10px">
                   <div fxLayout="column">
                     <img class="img-rounded m-r-5" width="25px" height="25px" [src]="element[tableColumns[1].photo] ? env + element['photo'] : 'assets/img/default.jpg' " alt="image">
@@ -66,8 +66,8 @@
             <ng-container *ngFor="let test of tableColumns; let index = index">
             <ng-container *ngIf="index+2 < tableColumns.length">
               <ng-container [matColumnDef]="tableColumns[index+2].nameColumn" >
-                <th [ngStyle] = "{'max-width':numberColumn, 'min-width':numberColumn, 'width': numberColumn}" mat-header-cell *matHeaderCellDef>  </th>
-                <td  [ngStyle] = "{'max-width':numberColumn, 'min-width':numberColumn, 'width': numberColumn}" mat-cell *matCellDef="let element">
+                <th [ngStyle] = "{'width': tableColumns[index+2].width}" mat-header-cell *matHeaderCellDef>  </th>
+                <td [ngStyle] = "{'width': tableColumns[index+2].width}" mat-cell *matCellDef="let element">
 
                   <div fxLayout="row" fxLayoutGap="10px">
                     <div fxLayout="column">
@@ -94,8 +94,8 @@
             </div>
             <div  fxFlex="15" fxLayout="row">
               <div >
-                <button  mat-raised-button  class="btn-medium bg-cerulean-blue" >
-                  <span class="white font-size-12 font-normal">Add candidate</span>
+                <button (click)="addButton()"  mat-raised-button  class="btn-medium bg-cerulean-blue" >
+                  <span class="white font-size-12 font-normal"> {{titleAddButton}}</span>
                 </button>
               </div>
             </div>
@@ -107,7 +107,7 @@
 
   <div fxLayout="row" fxFlex="8" fxLayoutAlign="center"  class="container-button-candidates">
    <ng-container [ngSwitch]="specificData.component" >
-     <div *ngSwitchCase="'inviteColoaborator'">
+     <div *ngSwitchCase="'inviteCollaborator'">
        <div fxFlex="8" fxLayout="row" fxLayoutAlign="start center"
             class="full-width p-10 p-t-5">
          <p class="font-size-12 black m-0 m-r-15">Delay(day):</p>
@@ -123,17 +123,18 @@
          </div>
        </div>
      </div>
-     <div *ngSwitchCase="'match_expresson_2'" style="width: 100%;">Number of colloborator {{this.selection['_selected']? this.selection['_selected'].length : 0}} of {{dataSource?.data?.length}}</div>
+     <div *ngSwitchCase="'match_expresson_2'" class="full-width">Number of colloborator {{this.selection['_selected']? this.selection['_selected'].length : 0}} of {{dataSource?.data?.length}}
+     </div>
    </ng-container>
     <div fxLayout="column" fxLayoutAlign=" center" fxFlex="100">
       <div fxLayout="row" fxFlexFill fxLayoutGap="25px" fxLayoutAlign="flex-end center">
 
         <div fxLayout="row" fxLayoutGap="25px">
-          <button mat-raised-button class="btn-small bg-pale-grey" (click)="cancel()">
-            <span class="black">Cancel</span>
+          <button mat-raised-button class="btn-small" [ngStyle]="{'color': buttonLeft.color, 'background': buttonLeft.background}" (click)="cancel()">
+            <span class="black">{{buttonLeft.title}}</span>
           </button>
-          <button mat-raised-button class="btn-small " color="primary"   (click)="sendMail()">
-            <span class="white">Invite</span>
+          <button mat-raised-button class="btn-small " [ngStyle]="{'color': buttonRight.color, 'background': buttonRight.background}"  (click)="invite()">
+            <span class="white">{{buttonRight.title}}</span>
           </button>
         </div>
 

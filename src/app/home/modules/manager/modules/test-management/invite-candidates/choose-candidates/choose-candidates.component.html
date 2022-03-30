@@ -1,10 +1,14 @@
 <wid-dialog-invite [tableColumns] = "tableColumns"
-                   (listChecked) = sendMail($event)
-                   [specificData] = '{component:"inviteColoaborator", params:expiredDay}'
-                   [data]  =" data.listCandidates"
-                   [column]="'language_id'"
+                   [data] = "data.listCandidates"
+                   [sortColumn]="'language_id'"
                    [title]="'Invite candidate'"
+                   [titleAddButton] ="'Add candidate'"
+                   [buttonLeft] = "{'background':'#f3f6f9', color: 'black',title: 'Cancel' }"
+                   [buttonRight] = "{'background':'#0067e0', color: 'white',title: 'Invite' }"
+                   [specificData] = '{component:"inviteCollaborator", params:expiredDay}'
+                   (AddButton)="addCandidate()"
                    (cancelButton)="cancel()"
+                   (inviteButton) = sendMail($event)
                     >
 </wid-dialog-invite>
 
