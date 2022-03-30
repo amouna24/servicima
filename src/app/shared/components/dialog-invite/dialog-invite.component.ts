@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { environment } from '@environment/environment';
@@ -65,7 +65,6 @@ export class DialogInviteComponent implements OnInit {
   searchField(event) {
     const filterArray = [];
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(this.data, 'data sourece');
     this.data.filter(
       (res) => {
         const filter = [];

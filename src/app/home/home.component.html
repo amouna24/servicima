@@ -22,7 +22,7 @@
 
   <mat-sidenav-content [@mainContent]="displaySidenavSetting() ? 'setting' : sidebarState"
                        class="full-screen-height"
-                       fxLayout="column">
+                       fxLayout="column" [ngStyle] = "{'margin-left': dontDisplaySidenav() ? '1px' : '249px' }">
     <wid-header fxFlexOffset="1" [showHeader] = !dontDisplaySidenav()> </wid-header>
     <wid-breadcrumb></wid-breadcrumb>
 

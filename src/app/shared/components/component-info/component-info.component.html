@@ -1,3 +1,4 @@
+<div class="full-height">
 <div fxLayout="column" fxFlex="100" class="font-size-12 black">
   <div fxFlex="28"   fxLayoutAlign="center center" fxLayout="row"  [ngStyle]="{'color': title.color }" class="session-ready  font-size-24">
     {{title.name}}
@@ -12,4 +13,5 @@
       <button (click)="clickButton()" mat-button [ngStyle]="{'color': button.color, 'background': button.background }" class="btn-large font-medium"> {{button.name}} </button>
     </div>
   </div>
+</div>
 </div>
