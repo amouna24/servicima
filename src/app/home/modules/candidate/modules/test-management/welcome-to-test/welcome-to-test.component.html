@@ -27,7 +27,7 @@
            fxLayout="column" fxLayoutAlign="start"  >
 
        <div class="full-height-test" *ngIf="statusLink == 'link invalid'">
-         <wid-component-info class="full-height-test" [title]="{ name: 'Test passed', color:'#f1c40f'}"
+         <wid-component-info [title]="{ name: 'Test passed', color:'#f1c40f'}"
                              [image]= "{ path:'warning-sign.svg',height:'110px' }"
                              [message] = "' You have already passed the exam.'"
                              [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}"

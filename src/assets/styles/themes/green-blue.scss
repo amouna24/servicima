@@ -54,3 +54,6 @@ wid-sidenav {
     color: $golden-yellow !important;
   }
 }
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color:$black-two !important;
+}
