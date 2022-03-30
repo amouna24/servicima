@@ -230,7 +230,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.animationStatePrevious = false;
         this.index = this.index - 1;
       }, 1);
-      console.log(this.skippedQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index), this.skippedQuestions, this.index);
       if (this.skippedQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index)) {
         this.skippedQuestions.splice(this.index - 1, 1);
       }
