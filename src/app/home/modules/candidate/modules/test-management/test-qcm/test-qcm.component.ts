@@ -20,6 +20,7 @@ import { UtilsService } from '@core/services/utils/utils.service';
 import { TestService } from '@core/services/test/test.service';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
+import { environment } from '@environment/environment';
 
 @Component({
   selector: 'wid-test-qcm',
@@ -58,6 +59,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   timerInterval = null;
   timeLeft = this.maxTime;
   skippedQuestions = [];
+  env = environment.uploadFileApiUrl + '/show/';
   companyEmailAddress = '';
   paddingTopMinutes = '';
   checkedChoices = [];
@@ -77,6 +79,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   disableChoices =  false;
   enableNextButton = false;
   finalResult = 0;
+  photo: string;
 
   constructor(
     private utilsService: UtilsService,
@@ -194,7 +197,11 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.animationStatePrevious = false;
         this.index = this.index - 1;
       }, 1);
-      return this.index;
+      console.log(this.skippedQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index), this.skippedQuestions, this.index);
+      if (this.skippedQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index)) {
+        this.skippedQuestions.splice(this.index - 1, 1);
+      }
+        return this.index;
     } else {
       return this.index;
     }
@@ -279,12 +286,11 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
             this.companyEmailAddress}&application_id=${
             this.utilsService.getApplicationID('SERVICIMA')}&session_code=${
             this.sessionCode}`).subscribe((sessionQuestions) => {
-        sessionQuestions.map((oneSessionQuestion) => {
+        sessionQuestions.map((oneSessionQuestion, index) => {
           this.testService
             .getQuestion(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
             .subscribe((question) => {
-            this.questionsList.push(question[0]);
-            this.testService.getChoices(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
+            this.testService.getChoices(`?test_question_code=${question[0].TestQuestionKey.test_question_code}`)
               .subscribe((choices) => {
                 const correctChoice = [];
                 choices.map( (oneChoice) => {
@@ -292,6 +298,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                     correctChoice.push(oneChoice.TestChoicesKey.test_choices_code);
                   }
                 });
+                this.questionsList.push(question[0]);
                 this.choicesList.push({
                   questionCode: oneSessionQuestion.TestSessionQuestionsKey.test_question_code,
                   questionType: question[0].question_type,
@@ -318,6 +325,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         (userInfo) => {
           if (userInfo) {
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
+            this.photo = userInfo['company'][0].photo;
           }
         });
   }
@@ -331,16 +339,14 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     });
     return checkedChoice;
   }
-
   setSkippedQuestions() {
-    if (this.checkedChoices.length === 0) {
+    if (!this.answeredQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index + 1)) {
       this.skippedQuestions.push({
         questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
         questionNumber: this.index + 1
       });
-    }
   }
-
+  }
   initTimerParams(maxTime) {
     if (this.durationType === 'time_per_question') {
       this.timerPerQuestionTimePassed += this.timePassed;
@@ -349,7 +355,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       this.timeLeft = maxTime;
     }
   }
-
   testExpiredTime() {
     if (this.timeLeft === 0) {
       if (this.durationType === 'time_per_question') {

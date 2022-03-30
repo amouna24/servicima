@@ -66,7 +66,7 @@
                   <span class="black font-size-20 font-normal">Available Packs</span>
                 </div>
               </div>
-              <div fxLayout="row" style="min-height: 70%">
+              <div fxLayout="row" >
                 <div fxLayout="column" fxFlex="96" >
                   <div fxLayout="row" fxFlex="100" fxLayoutAlign="end">
                     <div fxLayout="column" fxFlex="97" fxLayoutAlign="center">
@@ -80,8 +80,8 @@
                       </ng-template>
                       <ng-template [ngIf]="!isLoading.getValue()">
                         <ng-template [ngIf]="availableBlocQuestionsList.length === 0">
-                          <div fxLayout="row" fxFlex="70" class="empty-available-bloc">
-                            <div fxLayout="column" fxFlexFill  fxLayoutGap="20px">
+                          <div fxLayout="row"  class="empty-available-bloc" style="min-height: 220px">
+                            <div fxLayout="column" fxFlexFill  fxLayoutGap="20px" >
                               <div fxLayout="row" fxFlex="50" fxLayoutAlign="center end">
                                 <span class="cool-grey font-medium font-size-24">There is no bloc questions available</span>
                               </div>
@@ -98,15 +98,20 @@
                               <div fxLayout="column" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
                                    filterData: searchField: 'test_question_bloc_title' |
                                    filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
-                                <mat-card  fxLayout="column" fxLayoutAlign="center center" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
+                                <mat-card  fxLayout="column" fxLayoutAlign="center center" (click)="selectBlocFromCard(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-vertical selected-card' : 'bloc-list-card-vertical'">
                                   <div fxLayout="column" fxFlexFill>
                                     <div fxLayout="row" >
                                       <div fxLayout="column" class="p-5">
-                                        <div fxLayout="column" [style.width.px]="220" [style.height.px]="108"  [style.background-image]="'url('+ imageUrl + oneAvailableBloc.image+ ')'" style="border-radius: 15px; background-size: cover">
+                                        <div fxLayout="column"
+                                             [style.width.px]="220"
+                                             [style.height.px]="108"
+                                             [style.background-image]="'url('+ imageUrl + oneAvailableBloc.image+ ')'"
+                                             style="border-radius: 15px; background-size: 100% 100%">
                                           <div fxLayout="row" fxFlex="10" fxLayoutAlign="end">
                                             <div fxLayout="column"  class="p-r-12 rounded-check-box colored-check-box">
                                               <mat-checkbox class="custom-frame"
                                                             #checkBoxEvent
+                                                            disabled
                                                             [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
                                                             (change)="addRemoveSelectedBloc(checkBoxEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"></mat-checkbox>
                                             </div>
@@ -146,7 +151,7 @@
                                 <div fxLayout="row" *ngFor="let oneAvailableBloc of availableBlocQuestionsList |
                                    filterData: searchField: 'test_question_bloc_title' |
                                    filterData: selectSearchField: 'TestQuestionBlocKey.test_technology_code';" >
-                                  <mat-card [ngClass]="checkBoxOtherEvent['checked'] ? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'" >
+                                  <mat-card (click)="selectBlocFromCard(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)" [ngClass]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)? 'bloc-list-card-horizontal selected-card' : 'bloc-list-card-horizontal'" >
                                     <div fxLayout="row" fxFlexFill>
                                       <div fxLayout="column"  fxLayoutAlign="center">
                                         <div fxLayout="column" class="p-5">
@@ -186,8 +191,8 @@
                                       </div>
                                       <div fxLayout="column" fxLayoutAlign=" end" class="rounded-check-box p-r-12" >
                                         <mat-checkbox class="custom-frame"
+                                                      disabled
                                                       [checked]="checkSelectedBloc(oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
-                                                      (change)="addRemoveSelectedBloc(checkBoxOtherEvent, oneAvailableBloc.TestQuestionBlocKey.test_question_bloc_code)"
                                                       #checkBoxOtherEvent></mat-checkbox>
                                       </div>
                                     </div>
