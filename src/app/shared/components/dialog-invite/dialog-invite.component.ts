@@ -13,10 +13,14 @@ export class DialogInviteComponent implements OnInit {
   @Input() tableColumns: any;
   @Input() data: any;
   @Input() specificData: { component: any, params: any};
-  @Output() listChecked = new EventEmitter<{ }>();
+  @Output() inviteButton = new EventEmitter<{ }>();
   @Output() cancelButton = new EventEmitter<{ }>();
+  @Output() AddButton = new EventEmitter<{ }>();
+  @Input() titleAddButton: string;
   @Input() title: string;
-  @Input() column: string;
+  @Input() buttonLeft: { color: string, background: string, title: string };
+  @Input() buttonRight: { color: string, background: string, title: string };
+  @Input() sortColumn: string;
   dataSource: any;
   numberColumn: string;
   tableColumnsFiltered: string[];
@@ -38,11 +42,7 @@ export class DialogInviteComponent implements OnInit {
       this.data
     );
     this.tableColumnsFiltered = this.tableColumns.map((data) => data.nameColumn);
-    this.calculPourcent();
-  }
-
-  calculPourcent() {
-    this.numberColumn = 100 / (this.tableColumns.length - 2) + '%';
+     this.numberColumn = 510 / (this.tableColumns.length - 2) + 'px';
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -90,10 +90,10 @@ export class DialogInviteComponent implements OnInit {
   }
 
   /**
-   * @description send mail
+   * @description invite
    */
-  sendMail() {
-    this.listChecked.emit(this.selection['_selected'] );
+  invite() {
+    this.inviteButton.emit(this.selection['_selected'] );
   }
 
   /**
@@ -115,6 +115,13 @@ export class DialogInviteComponent implements OnInit {
       this.dataSource.data = _.orderBy( this.dataSource.data , [data => data[column].toLowerCase()], ['desc']);
 
     }
+  }
+
+  /**
+   * @description go to add when array is empty
+   */
+  addButton() {
+    this.AddButton.emit('button add' );
   }
 
 }
