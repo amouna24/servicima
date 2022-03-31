@@ -25,12 +25,29 @@ export class SessionListComponent implements OnInit {
     private utilsService: UtilsService,
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.getConnectedUser();
     this.getDataFromLocalStorage();
-    this.getData(0, this.nbtItems.getValue()).then( (result) => {
-      this.tableData.next(result);
-    });
+    await this.getData(0, this.nbtItems.getValue()).then((result: any[]) => {
+      const blocData = [];
+      result['results'].map( async (oneData) => {
+          blocData.push({
+            session_code: oneData.oneSession.TestSessionKey.session_code,
+            session_technologies: oneData.sessionTechnology,
+            session_points: oneData.sessionPoint,
+            session_questions: oneData.questionsList.length ? oneData.questionsList.length : 0,
+            session_time: oneData.sessionTime,
+            level:  oneData.sessionLevel,
+            session_name: oneData.oneSessionInfo[0].session_name,
+          });
+          if (blocData.length === result['results'].length) {
+            result['results'] = blocData;
+            this.tableData.next(result);
+            this.isLoading.next(false);
+          }
+        });
+
+      });
   }
   /**
    * @description Get connected user
@@ -50,55 +67,47 @@ export class SessionListComponent implements OnInit {
   getData(offset: number, limit: number) {
     this.isLoading.next(true);
     const blocData = [];
-    let index = 1;
     return new Promise( (resolve) => {
-      this.testService
-        .getSessionDataTable(`?company_email=${this.companyEmailAddress}&application_id=${this.applicationId}&beginning=${offset}&number=${limit}`)
-        .subscribe( (listSessions) => {
-          if (listSessions['results'].length !== 0) {
-            listSessions['results'].forEach((oneSession, indexSession) => {
+          this.testService
+            .getSessionDataTable(`?company_email=${
+              this.companyEmailAddress}&application_id=${
+              this.applicationId}&beginning=${
+              offset}&number=${
+              limit}`)
+            .subscribe((listSessions) => {
+        if (listSessions['results'].length !== 0) {
+          const dataTable = { ...listSessions };
+          dataTable['results'].map((oneSession) => {
               this.testService.getSessionQuestion(`?session_code=${
                 oneSession.TestSessionKey.session_code}&company_email=${
                 this.companyEmailAddress}&application_id=${
                 this.applicationId}`).subscribe((questionsList) => {
-                this.testService
-                  .getSessionInfo(`?company_email=${
-                    this.companyEmailAddress}&application_id=${
-                    this.applicationId}&session_code=${
-                    oneSession.TestSessionKey.session_code}`).subscribe(async (oneSessionInfo) => {
-                  return new Promise(async (resolveTwo) => {
-                    index++;
-                    blocData.push({
-                      session_code: oneSession.TestSessionKey.session_code,
-                      session_technologies: await this.getTechnologies(oneSession.TestSessionKey.block_questions_code),
-                      session_points: await this.getSessionPoints(questionsList),
-                      session_questions: questionsList.length ? questionsList.length : 0,
-                      session_time: this.convertSessionTime(oneSessionInfo[0].test_session_time),
-                      level: await this.getLevel(oneSessionInfo[0].level_code),
-                      session_name: oneSessionInfo[0].session_name,
-                    });
-                    console.log(index, listSessions['results'].length);
-                    if (index > listSessions['results'].length) {
-                      listSessions['results'] = blocData;
-                      resolveTwo(listSessions);
-                    }
-                  }).then((result) => {
-                    if (listSessions['results'].length <= indexSession + 1) {
-                      resolve(result);
-                      console.log('result=', result);
-                      this.isLoading.next(false);
-                    }
-                  });
+              this.testService
+                .getSessionInfo(`?company_email=${
+                  this.companyEmailAddress}&application_id=${
+                  this.applicationId}&session_code=${
+                  oneSession.TestSessionKey.session_code}`).subscribe(async (oneSessionInfo) => {
+                const sessionTechnology = await this.getTechnologies(oneSession.TestSessionKey.block_questions_code);
+                const sessionPoint = await  this.getSessionPoints(questionsList);
+                const sessionTime = this.convertSessionTime(oneSessionInfo[0].test_session_time);
+                const sessionLevel = await this.getLevel(oneSessionInfo[0].level_code);
+                    blocData.push({ questionsList, oneSessionInfo, oneSession, sessionTechnology, sessionPoint, sessionTime, sessionLevel});
 
-                });
+                if (blocData.length === dataTable['results'].length) {
+                  dataTable['results'] = blocData;
+                  resolve(dataTable);
+                }
+
               });
             });
-          } else {
-            this.isLoading.next(false);
-            resolve([]);
-          }
+          });
+        } else {
+          this.isLoading.next(false);
+          resolve([]);
+        }
+      });
+
         });
-    });
   }
 
   switchAction(event: any) {
@@ -123,9 +132,9 @@ export class SessionListComponent implements OnInit {
             this.testService.getTechnologies(`?test_technology_code=${oneBloc['results'][0].TestQuestionBlocKey.test_technology_code}`)
               .subscribe( (oneTechnology) => {
                   technologiesArray.push(oneTechnology[0].technology_title);
-                  index === blocCodeArray.length ? resolve(technologiesArray) : ++index;
               });
           }
+          index === blocCodeArray.length ? resolve(technologiesArray) : ++index;
         });
       });
     }).then( (result) => {
@@ -145,7 +154,7 @@ export class SessionListComponent implements OnInit {
            this.testService
              .getQuestion(`?test_question_code=${oneQuestion.TestSessionQuestionsKey.test_question_code}`)
              .subscribe( (question) => {
-               totalPoint += Number(question[0].mark);
+                 totalPoint += question[0] ? Number(question[0].mark) : 0;
                index >= questionsList.length ? resolve(totalPoint) : index++;
              });
          });
@@ -176,7 +185,7 @@ export class SessionListComponent implements OnInit {
   }
 
    deleteSession(data) {
-    data.map( (oneSession) => {
+    data.map( (oneSession, indexData) => {
         this.testService
           .getSessionInfo(`?company_email=${
             this.companyEmailAddress}&application_id=${
@@ -200,13 +209,33 @@ export class SessionListComponent implements OnInit {
                         if (questions['msg_code'] !== '0004') {
                           questions.map( (oneQuestion, index) => {
                             this.testService.deleteSessionQuestion(oneQuestion._id).subscribe( (deletedQuestion) => {
+
+                            });
+                          });
+                        }
+                        if ( data.length === indexData + 1) {
+                          this.getData(0, this.nbtItems.getValue()).then( (result) => {
+                            const blocData = [];
+                            result['results'].map( async (oneData) => {
+                              blocData.push({
+                                session_code: oneData.oneSession.TestSessionKey.session_code,
+                                session_technologies: oneData.sessionTechnology,
+                                session_points: oneData.sessionPoint,
+                                session_questions: oneData.questionsList.length ? oneData.questionsList.length : 0,
+                                session_time: oneData.sessionTime,
+                                level:  oneData.sessionLevel,
+                                session_name: oneData.oneSessionInfo[0].session_name,
+                              });
+                              if (blocData.length === result['results'].length) {
+                                result['results'] = blocData;
+                                this.tableData.next(result);
+                                this.isLoading.next(false);
+                              }
                             });
                           });
                         }
                       });
-                    this.getData(0, this.nbtItems.getValue()).then( (result) => {
-                      this.tableData.next(result);
-                    });
+
                   });
                 });
               });
