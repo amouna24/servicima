@@ -1,0 +1,9 @@
+<wid-dialog-invite [tableColumns] = "tableColumns"
+                   (listChecked) = sendRequest($event)
+                   [specificData] = '{component:"match_expresson_2", params:training.warned_number}'
+                   [data]  ="data.listCollaborators"
+                   [column]="'full_name'"
+                   [title]="'Invite collaborators'"
+                   (cancelButton)="cancel()"
+>
+</wid-dialog-invite>

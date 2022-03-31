@@ -48,6 +48,7 @@ export class ChooseCandidatesComponent implements OnInit {
              ) {
    this.env = environment.uploadFileApiUrl + '/show/';
     this.displayIcon = true;
+
   }
 
   /**************************************************************************

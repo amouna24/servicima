@@ -36,7 +36,7 @@
                         <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100" class="bg-card-session" >
                             <div fxLayout="column">
                                 <span class="font-size-9">End Date:</span>
-                                <span class="font-size-15" *ngIf="training">{{ training.end_date}}</span>
+                                <span class="font-size-15" *ngIf="training">{{ training.end_date | date: 'dd/MM/yyyy' }}</span>
                                 <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
 
                             </div>
@@ -45,7 +45,7 @@
                         <div fxLayout="column" fxFlex="100" class="bg-card-session" fxLayoutAlign="center center"  >
                             <div fxLayout="column">
                                 <span class="font-size-9">Start Date: </span>
-                                <span class="font-size-15" *ngIf="training">{{ training.start_date }}</span>
+                                <span class="font-size-15" *ngIf="training">{{ training.start_date | date: 'dd/MM/yyyy'  }}</span>
                                 <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                     <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
                         <div fxLayout="column">
                             <span class="font-size-12">total hours :</span>
-                            <span class="font-size-18"><sup>{{ timeDisplay.value }}/</sup><span *ngIf="training">{{ training.warned_hours }} </span>
+                            <span class="font-size-18"><sup>{{ timeDisplay.getValue() }}/</sup><span *ngIf="training">{{ training.warned_hours }} </span>
                                                             <span *ngIf="!training">00</span>
                                 hours</span>
                         </div>
@@ -199,7 +199,7 @@
               fxLayout="column" fxLayoutAlign="start" @dataAppearance *ngIf="done"  >
             <wid-done-creation style="height: 100%" [title]="{ name: 'Training session created', color:'#0067e0'}"
                                 (homeAction)="back($event)"
-                               (inviteAction)="back($event)"
+                               (inviteAction)="invite($event)"
                                [image]= "{ path:'done-circle.svg',height:'110px' }"
                                 [message] = "'The training session was successfully created.'"
                                 [home]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}"

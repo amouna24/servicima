@@ -75,23 +75,16 @@ export const managerMenu: IMenu[] = [
       },
       {
         state: 'training',
-        name: 'Training List',
+        name: 'Training',
         type: 'sub',
         icon: 'wi-HR',
-        feature: 'HR_ACCESS',
+        feature: 'SOURCING_ACCESS',
         child: [
-          {
-            state: 'training-add',
-            name: 'Training Add',
-            icon: '',
-            feature: 'HR_ACCESS',
-            type: 'link',
-          },
           {
             state: 'training-list',
             name: 'Training List',
             icon: '',
-            feature: 'HR_ACCESS',
+            feature: 'SOURCING_ACCESS',
             type: 'link',
           },
         ]

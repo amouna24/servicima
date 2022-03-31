@@ -63,7 +63,7 @@ export class TrainingService {
    * @description Add new Training
    * @param Training: Training Model
    *************************************************************************/
-  addTrainingSession(SessionTraining: ITrainingSessionWeek): Observable<ITrainingSessionWeek> {
+  addTrainingSession(SessionTraining: any): Observable<ITrainingSessionWeek> {
     return this.httpClient.post<ITrainingSessionWeek>(`${environment.hrTrainingSessionWeekApiUrl}`, SessionTraining);
   }
   /**************************************************************************
@@ -108,7 +108,7 @@ export class TrainingService {
    * @description Add new Invitation for collaborator
    * @param RequestTraining: Training Request Model
    *************************************************************************/
-  addTrainingInviteCollaborator(InviteCollaboratorTraining: ITrainingInviteCollaborator): Observable<ITrainingInviteCollaborator> {
+  addTrainingInviteCollaborator(InviteCollaboratorTraining: any): Observable<ITrainingInviteCollaborator> {
     return this.httpClient.post<ITrainingInviteCollaborator>(`${environment.hrTrainingInviteCollaboratorApiUrl}`, InviteCollaboratorTraining);
   }
   /**************************************************************************

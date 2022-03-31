@@ -59,8 +59,8 @@
                                 <label class="font-size-12 required">{{'Number of hours' | translate | capitalizeFirstLetter}} </label>
                                 <mat-form-field appearance="outline">
                                     <input autocomplete="off" matInput required [placeholder]=" 'Number of hours' | translate | capitalizeFirstLetter"
-                                           formControlName="hours" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" />
-                                    <mat-error class="wid-error-messages" *ngIf="form.controls.hours?.errors?.required">
+                                           formControlName="warned_hours" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" />
+                                    <mat-error class="wid-error-messages" *ngIf="form.controls.warned_hours?.errors?.required">
                                         {{ 'general.required' | translate }}</mat-error>
                                 </mat-form-field>
                             </div>
@@ -142,8 +142,8 @@
                 <label class="font-size-12 required">{{'Description' | translate | capitalizeFirstLetter}} </label>
                 <mat-form-field appearance="outline">
                     <textarea autocomplete="off" matInput required [placeholder]=" 'Description' | translate | capitalizeFirstLetter"
-                           formControlName="hours" type="number" value="0" [ngStyle.xs]="{'font-size': '15px'}" rows="7"> </textarea>
-                    <mat-error class="wid-error-messages" *ngIf="form.controls.hours?.errors?.required">
+                           formControlName="description"   [ngStyle.xs]="{'font-size': '15px'}" rows="7"> </textarea>
+                    <mat-error class="wid-error-messages" *ngIf="form.controls.description?.errors?.required">
                         {{ 'general.required' | translate }}</mat-error>
                 </mat-form-field>
             </div>
@@ -172,7 +172,7 @@
                             <button type="submit" mat-raised-button   class="black btn-small bg-white-two" (click)="cancel()" >
                                 <span class="font-size-11" >{{ 'Cancel' | translate }}</span>
                             </button>
-                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="next()" [disabled]="form.valid" >
+                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="next()" [disabled]="!form.valid" >
                                 <span class="font-size-11 white">{{ 'Next' | translate }}</span>
                             </button>
                         </div>

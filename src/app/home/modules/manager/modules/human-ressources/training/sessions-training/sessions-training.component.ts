@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ITraining } from '@shared/models/training.model';
 import { TrainingService } from '@core/services/training/training.service';
@@ -7,12 +7,18 @@ import { dataAppearance } from '@shared/animations/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { takeUntil } from 'rxjs/operators';
+import { ModalService } from '@core/services/modal/modal.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { ProfileService } from '@core/services/profile/profile.service';
+import * as _ from 'lodash';
+
+import { InviteCollaboratorComponent } from '../invite-collaborator/invite-collaborator.component';
 
 @Component({
   selector: 'wid-sessions-training',
@@ -23,9 +29,10 @@ import { Router } from '@angular/router';
   ]
 })
 export class SessionsTrainingComponent implements OnInit {
+  @Input() update = false;
   title = 'Session List';
+  listCollaborators: any;
   training: ITraining;
-  trainingCode = 'WID-27821-TR';
   showForm = false;
   trainingSessions: ITrainingSessionWeek[] = [];
   form: FormGroup;
@@ -33,8 +40,9 @@ export class SessionsTrainingComponent implements OnInit {
   applicationId: string;
   userInfo: IUserInfo;
   weekDays: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-  totalMinutesSessions = 0;
+  totalMinutesSessions: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   timeDisplay: BehaviorSubject<string> = new BehaviorSubject<string>('00:00');
+  destroy$: Subject<boolean> = new Subject<boolean>();
   done = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -43,32 +51,47 @@ export class SessionsTrainingComponent implements OnInit {
       private location: Location,
       private trainingService: TrainingService,
       private formBuilder: FormBuilder,
-      private refDataService: RefdataService,
       private userService: UserService,
+      private router: Router,
+      private modalService: ModalService,
+      private localStorageService: LocalStorageService,
+      private profileService: ProfileService,
+      private refDataService: RefdataService,
       private utilsService: UtilsService,
-      private router: Router
+      private route: ActivatedRoute,
 
   ) {
     this.initForm();
   }
   async getData() {
-    this.trainingService.getTraining(`?training_code=${this.trainingCode}`).subscribe((data) => {
-      this.training = data['results'][0];
-    });
+      this.route.queryParams
+          .pipe(
+              takeUntil(this.destroy$)
+          )
+          .subscribe( params => {
+              this.trainingService.getTraining(`?training_code=${atob(params.code)}`).subscribe((data) => {
+                  this.training = data['results'][0];
+                  console.log('my training ', this.training);
+              });
+          });
+
     if (this.trainingSessions.length !== 0) {
     this.trainingSessions.map((t) => {
       const ar = t.durration.split(':');
       const hours = parseInt(ar[0], null);
       const minutes = parseInt(ar[1], null);
-      this.totalMinutesSessions = this.totalMinutesSessions + this.convertTimeToMinute(hours, minutes);
+      this.totalMinutesSessions.next(this.totalMinutesSessions.getValue() + this.convertTimeToMinute(hours, minutes));
     });
     }
   }
 
   async ngOnInit(): Promise<void> {
+    this.modalService.registerModals(
+        { modalName: 'inviteCollaborator', modalComponent: InviteCollaboratorComponent});
     await this.getConnectedUser();
     await this.getRefData();
     await this.getData();
+    await this.getCollaborator();
   }
   /**************************************************************************
    * @description back click
@@ -102,7 +125,8 @@ export class SessionsTrainingComponent implements OnInit {
   addSession() {
     const ar = this.form.value.durration.split(':');
     const total = this.convertTimeToMinute(parseInt(ar[0], null), parseInt(ar[1], null));
-    const t = total + this.totalMinutesSessions;
+    console.log('my total ', total);
+    const t = total + this.totalMinutesSessions.getValue();
     if (t <= this.training.warned_hours * 60) {
       this.trainingSessions.push({
         _id: '', status: '',
@@ -111,6 +135,7 @@ export class SessionsTrainingComponent implements OnInit {
         time: this.form.value.time,
         durration: this.form.value.durration
       });
+      this.totalMinutesSessions.next(t);
       this.timeDisplay.next(this.displayTotalHours(t));
     } else {
       this.utilsService.openSnackBar('time invalid', 'close', 3000);
@@ -152,7 +177,26 @@ export class SessionsTrainingComponent implements OnInit {
    * @description : next step of add training
    */
   next() {
-  this.done = true;
+      if (this.training.warned_hours * 60 === this.totalMinutesSessions.getValue()) {
+          this.trainingSessions.map((session) => {
+              this.trainingService.addTrainingSession({
+                  application_id: this.applicationId,
+                  email_address: this.companyEmail,
+                  training_code: this.training.TrainingKey.training_code,
+                  session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-SESSION`,
+                  day: session.day,
+                  time: session.time,
+                  durration: session.durration
+              }).subscribe((data) => {
+                  console.log('session added successfully');
+              });
+
+          });
+          this.done = true;
+      } else {
+          this.utilsService.openSnackBar('you must complete session time');
+      }
+
   }
   /**
    * @description :  cancel function
@@ -167,18 +211,14 @@ export class SessionsTrainingComponent implements OnInit {
   displayTotalHours(minutes: number): string {
     let totalHours = 0;
     let totalMinutes = minutes;
-    while (totalMinutes > 60) {
+    while (totalMinutes > 59) {
       totalHours = totalHours + 1;
       totalMinutes = totalMinutes - 60;
     }
-    let hoursString = totalHours.toString(null);
-    let minutesString = totalMinutes.toString(null);
-    if (totalHours < 10) {
-      hoursString = '0' + hoursString;
-    }
-    if (totalMinutes < 10) {
-      minutesString = '0' + minutesString;
-    }
+    let hoursString = '';
+    let minutesString = '';
+    totalHours < 10 ? hoursString = '0' + totalHours : hoursString = '' + totalHours;
+    totalMinutes < 10 ? minutesString = '0' + totalMinutes : minutesString = '' + totalMinutes;
    return hoursString + ':' + minutesString;
 
   }
@@ -186,7 +226,47 @@ export class SessionsTrainingComponent implements OnInit {
     this.router.navigate(['/manager/human-ressources/training/training-list']);
   }
   invite(event) {
-    console.log('invite collaborator');
+    this.modalService.displayModal('inviteCollaborator', {
+            listCollaborators: this.listCollaborators,
+            training: this.training
+        },
+        '900px', '580px')
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(async (res) => {
+          if (res) {
+            console.log(res, 'res');
+          }
+        }, (error => {
+          console.error(error);
+        }));
   }
+    /**
+     * @description Get collaborator List
+     */
+    async getCollaborator() {
+        const cred = this.localStorageService.getItem('userCredentials');
+        this.applicationId = cred['application_id'];
+        this.companyEmail = cred['email_address'];
+        await this.refDataService.getRefData(
+            this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+            this.applicationId,
+            ['PROF_TITLES']
+        );
+        this.profileService.getAllUser(this.companyEmail, 'COLLABORATOR')
+            .subscribe(async data => {
+                this.listCollaborators = data['results'].map(
+                    (obj) => {
+                        return {
+                            _id: obj._id,
+                            userKey: obj.userKey,
+                            full_name: obj.first_name + ' ' + obj.last_name,
+                            email_address: obj.userKey.email_address,
+                            photo: obj.photo ?  obj.photo : null,
+                            job_title: this.utilsService.getViewValue(obj.title_id, this.refDataService.refData['PROF_TITLES'])
+                        };
+                    });
+                this.listCollaborators = _.orderBy(this.listCollaborators, [collab => collab.full_name.toLowerCase()], ['asc']);
+            });
+    }
 
 }

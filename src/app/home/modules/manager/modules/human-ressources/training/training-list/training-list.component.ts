@@ -1,13 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
-import { IInvoiceHeaderModel } from '@shared/models/invoiceHeader.model';
-import { IContractor } from '@shared/models/contractor.model';
 import { IUserInfo } from '@shared/models/userInfo.model';
 import { ITraining } from '@shared/models/training.model';
 import { UserService } from '@core/services/user/user.service';
 import { TrainingService } from '@core/services/training/training.service';
-import { Router } from '@angular/router';
-import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -38,9 +34,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
   constructor(
       private userService: UserService,
       private trainingService: TrainingService,
-      private router: Router,
-      private localStorageService: LocalStorageService,
-
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -72,7 +65,7 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
        this.trainingService.getTraining(`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}`).subscribe((training) => {
           this.listTraining = training['results'];
           console.log('return data', this.listTraining);
-          this.ELEMENT_DATA.next(this.listTraining);
+          this.ELEMENT_DATA.next(training);
           resolve(this.listTraining);
        });
   });

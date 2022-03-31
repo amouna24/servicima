@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { takeUntil } from 'rxjs/operators';
-import { UserService } from '@core/services/user/user.service';
-import { ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { TrainingService } from '@core/services/training/training.service';
 
 @Component({
   selector: 'wid-training-add',
@@ -16,16 +15,17 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   constructor(
       private location: Location,
       private formBuilder: FormBuilder,
-      private userService: UserService,
-      private router: Router
+      private router: Router,
+      private localStorageService: LocalStorageService,
+      private trainingService: TrainingService
 
   ) { }
 
   title = 'Add Training';
   form: FormGroup;
   companyEmail: string;
+  applicationId: string;
   userInfo: IUserInfo;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**************************************************************************
    * @description back click
@@ -35,6 +35,7 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getDataFromLocalStorage();
     this.initForm();
   }
   /**
@@ -42,34 +43,22 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
    */
   initForm(): void {
     this.form = this.formBuilder.group({
-      application_id: [''],
-      email_address: [''],
-      training_code: [''],
+      application_id: [this.applicationId],
+      email_address: [this.companyEmail],
+      training_code: [`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TR`],
       title: ['', [Validators.required]],
       domain: ['', [Validators.required]],
       warned_number: [''],
       start_date: [''],
       end_date: [''],
       price: [''],
-      hours: [''],
+      warned_hours: [''],
       description: ['', [Validators.required]],
       online: [''],
       organisation_code: [''],
     });
   }
-  /**
-   * @description Get connected user
-   */
-  getConnectedUser(): void {
-    this.userService.connectedUser$.pipe(takeUntil(this.destroyed$))
-        .subscribe(
-            (userInfo) => {
-              if (userInfo) {
-                this.userInfo = userInfo['company'][0];
-                this.companyEmail = userInfo['company'][0]['companyKey']['email_address'];
-              }
-            });
-  }
+
   ngOnDestroy(): void {
   }
 
@@ -86,8 +75,26 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   next() {
     console.log(this.form.valid);
     console.log('value ', this.form.value);
-    this.router.navigate(['/manager/human-ressources/training/session-training']);
+ this.trainingService.addTraining(this.form.value).subscribe((data) => {
+   console.log('my data ', data);
+      this.router.navigate(['/manager/human-ressources/training/session-training'],
+          {
+            queryParams: {
+              code: btoa(data['Training']['TrainingKey']['training_code'])
+            }
+          }
+          );
 
+    });
+
+  }
+  /**
+   * @description Get data from localstorage
+   */
+  getDataFromLocalStorage() {
+    const cred = this.localStorageService.getItem('userCredentials');
+    this.applicationId = cred['application_id'];
+    this.companyEmail = cred['email_address'];
   }
 
 }
