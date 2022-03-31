@@ -34,8 +34,15 @@
                             <div fxLayout="column" fxFlex="80">
                                 <label class="font-size-12 required">{{'Domain' | translate | capitalizeFirstLetter}} </label>
                                 <mat-form-field appearance="outline">
-                                    <input autocomplete="off" matInput required [placeholder]=" 'Domain' | translate | capitalizeFirstLetter"
-                                           formControlName="domain" [ngStyle.xs]="{'font-size': '15px'}" />
+
+                                    <mat-select disableOptionCentering panelClass="panelColor"
+                                                placeholder="{{ 'Domain' | translate | capitalizeFirstLetter }}" formControlName="domain"
+                                                [ngStyle.xs]="{'font-size': '15px'}" class="font-size-12"
+                                    >
+                                        <mat-option *ngFor="let v of domainList.getValue()" [value]="v.value">
+                                            {{v.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
                                     <mat-error class="wid-error-messages" *ngIf="form.controls.domain?.errors?.required">
                                         {{ 'general.required' | translate }}</mat-error>
                                 </mat-form-field>

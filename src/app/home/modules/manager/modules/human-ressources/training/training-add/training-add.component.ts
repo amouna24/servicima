@@ -5,6 +5,10 @@ import { IUserInfo } from '@shared/models/userInfo.model';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { TrainingService } from '@core/services/training/training.service';
+import { RefdataService } from '@core/services/refdata/refdata.service';
+import { BehaviorSubject } from 'rxjs';
+import { IViewParam } from '@shared/models/view.model';
+import {UtilsService} from "@core/services/utils/utils.service";
 
 @Component({
   selector: 'wid-training-add',
@@ -17,7 +21,10 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       private formBuilder: FormBuilder,
       private router: Router,
       private localStorageService: LocalStorageService,
-      private trainingService: TrainingService
+      private trainingService: TrainingService,
+      private refDataService: RefdataService,
+      private utilsService: UtilsService,
+
 
   ) { }
 
@@ -26,6 +33,7 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   companyEmail: string;
   applicationId: string;
   userInfo: IUserInfo;
+  domainList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
 
   /**************************************************************************
    * @description back click
@@ -34,7 +42,8 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.getRefData();
     this.getDataFromLocalStorage();
     this.initForm();
   }
@@ -95,6 +104,14 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
     const cred = this.localStorageService.getItem('userCredentials');
     this.applicationId = cred['application_id'];
     this.companyEmail = cred['email_address'];
+  }
+  async getRefData() {
+    await this.refDataService.getRefData(
+        this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
+        this.applicationId,
+        ['WEEK_DAYS']
+    );
+    this.domainList.next(this.refDataService.refData['DOMAIN']);
   }
 
 }

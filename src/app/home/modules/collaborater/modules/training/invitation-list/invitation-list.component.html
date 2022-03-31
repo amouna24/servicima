@@ -13,7 +13,7 @@
         <div fxFlex="2" fxLayout="row">
             <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
         </div>
-        <wid-scrollbar class="scrollbar" style="width: 100%" @dataAppearance>
+        <wid-scrollbar class="scrollbar-invitation-list" style="width: 100%" @dataAppearance>
 
         <div  *ngIf="invitesTraining.length!==0" fxLayout="column" fxFlex="100" fxLayoutGap="8px" >
             <div class="steel font-size-20 font-normal">{{ 'Recent invitations' | translate | capitalizeFirstLetter }}</div>
@@ -61,5 +61,67 @@
             </div>
         </div>
         </wid-scrollbar>
+        <div  >
+            <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <span fxLayoutAlign="center center" class="black-three font-size-12">
+          {{ offset }} - {{ totalCountedItems || countedItems }} of {{ totalItems }}
+        </span>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('first-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">first_page</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('previous-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">navigate_before</span>
+                        </button>
+
+                        <ng-container *ngFor="let pageNumber of nbrPages">
+                            <button
+                                    mat-stroked-button
+                                    fxLayoutAlign="center center" class="next-previous-page font-size-12"
+                                    [ngClass] = "pageNumber === currentPage ? 'bg-topaz white'
+                                                  : 'bg-white-two black-three'"
+                                    (click)="getItemsPerPage('specific-page', pageNumber)"
+                            >
+                                <span>{{ pageNumber }}</span>
+                            </button>
+                        </ng-container>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('next-page')"
+                        >
+
+                            <span class="material-icons-outlined font-size-16">navigate_next</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('last-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">last_page</span>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
 </div>
 </div>
