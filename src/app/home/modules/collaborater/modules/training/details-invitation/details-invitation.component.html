@@ -80,10 +80,10 @@
                 <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" class="m-t-20">
                     <ng-container [ngSwitch]="trainingInformation.status_invite" >
                         <div  fxLayout="row"  fxFlex="100"  fxLayoutGap="8px" *ngSwitchCase="'PENDING'" fxLayoutAlign="center center"  >
-                            <button type="submit" mat-raised-button   class="black btn-small bg-pale-grey-two"  >
+                            <button type="submit" mat-raised-button   class="black btn-small bg-pale-grey-two" (click)="ignore()"  >
                                 <span  class="font-size-11" >{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
                             </button>
-                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small"  >
+                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="accept()" >
                                 <span   class="font-size-11 white">{{ 'Accept' | translate | capitalizeFirstLetter }}</span>
                             </button>
                         </div>

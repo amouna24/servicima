@@ -8,7 +8,7 @@ import { TrainingService } from '@core/services/training/training.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
 import { BehaviorSubject } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
-import {UtilsService} from "@core/services/utils/utils.service";
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-training-add',
@@ -24,7 +24,6 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       private trainingService: TrainingService,
       private refDataService: RefdataService,
       private utilsService: UtilsService,
-
 
   ) { }
 
@@ -43,9 +42,10 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.getRefData();
     this.getDataFromLocalStorage();
     this.initForm();
+    await this.getRefData();
+
   }
   /**
    * @description : initialization of the form
@@ -75,7 +75,7 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
    * @description reset form
    */
   cancel() {
-    this.form.reset();
+     this.form.reset();
   }
 
   /**
@@ -109,7 +109,7 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
     await this.refDataService.getRefData(
         this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
         this.applicationId,
-        ['WEEK_DAYS']
+        ['DOMAIN']
     );
     this.domainList.next(this.refDataService.refData['DOMAIN']);
   }

@@ -101,6 +101,16 @@ export class InvitationListComponent implements OnInit {
         .filter
         (x => (x.TrainingInviteCollaboratorKey.collaborator_email === event.TrainingInviteCollaboratorKey.collaborator_email)
             && (x.TrainingInviteCollaboratorKey.training_code === event.TrainingInviteCollaboratorKey.training_code))[0].status_invite = 'ACCEPT';
+    this.trainingService.updateTrainingInviteCollaborator({
+      'application_id': event.TrainingInviteCollaboratorKey.application_id,
+      'email_address': event.TrainingInviteCollaboratorKey.email_address,
+      'training_code': event.TrainingInviteCollaboratorKey.training_code,
+      'collaborator_email': event.TrainingInviteCollaboratorKey.collaborator_email,
+      'status_invite': 'ACCEPT',
+      'status': 'ACTIVE'
+    }).subscribe((invite) => {
+      console.log('invite success');
+    });
     this.ELEMENT_DATA.next(this.invitesTraining);
     this.PENDING_DATA.next(this.ELEMENT_DATA.getValue().filter(x => x.status_invite === 'PENDING'));
     this.IGNORED_DATA.next(this.ELEMENT_DATA.getValue().filter(x => x.status_invite === 'IGNORED'));
@@ -115,6 +125,17 @@ export class InvitationListComponent implements OnInit {
         .filter
         (x => (x.TrainingInviteCollaboratorKey.collaborator_email === event.TrainingInviteCollaboratorKey.collaborator_email)
         && (x.TrainingInviteCollaboratorKey.training_code === event.TrainingInviteCollaboratorKey.training_code))[0].status_invite = 'IGNORED';
+   this.trainingService.updateTrainingInviteCollaborator({
+     'application_id': event.TrainingInviteCollaboratorKey.application_id,
+     'email_address': event.TrainingInviteCollaboratorKey.email_address,
+     'training_code': event.TrainingInviteCollaboratorKey.training_code,
+     'collaborator_email': event.TrainingInviteCollaboratorKey.collaborator_email,
+     'status_invite': 'IGNORED',
+     'status': 'ACTIVE'
+   }).subscribe((invite) => {
+     console.log('my invite ', invite);
+     console.log('invite success');
+   });
    this.ELEMENT_DATA.next(this.invitesTraining);
     this.PENDING_DATA.next(this.ELEMENT_DATA.getValue().filter(x => x.status_invite === 'PENDING'));
     this.IGNORED_DATA.next(this.ELEMENT_DATA.getValue().filter(x => x.status_invite === 'IGNORED'));
