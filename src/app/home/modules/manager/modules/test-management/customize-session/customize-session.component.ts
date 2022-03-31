@@ -28,6 +28,7 @@ export class CustomizeSessionComponent implements OnInit {
   applicationId: string;
   companyEmailAddress: string;
   mode: string;
+  showblocQuestionsList = [];
   constructor(
     private testService: TestService,
     private utilsService: UtilsService,
@@ -133,12 +134,14 @@ export class CustomizeSessionComponent implements OnInit {
             this.totalPoints += Number(resOneNode.mark);
           });
       });
+      this.showblocQuestionsList = this.blocQuestionsList;
     });
   }
   dragAndDrop(event: CdkDragDrop<Array<{ questionDetails: ITestQuestionModel; bloc_title: string; color: string }>, any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      console.log('current event', event),
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -180,9 +183,9 @@ export class CustomizeSessionComponent implements OnInit {
     }
   }
   addRandomQuestion() {
-    const randomNumber = Math.floor(Math.random() * this.blocQuestionsList.length);
-    this.sessionQuestionsList.push(this.blocQuestionsList[randomNumber]);
-    this.blocQuestionsList.splice(randomNumber, 1);
+    const randomNumber = Math.floor(Math.random() * this.showblocQuestionsList.length);
+    this.sessionQuestionsList.push(this.showblocQuestionsList[randomNumber]);
+    this.showblocQuestionsList.splice(randomNumber, 1);
   }
   setDuration(duration) {
     const displayedHours = Math.floor(duration / 3600) <= 9 ? '0' + Math.floor(duration / 3600) : Math.floor(duration / 3600);
@@ -386,5 +389,23 @@ export class CustomizeSessionComponent implements OnInit {
           });
         }
       });
+  }
+
+  updateAvailableQuestions() {
+    this.sessionQuestionsList.map( (oneSession) => {
+      this.blocQuestionsList.map((oneBloc, index) => {
+        if (oneSession === oneBloc) {
+          this.blocQuestionsList.splice(index, 1);
+        }
+      });
+    });
+    this.showblocQuestionsList = this.blocQuestionsList.filter( (data) => {
+      const selectField = data.questionDetails.test_question_title;
+      return selectField?.toLowerCase().includes(this.searchField.toLowerCase());
+    }).filter( (dataSelect) => {
+      const selectField = dataSelect.technology;
+      return selectField?.toLowerCase().includes(this.selectSearchField.toLowerCase());
+    });
+    console.log('show bloc questions', this.showblocQuestionsList);
   }
 }
