@@ -13,7 +13,7 @@ export class FilterDataPipe implements PipeTransform {
         objectKeysArray.map( (key) => {
           selectField = selectField[key];
         });
-        return selectField.toLowerCase().includes(filters.toLowerCase());
+        return selectField?.toLowerCase().includes(filters.toLowerCase());
       });
     } else {
       return list;
