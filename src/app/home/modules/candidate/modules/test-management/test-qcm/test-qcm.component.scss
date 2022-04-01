@@ -171,6 +171,9 @@ transform: scaleX(-1);
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+.opacity-30 {
+  opacity: 30%;
+}
 @keyframes lastSecondAnimation {
   0% {
     transform: translateY(10px);

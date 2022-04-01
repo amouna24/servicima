@@ -5,9 +5,9 @@
     mode="indeterminate">
   </mat-progress-spinner>
 </div>
-<div *ngIf="!isLoading.getValue();">
+<div *ngIf="!isLoading.getValue();" fxLayoutAlign="center">
 <div class="licence-container"
-     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="85">
   <div fxLayout="row" fxFlex="15" fxLayoutGap="50px" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="row" fxFlex="50" fxLayoutGap="15px" class=" m-l-60">
       <div fxLayout="column"> <img [src]="env + photo" [width]='50'
