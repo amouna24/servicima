@@ -208,7 +208,11 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   addIndex() {
     this.enableNextButton = false;
     this.disableChoices = false;
-    this.checkedChoices = this.answeredQuestions[this.index + 1] ? [...this.answeredQuestions[this.index + 1].choiceCode] : [];
+    this.checkedChoices = this.answeredQuestions
+      .map((oneQuestion) => oneQuestion.questionNumber)
+      .includes(this.index + 2) ? [...this.answeredQuestions[this.answeredQuestions
+      .findIndex((obj => obj.questionNumber === this.index + 2))].choiceCode] : [];
+    console.log('checked choice', this.checkedChoices, 'answered questions', this.answeredQuestions);
     if ((this.questionsList.length - 1) > this.index) {
       this.animationStateNext = true;
       setTimeout(() => {
@@ -223,7 +227,12 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   reduceIndex() {
     this.enableNextButton = false;
     this.disableChoices = false;
-    this.checkedChoices = this.answeredQuestions[this.index - 1] ? [...this.answeredQuestions[this.index - 1].choiceCode] : [];
+    this.checkedChoices = this.answeredQuestions
+      .map((oneQuestion) => oneQuestion.questionNumber)
+      .includes(this.index) ? [...this.answeredQuestions[this.answeredQuestions
+      .findIndex((obj => obj.questionNumber === this.index))].choiceCode] : [];
+    console.log('checked choice', this.checkedChoices, 'answered questions', this.answeredQuestions);
+
     if (this.index > 0) {
       this.animationStatePrevious = true;
       setTimeout(() => {
@@ -300,7 +309,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         };
       }
       const skippedQuestionIndex = this.skippedQuestions.findIndex((obj => obj.questionNumber === this.index + 1));
-      this.skippedQuestions.splice(skippedQuestionIndex, 1);
+      if (this.skippedQuestions.findIndex((obj => obj.questionNumber === this.index + 1)) !== -1) {
+        this.skippedQuestions.splice(skippedQuestionIndex, 1);
+      }
 
     }
 

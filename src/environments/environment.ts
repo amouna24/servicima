@@ -84,7 +84,7 @@ export const environment = {
   testCandidateResultApiUrl: 'http://213.136.74.202/testcandidateresult',
   testSessionQuestionsApiUrl: 'http://213.136.74.202/testsessionquestions',
   testInviteCandidatesApiUrl: 'http://213.136.74.202/testinvitecandidates',
-  testSessionApiUrl: 'http://127.0.0.1:8120/servicima/testsession/v1',
+  testSessionApiUrl: 'http://213.136.74.202/testsession',
   projectCollaboratorApiUrl: 'http://213.136.74.202/projectcollaborator',
   linkedInOauthApiUrl: 'http://213.136.74.202/socialnetwork',
   servicimaUrl: 'http://localhost:4200',
