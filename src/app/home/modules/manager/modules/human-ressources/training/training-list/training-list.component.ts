@@ -5,6 +5,7 @@ import { ITraining } from '@shared/models/training.model';
 import { UserService } from '@core/services/user/user.service';
 import { TrainingService } from '@core/services/training/training.service';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-training-list',
@@ -15,7 +16,7 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
   type = 'Trainings';
   title = 'List Trainings';
   ELEMENT_DATA = new BehaviorSubject<ITraining[]>([]);
-  isLoading = new BehaviorSubject<boolean>(false);
+  isLoading = new BehaviorSubject<boolean>(true);
   listTraining: ITraining[];
   companyEmail: string;
   finalMapping = new BehaviorSubject<any>([]);
@@ -27,13 +28,17 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
   subscriptionModal: Subscription;
   nbtItems = new BehaviorSubject<number>(5);
   featureAdd = 'SOURCING_CAND_FILE_ACCESS';
+
   tabFeatureAccess = [
     { name: 'Update', feature: 'SOURCING_CAND_FILE_ACCESS'},
+    { name: 'update session', feature: 'SOURCING_CAND_FILE_ACCESS'},
     { name: 'Delete', feature: 'SOURCING_CAND_FILE_ACCESS'},
     { name: 'Archiver', feature: 'SOURCING_CAND_FILE_ACCESS'}];
   constructor(
       private userService: UserService,
       private trainingService: TrainingService,
+      private router: Router,
+
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -66,6 +71,7 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
           this.listTraining = training['results'];
           console.log('return data', this.listTraining);
           this.ELEMENT_DATA.next(training);
+          this.isLoading.next(false);
           resolve(this.listTraining);
        });
   });
@@ -84,7 +90,9 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
          break;
        case ('archive') : console.log('archive');
          break;
-       case ('update') : console.log('update');
+       case ('update session') : this.updateSession(rowAction.data);
+         break;
+       case ('update') : this.update(rowAction.data);
        break;
      }
   }
@@ -96,4 +104,30 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
     this.nbtItems.next(params.limit);
     await this.getTrainings(params.limit, params.offset);
   }
+  /**************************************************************************
+   * @description update
+   * @param params object
+   *************************************************************************/
+   update(training: ITraining) {
+    this.router.navigate(['/manager/human-ressources/training/training-update'], {
+      queryParams: {
+        id: btoa(training._id),
+        tc: btoa(training.TrainingKey.training_code)
+      }
+    });
+
+  }
+  /**************************************************************************
+   * @description update session
+   * @param params object
+   *************************************************************************/
+  updateSession(training: ITraining) {
+    this.router.navigate(['/manager/human-ressources/training/session-training-update'], {
+      queryParams: {
+        id: btoa(training[0]._id),
+        code: btoa(training[0].TrainingKey.training_code)
+      }
+    });
+  }
+
 }

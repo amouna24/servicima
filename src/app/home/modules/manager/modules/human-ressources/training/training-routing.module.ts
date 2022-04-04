@@ -11,7 +11,15 @@ const routes: Routes = [
     component: TrainingAddComponent
   },
   {
+    path: 'training-update',
+    component: TrainingAddComponent
+  },
+  {
     path: 'session-training',
+    component: SessionsTrainingComponent
+  },
+  {
+    path: 'session-training-update',
     component: SessionsTrainingComponent
   },
   {

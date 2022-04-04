@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ModalService } from '@core/services/modal/modal.service';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, ReplaySubject, Subject } from 'rxjs';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { IViewParam } from '@shared/models/view.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,6 @@ import { InviteCollaboratorComponent } from '../invite-collaborator/invite-colla
   ]
 })
 export class SessionsTrainingComponent implements OnInit {
-  @Input() update = false;
   title = 'Session List';
   listCollaborators: any;
   training: ITraining;
@@ -44,6 +43,9 @@ export class SessionsTrainingComponent implements OnInit {
   timeDisplay: BehaviorSubject<string> = new BehaviorSubject<string>('00:00');
   destroy$: Subject<boolean> = new Subject<boolean>();
   done = false;
+  id = '';
+  code = '';
+  sessionCode: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -61,19 +63,25 @@ export class SessionsTrainingComponent implements OnInit {
       private route: ActivatedRoute,
 
   ) {
-    this.initForm();
-  }
-  async getData() {
       this.route.queryParams
           .pipe(
               takeUntil(this.destroy$)
           )
           .subscribe( params => {
-              this.trainingService.getTraining(`?training_code=${atob(params.code)}`).subscribe((data) => {
-                  this.training = data['results'][0];
-                  console.log('my training ', this.training);
-              });
+              if (params.id) {
+                  this.id = atob(params.id);
+                  this.code = atob(params.code);
+                  this.getTrainingWithSessions(this.id, this.code);
+              } else {
+                  this.trainingService.getTraining(`?training_code=${atob(params.code)}`).subscribe((data) => {
+                      this.training = data['results'][0];
+                  });
+              }
+
           });
+    this.initForm();
+  }
+   getData() {
 
     if (this.trainingSessions.length !== 0) {
     this.trainingSessions.map((t) => {
@@ -90,7 +98,6 @@ export class SessionsTrainingComponent implements OnInit {
         { modalName: 'inviteCollaborator', modalComponent: InviteCollaboratorComponent});
     await this.getConnectedUser();
     await this.getRefData();
-    await this.getData();
     await this.getCollaborator();
   }
   /**************************************************************************
@@ -117,28 +124,65 @@ export class SessionsTrainingComponent implements OnInit {
       day: [''],
       time: [''],
       durration: [''],
+      _id: ''
     });
   }
   /**
    * @description : initialization of the form
    */
   addSession() {
+      if (this.form.value._id !== '') {
+        const session =  this.trainingSessions
+              .filter
+              (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0];
+          const duration = session.durration.split(':');
+          const totalDurr = this.convertTimeToMinute(parseInt(duration[0], null), parseInt(duration[1], null));
+          const tot =  this.totalMinutesSessions.getValue() - totalDurr;
+          this.totalMinutesSessions.next(tot);
+
+      }
     const ar = this.form.value.durration.split(':');
     const total = this.convertTimeToMinute(parseInt(ar[0], null), parseInt(ar[1], null));
     console.log('my total ', total);
-    const t = total + this.totalMinutesSessions.getValue();
-    if (t <= this.training.warned_hours * 60) {
-      this.trainingSessions.push({
-        _id: '', status: '',
-        TrainingSessionWeekKey: null,
-        day: this.form.value.day,
-        time: this.form.value.time,
-        durration: this.form.value.durration
-      });
-      this.totalMinutesSessions.next(t);
-      this.timeDisplay.next(this.displayTotalHours(t));
+    if (total > 15) {
+        const t = total + this.totalMinutesSessions.getValue();
+        if (t <= this.training.warned_hours * 60) {
+            if (this.form.value._id !== '') {
+                this.trainingSessions
+                    .filter
+                    (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].day = this.form.value.day;
+                this.trainingSessions
+                    .filter
+                    (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].time = this.form.value.time;
+                this.trainingSessions
+                    .filter
+                    (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].durration = this.form.value.durration;
+                this.totalMinutesSessions.next(t);
+                this.timeDisplay.next(this.displayTotalHours(this.totalMinutesSessions.getValue()));
+
+            } else {
+
+                this.trainingSessions.push({
+                    _id: '', status: 'ACTIVE',
+                    TrainingSessionWeekKey: { application_id : this.applicationId,
+                        email_address: this.companyEmail,
+                        training_code: this.training.TrainingKey.training_code,
+                        session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-SESSION`
+                    },
+                    day: this.form.value.day,
+                    time: this.form.value.time,
+                    durration: this.form.value.durration
+                });
+            }
+            this.totalMinutesSessions.next(t);
+            this.timeDisplay.next(this.displayTotalHours(t));
+            this.resetForm();
+        } else {
+            this.utilsService.openSnackBar('time invalid', 'close', 3000);
+        }
     } else {
-      this.utilsService.openSnackBar('time invalid', 'close', 3000);
+        this.utilsService.openSnackBar('durration invalid', 'close', 3000);
+
     }
 
   }
@@ -179,17 +223,32 @@ export class SessionsTrainingComponent implements OnInit {
   next() {
       if (this.training.warned_hours * 60 === this.totalMinutesSessions.getValue()) {
           this.trainingSessions.map((session) => {
-              this.trainingService.addTrainingSession({
-                  application_id: this.applicationId,
-                  email_address: this.companyEmail,
-                  training_code: this.training.TrainingKey.training_code,
-                  session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-SESSION`,
-                  day: session.day,
-                  time: session.time,
-                  durration: session.durration
-              }).subscribe((data) => {
-                  console.log('session added successfully');
-              });
+              if (session._id === '') {
+                  this.trainingService.addTrainingSession({
+                      application_id: this.applicationId,
+                      email_address: this.companyEmail,
+                      training_code: this.training.TrainingKey.training_code,
+                      session_code: session.TrainingSessionWeekKey.session_code,
+                      day: session.day,
+                      time: session.time,
+                      durration: session.durration
+                  }).subscribe((data) => {
+                      console.log('session added successfully');
+                  });
+              } else {
+                  this.trainingService.updateTrainingSession(
+                      {
+                      application_id: this.applicationId,
+                      email_address: this.companyEmail,
+                      training_code: this.training.TrainingKey.training_code,
+                      session_code: session.TrainingSessionWeekKey.session_code,
+                      day: session.day,
+                      time: session.time,
+                      durration: session.durration
+                  }).subscribe((data) => {
+                      console.log('session added successfully');
+                  });
+              }
 
           });
           this.done = true;
@@ -222,9 +281,15 @@ export class SessionsTrainingComponent implements OnInit {
    return hoursString + ':' + minutesString;
 
   }
+    /**
+     * @description back to the main List
+     */
   back(event) {
     this.router.navigate(['/manager/human-ressources/training/training-list']);
   }
+    /**
+     * @description Invite Collaborator
+     */
   invite(event) {
     this.modalService.displayModal('inviteCollaborator', {
             listCollaborators: this.listCollaborators,
@@ -267,6 +332,95 @@ export class SessionsTrainingComponent implements OnInit {
                     });
                 this.listCollaborators = _.orderBy(this.listCollaborators, [collab => collab.full_name.toLowerCase()], ['asc']);
             });
+    }
+    /**
+     * @description Get Training sessions for update
+     */
+    getTrainingWithSessions(ID: string, code: string) {
+        forkJoin([
+            this.trainingService.getTraining(`?_id=${ID}`),
+            this.trainingService.getTrainingSession(`?training_code=${code}`)
+        ]).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(async (res) => {
+            this.training = res[0]['results'][0];
+            this.training = res[0]['results'][0];
+            if (res[1]['results'] === []) {
+            this.trainingSessions = [];
+            } else {
+            this.trainingSessions = res[1]['results'];
+            this.getInitialTotalHours();
+            this.showForm = true;
+            }
+
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    /**
+     * @description affiche total hours
+     */
+    getInitialTotalHours() {
+        this.trainingSessions.map((session) => {
+            const ar = session.durration.split(':');
+            const total = this.convertTimeToMinute(parseInt(ar[0], null), parseInt(ar[1], null));
+            console.log('my total ', total);
+            const t = total + this.totalMinutesSessions.getValue();
+            this.totalMinutesSessions.next(t);
+        });
+        console.log('get initial data ', this.totalMinutesSessions.getValue());
+        this.timeDisplay.next(this.displayTotalHours(this.totalMinutesSessions.getValue()));
+
+    }
+
+    /**
+     * @ description
+     */
+    resetForm() {
+        this.form.get('application_id').setValue('');
+        this.form.get('email_address').setValue('');
+        this.form.get('session_code').setValue('');
+        this.form.get('training_code').setValue('');
+        this.form.get('day').setValue('');
+        this.form.get('time').setValue('');
+        this.form.get('durration').setValue('');
+        this.form.get('_id').setValue('');
+    }
+
+    /**
+     * @description check dates contains day
+     */
+    checkDateDay(dateStart: Date, dateEnd: Date) {
+       console.log(new Date(dateStart).getDay());
+    }
+    weeksBetween(d1: number, d2: number) {
+        return Math.round((d2 - d1) / (7 * 24 * 60 * 60 * 1000));
+    }
+
+    /**
+     * @description Update Date
+     */
+    updateHours(session: any) {
+        console.log('my form ', this.form.value);
+        if (this.form.value.session_code !== '') {
+            this.utilsService.openSnackBar('you must submit your update', 'close', 3000);
+        } else {
+            console.log('get initaaaaaaaaa ', this.totalMinutesSessions.getValue());
+            this.showForm = true;
+            this.form.setValue({
+                application_id: this.applicationId,
+                email_address: this.companyEmail,
+                training_code: session?.TrainingSessionWeekKey?.training_code,
+                session_code: session?.TrainingSessionWeekKey?.session_code,
+                day: session?.day,
+                time: session?.time,
+                durration: session?.durration,
+                _id: session?._id
+            });
+            this.sessionCode.next(session?.TrainingSessionWeekKey?.session_code);
+        }
+
     }
 
 }

@@ -82,7 +82,7 @@
                     <th>Time</th>
                     <th>Durrations</th>
                 </tr>
-                <tr *ngFor="let s of trainingSessions">
+                <tr *ngFor="let s of trainingSessions"  (click)="updateHours(s)">
                     <td>{{ s.day }}</td>
                     <td>{{ s.time }}</td>
                     <td>{{ s.durration }}</td>

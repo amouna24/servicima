@@ -13,7 +13,12 @@
         <div fxFlex="2" fxLayout="row">
             <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
         </div>
-        <wid-scrollbar class="scrollbar" style="width: 100%">
+        <wid-skeleton-loader
+                height="35" width="250"
+                *ngIf="isLoading.getValue()" nbrRow=8
+                nbrColumn=2
+        ></wid-skeleton-loader>
+        <wid-scrollbar class="scrollbar" style="width: 100%" *ngIf="!isLoading.getValue()">
 
         <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 " [formGroup]="form" >
             <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" >

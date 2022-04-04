@@ -2,13 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IUserInfo } from '@shared/models/userInfo.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { TrainingService } from '@core/services/training/training.service';
 import { RefdataService } from '@core/services/refdata/refdata.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
 import { IViewParam } from '@shared/models/view.model';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { takeUntil } from 'rxjs/operators';
+import { ITraining } from '@shared/models/training.model';
 
 @Component({
   selector: 'wid-training-add',
@@ -16,6 +18,17 @@ import { UtilsService } from '@core/services/utils/utils.service';
   styleUrls: ['./training-add.component.scss']
 })
 export class TrainingAddComponent implements OnInit, OnDestroy {
+    title = 'Add Training';
+    form: FormGroup;
+    trainingCode = '';
+    id = '';
+    isLoading = new BehaviorSubject<boolean>(false);
+    destroy$: Subject<boolean> = new Subject<boolean>();
+    companyEmail: string;
+    applicationId: string;
+    userInfo: IUserInfo;
+    domainList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+    trainingInfo: ITraining;
   constructor(
       private location: Location,
       private formBuilder: FormBuilder,
@@ -24,15 +37,24 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       private trainingService: TrainingService,
       private refDataService: RefdataService,
       private utilsService: UtilsService,
+      private route: ActivatedRoute,
 
-  ) { }
+  ) {
+      this.getDataFromLocalStorage();
+      this.initForm();
+      this.route.queryParams
+          .pipe(
+              takeUntil(this.destroy$)
+          )
+          .subscribe( params => {
+              if (params.id) {
+                  this.trainingCode = atob(params.tc);
+                  this.id = params.id;
+                  this.getTrainingByID(this.id);
+              }
 
-  title = 'Add Training';
-  form: FormGroup;
-  companyEmail: string;
-  applicationId: string;
-  userInfo: IUserInfo;
-  domainList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+          });
+  }
 
   /**************************************************************************
    * @description back click
@@ -42,8 +64,6 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.getDataFromLocalStorage();
-    this.initForm();
     await this.getRefData();
 
   }
@@ -75,26 +95,35 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
    * @description reset form
    */
   cancel() {
-     this.form.reset();
+      if (this.id || this.id !== '') {
+         this.updateForm(this.trainingInfo);
+      } else {
+          this.form.reset();
+
+      }
   }
 
   /**
    * @description submit function
    */
   next() {
-    console.log(this.form.valid);
-    console.log('value ', this.form.value);
- this.trainingService.addTraining(this.form.value).subscribe((data) => {
-   console.log('my data ', data);
-      this.router.navigate(['/manager/human-ressources/training/session-training'],
-          {
-            queryParams: {
-              code: btoa(data['Training']['TrainingKey']['training_code'])
+if (this.id || this.id !== '') {
+    this.trainingService.updateTraining(this.form.value).subscribe((data) => {
+        this.utilsService.openSnackBar('Training Updated successfully');
+    });
+} else {
+    this.trainingService.addTraining(this.form.value).subscribe((data) => {
+        console.log('my data ', data);
+        this.router.navigate(['/manager/human-ressources/training/session-training'],
+            {
+                queryParams: {
+                    code: btoa(data['Training']['TrainingKey']['training_code'])
+                }
             }
-          }
-          );
+        );
 
     });
+}
 
   }
   /**
@@ -113,5 +142,47 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
     );
     this.domainList.next(this.refDataService.refData['DOMAIN']);
   }
+
+    /**
+     * @description Get Training to be updated
+     */
+    getTrainingByID(ID: string) {
+        this.isLoading.next(true);
+        forkJoin([
+            this.trainingService.getTraining(`?_id=${atob(ID)}`)
+        ]).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(async (res) => {
+            this.trainingInfo = res[0]['results'][0];
+            console.log('my training info ', this.trainingInfo);
+            this.updateForm(this.trainingInfo);
+            this.isLoading.next(false);
+
+        }, (error) => {
+            console.log(error);
+        });
+
+    }
+
+    /**
+     * @description Update Form Training
+     */
+    updateForm(training: ITraining) {
+         this.form.setValue({
+             application_id: this.applicationId,
+             email_address: this.companyEmail,
+             training_code: training?.TrainingKey?.training_code,
+             title: training?.title,
+             domain: training?.domain,
+             warned_number: training?.warned_number,
+             start_date: training?.start_date,
+             end_date: training?.end_date,
+             price: training?.price,
+             warned_hours: training?.warned_hours,
+             description: training?.description,
+             online: training?.online,
+             organisation_code: training?.organisation_code,
+         });
+    }
 
 }
