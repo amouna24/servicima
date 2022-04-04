@@ -54,7 +54,19 @@
                 {{ 'general.required' | translate }}
               </mat-error>
             </div>
-
+            <div fxLayout="column" class="name-session">
+              <mat-label class="font-size-12 black font-normal">
+                Minimal score expected:
+              </mat-label>
+              <mat-form-field [style]="{'width': '70%', 'height': '80%', 'fontSize': '11px'}" appearance="outline">
+                <input matInput placeholder="Minimal score expected" formControlName="minimalScore" type="number" min="0" max="100"
+                       class="font-extra-light font-size-12">
+              </mat-form-field>
+              <mat-error class="wid-error-messages" *ngIf="form.controls.minimalScore?.errors?.required &&
+               form.controls.copyPaste.touched">
+                {{ 'general.required' | translate }}
+              </mat-error>
+            </div>
 
             <div fxLayout="column" fxLayoutGap="15px">
 

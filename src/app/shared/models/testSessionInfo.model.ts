@@ -10,6 +10,7 @@ export interface ITestSessionInfoModel {
   test_session_time: number;
   copy_paste: boolean;
   send_report: boolean;
+  minimal_score: number;
   company_email: string;
   application_id: string;
   session_code: string;
