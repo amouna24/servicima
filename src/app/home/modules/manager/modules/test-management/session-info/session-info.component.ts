@@ -109,6 +109,7 @@ export class SessionInfoComponent implements OnInit {
       sessionName: ['', [Validators.required]],
       experienceRequired: ['', [Validators.required]],
       language: ['', [Validators.required]],
+      minimalScore: ['', [Validators.required, Validators.max(100), Validators.min(0)]],
       copyPaste: ['', [Validators.required]],
       sendReport: ['', [Validators.required]],
     });
@@ -288,6 +289,7 @@ export class SessionInfoComponent implements OnInit {
             session_name: this.form.controls.sessionName.value,
             test_session_timer_type: 'time_per_question',
             test_session_time: 0,
+            minimal_score: this.form.controls.minimalScore.value,
             level_code: this.form.controls.experienceRequired.value,
             language_id: this.form.controls.language.value,
             copy_paste: this.form.controls.copyPaste.value,
@@ -316,6 +318,7 @@ export class SessionInfoComponent implements OnInit {
           session_name: this.form.controls.sessionName.value,
           test_session_timer_type: this.sessionInfo.test_session_timer_type,
           level_code: this.form.controls.experienceRequired.value,
+          minimal_score: this.form.controls.minimalScore.value,
           test_session_time: this.sessionInfo.test_session_time,
           language_id: this.form.controls.language.value,
           copy_paste: this.form.controls.copyPaste.value,
@@ -382,6 +385,7 @@ export class SessionInfoComponent implements OnInit {
               experienceRequired: sessionInfo[0].level_code,
               language: sessionInfo[0].language_id,
               copyPaste: sessionInfo[0].copy_paste,
+              minimalScore: sessionInfo[0].minimal_score,
               sendReport: sessionInfo[0].send_report,
             });
         });

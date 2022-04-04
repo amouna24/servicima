@@ -29,6 +29,7 @@ export class CustomizeSessionComponent implements OnInit {
   companyEmailAddress: string;
   mode: string;
   showblocQuestionsList = [];
+  minimalScore: number;
   constructor(
     private testService: TestService,
     private utilsService: UtilsService,
@@ -67,6 +68,7 @@ export class CustomizeSessionComponent implements OnInit {
     await this.getBlocQuestionsData();
     this.getBlocTitleAndPoints();
     this.getTechnologies();
+    this.getMinimalScore();
   }
   getBlocQuestionsData() {
     this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe((resNode) => {
@@ -407,5 +409,15 @@ export class CustomizeSessionComponent implements OnInit {
       return selectField?.toLowerCase().includes(this.selectSearchField.toLowerCase());
     });
     console.log('show bloc questions', this.showblocQuestionsList);
+  }
+  getMinimalScore() {
+    this.testService
+      .getSessionInfo(`?company_email=${
+        this.companyEmailAddress}&application_id=${
+        this.applicationId}&session_code=${
+        this.sessionCode}`)
+      .subscribe((sessionInfo) => {
+        this.minimalScore = sessionInfo[0].minimal_score;
+      });
   }
 }

@@ -36,6 +36,7 @@ export class WelcomeToTestComponent implements OnInit {
   photo: string;
   helpMenuOpen: string;
   env = environment.uploadFileApiUrl + '/show/';
+  minimalScore: number;
   constructor(private route: ActivatedRoute,
               private cryptoService: CryptoService,
               private testService: TestService,
@@ -94,6 +95,7 @@ export class WelcomeToTestComponent implements OnInit {
     this.testService
       .getSessionInfo(`?company_email=${this.emailAddress}&application_id=${this.applicationId}&session_code=${this.queryList?.session_code}`)
       .subscribe((data) => {
+      this.minimalScore = data[0].minimal_score;
       this.totalTime = data[0]['test_session_time'] ;
       this.nameSession = data[0]['session_name'];
     });
