@@ -1,0 +1,16 @@
+<div fxLayout="column" fxFlex="100" class="font-size-12 black">
+    <div fxFlex="28"   fxLayoutAlign="center center" fxLayout="row"  [ngStyle]="{'color': title.color }" class="session-ready  font-size-24">
+        {{title.name | translate}}
+    </div>
+    <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center center">
+        <img  [src]="'assets/img/' + image.path" alt="" >
+    </div>
+    <div fxFlex="28" fxLayout="row"  fxLayoutAlign="center center" class="font-size-18 font-extra-light black-three" > {{message | translate}} </div>
+    <div fxFlex="20" fxLayout="row"  fxLayoutAlign="center start" fxLayoutGap="20px">
+
+        <div fxLayout="row" fxFlex fxLayoutAlign="center center" fxLayoutGap="16px" >
+            <button (click)="homeClick()" mat-button [ngStyle]="{'color': home.color, 'background': home.background }" class="btn-large font-medium"> {{home.name | translate}} </button>
+            <button (click)="inviteClick()" mat-button [ngStyle]="{'color': invite.color, 'background': invite.background }" class="btn-large font-medium"> {{invite.name | translate}} </button>
+        </div>
+    </div>
+</div>

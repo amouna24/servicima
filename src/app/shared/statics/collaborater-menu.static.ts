@@ -62,9 +62,18 @@ export const collaboraterMenu: IMenu[] = [
   {
     state: 'training',
     name: 'training',
-    type: 'link',
+    type: 'sub',
     icon: 'wi_dashboard',
     feature: 'SOURCING_CAND_FILE_ACCESS',
+    children: [
+      {
+        state: 'invitation-list',
+        name: 'Invitation List',
+        icon: '',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
+        type: 'link',
+      },
+    ]
   },
   {
     state: 'work-certificates',

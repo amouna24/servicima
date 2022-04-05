@@ -1,0 +1,38 @@
+<div fxLayout="row" fxFlex="90"   class="invitation-card" >
+    <div fxLayout="row" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '1%'}" *ngIf="data" fxLayoutAlign="space-between center"  >
+        <div fxLayout="row" fxFlex="25" fxLayoutGap="8px" class="details-training" (click)="showDetails()" >
+            <div class="img-organisation" fxLayout="row" fxLayoutAlign="center center">
+                <img src="assets/img/google.png" alt="" [ngStyle]="{ 'width': '20px', 'height' : '20px'}"  />
+            </div>
+            <div fxLayout="column" fxLayoutGap="4px">
+               <div class="font-semi-bold font-size-12">{{ data.title }}</div>
+                <div class="font-size-9">{{ data.organisation_code }}</div>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxFlex="25"  [ngStyle]="{ 'marginRight': '4%'}">
+
+                <ng-container [ngSwitch]="data.status_invite" >
+                    <div  fxLayout="row"  fxFlex="100"  fxLayoutGap="8px" *ngSwitchCase="'PENDING'"  >
+                        <button type="submit" mat-raised-button   class="black btn-small bg-white" (click)="ignore()" >
+                            <span  class="font-size-11" >{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
+                        </button>
+                        <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="accept()"  >
+                            <span   class="font-size-11 white">{{ 'Accept' | translate | capitalizeFirstLetter }}</span>
+                        </button>
+                    </div>
+                    <div  fxLayout="row"  fxFlex="100"   *ngSwitchCase="'ACCEPT'"  >
+                        <span class="font-size-11 cerulean-blue">{{ 'Accept' | translate | capitalizeFirstLetter }}</span>
+                    </div>
+                    <div  fxLayout="row"  fxFlex="100"  fxLayoutAlign="center end"  *ngSwitchCase="'IGNORED'" >
+                        <span class="font-size-11 danger">{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
+                    </div>
+                </ng-container>
+
+
+
+
+        </div>
+
+    </div>
+</div>
