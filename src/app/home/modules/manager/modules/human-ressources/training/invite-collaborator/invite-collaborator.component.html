@@ -1,9 +1,13 @@
 <wid-dialog-invite [tableColumns] = "tableColumns"
-                   (listChecked) = sendRequest($event)
+                   (AddButton) = sendRequest($event)
                    [specificData] = '{component:"match_expresson_2", params:training.warned_number}'
                    [data]  ="data.listCollaborators"
-                   [column]="'full_name'"
                    [title]="'Invite collaborators'"
+                   [titleAddButton] ="'Add Collaborators'"
+                   [buttonLeft] = "{'background':'#f3f6f9', color: 'black',title: 'Cancel' }"
+                   [buttonRight] = "{'background':'#0067e0', color: 'white',title: 'Invite' }"
                    (cancelButton)="cancel()"
+                   [sortColumn]="'full_name'"
+                   (inviteButton)="sendRequest($event)"
 >
 </wid-dialog-invite>
