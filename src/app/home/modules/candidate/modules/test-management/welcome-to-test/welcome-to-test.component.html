@@ -5,9 +5,9 @@
     mode="indeterminate">
   </mat-progress-spinner>
 </div>
-<div *ngIf="!isLoading.getValue();">
+<div *ngIf="!isLoading.getValue();" fxLayoutAlign="center">
 <div class="licence-container"
-     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
+     fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="85">
   <div fxLayout="row" fxFlex="15" fxLayoutGap="50px" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="row" fxFlex="50" fxLayoutGap="15px" class=" m-l-60">
       <div fxLayout="column"> <img [src]="env + photo" [width]='50'
@@ -27,7 +27,7 @@
            fxLayout="column" fxLayoutAlign="start"  >
 
        <div class="full-height-test" *ngIf="statusLink == 'link invalid'">
-         <wid-component-info class="full-height-test" [title]="{ name: 'Test passed', color:'#f1c40f'}"
+         <wid-component-info [title]="{ name: 'Test passed', color:'#f1c40f'}"
                              [image]= "{ path:'warning-sign.svg',height:'110px' }"
                              [message] = "' You have already passed the exam.'"
                              [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}"
@@ -45,7 +45,7 @@
                <mat-card-title class="font-size-15  m-t-10 steel">Minimal score</mat-card-title>
              </mat-card-title-group>
              <mat-card-content class="text-center value-card golden-yellow" >
-               60%
+               {{minimalScore}}%
              </mat-card-content>
            </mat-card>
          </div >

@@ -121,11 +121,11 @@ export class BlocListComponent implements OnInit {
     });
     return checked;
   }
-  addRemoveSelectedBloc(event: MatCheckbox, blocQuestionCode: string) {
-    if (event.checked) {
-      this.selectedBlocs.push(blocQuestionCode);
-    } else {
+  selectBlocFromCard(blocQuestionCode: string) {
+    if (this.selectedBlocs.map((oneQuestion) => oneQuestion).includes(blocQuestionCode)) {
       this.selectedBlocs.splice(this.selectedBlocs.indexOf(blocQuestionCode), 1);
+    } else {
+      this.selectedBlocs.push(blocQuestionCode);
     }
   }
   moveToInfoSessionPage() {

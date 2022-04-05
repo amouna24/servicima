@@ -9,6 +9,7 @@ import { UserService } from '@core/services/user/user.service';
 import { CryptoService } from '@core/services/crypto/crypto.service';
 import { TestService } from '@core/services/test/test.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wid-choose-candidates',
@@ -17,9 +18,9 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ChooseCandidatesComponent implements OnInit {
   tableColumns = [
-    { nameColumn: 'fullName', photo: 'photo'},
-    { nameColumn: 'email_address', iconColumn: 'email'},
-    { nameColumn: 'prof_phone', iconColumn: 'wi-phone'}];
+    { nameColumn: 'fullName', photo: 'photo', width: '25%'},
+    { nameColumn: 'email_address', iconColumn: 'email' , width: '40%'},
+    { nameColumn: 'prof_phone', iconColumn: 'wi-phone', width: '25%'}];
   dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   selection = new SelectionModel<any>(true, []);
   env: string;
@@ -44,6 +45,7 @@ export class ChooseCandidatesComponent implements OnInit {
                 private userService: UserService,
                 private testService: TestService,
                 private translate: TranslateService,
+                private router: Router,
                 private dialogRef: MatDialogRef<ChooseCandidatesComponent>
              ) {
    this.env = environment.uploadFileApiUrl + '/show/';
@@ -126,7 +128,7 @@ export class ChooseCandidatesComponent implements OnInit {
             {
               receiver: {
                 name: '',
-                email: candidate.email_address
+                email: 'khmayesbounguicha@gmail.com'
               },
               sender: {
                 application: '',
@@ -168,6 +170,14 @@ export class ChooseCandidatesComponent implements OnInit {
    */
   cancel() {
    this.dialogRef.close(false);
+  }
+
+  /**
+   * @description Add candidate
+   */
+  addCandidate() {
+    this.dialogRef.close(false);
+    this.router.navigate(['/manager/settings/users/add-user'], { state: { action: 'add'}});
   }
 
 }

@@ -1,8 +1,9 @@
-<div fxLayout="column" fxFlexFill *ngIf="!showExpiringPage && !showCongratulationPage">
-  <div fxLayout="row" fxFlex="97" [widBlockCopyPaste]="disableCopyPaste">
-    <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-      <div fxLayout="row" fxFlex="25" fxLayoutGap="10px">
-        <div fxLayout="column" fxFlex="66" class="white-bloc">
+<div fxLayout="row" fxFlexFill *ngIf="!showExpiringPage && !showCongratulationPage">
+  <div fxLayout="column" fxFlex="95">
+    <div fxLayout="row" fxFlex="92" [ngClass]=" disableCopyPaste ? 'noselect' : ''" fxLayoutAlign="center">
+      <div fxLayout="column" fxFlex="95" fxLayoutGap="10px">
+        <div fxLayout="row" fxFlex="25" fxLayoutGap="10px">
+          <div fxLayout="column" fxFlex="66" class="white-bloc">
             <div fxLayout="row" fxFlexFill fxLayoutAlign="center" class="p-t-10 p-b-10">
               <div fxLayout="column" fxFlex="100">
                 <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
@@ -22,9 +23,9 @@
                 </div>
                 <div fxLayout="row" fxFlex="22"  fxLayoutAlign="center center">
                   <span
-                        [@questionCurrentToPrevious]="animationStatePrevious.toString()"
-                        [@questionDisplayNewNext]="animationStateNext.toString()"
-                        class="font-medium font-size-12 steel opacity-23 text-center">{{showQuestion(index + 1)}}</span>
+                    [@questionCurrentToPrevious]="animationStatePrevious.toString()"
+                    [@questionDisplayNewNext]="animationStateNext.toString()"
+                    class="font-medium font-size-12 steel opacity-23 text-center">{{showQuestion(index + 1)}}</span>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center" fxFlex="13">
                   <button class="transparent-button" [disabled]="durationType === 'time_per_question'" (click)="reduceIndex()">
@@ -33,160 +34,168 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div fxLayout="column" fxFlex="33" class="white-bloc" fxLayoutAlign="center">
-          <div fxLayout="row" fxFlex="80">
-            <div fxLayout="column" fxFlex="50" fxLayoutAlign="center">
-                  <div fxLayout="row" fxFlex="90" fxLayoutAlign="center">
-                      <div fxLayout="column" fxFlex="50" fxLayoutAlign=" center">
-                        <ng-template [ngIf]="timeLeft !== undefined">
-                          <svg class="right-to-left-timer"   viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <g class="structure-circle ">
-                              <circle class="gray-ring" cx="50" cy="50" r="45"></circle>
+          </div>
+          <div fxLayout="column" fxFlex="33" class="white-bloc" fxLayoutAlign="center">
+            <div fxLayout="row" fxFlex="80">
+              <div fxLayout="column" fxFlex="50" fxLayoutAlign="center">
+                <div fxLayout="row" fxFlex="90" fxLayoutAlign="center">
+                  <div fxLayout="column" fxFlex="50" fxLayoutAlign=" center">
+                    <ng-template [ngIf]="timeLeft !== undefined">
+                      <svg class="right-to-left-timer"   viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <g class="structure-circle ">
+                          <circle class="gray-ring" cx="50" cy="50" r="45"></circle>
 
-                              <path
-                                [attr.stroke-dasharray]="setCircleDasharray()"
-                                class="deg-90 {{timeRing}} {{setRemainingPathColor(timeLeft)}}"
-                                d=" M 50, 50
+                          <path
+                            [attr.stroke-dasharray]="setCircleDasharray()"
+                            class="deg-90 {{timeRing}} {{setRemainingPathColor(timeLeft)}}"
+                            d=" M 50, 50
                                   m -45, 0
                                   a 45,45 0 1,0 90,0
                                   a 45,45 0 1,0 -90,0
                                 "
-                              ></path>
-                            </g>
-                          </svg>
-                          <div fxLayout="row" class="height-width-10 font-size-23 steel font-medium" fxLayoutAlign="center">
+                          ></path>
+                        </g>
+                      </svg>
+                      <div fxLayout="row" class="height-width-10 font-size-23 steel font-medium" fxLayoutAlign="center">
                            <span   fxLayoutAlign="center center" style="{{paddingTopMinutes}}">
                         {{formatTimeLeftMinutes(timeLeft)}}.
                          </span>
-                            <span  style="{{paddingTopSeconds}}" fxLayoutAlign="center center" >
+                        <span  style="{{paddingTopSeconds}}" fxLayoutAlign="center center" >
                         {{formatTimeLeftSeconds(timeLeft)}}
                          </span>
-                          </div>
-                          <div fxLayout="row"  class="height-width-6" fxLayoutAlign="center end">
-                            <span class="font-size-9 font-medium cool-grey">minute</span>
-                          </div>
-                        </ng-template>
                       </div>
+                      <div fxLayout="row"  class="height-width-6" fxLayoutAlign="center end">
+                        <span class="font-size-9 font-medium cool-grey">minute</span>
+                      </div>
+                    </ng-template>
                   </div>
-            </div>
-            <div fxLayout="column" fxFlex="50" class="steel font-size-10 font-medium" fxLayoutAlign="center" fxLayoutGap="3px">
-              <div fxLayout="row">
-                Answered questions: {{this.answeredQuestions.length}}
+                </div>
               </div>
-              <div fxLayout="row" *ngIf="durationType !== 'time_per_question'">
-                Skipped questions: {{this.skippedQuestions.length}}
-              </div>
-              <div fxLayout="row">
-                Remainder questions: {{this.questionsList.length - this.answeredQuestions.length}}
-              </div>
-              <div fxLayout="row">
-                Total questions: {{questionsList.length}}
+              <div fxLayout="column" fxFlex="50" class="steel font-size-10 font-medium" fxLayoutAlign="center" fxLayoutGap="3px">
+                <div fxLayout="row">
+                  Answered questions: {{this.answeredQuestions.length}}
+                </div>
+                <div fxLayout="row" *ngIf="durationType !== 'time_per_question'">
+                  Skipped questions: {{this.skippedQuestions.length}}
+                </div>
+                <div fxLayout="row">
+                  Remainder questions: {{this.questionsList.length - this.answeredQuestions.length}}
+                </div>
+                <div fxLayout="row">
+                  Total questions: {{questionsList.length}}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div fxLayout="row" fxFlex="75">
-        <div fxLayout="column" fxFlex="100" class="white-bloc p-l-30 p-t-25 p-b-25" fxLayoutGap="20px">
-          <div fxLayout="row" fxFlex="25">
-            <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-              <div fxLayout="row" fxFlex="25">
-                <span class="font-medium font-size-18 black">Question {{index + 1}}:</span>
-              </div>
-              <div fxLayout="row" fxFlex="75">
-                <div fxLayout="column" fxFlex="80" class="p-l-10">
-                   <span class="font-size-18 font-light black">{{showQuestionDesc(index)}}</span>
+        <div fxLayout="row" fxFlex="75">
+          <div fxLayout="column" fxFlex="100" class="white-bloc p-l-30 p-t-25 p-b-25" fxLayoutGap="20px">
+            <div fxLayout="row" fxFlex="25">
+              <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+                <div fxLayout="row" fxFlex="25">
+                  <span class="font-medium font-size-18 black">Question {{index + 1}}:</span>
+                </div>
+                <div fxLayout="row" fxFlex="75">
+                  <div fxLayout="column" fxFlex="80" class="p-l-10">
+                    <span class="font-size-18 font-light black">{{showQuestionDesc(index)}}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <wid-scrollbar fxLayout="row" fxFlex="53"  >
-            <div fxLayout="column" fxFlexFill>
-              <div fxLayout="row" fxFlexFill fxLayoutAlign="center" >
-                <div fxLayout="column" fxFlex="60" fxLayoutAlign="center">
-                  <div fxLayout="row" fxFlexFill >
-                    <ng-template  [ngIf]="choicesList.length === 0">
-                      <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
-                        <mat-progress-spinner
-                          color="primary"
-                          mode="indeterminate">
-                        </mat-progress-spinner>
-                      </div>
-                    </ng-template>
-                    <ng-template [ngIf]="choicesList.length !== 0">
-                      <div fxLayout="column" fxFlex="90" fxLayoutAlign="center" *ngIf="choicesList[index]?.questionType === 'multiple'" fxLayoutGap="10px" class="rounded-check-box">
-                        <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice " [ngClass]="checkBoxChecked(checkBoxEvent) ? 'bg-pale-grey-four' : ''" >
-                          <div fxLayout="column" fxFlexFill [ngClass]="checkBoxChecked(checkBoxEvent) ? 'border-left-secondary' : 'border-left-grey'">
-                            <div fxLayout="row" fxFlexFill>
-                              <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
-                                <mat-checkbox class="custom-frame font-size-16 black" [disabled]="disableChoices" [checked]="checkBoxChecked(checkBoxEvent)" [value]="choice['TestChoicesKey']['test_choices_code']" (change)="checkBoxChange(checkBoxEvent)" #checkBoxEvent>
-                                  {{choice['choice_title']}}
-                                </mat-checkbox>
+            <wid-scrollbar fxLayout="row" fxFlex="53"  >
+              <div fxLayout="column" fxFlexFill>
+                <div fxLayout="row" fxFlexFill fxLayoutAlign="center" >
+                  <div fxLayout="column" fxFlex="60" fxLayoutAlign="center">
+                    <div fxLayout="row" fxFlexFill >
+                      <ng-template  [ngIf]="choicesList.length === 0">
+                        <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
+                          <mat-progress-spinner
+                            color="primary"
+                            mode="indeterminate">
+                          </mat-progress-spinner>
+                        </div>
+                      </ng-template>
+                      <ng-template [ngIf]="choicesList.length !== 0">
+                        <div fxLayout="column" fxFlex="90" fxLayoutAlign="center" *ngIf="choicesList[index]?.questionType === 'multiple'" fxLayoutGap="10px" class="rounded-check-box">
+                          <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice " [ngClass]="checkBoxChecked(checkBoxEvent) ? 'bg-pale-grey-four' : ''" >
+                            <div fxLayout="column" fxFlexFill [ngClass]="checkBoxChecked(checkBoxEvent) ? 'border-left-secondary' : 'border-left-grey'">
+                              <div fxLayout="row" fxFlexFill>
+                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
+                                  <mat-checkbox class="custom-frame font-size-16 black" [disabled]="disableChoices" [checked]="checkBoxChecked(checkBoxEvent)" [value]="choice['TestChoicesKey']['test_choices_code']" (change)="checkBoxChange(checkBoxEvent)" #checkBoxEvent>
+                                    {{choice['choice_title']}}
+                                  </mat-checkbox>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <mat-radio-group fxLayout="column" fxFlex="90" [value]="checkedChoices[0]"  *ngIf="choicesList[index]['questionType'] === 'single'" fxLayoutGap="10px" class="rounded-check-box">
-                        <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'bg-pale-grey-four' : ''">
-                          <div fxLayout="column" fxFlexFill fxLayoutAlign="center" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'border-left-secondary' : 'border-left-grey'" class="p-l-15 ">
-                            <div fxLayout="row" fxFlexFill>
-                              <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
-                                <mat-radio-button class="custom-frame font-size-16 black"  [value]="choice['TestChoicesKey']['test_choices_code']" [disabled]="disableChoices" (change)="radioButtonChange(radioButtonEvent)" #radioButtonEvent> {{choice['choice_title']}}</mat-radio-button>
+                        <mat-radio-group fxLayout="column" fxFlex="90" [value]="checkedChoices[0]"  *ngIf="choicesList[index]['questionType'] === 'single'" fxLayoutGap="10px" class="rounded-check-box">
+                          <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'bg-pale-grey-four' : ''">
+                            <div fxLayout="column" fxFlexFill fxLayoutAlign="center" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'border-left-secondary' : 'border-left-grey'" class="p-l-15 ">
+                              <div fxLayout="row" fxFlexFill>
+                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
+                                  <mat-radio-button class="custom-frame font-size-16 black"  [value]="choice['TestChoicesKey']['test_choices_code']" [disabled]="disableChoices" (change)="radioButtonChange(radioButtonEvent)" #radioButtonEvent> {{choice['choice_title']}}</mat-radio-button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </mat-radio-group>
-                    </ng-template>
+                        </mat-radio-group>
+                      </ng-template>
+                    </div>
+
+
                   </div>
-
-
                 </div>
               </div>
-            </div>
-          </wid-scrollbar>
-          <div fxLayout="row" fxFlex="15" class="p-r-40">
-            <div fxLayout="column" fxFlex="90" fxLayoutAlign="end">
-              <ng-template [ngIf]="index > 0 && durationType !== 'time_per_question'">
-                <button mat-raised-button class="btn-small" color="primary" (click)="setAnsweredQuestions(); reduceIndex(); initTimerParams(durationList[index])" >
-                  <span class="white">Previous</span></button>
-              </ng-template>
+            </wid-scrollbar>
+            <div fxLayout="row" fxFlex="15" class="p-r-40">
+              <div fxLayout="column" fxFlex="90" fxLayoutAlign="end">
+                <ng-template [ngIf]="index > 0 && durationType !== 'time_per_question'">
+                  <button mat-raised-button class="btn-small" color="primary" (click)="setAnsweredQuestions(); reduceIndex(); initTimerParams(durationList[index])" >
+                    <span class="white">Previous</span></button>
+                </ng-template>
 
-            </div>
-            <div fxLayout="column">
-              <div fxLayout="row" fxFlexFill fxLayoutGap="10px">
-                <div fxLayout="column" fxLayoutAlign="end">
-                  <ng-template [ngIf]="durationType !== 'time_per_question' && index + 1 < questionsList.length">
-                    <button mat-raised-button class="btn-small bg-pale-grey" (click)="setSkippedQuestions(); addIndex(); initTimerParams(durationList[index])">
-                      <span class="black">Skip</span>
-                    </button>
-                  </ng-template>
+              </div>
+              <div fxLayout="column">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="10px">
+                  <div fxLayout="column" fxLayoutAlign="end">
+                    <ng-template [ngIf]="durationType !== 'time_per_question' && index + 1 < questionsList.length">
+                      <button mat-raised-button class="btn-small bg-pale-grey" (click)="setSkippedQuestions(); addIndex(); initTimerParams(durationList[index])">
+                        <span class="black">Skip</span>
+                      </button>
+                    </ng-template>
 
-                </div>
-                <div fxLayout="column" fxLayoutAlign="end">
-                  <ng-template [ngIf]="index + 1 < questionsList.length">
-                    <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); addIndex(); initTimerParams(durationList[index])">
-                      <span class="white">Next</span>
-                    </button>
-                  </ng-template>
-                  <ng-template [ngIf]="index + 1 === questionsList.length">
-                    <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); initTimerParams(durationList[index]); this.finishTest() ">
-                      <span class="white">Finish</span>
-                    </button>
-                  </ng-template>
+                  </div>
+                  <div fxLayout="column" fxLayoutAlign="end">
+                    <ng-template [ngIf]="index + 1 < questionsList.length">
+                      <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); addIndex(); initTimerParams(durationList[index])">
+                        <span class="white">Next</span>
+                      </button>
+                    </ng-template>
+                    <ng-template [ngIf]="index + 1 === questionsList.length">
+                      <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); initTimerParams(durationList[index]); this.finishTest() ">
+                        <span class="white">Finish</span>
+                      </button>
+                    </ng-template>
 
 
                   </div>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
-
       </div>
     </div>
   </div>
+  <div fxLayout="column" fxFlex="5"  class="p-b-20">
+    <div fxLayout="row" fxFlexFill class="opacity-30" fxLayoutAlign=" end">
+      <img src="assets/img/logoServicima.@3x.png" width="15px" height="18px"><span class="font-light black font-size-12">SERVICMA</span>
+
+    </div>
+  </div>
+
 
 </div>
 <ng-template [ngIf]="showExpiringPage || showCongratulationPage">
@@ -194,8 +203,8 @@
        fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
     <div fxLayout="row" fxFlex="15" fxLayoutGap="50px" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
       <div fxLayout="row" fxFlex="50" fxLayoutGap="15px" class=" m-l-60">
-        <div fxLayout="column"> <img src="assets/img/500illustration.png" [width]='50'
-                                     [height]='50' class="edit-img" alt=""></div>
+        <div fxLayout="column"> <img [src]="env + photo"  [width]='50'
+                                     [height]='50' class="border-radius-50"  alt="image"></div>
         <div fxLayout="column" fxLayoutAlign="center">
           <span  class="font-size-20 warm-grey"> {{companyName}}</span>
         </div>
@@ -222,7 +231,8 @@
         <wid-component-info style="height: 100%" [title]="{ name: 'congratulations', color:'#0067e0'}"
                             [image]= "{ path:'done-circle.svg',height:'110px' }"
                             [message] = "' You have completed the exam during the specified time.'"
-                            [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}">
+                            [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}"
+                            (buttonAction)="backToHome()">
         </wid-component-info>
       </ng-template>
     </div>
