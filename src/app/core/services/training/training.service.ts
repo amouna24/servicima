@@ -55,8 +55,8 @@ export class TrainingService {
    * @description Disable collaborator Status
    * @param code of the training
    *************************************************************************/
-  disableTraining(code: string): Observable<any> {
-    return this.httpClient.delete<ITraining>(`${environment.hrTrainingApiUrl}/disable?training_code=${code}`);
+  disableTraining(ID: string): Observable<any> {
+    return this.httpClient.delete<ITraining>(`${environment.hrTrainingApiUrl}?_id=${ID}`);
   }
   /*------------------------------------ TRAINING SESSION WEEK --------------------------------------*/
   /**************************************************************************
@@ -89,20 +89,6 @@ export class TrainingService {
         .get<ITrainingSessionWeek[]>(`${environment.hrTrainingSessionWeekApiUrl}/${filter}`);
   }
 
-  /**************************************************************************
-   * @description Enable collaborator Status
-   * @param code of the training session
-   *************************************************************************/
-  enableTrainingSession(code: string): Observable<any> {
-    return this.httpClient.put<ITrainingSessionWeek>(`${environment.hrTrainingSessionWeekApiUrl}/enable?session_code=${code}`, null);
-  }
-  /**************************************************************************
-   * @description Disable collaborator Status
-   * @param code of the training session
-   *************************************************************************/
-  disableTrainingSession(code: string): Observable<any> {
-    return this.httpClient.delete<ITrainingSessionWeek>(`${environment.hrTrainingSessionWeekApiUrl}/disable?session_code=${code}`);
-  }
   /*------------------------------------ TRAINING INVITE COLLABORATOR --------------------------------------*/
   /**************************************************************************
    * @description Add new Invitation for collaborator
@@ -132,6 +118,20 @@ export class TrainingService {
   getTrainingInviteCollaborator(filter: string): Observable<ITrainingInviteCollaborator[]> {
     return this.httpClient
         .get<ITrainingInviteCollaborator[]>(`${environment.hrTrainingInviteCollaboratorApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Enable collaborator Status
+   * @param code of the invite collaborator
+   *************************************************************************/
+  enableTrainingInviteCollaborator(ID: string): Observable<any> {
+    return this.httpClient.put<ITrainingInviteCollaborator>(`${environment.hrTrainingInviteCollaboratorApiUrl}/enable?_id=${ID}`, null);
+  }
+  /**************************************************************************
+   * @description Disable collaborator Status
+   * @param code of the invite collaborator
+   *************************************************************************/
+  disableTrainingInviteCollaborator(ID: string): Observable<any> {
+    return this.httpClient.delete<ITrainingInviteCollaborator>(`${environment.hrTrainingInviteCollaboratorApiUrl}?_id=${ID}`);
   }
 
   /*------------------------------------ TRAINING REQUEST --------------------------------------*/

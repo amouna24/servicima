@@ -6,6 +6,7 @@ import { UserService } from '@core/services/user/user.service';
 import { TrainingService } from '@core/services/training/training.service';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-training-list',
@@ -32,12 +33,12 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
   tabFeatureAccess = [
     { name: 'Update', feature: 'SOURCING_CAND_FILE_ACCESS'},
     { name: 'update session', feature: 'SOURCING_CAND_FILE_ACCESS'},
-    { name: 'Delete', feature: 'SOURCING_CAND_FILE_ACCESS'},
-    { name: 'Archiver', feature: 'SOURCING_CAND_FILE_ACCESS'}];
+    { name: 'Delete', feature: 'SOURCING_CAND_FILE_ACCESS'}];
   constructor(
       private userService: UserService,
       private trainingService: TrainingService,
       private router: Router,
+      private utilsService: UtilsService
 
   ) { }
 
@@ -67,7 +68,8 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
    *************************************************************************/
   getTrainings(limit?, offset?): Promise<ITraining[]> {
    return new Promise ((resolve) => {
-       this.trainingService.getTraining(`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}`).subscribe((training) => {
+       this.trainingService
+           .getTraining(`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}&status=ACTIVE`).subscribe((training) => {
           this.listTraining = training['results'];
           console.log('return data', this.listTraining);
           this.ELEMENT_DATA.next(training);
@@ -86,9 +88,9 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
      switch (rowAction.actionType.name) {
        case ('show') : console.log('show');
        break;
-       case ('delete') : console.log('delete');
+       case ('Delete') : this.archive(rowAction.data[0]);
          break;
-       case ('archive') : console.log('archive');
+       case ('Update') : this.update(rowAction.data[0]);
          break;
        case ('update session') : this.updateSession(rowAction.data);
          break;
@@ -128,6 +130,27 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
         code: btoa(training[0].TrainingKey.training_code)
       }
     });
+  }
+
+  /**
+   * @description archive training
+   */
+  archive(training: ITraining) {
+   this.trainingService.disableTraining(training._id).subscribe(async (data) => {
+     await this.getTrainings(this.nbtItems.getValue(), 0);
+
+     this.trainingService.getTrainingInviteCollaborator(`?training_code=${training.TrainingKey.training_code}`).subscribe((invites) => {
+       console.log('my invites ', invites);
+       if (invites.length !== 0) {
+         invites['results'].map((invite) => {
+           this.trainingService.disableTrainingInviteCollaborator(invite._id)
+               .subscribe((myInvite) => {
+           });
+         });
+       }
+
+     });
+   });
   }
 
 }

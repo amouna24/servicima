@@ -46,6 +46,7 @@ export class SessionsTrainingComponent implements OnInit {
   id = '';
   code = '';
   sessionCode: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  indexDay = { SUNDAY: 0, MONDAY: 1, TUESDAY: 2, WEDNESDAY: 3, THURSDAY: 4, FRIDAY: 5, SATURDAY: 6};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -142,7 +143,8 @@ export class SessionsTrainingComponent implements OnInit {
 
       }
     const ar = this.form.value.durration.split(':');
-    const total = this.convertTimeToMinute(parseInt(ar[0], null), parseInt(ar[1], null));
+    const total = this.convertTimeToMinute(parseInt(ar[0], null), parseInt(ar[1], null))
+        * this.checkDateDay(this.training.start_date, this.training.end_date, this.form.value.day);
     console.log('my total ', total);
     if (total > 15) {
         const t = total + this.totalMinutesSessions.getValue();
@@ -391,8 +393,14 @@ export class SessionsTrainingComponent implements OnInit {
     /**
      * @description check dates contains day
      */
-    checkDateDay(dateStart: Date, dateEnd: Date) {
-       console.log(new Date(dateStart).getDay());
+    checkDateDay(dateStart: Date, dateEnd: Date, day: string) {
+        const nbrStartDate = new Date(dateStart).getDay();
+        const nbrEndDate = new Date(dateEnd).getDay();
+        let existDay = this.weeksBetween(new Date(dateStart).getTime(), new Date(dateEnd).getTime());
+        if ((this.indexDay[day] >= nbrStartDate) || ((this.indexDay[day] <= nbrEndDate))) {
+            existDay = existDay + 1;
+        }
+        return existDay;
     }
     weeksBetween(d1: number, d2: number) {
         return Math.round((d2 - d1) / (7 * 24 * 60 * 60 * 1000));
