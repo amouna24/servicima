@@ -1,0 +1,127 @@
+<div class="border-radius-20 dynamic-component-container m-l-30 ">
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+        <div fxFlex="7"  fxLayout="row" class="line-height-2">
+            <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+                    </mat-icon>
+                    <span class="cool-grey"> {{ 'user.back' | translate}} </span>
+                </button>
+            </div>
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+        </div>
+        <wid-scrollbar class="scrollbar-invitation-list" style="width: 100%" @dataAppearance>
+
+        <div  *ngIf="invitesTraining.length!==0" fxLayout="column" fxFlex="100" fxLayoutGap="8px" >
+            <div class="steel font-size-20 font-normal">{{ 'Recent invitations' | translate | capitalizeFirstLetter }}</div>
+            <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" >
+                <wid-invitation  *ngFor="let t of PENDING_DATA.getValue()" [data]="t" (acceptInvite)="acceptInvitation($event)" (ignoreInvite)="ignoreInvitation($event)" ></wid-invitation>
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="space-between" *ngIf="this.PENDING_DATA.getValue().length===0">
+                    <div  style=" min-height: 75px;" >
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+                            <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
+                                <div  fxFlex="15" fxLayout="row">
+                                    <span class="cool-grey font-size-18">No Data Found</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="steel font-size-20 font-normal">{{ 'Rejected invitations' | translate | capitalizeFirstLetter }}</div>
+            <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" >
+                <wid-invitation  *ngFor="let t of IGNORED_DATA.getValue()" [data]="t" (acceptInvite)="acceptInvitation($event)" (ignoreInvite)="ignoreInvitation($event)" ></wid-invitation>
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="space-between" *ngIf="this.IGNORED_DATA.getValue().length===0">
+                    <div  style=" min-height: 75px;" >
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+                            <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
+                                <div  fxFlex="15" fxLayout="row">
+                                    <span class="cool-grey font-size-18">No Data Found</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div fxLayout="column" fxFlex="74" fxLayoutAlign="space-between" *ngIf="this.invitesTraining.length===0">
+            <div  style=" min-height: 287px;" >
+                <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+                    <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
+                        <div  fxFlex="15" fxLayout="row">
+                            <span class="cool-grey font-size-18">No Data Found</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </wid-scrollbar>
+        <div  >
+            <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <span fxLayoutAlign="center center" class="black-three font-size-12">
+          {{ offset }} - {{ totalCountedItems || countedItems }} of {{ totalItems }}
+        </span>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('first-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">first_page</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('previous-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">navigate_before</span>
+                        </button>
+
+                        <ng-container *ngFor="let pageNumber of nbrPages">
+                            <button
+                                    mat-stroked-button
+                                    fxLayoutAlign="center center" class="next-previous-page font-size-12"
+                                    [ngClass] = "pageNumber === currentPage ? 'bg-topaz white'
+                                                  : 'bg-white-two black-three'"
+                                    (click)="getItemsPerPage('specific-page', pageNumber)"
+                            >
+                                <span>{{ pageNumber }}</span>
+                            </button>
+                        </ng-container>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('next-page')"
+                        >
+
+                            <span class="material-icons-outlined font-size-16">navigate_next</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('last-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">last_page</span>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+</div>
+</div>

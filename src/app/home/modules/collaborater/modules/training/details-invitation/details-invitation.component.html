@@ -1,0 +1,103 @@
+<div class="border-radius-20 dynamic-component-container m-l-5">
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+        <div fxFlex="7"  fxLayout="row" class="line-height-2">
+            <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+                <div fxLayout="row">
+                    <button class="close-container" mat-dialog-close><img src="../../../../assets/icons/close_icon.svg" alt="image"></button>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+        </div>
+        <wid-scrollbar class="scrollbar" style="min-width: 100%;">
+            <div fxLayout="column" fxFlex="83" class="font-size-12 black container-details-invite" *ngIf="trainingInformation" >
+                <div fxLayout="row" fxFlex="100" fxLayoutGap="8px" class="details-training" fxLayoutAlign="start center">
+                        <div class="img-details-organisation" fxLayout="row" fxLayoutAlign="center center">
+                            <img src="assets/img/google.png" alt="" [ngStyle]="{ 'width': '40px', 'height' : '40px'}"  />
+                        </div>
+                        <div fxLayout="column" fxLayoutGap="4px" >
+                            <div class="font-semi-bold font-size-20">{{ trainingInformation.title }}</div>
+                            <div class="font-size-15">{{ trainingInformation.organisation_code }}</div>
+                        </div>
+
+                </div>
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="8px">
+                    <h6 class="black font-size-15 font-semi-bold">{{ 'Trainig information:' | translate | capitalizeFirstLetter }}</h6>
+                    <div fxLayout="row" fxFlex="100" fxLayoutGap="4px"  >
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'Start on:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-12">{{ trainingInformation.start_date | date: 'dd-MM-yyyy' }}</span>
+                        </div>
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'End on:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-12">{{ trainingInformation.end_date | date: 'dd-MM-yyyy' }}</span>
+                        </div>
+
+                    </div>
+                    <div fxLayout="row" fxFlex="100" fxLayoutGap="4px" >
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'Domain:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-12">{{ trainingInformation.domain  }}</span>
+                        </div>
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'Number of Hours:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-10">{{ trainingInformation.warned_hours  }} {{ 'Hours:' | translate | capitalizeFirstLetter }}</span>
+                        </div>
+
+                    </div>
+                    <div fxLayout="row" fxFlex="100" fxLayoutGap="4px" >
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'Price:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-10">{{ trainingInformation.price  }} {{ 'USD' | translate | capitalizeFirstLetter }} </span>
+                        </div>
+                        <div fxLayout="row" fxFlex="50">
+                            <span class="black font-normal font-size-12 m-r-5">{{ 'Number of Collaborator:' | translate | capitalizeFirstLetter }}</span>
+                            <span class="steel font-normal font-size-10">{{ trainingInformation.warned_number  }} / {{ trainingInformation.warned_number  }}</span>
+                        </div>
+
+                    </div>
+                    <div fxLayout="row" fxFlex="100" fxLayoutGap="2px">
+                        <span class="black font-normal font-size-12 m-r-5">{{ 'Description:' | translate | capitalizeFirstLetter }}</span>
+                        <span class="steel font-normal font-size-12">{{ trainingInformation.description  }}  </span>
+                    </div>
+                </div>
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="8px">
+                    <h6 class="black font-size-15 font-semi-bold">{{ 'sessions per week:' | translate | capitalizeFirstLetter }}</h6>
+                    <div fxLayout="row" fxFlex="100" fxLayoutGap="4px"  class="week-details p-15" *ngFor="let s of sessions" >
+                        <div fxLayout="row" fxFlex="25" class="black font-normal font-size-12" fxLayoutAlign="center center"  >
+                          {{ s.day }}
+                        </div>
+                        <div fxLayout="row" fxFlex="50" class="black font-normal font-size-12" fxLayoutAlign="center center" >
+                            {{ s.time }}
+                        </div>
+                        <div fxLayout="row" fxFlex="50" class="black font-normal font-size-12" fxLayoutAlign="center center" >
+                            {{ s.durration }}
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" class="m-t-20">
+                    <ng-container [ngSwitch]="trainingInformation.status_invite" >
+                        <div  fxLayout="row"  fxFlex="100"  fxLayoutGap="8px" *ngSwitchCase="'PENDING'" fxLayoutAlign="center center"  >
+                            <button type="submit" mat-raised-button   class="black btn-small bg-pale-grey-two" (click)="ignore()"  >
+                                <span  class="font-size-11" >{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
+                            </button>
+                            <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="accept()" >
+                                <span   class="font-size-11 white">{{ 'Accept' | translate | capitalizeFirstLetter }}</span>
+                            </button>
+                        </div>
+                        <div  fxLayout="row"  fxFlex="100"   *ngSwitchCase="'ACCEPT'"  fxLayoutAlign="center center" >
+                            <span class="font-size-11 cerulean-blue">{{ 'Accept' | translate | capitalizeFirstLetter }}</span>
+                        </div>
+                        <div  fxLayout="row"  fxFlex="100"    *ngSwitchCase="'IGNORED'" fxLayoutAlign="center center" >
+                            <span class="font-size-11 danger">{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+
+
+            </div>
+        </wid-scrollbar>
+    </div>
+</div>

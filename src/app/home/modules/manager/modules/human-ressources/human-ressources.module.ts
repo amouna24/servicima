@@ -21,7 +21,8 @@ import { ShowCertificationComponent } from './certifications/show-certification/
         CollaboratorComponent,
         ListOfCertificationComponent,
         EditCertificationComponent,
-        ShowCertificationComponent],
+        ShowCertificationComponent,
+    ],
     exports: [
         CertificationListComponent,
         ListOfCertificationComponent

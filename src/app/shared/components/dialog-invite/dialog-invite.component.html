@@ -123,8 +123,9 @@
          </div>
        </div>
      </div>
-     <div *ngSwitchCase="'match_expresson_2'" class="full-width">Number of colloborator {{this.selection['_selected']? this.selection['_selected'].length : 0}} of {{dataSource?.data?.length}}
-     </div>
+
+     <div *ngSwitchCase="'match_expresson_2'" style="width: 100%;">Number of colloborator {{this.selection['_selected']? this.selection['_selected'].length : 0}} of {{specificData.params}}</div>
+
    </ng-container>
     <div fxLayout="column" fxLayoutAlign=" center" fxFlex="100">
       <div fxLayout="row" fxFlexFill fxLayoutGap="25px" fxLayoutAlign="flex-end center">

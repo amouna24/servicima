@@ -37,6 +37,7 @@ export class DialogInviteComponent implements OnInit {
    *  @description Loaded when component in init state
    *************************************************************************/
   ngOnInit(): void {
+    console.log('my data invite dialog ', this.data);
     this.tableColumns.unshift({ nameColumn: 'select', iconColumn: ''});
     this.dataSource = new MatTableDataSource(
       this.data
