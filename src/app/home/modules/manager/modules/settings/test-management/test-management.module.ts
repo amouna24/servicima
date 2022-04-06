@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { TestManagementRoutingModule } from './test-management-routing.module';
 
@@ -7,6 +8,7 @@ import { TestManagementRoutingModule } from './test-management-routing.module';
   declarations: [],
   imports: [
     CommonModule,
+    MonacoEditorModule,
     TestManagementRoutingModule
   ]
 })

@@ -85,6 +85,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   enableNextButton = false;
   finalResult = 0;
   candidateEmail: string;
+  editorOptions = { };
+  code = '';
 
   constructor(
     private utilsService: UtilsService,
@@ -208,6 +210,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   addIndex() {
     this.enableNextButton = false;
     this.disableChoices = false;
+    this.editorOptions = { theme: 'vs-dark', language: this.questionsList[this.index + 1].language_tech, readOnly: true,  selectionClipboard: false};
+    this.code = this.questionsList[this. index + 1].code;
     this.checkedChoices = this.answeredQuestions
       .map((oneQuestion) => oneQuestion.questionNumber)
       .includes(this.index + 2) ? [...this.answeredQuestions[this.answeredQuestions
@@ -227,6 +231,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   reduceIndex() {
     this.enableNextButton = false;
     this.disableChoices = false;
+    this.editorOptions = { theme: 'vs-dark', language: this.questionsList[this.index - 1].language_tech};
+    this.code = this.questionsList[this.index - 1].code;
     this.checkedChoices = this.answeredQuestions
       .map((oneQuestion) => oneQuestion.questionNumber)
       .includes(this.index) ? [...this.answeredQuestions[this.answeredQuestions
@@ -335,6 +341,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           this.testService
             .getQuestion(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
             .subscribe((question) => {
+              console.log('question', question[0]);
             this.testService.getChoices(`?test_question_code=${question[0].TestQuestionKey.test_question_code}`)
               .subscribe((choices) => {
                 const correctChoice = [];
@@ -344,6 +351,14 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   }
                 });
                 this.questionsList.push(question[0]);
+                console.log(this.questionsList[0].code);
+                this.editorOptions = {
+                  theme: 'vs-dark',
+                  language: question[0].language_tech,
+                  readOnly: true,
+                  contextmenu: false
+                };
+                this.code = this.questionsList[0].code;
                 this.choicesList.push({
                   questionCode: oneSessionQuestion.TestSessionQuestionsKey.test_question_code,
                   questionType: question[0].question_type,
@@ -358,6 +373,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   this.maxTime = this.durationList[0];
                 }
               });
+
             this.isLoading.next(false);
           });
         });
@@ -458,6 +474,15 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
    */
   backToHome() {
     this.router.navigate(['/candidate']);
+  }
+  onKeyDown(event) {
+    console.log(event);
+    if (this.disableCopyPaste) {
+      const { keyCode, ctrlKey, metaKey} = event;
+      if ((keyCode === 17 || keyCode === 67) && (metaKey || ctrlKey)) {
+        event.preventDefault();
+      }
+    }
   }
 
 }

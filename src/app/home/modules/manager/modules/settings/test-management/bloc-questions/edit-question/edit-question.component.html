@@ -38,7 +38,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="row" fxFlex="20" fxLayoutGap="15px">
+                  <div fxLayout="row"  fxLayoutGap="15px">
                     <div fxLayout="column" fxFlex>
                       <mat-label class="black font-size-12 required">
                         Level:
@@ -95,7 +95,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div fxLayout="row" fxFlex="30">
+                  <div fxLayout="row" >
                     <div fxLayout="column" fxFlexFill>
                       <mat-label class="black font-size-12 ">
                         Description:
@@ -104,6 +104,21 @@
                               <textarea matInput placeholder="Description" rows="7"
                                         formControlName="test_question_desc" ></textarea>
                       </mat-form-field>
+                      <mat-label class="black font-size-12 required">
+                        Language code:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-select  formControlName="language_tech" disableOptionCentering panelClass="panelColor"
+                                     placeholder="Language" >
+                          <ng-container *ngFor="let v of languagesList">
+                            <mat-option [value]="v">{{v}}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-label class="black font-size-12 ">
+                        Code:
+                      </mat-label>
+                      <ngx-monaco-editor [options]="editorOptions"  formControlName="code"></ngx-monaco-editor>
                     </div>
                   </div>
                 </div>
