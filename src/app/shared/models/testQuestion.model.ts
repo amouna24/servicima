@@ -7,7 +7,10 @@ export interface ITestQuestionModel {
   order: string;
   mark: string;
   duration: string;
+  language_id: string;
   question_type: string;
+  code: string;
+  language_tech: string;
   test_question_title: string;
   test_question_desc: string;
   test_question_code: string;

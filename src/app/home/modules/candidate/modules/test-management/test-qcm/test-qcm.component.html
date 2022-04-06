@@ -90,60 +90,77 @@
         </div>
         <div fxLayout="row" fxFlex="75">
           <div fxLayout="column" fxFlex="100" class="white-bloc p-l-30 p-t-25 p-b-25" fxLayoutGap="20px">
-            <div fxLayout="row" fxFlex="25">
-              <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
-                <div fxLayout="row" fxFlex="25">
-                  <span class="font-medium font-size-18 black">Question {{index + 1}}:</span>
-                </div>
-                <div fxLayout="row" fxFlex="75">
-                  <div fxLayout="column" fxFlex="80" class="p-l-10">
-                    <span class="font-size-18 font-light black">{{showQuestionDesc(index)}}</span>
+            <wid-scrollbar fxLayout="row" fxFlex="85">
+              <div fxLayout="column" fxFlexFill fxLayoutGap="15px">
+                <div fxLayout="row" >
+                  <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+                    <div fxLayout="row" fxLayoutAlign="center">
+                      <div fxLayout="column" fxFlex="60">
+                        <span class="font-medium font-size-18 black">Question {{index + 1}}:</span>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center">
+                      <div fxLayout="column" fxFlex="60" class="p-l-10">
+                        <span class="font-size-18 font-light black">{{showQuestionDesc(index)}}</span>
+                      </div>
+                    </div>
+                    <div fxLayout="row" *ngIf="code" fxLayoutAlign="center">
+                      <div fxLayout="colymn" fxFlex="45">
+                        <ngx-monaco-editor
+                          [options]="editorOptions"
+                           disabled class="noselect"
+                          (keydown)="onKeyDown($event)"
+                          [(ngModel)]="code"
+                          style="min-width: 100%"></ngx-monaco-editor>
+
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <wid-scrollbar fxLayout="row" fxFlex="53"  >
-              <div fxLayout="column" fxFlexFill>
-                <div fxLayout="row" fxFlexFill fxLayoutAlign="center" >
-                  <div fxLayout="column" fxFlex="60" fxLayoutAlign="center">
-                    <div fxLayout="row" fxFlexFill >
-                      <ng-template  [ngIf]="choicesList.length === 0">
-                        <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
-                          <mat-progress-spinner
-                            color="primary"
-                            mode="indeterminate">
-                          </mat-progress-spinner>
-                        </div>
-                      </ng-template>
-                      <ng-template [ngIf]="choicesList.length !== 0">
-                        <div fxLayout="column" fxFlex="90" fxLayoutAlign="center" *ngIf="choicesList[index]?.questionType === 'multiple'" fxLayoutGap="10px" class="rounded-check-box">
-                          <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice " [ngClass]="checkBoxChecked(checkBoxEvent) ? 'bg-pale-grey-four' : ''" >
-                            <div fxLayout="column" fxFlexFill [ngClass]="checkBoxChecked(checkBoxEvent) ? 'border-left-secondary' : 'border-left-grey'">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
-                                  <mat-checkbox class="custom-frame font-size-16 black" [disabled]="disableChoices" [checked]="checkBoxChecked(checkBoxEvent)" [value]="choice['TestChoicesKey']['test_choices_code']" (change)="checkBoxChange(checkBoxEvent)" #checkBoxEvent>
-                                    {{choice['choice_title']}}
-                                  </mat-checkbox>
+                <div fxLayout="row"   >
+                  <div fxLayout="column" fxFlexFill>
+                    <div fxLayout="row" fxFlexFill fxLayoutAlign="center" >
+                      <div fxLayout="column" fxFlex="60" fxLayoutAlign="center">
+                        <div fxLayout="row" fxFlexFill >
+                          <ng-template  [ngIf]="choicesList.length === 0">
+                            <div class="min-full-width min-full-height" fxLayoutAlign="center center" style="height: 45vh;">
+                              <mat-progress-spinner
+                                color="primary"
+                                mode="indeterminate">
+                              </mat-progress-spinner>
+                            </div>
+                          </ng-template>
+                          <ng-template [ngIf]="choicesList.length !== 0">
+                            <div fxLayout="column" fxFlex="90" fxLayoutAlign="center" *ngIf="choicesList[index]?.questionType === 'multiple'" fxLayoutGap="10px" class="rounded-check-box">
+                              <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice " [ngClass]="checkBoxChecked(checkBoxEvent) ? 'bg-pale-grey-four' : ''" >
+                                <div fxLayout="column" fxFlexFill [ngClass]="checkBoxChecked(checkBoxEvent) ? 'border-left-secondary' : 'border-left-grey'">
+                                  <div fxLayout="row" fxFlexFill>
+                                    <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
+                                      <mat-checkbox class="custom-frame font-size-16 black" [disabled]="disableChoices" [checked]="checkBoxChecked(checkBoxEvent)" [value]="choice['TestChoicesKey']['test_choices_code']" (change)="checkBoxChange(checkBoxEvent)" #checkBoxEvent>
+                                        {{choice['choice_title']}}
+                                      </mat-checkbox>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <mat-radio-group fxLayout="column" fxFlex="90" [value]="checkedChoices[0]"  *ngIf="choicesList[index]['questionType'] === 'single'" fxLayoutGap="10px" class="rounded-check-box">
-                          <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'bg-pale-grey-four' : ''">
-                            <div fxLayout="column" fxFlexFill fxLayoutAlign="center" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'border-left-secondary' : 'border-left-grey'" class="p-l-15 ">
-                              <div fxLayout="row" fxFlexFill>
-                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
-                                  <mat-radio-button class="custom-frame font-size-16 black"  [value]="choice['TestChoicesKey']['test_choices_code']" [disabled]="disableChoices" (change)="radioButtonChange(radioButtonEvent)" #radioButtonEvent> {{choice['choice_title']}}</mat-radio-button>
+                            <mat-radio-group fxLayout="column" fxFlex="90" [value]="checkedChoices[0]"  *ngIf="choicesList[index]['questionType'] === 'single'" fxLayoutGap="10px" class="rounded-check-box">
+                              <div fxLayout="row" *ngFor=" let choice of choicesList[index]['choices']" class="bloc-choice" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'bg-pale-grey-four' : ''">
+                                <div fxLayout="column" fxFlexFill fxLayoutAlign="center" [ngClass]="getCheckedChoices(radioButtonEvent.value) ? 'border-left-secondary' : 'border-left-grey'" class="p-l-15 ">
+                                  <div fxLayout="row" fxFlexFill>
+                                    <div fxLayout="column" fxFlexFill fxLayoutAlign="center" class="p-l-15 ">
+                                      <mat-radio-button class="custom-frame font-size-16 black"  [value]="choice['TestChoicesKey']['test_choices_code']" [disabled]="disableChoices" (change)="radioButtonChange(radioButtonEvent)" #radioButtonEvent> {{choice['choice_title']}}</mat-radio-button>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        </mat-radio-group>
-                      </ng-template>
+                            </mat-radio-group>
+                          </ng-template>
+                        </div>
+
+
+                      </div>
                     </div>
-
-
                   </div>
                 </div>
               </div>

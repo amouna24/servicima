@@ -31,6 +31,8 @@ export class QuestionDetailsComponent implements OnInit {
   codeLevel: string;
   companyEmailAddress: string;
   displayedLevel: string;
+  language_tech: string;
+  code: string;
 
   constructor(
     private dialogRef: MatDialogRef<QuestionDetailsComponent>,
@@ -69,6 +71,8 @@ initQuestionValues() {
   this.testQuestionCode = this.data.test_question_code;
   this.mark = this.data.mark;
   this.duration = this.data.duration;
+  this.code = this.data.code;
+  this.language_tech = this.data.language_tech;
   this.questionType = this.data.question_type;
   this.testQuestionDesc = this.data.test_question_desc;
   this.technology = this.data.technology;
@@ -113,6 +117,8 @@ deleteQuestions() {
       test_question_title:  this.testQuestionTitle,
       mark: this.mark,
       duration: this.duration,
+      code: this.code,
+      language_tech: this.language_tech,
       question_type: this.questionType,
       test_level_code: this.codeLevel,
       test_question_desc: this.testQuestionDesc,

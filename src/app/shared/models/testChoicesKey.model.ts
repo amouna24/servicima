@@ -3,4 +3,5 @@ export interface ITestChoicesKeyModel {
   test_question_code: string;
   application_id: string;
   company_email: string;
+  language_id: string;
 }

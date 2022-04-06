@@ -13,7 +13,15 @@ export class OverallTimerDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.totalTime = this.data.totalTime.time;
+    if (this.data.type === 'min') {
+      this.totalTime = this.data.time;
+    } else if (this.data.type === 'sec') {
+      this.totalTime = '1';
+    } else if (this.data.type === 'h') {
+      this.totalTime = (this.data.time * 60).toString();
+    }
+    console.log(this.data.totalTime);
+    console.log('total time =', this.data.totalTime);
   }
 
 }

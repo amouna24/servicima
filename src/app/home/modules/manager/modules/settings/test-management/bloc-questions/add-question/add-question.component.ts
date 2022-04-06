@@ -25,6 +25,10 @@ export class AddQuestionComponent implements OnInit {
   test_bloc_total_number: string;
   test_question_bloc_desc: string;
   _id: string;
+  editorOptions = { };
+  languagesList = [
+    'javascript', 'typescript', 'html', 'sql', 'text/plain', 'java', 'php'
+  ];
   constructor(
     private fb: FormBuilder,
     private testService: TestService,
@@ -41,6 +45,10 @@ export class AddQuestionComponent implements OnInit {
     this.getConnectedUser();
     this.getLevel();
     this.createForm();
+    this.editorOptions = { theme: 'vs-dark', language: this.sendAddQuestion.controls.language_tech.value};
+    this.sendAddQuestion.get('language_tech').valueChanges.subscribe(selectedValue => {
+      this.editorOptions = { theme: 'vs-dark', language: this.sendAddQuestion.controls.language_tech.value};
+    });
   }
 
   /**
@@ -62,6 +70,8 @@ export class AddQuestionComponent implements OnInit {
       mark: ['', [Validators.required, Validators.pattern('^[1-9][0-9]?$|^100$')]],
       duration: ['', [Validators.required]],
       question_type: ['', [Validators.required]],
+      language_tech: ['text/plain'],
+      code: '',
       test_level_code: ['', [Validators.required]],
       test_question_desc: '',
     });
@@ -100,6 +110,7 @@ export class AddQuestionComponent implements OnInit {
     this.question.application_id = this.applicationId;
     this.question.company_email = 'ALL';
     this.question.order = '';
+    this.question.language_id = this.localStorageService.getItem('language').langId;
     this.question.test_question_bloc_code = this.test_question_bloc_code;
     this.question.to_display = '';
     if (this.sendAddQuestion.valid) {

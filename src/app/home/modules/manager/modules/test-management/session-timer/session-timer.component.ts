@@ -47,7 +47,7 @@ export class SessionTimerComponent implements OnInit {
     const dialogRef = this.dialog.open(OverallTimerDialogComponent, {
       height: '353px',
       width: '607px',
-      data: { totalTime: this.totalTime },
+      data: {  time: this.totalTimePerQuestions, type: this.totalTimePerQuestionsType},
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
