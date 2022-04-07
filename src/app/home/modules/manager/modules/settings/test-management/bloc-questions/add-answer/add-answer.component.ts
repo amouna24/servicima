@@ -83,7 +83,6 @@ export class AddAnswerComponent implements OnInit {
       if ((this.question_type === 'single') && (this.answer.correct_choice === 'True')) {
         this.QuestionList.splice(0, 1);
       }
-      console.log('answer = ', this.answer);
       this.AnswerList.push(this.answer);
 
       this.sendAddAnswer.reset();
