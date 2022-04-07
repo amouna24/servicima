@@ -63,29 +63,10 @@
             </div>
 
           </div>
-<!--          <div fxLayout="column" fxFlex="71" class="answer-container"     >
-            <div fxLayout="row" fxFlexFill style="justify-content: center">
-              <div fxLayout="column" fxFlex="85" >
-               <div class="font-extra-light black font-size-12">{{item.choice_title}}</div>
-              </div>
-              <div fxLayout="column" fxFlex="10">
-                <ng-container *ngIf="item.correct_choice === 'True'">
-                 <div fxLayout="row"  class="correct-container">
-                   <span  class="font-light white font-size-8">{{item.correct_choice}}</span>
-                 </div>
-                </ng-container>
-                <ng-container *ngIf="item.correct_choice === 'False'">
-                  <div fxLayout="row"  class="false-container">
-                    <span  class="font-light white font-size-8">{{item.correct_choice}}</span>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-          </div>-->
         </div>
         <div fxLayout="row">
           <form  [formGroup]="sendAddAnswer" fxFlexFill class="p-t-10" fxLayoutGap="15px" fxLayout="row">
-            <div fxLayout="column" fxFlex="60" sqdsq >
+            <div fxLayout="column" fxFlex="60" >
               <div fxLayout="row" fxFlexFill  >
                 <div fxLayout="column" fxFlex="100">
                   <mat-form-field appearance="outline">
@@ -126,7 +107,7 @@
           </button>
         </div>
         <div fxLayout="column" fxFlex="20" fxLayoutAlign=" center" [style]="{ minHeight: '139px'}">
-          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="AnswerList.length < 2" [style]="{marginRight: '4%'}"
+          <button mat-raised-button type="submit" color="primary" class="white  btn-medium" [disabled]="!verifExistingTrueAnswer()" [style]="{marginRight: '4%'}"
                  (click)="saveAnswers()" >
             Save
           </button>

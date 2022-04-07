@@ -116,8 +116,8 @@ export class EditQuestionComponent implements OnInit {
       this.duration = data.duration;
       this.question_type = data.question_type;
       this.test_level_code = data.test_level_code;
-      this.code = data.code;
-      this.language_tech = data.language_tech;
+      this.code = data.code === 'undefined' ? undefined : data.code;
+      this.language_tech = data.language_tech === 'undefined' ? 'text/plain' : this.language_tech;
       this.test_question_desc = data.test_question_desc;
       this.test_question_code = data.test_question_code;
       this.test_question_bloc_code = data.test_question_bloc_code;
