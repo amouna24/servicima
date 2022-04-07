@@ -105,23 +105,23 @@
                                         formControlName="test_question_desc" ></textarea>
                   </mat-form-field>
 
+                      <mat-label class="black font-size-12 required">
+                        Language code:
+                      </mat-label>
+                      <mat-form-field appearance="outline">
+                        <mat-select  formControlName="language_tech" disableOptionCentering panelClass="panelColor"
+                                     placeholder="Language" >
+                          <ng-container *ngFor="let v of languagesList">
+                            <mat-option [value]="v">{{v}}</mat-option>
+                          </ng-container>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-label class="black font-size-12 ">
+                        Code:
+                      </mat-label>
+                      <ngx-monaco-editor [options]="editorOptions"  formControlName="code"></ngx-monaco-editor>
                   </div>
                 </div>
-                  <mat-label class="black font-size-12 required">
-                    Language code:
-                  </mat-label>
-                  <mat-form-field appearance="outline">
-                    <mat-select  formControlName="language_tech" disableOptionCentering panelClass="panelColor"
-                                 placeholder="Language" >
-                      <ng-container *ngFor="let v of languagesList">
-                        <mat-option [value]="v">{{v}}</mat-option>
-                      </ng-container>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-label class="black font-size-12 ">
-                    Code:
-                  </mat-label>
-                  <ngx-monaco-editor [options]="editorOptions" style="height: 100%" formControlName="code"></ngx-monaco-editor>
               </div>
               </div>
             </div>

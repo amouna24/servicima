@@ -83,18 +83,23 @@ export class AddAnswerComponent implements OnInit {
       if ((this.question_type === 'single') && (this.answer.correct_choice === 'True')) {
         this.QuestionList.splice(0, 1);
       }
+      console.log('answer = ', this.answer);
       this.AnswerList.push(this.answer);
 
       this.sendAddAnswer.reset();
     }
   }
-
+  verifExistingTrueAnswer() {
+    return this.AnswerList.map((oneAnswer) => oneAnswer.correct_choice).includes('True') && this.AnswerList.length >= 2;
+  }
   saveAnswers() {
-    this.AnswerList.forEach(res => {
-      this.testService.addChoice(res).subscribe((resAnswer) => {
-        console.log('answer added', resAnswer);
+    if (this.AnswerList.map((oneAnswer) => oneAnswer.correct_choice).includes('True')) {
+      this.AnswerList.forEach(res => {
+        this.testService.addChoice(res).subscribe((resAnswer) => {
+          console.log('answer added', resAnswer);
+        });
       });
-    });
+    }
     const queryObject = {
       test_question_bloc_code: this.test_question_bloc_code,
       test_bloc_title: this.test_bloc_title,
