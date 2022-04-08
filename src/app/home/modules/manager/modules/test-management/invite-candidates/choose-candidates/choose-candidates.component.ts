@@ -50,7 +50,6 @@ export class ChooseCandidatesComponent implements OnInit {
              ) {
    this.env = environment.uploadFileApiUrl + '/show/';
     this.displayIcon = true;
-
   }
 
   /**************************************************************************
@@ -128,7 +127,7 @@ export class ChooseCandidatesComponent implements OnInit {
             {
               receiver: {
                 name: '',
-                email: 'khmayesbounguicha@gmail.com'
+                email: candidate.email_address
               },
               sender: {
                 application: '',

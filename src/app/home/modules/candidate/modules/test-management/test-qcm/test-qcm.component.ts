@@ -70,6 +70,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   applicationId: string;
   expiredDate: number;
   photo: string;
+  languageId: string;
   @Input() isLoading = new BehaviorSubject<boolean>(true);
   @HostListener('window:beforeunload')
   disableCopyPaste: boolean;
@@ -330,6 +331,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.companyEmailAddress}&application_id=${
         this.utilsService.getApplicationID('SERVICIMA')}&session_code=${
         this.sessionCode}`).subscribe((oneSession) => {
+          this.languageId = oneSession[0]['language_id'];
           this.disableCopyPaste = oneSession[0].copy_paste;
       this.testService
         .getSessionQuestion(

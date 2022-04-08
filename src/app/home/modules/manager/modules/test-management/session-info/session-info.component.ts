@@ -72,7 +72,7 @@ export class SessionInfoComponent implements OnInit {
     this.getConnectedUser();
     this.listLanguage = this.getLanguages();
     this.testService.getLevel(`?application_id=${this.applicationId}&language_id=${this.languageId}`).subscribe(data => {
-      this.listLevel = data;
+      this.listLevel = data.sort((a, b) => (a.TestLevelKey.test_level_code > b.TestLevelKey.test_level_code ? 1 : -1));
     });
     this.getSessionInfoData();
     await this.getBlocQuestions();
