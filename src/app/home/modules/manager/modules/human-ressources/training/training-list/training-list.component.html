@@ -2,7 +2,7 @@
         [tableData]="ELEMENT_DATA"
         [tableCode]="'TRAINING_MANAGER'"
         [isLoading]="isLoading"
-        [header]="{title: title  , addActionURL: '/manager/human-ressources/training/training-add', feature: featureAdd ,addActionText: 'Add new Training' }"
+        [header]="{title: title  , addActionURL: '/manager/human-ressources/training/training-add', feature: featureAdd ,addActionText: 'hr.training.trainingslist.add' }"
         [buttonAdd]="true"
         (rowActionData)="switchAction($event)"
         [singleAction]="{name:'certification.import', feature: 'SOURCING_CAND_FILE_ACCESS'}"

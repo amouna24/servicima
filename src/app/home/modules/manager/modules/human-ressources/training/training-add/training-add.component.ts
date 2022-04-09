@@ -18,7 +18,7 @@ import { ITraining } from '@shared/models/training.model';
   styleUrls: ['./training-add.component.scss']
 })
 export class TrainingAddComponent implements OnInit, OnDestroy {
-    title = 'Add Training';
+    title = 'hr.training.trainingslist.sessioncreated.trainingsession';
     form: FormGroup;
     trainingCode = '';
     id = '';
@@ -77,9 +77,9 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
       training_code: [`WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TR`],
       title: ['', [Validators.required]],
       domain: ['', [Validators.required]],
-      warned_number: [''],
-      start_date: [''],
-      end_date: [''],
+      warned_number: ['', [Validators.required]],
+      start_date: ['', [Validators.required]],
+      end_date: ['', [Validators.required]],
       price: [''],
       warned_hours: [''],
       description: ['', [Validators.required]],
@@ -107,23 +107,27 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
    * @description submit function
    */
   next() {
-if (this.id || this.id !== '') {
-    this.trainingService.updateTraining(this.form.value).subscribe((data) => {
-        this.utilsService.openSnackBar('Training Updated successfully');
-    });
-} else {
-    this.trainingService.addTraining(this.form.value).subscribe((data) => {
-        console.log('my data ', data);
-        this.router.navigate(['/manager/human-ressources/training/session-training'],
-            {
-                queryParams: {
-                    code: btoa(data['Training']['TrainingKey']['training_code'])
-                }
-            }
-        );
+      if ( this.checkDate(this.form.value.start_date, this.form.value.end_date)) {
+          if (this.id || this.id !== '') {
+              this.trainingService.updateTraining(this.form.value).subscribe((data) => {
+                  this.utilsService.openSnackBar('Training Updated successfully');
+              });
+          } else {
+              this.trainingService.addTraining(this.form.value).subscribe((data) => {
+                  console.log('my data ', data);
+                  this.router.navigate(['/manager/human-ressources/training/session-training'],
+                      {
+                          queryParams: {
+                              code: btoa(data['Training']['TrainingKey']['training_code'])
+                          }
+                      }
+                  );
 
-    });
-}
+              });
+          }
+      } else {
+          this.utilsService.openSnackBar('Check dates');
+      }
 
   }
   /**
@@ -162,6 +166,16 @@ if (this.id || this.id !== '') {
             console.log(error);
         });
 
+    }
+
+    /**
+     * @description check date start and date end
+     */
+    checkDate(dateStart: Date, dateEnd: Date): boolean {
+      if (dateStart.getTime() < dateEnd.getTime()) {
+          return true;
+      }
+      return false;
     }
 
     /**

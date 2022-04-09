@@ -29,7 +29,7 @@ import { InviteCollaboratorComponent } from '../invite-collaborator/invite-colla
   ]
 })
 export class SessionsTrainingComponent implements OnInit {
-  title = 'Session List';
+  title = 'Training Session';
   listCollaborators: any;
   training: ITraining;
   showForm = false;
@@ -64,11 +64,13 @@ export class SessionsTrainingComponent implements OnInit {
       private route: ActivatedRoute,
 
   ) {
+      this.getDataFromLocalStorage();
       this.route.queryParams
           .pipe(
               takeUntil(this.destroy$)
           )
-          .subscribe( params => {
+          .subscribe( async params => {
+              await this.getRefData();
               if (params.id) {
                   this.id = atob(params.id);
                   this.code = atob(params.code);
@@ -93,12 +95,19 @@ export class SessionsTrainingComponent implements OnInit {
     });
     }
   }
+    /**
+     * @description get connected user from local storage
+     */
+    getDataFromLocalStorage() {
+        const cred = this.localStorageService.getItem('userCredentials');
+        this.companyEmail = cred['email_address'];
+        this.applicationId = cred['application_id'];
+    }
 
-  async ngOnInit(): Promise<void> {
+    async ngOnInit(): Promise<void> {
     this.modalService.registerModals(
         { modalName: 'inviteCollaborator', modalComponent: InviteCollaboratorComponent});
     await this.getConnectedUser();
-    await this.getRefData();
     await this.getCollaborator();
   }
   /**************************************************************************
@@ -158,6 +167,10 @@ export class SessionsTrainingComponent implements OnInit {
                     (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].time = this.form.value.time;
                 this.trainingSessions
                     .filter
+                    (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].dayView =
+                    this.weekDays.getValue().filter(x => x.value === this.form.value.day)[0].viewValue;
+                this.trainingSessions
+                    .filter
                     (x => x.TrainingSessionWeekKey.session_code === this.form.value.session_code)[0].durration = this.form.value.durration;
                 this.totalMinutesSessions.next(t);
                 this.timeDisplay.next(this.displayTotalHours(this.totalMinutesSessions.getValue()));
@@ -172,6 +185,7 @@ export class SessionsTrainingComponent implements OnInit {
                         session_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-SESSION`
                     },
                     day: this.form.value.day,
+                    dayView: this.weekDays.getValue().filter(x => x.value === this.form.value.day)[0].viewValue,
                     time: this.form.value.time,
                     durration: this.form.value.durration
                 });
@@ -209,7 +223,7 @@ export class SessionsTrainingComponent implements OnInit {
         ['WEEK_DAYS']
     );
    this.weekDays.next(this.refDataService.refData['WEEK_DAYS']);
-
+   console.log('my week end days ', this.weekDays.getValue());
  }
   /**
    * @description : Convert Time to number
@@ -263,7 +277,7 @@ export class SessionsTrainingComponent implements OnInit {
    * @description :  cancel function
    */
   cancel() {
-
+      this.location.back();
   }
 
   /**
@@ -280,7 +294,8 @@ export class SessionsTrainingComponent implements OnInit {
     let minutesString = '';
     totalHours < 10 ? hoursString = '0' + totalHours : hoursString = '' + totalHours;
     totalMinutes < 10 ? minutesString = '0' + totalMinutes : minutesString = '' + totalMinutes;
-   return hoursString + ':' + minutesString;
+
+   return minutesString === '00' ? hoursString :  hoursString + ':' + minutesString;
 
   }
     /**
@@ -351,6 +366,9 @@ export class SessionsTrainingComponent implements OnInit {
             this.trainingSessions = [];
             } else {
             this.trainingSessions = res[1]['results'];
+            this.trainingSessions.map(async (session) => {
+                session.dayView = this.weekDays.getValue().filter(x => x.value === session.day)[0].viewValue;
+            });
             this.getInitialTotalHours();
             this.showForm = true;
             }

@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ITraining } from '@shared/models/training.model';
 import { TrainingService } from '@core/services/training/training.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-invite-collaborator',
@@ -28,6 +29,7 @@ export class InviteCollaboratorComponent implements OnInit {
         private dialogRef: MatDialogRef<InviteCollaboratorComponent>,
         private trainingService: TrainingService,
         private localStorageService: LocalStorageService,
+        private utilsService: UtilsService
 
     ) {
         this.training = data.training;
@@ -55,11 +57,50 @@ export class InviteCollaboratorComponent implements OnInit {
                 status_invite: 'PENDING'
             };
             this.trainingService.addTrainingInviteCollaborator(inviteCollaborator).subscribe((data) => {
-                console.log('invite sended');
+                console.log('invitation sended successfully');
+                this.sendMail(collaborator.email_address, collaborator.fullName, 'testurl');
             });
         });
 
   }
+
+    /**
+     * @description send mail
+     */
+    sendMail(emailCollaborator, fullName, url) {
+        this.trainingService
+            .sendMail(
+                {
+                    receiver: {
+                        name: '',
+                        email: 'weed.wd2019@gmail.com'
+                    },
+                    sender: {
+                        application: '',
+                        name: 'No Reply',
+                        email: emailCollaborator
+                    },
+                    details: {
+                        var_param_1: `${fullName}`,
+                        url_param_1: `${url}`,
+                    },
+
+                    modelCode: {
+                        applicationName: '',
+                        model_code: 'TRAINING_INVITATION',
+                        language_id: this.localStorageService.getItem('language').langId,
+                        application_id: this.utilsService.getApplicationID('SERVICIMA'),
+                        company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+                    },
+                    attachement: [],
+                    emailcc: '',
+                    emailbcc: '',
+                }
+            ).subscribe((dataB) => {
+            console.log('email send successfully');
+    });
+    }
+
     /**
      * @description cancel
      */
