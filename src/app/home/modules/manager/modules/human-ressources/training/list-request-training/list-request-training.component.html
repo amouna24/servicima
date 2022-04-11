@@ -1,0 +1,13 @@
+<wid-dynamic-data-table
+        [tableData]="ELEMENT_DATA"
+        [tableCode]="'TRAINING_MANAGER'"
+        [isLoading]="isLoading"
+        [header]="{title: title  , addActionURL: '', feature: featureAdd ,addActionText: 'Add new Request' }"
+        [buttonAdd]="true"
+        (rowActionData)="switchAction($event)"
+        [singleAction]="{name:'certification.import', feature: 'SOURCING_CAND_FILE_ACCESS'}"
+        [allowedActions]="tabFeatureAccess"
+        (pagination)="loadMoreItems($event)"
+>
+
+</wid-dynamic-data-table>

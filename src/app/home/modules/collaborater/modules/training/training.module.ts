@@ -7,13 +7,17 @@ import { TrainingComponent } from './training.component';
 import { InvitationListComponent } from './invitation-list/invitation-list.component';
 import { InvitationComponent } from './invitation/invitation.component';
 import { DetailsInvitationComponent } from './details-invitation/details-invitation.component';
+import { TrainingRequestCollaboratorComponent } from './training-request-collaborator/training-request-collaborator.component';
+import {HumanRessourcesModule} from "../../../manager/modules/human-ressources/human-ressources.module";
+import { AddRequestTrainingComponent } from './add-request-training/add-request-training.component';
 
 @NgModule({
-  declarations: [TrainingComponent, InvitationListComponent, InvitationComponent, DetailsInvitationComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    TrainingRoutingModule
-  ]
+  declarations: [TrainingComponent, InvitationListComponent, InvitationComponent, DetailsInvitationComponent, TrainingRequestCollaboratorComponent, AddRequestTrainingComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        TrainingRoutingModule,
+        HumanRessourcesModule,
+    ]
 })
 export class TrainingModule { }
