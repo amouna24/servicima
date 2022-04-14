@@ -300,9 +300,9 @@ export class SessionInfoComponent implements OnInit {
               selectedBlocs: this.technologies.map( (tech) =>  tech.value),
               sessionCode: sessionObject.session_code,
               mode: this.mode,
+              language_id: this.form.controls.language.value,
             };
             this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
-            console.log(data, 'data');
           }, error => {
             console.error(error);
           });
@@ -322,13 +322,14 @@ export class SessionInfoComponent implements OnInit {
           test_session_time: this.sessionInfo.test_session_time,
           language_id: this.form.controls.language.value,
           copy_paste: this.form.controls.copyPaste.value,
-          send_report: this.form.controls.sendReport.value
+          send_report: this.form.controls.sendReport.value,
         };
         this.testService.updateSessionInfo(updateSessionInfoObject).subscribe( (sessionInfo) => {
           const queryObject = {
             selectedBlocs: this.technologies.map( (tech) =>  tech.value),
             sessionCode: updateSessionInfoObject.session_code,
-            mode: this.mode
+            mode: this.mode,
+            language_id: this.form.controls.language.value,
           };
           this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
         });

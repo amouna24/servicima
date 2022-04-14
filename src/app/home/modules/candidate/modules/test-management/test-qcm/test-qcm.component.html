@@ -190,7 +190,7 @@
                       </button>
                     </ng-template>
                     <ng-template [ngIf]="index + 1 === questionsList.length">
-                      <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); initTimerParams(durationList[index]); this.finishTest() ">
+                      <button mat-raised-button class="btn-small" color="primary" [disabled]="checkedChoices.length === 0 && !enableNextButton" (click)="setAnsweredQuestions(); initTimerParams(durationList[index]);  getQuestionsStats(); sendReport(); finishTest();">
                         <span class="white">Finish</span>
                       </button>
                     </ng-template>

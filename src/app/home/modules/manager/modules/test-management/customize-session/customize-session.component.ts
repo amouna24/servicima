@@ -144,7 +144,6 @@ export class CustomizeSessionComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      console.log('current event', event),
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -330,7 +329,7 @@ export class CustomizeSessionComponent implements OnInit {
     this.sessionQuestionsList.map( (oneQuestion, index) => {
       let addQuestion = true;
       const testSessionObject: ITestSessionQuestionModel = {
-        application_id: oneQuestion.questionDetails.TestQuestionKey.application_id,
+        application_id: this.utilsService.getApplicationID('SERVICIMA'),
         company_email: this.companyEmailAddress,
         session_code: this.sessionCode,
         bloc_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_bloc_code,
@@ -410,7 +409,6 @@ export class CustomizeSessionComponent implements OnInit {
       const selectField = dataSelect.technology;
       return selectField?.toLowerCase().includes(this.selectSearchField.toLowerCase());
     });
-    console.log('show bloc questions', this.showblocQuestionsList);
   }
   getMinimalScore() {
     this.testService
