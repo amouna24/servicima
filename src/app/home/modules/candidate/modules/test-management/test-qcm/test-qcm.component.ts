@@ -52,7 +52,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   env = environment.uploadFileApiUrl + '/show/';
   paddingTopSeconds = '';
   timeRing = '';
-  infoCircleClass = 'deg 90';
   index = 0;
   animationStateNext = false;
   animationStatePrevious = false;
@@ -88,7 +87,12 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   candidateEmail: string;
   editorOptions = { };
   code = '';
-
+  fullName: string;
+  experienceRequired: string;
+  correctAnswersList = [];
+  wrongAnswersList = [];
+  blocQuestions: string[];
+  questionsStats = [];
   constructor(
     private utilsService: UtilsService,
     private testService: TestService,
@@ -217,7 +221,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       .map((oneQuestion) => oneQuestion.questionNumber)
       .includes(this.index + 2) ? [...this.answeredQuestions[this.answeredQuestions
       .findIndex((obj => obj.questionNumber === this.index + 2))].choiceCode] : [];
-    console.log('checked choice', this.checkedChoices, 'answered questions', this.answeredQuestions);
     if ((this.questionsList.length - 1) > this.index) {
       this.animationStateNext = true;
       setTimeout(() => {
@@ -238,7 +241,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       .map((oneQuestion) => oneQuestion.questionNumber)
       .includes(this.index) ? [...this.answeredQuestions[this.answeredQuestions
       .findIndex((obj => obj.questionNumber === this.index))].choiceCode] : [];
-    console.log('checked choice', this.checkedChoices, 'answered questions', this.answeredQuestions);
 
     if (this.index > 0) {
       this.animationStatePrevious = true;
@@ -295,6 +297,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
 
   setAnsweredQuestions() {
+    const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
     if (this.checkedChoices.length > 0) {
       if (!this.answeredQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index + 1)) {
         this.answeredQuestions.push({
@@ -302,6 +305,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           questionMark: Number(this.questionsList[this.index].mark),
           choiceCode: this.checkedChoices,
           correctChoice: this.choicesList[this.index].correctChoice,
+          correctAnswer: equals(this.choicesList[this.index].correctChoice, this.checkedChoices),
           questionNumber: this.index + 1,
         });
         if (this.answeredQuestions.length === this.questionsList.length) {
@@ -326,12 +330,17 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
 
   getQuestions() {
     this.isLoading.next(true);
+    this.testService.getSession(`?session_code=${this.sessionCode}`).subscribe( (session) => {
+      this.blocQuestions = session[0].TestSessionKey.block_questions_code.split(',');
     this.testService.getSessionInfo(
       `?company_email=${
         this.companyEmailAddress}&application_id=${
         this.utilsService.getApplicationID('SERVICIMA')}&session_code=${
         this.sessionCode}`).subscribe((oneSession) => {
           this.languageId = oneSession[0]['language_id'];
+          this.testService.getLevel(`?test_level_code=${oneSession[0].level_code}`).subscribe( (level) => {
+            this.experienceRequired = level[0].test_level_title;
+          });
           this.disableCopyPaste = oneSession[0].copy_paste;
       this.testService
         .getSessionQuestion(
@@ -343,7 +352,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           this.testService
             .getQuestion(`?test_question_code=${oneSessionQuestion.TestSessionQuestionsKey.test_question_code}`)
             .subscribe((question) => {
-              console.log('question', question[0]);
             this.testService.getChoices(`?test_question_code=${question[0].TestQuestionKey.test_question_code}`)
               .subscribe((choices) => {
                 const correctChoice = [];
@@ -353,7 +361,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   }
                 });
                 this.questionsList.push(question[0]);
-                console.log(this.questionsList[0].code);
                 this.editorOptions = {
                   theme: 'vs-dark',
                   language: question[0].language_tech,
@@ -381,6 +388,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         });
       });
     });
+    });
   }
   getConnectedUser() {
     this.userService.connectedUser$
@@ -389,6 +397,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           if (userInfo) {
             this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
             this.photo = userInfo['company'][0].photo;
+            this.fullName = userInfo['user'][0].first_name + ' ' + userInfo['user'][0].last_name;
           }
         });
   }
@@ -478,7 +487,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     this.router.navigate(['/candidate']);
   }
   onKeyDown(event) {
-    console.log(event);
     if (this.disableCopyPaste) {
       const { keyCode, ctrlKey, metaKey} = event;
       if ((keyCode === 17 || keyCode === 67) && (metaKey || ctrlKey)) {
@@ -486,5 +494,91 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       }
     }
   }
+  sendReport() {
+    const reportData = {
+      fullName: this.fullName,
+      sessionName: this.sessionName,
+      experienceRequired: this.experienceRequired,
+      companyName: this.companyName,
+      duration: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
+      skippedQuestionTotal: this.skippedQuestions.length,
+      correctAnswerPercentage: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed()),
+      wrongAnswerPercentage: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
+      skippedAnswerPercentage: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+      questionsStats: this.questionsStats,
+    };
+    console.log(reportData);
+  }
+  correctAnswerPercentage() {
+    this.answeredQuestions.map( (oneQuestion) => {
+      if (oneQuestion.correctAnswer) {
+        this.correctAnswersList.push(oneQuestion);
+      }
+    });
+    return (this.correctAnswersList.length * 100) / this.questionsList.length;
+  }
+  wrongAnswerPercentage() {
+    this.answeredQuestions.map( (oneQuestion) => {
+      if (!oneQuestion.correctAnswer) {
+        this.wrongAnswersList.push(oneQuestion);
 
+      }
+    });
+    return (this.wrongAnswersList.length * 100) / this.questionsList.length;
+  }
+  getQuestionsStats() {
+    this.correctAnswerPercentage();
+    this.wrongAnswerPercentage();
+      this.blocQuestions.map( (oneBlocQuestionsCode, index) => {
+        let technologyTitle = '';
+        let sumTotal = 0;
+        let sumCorrect = 0;
+        let sumWrong = 0;
+        let sumSkipped = 0;
+        let achievedPts = 0;
+        let totalPts = 0;
+        this.testService.getQuestionBloc(`?bloc_question_code=${oneBlocQuestionsCode}`).subscribe( (blocQuestion) => {
+          this.testService.getTechnologies(`?test_technology_code=${blocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
+            .subscribe( (technology) => {
+              technologyTitle = technology[0].technology_title;
+          this.testService.getSessionQuestion(`?session_code=${this.sessionCode}&bloc_question_code=${oneBlocQuestionsCode}`)
+            .subscribe((sessionQuestions) => {
+              sumTotal = sessionQuestions.length;
+              this.questionsList.map( (oneQuestion ) => {
+                totalPts += Number(oneQuestion.mark);
+              });
+              sessionQuestions.map((oneSessionQuestion) => {
+                this.correctAnswersList.map( (correctAnswer) => {
+                  if (correctAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
+                    sumCorrect += 1;
+                    achievedPts = Number(correctAnswer.questionMark);
+                  }
+                });
+                this.wrongAnswersList.map( (wrongAnswer) => {
+                  if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
+                    sumWrong += 1;
+                  }
+                });
+                sumSkipped = sumTotal - (sumWrong + sumCorrect);
+
+              });
+              this.questionsStats.push( {
+                technologyTitle,
+                questionsStats:
+                  {
+                    skippedPercentage: Number(((sumSkipped * 100) / sumTotal).toFixed()),
+                    wrongPercentage: Number(((sumWrong * 100) / sumTotal).toFixed()),
+                    correctPercentage: Number(((sumCorrect * 100) / sumTotal).toFixed()),
+                  },
+                questionMark: {
+                  totalPts,
+                  achievedPts,
+                  percentagePts: Number(((achievedPts * 100) / totalPts).toFixed()),
+                }
+              });
+            });
+        });
+        });
+      });
+  }
 }

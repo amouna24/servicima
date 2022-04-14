@@ -8,7 +8,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UserService } from '@core/services/user/user.service';
 import { environment } from '@environment/environment';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { IUserModel } from '@shared/models/user.model';
 
 @Component({
   selector: 'wid-welcome-to-test',
