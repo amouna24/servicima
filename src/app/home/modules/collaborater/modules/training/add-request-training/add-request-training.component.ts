@@ -11,7 +11,7 @@ import { RefdataService } from '@core/services/refdata/refdata.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { TrainingService } from '@core/services/training/training.service';
 import { ITrainingRequest } from '@shared/models/trainingRequest.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'wid-add-request-training',
@@ -42,6 +42,7 @@ export class AddRequestTrainingComponent implements OnInit {
       private utilsService: UtilsService,
       private trainingService: TrainingService,
       private route: ActivatedRoute,
+      private router: Router,
 
   ) {
     this.initForm();
@@ -143,6 +144,7 @@ export class AddRequestTrainingComponent implements OnInit {
         this.form.value.send_date = new Date();
         this.trainingService.addTrainingRequest(this.form.value).subscribe((data) => {
           this.utilsService.openSnackBar('Training request send successfully', 'close', 3000);
+          this.router.navigate(['/collaborator/training/request-list']);
         });
 
       }

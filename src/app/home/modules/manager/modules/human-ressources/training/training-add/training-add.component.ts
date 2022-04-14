@@ -138,6 +138,10 @@ export class TrainingAddComponent implements OnInit, OnDestroy {
     this.applicationId = cred['application_id'];
     this.companyEmail = cred['email_address'];
   }
+
+    /**
+     * @description get refdata
+     */
   async getRefData() {
     await this.refDataService.getRefData(
         this.utilsService.getCompanyId(this.companyEmail, this.applicationId),

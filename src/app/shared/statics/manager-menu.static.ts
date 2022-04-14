@@ -87,6 +87,13 @@ export const managerMenu: IMenu[] = [
             feature: 'SOURCING_ACCESS',
             type: 'link',
           },
+          {
+            state: 'request-list',
+            name: 'Requests Collaborators',
+            icon: '',
+            feature: 'SOURCING_ACCESS',
+            type: 'link',
+          },
         ]
       }
     ]

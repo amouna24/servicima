@@ -38,8 +38,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
       private userService: UserService,
       private trainingService: TrainingService,
       private router: Router,
-      private utilsService: UtilsService
-
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -71,7 +69,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
        this.trainingService
            .getTraining(`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}&status=ACTIVE`).subscribe((training) => {
           this.listTraining = training['results'];
-          console.log('return data', this.listTraining);
           this.ELEMENT_DATA.next(training);
           this.isLoading.next(false);
           resolve(this.listTraining);

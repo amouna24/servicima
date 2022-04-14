@@ -8,11 +8,16 @@ import { InvitationListComponent } from './invitation-list/invitation-list.compo
 import { InvitationComponent } from './invitation/invitation.component';
 import { DetailsInvitationComponent } from './details-invitation/details-invitation.component';
 import { TrainingRequestCollaboratorComponent } from './training-request-collaborator/training-request-collaborator.component';
-import {HumanRessourcesModule} from "../../../manager/modules/human-ressources/human-ressources.module";
+import { HumanRessourcesModule } from '../../../manager/modules/human-ressources/human-ressources.module';
 import { AddRequestTrainingComponent } from './add-request-training/add-request-training.component';
 
 @NgModule({
-  declarations: [TrainingComponent, InvitationListComponent, InvitationComponent, DetailsInvitationComponent, TrainingRequestCollaboratorComponent, AddRequestTrainingComponent],
+  declarations: [
+      TrainingComponent,
+      InvitationListComponent,
+      InvitationComponent,
+      DetailsInvitationComponent,
+      TrainingRequestCollaboratorComponent, AddRequestTrainingComponent],
     imports: [
         CommonModule,
         SharedModule,

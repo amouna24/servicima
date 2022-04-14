@@ -1,12 +1,14 @@
 <wid-dynamic-data-table
         [tableData]="ELEMENT_DATA"
-        [tableCode]="'TRAINING_MANAGER'"
+        [tableCode]="'TRAINING_REQUEST'"
         [isLoading]="isLoading"
-        [header]="{title: title  , addActionURL: '', feature: featureAdd ,addActionText: 'Add new Request' }"
+        [header]="{title: title  , addActionURL: '/collaborator/training/add-request', feature: featureAdd ,addActionText: 'Add new Request' }"
         [buttonAdd]="true"
         (rowActionData)="switchAction($event)"
+        [colorObject]="colorCheck()"
         [singleAction]="{name:'certification.import', feature: 'SOURCING_CAND_FILE_ACCESS'}"
         [allowedActions]="tabFeatureAccess"
+        [setAvatar]="{columnCode:'full_name', imgSrc: 'photo' }"
         (pagination)="loadMoreItems($event)"
 >
 
