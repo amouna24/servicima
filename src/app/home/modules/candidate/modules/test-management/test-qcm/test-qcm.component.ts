@@ -323,7 +323,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       }
 
     }
-    console.log('answered questions', this.answeredQuestions, 'skipped questions', this.skippedQuestions);
 
   }
 
@@ -501,9 +500,16 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       companyName: this.companyName,
       duration: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
       skippedQuestionTotal: this.skippedQuestions.length,
-      correctAnswerPercentage: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed()),
-      wrongAnswerPercentage: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
-      skippedAnswerPercentage: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+      correctAnswerPercentage: {
+        exact: Number((this.correctAnswersList.length * 100) / this.questionsList.length),
+        display: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed())
+      },
+      wrongAnswerPercentage: {
+        display: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
+        exact: Number((this.wrongAnswersList.length * 100) / this.questionsList.length), },
+      skippedAnswerPercentage: {
+        display: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+        exact: Number((this.skippedQuestions.length * 100) / this.questionsList.length), },
       questionsStats: this.questionsStats,
     };
     console.log(reportData);
@@ -542,7 +548,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.testService.getQuestionBloc(`?test_question_bloc_code=${oneBlocQuestionsCode}`).subscribe( (blocQuestion) => {
           this.testService.getTechnologies(`?test_technology_code=${blocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
             .subscribe( (technology) => {
-              console.log('technologies', technology[0]);
               technologyTitle = technology[0].technology_title;
           this.testService.getSessionQuestion(`?session_code=${this.sessionCode}&bloc_question_code=${oneBlocQuestionsCode}`)
             .subscribe((sessionQuestions) => {
@@ -568,7 +573,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                 sumSkipped = sumTotal - (sumWrong + sumCorrect);
 
               });
-              console.log('sum wrong', sumWrong, 'sum correct', sumCorrect, 'sumSkipped', sumSkipped, 'bloc questions', this.blocQuestions, index);
               this.questionsStats.push( {
                 technologyTitle,
                 questionsStats:
