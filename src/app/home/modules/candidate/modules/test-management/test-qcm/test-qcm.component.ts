@@ -566,9 +566,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   }
                 });
                 this.wrongAnswersList.map( (wrongAnswer) => {
-                  if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
-                    sumWrong += Number(wrongAnswer.questionMark);
-                  }
+                    if (wrongAnswer.questionCode === oneBlocQuestionsCode) {
+                      sumWrong += Number(wrongAnswer.questionMark);
+                    }
                 });
                 sumSkipped = sumTotal - (sumWrong + sumCorrect);
 
