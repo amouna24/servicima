@@ -308,8 +308,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           correctAnswer: equals(this.choicesList[this.index].correctChoice, this.checkedChoices),
           questionNumber: this.index + 1,
         });
-        if (this.answeredQuestions.length === this.questionsList.length) {
-        }
       } else {
         const questionIndex = this.answeredQuestions.findIndex((obj => obj.questionNumber === this.index + 1));
         this.answeredQuestions[questionIndex] = {
@@ -502,14 +500,22 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       companyName: this.companyName,
       duration: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
       skippedQuestionTotal: this.skippedQuestions.length,
-      correctAnswerPercentage: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed()),
-      wrongAnswerPercentage: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
-      skippedAnswerPercentage: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+      correctAnswerPercentage: {
+        exact: Number((this.correctAnswersList.length * 100) / this.questionsList.length),
+        display: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed())
+      },
+      wrongAnswerPercentage: {
+        display: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
+        exact: Number((this.wrongAnswersList.length * 100) / this.questionsList.length), },
+      skippedAnswerPercentage: {
+        display: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+        exact: Number((this.skippedQuestions.length * 100) / this.questionsList.length), },
       questionsStats: this.questionsStats,
     };
     console.log(reportData);
   }
   correctAnswerPercentage() {
+    this.correctAnswersList = [];
     this.answeredQuestions.map( (oneQuestion) => {
       if (oneQuestion.correctAnswer) {
         this.correctAnswersList.push(oneQuestion);
@@ -518,6 +524,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     return (this.correctAnswersList.length * 100) / this.questionsList.length;
   }
   wrongAnswerPercentage() {
+    this.wrongAnswersList = [];
     this.answeredQuestions.map( (oneQuestion) => {
       if (!oneQuestion.correctAnswer) {
         this.wrongAnswersList.push(oneQuestion);
@@ -527,6 +534,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     return (this.wrongAnswersList.length * 100) / this.questionsList.length;
   }
   getQuestionsStats() {
+    this.questionsStats = [];
     this.correctAnswerPercentage();
     this.wrongAnswerPercentage();
       this.blocQuestions.map( (oneBlocQuestionsCode, index) => {
@@ -537,26 +545,29 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         let sumSkipped = 0;
         let achievedPts = 0;
         let totalPts = 0;
-        this.testService.getQuestionBloc(`?bloc_question_code=${oneBlocQuestionsCode}`).subscribe( (blocQuestion) => {
+        this.testService.getQuestionBloc(`?test_question_bloc_code=${oneBlocQuestionsCode}`).subscribe( (blocQuestion) => {
           this.testService.getTechnologies(`?test_technology_code=${blocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
             .subscribe( (technology) => {
               technologyTitle = technology[0].technology_title;
           this.testService.getSessionQuestion(`?session_code=${this.sessionCode}&bloc_question_code=${oneBlocQuestionsCode}`)
             .subscribe((sessionQuestions) => {
-              sumTotal = sessionQuestions.length;
               this.questionsList.map( (oneQuestion ) => {
-                totalPts += Number(oneQuestion.mark);
+                if (oneQuestion.TestQuestionKey.test_question_bloc_code === oneBlocQuestionsCode) {
+                  sumTotal += Number(oneQuestion.mark);
+                  totalPts += Number(oneQuestion.mark);
+
+                }
               });
               sessionQuestions.map((oneSessionQuestion) => {
                 this.correctAnswersList.map( (correctAnswer) => {
                   if (correctAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
-                    sumCorrect += 1;
-                    achievedPts = Number(correctAnswer.questionMark);
+                    sumCorrect += Number(correctAnswer.questionMark);
+                    achievedPts += Number(correctAnswer.questionMark);
                   }
                 });
                 this.wrongAnswersList.map( (wrongAnswer) => {
                   if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
-                    sumWrong += 1;
+                    sumWrong += Number(wrongAnswer.questionMark);
                   }
                 });
                 sumSkipped = sumTotal - (sumWrong + sumCorrect);
