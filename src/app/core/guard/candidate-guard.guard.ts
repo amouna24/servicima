@@ -63,9 +63,9 @@ export class CandidateGuardGuard implements CanActivate {
     const idSessionCandidateLink = this.cryptoService.encrypt(environment.cryptoKeyCode, cryptData);
      this.testService.getTestInviteCandidates(  `?company_email=${this.emailAddress}&candidate_email=${decryptQueryCandidateMail}` +
        `&session_code=${decryptQuerySessionCode}&send_date=${decryptQuerySendDate}`).subscribe((data) => {
-       /*if ( !data[0].link_valid ) {
+       if ( !data[0].link_valid ) {
          this.router.navigate(['/candidate/test-management/welcome-to-test'], { queryParams: { id: idSessionCandidateLink}});
-       }*/
+       }
      });
     return true;
   }

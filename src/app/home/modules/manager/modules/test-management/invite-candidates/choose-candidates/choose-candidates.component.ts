@@ -127,7 +127,7 @@ export class ChooseCandidatesComponent implements OnInit {
             {
               receiver: {
                 name: '',
-                email: 'khmayesbounguicha@gmail.com'
+                email: candidate.email_address
               },
               sender: {
                 application: '',
