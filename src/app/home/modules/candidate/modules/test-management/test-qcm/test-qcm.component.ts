@@ -434,6 +434,10 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         } else {
           this.finishTest();
         }
+        this.skippedQuestions.push({
+          questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
+          questionNumber: this.index + 1
+        });
       } else if (this.durationType === 'time_overall') {
         this.showExpiringPage = true;
     }
