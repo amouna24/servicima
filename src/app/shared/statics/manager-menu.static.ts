@@ -257,6 +257,13 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
       },
+      {
+        state: 'candidates-list',
+        name: 'Candidates list',
+        type: 'link',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+      },
     ]
     },
   {

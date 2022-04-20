@@ -41,7 +41,6 @@ import * as html2pdf from 'html2pdf.js';
   ]
 })
 export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewInit {
-
   colorCodes = {
     info: {
       color: 'firstColor'
@@ -90,7 +89,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   showCongratulationPage = false;
   disableChoices =  false;
   enableNextButton = false;
-  finalResult = 0;
   candidateEmail: string;
   editorOptions = { };
   code = '';
@@ -102,6 +100,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   questionsStats = [];
   spinnerData = [];
   minimalScore: number;
+  finalResult = 0;
 
   constructor(
     private utilsService: UtilsService,
@@ -397,6 +396,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.skippedQuestions.splice(skippedQuestionIndex, 1);
       }
 
+    } else {
+      this.setSkippedQuestions();
     }
 
   }
@@ -412,7 +413,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.sessionCode}`).subscribe((oneSession) => {
           this.languageId = oneSession[0]['language_id'];
           this.testService.getLevel(`?test_level_code=${oneSession[0].level_code}`).subscribe( (level) => {
-
             this.experienceRequired = level[0].test_level_title;
           });
       this.minimalScore = oneSession[0]['minimal_score'];
@@ -509,6 +509,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
           this.disableChoices = true;
           this.enableNextButton = true;
         } else {
+          await this.finishTest('', '');
         }
         this.skippedQuestions.push({
           questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
@@ -531,34 +532,17 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
    const newTestResult = {
      company_email: this.companyEmailAddress,
      application_id:  this.utilsService.getApplicationID('SERVICIMA'),
-     session_code: this.sessionCode,
+     session_name: this.sessionName,
      candidate_result_code: candidateResultCode,
-     final_result: this.finalResult,
+     final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
+     full_name: this.fullName,
      time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
      answered_questions: this.answeredQuestions.length,
      total_questions: this.questionsList.length,
    };
-   this.testService.addTestCandidateResults(newTestResult).subscribe( (testResult) => {
-
-     this.answeredQuestions.map( (oneAnsweredQuestion, index) => {
-       const answeredQuestion = {
-         company_email: this.companyEmailAddress,
-         application_id: newTestResult.application_id,
-         session_code: this.sessionCode,
-         candidate_result_code: candidateResultCode,
-         candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
-         response_code: oneAnsweredQuestion.choiceCode.toString(),
-         question_code: oneAnsweredQuestion.questionCode,
-         correct_answer: oneAnsweredQuestion.correctChoice.toString(),
-       };
-       this.testService.addTestCandidateResponse(answeredQuestion).subscribe( async (response) => {
-         console.log('response added', response);
-         if (index + 1 === this.answeredQuestions.length ) {
-           await this.exportPdf();
-           type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
-         }
-       });
-     });
+   this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
+       await this.exportPdf();
+       type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
    });
   }
 
@@ -596,6 +580,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         exact: Number((this.skippedQuestions.length * 100) / this.questionsList.length), },
       questionsStats: this.questionsStats,
     };
+    console.log('report data', this.reportData);
     this.spinnerData =  [{
       id: 1,
       percent: Number(this.reportData.correctAnswerPercentage.exact),
@@ -629,6 +614,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     this.answeredQuestions.map( (oneQuestion) => {
       if (!oneQuestion.correctAnswer) {
         this.wrongAnswersList.push(oneQuestion);
+
       }
     });
     return (this.wrongAnswersList.length * 100) / this.questionsList.length;
@@ -659,6 +645,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                 if (oneQuestion.TestQuestionKey.test_question_bloc_code === oneBlocQuestionsCode) {
                   sumTotal += Number(oneQuestion.mark);
                   totalPts += Number(oneQuestion.mark);
+
                 }
               });
               sessionQuestions.map((oneSessionQuestion) => {
@@ -669,17 +656,13 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   }
                 });
                 this.wrongAnswersList.map( (wrongAnswer) => {
-                  if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
-                    sumWrong += Number(wrongAnswer.questionMark);
-                  }
-                    if (wrongAnswer.questionCode === oneBlocQuestionsCode) {
+                    if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
                       sumWrong += Number(wrongAnswer.questionMark);
                     }
                 });
                 sumSkipped = sumTotal - (sumWrong + sumCorrect);
 
               });
-
               this.questionsStats.push( {
                 technologyTitle,
                 questionsStats:

@@ -16,6 +16,7 @@ import { OverallTimerDialogComponent } from './session-timer/overall-timer-dialo
 import { SessionListComponent } from './session-list/session-list.component';
 import { InviteCandidatesComponent } from './invite-candidates/invite-candidates.component';
 import { ChooseCandidatesComponent } from './invite-candidates/choose-candidates/choose-candidates.component';
+import { CandidateResultListComponent } from './candidate-result-list/candidate-result-list.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ChooseCandidatesComponent } from './invite-candidates/choose-candidates
     OverallTimerDialogComponent,
     SessionListComponent,
     InviteCandidatesComponent,
-    ChooseCandidatesComponent, ],
+    ChooseCandidatesComponent,
+    CandidateResultListComponent, ],
     imports: [
         CommonModule,
         TestManagementRoutingModule,
