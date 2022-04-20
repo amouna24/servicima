@@ -131,7 +131,7 @@ export class WelcomeToTestComponent implements OnInit {
          this.statusLink = 'link valid';
         } else if ( !data[0].link_valid ) {
           console.log('link invalid');
-          this.statusLink = 'link invalid';
+          this.statusLink = 'link valid';
         } else if (this.calculateDiff(this.queryList['send_date']) >= data[0]['expired_date']) {
           console.log('link expired');
           this.router.navigate(['/expired-code']);
