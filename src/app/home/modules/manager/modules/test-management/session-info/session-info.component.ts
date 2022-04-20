@@ -300,7 +300,7 @@ export class SessionInfoComponent implements OnInit {
               selectedBlocs: this.technologies.map( (tech) =>  tech.value),
               sessionCode: sessionObject.session_code,
               mode: this.mode,
-              language_id: this.form.controls.language.value,
+              language_id: this.form.controls.language.value
             };
             this.utilsService.navigateWithQueryParam('/manager/test/customize-session', queryObject);
           }, error => {
