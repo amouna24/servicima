@@ -190,7 +190,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     }, error => {
       console.log(error);
     });
-
+    return fileName;
   }
   /**************************************************************************
    * @description Upload Image to Server
@@ -528,7 +528,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
    const resp = await this.getQuestionsStats();
    this.sendReport();
    const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
-
+   const fileName = await this.exportPdf();
    const newTestResult = {
      company_email: this.companyEmailAddress,
      application_id:  this.utilsService.getApplicationID('SERVICIMA'),
@@ -539,9 +539,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
      time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
      answered_questions: this.answeredQuestions.length,
      total_questions: this.questionsList.length,
+     file_name: fileName
    };
    this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
-       await this.exportPdf();
        type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
    });
   }
