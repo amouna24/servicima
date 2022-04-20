@@ -23,6 +23,9 @@ import { UserService } from '@core/services/user/user.service';
 import { Router } from '@angular/router';
 import { environment } from '@environment/environment';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
+import { UploadService } from '@core/services/upload/upload.service';
+import { map } from 'rxjs/internal/operators/map';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'wid-test-qcm',
@@ -38,6 +41,7 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
   ]
 })
 export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewInit {
+
   colorCodes = {
     info: {
       color: 'firstColor'
@@ -49,6 +53,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       color: 'thirdColor',
     }
   };
+  totalTechnologyPts: number;
+  totalAchievedPts: number;
+  reportData: any;
   env = environment.uploadFileApiUrl + '/show/';
   paddingTopSeconds = '';
   timeRing = '';
@@ -93,6 +100,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   wrongAnswersList = [];
   blocQuestions: string[];
   questionsStats = [];
+  spinnerData = [];
+  minimalScore: number;
+
   constructor(
     private utilsService: UtilsService,
     private testService: TestService,
@@ -100,6 +110,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private router: Router,
+    private uploadService: UploadService,
   ) {
     this.getSessionCode();
     this.getDataFromLocalStorage();
@@ -131,6 +142,70 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       console.log(updated, 'updated');
     });
   }
+
+  async exportPdf() {
+    const options = {
+      filename: 'report.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 5, useCORS: false },
+      jsPDF:        { unit: 'in', format: 'A4', orientation: 'portrait' }
+    };
+    html2pdf().set({
+      pagebreak: { mode: 'avoid-all', before: '#page2el' },
+    });
+    const content: Element = document.getElementById('container-report');
+    const worker = await html2pdf().set(options).from(content).toPdf().output('blob').then( (data: Blob) => {
+      return data;
+    });
+    const formData = new FormData();
+    formData.append('file', worker);
+    formData.append('caption', 'test');
+    const fileName = await this.uploadFile(formData);
+    const text = 'le candidat a terminé le test vous trouverez ci-dessous le resultat';
+    this.userService
+      .sendMail(
+        {
+          receiver: {
+            name: '',
+            email: this.companyEmailAddress
+          },
+          sender: {
+            application: '',
+            name: 'No Reply',
+            email: this.companyEmailAddress,
+          },
+          modelCode: {
+            applicationName: '',
+            language_id: this.localStorageService.getItem('language').langId,
+            application_id: this.utilsService.getApplicationID('SERVICIMA'),
+            company_id: this.utilsService.getCompanyId('ALL', this.utilsService.getApplicationID('ALL')),
+          },
+          text,
+          subject: 'Resultat de test',
+          attachement: [ { filename: `Test ${this.fullName}.pdf`, path: `${this.env + fileName}`}],
+          emailcc: '',
+          emailbcc: '',
+        }
+      ).subscribe((dataB) => {
+      console.log('email resended');
+    }, error => {
+      console.log(error);
+    });
+
+  }
+  /**************************************************************************
+   * @description Upload Image to Server
+   * @param formData: formData
+   *************************************************************************/
+  async uploadFile(formData: FormData): Promise<string> {
+    return await this.uploadService.uploadImage(formData)
+      // return await this.uploadService.uploadImageLocal(formData)
+      .pipe(
+        map(response => response.file.filename)
+      )
+      .toPromise();
+  }
+
   /**************************************************************************
    * @description get data from local storage
    *************************************************************************/
@@ -337,8 +412,10 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.sessionCode}`).subscribe((oneSession) => {
           this.languageId = oneSession[0]['language_id'];
           this.testService.getLevel(`?test_level_code=${oneSession[0].level_code}`).subscribe( (level) => {
+
             this.experienceRequired = level[0].test_level_title;
           });
+      this.minimalScore = oneSession[0]['minimal_score'];
           this.disableCopyPaste = oneSession[0].copy_paste;
       this.testService
         .getSessionQuestion(
@@ -425,61 +502,64 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       this.timeLeft = maxTime;
     }
   }
-  testExpiredTime() {
+ async testExpiredTime() {
     if (this.timeLeft === 0) {
       if (this.durationType === 'time_per_question') {
         if (this.index + 1 < this.questionsList.length) {
           this.disableChoices = true;
           this.enableNextButton = true;
         } else {
-          this.finishTest();
         }
         this.skippedQuestions.push({
           questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
           questionNumber: this.index + 1
         });
       } else if (this.durationType === 'time_overall') {
-        this.showExpiringPage = true;
+       const finish = await  this.finishTest('index', 'showExpiringPage');
+       // this.showExpiringPage = true;
     }
     }
   }
-  finishTest() {
-    const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
-    this.answeredQuestions.map( (oneQuestion) => {
-      if (oneQuestion.correctChoice === oneQuestion.choiceCode)  {
-        this.finalResult += oneQuestion.questionMark;
-      }
-    });
-    const newTestResult = {
-      company_email: this.companyEmailAddress,
-      application_id:  this.utilsService.getApplicationID('SERVICIMA'),
-      session_code: this.sessionCode,
-      candidate_result_code: candidateResultCode,
-      final_result: this.finalResult,
-      time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
-      answered_questions: this.answeredQuestions.length,
-      total_questions: this.questionsList.length,
-    };
-    this.testService.addTestCandidateResults(newTestResult).subscribe( (testResult) => {
-      this.answeredQuestions.map( (oneAnsweredQuestion, index) => {
-        const answeredQuestion = {
-          company_email: this.companyEmailAddress,
-          application_id: newTestResult.application_id,
-          session_code: this.sessionCode,
-          candidate_result_code: candidateResultCode,
-          candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
-          response_code: oneAnsweredQuestion.choiceCode.toString(),
-          question_code: oneAnsweredQuestion.questionCode,
-          correct_answer: oneAnsweredQuestion.correctChoice.toString(),
-        };
-        this.testService.addTestCandidateResponse(answeredQuestion).subscribe( (response) => {
-          console.log('response added', response);
-          if (index + 1 === this.answeredQuestions.length) {
-            this.showCongratulationPage = true;
-          }
-        });
-      });
-    });
+
+ async finishTest(index, type) {
+   this.setAnsweredQuestions();
+   this.initTimerParams(this.durationList[index]);
+   const resp = await this.getQuestionsStats();
+   this.sendReport();
+   const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
+
+   const newTestResult = {
+     company_email: this.companyEmailAddress,
+     application_id:  this.utilsService.getApplicationID('SERVICIMA'),
+     session_code: this.sessionCode,
+     candidate_result_code: candidateResultCode,
+     final_result: this.finalResult,
+     time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
+     answered_questions: this.answeredQuestions.length,
+     total_questions: this.questionsList.length,
+   };
+   this.testService.addTestCandidateResults(newTestResult).subscribe( (testResult) => {
+
+     this.answeredQuestions.map( (oneAnsweredQuestion, index) => {
+       const answeredQuestion = {
+         company_email: this.companyEmailAddress,
+         application_id: newTestResult.application_id,
+         session_code: this.sessionCode,
+         candidate_result_code: candidateResultCode,
+         candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
+         response_code: oneAnsweredQuestion.choiceCode.toString(),
+         question_code: oneAnsweredQuestion.questionCode,
+         correct_answer: oneAnsweredQuestion.correctChoice.toString(),
+       };
+       this.testService.addTestCandidateResponse(answeredQuestion).subscribe( async (response) => {
+         console.log('response added', response);
+         if (index + 1 === this.answeredQuestions.length ) {
+           await this.exportPdf();
+           type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
+         }
+       });
+     });
+   });
   }
 
   /**
@@ -497,7 +577,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     }
   }
   sendReport() {
-    const reportData = {
+     this.reportData = {
       fullName: this.fullName,
       sessionName: this.sessionName,
       experienceRequired: this.experienceRequired,
@@ -506,17 +586,34 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       skippedQuestionTotal: this.skippedQuestions.length,
       correctAnswerPercentage: {
         exact: Number((this.correctAnswersList.length * 100) / this.questionsList.length),
-        display: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed())
+        display: Number(((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed(1))
       },
       wrongAnswerPercentage: {
-        display: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed()),
+        display: Number(((this.wrongAnswersList.length * 100) / this.questionsList.length).toFixed(1)),
         exact: Number((this.wrongAnswersList.length * 100) / this.questionsList.length), },
       skippedAnswerPercentage: {
-        display: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed()),
+        display: Number(((this.skippedQuestions.length * 100) / this.questionsList.length).toFixed(1)),
         exact: Number((this.skippedQuestions.length * 100) / this.questionsList.length), },
       questionsStats: this.questionsStats,
     };
-    console.log(reportData);
+    this.spinnerData =  [{
+      id: 1,
+      percent: Number(this.reportData.correctAnswerPercentage.exact),
+      color: '#1bc5bd',
+      label: 'Slice 1',
+    },
+      {
+        id: 2,
+        percent: Number(this.reportData.wrongAnswerPercentage.exact),
+        color: '#fc0f3b',
+        label: 'Slice 2',
+      },
+      {
+        id: 3,
+        percent: Number(this.reportData.skippedAnswerPercentage.exact),
+        color: '#f3f6f9',
+        label: 'Slice 3',
+      }, ];
   }
   correctAnswerPercentage() {
     this.correctAnswersList = [];
@@ -532,16 +629,16 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     this.answeredQuestions.map( (oneQuestion) => {
       if (!oneQuestion.correctAnswer) {
         this.wrongAnswersList.push(oneQuestion);
-
       }
     });
     return (this.wrongAnswersList.length * 100) / this.questionsList.length;
   }
   getQuestionsStats() {
+    return new Promise(((resolve) => {
     this.questionsStats = [];
     this.correctAnswerPercentage();
     this.wrongAnswerPercentage();
-      this.blocQuestions.map( (oneBlocQuestionsCode, index) => {
+    this.blocQuestions.map( (oneBlocQuestionsCode, index) => {
         let technologyTitle = '';
         let sumTotal = 0;
         let sumCorrect = 0;
@@ -549,9 +646,12 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         let sumSkipped = 0;
         let achievedPts = 0;
         let totalPts = 0;
+        this.totalTechnologyPts = 0;
+        this.totalAchievedPts = 0;
         this.testService.getQuestionBloc(`?test_question_bloc_code=${oneBlocQuestionsCode}`).subscribe( (blocQuestion) => {
           this.testService.getTechnologies(`?test_technology_code=${blocQuestion['results'][0].TestQuestionBlocKey.test_technology_code}`)
             .subscribe( (technology) => {
+              this.totalTechnologyPts = 0;
               technologyTitle = technology[0].technology_title;
           this.testService.getSessionQuestion(`?session_code=${this.sessionCode}&bloc_question_code=${oneBlocQuestionsCode}`)
             .subscribe((sessionQuestions) => {
@@ -559,7 +659,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                 if (oneQuestion.TestQuestionKey.test_question_bloc_code === oneBlocQuestionsCode) {
                   sumTotal += Number(oneQuestion.mark);
                   totalPts += Number(oneQuestion.mark);
-
                 }
               });
               sessionQuestions.map((oneSessionQuestion) => {
@@ -570,6 +669,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                   }
                 });
                 this.wrongAnswersList.map( (wrongAnswer) => {
+                  if (wrongAnswer.questionCode === oneSessionQuestion.TestSessionQuestionsKey.test_question_code) {
+                    sumWrong += Number(wrongAnswer.questionMark);
+                  }
                     if (wrongAnswer.questionCode === oneBlocQuestionsCode) {
                       sumWrong += Number(wrongAnswer.questionMark);
                     }
@@ -577,23 +679,37 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
                 sumSkipped = sumTotal - (sumWrong + sumCorrect);
 
               });
+
               this.questionsStats.push( {
                 technologyTitle,
                 questionsStats:
                   {
-                    skippedPercentage: Number(((sumSkipped * 100) / sumTotal).toFixed()),
-                    wrongPercentage: Number(((sumWrong * 100) / sumTotal).toFixed()),
-                    correctPercentage: Number(((sumCorrect * 100) / sumTotal).toFixed()),
+                    skippedPercentage: Number(((sumSkipped * 100) / sumTotal).toFixed(1)),
+                    wrongPercentage: Number(((sumWrong * 100) / sumTotal).toFixed(1)),
+                    correctPercentage: Number(((sumCorrect * 100) / sumTotal).toFixed(1)),
                   },
                 questionMark: {
                   totalPts,
                   achievedPts,
-                  percentagePts: Number(((achievedPts * 100) / totalPts).toFixed()),
+                  percentagePts: Number(((achievedPts * 100) / totalPts).toFixed(1)),
                 }
               });
+              this.totalTechnologyPts = totalPts + this.totalTechnologyPts;
+              this.totalAchievedPts = achievedPts + this.totalAchievedPts;
+
+              this.answeredQuestions.map( (oneQuestion) => {
+                if (oneQuestion.correctChoice === oneQuestion.choiceCode)  {
+                  this.finalResult += oneQuestion.questionMark;
+                }
+              });
+
+              resolve(this.answeredQuestions);
+
+            });
+
             });
         });
-        });
       });
+    }));
   }
-}
+  }

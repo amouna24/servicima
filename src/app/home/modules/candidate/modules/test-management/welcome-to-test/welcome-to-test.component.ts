@@ -178,21 +178,13 @@ export class WelcomeToTestComponent implements OnInit {
    * @description Start test
    */
   startTest() {
-    const inviteCandidateSend = {
-      company_email: this.detailsCandidates['TestInviteCandidatesKey']['company_email'],
-      application_id: this.detailsCandidates['TestInviteCandidatesKey']['application_id'],
-      session_code: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
-      candidate_email: this.detailsCandidates['TestInviteCandidatesKey']['candidate_email'],
-      link_valid: false,
-      expired_date: this.detailsCandidates['expired_date']
-    };
       const queryObject = {
         sessionCode: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
         sessionName: this.nameSession,
         companyName: this.nameCompany,
         candidateEmail: this.queryList?.candidate_email,
         sendDate: this.queryList?.send_date,
-        expiredDate: this.expiredDay
+        expiredDate: this.expiredDay,
       };
       this.utilsService.navigateWithQueryParam('/candidate/test-management/qcm', queryObject);
   }
