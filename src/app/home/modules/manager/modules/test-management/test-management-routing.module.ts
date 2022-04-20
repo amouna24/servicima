@@ -7,6 +7,7 @@ import { SessionInfoComponent } from './session-info/session-info.component';
 import { SessionTimerComponent } from './session-timer/session-timer.component';
 import { SessionListComponent } from './session-list/session-list.component';
 import { InviteCandidatesComponent } from './invite-candidates/invite-candidates.component';
+import { CandidateResultListComponent } from './candidate-result-list/candidate-result-list.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
   {
     path: 'invite-candidates',
     component: InviteCandidatesComponent
+  },
+  {
+    path: 'candidates-list',
+    component: CandidateResultListComponent
   }
 ];
 

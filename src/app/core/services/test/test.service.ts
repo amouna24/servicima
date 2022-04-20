@@ -383,12 +383,44 @@ export class TestService {
   addTestCandidateResponse(candidateResponse): Observable<any> {
     return this.httpClient.post<any>(`${environment.testCandidateResponseApiUrl}`, candidateResponse);
   }
+  /**************************************************************************
+   * @description Delete test question Status
+   * @param id: Delete test candidate result
+   *************************************************************************/
+  deleteTestCandidateResult(id: string): Observable<any> {
+    return this.httpClient.delete<any>(`${environment.testSessionCandidateResultApiUrl}/?_id=${id}`);
+  }
 
   /**************************************************************************
-   * @description add candidate result
-   * @param candidateResult: candidate result
+   * @description Get Test Candidates results
+   * @param filter search query like [ ?id=123 ]
+   * @returns  candidate result
    *************************************************************************/
-  addTestCandidateResults(candidateResult): Observable<any> {
-    return this.httpClient.post<any>(`${environment.testCandidateResultApiUrl}`, candidateResult);
+  getTestCandidateResult(filter: string): Observable<any> {
+    return this.httpClient.get<any>(`${environment.testSessionCandidateResultApiUrl}/${filter}`);
+  }
+
+  /**************************************************************************
+   * @description add test invite candidates
+   * @param candidateResult: invite candidates
+   *************************************************************************/
+  addTestCandidateResult(candidateResult): Observable<any> {
+    return this.httpClient.post<any>(`${environment.testSessionCandidateResultApiUrl}`, candidateResult);
+  }
+
+  /**************************************************************************
+   * @description Update choice Status
+   * @param candidateResult: updated choice Object
+   *************************************************************************/
+  updateTestCandidateResult(candidateResult): Observable<any> {
+    return this.httpClient.put<any>(`${environment.testSessionCandidateResultApiUrl}`, candidateResult);
+  }
+  /**************************************************************************
+   * @description Get Candidates results List in data table format
+   * @param filter search query like [ ?id=123 ]
+   * @returns All Test session Observable<ITestCandidatesResultsModel[]>
+   *************************************************************************/
+  getTestCandidateResultDataTable(filter: string): Observable<ITestSessionModel[]> {
+    return this.httpClient.get<any[]>(`${environment.testSessionCandidateResultApiUrl}/datatable/${filter}`);
   }
 }

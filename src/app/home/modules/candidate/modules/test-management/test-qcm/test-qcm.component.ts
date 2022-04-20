@@ -83,7 +83,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   showCongratulationPage = false;
   disableChoices =  false;
   enableNextButton = false;
-  finalResult = 0;
   candidateEmail: string;
   editorOptions = { };
   code = '';
@@ -444,41 +443,23 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     }
   }
   finishTest() {
+    console.log('correct answers list', this.correctAnswersList);
     const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
-    this.answeredQuestions.map( (oneQuestion) => {
-      if (oneQuestion.correctChoice === oneQuestion.choiceCode)  {
-        this.finalResult += oneQuestion.questionMark;
-      }
-    });
     const newTestResult = {
       company_email: this.companyEmailAddress,
       application_id:  this.utilsService.getApplicationID('SERVICIMA'),
-      session_code: this.sessionCode,
+      session_name: this.sessionName,
       candidate_result_code: candidateResultCode,
-      final_result: this.finalResult,
+      final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
+      full_name: this.fullName,
       time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
       answered_questions: this.answeredQuestions.length,
       total_questions: this.questionsList.length,
     };
-    this.testService.addTestCandidateResults(newTestResult).subscribe( (testResult) => {
-      this.answeredQuestions.map( (oneAnsweredQuestion, index) => {
-        const answeredQuestion = {
-          company_email: this.companyEmailAddress,
-          application_id: newTestResult.application_id,
-          session_code: this.sessionCode,
-          candidate_result_code: candidateResultCode,
-          candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
-          response_code: oneAnsweredQuestion.choiceCode.toString(),
-          question_code: oneAnsweredQuestion.questionCode,
-          correct_answer: oneAnsweredQuestion.correctChoice.toString(),
-        };
-        this.testService.addTestCandidateResponse(answeredQuestion).subscribe( (response) => {
-          console.log('response added', response);
-          if (index + 1 === this.answeredQuestions.length) {
+    console.log('test result object=', newTestResult);
+    this.testService.addTestCandidateResult(newTestResult).subscribe( (testResult) => {
+      console.log('added', testResult);
             this.showCongratulationPage = true;
-          }
-        });
-      });
     });
   }
 
