@@ -258,6 +258,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.timeLeft = this.maxTime - this.timePassed;
         this.testExpiredTime();
         this.setCircleDasharray();
+        console.log('time passed', this.timePassed);
       } else {
         this.paddingTopMinutes = ``;
         this.paddingTopSeconds = '';
@@ -523,12 +524,13 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
 
  async finishTest(index, type) {
+   clearInterval(this.timerInterval);
+   await this.getQuestionsStats();
    this.setAnsweredQuestions();
    this.initTimerParams(this.durationList[index]);
-   const resp = await this.getQuestionsStats();
    this.sendReport();
-   const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
    const fileName = await this.exportPdf();
+   const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
    const newTestResult = {
      company_email: this.companyEmailAddress,
      application_id:  this.utilsService.getApplicationID('SERVICIMA'),
@@ -541,8 +543,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
      total_questions: this.questionsList.length,
      file_name: fileName
    };
+   console.log('time passed', this.timePassed);
    this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
-       type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
+     type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
    });
   }
 
