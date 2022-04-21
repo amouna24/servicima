@@ -258,7 +258,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         this.timeLeft = this.maxTime - this.timePassed;
         this.testExpiredTime();
         this.setCircleDasharray();
-        console.log('time passed', this.timePassed);
       } else {
         this.paddingTopMinutes = ``;
         this.paddingTopSeconds = '';
@@ -543,7 +542,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
      total_questions: this.questionsList.length,
      file_name: fileName
    };
-   console.log('time passed', this.timePassed);
    this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
      type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
    });
