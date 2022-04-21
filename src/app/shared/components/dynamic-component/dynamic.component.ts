@@ -154,6 +154,7 @@ export class DynamicComponent implements OnInit, OnDestroy {
           if (!!res) {
             this.attachmentList.push({ data: res?.file, name: res.name, formGroupName});
             this.selectedDoc.emit(this.attachmentList);
+            console.log('upload image ', this.attachmentList);
           }
 /*
           this.selectedDocName.next({ name: res.name, formGroupName});

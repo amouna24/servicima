@@ -127,7 +127,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
       this.addButtonLabel = 'New Contract';
     }
     this.tabFeatureAccess = [
-      { name: 'TRLcontracts.show', feature: 'CONTRACT_DISPLAY'},
+      { name: 'contracts.show', feature: 'CONTRACT_DISPLAY'},
       { name: 'contracts.update', feature: 'CONTRACT_UPDATE'},
         { name: 'contracts.delete', feature: 'CONTRACT_DELETE'},
         { name: 'contracts.archive', feature: 'CONTRACT_ARCHIVE'},

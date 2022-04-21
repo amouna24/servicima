@@ -1287,7 +1287,7 @@
                                   <ng-container *ngSwitchDefault >
                                     <ng-container cdkColumnDef="{{ col.prop }}">
                                       <th cdk-header-cell
-                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name | translate }}
                                       </th>
                                       <ng-container [ngSwitch]="col.type">
                                         <ng-container *ngSwitchCase="'date'">

@@ -15,6 +15,8 @@ import { ListOfCertificationComponent } from './certifications/list-of-certifica
 import { EditCertificationComponent } from './certifications/edit-certification/edit-certification.component';
 import { ShowCertificationComponent } from './certifications/show-certification/show-certification.component';
 import { TrainingModule } from './training/training.module';
+import { CandidatesListComponent } from './candidates/candidates-list/candidates-list.component';
+import { CandidateFileComponent } from './candidates/candidate-file/candidate-file.component';
 
 @NgModule({
     declarations: [HumanRessourcesComponent,
@@ -24,6 +26,8 @@ import { TrainingModule } from './training/training.module';
         ListOfCertificationComponent,
         EditCertificationComponent,
         ShowCertificationComponent,
+        CandidatesListComponent,
+        CandidateFileComponent,
     ],
     exports: [
         CertificationListComponent,

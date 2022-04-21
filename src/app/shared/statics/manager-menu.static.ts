@@ -55,14 +55,21 @@ export const managerMenu: IMenu[] = [
       {
         state: 'collaborator-list',
         name: 'manager_collaborator',
-        icon: '',
+        icon: 'wi-recruitment',
+        feature: 'HR_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'candidates-list',
+        name: 'List des candidates',
+        icon: 'wi-recruitment',
         feature: 'HR_ACCESS',
         type: 'link',
       },
       {
         state: 'work-certificate',
         name: 'certification_all',
-        icon: '',
+        icon: 'wi-recruitment',
         feature: 'HR_ACCESS',
         type: 'link',
       },
