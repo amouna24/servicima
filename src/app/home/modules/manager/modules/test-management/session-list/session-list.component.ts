@@ -1,10 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
 import { TestService } from '@core/services/test/test.service';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
 import { ITestSessionQuestionModel } from '@shared/models/testSessionQuestion.model';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { ModalService } from '@core/services/modal/modal.service';
+
+import { ChooseCandidatesComponent } from '../invite-candidates/choose-candidates/choose-candidates.component';
 
 @Component({
   selector: 'wid-session-list',
@@ -17,17 +22,23 @@ export class SessionListComponent implements OnInit {
   nbtItems = new BehaviorSubject<number>(5);
   companyEmailAddress: string;
   applicationId: string;
+  listCandidates: any;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private testService: TestService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private utilsService: UtilsService,
+    private modalService: ModalService,
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.modalService.registerModals(
+      { modalName: 'inviteCandidate', modalComponent: ChooseCandidatesComponent});
     this.getConnectedUser();
     this.getDataFromLocalStorage();
+    this.getAllUsers();
     await this.getData(0, this.nbtItems.getValue()).then((result: any[]) => {
       const blocData = [];
       result['results'].map( async (oneData) => {
@@ -117,6 +128,9 @@ export class SessionListComponent implements OnInit {
         break;
       case ('Delete session'):
         this.deleteSession(event.data);
+        break;
+      case ('Send invite'):
+        this.inviteCandidates(event.data);
         break;
 
     }
@@ -266,4 +280,35 @@ export class SessionListComponent implements OnInit {
      };
      this.utilsService.navigateWithQueryParam('/manager/test/session-info', queryObject);
    }
+  /**************************************************************************
+   *  get all candidates with specific company
+   *************************************************************************/
+  getAllUsers() {
+    this.userService.getAllUsers(`?company_email=${this.companyEmailAddress}&user_type=CANDIDATE`).subscribe((data) => {
+      data['results'].map((candidate) => {
+        candidate['email_address'] = candidate['userKey']['email_address'];
+        candidate['fullName'] = candidate['first_name'] + ' ' + candidate['last_name'];
+      });
+      this.listCandidates = data['results'];
+      this.listCandidates = _.orderBy(this.listCandidates, [user => user.fullName.toLowerCase()], ['asc']);
+
+    });
+  }
+  inviteCandidates(data) {
+    this.modalService.displayModal(
+      'inviteCandidate',
+      {
+        listCandidates: this.listCandidates,
+        sessionCode: data[0].session_code
+      },
+      '900px', '580px')
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(async (res) => {
+        if (res) {
+          console.log(res, 'res');
+        }
+      }, (error => {
+        console.error(error);
+      }));
+  }
 }
