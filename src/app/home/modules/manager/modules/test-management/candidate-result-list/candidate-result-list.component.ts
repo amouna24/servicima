@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TestService } from '@core/services/test/test.service';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
+import { environment } from '@environment/environment';
 
 @Component({
   selector: 'wid-candidate-result-list',
@@ -14,22 +15,28 @@ export class CandidateResultListComponent implements OnInit {
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() tableData = new BehaviorSubject<any>([]);
   companyEmailAddress: string;
+  env = environment.uploadFileApiUrl + '/show/';
+
   constructor(
     private testService: TestService,
     private userService: UserService,
-    private utilsService: UtilsService
-  ) { }
+    private utilsService: UtilsService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.getConnectedUser();
     this.getData(0, this.nbtItems.getValue());
   }
+
   switchAction(event: any) {
     switch (event.actionType.name) {
       case ('update'):
         break;
+      case ('export PDF'): this.exportPdf(event.data);
     }
   }
+
   loadMoreItems(event: any) {
     this.nbtItems.next(event.limit);
     this.getData(event.offset, event.limit);
@@ -42,32 +49,42 @@ export class CandidateResultListComponent implements OnInit {
       this.companyEmailAddress}&application_id=${
       this.utilsService.getApplicationID('SERVICIMA')}&beginning=${
       offset}&number=${limit}`).subscribe((candidatesResults) => {
-        if (candidatesResults['results'].length !== 0) {
-          candidatesResults['results'].map( (oneCandidateResult) => {
-            dataList.push({
-              session: oneCandidateResult.TestCandidateResultKey.session_name,
-              duration: oneCandidateResult.time,
-              result: oneCandidateResult.final_result,
-              candidate_name: oneCandidateResult.full_name,
-              date: new Date( parseInt( oneCandidateResult._id.toString().substring(0, 8), 16 ) * 1000 )
-            });
+      if (candidatesResults['results'].length !== 0) {
+        candidatesResults['results'].map((oneCandidateResult) => {
+          dataList.push({
+            session: oneCandidateResult.TestCandidateResultKey.session_name,
+            duration: oneCandidateResult.time,
+            result: oneCandidateResult.final_result,
+            candidate_name: oneCandidateResult.full_name,
+            date: new Date(parseInt(oneCandidateResult._id.toString().substring(0, 8), 16) * 1000),
+            fileName: oneCandidateResult.file_name
           });
-          candidatesResults['results'] = dataList;
-          this.tableData.next(candidatesResults);
-          this.isLoading.next(false);
+        });
+        candidatesResults['results'] = dataList;
+        this.tableData.next(candidatesResults);
+        this.isLoading.next(false);
 
-        } else {
-          this.tableData.next([]);
-          this.isLoading.next(false);
-        }
+      } else {
+        this.tableData.next([]);
+        this.isLoading.next(false);
+      }
     });
   }
+
   getConnectedUser() {
     this.userService.connectedUser$
       .subscribe(
         (userInfo) => {
           if (userInfo) {
-            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];          }
+            this.companyEmailAddress = userInfo['company'][0]['companyKey']['email_address'];
+          }
         });
+  }
+
+  exportPdf(data) {
+    data.map((exportPdfData) => {
+      console.log(exportPdfData);
+      window.open(this.env + exportPdfData.fileName, '_blank');
+    });
   }
 }

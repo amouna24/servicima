@@ -523,28 +523,32 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
 
  async finishTest(index, type) {
-   clearInterval(this.timerInterval);
-   await this.getQuestionsStats();
+    clearInterval(this.timerInterval);
    this.setAnsweredQuestions();
    this.initTimerParams(this.durationList[index]);
+   const resp = await this.getQuestionsStats();
    this.sendReport();
-   const fileName = await this.exportPdf();
    const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
-   const newTestResult = {
-     company_email: this.companyEmailAddress,
-     application_id:  this.utilsService.getApplicationID('SERVICIMA'),
-     session_name: this.sessionName,
-     candidate_result_code: candidateResultCode,
-     final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
-     full_name: this.fullName,
-     time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
-     answered_questions: this.answeredQuestions.length,
-     total_questions: this.questionsList.length,
-     file_name: fileName
-   };
-   this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
+   setTimeout(async () => {
+     const fileName = await this.exportPdf();
      type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
-   });
+     const newTestResult = {
+       company_email: this.companyEmailAddress,
+       application_id:  this.utilsService.getApplicationID('SERVICIMA'),
+       session_name: this.sessionName,
+       candidate_result_code: candidateResultCode,
+       final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
+       full_name: this.fullName,
+       time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
+       answered_questions: this.answeredQuestions.length,
+       total_questions: this.questionsList.length,
+       file_name: fileName
+     };
+     this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
+       console.log(testResult);
+     });
+
+   }, 100);
   }
 
   /**
