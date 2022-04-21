@@ -545,6 +545,22 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
        file_name: fileName
      };
      this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
+       this.answeredQuestions.map( (oneAnsweredQuestion, responseIndex) => {
+         const answeredQuestion = {
+           company_email: this.companyEmailAddress,
+           application_id: newTestResult.application_id,
+           session_code: this.sessionCode,
+           candidate_result_code: candidateResultCode,
+           candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
+           response_code: oneAnsweredQuestion.choiceCode.toString(),
+           question_code: oneAnsweredQuestion.questionCode,
+           correct_answer: oneAnsweredQuestion.correctChoice.toString(),
+         };
+         this.testService.addTestCandidateResponse(answeredQuestion).subscribe( (response) => {
+           console.log('response added', response);
+         });
+       });
+
        console.log(testResult);
      });
 
