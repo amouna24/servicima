@@ -77,6 +77,7 @@ export class AddAnswerComponent implements OnInit {
     this.answer.test_question_code = this.test_question_code;
     this.answer.application_id = this.applicationId;
     this.answer.company_email = 'ALL';
+    this.answer.language_id =  this.localStorageService.getItem('language').langId;
     this.answer.test_choices_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-ANSWER`;
     if ((this.sendAddAnswer.valid)) {
       if ((this.question_type === 'single') && (this.answer.correct_choice === 'True')) {
@@ -87,13 +88,17 @@ export class AddAnswerComponent implements OnInit {
       this.sendAddAnswer.reset();
     }
   }
-
+  verifExistingTrueAnswer() {
+    return this.AnswerList.map((oneAnswer) => oneAnswer.correct_choice).includes('True') && this.AnswerList.length >= 2;
+  }
   saveAnswers() {
-    this.AnswerList.forEach(res => {
-      this.testService.addChoice(res).subscribe((resAnswer) => {
-        console.log('answer added', resAnswer);
+    if (this.AnswerList.map((oneAnswer) => oneAnswer.correct_choice).includes('True')) {
+      this.AnswerList.forEach(res => {
+        this.testService.addChoice(res).subscribe((resAnswer) => {
+          console.log('answer added', resAnswer);
+        });
       });
-    });
+    }
     const queryObject = {
       test_question_bloc_code: this.test_question_bloc_code,
       test_bloc_title: this.test_bloc_title,

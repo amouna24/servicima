@@ -46,8 +46,7 @@ export class BlocQuestionsAddComponent implements OnInit {
     this.createForm();
     this.getLanguageList();
     this.getTechnologiesInfo();
-  }
-
+    }
   /**
    * @description Get connected user
    */

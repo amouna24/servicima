@@ -8,7 +8,6 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UserService } from '@core/services/user/user.service';
 import { environment } from '@environment/environment';
 import { UtilsService } from '@core/services/utils/utils.service';
-import { IUserModel } from '@shared/models/user.model';
 
 @Component({
   selector: 'wid-welcome-to-test',
@@ -179,21 +178,13 @@ export class WelcomeToTestComponent implements OnInit {
    * @description Start test
    */
   startTest() {
-    const inviteCandidateSend = {
-      company_email: this.detailsCandidates['TestInviteCandidatesKey']['company_email'],
-      application_id: this.detailsCandidates['TestInviteCandidatesKey']['application_id'],
-      session_code: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
-      candidate_email: this.detailsCandidates['TestInviteCandidatesKey']['candidate_email'],
-      link_valid: false,
-      expired_date: this.detailsCandidates['expired_date']
-    };
       const queryObject = {
         sessionCode: this.detailsCandidates['TestInviteCandidatesKey']['session_code'],
         sessionName: this.nameSession,
         companyName: this.nameCompany,
         candidateEmail: this.queryList?.candidate_email,
         sendDate: this.queryList?.send_date,
-        expiredDate: this.expiredDay
+        expiredDate: this.expiredDay,
       };
       this.utilsService.navigateWithQueryParam('/candidate/test-management/qcm', queryObject);
   }

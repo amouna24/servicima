@@ -105,7 +105,7 @@ export class BlocQuestionsDetailsComponent implements OnInit {
 
   ShowQuestionDetail(test_question_title: string, test_level_code: string, test_question_code: string,
                      mark: string, duration: string, question_type: string, test_question_desc: string,
-                     _id: string, test_question_bloc_code: string, code_level: string) {
+                     _id: string, test_question_bloc_code: string, code_level: string, code: string, language_tech: string) {
     this.dialog.open(QuestionDetailsComponent, {
       height: '90vh',
       width: '85vh',
@@ -121,6 +121,8 @@ export class BlocQuestionsDetailsComponent implements OnInit {
         technology: this.test_bloc_technology,
         id: _id,
         code_level,
+        code,
+        language_tech
       }
     }).afterClosed().subscribe((id) => {
       if ((id !== undefined) && (id !== 'false') && (id !== 'closeDialog')) {

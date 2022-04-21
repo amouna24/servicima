@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DynamicDataTableModule } from '@shared/modules/dynamic-data-table/dynamic-data-table.module';
 import { SharedModule } from '@shared/shared.module';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { BlocQuestionsRoutingModule } from './bloc-questions-routing.module';
 import { BlocQuestionsListComponent } from './bloc-questions-list/bloc-questions-list.component';
@@ -17,11 +18,12 @@ import { EditQuestionComponent } from './edit-question/edit-question.component';
 @NgModule({
   declarations: [BlocQuestionsListComponent, BlocQuestionsAddComponent, BlocQuestionsDetailsComponent,
     AddQuestionComponent, AddAnswerComponent, QuestionDetailsComponent, EditBlocComponent, EditQuestionComponent],
-  imports: [
-    CommonModule,
-    BlocQuestionsRoutingModule,
-    DynamicDataTableModule,
-    SharedModule
-  ]
+    imports: [
+        CommonModule,
+        BlocQuestionsRoutingModule,
+        DynamicDataTableModule,
+        SharedModule,
+        MonacoEditorModule.forRoot()
+    ]
 })
 export class BlocQuestionsModule { }

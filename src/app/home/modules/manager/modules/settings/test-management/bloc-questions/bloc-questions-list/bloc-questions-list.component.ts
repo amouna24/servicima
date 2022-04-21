@@ -69,8 +69,7 @@ export class BlocQuestionsListComponent implements OnInit {
     this.blocData = [];
     this.isLoading.next(true);
     return  new Promise<any>(resolve => {
-      this.testService.getQuestionBloc(`?application_id=${this.applicationId}&company_email=ALL&language_id=${
-        this.localStorageService.getItem('language').langCode}`)
+      this.testService.getQuestionBloc(``)
         .subscribe(
           (response) => {
             console.log('response=', response);

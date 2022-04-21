@@ -37,10 +37,11 @@ export class CustomizeSessionComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
   ) {
-    this.getChartParams();
     this.getSelectedBlocArray();
-  }
+    this.getChartParams();
 
+  }
+  languageId: string;
   blocQuestionsList: Array<{
     questionDetails: ITestQuestionModel,
     bloc_title: string,
@@ -71,7 +72,7 @@ export class CustomizeSessionComponent implements OnInit {
     this.getMinimalScore();
   }
   getBlocQuestionsData() {
-    this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}`).subscribe((resNode) => {
+    this.testService.getQuestion(`?test_question_bloc_code=${this.selectedBlocsStringFormat}&language_id=${this.languageId}`).subscribe((resNode) => {
       const quartLength = Math.ceil(resNode.length / 3);
       resNode.map((resOneNode, index) => {
         let addSessionQuestion = false;
@@ -143,7 +144,6 @@ export class CustomizeSessionComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      console.log('current event', event),
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -219,6 +219,7 @@ export class CustomizeSessionComponent implements OnInit {
     this.utilsService.verifyCurrentRoute('/manager/test/session-list').subscribe((data) => {
       this.selectedBlocsStringFormat = data.selectedBlocs;
       this.sessionCode = data.sessionCode;
+      this.languageId = data.language_id;
       this.selectedBlocArray = data.selectedBlocs.split(',');
       this.mode = data.mode;
     });
@@ -328,7 +329,7 @@ export class CustomizeSessionComponent implements OnInit {
     this.sessionQuestionsList.map( (oneQuestion, index) => {
       let addQuestion = true;
       const testSessionObject: ITestSessionQuestionModel = {
-        application_id: oneQuestion.questionDetails.TestQuestionKey.application_id,
+        application_id: this.utilsService.getApplicationID('SERVICIMA'),
         company_email: this.companyEmailAddress,
         session_code: this.sessionCode,
         bloc_question_code: oneQuestion.questionDetails.TestQuestionKey.test_question_bloc_code,
@@ -408,7 +409,6 @@ export class CustomizeSessionComponent implements OnInit {
       const selectField = dataSelect.technology;
       return selectField?.toLowerCase().includes(this.selectSearchField.toLowerCase());
     });
-    console.log('show bloc questions', this.showblocQuestionsList);
   }
   getMinimalScore() {
     this.testService
