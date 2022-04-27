@@ -330,13 +330,9 @@ export class UtilsService {
    * @description check date start and date end
    */
   checkDate(dateStart: Date, dateEnd: Date): boolean {
-    console.log('my start date ', dateStart);
-    console.log('my end date ', dateEnd);
     if (dateStart.getTime() < dateEnd.getTime()) {
-      console.log('aaaaaaaaaaa');
       return true;
     }
-    console.log('bbbbbbbb');
     return false;
   }
   verifyCurrentRoute(previousRoute?: string, noRefreshable?: boolean): Observable<any> {

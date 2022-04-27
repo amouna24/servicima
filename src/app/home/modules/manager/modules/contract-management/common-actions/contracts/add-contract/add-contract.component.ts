@@ -766,7 +766,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
            )
          );
       });
-    console.log('my type ', this.type);
     /*---------------------------------------------------------------*/
    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
