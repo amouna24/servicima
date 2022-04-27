@@ -5,6 +5,7 @@ import { TrainingComponent } from './training.component';
 import { InvitationListComponent } from './invitation-list/invitation-list.component';
 import { TrainingRequestCollaboratorComponent } from './training-request-collaborator/training-request-collaborator.component';
 import { AddRequestTrainingComponent } from './add-request-training/add-request-training.component';
+import { TrainingAvailableListComponent } from './training-available-list/training-available-list.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'update-request',
     component: AddRequestTrainingComponent,
+  },
+  {
+    path: 'available-list',
+    component: TrainingAvailableListComponent,
   }
 ];
 

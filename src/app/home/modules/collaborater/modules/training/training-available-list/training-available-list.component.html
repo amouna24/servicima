@@ -1,0 +1,19 @@
+<div class="border-radius-20 dynamic-component-container m-l-30 ">
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+        <div fxFlex="7"  fxLayout="row" class="line-height-2">
+            <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+                    </mat-icon>
+                    <span class="cool-grey"> {{ 'user.back' | translate}} </span>
+                </button>
+            </div>
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+        </div>
+        <wid-scrollbar class="scrollbar-content-list" style="width: 100%" @dataAppearance>
+        </wid-scrollbar>
+    </div>
+</div>

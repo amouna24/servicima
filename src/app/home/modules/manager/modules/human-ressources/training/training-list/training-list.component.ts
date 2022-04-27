@@ -6,7 +6,6 @@ import { UserService } from '@core/services/user/user.service';
 import { TrainingService } from '@core/services/training/training.service';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { UtilsService } from '@core/services/utils/utils.service';
 
 @Component({
   selector: 'wid-training-list',

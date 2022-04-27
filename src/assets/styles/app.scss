@@ -845,6 +845,12 @@ html body {
   border-radius: 4px !important;
   box-sizing: border-box !important;
 }
+.scrollbar-content-list{
+  max-width: 100% !important;
+  min-height: 80% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+}
 .scrollbar-dynamic-component {
   resize: both !important;
   scroll-behavior: smooth !important;

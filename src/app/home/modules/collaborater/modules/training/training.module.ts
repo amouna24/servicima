@@ -10,6 +10,8 @@ import { DetailsInvitationComponent } from './details-invitation/details-invitat
 import { TrainingRequestCollaboratorComponent } from './training-request-collaborator/training-request-collaborator.component';
 import { HumanRessourcesModule } from '../../../manager/modules/human-ressources/human-ressources.module';
 import { AddRequestTrainingComponent } from './add-request-training/add-request-training.component';
+import { TrainingAvailableListComponent } from './training-available-list/training-available-list.component';
+import { TrainingAvailableComponent } from './training-available/training-available.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,7 @@ import { AddRequestTrainingComponent } from './add-request-training/add-request-
       InvitationListComponent,
       InvitationComponent,
       DetailsInvitationComponent,
-      TrainingRequestCollaboratorComponent, AddRequestTrainingComponent],
+      TrainingRequestCollaboratorComponent, AddRequestTrainingComponent, TrainingAvailableListComponent, TrainingAvailableComponent],
     imports: [
         CommonModule,
         SharedModule,
