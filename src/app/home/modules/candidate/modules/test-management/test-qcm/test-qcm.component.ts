@@ -736,4 +736,23 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
      console.log('added');
    });
  }
+ sendResultReportData(param) {
+    if (param === 'path') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? 'test-success.svg' : 'test-error.svg';
+    } else if (param === 'message') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ?
+        `Congratulation you passed the exam successfully your score is ${
+        this.reportData.correctAnswerPercentage.display}% and the minimal score was ${
+        this.minimalScore}%` : `Sadly, you failed the Exam your score is ${
+          this.reportData.correctAnswerPercentage.display}% and the minimal score was ${
+          this.minimalScore}%`;
+    } else if (param === 'title') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? 'Congratulations' : `Unfortunately`;
+    } else if (param === 'color') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? '#0067e0' : '#DC143C';
+    } else {
+      return '';
+
+    }
+ }
 }
