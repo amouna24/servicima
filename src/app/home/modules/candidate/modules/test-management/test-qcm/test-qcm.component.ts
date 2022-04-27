@@ -77,7 +77,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   photo: string;
   languageId: string;
   @Input() isLoading = new BehaviorSubject<boolean>(true);
-  @HostListener('window:beforeunload')
+  @HostListener('window:beforeunload', ['$event'])
   disableCopyPaste: boolean;
   companyName: string;
   questionsList = [];
@@ -101,7 +101,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   spinnerData = [];
   minimalScore: number;
   finalResult = 0;
-
+  candidateResultCode: string;
   constructor(
     private utilsService: UtilsService,
     private testService: TestService,
@@ -116,9 +116,11 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
 
   ngOnInit(): void {
+    this.candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
     this.getConnectedUser();
     this.getQuestions();
     this.startTest();
+    this.addNewTestResult();
   }
 
   ngAfterContentChecked() {
@@ -523,27 +525,48 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
 
  async finishTest(index, type) {
+    clearInterval(this.timerInterval);
    this.setAnsweredQuestions();
    this.initTimerParams(this.durationList[index]);
    const resp = await this.getQuestionsStats();
    this.sendReport();
-   const candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
-   const fileName = await this.exportPdf();
-   const newTestResult = {
-     company_email: this.companyEmailAddress,
-     application_id:  this.utilsService.getApplicationID('SERVICIMA'),
-     session_name: this.sessionName,
-     candidate_result_code: candidateResultCode,
-     final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
-     full_name: this.fullName,
-     time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
-     answered_questions: this.answeredQuestions.length,
-     total_questions: this.questionsList.length,
-     file_name: fileName
-   };
-   this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
-       type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
-   });
+   setTimeout(async () => {
+     const fileName = await this.exportPdf();
+     type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
+     const updateTestResult = {
+       company_email: this.companyEmailAddress,
+       application_id:  this.utilsService.getApplicationID('SERVICIMA'),
+       session_code: this.sessionCode,
+       candidate_result_code: this.candidateResultCode,
+       final_result: ((this.correctAnswersList.length * 100) / this.questionsList.length).toFixed() + '%',
+       full_name: this.fullName,
+       time: this.durationType === 'time_overall' ? this.timePassed : this.timerPerQuestionTimePassed,
+       answered_questions: this.answeredQuestions.length,
+       total_questions: this.questionsList.length,
+       file_name: fileName,
+       problem: false,
+       report_sent: true,
+     };
+     this.testService.updateTestCandidateResult(updateTestResult).subscribe( async (testResult) => {
+       this.answeredQuestions.map( (oneAnsweredQuestion, responseIndex) => {
+         const answeredQuestion = {
+           company_email: this.companyEmailAddress,
+           application_id: updateTestResult.application_id,
+           session_code: this.sessionCode,
+           candidate_result_code: this.candidateResultCode,
+           candidate_response_code: `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESPONSE`,
+           response_code: oneAnsweredQuestion.choiceCode.toString(),
+           question_code: oneAnsweredQuestion.questionCode,
+           correct_answer: oneAnsweredQuestion.correctChoice.toString(),
+         };
+         this.testService.addTestCandidateResponse(answeredQuestion).subscribe( (response) => {
+           console.log('response added', response);
+         });
+       });
+
+     });
+
+   }, 100);
   }
 
   /**
@@ -580,7 +603,6 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
         exact: Number((this.skippedQuestions.length * 100) / this.questionsList.length), },
       questionsStats: this.questionsStats,
     };
-    console.log('report data', this.reportData);
     this.spinnerData =  [{
       id: 1,
       percent: Number(this.reportData.correctAnswerPercentage.exact),
@@ -695,4 +717,23 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       });
     }));
   }
-  }
+ addNewTestResult() {
+   const newTestResult = {
+     company_email: this.companyEmailAddress,
+     application_id:  this.utilsService.getApplicationID('SERVICIMA'),
+     session_code: this.sessionCode,
+     candidate_result_code: this.candidateResultCode,
+     final_result: '0%',
+     full_name: this.fullName,
+     time:  0,
+     answered_questions: 0,
+     total_questions: this.questionsList.length,
+     file_name: 'file not found',
+     problem: true,
+     report_sent: false,
+   };
+   this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
+     console.log('added');
+   });
+ }
+}
