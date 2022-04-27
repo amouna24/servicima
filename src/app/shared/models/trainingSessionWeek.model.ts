@@ -7,4 +7,5 @@ export interface ITrainingSessionWeek {
     time?: string;
     durration?: string;
     status?: string;
+    dayView?: string;
 }

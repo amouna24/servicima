@@ -176,7 +176,14 @@ export class TrainingService {
    * @description Disable collaborator Status
    * @param code of the training session
    *************************************************************************/
-  disableTrainingRequest(code: string): Observable<any> {
-    return this.httpClient.delete<ITrainingSessionWeek>(`${environment.hrTrainingRequestApiUrl}/disable?session_code=${code}`);
+  disableTrainingRequest(filter: string): Observable<any> {
+    return this.httpClient.delete<ITrainingSessionWeek>(`${environment.hrTrainingRequestApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description send mail to collaborator
+   * @param code of the training session
+   *************************************************************************/
+  sendMail(mailing) {
+    return this.httpClient.post(`${environment.mailingApiUrl}`, mailing);
   }
 }

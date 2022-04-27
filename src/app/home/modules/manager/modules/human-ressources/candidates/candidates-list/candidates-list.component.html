@@ -1,0 +1,155 @@
+<div class="border-radius-20 dynamic-component-container m-l-30 ">
+    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+        <div fxFlex="7"  fxLayout="row" class="line-height-2">
+            <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
+            <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="backClicked()">
+                    <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+                    </mat-icon>
+                    <span class="cool-grey"> {{ 'user.back' | translate}} </span>
+                </button>
+            </div>
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
+        </div>
+        <div fxLayout="row" fxFlex="100" fxFlexOffset="8px" >
+            <div fxLayout="row" fxFlex="60" fxLayoutGap="8px">
+                <mat-form-field class="data-table-search-bar" [style]="{'width': '60%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
+                    <input  matInput type="search" placeholder="Search ..." class="font-extra-light font-size-14">
+                    <mat-icon class="font-size-14 cool-grey"  matPrefix>search</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline"
+                                [style]="{'width': '40%', 'height': '80%', 'fontSize': '7px'}"
+                >
+                    <mat-select disableOptionCentering panelClass="panelColor"
+                                placeholder="Sorted By"
+                                (selectionChange)="sortedBy($event)"
+                                [formControl]="sortedby"
+                                class="font-size-12"
+                    >
+                        <mat-option value="full_name" >
+                            Full Name
+                        </mat-option>
+                        <mat-option value="job_title" >
+                            Job Title
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <wid-scrollbar class="scrollbar-candidates-list" style="width: 100%" >
+            <div fxLayout="column" fxFlex="97" class="font-size-12">
+
+                <div fxLayout="column" fxFlex="74" fxLayoutAlign="space-between" *ngIf="ELEMENT_DATA.getValue().length===0&& !isLoading.getValue()">
+                    <div  style=" min-height: 287px;" >
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+                            <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
+                                <div  fxFlex="15" fxLayout="row">
+                                    <span class="cool-grey font-size-18">No Data Found</span>
+                                </div>
+                                <div  fxFlex="15" fxLayout="row">
+                                    <div >
+                                        <button  mat-raised-button  class="btn-medium bg-cerulean-blue" >
+                                            <span class="white font-size-12 font-normal">Add Candidate</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div  fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="8px"  style=" min-height: 600px;" fxLayoutGap.lg="8px" *ngIf="listCandidates.length!==0"  @dataAppearance>
+                    <div fxLayout="row wrap " fxFlex="100" >
+                            <div *ngFor="let candidate of ELEMENT_DATA.getValue()"   fxFlex="20%">
+                                <mat-card class="card-person "  fxLayout="column"  fxLayoutAlign="center" fxLayoutGap="8px">
+                                    <mat-card-content fxLayout="column" fxLayoutAlign="center" fxLayoutGap="4px" fxLayoutGap.lg="2px" fxLayoutGap.sm="2px"  fxLayoutGap.md="2px">
+                                        <div   fxLayout="row" fxLayoutAlign="center">
+                                            <img class="profile-image" [src]="(candidate.photo) ? uploadURL+candidate.photo: 'assets/img/default.jpg'" width="80" height="80"
+                                                 [ngStyle.xl]="{ 'width.px': 100 , 'height.px': 100 }"
+                                                 [ngStyle.xs]="{ 'width.px': 20, 'height.px': 20 }"   alt="" />
+                                        </div>
+                                        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayoutGap.lg="4px" fxLayoutGap.sm="4px" fxLayoutGap.md="4px"  >
+                                            <p class="font-size-12 font-semi-bold black text-center" >{{candidate.full_name}}</p>
+                                            <p class="font-size-10 font-light black text-center" >{{candidate.job_title}}</p>
+
+                                        </div>
+                                    </mat-card-content>
+
+                                    <mat-card-actions
+                                            style="padding-bottom: .8rem;"
+                                            fxLayout.xs="column"
+                                            fxLayoutAlign="center center" >
+                                        <button class="btn-small bg-pale-grey-four btn-details" mat-raised-button (click)="details(candidate)" >Details</button>
+                                    </mat-card-actions>
+                                </mat-card>
+                            </div>
+                            </div>
+                </div>
+                </div>
+        </wid-scrollbar>
+        <div  >
+            <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <span fxLayoutAlign="center center" class="black-three font-size-12">
+          {{ offset }} - {{ totalCountedItems || countedItems }} of {{ totalItems }}
+        </span>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('first-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">first_page</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('previous-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">navigate_before</span>
+                        </button>
+
+                        <ng-container *ngFor="let pageNumber of nbrPages">
+                            <button
+                                    mat-stroked-button
+                                    fxLayoutAlign="center center" class="next-previous-page font-size-12"
+                                    [ngClass] = "pageNumber === currentPage ? 'bg-topaz white'
+                                                  : 'bg-white-two black-three'"
+                                    (click)="getItemsPerPage('specific-page', pageNumber)"
+                            >
+                                <span>{{ pageNumber }}</span>
+                            </button>
+                        </ng-container>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('next-page')"
+                        >
+
+                            <span class="material-icons-outlined font-size-16">navigate_next</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('last-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">last_page</span>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

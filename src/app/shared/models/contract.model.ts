@@ -9,7 +9,7 @@ export interface IContract {
   contract_start_date?: Date;
   contract_end_date?: Date;
   contract_date: Date;
-  contract_status?: number;
+  contract_status?: string;
   signer_company_email?: string;
   signer_contractor_email?: string;
   signature_company_date?: Date;

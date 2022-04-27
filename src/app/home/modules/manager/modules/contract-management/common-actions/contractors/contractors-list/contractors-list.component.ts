@@ -145,7 +145,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading.next(true);
     this.contractorService.getContractors(
         // tslint:disable-next-line:max-line-length
-        `?beginning=${offset}&number=${limit}&contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}`
+        `?beginning=${offset}&number=${limit}&contractor_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&status=ACTIVE`
     ).pipe(
         takeUntil(this.destroy$)
     )
@@ -174,7 +174,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
         this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_SUPPLIER'},
         { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_SUPPLIER'}, // archive
-        { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_SUPPLIER'},
       ];
     } else {
       this.redirectUrl = '/manager/contract-management/clients-contracts/clients';
@@ -185,7 +184,6 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
         this.tabFeatureAccess = [
         { name: 'contract.contractor.update', feature: 'CONTRACT_UPDATE_CLIENT'},
         { name: 'contract.contractor.delete', feature: 'CONTRACT_DELETE_CLIENT'},
-        { name: 'contract.contractor.archive', feature: 'CONTRACT_STORE_CLIENT'},
       ];
     }
   }
@@ -294,6 +292,15 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
 
         );
   }
+
+    /**
+     * @description archive contractor
+     */
+    archive(contractor: IContractor) {
+        this.contractorService.deleteContractor(contractor._id).subscribe(async (data) => {
+            await this.getContractors(this.nbtItems.getValue(), 0);
+        });
+    }
   /**************************************************************************
    * @description: Show Contact
    * @param Contractor contractor Object
@@ -338,11 +345,9 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType.name) {
-      case (this.tabFeatureAccess[0].name): this.updateContractor(rowAction.data);
+      case ('contract.contractor.update'): this.updateContractor(rowAction.data[0]);
         break;
-      case (this.tabFeatureAccess[1].name): this.showContact(rowAction.data);
-        break;
-      case(this.tabFeatureAccess[2].name): this.onStatusChange(rowAction.data, 'ACTIVE');
+      case('contract.contractor.delete'): this.archive(rowAction.data[0]);
         break;
       case('update'):
         this.updateContractor(rowAction.data as any);

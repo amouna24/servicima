@@ -59,6 +59,13 @@ export class ContractsService {
   disableContract(ID: string): Observable<any> {
     return this.httpClient.delete<IContract>(`${environment.contractApiUrl}/disable?_id=${ID}`);
   }
+  /**************************************************************************
+   * @description Disable Contract Status
+   * @param ID : of the contract
+   *************************************************************************/
+  deleteContract(ID: string): Observable<any> {
+    return this.httpClient.delete<IContract>(`${environment.contractApiUrl}/disable?_id=${ID}`);
+  }
 
   /*------------------------------CONTRACT EXTENSIONS -----------------------------------*/
 

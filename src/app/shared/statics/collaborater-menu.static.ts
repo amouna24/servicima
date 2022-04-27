@@ -73,6 +73,13 @@ export const collaboraterMenu: IMenu[] = [
         feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
+      {
+        state: 'request-list',
+        name: 'Request Training',
+        icon: '',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
+        type: 'link',
+      },
     ]
   },
   {

@@ -378,13 +378,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
               'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'Start Date', prop: 'extension_start_date', type: InputType.DATE},
-              { name: 'End date', prop: 'extension_end_date', type: InputType.DATE},
-              { name: 'Rate', prop: 'extension_rate', type: InputType.TEXT},
-              { name: 'Currency', prop: 'extension_currency_cd', type: InputType.TEXT},
-              { name: 'Status', prop: 'extension_status', type: InputType.TEXT},
-              { name: 'Attachment', prop: 'attachments', type: InputType.TEXT},
-              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+              { name: 'contracts.extensioncontract.table.startdate', prop: 'extension_start_date', type: InputType.DATE},
+              { name: 'contracts.extensioncontract.table.enddate', prop: 'extension_end_date', type: InputType.DATE},
+              { name: 'contracts.extensioncontract.table.rate', prop: 'extension_rate', type: InputType.TEXT},
+              { name: 'contracts.extensioncontract.table.currency', prop: 'extension_currency_cd', type: InputType.TEXT},
+              { name: 'contracts.extensioncontract.table.status', prop: 'extension_status', type: InputType.TEXT},
+              { name: 'contracts.extensioncontract.table.attachment', prop: 'attachments', type: InputType.TEXT},
+              { prop: 'Actions',  name: 'contracts.extensioncontract.table.actions', type: InputType.ACTIONS},
             ],
             dataSource: this.extensionsList
           }
@@ -481,10 +481,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
               'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'Project rate', prop: 'project_rate', type: InputType.TEXT},
-              { name: 'Start Date', prop: 'start_date', type: InputType.DATE},
-              { name: 'End date', prop: 'end_date', type: InputType.DATE},
-              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+              { name: 'contracts.projectcontract.table.rate', prop: 'project_rate', type: InputType.TEXT},
+              { name: 'contracts.projectcontract.table.startdate', prop: 'start_date', type: InputType.DATE},
+              { name: 'contracts.projectcontract.table.enddate', prop: 'end_date', type: InputType.DATE},
+              { prop: 'Actions',  name: 'contracts.projectcontract.table.actions', type: InputType.ACTIONS},
             ],
             dataSource: this.contractProjectList
           }
@@ -504,11 +504,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
           required: true
         },
         {
-          label: 'contracts.addcontrat.contractProject.description',
-          placeholder: 'contracts.addcontrat.contractProject.description',
+          label: 'rh_comment_certif',
+          placeholder: 'rh_comment_certif',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
-          formControlName: 'project_desc',
+          formControlName: 'comment',
           required: true
         },
       ],
@@ -566,7 +566,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredVat,
           formControlName: 'vat_nbr',
-          searchControlName: 'filterVatControl'
+          searchControlName: 'filterVatControl',
+          required: true
         },
         {
           label: 'contracts.addcontrat.contractProject.status',
@@ -574,13 +575,15 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredStatus,
           formControlName: 'project_status',
-          searchControlName: 'filterStatusControl'
+          searchControlName: 'filterStatusControl',
+          required: true
         },
         {
-          label: 'rh_comment_certif',
-          placeholder: 'rh_comment_certif',
+          label: 'contracts.addcontrat.contractProject.description',
+          placeholder: 'contracts.addcontrat.contractProject.description',
           type: FieldsType.TEXTAREA,
-          formControlName: 'comment'
+          formControlName: 'project_desc',
+          required: true
         }
       ],
     },
@@ -609,11 +612,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
               'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'Code', prop: 'project_code', type: InputType.TEXT},
-              { name: 'Collaborator Email', prop: 'email_address', type: InputType.EMAIL},
-              { name: 'Start Date', prop: 'start_date', type: InputType.DATE},
-              { name: 'End date', prop: 'end_date', type: InputType.DATE},
-              { prop: 'Actions',  name: 'Actions', type: InputType.ACTIONS},
+              { name: 'contracts.projectcollaborator.code', prop: 'project_code', type: InputType.TEXT},
+              { name: 'contracts.projectcollaborator.email', prop: 'email_address', type: InputType.EMAIL},
+              { name: 'contracts.projectcollaborator.startdate', prop: 'start_date', type: InputType.DATE},
+              { name: 'contracts.projectcollaborator.enddate', prop: 'end_date', type: InputType.DATE},
+              { prop: 'Actions',  name: 'contracts.projectcollaborator.actions', type: InputType.ACTIONS},
             ],
             dataSource: this.projectCollaboratorList
           }
@@ -691,7 +694,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
         if (this.canUpdate(params.id)) {
           this.contractId = params.id;
           this.getContractByID(params);
-          console.log('my contract info ', this.contractInfo);
         }
       });
     this.sheetService.registerSheets(
@@ -699,6 +701,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
     this.getSignerContractor();
+    this.onContractStatusChanges();
 
   }
 
@@ -787,6 +790,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.INFORMATION['controls'].contractStatusFilter,
       this.filteredStatus
       );
+    await this.getContractorStatus(this.type);
     this.utilsService.changeValueField(this.statusList.value,
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].filterStatusControl,
       this.filteredStatus
@@ -797,7 +801,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     );
 
     this.contractorService
-      .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
+      .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}&status=ACTIVE`)
       .pipe(
         takeUntil(this.destroy$)
       )
@@ -853,6 +857,43 @@ export class AddContractComponent implements OnInit, OnDestroy {
      }
 
   }
+
+  /**
+   * @description on contract status changes
+   */
+  onContractStatusChanges() {
+
+    this.contractForm.get('INFORMATION').valueChanges.subscribe(selectedValue => {
+      if (selectedValue?.contract_status === 'RUN' || selectedValue?.contract_status === 'EX_AW' ) {
+        this.disableContractExtension();
+      } else {
+      this.enableContractExtension();
+      }
+      if (selectedValue?.contract_status === 'CUST_SIGN' || selectedValue?.contract_status === 'SUP_SIGN') {
+        this.contractForm.controls.SIGNER['controls'].signer_contractor_email.disable();
+        this.contractForm.controls.SIGNER['controls'].signature_contractor_date.disable();
+
+      } else {
+        this.contractForm.controls.SIGNER['controls'].signer_contractor_email.enable();
+        this.contractForm.controls.SIGNER['controls'].signature_contractor_date.enable();
+      }
+      });
+  }
+  /**
+   * @description required if validators
+   */
+  requiredIfValidator(predicate) {
+    return (formControl => {
+      if (!formControl.parent) {
+        return null;
+      }
+      if (predicate()) {
+        return Validators.required(formControl);
+      }
+      return null;
+    });
+  }
+
   /**************************************************************************
    * @description Init form with initial data
    * empty if it's create contract + extension case
@@ -861,33 +902,41 @@ export class AddContractComponent implements OnInit, OnDestroy {
   async initContractForm(contract: IContract) {
     this.contractForm = this.formBuilder.group({
       INFORMATION: this.formBuilder.group({
-        contractor_code: [contract === null ? `${Math.random().toString(36).substring(7).toUpperCase()}` : contract.contractor_code],
+        contractor_code:
+            [contract !== null
+                ?   contract.contractor_code : ''],
         contract_date: [contract === null ? '' : contract.contract_date],
-        contract_start_date: [contract === null ? '' : contract.contract_start_date],
-        contract_end_date: [contract === null ? '' : contract.contract_end_date],
-        contract_status: [contract === null ? '' : contract.contract_status],
+        contract_start_date: [contract === null ? '' : contract.contract_start_date, [Validators.required]],
+        contract_end_date: [contract === null ? '' : contract.contract_end_date, [Validators.required]],
+        contract_status: [contract === null ? '' : contract.contract_status, [Validators.required]],
         contractStatusFilter: [''],
         attachments: [contract === null ? '' : await this.getFileNameAndUpdateForm(contract.attachments, 'INFORMATION')],
       }),
       SIGNER: this.formBuilder.group({
-        signer_company_email: [contract === null ? '' : contract.signer_company_email],
-        signer_contractor_email: [contract === null ? '' : contract.signer_contractor_email],
-        signature_company_date: [contract === null ? '' : contract.signature_company_date],
-        signature_contractor_date: [contract === null ? '' : contract.signature_contractor_date],
+        signer_company_email: [contract === null ? '' : contract.signer_company_email, [Validators.required]],
+        signer_contractor_email: [contract === null ? '' : contract.signer_contractor_email,
+          [this.requiredIfValidator(() => this.contractForm.controls.INFORMATION['controls'].contract_status !== 'CUST_SIGN' &&
+            this.contractForm.controls.INFORMATION['controls'].contract_status !== 'SUP_SIGN'
+        )]],
+        signature_company_date: [contract === null ? '' : contract.signature_company_date, [Validators.required]],
+        signature_contractor_date: [contract === null ? '' : contract.signature_contractor_date
+          , [this.requiredIfValidator(() => this.contractForm.controls.INFORMATION['controls'].contract_status !== 'CUST_SIGN' &&
+              this.contractForm.controls.INFORMATION['controls'].contract_status !== 'SUP_SIGN'
+          )]],
       }),
       RATE: this.formBuilder.group({
-        contract_rate: [contract === null ? '' : contract.contract_rate],
-        currency_cd: [contract === null ? '' : contract.currency_cd],
-        payment_terms: [contract === null ? '' : contract.payment_terms],
+        contract_rate: [contract === null ? '' : contract.contract_rate, [Validators.required]],
+        currency_cd: [contract === null ? '' : contract.currency_cd, [Validators.required]],
+        payment_terms: [contract === null ? '' : contract.payment_terms, [Validators.required] ],
         filterCurrencyControl: [''],
         contractPaymentFilter: [''],
         paymentTermsControl: [''],
       }),
       TIMESHEET: this.formBuilder.group({
-        working_hour_day: [contract === null ? '' : contract.working_hour_day],
-        holiday_rate: [contract === null ? '' : contract.holiday_rate],
-        saturday_rate: [contract === null ? '' : contract.saturday_rate],
-        sunday_rate: [contract === null ? '' : contract.sunday_rate],
+        working_hour_day: [contract === null ? '' : contract.working_hour_day, [Validators.required]],
+        holiday_rate: [contract === null ? '' : contract.holiday_rate, [Validators.required]],
+        saturday_rate: [contract === null ? '' : contract.saturday_rate, [Validators.required]],
+        sunday_rate: [contract === null ? '' : contract.sunday_rate, [Validators.required]],
       }),
       CONTRACT_EXTENSION: this.formBuilder.group({
         extension_code: [''],
@@ -924,6 +973,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         end_date: [''],
       }),
     });
+
   }
 
   /**************************************************************************
@@ -942,6 +992,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .subscribe(
         async (res) => {
           this.contractInfo = res[0]['results'][0];
+          if (this.contractInfo.contract_status === 'EXPIRED') {
+            this.contractForm.controls.INFORMATION['controls'].contract_status.disable();
+          }
           this.getSignerContractor(this.contractInfo.contractor_code);
           if (res[1]['msg_code'] === '0004') {
             this.contractExtensionInfo = [];
@@ -986,10 +1039,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
           });
 
           await this.initContractForm(this.contractInfo);
-          this.extensionsList.next(this.contractExtensionInfo.slice());
+           if (this.contractInfo.contract_status === 'RUN' || this.contractInfo.contract_status === 'EX_AW' ) {
+             this.disableContractExtension();
+           }
+           this.extensionsList.next(this.contractExtensionInfo.slice());
           this.contractProjectList.next(this.contractProjectInfo.slice());
           this.projectCollaboratorList.next(this.projectCollaboratorInfo);
-          console.log('contractor ', this.contractorContactList.value);
           this.isLoading.next(false);
         },
         (error) => {
@@ -1106,280 +1161,580 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractInfo.contractKey.email_address : this.userInfo.company[0].companyKey.email_address;
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
-    if (this.canUpdate(this.contractId)) {
-      if (this.selectedContractFile.name !== '') {
-        Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
-      } else {
-        Contract.attachments = this.contractInfo.attachments;
-      }
-      this.contractsService.updateContract(Contract)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(
-          (res) => {
-            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      for (const extension of this.contractExtensionInfo) {
-        extension.application_id = Contract.application_id;
-        extension.email_address = Contract.email_address;
-        extension.contract_code = Contract.contract_code;
-        extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-          type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-        extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-          type.viewValue === extension.extension_status)?.value;
+    if (this.contractForm.valid) {
+        if (Contract.contract_status === 'RUN' || Contract.contract_status === 'EX_AW') {
+            if (!this.utilsService.checkDate(new Date(Contract.signature_company_date), new Date(Contract.contract_start_date))) {
+                this.utilsService.openSnackBar('check date signature company');
+            } else if (!this.utilsService.checkDate(new Date(Contract.signature_contractor_date), new Date(Contract.contract_start_date))) {
+                this.utilsService.openSnackBar('check date signature contractor');
+            } else {
 
-        if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
-          extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
-        }
-        if (extension._id && extension?.updated) {
-          extension.extension_code = extension.contractExtensionKey.extension_code;
-          this.contractsService.updateContractExtension(extension)
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-              (response) => {
-                this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
-              },
-              (error) => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-              }
-            );
-        } else if (!extension?._id) {
-          this.contractsService.addContractExtension(extension)
-            .pipe(
-              takeUntil(
-                this.destroy$
-              )
-            )
-            .subscribe(
-              (resp) => {
-                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
-              },
-              error => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-                if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                if (this.canUpdate(this.contractId)) {
+                    if (this.selectedContractFile.name !== '') {
+                        Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                    } else {
+                        Contract.attachments = this.contractInfo.attachments;
+                    }
+                    this.contractsService.updateContract(Contract)
+                        .pipe(
+                            takeUntil(this.destroy$)
+                        )
+                        .subscribe(
+                            (res) => {
+                                this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                            },
+                            (error) => {
+                                console.log(error);
+                            }
+                        );
+                    for (const extension of this.contractExtensionInfo) {
+                        extension.application_id = Contract.application_id;
+                        extension.email_address = Contract.email_address;
+                        extension.contract_code = Contract.contract_code;
+                        extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                            type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+                        extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                            type.viewValue === extension.extension_status)?.value;
 
-                }
-              }
-            );
-        }
-      }
-      for (const project of this.contractProjectInfo) {
-        project.application_id = Contract.application_id;
-        project.company_email = Contract.email_address;
-        project.contract_code = Contract.contract_code;
-        project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-          type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-        project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-          type.viewValue === project.extension_status)?.value;
+                        if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
+                            extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                        }
+                        if (extension._id && extension?.updated) {
+                            extension.extension_code = extension.contractExtensionKey.extension_code;
+                            this.contractsService.updateContractExtension(extension)
+                                .pipe(
+                                    takeUntil(this.destroy$)
+                                )
+                                .subscribe(
+                                    (response) => {
+                                        this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                                    },
+                                    (error) => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                    }
+                                );
+                        } else if (!extension?._id) {
+                            this.contractsService.addContractExtension(extension)
+                                .pipe(
+                                    takeUntil(
+                                        this.destroy$
+                                    )
+                                )
+                                .subscribe(
+                                    (resp) => {
+                                        this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                    },
+                                    error => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                        if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
 
-        if (project._id && project?.updated) {
-          project.project_code = project.ContractProjectKey?.project_code;
-          this.contractsService.updateContractProject(project)
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-              (response) => {
-                this.utilsService.openSnackBar('general.updated', '', 2000);
-              },
-              (error) => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-              }
-            );
-        } else if (!project?._id) {
-          this.contractsService.addContractProject(project)
-            .pipe(
-              takeUntil(
-                this.destroy$
-              )
-            )
-            .subscribe(
-              (resp) => {
-                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
-              },
-              error => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-                if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                                        }
+                                    }
+                                );
+                        }
+                    }
+                    for (const project of this.contractProjectInfo) {
+                        project.application_id = Contract.application_id;
+                        project.company_email = Contract.email_address;
+                        project.contract_code = Contract.contract_code;
+                        project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                            type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+                        project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                            type.viewValue === project.extension_status)?.value;
 
-                }
-              }
-            );
-        }
-      }
-      for (const projectCollaborator of this.projectCollaboratorInfo ) {
-        projectCollaborator.contract_code = Contract.contract_code;
-        if (projectCollaborator._id && projectCollaborator?.updated) {
-          this.contractsService.updateProjectCollaborator(projectCollaborator)
-            .pipe(
-              takeUntil(this.destroy$)
-            )
-            .subscribe(
-              (response) => {
-                this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
-              },
-              (error) => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-              }
-            );
-        } else if (!projectCollaborator?._id) {
-          this.contractsService.addProjectCollaborator(projectCollaborator)
-            .pipe(
-              takeUntil(
-                this.destroy$
-              )
-            )
-            .subscribe(
-              (resp) => {
-                if (resp['msg_code'] === '0001') {
-                  this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+                        if (project._id && project?.updated) {
+                            project.project_code = project.ContractProjectKey?.project_code;
+                            this.contractsService.updateContractProject(project)
+                                .pipe(
+                                    takeUntil(this.destroy$)
+                                )
+                                .subscribe(
+                                    (response) => {
+                                        this.utilsService.openSnackBar('general.updated', '', 2000);
+                                    },
+                                    (error) => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                    }
+                                );
+                        } else if (!project?._id) {
+                            this.contractsService.addContractProject(project)
+                                .pipe(
+                                    takeUntil(
+                                        this.destroy$
+                                    )
+                                )
+                                .subscribe(
+                                    (resp) => {
+                                        this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                    },
+                                    error => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                        if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+
+                                        }
+                                    }
+                                );
+                        }
+                    }
+                    for (const projectCollaborator of this.projectCollaboratorInfo ) {
+                        projectCollaborator.contract_code = Contract.contract_code;
+                        if (projectCollaborator._id && projectCollaborator?.updated) {
+                            this.contractsService.updateProjectCollaborator(projectCollaborator)
+                                .pipe(
+                                    takeUntil(this.destroy$)
+                                )
+                                .subscribe(
+                                    (response) => {
+                                        this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                                    },
+                                    (error) => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                    }
+                                );
+                        } else if (!projectCollaborator?._id) {
+                            this.contractsService.addProjectCollaborator(projectCollaborator)
+                                .pipe(
+                                    takeUntil(
+                                        this.destroy$
+                                    )
+                                )
+                                .subscribe(
+                                    (resp) => {
+                                        if (resp['msg_code'] === '0001') {
+                                            this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                                        } else {
+                                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+
+                                        }
+                                    },
+                                    error => {
+                                        console.log('error', error);
+                                    },
+                                    () => {
+                                        itemsFetched += 1;
+                                        if (itemsFetched === this.projectCollaboratorInfo
+                                            .filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+
+                                        }
+                                    }
+                                );
+                        }
+                    }
 
                 } else {
-                  this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                    if (this.selectedContractFile.name !== '') {
+                        Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                    } else {
+                        Contract.attachments = '';
+                    }
+                    if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
+                        this.utilsService.openSnackBar('check date');
+                    } else {
+                        this.contractsService.addContract(Contract)
+                            .pipe(
+                                takeUntil(this.destroy$)
+                            )
+                            .subscribe(
+                                async (response) => {
+                                    for (const extension of this.contractExtensionInfo) {
+                                        extension.application_id = Contract.application_id;
+                                        extension.email_address = Contract.email_address;
+                                        extension.contract_code = Contract.contract_code;
+                                        extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                                            type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+                                        extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                                            type.viewValue === extension.extension_status)?.value;
+                                        if (extension.selectedExtensionFile.name !== '') {
+                                            extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                                        }
+                                        await this.contractsService.addContractExtension(extension)
+                                            .pipe(
+                                                takeUntil(
+                                                    this.destroy$
+                                                )
+                                            )
+                                            .subscribe(
+                                                async (res) => {
+
+                                                },
+                                                error => {
+                                                    console.log('error', error);
+                                                },
+                                                () => {
+
+                                                }
+                                            );
+                                    }
+                                    for (const project of this.contractProjectInfo) {
+                                        project.application_id = Contract.application_id;
+                                        project.company_email = Contract.email_address;
+                                        project.contract_code = Contract.contract_code;
+                                        project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                                            type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+                                        project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                                            type.viewValue === project.extension_status)?.value;
+                                        await this.contractsService.addContractProject(project)
+                                            .pipe(
+                                                takeUntil(
+                                                    this.destroy$
+                                                )
+                                            )
+                                            .subscribe(
+                                                async (resp) => {
+                                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                                                },
+                                                error => {
+                                                    console.log('error', error);
+                                                },
+                                                () => {
+
+                                                }
+                                            );
+                                    }
+                                    for (const projectCollaborator of this.projectCollaboratorInfo ) {
+                                        projectCollaborator.contract_code = Contract.contract_code;
+                                        await this.contractsService.addProjectCollaborator(projectCollaborator)
+                                            .pipe(
+                                                takeUntil(
+                                                    this.destroy$
+                                                )
+                                            )
+                                            .subscribe(
+                                                (resp1) => {
+                                                    if (resp1['msg_code'] === '0001') {
+                                                        this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                                                    } else {
+                                                        this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                                                    }
+                                                },
+                                                error => {
+                                                    console.log('error', error);
+                                                },
+                                                () => {
+                                                }
+                                            );
+
+                                    }
+                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                                },
+                                (error) => {
+                                    console.log(error);
+
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                }
+                            );
+                    }
 
                 }
-              },
-              error => {
-                console.log('error', error);
-              },
-              () => {
-                itemsFetched += 1;
-                if (itemsFetched === this.projectCollaboratorInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+            }
+        } else {
 
+            if (this.canUpdate(this.contractId)) {
+                if (this.selectedContractFile.name !== '') {
+                    Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                } else {
+                    Contract.attachments = this.contractInfo.attachments;
                 }
-              }
-            );
+                this.contractsService.updateContract(Contract)
+                    .pipe(
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe(
+                        (res) => {
+                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                for (const extension of this.contractExtensionInfo) {
+                    extension.application_id = Contract.application_id;
+                    extension.email_address = Contract.email_address;
+                    extension.contract_code = Contract.contract_code;
+                    extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                        type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+                    extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                        type.viewValue === extension.extension_status)?.value;
+
+                    if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
+                        extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                    }
+                    if (extension._id && extension?.updated) {
+                        extension.extension_code = extension.contractExtensionKey.extension_code;
+                        this.contractsService.updateContractExtension(extension)
+                            .pipe(
+                                takeUntil(this.destroy$)
+                            )
+                            .subscribe(
+                                (response) => {
+                                    this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                                },
+                                (error) => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                }
+                            );
+                    } else if (!extension?._id) {
+                        this.contractsService.addContractExtension(extension)
+                            .pipe(
+                                takeUntil(
+                                    this.destroy$
+                                )
+                            )
+                            .subscribe(
+                                (resp) => {
+                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                },
+                                error => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                    if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+
+                                    }
+                                }
+                            );
+                    }
+                }
+                for (const project of this.contractProjectInfo) {
+                    project.application_id = Contract.application_id;
+                    project.company_email = Contract.email_address;
+                    project.contract_code = Contract.contract_code;
+                    project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                        type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+                    project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                        type.viewValue === project.extension_status)?.value;
+
+                    if (project._id && project?.updated) {
+                        project.project_code = project.ContractProjectKey?.project_code;
+                        this.contractsService.updateContractProject(project)
+                            .pipe(
+                                takeUntil(this.destroy$)
+                            )
+                            .subscribe(
+                                (response) => {
+                                    this.utilsService.openSnackBar('general.updated', '', 2000);
+                                },
+                                (error) => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                }
+                            );
+                    } else if (!project?._id) {
+                        this.contractsService.addContractProject(project)
+                            .pipe(
+                                takeUntil(
+                                    this.destroy$
+                                )
+                            )
+                            .subscribe(
+                                (resp) => {
+                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                },
+                                error => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                    if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+
+                                    }
+                                }
+                            );
+                    }
+                }
+                for (const projectCollaborator of this.projectCollaboratorInfo ) {
+                    projectCollaborator.contract_code = Contract.contract_code;
+                    if (projectCollaborator._id && projectCollaborator?.updated) {
+                        this.contractsService.updateProjectCollaborator(projectCollaborator)
+                            .pipe(
+                                takeUntil(this.destroy$)
+                            )
+                            .subscribe(
+                                (response) => {
+                                    this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                                },
+                                (error) => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                }
+                            );
+                    } else if (!projectCollaborator?._id) {
+                        this.contractsService.addProjectCollaborator(projectCollaborator)
+                            .pipe(
+                                takeUntil(
+                                    this.destroy$
+                                )
+                            )
+                            .subscribe(
+                                (resp) => {
+                                    if (resp['msg_code'] === '0001') {
+                                        this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                                    } else {
+                                        this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+
+                                    }
+                                },
+                                error => {
+                                    console.log('error', error);
+                                },
+                                () => {
+                                    itemsFetched += 1;
+                                    if (itemsFetched === this.projectCollaboratorInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+
+                                    }
+                                }
+                            );
+                    }
+                }
+
+            } else {
+                if (this.selectedContractFile.name !== '') {
+                    Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                } else {
+                    Contract.attachments = '';
+                }
+                if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
+                    this.utilsService.openSnackBar('check date');
+                } else {
+                    this.contractsService.addContract(Contract)
+                        .pipe(
+                            takeUntil(this.destroy$)
+                        )
+                        .subscribe(
+                            async (response) => {
+                                for (const extension of this.contractExtensionInfo) {
+                                    extension.application_id = Contract.application_id;
+                                    extension.email_address = Contract.email_address;
+                                    extension.contract_code = Contract.contract_code;
+                                    extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                                        type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
+                                    extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                                        type.viewValue === extension.extension_status)?.value;
+                                    if (extension.selectedExtensionFile.name !== '') {
+                                        extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                                    }
+                                    await this.contractsService.addContractExtension(extension)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            async (res) => {
+
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+
+                                            }
+                                        );
+                                }
+                                for (const project of this.contractProjectInfo) {
+                                    project.application_id = Contract.application_id;
+                                    project.company_email = Contract.email_address;
+                                    project.contract_code = Contract.contract_code;
+                                    project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                                        type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
+                                    project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                                        type.viewValue === project.extension_status)?.value;
+                                    await this.contractsService.addContractProject(project)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            async (resp) => {
+                                                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+
+                                            }
+                                        );
+                                }
+                                for (const projectCollaborator of this.projectCollaboratorInfo ) {
+                                    projectCollaborator.contract_code = Contract.contract_code;
+                                    await this.contractsService.addProjectCollaborator(projectCollaborator)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            (resp1) => {
+                                                if (resp1['msg_code'] === '0001') {
+                                                    this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
+
+                                                } else {
+                                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                                                }
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                            }
+                                        );
+
+                                }
+                                this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+
+                            },
+                            (error) => {
+                                console.log(error);
+
+                            },
+                            () => {
+                                itemsFetched += 1;
+                            }
+                        );
+                }
+
+            }
         }
-      }
 
     } else {
-      if (this.selectedContractFile.name !== '') {
-        Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
-      } else {
-        Contract.attachments = '';
-      }
-      console.log('Contract management ', Contract);
-      this.contractsService.addContract(Contract)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(
-          async (response) => {
-            for (const extension of this.contractExtensionInfo) {
-              extension.application_id = Contract.application_id;
-              extension.email_address = Contract.email_address;
-              extension.contract_code = Contract.contract_code;
-              extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-              extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                type.viewValue === extension.extension_status)?.value;
-              if (extension.selectedExtensionFile.name !== '') {
-                extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
-              }
-            await this.contractsService.addContractExtension(extension)
-                .pipe(
-                  takeUntil(
-                    this.destroy$
-                  )
-                )
-                .subscribe(
-                  async (res) => {
-
-                  },
-                  error => {
-                    console.log('error', error);
-                  },
-                  () => {
-
-                  }
-                );
-            }
-            for (const project of this.contractProjectInfo) {
-              project.application_id = Contract.application_id;
-              project.company_email = Contract.email_address;
-              project.contract_code = Contract.contract_code;
-              project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-              project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                type.viewValue === project.extension_status)?.value;
-              await this.contractsService.addContractProject(project)
-                .pipe(
-                  takeUntil(
-                    this.destroy$
-                  )
-                )
-                .subscribe(
-                  async (resp) => {
-                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
-
-                  },
-                  error => {
-                    console.log('error', error);
-                  },
-                  () => {
-
-                  }
-                );
-            }
-            for (const projectCollaborator of this.projectCollaboratorInfo ) {
-              projectCollaborator.contract_code = Contract.contract_code;
-              await this.contractsService.addProjectCollaborator(projectCollaborator)
-                .pipe(
-                  takeUntil(
-                    this.destroy$
-                  )
-                )
-                .subscribe(
-                  (resp1) => {
-                    if (resp1['msg_code'] === '0001') {
-                      this.utilsService.openSnackBar('Collaborator already affected to this project', '', 2000);
-
-                    } else {
-                      this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
-
-                    }
-                  },
-                  error => {
-                    console.log('error', error);
-                  },
-                  () => {
-                  }
-                );
-
-            }
-            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
-
-          },
-          (error) => {
-            console.log(error);
-          },
-          () => {
-            itemsFetched += 1;
-          }
-        );
-
+      this.utilsService.openSnackBar('missing required field');
     }
+
   }
 
   /**************************************************************************
@@ -1392,30 +1747,35 @@ export class AddContractComponent implements OnInit, OnDestroy {
       const validatedField = ['extension_start_date', 'extension_end_date', 'extension_currency_cd', 'attachments', 'extension_rate'];
       switch (result.action) {
         case 'update': {
-          this.contractExtensionInfo.forEach(
-            (element, index) => {
-              if ( ((element.contractExtensionKey ? element.contractExtensionKey.extension_code  : element.extension_code  ) ===
-                this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value)
-                && (this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField))
-              ) {
-                this.contractExtensionInfo[index].extension_start_date =
-                  this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
-                this.contractExtensionInfo[index].extension_end_date =
-                  this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
-                this.contractExtensionInfo[index].extension_rate = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
-                this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                  type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value)?.viewValue;
-                this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
-                this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
-                this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
-                this.contractExtensionInfo[index].updated = true;
-              }
-            }
-          );
-          this.contractForm.controls.CONTRACT_EXTENSION.reset();
-          this.canUpdateAction.next(false);
-          this.canAddAction.next(true);
+          if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField)) {
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
+          } else {
+            this.contractExtensionInfo.forEach(
+                (element, index) => {
+                  if ( ((element.contractExtensionKey ? element.contractExtensionKey.extension_code  : element.extension_code  ) ===
+                          this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_code.value)
+                      && (this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField))
+                  ) {
+                    this.contractExtensionInfo[index].extension_start_date =
+                        this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value;
+                    this.contractExtensionInfo[index].extension_end_date =
+                        this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
+                    this.contractExtensionInfo[index].extension_rate = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
+                    this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                        type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value)?.viewValue;
+                    this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
+                        type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
+                    this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
+                    this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
+                    this.contractExtensionInfo[index].updated = true;
+                  }
+                }
+            );
+            this.contractForm.controls.CONTRACT_EXTENSION.reset();
+            this.canUpdateAction.next(false);
+            this.canAddAction.next(true);
+          }
+
         }
           break;
         case 'addMore': {
@@ -1450,44 +1810,61 @@ export class AddContractComponent implements OnInit, OnDestroy {
     if (result.formGroupName === 'CONTRACT_PROJECT' ) {
       const validatedField =
         ['start_date', 'project_desc', 'end_date', 'comment', 'project_rate', 'project_status', 'rate_currency'];
-
+      const validatedFieldLength =
+          ['project_desc', 'comment'];
       switch (result.action) {
         case 'update': {
-          this.contractProjectInfo.forEach(
-            (element, index) => {
-              if ( ((element.ContractProjectKey ? element.ContractProjectKey.project_code : element.project_code  ) ===
-                this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.value)
-                && (this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField))
+          if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
 
-              ) {
-                this.contractProjectInfo[index].start_date =
-                  this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value;
-                this.contractProjectInfo[index].project_desc =
-                  this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value;
-                this.contractProjectInfo[index].end_date =
-                  this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value;
-                this.contractProjectInfo[index].comment =
-                  this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
-               // this.contractProjectInfo[index].vat_vbr =
-                //  this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_vbr.value;
-                this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
-                this.contractProjectInfo[index].project_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                  type.value === this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value)?.viewValue;
-                this.contractProjectInfo[index].rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC;
+          } else if (
+              !this.utilsService.checkFormGroupLength(this.contractForm.controls.CONTRACT_PROJECT, validatedFieldLength, 5, 100)
+          ) {
+            this.utilsService.openSnackBar('general.missing.length.invalid', 'close');
 
-                this.contractProjectInfo[index].updated = true;
-              }
-            }
-          );
-          this.contractForm.controls.CONTRACT_PROJECT.reset();
-          this.canUpdateContractProjectAction.next(false);
-          this.canAddContractProjectAction.next(true);
+          } else {
+            this.contractProjectInfo.forEach(
+                (element, index) => {
+                  if ( ((element.ContractProjectKey ? element.ContractProjectKey.project_code : element.project_code  ) ===
+                          this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.value)
+                      && (this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField))
+
+                  ) {
+                    this.contractProjectInfo[index].start_date =
+                        this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value;
+                    this.contractProjectInfo[index].project_desc =
+                        this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value;
+                    this.contractProjectInfo[index].end_date =
+                        this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value;
+                    this.contractProjectInfo[index].comment =
+                        this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
+                    // this.contractProjectInfo[index].vat_vbr =
+                    //  this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_vbr.value;
+                    this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
+                    this.contractProjectInfo[index].project_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
+                        type.value === this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value)?.viewValue;
+                    this.contractProjectInfo[index].rate_currency = this.appInitializerService.currenciesList.find((type) =>
+                        type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC;
+
+                    this.contractProjectInfo[index].updated = true;
+                  }
+                }
+            );
+            this.contractForm.controls.CONTRACT_PROJECT.reset();
+            this.canUpdateContractProjectAction.next(false);
+            this.canAddContractProjectAction.next(true);
+          }
+
         }
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
             this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
+
+          } else if (
+              !this.utilsService.checkFormGroupLength(this.contractForm.controls.CONTRACT_PROJECT, validatedFieldLength, 5, 100)
+          ) {
+            this.utilsService.openSnackBar('general.missing.length.invalid', 'close');
 
           } else {
             this.contractProjectList.next([]);
@@ -1533,30 +1910,35 @@ export class AddContractComponent implements OnInit, OnDestroy {
         ['start_date', 'project_code', 'email_address', 'end_date'];
       switch (result.action) {
         case 'update': {
-          this.projectCollaboratorInfo.forEach(
-            (element, index) => {
-              if (( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.project_code : element.project_code  ) ===
-                this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value) &&
-              ( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.email_address : element.email_address  ) ===
-                this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value)
-                && (this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField))
-              ) {
-                this.projectCollaboratorInfo[index].start_date =
-                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value;
-                this.projectCollaboratorInfo[index].project_code =
-                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value;
-                this.projectCollaboratorInfo[index].contract_code = this.contractInfo.contractKey.contract_code;
-                this.projectCollaboratorInfo[index].email_address =
-                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value;
-                this.projectCollaboratorInfo[index].end_date =
-                  this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value;
-                this.projectCollaboratorInfo[index].updated = true;
-              }
-            }
-          );
-          this.contractForm.controls.PROJECT_COLLABORATOR.reset();
-          this.canUpdateContractProjectAction.next(false);
-          this.canAddContractProjectAction.next(true);
+          if (!this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField)) {
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close', 2000);
+          } else {
+            this.projectCollaboratorInfo.forEach(
+                (element, index) => {
+                  if (( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.project_code : element.project_code  ) ===
+                          this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value) &&
+                      ( (element.ProjectCollaboratorKey ? element.ProjectCollaboratorKey.email_address : element.email_address  ) ===
+                          this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value)
+                      && (this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField))
+                  ) {
+                    this.projectCollaboratorInfo[index].start_date =
+                        this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value;
+                    this.projectCollaboratorInfo[index].project_code =
+                        this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value;
+                    this.projectCollaboratorInfo[index].contract_code = this.contractInfo.contractKey.contract_code;
+                    this.projectCollaboratorInfo[index].email_address =
+                        this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value;
+                    this.projectCollaboratorInfo[index].end_date =
+                        this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value;
+                    this.projectCollaboratorInfo[index].updated = true;
+                  }
+                }
+            );
+            this.contractForm.controls.PROJECT_COLLABORATOR.reset();
+            this.canUpdateContractProjectAction.next(false);
+            this.canAddContractProjectAction.next(true);
+          }
+
         }
           break;
         case 'addMore': {
@@ -1697,7 +2079,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
         });
   }
   onChangesData(data) {
-    console.log('on change data ', data);
   }
 
   /**************************************************************************
@@ -1852,6 +2233,29 @@ export class AddContractComponent implements OnInit, OnDestroy {
 
         });
   }
+
+  /**
+   * @description disable contract extension
+   */
+  disableContractExtension() {
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.disable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.disable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.disable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.disable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.disable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.disable();
+  }
+  /**
+   * @description disable contract extension
+   */
+  enableContractExtension() {
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.enable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.enable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.enable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.enable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.enable();
+    this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.enable();
+  }
   /**************************************************************************
    * @description check project affected to collaborator
    *************************************************************************/
@@ -1864,5 +2268,33 @@ export class AddContractComponent implements OnInit, OnDestroy {
     }
     return false;
 
+  }
+
+  /**
+   * @description get contractor status
+   */
+  async getContractorStatus(type: string) {
+    if (type === 'CLIENT') {
+       const element = this.statusList.value.filter(x => x.value === 'SUP_SIGN')[0];
+       const i = this.statusList.value.indexOf(element);
+       this.statusList.value.splice(i, 1);
+      this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
+      this.filteredStatus.next(this.statusList.value);
+      this.utilsService.changeValueField(this.statusList.value,
+          this.contractForm.controls.INFORMATION['controls'].contractStatusFilter,
+          this.filteredStatus
+      );
+    }
+    if (type === 'SUPPLIER') {
+      const element = this.statusList.value.filter(x => x.value === 'CUST_SIGN')[0];
+      const i = this.statusList.value.indexOf(element);
+      this.statusList.value.splice(i, 1);
+      this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
+      this.filteredStatus.next(this.statusList.value);
+      this.utilsService.changeValueField(this.statusList.value,
+          this.contractForm.controls.INFORMATION['controls'].contractStatusFilter,
+          this.filteredStatus
+      );
+    }
   }
 }

@@ -18,7 +18,7 @@
     <div fxLayout="row" fxFlex="55" fxLayoutAlign="space-around center">
       <div fxLayout="row" fxFlex="80" fxLayoutGap="20px" class="m-t-10">
         <mat-form-field class="data-table-search-bar" [style]="{'width': '80%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
-          <input (blur)="searchData($event)" matInput type="search" placeholder="Search ..." class="font-extra-light font-size-12">
+          <input (blur)="searchData($event)" matInput type="search" placeholder="{{ 'datatable.searchbar' | translate | capitalizeFirstLetter }}" class="font-extra-light font-size-12">
           <span matPrefix class="absolute mat-icon-btn"><img src="assets/icons/Iconly_Light_Search.svg" alt="search"></span>
         </mat-form-field>
         <button mat-stroked-button  [style]="{'width': '10%', 'height': '80%'}" (click)="displayTableConfig()">
@@ -126,9 +126,11 @@
                         {{ 'general.required' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
-                  <div fxLayout="row" fxFlex="3" fxFlexAlign="center" fxLayoutGap="90%" class="m-b-15">
-                    <button mat-stroked-button  type="button">OR</button>
-                    <button mat-stroked-button  type="button">AND</button>
+                  <div fxLayout="row" fxFlex="10" fxLayoutGap="90%" class="m-b-15">
+                    <button mat-stroked-button  type="button" fxLayoutAlign="center center">
+                      <span>{{ 'datatable.or' | translate }}</span></button>
+                    <button mat-stroked-button  type="button">
+                      <span>{{ 'datatable.and' | translate }}</span></button>
                     <button mat-stroked-button  type="button" (click)="deleteLineFilter(i)">X</button>
                   </div>
                 </div>
@@ -141,7 +143,7 @@
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
             <div  fxFlex="15" fxLayout="row">
-              <span class="cool-grey font-size-18">No Data Found</span>
+              <span class="cool-grey font-size-18">{{ 'datatable.datafound' | translate | capitalizeFirstLetter }}</span>
             </div>
             <div  fxFlex="15" fxLayout="row" *canBeDisplayed="{'feature': header.feature}">
               <div *ngIf="buttonAdd !== false">

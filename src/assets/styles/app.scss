@@ -181,6 +181,9 @@ Paddings
 .p-30 {
     padding: 30px;
 }
+.p-45 {
+  padding: 45px !important;
+}
 
 .p-l-0 {
     padding-left: 0;
@@ -205,6 +208,12 @@ Paddings
 }
 .p-l-40 {
   padding-left: 40px;
+}
+.p-l-45 {
+  padding-left: 45px;
+}
+.p-l-50 {
+  padding-left: 50px;
 }
 .p-l-65{
     padding-left: 65px;
@@ -265,6 +274,9 @@ Paddings
 }
 .p-t-30 {
     padding-top: 30px;
+}
+.p-t-45 {
+  padding-top: 30px;
 }
 .p-b-0 {
     padding-bottom: 0 !important;
@@ -826,6 +838,16 @@ html body {
   max-height: 100% !important;
   border-radius: 4px !important;
   box-sizing: border-box !important;
+}
+.scrollbar-dynamic-component {
+  max-width: 100% !important;
+  max-height: 90% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+}
+.scrollbar-dynamic-component {
+  resize: both !important;
+  scroll-behavior: smooth !important;
 }
 /* ---------------------- */
 

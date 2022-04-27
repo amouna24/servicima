@@ -38,8 +38,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
       private userService: UserService,
       private trainingService: TrainingService,
       private router: Router,
-      private utilsService: UtilsService
-
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -71,7 +69,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
        this.trainingService
            .getTraining(`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}&status=ACTIVE`).subscribe((training) => {
           this.listTraining = training['results'];
-          console.log('return data', this.listTraining);
           this.ELEMENT_DATA.next(training);
           this.isLoading.next(false);
           resolve(this.listTraining);
@@ -140,7 +137,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
      await this.getTrainings(this.nbtItems.getValue(), 0);
 
      this.trainingService.getTrainingInviteCollaborator(`?training_code=${training.TrainingKey.training_code}`).subscribe((invites) => {
-       console.log('my invites ', invites);
        if (invites.length !== 0) {
          invites['results'].map((invite) => {
            this.trainingService.disableTrainingInviteCollaborator(invite._id)

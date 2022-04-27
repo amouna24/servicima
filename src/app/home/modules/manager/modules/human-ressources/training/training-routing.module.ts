@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { TrainingAddComponent } from './training-add/training-add.component';
 import { TrainingListComponent } from './training-list/training-list.component';
 import { SessionsTrainingComponent } from './sessions-training/sessions-training.component';
+import { ListRequestManagerComponent } from './list-request-manager/list-request-manager.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'training-list',
     component: TrainingListComponent
+  },
+  {
+    path: 'request-list',
+    component: ListRequestManagerComponent
   }
 ];
 
