@@ -619,20 +619,20 @@ private subscriptions: Subscription;
     this.contractorForm = this.formBuilder.group({
       PERSONAL_INFORMATION: this.formBuilder.group({
         contractor_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-        registry_code: ['', [Validators.required]],
+        registry_code: ['', [Validators.required, , Validators.pattern(this.patternPhone)]],
         language: ['', [Validators.required]],
       }),
       ADDRESS: this.formBuilder.group({
         address: ['', [Validators.required]],
         country_cd: ['', [Validators.required]],
         registryCountryFilterCtrl: [''],
-        zip_code: ['', [Validators.required]],
+        zip_code: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
         city: ['', [Validators.required]],
       }),
       GENERAL_CONTACT: this.formBuilder.group({
         web_site: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
         contact_email: ['', [Validators.required, Validators.email]],
-        phone_nbr: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
+        phone_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
         phone2_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
         fax_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
       }),
@@ -644,7 +644,7 @@ private subscriptions: Subscription;
         filteredPayementOrganisation: [''],
         filteredLegalOrganisation: [''],
         filteredCurrencyOrganisation: [''],
-        vat_nbr: ['', [Validators.required]],
+        vat_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
         legal_form: ['', [Validators.required]],
         tax_cd: ['', [Validators.required]],
       }),
@@ -770,7 +770,7 @@ private subscriptions: Subscription;
           this.filteredTitles
         );
         this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
-        this.filteredPayMode.next(this.profileTitleList.value);
+        this.filteredPayMode.next(this.paymentModeList.value);
         this.utilsService.changeValueField(this.paymentModeList.value,
           this.contractorForm.controls.ORGANISATION['controls'].filteredPayementOrganisation,
           this.filteredPayMode

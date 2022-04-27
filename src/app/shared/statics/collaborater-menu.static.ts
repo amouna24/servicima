@@ -80,6 +80,13 @@ export const collaboraterMenu: IMenu[] = [
         feature: 'SOURCING_CAND_FILE_ACCESS',
         type: 'link',
       },
+      {
+        state: 'available-list',
+        name: 'Available Training',
+        icon: '',
+        feature: 'SOURCING_CAND_FILE_ACCESS',
+        type: 'link',
+      },
     ]
   },
   {
