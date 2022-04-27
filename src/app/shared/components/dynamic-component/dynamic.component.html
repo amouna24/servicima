@@ -37,6 +37,7 @@
                              (click)="scroll('#' + mi.titleKey)"> {{ mi.title | translate }} </mat-list-item>
             </ng-template>
           </mat-list>
+
         </div>
       </div>
     </div>
@@ -45,14 +46,14 @@
 
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/   MAT DIVIDER SECTION   /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
     <div fxLayout="row" fxFlex="1">
-      <mat-divider fxFlexAlign="center" [vertical]="true" [ngStyle]="{ 'height': '90%'}"></mat-divider>
+      <mat-divider fxFlexAlign="center" [vertical]="true" [ngStyle]="{ 'height': '80%'}"></mat-divider>
     </div>
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--->
 
 
     <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  DYNAMIC FORM SECTION  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
     <div fxLayout="column" fxFlex="69">
-      <wid-scrollbar id="dynamic-component-content" class="dynamic-component-content">
+      <wid-scrollbar  class="scrollbar-dynamic-component" id="dynamic-component-content">
         <form [formGroup]="formData" *ngIf="formData" fxLayout="column" fxFlex="100">
           <ng-container *ngFor="let mi of menuItems">
             <!---/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/  FIRST ITEM AND ITS CHILD  /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-->
@@ -93,6 +94,12 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -107,24 +114,30 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'uploadFile'" fxLayout="column" fxFlex="40">
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                  <span class="white">{{ 'home.dynamic.browse' | translate }}</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -148,7 +161,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -166,7 +179,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -189,6 +202,12 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
@@ -209,18 +228,23 @@
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -244,7 +268,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -262,7 +286,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -285,6 +309,12 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -305,18 +335,23 @@
                               <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -340,7 +375,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -358,7 +393,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="87">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -383,6 +418,12 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -403,18 +444,23 @@
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}"  matInput
-                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -438,7 +484,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -456,7 +502,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -480,6 +526,12 @@
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                    {{'register.invalidformat' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                    {{'register.invalidminlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                    {{'register.invalidmaxlength' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -500,18 +552,23 @@
                                 <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                   {{ sf.label | translate }} :
                                 </mat-label>
-                                <div fxLayout="row" fxFlex="100">
-                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                                <div fxLayout="row" fxFlex="100" >
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                    <div fxFlex="100" fxLayout="row">
+                                      <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                             fxFlex="60"
+                                             placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                      <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                        <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                      </button>
+                                    </div>
+
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                    <span class="white">Browse</span>
-                                  </button>
+
                                 </div>
 
                               </div>
@@ -535,7 +592,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor"
+                                  <mat-select
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -553,7 +610,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                               </div>
                             </ng-container>
                           </div>
@@ -594,6 +651,12 @@
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                    {{'register.invalidformat' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                    {{'register.invalidminlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                    {{'register.invalidmaxlength' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -614,18 +677,23 @@
                                 <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                   {{ sf.label | translate }} :
                                 </mat-label>
-                                <div fxLayout="row" fxFlex="100">
-                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                                <div fxLayout="row" fxFlex="100" >
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                    <div fxFlex="100" fxLayout="row">
+                                      <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                             fxFlex="60"
+                                             placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                      <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                        <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                      </button>
+                                    </div>
+
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                    <span class="white">Browse</span>
-                                  </button>
+
                                 </div>
 
                               </div>
@@ -649,7 +717,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor"
+                                  <mat-select
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -667,7 +735,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                               </div>
                             </ng-container>
                           </div>
@@ -717,6 +785,12 @@
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                    {{'register.invalidformat' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                    {{'register.invalidminlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                    {{'register.invalidmaxlength' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -737,18 +811,23 @@
                                 <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                   {{ sf.label | translate }} :
                                 </mat-label>
-                                <div fxLayout="row" fxFlex="100">
-                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                           placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                                <div fxLayout="row" fxFlex="100" >
+                                  <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                    <div fxFlex="100" fxLayout="row">
+                                      <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                             fxFlex="60"
+                                             placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                      <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(chMI.titleKey)">
+                                        <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                      </button>
+                                    </div>
+
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'required')">
                                       {{ 'general.required' | translate }} </mat-error>
                                     <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'email')">
                                       {{'register.invalidemail' | translate}} </mat-error>
                                   </mat-form-field>
-                                  <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(chMI.titleKey)">
-                                    <span class="white">Browse</span>
-                                  </button>
+
                                 </div>
 
                               </div>
@@ -772,7 +851,7 @@
                                   {{ sf.label  | translate }} :
                                 </mat-label>
                                 <mat-form-field appearance="outline">
-                                  <mat-select disableOptionCentering panelClass="panelColor"
+                                  <mat-select
                                               formControlName="{{sf.formControlName}}"
                                               placeholder="{{ sf.placeholder | translate }}">
                                     <mat-option>
@@ -790,7 +869,7 @@
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                                <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                               </div>
                             </ng-container>
                           </div>
@@ -840,6 +919,12 @@
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                {{'register.invalidformat' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                {{'register.invalidminlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                {{'register.invalidmaxlength' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -860,18 +945,23 @@
                             <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                               {{ sf.label | translate }} :
                             </mat-label>
-                            <div fxLayout="row" fxFlex="100">
-                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                            <div fxLayout="row" fxFlex="100" >
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                <div fxFlex="100" fxLayout="row">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         fxFlex="60"
+                                         placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                  <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                    <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                  </button>
+                                </div>
+
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                <span class="white">Browse</span>
-                              </button>
+
                             </div>
 
                           </div>
@@ -895,7 +985,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor"
+                              <mat-select
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -913,7 +1003,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
-                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                           </div>
                           <div *ngIf="sf.type === 'themeRadioGroup'" fxLayout="column" fxFlex="87">
                             <mat-label fxLayout="row" [ngClass]="{'required': sf.required  }" >
@@ -956,6 +1046,12 @@
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                {{'register.invalidformat' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                {{'register.invalidminlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                {{'register.invalidmaxlength' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
@@ -976,18 +1072,23 @@
                             <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
                               {{ sf.label | translate }} :
                             </mat-label>
-                            <div fxLayout="row" fxFlex="100">
-                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder  | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                            <div fxLayout="row" fxFlex="100" >
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                <div fxFlex="100" fxLayout="row">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         fxFlex="60"
+                                         placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                  <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                    <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                  </button>
+                                </div>
+
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                <span class="white">Browse</span>
-                              </button>
+
                             </div>
 
                           </div>
@@ -1011,7 +1112,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor"
+                              <mat-select
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1029,7 +1130,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -1067,6 +1168,12 @@
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                {{'register.invalidformat' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                {{'register.invalidminlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                {{'register.invalidmaxlength' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1087,18 +1194,23 @@
                             <mat-label class="black font-size-12" fxLayout="row" fxFlex="100" [ngClass]="{'required': sf.required  }">
                               {{ sf.label | translate }} :
                             </mat-label>
-                            <div fxLayout="row" fxFlex="100">
-                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder | translate  }}" formControlName="{{sf.formControlName}}" readonly>
+                            <div fxLayout="row" fxFlex="100" >
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                <div fxFlex="100" fxLayout="row">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         fxFlex="60"
+                                         placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                  <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                    <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                  </button>
+                                </div>
+
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                <span class="white">Browse</span>
-                              </button>
+
                             </div>
 
                           </div>
@@ -1122,7 +1234,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor"
+                              <mat-select
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1140,7 +1252,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
-                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -1163,6 +1275,12 @@
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                {{'register.invalidformat' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                {{'register.invalidminlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                {{'register.invalidmaxlength' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="87">
@@ -1183,18 +1301,23 @@
                             <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                               {{ sf.label | translate }} :
                             </mat-label>
-                            <div fxLayout="row" fxFlex="100">
-                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                            <div fxLayout="row" fxFlex="100" >
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                <div fxFlex="100" fxLayout="row">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         fxFlex="60"
+                                         placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                  <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                    <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                  </button>
+                                </div>
+
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                <span class="white">Browse</span>
-                              </button>
+
                             </div>
 
                           </div>
@@ -1218,7 +1341,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor"
+                              <mat-select
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1244,7 +1367,7 @@
 
                                     <ng-container cdkColumnDef="{{ col.prop }}" [sticky]="true">
                                       <th cdk-header-cell
-                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name | translate }}
                                       </th>
                                       <td cdk-cell
                                           *cdkCellDef="let row" class="black-three font-size-12 font-light">
@@ -1257,10 +1380,10 @@
 
                                   <ng-container *ngSwitchCase="'Actions'">
 
-                                    <ng-container cdkColumnDef="{{ col.prop }}" [stickyEnd]="true">
+                                    <ng-container cdkColumnDef="{{ col.prop }}" >
 
                                       <th cdk-header-cell
-                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name }}
+                                          *cdkHeaderCellDef class="steel font-size-14 font-semi-bold"> {{ col.name | translate }}
                                       </th>
                                       <td cdk-cell
                                           *cdkCellDef="let row" class="black-three font-size-12 font-light">
@@ -1312,7 +1435,7 @@
                             </table>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="87">
-                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -1335,6 +1458,12 @@
                                 {{ 'general.required' | translate }} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                 {{'register.invalidemail' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                {{'register.invalidformat' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                {{'register.invalidminlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                {{'register.invalidmaxlength' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1355,18 +1484,23 @@
                             <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                               {{ sf.label | translate }} :
                             </mat-label>
-                            <div fxLayout="row" fxFlex="100">
-                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                       placeholder="{{sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                            <div fxLayout="row" fxFlex="100" >
+                              <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                <div fxFlex="100" fxLayout="row">
+                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                         fxFlex="60"
+                                         placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                  <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                    <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                  </button>
+                                </div>
+
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
                               </mat-form-field>
-                              <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                <span class="white">Browse</span>
-                              </button>
+
                             </div>
 
                           </div>
@@ -1390,7 +1524,7 @@
                               {{ sf.label  | translate }} :
                             </mat-label>
                             <mat-form-field appearance="outline">
-                              <mat-select disableOptionCentering panelClass="panelColor"
+                              <mat-select
                                           formControlName="{{sf.formControlName}}"
                                           placeholder="{{ sf.placeholder | translate }}">
                                 <mat-option>
@@ -1408,7 +1542,7 @@
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="40">
-                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                            <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                           </div>
                         </ng-container>
                       </div>
@@ -1432,6 +1566,12 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1452,18 +1592,23 @@
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{sf.placeholder | translate  }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -1487,7 +1632,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -1505,7 +1650,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -1546,6 +1691,13 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
+
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1566,18 +1718,23 @@
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{sf.placeholder  | translate  }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -1601,7 +1758,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -1619,7 +1776,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>
@@ -1680,6 +1837,13 @@
                                   {{ 'general.required' | translate }} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                   {{'register.invalidemail' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'pattern')">
+                                  {{'register.invalideformat' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'minLength')">
+                                  {{'register.invalidminlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
+                                  {{'register.invalidmaxlength' | translate}} </mat-error>
+
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1700,18 +1864,23 @@
                               <mat-label class="black font-size-12" [ngClass]="{'required': sf.required  }" fxLayout="row" fxFlex="100">
                                 {{ sf.label | translate }} :
                               </mat-label>
-                              <div fxLayout="row" fxFlex="100">
-                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="70">
-                                  <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
-                                         placeholder="{{ sf.placeholder | translate }}" formControlName="{{sf.formControlName}}" readonly>
+                              <div fxLayout="row" fxFlex="100" >
+                                <mat-form-field mat-line appearance="outline" fxLayout="column" fxFlex="100">
+                                  <div fxFlex="100" fxLayout="row">
+                                    <input (keyup)="keyUpHandler($event.target)" type="{{ sf.inputType }}" matInput
+                                           fxFlex="60"
+                                           placeholder="{{ sf.placeholder | translate }}"  formControlName="{{sf.formControlName}}" readonly>
+                                    <button type="button" mat-raised-button class="bg-topaz buttonBrowse" fxFlex="40" fxLayoutAlign="center center"  (click)="openUploadSheet(mi.titleKey)">
+                                      <span class="white text-center">{{ 'home.dynamic.browse' | translate }}</span>
+                                    </button>
+                                  </div>
+
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'required')">
                                     {{ 'general.required' | translate }} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'email')">
                                     {{'register.invalidemail' | translate}} </mat-error>
                                 </mat-form-field>
-                                <button type="button" mat-raised-button class="bg-topaz upload-button" fxLayout="column" fxLayoutAlign="center center"  fxFlex="30" (click)="openUploadSheet(mi.titleKey)">
-                                  <span class="white">Browse</span>
-                                </button>
+
                               </div>
 
                             </div>
@@ -1735,7 +1904,7 @@
                                 {{ sf.label  | translate }} :
                               </mat-label>
                               <mat-form-field appearance="outline">
-                                <mat-select disableOptionCentering panelClass="panelColor"
+                                <mat-select
                                             formControlName="{{sf.formControlName}}"
                                             placeholder="{{ sf.placeholder | translate }}">
                                   <mat-option>
@@ -1753,7 +1922,7 @@
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'slideToggle'" fxLayout="column" fxFlex="100">
-                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label }}</mat-slide-toggle>
+                              <mat-slide-toggle class="black font-size-12" formControlName="{{sf.formControlName}}"> {{ sf.label | translate | capitalizeFirstLetter }}</mat-slide-toggle>
                             </div>
                           </ng-container>
                         </div>

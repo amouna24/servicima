@@ -62,19 +62,19 @@ export class DynamicComponent implements OnInit, OnDestroy {
   setSelectedItem(titleKey) {
     this.selectedItem.next(titleKey);
     this.selectedItem.subscribe(
-      (res) => {
-        this.valueOfSelectedItem = res;
-      }
+        (res) => {
+          this.valueOfSelectedItem = res;
+        }
     );
   }
 
   scroll(child) {
     this.menuItems.forEach(
-      (item) => {
-        if (item.child.length > 0 && child === item.titleKey) {
-          child = item.child[0].titleKey;
+        (item) => {
+          if (item.child.length > 0 && child === item.titleKey) {
+            child = item.child[0].titleKey;
+          }
         }
-      }
     );
     this.setSelectedItem(child.replace('#', ''));
     const childID = document.getElementById(child);
@@ -100,17 +100,17 @@ export class DynamicComponent implements OnInit, OnDestroy {
   childSelected(parent: string): boolean {
     let res = false;
     this.menuItems.forEach(
-      (menu) => {
-        if (menu.titleKey === parent) {
-          menu.child.forEach(
-            (child) => {
-              if (child.titleKey === this.valueOfSelectedItem) {
-                res = true;
-              }
-            }
-          );
+        (menu) => {
+          if (menu.titleKey === parent) {
+            menu.child.forEach(
+                (child) => {
+                  if (child.titleKey === this.valueOfSelectedItem) {
+                    res = true;
+                  }
+                }
+            );
+          }
         }
-      }
     );
     return res;
   }

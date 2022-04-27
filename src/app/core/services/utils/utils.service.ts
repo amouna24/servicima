@@ -292,6 +292,53 @@ export class UtilsService {
     const isValueValid = (field) => form['controls'][field].value !== '' && form['controls'][field].value ;
     return columnFields.every(isValueValid);
   }
+
+  /**
+   * @description check email field
+   */
+  checkEmailFormGroup(form: AbstractControl, columnFields: string[]): boolean {
+    const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const isValueValid = (field) =>  pattern.test(form['controls'][field].value);
+    return columnFields.every(isValueValid);
+  }
+  /**
+   * @description check email field
+   */
+  checkPatternFormGroup(form: AbstractControl, columnFields: string[], pattern: any): boolean {
+    const isValueValid = (field) =>  pattern.test(form['controls'][field].value);
+    return columnFields.every(isValueValid);
+  }
+
+  /**
+   * @description check phone number field
+   */
+  checkPhoneNumberFields(form: AbstractControl, columnFields: string[]): boolean {
+
+    const pattern = /^(0|[1-9][0-9]*)$/;
+    const isValueValid = (field) =>  pattern.test(form['controls'][field].value);
+    return columnFields.every(isValueValid);
+  }
+
+  /**
+   * @description checkFormGroup length field
+   */
+  checkFormGroupLength(form: AbstractControl, columnFields: string[], min: number, max: number): boolean {
+    const isValueValid = (field) => form['controls'][field].value.length > min && form['controls'][field].value.length < max ;
+    return columnFields.every(isValueValid);
+  }
+  /**
+   * @description check date start and date end
+   */
+  checkDate(dateStart: Date, dateEnd: Date): boolean {
+    console.log('my start date ', dateStart);
+    console.log('my end date ', dateEnd);
+    if (dateStart.getTime() < dateEnd.getTime()) {
+      console.log('aaaaaaaaaaa');
+      return true;
+    }
+    console.log('bbbbbbbb');
+    return false;
+  }
   verifyCurrentRoute(previousRoute?: string, noRefreshable?: boolean): Observable<any> {
     if ( Object.keys(this.route.snapshot.queryParams).length === 0) {
       this.router.navigate([`${previousRoute ? previousRoute : '/'}`]);

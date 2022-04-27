@@ -103,13 +103,12 @@
                         <div fxLayout="row">
                             <div fxLayout="column" fxFlex="80">
                                 <label class="font-size-12 required">{{'hr.training.trainingslist.trainingsession.price' | translate | capitalizeFirstLetter}} </label>
-                                <div fxLayout="row" fxFlex="100">
+                                <div fxLayout="row" fxFlex="100" >
                                 <mat-form-field appearance="outline" >
                                     <div fxFlex="100" fxLayout="row">
                                         <input fxFlex="80" autocomplete="off" matInput required [placeholder]=" 'hr.training.trainingslist.trainingsession.price' | translate | capitalizeFirstLetter"
                                                formControlName="price" [ngStyle.xs]="{'font-size': '15px'}" />
                                        <button fxFlex="20" class="buttonCurrency" fxLayoutAlign="center center" > <label >USD</label></button>
-
                                     </div>
 
                                     <mat-error class="wid-error-messages" *ngIf="form.controls.price?.errors?.required">

@@ -88,6 +88,13 @@ export class ContractorsService {
   disableContractor(ID: string): Observable<any> {
     return this.httpClient.delete<IContract>(`${environment.contractorApiUrl}/disable?_id=${ID}`);
   }
+  /**************************************************************************
+   * @description Disable Contractor Status
+   * @param ID of the contractor
+   *************************************************************************/
+  deleteContractor(ID: string): Observable<any> {
+    return this.httpClient.delete<IContract>(`${environment.contractorApiUrl}/disable?_id=${ID}`);
+  }
 
   /**************************************************************************
    * @description Disable IContractorContact Status

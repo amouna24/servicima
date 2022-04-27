@@ -157,6 +157,14 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
+                name: 'Contrat en attente',
+                icon: 'wi-credit-card',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+                queryParams: { contract_status: 'EX_AW' },
+              },
+              {
+                state: 'contracts-list',
                 name: 'manager.menu.static.contract.management.suppliers.management.inprogress',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
@@ -171,20 +179,6 @@ export const managerMenu: IMenu[] = [
                 type: 'link',
                 queryParams: { contract_status: 'EXPIRED' },
 
-              },
-              {
-                state: 'projects-list',
-                name: 'manager.menu.static.contract.management.suppliers.management.projects',
-                icon: 'wi-credit-card',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
-              },
-              {
-                state: 'collaborators-list',
-                name: 'manager.menu.static.contract.management.suppliers.management.collaborators',
-                icon: 'wi_settings',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
               },
             ]
           },
@@ -211,6 +205,14 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
+                name: 'Contrat en attente',
+                icon: 'wi-credit-card',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+                queryParams: { contract_status: 'EX_AW' },
+              },
+              {
+                state: 'contracts-list',
                 name: 'manager.menu.static.contract.management.clients.management.inprogress',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
@@ -224,20 +226,6 @@ export const managerMenu: IMenu[] = [
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
                 queryParams: { contract_status: 'EXPIRED' },
-              },
-              {
-                state: 'contracts-list',
-                name: 'manager.menu.static.contract.management.clients.management.export',
-                icon: 'wi_upload',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
-              },
-              {
-                state: 'contracts-list',
-                name: 'manager.menu.static.contract.management.clients.management.settings',
-                icon: 'wi_settings',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
               },
             ]
           }

@@ -8,7 +8,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class SupplierListComponent implements OnInit {
 
   type = 'SUPPLIER';
-  title = 'Suppliers list';
+  title = 'contracts.supp.supplierslist';
 
   constructor(
   ) {

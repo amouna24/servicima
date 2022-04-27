@@ -62,7 +62,7 @@ export class InvitationListComponent implements OnInit {
   async getInvitation(limit?, offset?) {
    await  this.trainingService
        .getTrainingInviteCollaborator
-       (`?beginning=${offset}&number=${limit}&collaborator_email=${this.emailAddress}&status_invite=PENDING&status_invite=IGNORED&status=DISABLED`)
+       (`?beginning=${offset}&number=${limit}&collaborator_email=${this.emailAddress}&status_invite=PENDING&status_invite=IGNORED&status=ACTIVE`)
        .subscribe(async ( data) => {
          this.totalItems = data['total'] ? data['total'] : null;
          this.countedItems = data['count'] ? data['total'] : null;

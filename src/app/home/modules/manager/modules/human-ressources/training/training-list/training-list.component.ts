@@ -137,7 +137,6 @@ export class TrainingListComponent  implements OnInit, OnDestroy {
      await this.getTrainings(this.nbtItems.getValue(), 0);
 
      this.trainingService.getTrainingInviteCollaborator(`?training_code=${training.TrainingKey.training_code}`).subscribe((invites) => {
-       console.log('my invites ', invites);
        if (invites.length !== 0) {
          invites['results'].map((invite) => {
            this.trainingService.disableTrainingInviteCollaborator(invite._id)

@@ -319,7 +319,7 @@ export class CandidateFileComponent implements OnInit {
             this.disableFieldsCandidate();
             await this.getRefData(this.companyEmail);
             await this.getUserData(params);
-            this.getBlocQuestionTest().then(data => this.listBlocQuestion = data);
+            this.getBlocQuestionTest(this.emailAddress).then(data => this.listBlocQuestion = data);
           }
         });
   }
@@ -564,13 +564,12 @@ export class CandidateFileComponent implements OnInit {
   /**
    * @description get blocs question
    */
-  getBlocQuestionTest() {
+  getBlocQuestionTest(email: string) {
     console.log('my language ', this.localStorageService.getItem('language'));
     return new Promise<any>(resolve => {
         this.testService
             .getQuestionBloc
-            (`?application_id=${this.applicationId}&company_email=ALL&language_id=${
-                this.localStorageService.getItem('language').langId}`).subscribe((data) => {
+            (`?candidate_email=${email}`).subscribe((data) => {
                 console.log('my data ', data);
               resolve(data);
         });

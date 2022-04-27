@@ -58,7 +58,7 @@ export class InviteCollaboratorComponent implements OnInit {
             };
             this.trainingService.addTrainingInviteCollaborator(inviteCollaborator).subscribe((data) => {
                 console.log('invitation sended successfully');
-                this.sendMail(collaborator.email_address, collaborator.fullName, 'testurl');
+             //   this.sendMail(collaborator.email_address, collaborator.fullName, 'testurl');
             });
         });
 

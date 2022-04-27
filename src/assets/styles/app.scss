@@ -839,6 +839,16 @@ html body {
   border-radius: 4px !important;
   box-sizing: border-box !important;
 }
+.scrollbar-dynamic-component {
+  max-width: 100% !important;
+  max-height: 90% !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+}
+.scrollbar-dynamic-component {
+  resize: both !important;
+  scroll-behavior: smooth !important;
+}
 /* ---------------------- */
 
 /*******************

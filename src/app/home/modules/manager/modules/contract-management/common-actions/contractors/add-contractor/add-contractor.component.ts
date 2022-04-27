@@ -62,18 +62,13 @@ private subscriptions: Subscription;
   contractorInfo: IContractor;
   contractorContactInfo = [];
   companyEmail: string;
-  activitySectorField: BehaviorSubject<IFieldsObject> = new BehaviorSubject<IFieldsObject>({
-    label: 'Activity Sector',
-    placeholder: 'Activity Sector',
-    type: FieldsType.INPUT,
-    inputType: InputType.TEXT,
-    formControlName: 'activity_sector',
-  });
+  urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+  patternPhone = /^(0|[1-9][0-9]*)$/;
   /**************************************************************************
    * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
    *************************************************************************/
   countriesList: IViewParam[] = [];
-  activitySectorList: IViewParam[] = [];
+  activitySectorList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   filteredCountries: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredGenders: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredTitles: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
@@ -206,8 +201,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items_with_image_at_right,
       fields: [
         {
-          label: 'clients.addcontractor.personal.info.contractor.name',
-          placeholder: 'clients.addcontractor.personal.info.contractor.name',
+          label: 'contracts.contractor.name',
+          placeholder: 'contracts.contractor.name',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'contractor_name',
@@ -242,7 +237,8 @@ private subscriptions: Subscription;
           placeholder: 'clients.addcontractor.personal.info.language',
           type: FieldsType.SELECT,
           selectFieldList: this.langList,
-          formControlName: 'language'
+          formControlName: 'language',
+          required: true
         },
       ],
     },
@@ -301,6 +297,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'web_site',
+          required: true
         },
         {
           label: 'clients.addcontractor.contact.email',
@@ -330,6 +327,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'phone2_nbr',
+          required: true
         },
       ],
     },
@@ -343,6 +341,7 @@ private subscriptions: Subscription;
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
           formControlName: 'fax_nbr',
+          required: true
         },
       ],
     },
@@ -350,7 +349,14 @@ private subscriptions: Subscription;
       titleRef: 'ORGANISATION',
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
-        this.activitySectorField.getValue(),
+        {
+          label: 'Activity Sector',
+          placeholder: 'Activity Sector',
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.activityCodeList,
+          formControlName: 'activity_sector',
+          searchControlName: 'activitySectorFilterCtrl'
+        },
         {
           label: 'clients.addcontractor.organisation.payment.method',
           placeholder: 'clients.addcontractor.organisation.payment.method',
@@ -379,14 +385,15 @@ private subscriptions: Subscription;
           label: 'VAT',
           placeholder: 'VAT',
           type: FieldsType.INPUT,
-          inputType: InputType.TEXT,
+          inputType: InputType.NUMBER,
           formControlName: 'vat_nbr',
+          required: true
         },
       ],
     },
     {
       titleRef: 'ORGANISATION',
-      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
           label: 'clients.addcontractor.organisation.legalform',
@@ -403,6 +410,7 @@ private subscriptions: Subscription;
           type: FieldsType.SELECT,
           selectFieldList: this.companyTaxList,
           formControlName: 'tax_cd',
+          required: true
         },
       ],
     },
@@ -428,12 +436,12 @@ private subscriptions: Subscription;
             displayedColumns: ['rowItem', 'first_name', 'last_name', 'main_contact', 'title_cd', 'Actions'],
             columns: [
               { prop: 'rowItem',  name: '', type: InputType.ROW_ITEM},
-              { name: 'First Name', prop: 'first_name', type: InputType.TEXT},
-              { name: 'Last Name', prop: 'last_name', type: InputType.TEXT},
-              { name: 'Main Contact', prop: 'main_contact', type: InputType.TEXT},
+              { name: 'contracts.suppliers.table.firstname', prop: 'first_name', type: InputType.TEXT},
+              { name: 'contracts.suppliers.table.lastname', prop: 'last_name', type: InputType.TEXT},
+              { name: 'contracts.suppliers.table.contactmain', prop: 'main_contact', type: InputType.TEXT},
               { name: 'Email', prop: 'contact_email', type: InputType.TEXT},
               { name: 'Gender', prop: 'gender_cd', type: InputType.TEXT},
-              { name: 'Title', prop: 'title_cd', type: InputType.TEXT},
+              { name: 'contracts.suppliers.table.title', prop: 'title_cd', type: InputType.TEXT},
               { name: 'Phone', prop: 'phone_nbr', type: InputType.TEXT},
               { name: 'Cellphone', prop: 'cell_phone_nbr', type: InputType.TEXT},
               { name: 'Language', prop: 'language_cd', type: InputType.TEXT},
@@ -546,7 +554,7 @@ private subscriptions: Subscription;
           formControlName: 'language_cd'
         },
         {
-          label: 'Signature',
+          label: 'clients.addcontractor.contact.sign',
           type: FieldsType.SLIDE_TOGGLE,
           formControlName: 'can_sign_contract',
           required: true
@@ -603,25 +611,6 @@ private subscriptions: Subscription;
    *************************************************************************/
  async ngOnInit() {
     await this.getInitialData();
-
-    this.contractorForm.get('ADDRESS').valueChanges.subscribe(selectedValue => {
-      selectedValue.country_cd === 'FRA' ?
-        this.dynamicForm.getValue()[7].fields[0] = {
-          label: 'Activity Sector',
-          placeholder: 'Activity Sector',
-          type: FieldsType.SELECT_WITH_SEARCH,
-          filteredList: this.activityCodeList,
-          formControlName: 'activity_sector',
-          searchControlName: 'activitySectorFilterCtrl'
-        } :
-        this.dynamicForm.getValue()[7].fields[0] = {
-          label: 'Activity Sector',
-          placeholder: 'Activity Sector',
-          type: FieldsType.INPUT,
-          inputType: InputType.TEXT,
-          formControlName: 'activity_sector',
-        };
-    });
   }
   /**************************************************************************
    * @description Init Contract Form
@@ -629,35 +618,35 @@ private subscriptions: Subscription;
   initContractForm() {
     this.contractorForm = this.formBuilder.group({
       PERSONAL_INFORMATION: this.formBuilder.group({
-        contractor_name: ['', Validators.required],
-        registry_code: [''],
-        language: [''],
+        contractor_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+        registry_code: ['', [Validators.required]],
+        language: ['', [Validators.required]],
       }),
       ADDRESS: this.formBuilder.group({
-        address: ['', Validators.required],
-        country_cd: [''],
+        address: ['', [Validators.required]],
+        country_cd: ['', [Validators.required]],
         registryCountryFilterCtrl: [''],
-        zip_code: [''],
-        city: [''],
+        zip_code: ['', [Validators.required]],
+        city: ['', [Validators.required]],
       }),
       GENERAL_CONTACT: this.formBuilder.group({
-        web_site: [''],
-        contact_email: [''],
-        phone_nbr: [''],
-        phone2_nbr: [''],
-        fax_nbr: ['', ],
+        web_site: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
+        contact_email: ['', [Validators.required, Validators.email]],
+        phone_nbr: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
+        phone2_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        fax_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
       }),
       ORGANISATION: this.formBuilder.group({
-        activity_sector: ['' ],
+        activity_sector: ['' , [Validators.required]],
         activitySectorFilterCtrl: [''],
-        payment_cd: [''],
-        currency_cd: [''],
+        payment_cd: ['', [Validators.required]],
+        currency_cd: ['', [Validators.required]],
         filteredPayementOrganisation: [''],
         filteredLegalOrganisation: [''],
         filteredCurrencyOrganisation: [''],
-        vat_nbr: [''],
-        legal_form: [''],
-        tax_cd: [''],
+        vat_nbr: ['', [Validators.required]],
+        legal_form: ['', [Validators.required]],
+        tax_cd: ['', [Validators.required]],
       }),
       RESUME_TEMPLATE: this.formBuilder.group( {
         resume_template: [''],
@@ -681,7 +670,6 @@ private subscriptions: Subscription;
     });
   }
   updateForms(contractor: IContractor) {
-    console.log('contractor ', contractor);
     this.contractorForm.patchValue({
       PERSONAL_INFORMATION : {
         contractor_name: contractor.contractor_name,
@@ -751,9 +739,17 @@ private subscriptions: Subscription;
         await this.refDataService.getRefData(
           this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
           this.applicationId,
-          [ 'GENDER', 'PROF_TITLES', 'LEGAL_FORM', 'PAYMENT_MODE']
+          [ 'GENDER', 'PROF_TITLES', 'LEGAL_FORM', 'PAYMENT_MODE', 'ACTIVITY_SECTOR']
         );
         /******************************** ACTIVITY CODE *******************************/
+        /******************************** FILTERED ACTIVITY CODE *******************************/
+        this.activitySectorList.next(this.refDataService.refData['ACTIVITY_SECTOR']);
+        this.activityCodeList.next(this.activitySectorList.value);
+        this.utilsService.changeValueField(
+            this.activitySectorList.value,
+            this.contractorForm.controls.ORGANISATION['controls'].activitySectorFilterCtrl,
+            this.activityCodeList
+        );
         this.legalList.next(this.refDataService.refData['LEGAL_FORM']);
         this.filteredLegalForm.next(this.legalList.value);
         this.utilsService.changeValueField(this.legalList.value,
@@ -794,20 +790,7 @@ private subscriptions: Subscription;
       this.contractorForm.controls.ADDRESS['controls'].registryCountryFilterCtrl,
       this.filteredCountries
     );
-    /********************************** ACTIVITY CODE **********************************/
-    this.appInitializerService.activityCodeList.forEach((activityCode) => {
-      this.activitySectorList.push({
-        value: activityCode.NAF,
-        viewValue: `${activityCode.NAF} - ${activityCode.ACTIVITE}`
-      });
-    });
-    /******************************** FILTERED ACTIVITY CODE *******************************/
-    this.activityCodeList.next(this.activitySectorList.slice());
-    this.utilsService.changeValueField(
-      this.activitySectorList,
-      this.contractorForm.controls.ORGANISATION['controls'].activitySectorFilterCtrl,
-      this.activityCodeList
-    );
+
     /********************************** LANGUAGE **********************************/
     this.langList.next(this.appInitializerService.languageList.map(
       (obj) => {
@@ -865,7 +848,6 @@ private subscriptions: Subscription;
       .subscribe(
         async (res) => {
           this.contractorInfo = res[0]['results'][0];
-          console.log('my contractor info');
           this.haveImage.next(res[0]['results'][0]['photo']);
           const av = await this.uploadService.getImage(res[0]['results'][0]['photo']);
           this.avatar.next(av);
@@ -935,7 +917,7 @@ private subscriptions: Subscription;
       phone_nbr: '',
       photo: '',
       registry_code: '',
-      status: '',
+      status: 'ACTIVE',
       tax_cd: '',
       vat_nbr: '',
       web_site: '',
@@ -943,174 +925,179 @@ private subscriptions: Subscription;
       template_resume: '',
       update: true,
     };
-    if (this.canUpdate(this.contractorId)) {
-      /*** CONTRACTOR KEY ***/
-      Contractor.application_id = this.contractorInfo.contractorKey.application_id;
-      Contractor.email_address = this.contractorInfo.contractorKey.email_address;
-      Contractor.contractor_code = this.contractorInfo.contractorKey.contractor_code;
-      Contractor.contractor_type = this.contractorInfo.contractorKey.contractor_type;
-      /*** PERSONAL INFORMATION ***/
-      Contractor.contractor_name = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].contractor_name.value;
-      Contractor.registry_code = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].registry_code.value;
-      Contractor.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
-      Contractor.photo = filename ? filename : this.contractorInfo.photo;
-      /*** ADDRESS ***/
-      Contractor.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
-      Contractor.country_cd = this.contractorForm.controls.ADDRESS['controls'].country_cd.value;
-      Contractor.zip_code = this.contractorForm.controls.ADDRESS['controls'].zip_code.value;
-      Contractor.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
-      /*** GENERAL CONTACT ***/
-      Contractor.web_site = this.contractorForm.controls.GENERAL_CONTACT['controls'].web_site.value;
-      Contractor.contact_email = this.contractorForm.controls.GENERAL_CONTACT['controls'].contact_email.value;
-      Contractor.phone_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone_nbr.value;
-      Contractor.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone2_nbr.value;
-      Contractor.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax_nbr.value;
-      /*** ORGANISATION ***/
-      Contractor.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activity_sector.value;
-      Contractor.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].payment_cd.value;
-      Contractor.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency_cd.value;
-      Contractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vat_nbr.value;
-      Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
-      Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
-      Contractor.update_date = Date.now();
-      Contractor.creation_date = this.contractorInfo.creation_date;
-      /*** RESUME TEMPLATE ***/
-      Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
-      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
-      this.contractorService.updateContractor(Contractor)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(
-          (res) => {
-            this.utilsService.openSnackBarWithTranslate('general.updated', 'close', 3000);
-
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      this.contractorContactInfo.forEach(
-        (contact) => {
-          contact.application_id = Contractor.application_id;
-          contact.email_address = Contractor.email_address;
-          contact.contractor_code = Contractor.contractor_code;
-          contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.viewValue === contact.title_cd)?.value;
-          if (contact._id && contact?.updated) {
-            this.contractorService.updateContractorContact(contact)
-              .pipe(
+    if (this.contractorForm.valid) {
+      if (this.canUpdate(this.contractorId)) {
+        /*** CONTRACTOR KEY ***/
+        Contractor.application_id = this.contractorInfo.contractorKey.application_id;
+        Contractor.email_address = this.contractorInfo.contractorKey.email_address;
+        Contractor.contractor_code = this.contractorInfo.contractorKey.contractor_code;
+        Contractor.contractor_type = this.contractorInfo.contractorKey.contractor_type;
+        /*** PERSONAL INFORMATION ***/
+        Contractor.contractor_name = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].contractor_name.value;
+        Contractor.registry_code = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].registry_code.value;
+        Contractor.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
+        Contractor.photo = filename ? filename : this.contractorInfo.photo;
+        /*** ADDRESS ***/
+        Contractor.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
+        Contractor.country_cd = this.contractorForm.controls.ADDRESS['controls'].country_cd.value;
+        Contractor.zip_code = this.contractorForm.controls.ADDRESS['controls'].zip_code.value;
+        Contractor.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
+        /*** GENERAL CONTACT ***/
+        Contractor.web_site = this.contractorForm.controls.GENERAL_CONTACT['controls'].web_site.value;
+        Contractor.contact_email = this.contractorForm.controls.GENERAL_CONTACT['controls'].contact_email.value;
+        Contractor.phone_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone_nbr.value;
+        Contractor.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone2_nbr.value;
+        Contractor.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax_nbr.value;
+        /*** ORGANISATION ***/
+        Contractor.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activity_sector.value;
+        Contractor.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].payment_cd.value;
+        Contractor.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency_cd.value;
+        Contractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vat_nbr.value;
+        Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
+        Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
+        Contractor.update_date = Date.now();
+        Contractor.creation_date = this.contractorInfo.creation_date;
+        /*** RESUME TEMPLATE ***/
+        Contractor.template_resume = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
+        Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
+        this.contractorService.updateContractor(Contractor)
+            .pipe(
                 takeUntil(this.destroy$)
-              )
-              .subscribe(
-                (response) => {
+            )
+            .subscribe(
+                (res) => {
+                  this.utilsService.openSnackBarWithTranslate('general.updated', 'close', 3000);
+
                 },
                 (error) => {
-                  console.log('error', error);
-                },
-                () => {
+                  console.log(error);
                 }
-              );
-          } else if (!contact?._id) {
-            this.contractorService.addContractorContact(contact)
-              .pipe(
-                takeUntil(
-                  this.destroy$
-                )
-              )
-              .subscribe(
-                (resp) => {
-                },
-                error => {
-                  console.log('error', error);
-                },
-                () => {
-
-                }
-              );
-          }
-        }
-      );
-      this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
-
-    } else {
-      /*** CONTRACTOR KEY ***/
-      Contractor.application_id = this.userInfo.company[0].companyKey.application_id;
-      Contractor.email_address = this.userInfo.company[0].companyKey.email_address;
-      Contractor.contractor_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CR`;
-      Contractor.contractor_type = this.type;
-      /*** PERSONAL INFORMATION ***/
-      Contractor.contractor_name = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].contractor_name.value;
-      Contractor.registry_code = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].registry_code.value;
-      Contractor.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
-      Contractor.photo = filename ? filename : '';
-      /*** ADDRESS ***/
-      Contractor.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
-      Contractor.country_cd = this.contractorForm.controls.ADDRESS['controls'].country_cd.value;
-      Contractor.zip_code = this.contractorForm.controls.ADDRESS['controls'].zip_code.value;
-      Contractor.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
-      /*** GENERAL CONTACT ***/
-      Contractor.web_site = this.contractorForm.controls.GENERAL_CONTACT['controls'].web_site.value;
-      Contractor.contact_email = this.contractorForm.controls.GENERAL_CONTACT['controls'].contact_email.value;
-      Contractor.phone_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone_nbr.value;
-      Contractor.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone2_nbr.value;
-      Contractor.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax_nbr.value;
-      /*** ORGANISATION ***/
-      Contractor.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activity_sector.value;
-      Contractor.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].payment_cd.value;
-      Contractor.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency_cd.value;
-      Contractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vat_nbr.value;
-      Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
-      Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
-      /*** RESUME TEMPLATE ***/
-      const templateValue = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
-      Contractor.template_resume = templateValue !== '' ? templateValue : 'DEFAULT';
-      Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
-
-      Contractor.creation_date = Date.now();
-      this.contractorService.addContractor(Contractor)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe(
-          (response) => {
-            this.contractorContactInfo.forEach(
-              async (contact) => {
-                contact.application_id = Contractor.application_id;
-                contact.email_address = Contractor.email_address;
-                contact.contractor_code = Contractor.contractor_code;
-                contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                  type.viewValue === contact.title_cd)?.value;
-                await this.contractorService.addContractorContact(contact)
-                  .pipe(
-                    takeUntil(
-                      this.destroy$
-                    )
-                  )
-                  .subscribe(
-                    (res) => {
-                    },
-                    error => {
-                      console.log('error', error);
-                    },
-                    () => {
-
-                    }
-                  );
-
-              }
             );
-            this.utilsService.openSnackBarWithTranslate('general.add ', null, 5000);
+        this.contractorContactInfo.forEach(
+            (contact) => {
+              contact.application_id = Contractor.application_id;
+              contact.email_address = Contractor.email_address;
+              contact.contractor_code = Contractor.contractor_code;
+              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                  type.viewValue === contact.title_cd)?.value;
+              if (contact._id && contact?.updated) {
+                this.contractorService.updateContractorContact(contact)
+                    .pipe(
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe(
+                        (response) => {
+                        },
+                        (error) => {
+                          console.log('error', error);
+                        },
+                        () => {
+                        }
+                    );
+              } else if (!contact?._id) {
+                this.contractorService.addContractorContact(contact)
+                    .pipe(
+                        takeUntil(
+                            this.destroy$
+                        )
+                    )
+                    .subscribe(
+                        (resp) => {
+                        },
+                        error => {
+                          console.log('error', error);
+                        },
+                        () => {
 
-          },
-
-          (error) => {
-            console.log(error);
-          }
+                        }
+                    );
+              }
+            }
         );
+        this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
 
+      } else {
+        /*** CONTRACTOR KEY ***/
+        Contractor.application_id = this.userInfo.company[0].companyKey.application_id;
+        Contractor.email_address = this.userInfo.company[0].companyKey.email_address;
+        Contractor.contractor_code = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-CR`;
+        Contractor.contractor_type = this.type;
+        /*** PERSONAL INFORMATION ***/
+        Contractor.contractor_name = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].contractor_name.value;
+        Contractor.registry_code = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].registry_code.value;
+        Contractor.language = this.contractorForm.controls.PERSONAL_INFORMATION['controls'].language.value;
+        Contractor.photo = filename ? filename : '';
+        /*** ADDRESS ***/
+        Contractor.address = this.contractorForm.controls.ADDRESS['controls'].address.value;
+        Contractor.country_cd = this.contractorForm.controls.ADDRESS['controls'].country_cd.value;
+        Contractor.zip_code = this.contractorForm.controls.ADDRESS['controls'].zip_code.value;
+        Contractor.city = this.contractorForm.controls.ADDRESS['controls'].city.value;
+        /*** GENERAL CONTACT ***/
+        Contractor.web_site = this.contractorForm.controls.GENERAL_CONTACT['controls'].web_site.value;
+        Contractor.contact_email = this.contractorForm.controls.GENERAL_CONTACT['controls'].contact_email.value;
+        Contractor.phone_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone_nbr.value;
+        Contractor.phone2_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].phone2_nbr.value;
+        Contractor.fax_nbr = this.contractorForm.controls.GENERAL_CONTACT['controls'].fax_nbr.value;
+        /*** ORGANISATION ***/
+        Contractor.activity_sector = this.contractorForm.controls.ORGANISATION['controls'].activity_sector.value;
+        Contractor.payment_cd = this.contractorForm.controls.ORGANISATION['controls'].payment_cd.value;
+        Contractor.currency_cd = this.contractorForm.controls.ORGANISATION['controls'].currency_cd.value;
+        Contractor.vat_nbr = this.contractorForm.controls.ORGANISATION['controls'].vat_nbr.value;
+        Contractor.legal_form = this.contractorForm.controls.ORGANISATION['controls'].legal_form.value;
+        Contractor.tax_cd = this.contractorForm.controls.ORGANISATION['controls'].tax_cd.value;
+        /*** RESUME TEMPLATE ***/
+        const templateValue = this.contractorForm.controls.RESUME_TEMPLATE['controls'].resume_template.value;
+        Contractor.template_resume = templateValue !== '' ? templateValue : 'DEFAULT';
+        Contractor.update = this.contractorForm.controls.RESUME_TEMPLATE['controls'].update.value;
+
+        Contractor.creation_date = Date.now();
+        this.contractorService.addContractor(Contractor)
+            .pipe(
+                takeUntil(this.destroy$)
+            )
+            .subscribe(
+                (response) => {
+                  this.contractorContactInfo.forEach(
+                      async (contact) => {
+                        contact.application_id = Contractor.application_id;
+                        contact.email_address = Contractor.email_address;
+                        contact.contractor_code = Contractor.contractor_code;
+                        contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                            type.viewValue === contact.title_cd)?.value;
+                        await this.contractorService.addContractorContact(contact)
+                            .pipe(
+                                takeUntil(
+                                    this.destroy$
+                                )
+                            )
+                            .subscribe(
+                                (res) => {
+                                },
+                                error => {
+                                  console.log('error', error);
+                                },
+                                () => {
+
+                                }
+                            );
+
+                      }
+                  );
+                  this.utilsService.openSnackBarWithTranslate('general.add', 'close', 3000);
+
+                },
+
+                (error) => {
+                  console.log(error);
+                }
+            );
+
+      }
+      this.photo = null;
+    } else {
+      this.utilsService.openSnackBar('missing required field', '', 3000);
     }
-    this.photo = null;
+
   }
 
   /**************************************************************************
@@ -1120,13 +1107,16 @@ private subscriptions: Subscription;
    *************************************************************************/
   addContractorContact(result) {
     const validatedField = ['first_name', 'last_name', 'main_contact', 'contact_email', 'title_cd', 'phone_nbr', 'cell_phone_nbr'];
+    const validatedFieldLength = ['first_name', 'last_name', 'main_contact'];
+    const validatedPattern = ['first_name', 'last_name'];
+    const validatedEmail = ['contact_email'];
+    const validatedPhone = ['phone_nbr', 'cell_phone_nbr'];
     switch (result.action) {
       case 'update': {
         this.contractorContactInfo.forEach(
           (element, index) => {
             if (( (element.contractorContactKey ? element.contractorContactKey.contact_email  : element.contact_email  ) ===
               this.contractorForm.controls.CONTACT['controls'].contact_email.value)
-              && this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField)
             ) {
               this.contractorContactInfo[index].first_name = this.contractorForm.controls.CONTACT['controls'].first_name.value;
               this.contractorContactInfo[index].last_name = this.contractorForm.controls.CONTACT['controls'].last_name.value;
@@ -1150,8 +1140,32 @@ private subscriptions: Subscription;
       }
         break;
       case 'addMore': {
-        if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField) ) {
+        if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField)
+
+        ) {
           this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close');
+        } else if (
+            !this.utilsService.checkFormGroupLength(
+                this.contractorForm.controls.CONTACT, validatedFieldLength, 2, 50
+            )
+        ) {
+          this.utilsService.openSnackBar('general.missing.length.invalid', 'close');
+
+        } else if (
+            !this.utilsService.checkEmailFormGroup(this.contractorForm.controls.CONTACT, validatedEmail)
+        ) {
+          this.utilsService.openSnackBar('general.missing.email.invalid', 'close');
+
+        } else if (
+            !this.utilsService.checkPhoneNumberFields(this.contractorForm.controls.CONTACT, validatedPhone)
+        ) {
+          this.utilsService.openSnackBar('general.missing.phone.invalid', 'close');
+
+        } else if (
+            !this.utilsService.checkPatternFormGroup(this.contractorForm.controls.CONTACT, validatedPattern, /[a-zA-Z ]*/)
+        ) {
+          this.utilsService.openSnackBar('general.missing.pattern.invalid', 'close');
+
         } else {
           this.contactList.next([]);
           this.contractorContactInfo.push(
@@ -1234,6 +1248,13 @@ private subscriptions: Subscription;
           }
         }
       );
+  }
+
+  /**
+   * @description check add or update new contact
+   */
+  checkAddNewContact() {
+
   }
 
   /**************************************************************************
