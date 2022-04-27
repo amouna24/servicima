@@ -6,6 +6,6 @@
   [header]="{ title: 'Candidates results'}"
   (pagination)="loadMoreItems($event)"
   (rowActionData)="switchAction($event)"
-  [allowedActions]="[{ name: 'Delete session', feature: 'EXPENSES_ACCESS'}]"
+  [allowedActions]="[{ name: 'export PDF', feature: 'EXPENSES_ACCESS'}]"
 >
 </wid-dynamic-data-table>
