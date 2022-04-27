@@ -10,7 +10,7 @@ import { ContractsService } from '@core/services/contracts/contracts.service';
 export class AddSupplierComponent implements OnInit {
 
   type = 'SUPPLIER';
-  title = 'Supplier management';
+  title = 'contracts.addsupplier.title';
 
   constructor() {
 

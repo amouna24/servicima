@@ -6,6 +6,8 @@ import { CollaboratorListComponent } from './collaborator-list/collaborator-list
 import { CertificationListComponent } from './certification-list/certification-list.component';
 import { CollaboratorComponent } from './collaborator/collaborator.component';
 import { ShowCertificationComponent } from './certifications/show-certification/show-certification.component';
+import { CandidatesListComponent } from './candidates/candidates-list/candidates-list.component';
+import { CandidateFileComponent } from './candidates/candidate-file/candidate-file.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,14 @@ const routes: Routes = [
   {
     path: 'collaborator-list',
     component: CollaboratorListComponent
+  },
+  {
+    path: 'candidates-list',
+    component: CandidatesListComponent
+  },
+  {
+    path: 'candidate-file',
+    component: CandidateFileComponent
   },
   {
     path: 'work-certificate',

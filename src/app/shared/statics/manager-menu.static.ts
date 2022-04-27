@@ -55,14 +55,21 @@ export const managerMenu: IMenu[] = [
       {
         state: 'collaborator-list',
         name: 'manager_collaborator',
-        icon: '',
+        icon: 'wi-recruitment',
+        feature: 'HR_ACCESS',
+        type: 'link',
+      },
+      {
+        state: 'candidates-list',
+        name: 'List des candidates',
+        icon: 'wi-recruitment',
         feature: 'HR_ACCESS',
         type: 'link',
       },
       {
         state: 'work-certificate',
         name: 'certification_all',
-        icon: '',
+        icon: 'wi-recruitment',
         feature: 'HR_ACCESS',
         type: 'link',
       },
@@ -75,14 +82,21 @@ export const managerMenu: IMenu[] = [
       },
       {
         state: 'training',
-        name: 'Training',
+        name: 'manager.menu.hr.training',
         type: 'sub',
         icon: 'wi-HR',
         feature: 'SOURCING_ACCESS',
         child: [
           {
             state: 'training-list',
-            name: 'Training List',
+            name: 'manager.menu.hr.training.trainingslist',
+            icon: '',
+            feature: 'SOURCING_ACCESS',
+            type: 'link',
+          },
+          {
+            state: 'request-list',
+            name: 'Requests Collaborators',
             icon: '',
             feature: 'SOURCING_ACCESS',
             type: 'link',
@@ -143,6 +157,14 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
+                name: 'Contrat en attente',
+                icon: 'wi-credit-card',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+                queryParams: { contract_status: 'EX_AW' },
+              },
+              {
+                state: 'contracts-list',
                 name: 'manager.menu.static.contract.management.suppliers.management.inprogress',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
@@ -157,20 +179,6 @@ export const managerMenu: IMenu[] = [
                 type: 'link',
                 queryParams: { contract_status: 'EXPIRED' },
 
-              },
-              {
-                state: 'projects-list',
-                name: 'manager.menu.static.contract.management.suppliers.management.projects',
-                icon: 'wi-credit-card',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
-              },
-              {
-                state: 'collaborators-list',
-                name: 'manager.menu.static.contract.management.suppliers.management.collaborators',
-                icon: 'wi_settings',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
               },
             ]
           },
@@ -197,6 +205,14 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
+                name: 'Contrat en attente',
+                icon: 'wi-credit-card',
+                feature: 'CONTRACT_ACCESS',
+                type: 'link',
+                queryParams: { contract_status: 'EX_AW' },
+              },
+              {
+                state: 'contracts-list',
                 name: 'manager.menu.static.contract.management.clients.management.inprogress',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
@@ -210,20 +226,6 @@ export const managerMenu: IMenu[] = [
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
                 queryParams: { contract_status: 'EXPIRED' },
-              },
-              {
-                state: 'contracts-list',
-                name: 'manager.menu.static.contract.management.clients.management.export',
-                icon: 'wi_upload',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
-              },
-              {
-                state: 'contracts-list',
-                name: 'manager.menu.static.contract.management.clients.management.settings',
-                icon: 'wi_settings',
-                feature: 'CONTRACT_ACCESS',
-                type: 'link',
               },
             ]
           }

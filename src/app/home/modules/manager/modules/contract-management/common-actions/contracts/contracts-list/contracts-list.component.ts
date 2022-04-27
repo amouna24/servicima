@@ -98,7 +98,7 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading.next(true);
     this.contractService.getContracts(
         // tslint:disable-next-line:max-line-length
-        `?beginning=${offset}&number=${limit}&contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&contract_status=${this.searchCriteria}`
+        `?beginning=${offset}&number=${limit}&contract_type=${this.type}&email_address=${this.userService.connectedUser$.getValue().user[0]['company_email']}&status=ACTIVE&contract_status=${this.searchCriteria}`
     )
         .pipe(
             takeUntil(
@@ -121,16 +121,15 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
   addNewContract() {
     if ( this.type === 'SUPPLIER') {
       this.redirectUrl = '/manager/contract-management/suppliers-contracts/contracts';
-      this.addButtonLabel = 'New Contract';
+      this.addButtonLabel = 'new.contract';
     } else {
       this.redirectUrl = '/manager/contract-management/clients-contracts/contracts';
-      this.addButtonLabel = 'New Contract';
+      this.addButtonLabel = 'new.contract';
     }
     this.tabFeatureAccess = [
-      { name: 'TRLcontracts.show', feature: 'CONTRACT_DISPLAY'},
+      { name: 'contracts.show', feature: 'CONTRACT_DISPLAY'},
       { name: 'contracts.update', feature: 'CONTRACT_UPDATE'},
         { name: 'contracts.delete', feature: 'CONTRACT_DELETE'},
-        { name: 'contracts.archive', feature: 'CONTRACT_ARCHIVE'},
     ];
   }
 
@@ -162,7 +161,6 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
                   )
                   .subscribe(
                       (resp) => {
-                        console.log(resp);
                       }
                   );
             },
@@ -200,17 +198,27 @@ export class ContractsListComponent implements OnInit, OnChanges, OnDestroy {
    *************************************************************************/
   switchAction(rowAction: any) {
     switch (rowAction.actionType.name) {
-      case ('contracts.show'): this.showContract(rowAction.data);
+      case ('contracts.show'): this.updateContract(rowAction.data[0]);
         break;
-      case('contracts.delete'): console.log('EDIT ME');
+      case('contracts.delete'): this.archiver(rowAction.data[0]);
         break;
-      case('contracts.archive'): console.log('EDIT ME');
+      case('contracts.update'): this.updateContract(rowAction.data[0]);
         break;
       case('update'):
         this.updateContract(rowAction.data);
         break;
     }
   }
+
+    /**
+     * @description archiver
+     */
+    archiver(contract: IContract) {
+        this.contractService.deleteContract(contract._id).subscribe(async (data) => {
+            await this.getContracts(this.nbtItems.getValue(), 0);
+        });
+
+    }
 
   /**************************************************************************
    * @description get Date with nbrItems as limit

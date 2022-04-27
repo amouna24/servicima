@@ -15,14 +15,14 @@
         </div>
         <wid-scrollbar class="scrollbar" style="width: 100%" *ngIf="!done">
 
-        <div fxLayout="column" fxLayoutGap="16px" @dataAppearance>
+        <div fxLayout="column" fxFlex="97" fxLayoutGap="16px" @dataAppearance>
     <div fxLayout="row" fxFlex="100">
         <div fxLayout="row" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '2%','width' : '98%'}" >
             <div fxLayout="row" fxFlex="100" fxLayoutGap="8px">
-                <div class="column"  fxFlex="50"  class="bg-card-session border-radius-left-5" >
+                <div class="column"  fxFlex="50"  class="bg-card-session border-radius-left-5 " >
                     <div fxLayout="column"  fxFlex="100" fxLayoutAlign="center center">
-                        <div fxLayout="column">
-                            <span class="font-size-10 font-semi-bold" >Session title :</span>
+                        <div fxLayout="column p-15">
+                            <span class="font-size-15 font-semi-bold" >{{ 'hr.training.trainingslist.newsession.title' | translate | capitalizeFirstLetter }}</span>
                             <span class="font-size-18" *ngIf="training">{{ training.title }}</span>
                             <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
                         </div>
@@ -32,28 +32,29 @@
                 </div>
                 <div class="column" fxFlex="25"  >
                     <div fxLayout="column" fxFlex="100" fxLayoutGap="8px">
+                        <div fxLayout="column" fxFlex="100" class="bg-card-session" fxLayoutAlign="center center"  >
+                            <div fxLayout="column p-15">
+                                <span class="font-size-9">{{ 'hr.training.trainingslist.newsession.startdate' | translate | capitalizeFirstLetter }} </span>
+                                <span class="font-size-15" *ngIf="training">{{ training.start_date | date: 'dd/MM/yyyy'  }}</span>
+                                <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
+                            </div>
+                        </div>
 
                         <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100" class="bg-card-session" >
-                            <div fxLayout="column">
-                                <span class="font-size-9">End Date:</span>
+                            <div fxLayout="column p-15">
+                                <span class="font-size-9">{{ 'hr.training.trainingslist.newsession.enddate' | translate | capitalizeFirstLetter }}</span>
                                 <span class="font-size-15" *ngIf="training">{{ training.end_date | date: 'dd/MM/yyyy' }}</span>
                                 <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
 
                             </div>
 
                         </div>
-                        <div fxLayout="column" fxFlex="100" class="bg-card-session" fxLayoutAlign="center center"  >
-                            <div fxLayout="column">
-                                <span class="font-size-9">Start Date: </span>
-                                <span class="font-size-15" *ngIf="training">{{ training.start_date | date: 'dd/MM/yyyy'  }}</span>
-                                <span class="font-size-18" *ngIf="!training">{{ 'No Data Found' | translate | capitalizeFirstLetter }}</span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <div class="column" fxFlex="25" fxLayoutAlign="center center" class="bg-card-session border-radius-right-5" >
                     <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
-                        <div fxLayout="column">
+                        <div fxLayout="column p-105">
                             <span class="font-size-12">total hours :</span>
                             <span class="font-size-18"><sup>{{ timeDisplay.getValue() }}/</sup><span *ngIf="training">{{ training.warned_hours }} </span>
                                                             <span *ngIf="!training">00</span>
@@ -68,7 +69,7 @@
     </div>
     <div fxLayout="row" fxFlex="100">
         <div fxLayout="row" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '1%'}" >
-            <div class="font-size-15 font-semi-bold">
+            <div class="font-size-18">
                 Sessions per week :
             </div>
         </div>
@@ -78,12 +79,12 @@
         <div fxLayout="row" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '1%'}" >
             <table style="width:100%">
                 <tr>
-                    <th>Day name</th>
-                    <th>Time</th>
-                    <th>Durrations</th>
+                    <th>{{ 'hr.training.trainingslist.newsession.day' | translate | capitalizeFirstLetter }}</th>
+                    <th>{{ 'Time' | translate | capitalizeFirstLetter }}</th>
+                    <th>{{ 'Durration' | translate | capitalizeFirstLetter }}</th>
                 </tr>
                 <tr *ngFor="let s of trainingSessions"  (click)="updateHours(s)">
-                    <td>{{ s.day }}</td>
+                    <td>{{ s.dayView }}</td>
                     <td>{{ s.time }}</td>
                     <td>{{ s.durration }}</td>
                 </tr>
@@ -95,20 +96,20 @@
         <div fxLayout="column" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '1%'}" >
             <table style="width:100%">
                 <tr>
-                    <th>{{ 'Day Name' | translate | capitalizeFirstLetter }}</th>
+                    <th>{{ 'hr.training.trainingslist.newsession.day' | translate | capitalizeFirstLetter }}</th>
                     <th>{{ 'Time' | translate | capitalizeFirstLetter }}</th>
-                    <th>{{ 'Durrations' | translate | capitalizeFirstLetter }}</th>
+                    <th>{{ 'Durration' | translate | capitalizeFirstLetter }}</th>
                 </tr>
             </table>
             <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="line-height-0" >
                 <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', height: '100px'}" >
                     <div  fxFlex="70" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" >
                         <div class="cool-grey">
-                            {{ 'Please Add Sessions' | translate | capitalizeFirstLetter }}
+                            {{ 'hr.training.trainingslist.newsession.please' | translate | capitalizeFirstLetter }}
                         </div>
                         <div >
                             <button  mat-raised-button (click)="showFormSession()"  class="btn-small bg-cerulean-blue" >
-                                <span class="white font-size-10 ">Add new session</span>
+                                <span class="white font-size-10 ">{{ 'hr.training.trainingslist.newsession.add' | translate | capitalizeFirstLetter }}</span>
                             </button>
                         </div>
                     </div>
@@ -116,9 +117,14 @@
             </div>
         </div>
     </div>
-    <div fxLayout="row" fxFlex="100" *ngIf="showForm" @dataAppearance>
-        <div fxLayout="row" fxFlex="100" fxFlexOffset="50px" [ngStyle]="{ 'marginRight': '1%'}" >
-            <form fxLayout="row" fxFlex="97" class="p-t-20 font-size-12 " [formGroup]="form" >
+    <div fxLayout="column" fxFlex="97" class="p-l-65"  *ngIf="showForm" @dataAppearance [ngStyle]="{ 'marginLeft': '2%'}">
+        <div fxLayout="row" fxFlex="100" fxFlexOffset="10px" [ngStyle]="{ 'marginRight': '1%'}" >
+            <div class="font-size-18">
+                New Session :
+            </div>
+        </div>
+        <div fxLayout="row" fxFlex="100" fxFlexOffset="10px"  [ngStyle]="{ 'marginRight': '1%'}" >
+            <form fxLayout="row" fxFlex="97"  class="font-size-12 " fxLayoutAlign="space-around center"  [formGroup]="form" >
 
             <div fxLayout="row" fxFlex="25">
                     <div fxLayout="column" fxFlex="80">
@@ -172,9 +178,9 @@
             </form>
         </div>
     </div>
-            <div class="row" fxFlexOffset="15" [ngStyle]="{'marginRight': '4%'}">
+            <div class="row" fxFlexOffset="20px" class="p-b-5" [ngStyle]="{'marginRight': '4%'}">
                 <div fxLayout="column" fxFlex="100">
-                    <div  fxLayout="row" fxLayoutAlign="space-around end" fxFlex="100">
+                    <div  fxLayout="row" fxLayoutAlign="space-between end" fxFlex="100">
 
 
                         <button type="submit" mat-raised-button   class="black btn-small bg-white-two" (click)="cancel()" >
@@ -187,7 +193,6 @@
                 </div>
 
             </div>
-    <br>
 
 
 
