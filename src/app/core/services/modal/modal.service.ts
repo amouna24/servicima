@@ -8,11 +8,8 @@ import { Subject, Observable } from 'rxjs';
 export class ModalService {
   appModals: Array<{ modalName: string, modalComponent: any }> = [];
   confirmationModalResponse$ = new Subject<boolean>();
-  closeDialog = new Subject<boolean>();
   constructor(public dialog: MatDialog) { }
-  onInit() {
 
-  }
   openModal(): void {
   }
   closeModal() {
