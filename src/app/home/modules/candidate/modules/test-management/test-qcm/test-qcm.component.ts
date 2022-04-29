@@ -26,6 +26,8 @@ import { LocalStorageService } from '@core/services/storage/local-storage.servic
 import { UploadService } from '@core/services/upload/upload.service';
 import { map } from 'rxjs/internal/operators/map';
 import * as html2pdf from 'html2pdf.js';
+import { ModalService } from '@core/services/modal/modal.service';
+import { LoadingModalComponent } from '@shared/components/loading-modal/loading-modal.component';
 
 @Component({
   selector: 'wid-test-qcm',
@@ -110,12 +112,15 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
     private localStorageService: LocalStorageService,
     private router: Router,
     private uploadService: UploadService,
-  ) {
+    private modalService: ModalService,
+) {
     this.getSessionCode();
     this.getDataFromLocalStorage();
   }
 
   ngOnInit(): void {
+    this.modalService.registerModals(
+      { modalName: 'loadingModal', modalComponent: LoadingModalComponent});
     this.candidateResultCode = `WID-${Math.floor(Math.random() * (99999 - 10000) + 10000)}-TEST-CANDIDATE-RESULT`;
     this.getConnectedUser();
     this.getQuestions();
@@ -374,7 +379,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
 
   setAnsweredQuestions() {
     const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    console.log('skipped questions before', this.checkedChoices);
     if (this.checkedChoices.length > 0) {
+      console.log('hello', this.checkedChoices.length);
       if (!this.answeredQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index + 1)) {
         this.answeredQuestions.push({
           questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
@@ -399,9 +406,10 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
       }
 
     } else {
+      console.log('hello');
       this.setSkippedQuestions();
+      console.log('skipped Questions', this.skippedQuestions);
     }
-
   }
 
   getQuestions() {
@@ -490,6 +498,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
   }
   setSkippedQuestions() {
     if (!this.answeredQuestions.map((oneQuestion) => oneQuestion.questionNumber).includes(this.index + 1)) {
+      console.log('whatttttttttt');
       this.skippedQuestions.push({
         questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
         questionNumber: this.index + 1
@@ -507,16 +516,16 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
  async testExpiredTime() {
     if (this.timeLeft === 0) {
       if (this.durationType === 'time_per_question') {
-        if (this.index + 1 < this.questionsList.length) {
+        if (this.index + 1 <= this.questionsList.length) {
           this.disableChoices = true;
           this.enableNextButton = true;
         } else {
           await this.finishTest('', '');
         }
-        this.skippedQuestions.push({
+/*        this.skippedQuestions.push({
           questionCode: this.questionsList[this.index].TestQuestionKey.test_question_code,
           questionNumber: this.index + 1
-        });
+        });*/
       } else if (this.durationType === 'time_overall') {
        const finish = await  this.finishTest('index', 'showExpiringPage');
        // this.showExpiringPage = true;
@@ -526,6 +535,9 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
 
  async finishTest(index, type) {
     clearInterval(this.timerInterval);
+   this.paddingTopMinutes = ``;
+   this.paddingTopSeconds = ``;
+    this.displayLoadingModal();
    this.setAnsweredQuestions();
    this.initTimerParams(this.durationList[index]);
    const resp = await this.getQuestionsStats();
@@ -533,6 +545,7 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
    setTimeout(async () => {
      const fileName = await this.exportPdf();
      type === 'showCongratulationPage' ? this.showCongratulationPage = true : this.showExpiringPage = true;
+     this.modalService.closeModal();
      const updateTestResult = {
        company_email: this.companyEmailAddress,
        application_id:  this.utilsService.getApplicationID('SERVICIMA'),
@@ -565,8 +578,8 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
        });
 
      });
-
    }, 100);
+   console.log('skippedQuestions=', this.skippedQuestions);
   }
 
   /**
@@ -735,5 +748,30 @@ export class TestQcmComponent implements OnInit, AfterContentChecked, AfterViewI
    this.testService.addTestCandidateResult(newTestResult).subscribe( async (testResult) => {
      console.log('added');
    });
+ }
+ sendResultReportData(param) {
+    if (param === 'path') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? 'test-success.svg' : 'test-error.svg';
+    } else if (param === 'message') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ?
+        `Congratulation you passed the exam successfully your score is ${
+        this.reportData.correctAnswerPercentage.display}% and the minimal score was ${
+        this.minimalScore}%` : `Sadly, you failed the Exam your score is ${
+          this.reportData.correctAnswerPercentage.display}% and the minimal score was ${
+          this.minimalScore}%`;
+    } else if (param === 'title') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? 'Congratulations' : `Unfortunately`;
+    } else if (param === 'color') {
+      return this.minimalScore <= this.reportData.correctAnswerPercentage.exact ? '#0067e0' : '#DC143C';
+    } else {
+      return '';
+    }
+ }
+ displayLoadingModal() {
+   this.modalService.displayModal(
+     'loadingModal',
+     {
+     },
+     '300px', '350px');
  }
 }

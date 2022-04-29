@@ -12,7 +12,9 @@ export class ModalService {
 
   openModal(): void {
   }
-
+  closeModal() {
+    this.dialog.closeAll();
+  }
   // register modal component reference and name
   registerModals(modalsList: { modalName: string, modalComponent: any }) {
     this.appModals.push(modalsList) ;

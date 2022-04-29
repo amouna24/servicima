@@ -67,6 +67,7 @@ import { ComponentInfoComponent } from './components/component-info/component-in
 import { DoneCreationComponent } from './components/done-creation/done-creation.component';
 import { DialogInviteComponent } from './components/dialog-invite/dialog-invite.component';
 import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { BlockCopyPasteDirective } from './directives/block-copy-paste.directive
     DoneCreationComponent,
     DialogInviteComponent,
     BlockCopyPasteDirective,
+    LoadingModalComponent,
   ],
     imports: [
         CommonModule,

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   env: 'prod',
-      /************************** ADMINISTRATION *****************************/
+  /************************** ADMINISTRATION *****************************/
   translateApiUrl: 'http://213.136.74.202/translates',
   languageApiUrl: 'http://213.136.74.202/languages',
   refDataApiUrl: 'http://213.136.74.202/refdatas',
@@ -58,34 +58,39 @@ export const environment = {
   hrContractExtension: 'http://213.136.74.202/hrcontractextension',
   hrPreviousContractApiUrl: 'http://213.136.74.202/hrcontractprevious',
   workCertificateApiUrl: 'http://213.136.74.202/hrworkcertificate',
+  payslipAssociateApiUrl: 'http://213.136.74.202/payslip',
+  workCertificateUrl: 'http://213.136.74.202/hrworkcertificate',
   hrTrainingApiUrl: 'http://213.136.74.202/hrtraining',
   hrTrainingRequestApiUrl: 'http://213.136.74.202/hrtrainingrequest',
   hrTrainingSessionWeekApiUrl: 'http://213.136.74.202/trainingsessionweek',
   hrTrainingInviteCollaboratorApiUrl: 'http://213.136.74.202/hrtraininginvitecollaborator',
-  payslipAssociateApiUrl: 'http://213.136.74.202/payslip',
-  invoiceGenerateApiUrl: 'http://213.136.74.202/invoicegenerate',
+  invoiceGenerateApiUrl: 'http://213.136.74.202/generateinv',
   invoiceLineApiUrl: 'http://213.136.74.202/invoiceline',
   invoiceHeaderApiUrl: 'http://213.136.74.202/invoiceheader',
   invoicePaymentApiUrl: 'http://213.136.74.202/invoicepayment',
   invoiceAttachmentApiUrl: 'http://213.136.74.202/invoiceattachment',
+  companyBankingInfoApiUrl: 'http://213.136.74.202/companybankinginfo',
+  timesheetApiUrl: 'http://213.136.74.202/timesheet',
+  timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
   testChoicesApiUrl: 'http://213.136.74.202/testchoices',
   testQuestionApiUrl: 'http://213.136.74.202/testquestion',
   testQuestionBlocApiUrl: 'http://213.136.74.202/testquestionbloc',
   testTechnologiesApiUrl: 'http://213.136.74.202/testtechnology',
   testSkillsApiUrl: 'http://213.136.74.202/testskills',
   testTechnologySkillsApiUrl: 'http://213.136.74.202/testtechnologyskill',
-  testCandidateResponseApiUrl: 'http://213.136.74.202/testcandidateresponse',
-  testCandidateResultApiUrl: 'http://213.136.74.202/testcandidateresult',
-  testLevelApiUrl: 'http://213.136.74.202/testlevel',
   testSessionInfoApiUrl: 'http://213.136.74.202/testsessioninfo',
-  companyBankingInfoApiUrl: 'http://213.136.74.202/companybankinginfo',
-  timesheetApiUrl: 'http://213.136.74.202/timesheet',
-  timesheetHolidayApiUrl: 'http://213.136.74.202/timesheetholiday',
+  testLevelApiUrl: 'http://213.136.74.202/testlevel',
+  testCandidateResponseApiUrl: 'http://213.136.74.202/testcandidateresponse',
+  testSessionQuestionsApiUrl: 'http://213.136.74.202/testsessionquestions',
+  testInviteCandidatesApiUrl: 'http://213.136.74.202/testinvitecandidates',
+  testSessionApiUrl: 'http://213.136.74.202/testsession',
+  testSessionCandidateResultApiUrl: 'http://213.136.74.202/testcandidateresult',
   projectCollaboratorApiUrl: 'http://213.136.74.202/projectcollaborator',
   linkedInOauthApiUrl: 'http://213.136.74.202/socialnetwork',
-  servicmaUrl: 'http://localhost:4200',
+  servicimaUrl: 'http://localhost:4200',
   /************************* AUTHENTICATION ******************************/
   credentialsApiUrl: 'http://213.136.74.202/credentials',
+  mailingApiUrl: 'http://213.136.74.202/mailing',
   userRoleApiUrl: 'http://213.136.74.202/userroles',
   companyApiUrl: 'http://213.136.74.202/companies',
   userApiUrl: 'http://213.136.74.202/users',
@@ -94,12 +99,10 @@ export const environment = {
 
   /************************* UPLOAD FILE ******************************/
   uploadFileApiUrl: 'http://213.136.74.202/uploadfiles',
-  /************************* GENERATE CERTIFICATION ******************************/
-  pdfFileApiUrl: 'http://213.136.74.202:8104/servicima/hrworkcertificate/pdf/v1',
   /************************* UPLOAD RESUME FILE ************************/
   uploadResumeFileApiUrl: 'http://213.136.74.202/uploadresumefile',
   /*************************** OTHERS ************************************/
   zipCodeApiUrl: 'https://vicopo.selfbuild.fr/cherche',
   applicationCode: 'SERVICIMA',
-  cryptoKeyCode: 'RfUjXn2r',
+  cryptoKeyCode: 'RfUjXn2r'
 };

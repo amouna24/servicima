@@ -486,15 +486,15 @@
 
       <ng-template [ngIf]="showExpiringPage">
         <wid-component-info style="height: 100%" [title]="{ name: ' Time Expired', color:'#fc4b6c'}"
-          [image]="{ path:'timeout.svg',height:'110px' }" [message]="'The remaining time for the exam has expired.'"
+          [image]="{ path:'test-success.svg',height:'110px' }" [message]="'The remaining time for the exam has expired.'"
           [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}">
         </wid-component-info>
       </ng-template>
       <ng-template [ngIf]="showCongratulationPage">
-        <wid-component-info style="height: 100%" [title]="{ name: 'congratulations', color:'#0067e0'}"
-          [image]="{ path:'done-circle.svg',height:'110px' }"
-          [message]="' You have completed the exam during the specified time.'"
-          [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}" (buttonAction)="backToHome()">
+        <wid-component-info style="height: 100%" [title]="{ name: sendResultReportData('title'), color:sendResultReportData('color')}"
+                            [image]="{ path: sendResultReportData('path'),height:'110px' }"
+                            [message]="sendResultReportData('message')"
+                            [button]="{ name: 'Back to home', color: '#2b2b2b', background: '#f3f6f9'}" (buttonAction)="backToHome()">
         </wid-component-info>
       </ng-template>
     </div>
