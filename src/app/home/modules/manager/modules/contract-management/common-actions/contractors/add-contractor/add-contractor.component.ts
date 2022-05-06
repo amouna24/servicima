@@ -350,8 +350,8 @@ private subscriptions: Subscription;
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'Activity Sector',
-          placeholder: 'Activity Sector',
+          label: 'clients.organisation.activitysector',
+          placeholder: 'clients.organisation.activitysector',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.activityCodeList,
           formControlName: 'activity_sector',
@@ -382,8 +382,8 @@ private subscriptions: Subscription;
           required: true
         },
         {
-          label: 'VAT',
-          placeholder: 'VAT',
+          label: 'clients.organisation.vat',
+          placeholder: 'clients.organisation.vat',
           type: FieldsType.INPUT,
           inputType: InputType.NUMBER,
           formControlName: 'vat_nbr',
@@ -585,7 +585,6 @@ private subscriptions: Subscription;
     private assetsDataService: AssetsDataService,
     private router: Router,
     private route: ActivatedRoute,
-    private companyTaxService: CompanyTaxService,
     private uploadService: UploadService,
     private sanitizer: DomSanitizer,
     private modalServices: ModalService,
@@ -739,7 +738,7 @@ private subscriptions: Subscription;
         await this.refDataService.getRefData(
           this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
           this.applicationId,
-          [ 'GENDER', 'PROF_TITLES', 'LEGAL_FORM', 'PAYMENT_MODE', 'ACTIVITY_SECTOR']
+          [ 'GENDER', 'PROF_TITLES', 'Tax' , 'LEGAL_FORM', 'PAYMENT_MODE', 'ACTIVITY_SECTOR']
         );
         /******************************** ACTIVITY CODE *******************************/
         /******************************** FILTERED ACTIVITY CODE *******************************/
@@ -756,6 +755,7 @@ private subscriptions: Subscription;
           this.contractorForm.controls.ORGANISATION['controls'].filteredLegalOrganisation,
           this.filteredLegalForm
         );
+        this.companyTaxList.next(this.refDataService.refData['Tax']);
         this.genderList.next(this.refDataService.refData['GENDER']);
         this.filteredGenders.next(this.genderList.value.slice());
 
@@ -775,8 +775,6 @@ private subscriptions: Subscription;
           this.contractorForm.controls.ORGANISATION['controls'].filteredPayementOrganisation,
           this.filteredPayMode
         );
-
-        this.getCompanyTax();
       }
     });
     /********************************** COUNTRY **********************************/
@@ -807,30 +805,6 @@ private subscriptions: Subscription;
       this.contractorForm.controls.ORGANISATION['controls'].filteredCurrencyOrganisation,
       this.filteredCurrencies
     );
-  }
-
-  /**************************************************************************
-   * @description get Tax for specific company
-   *************************************************************************/
-  getCompanyTax() {
-    this.companyTaxService.getTax()
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(
-        (companyTax) => {
-          this.companyTaxList.next(
-            companyTax.map(
-              (obj) => {
-                return { value: obj.taxKey.tax_code, viewValue: obj.tax_desc};
-          }
-          )
-          );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
   }
 
   /**************************************************************************
@@ -965,56 +939,54 @@ private subscriptions: Subscription;
                 takeUntil(this.destroy$)
             )
             .subscribe(
-                (res) => {
-                  this.utilsService.openSnackBarWithTranslate('general.updated', 'close', 3000);
+                async (res) => {
+                 this.contractorContactInfo.map( async (contact) => {
+                       contact.application_id = Contractor.application_id;
+                       contact.email_address = Contractor.email_address;
+                       contact.contractor_code = Contractor.contractor_code;
+                       contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                           type.viewValue === contact.title_cd)?.value;
+                       if (contact._id && contact?.updated) {
+                         await this.contractorService.updateContractorContact(contact)
+                             .pipe(
+                                 takeUntil(this.destroy$)
+                             )
+                             .subscribe(
+                                 (response) => {
+                                 },
+                                 (error) => {
+                                   console.log('error', error);
+                                 },
+                                 () => {
+                                 }
+                             );
+                       } else if (!contact?._id) {
+                        await this.contractorService.addContractorContact(contact)
+                             .pipe(
+                                 takeUntil(
+                                     this.destroy$
+                                 )
+                             )
+                             .subscribe(
+                                 (resp) => {
+                                 },
+                                 error => {
+                                   console.log('error', error);
+                                 },
+                                 () => {
+
+                                 }
+                             );
+                       }
+                     }
+                  );
+                  this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
 
                 },
                 (error) => {
                   console.log(error);
                 }
             );
-        this.contractorContactInfo.forEach(
-            (contact) => {
-              contact.application_id = Contractor.application_id;
-              contact.email_address = Contractor.email_address;
-              contact.contractor_code = Contractor.contractor_code;
-              contact.title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                  type.viewValue === contact.title_cd)?.value;
-              if (contact._id && contact?.updated) {
-                this.contractorService.updateContractorContact(contact)
-                    .pipe(
-                        takeUntil(this.destroy$)
-                    )
-                    .subscribe(
-                        (response) => {
-                        },
-                        (error) => {
-                          console.log('error', error);
-                        },
-                        () => {
-                        }
-                    );
-              } else if (!contact?._id) {
-                this.contractorService.addContractorContact(contact)
-                    .pipe(
-                        takeUntil(
-                            this.destroy$
-                        )
-                    )
-                    .subscribe(
-                        (resp) => {
-                        },
-                        error => {
-                          console.log('error', error);
-                        },
-                        () => {
-
-                        }
-                    );
-              }
-            }
-        );
-        this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
 
       } else {
         /*** CONTRACTOR KEY ***/
@@ -1083,7 +1055,7 @@ private subscriptions: Subscription;
 
                       }
                   );
-                  this.utilsService.openSnackBarWithTranslate('general.add', 'close', 3000);
+                  this.utilsService.openSnackBarWithTranslate('general.add', null, 3000);
 
                 },
 
@@ -1118,53 +1090,83 @@ private subscriptions: Subscription;
             if (( (element.contractorContactKey ? element.contractorContactKey.contact_email  : element.contact_email  ) ===
               this.contractorForm.controls.CONTACT['controls'].contact_email.value)
             ) {
-              this.contractorContactInfo[index].first_name = this.contractorForm.controls.CONTACT['controls'].first_name.value;
-              this.contractorContactInfo[index].last_name = this.contractorForm.controls.CONTACT['controls'].last_name.value;
-              this.contractorContactInfo[index].main_contact = this.contractorForm.controls.CONTACT['controls'].main_contact.value;
-              this.contractorContactInfo[index].contact_email = this.contractorForm.controls.CONTACT['controls'].contact_email.value;
-              this.contractorContactInfo[index].gender_cd = this.contractorForm.controls.CONTACT['controls'].gender_cd.value;
-              this.contractorContactInfo[index].title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
-                type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value)?.viewValue;
-              this.contractorContactInfo[index].phone_nbr = this.contractorForm.controls.CONTACT['controls'].phone_nbr.value;
-              this.contractorContactInfo[index].cell_phone_nbr = this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value;
-              this.contractorContactInfo[index].language_cd = this.contractorForm.controls.CONTACT['controls'].language_cd.value;
-              this.contractorContactInfo[index].can_sign_contract = this.contractorForm.controls.CONTACT['controls'].can_sign_contract.value;
-              this.contractorContactInfo[index].updated = true;
+              if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField)
+
+              ) {
+                this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 3000);
+              } else if (
+                  !this.utilsService.checkFormGroupLength(
+                      this.contractorForm.controls.CONTACT, validatedFieldLength, 2, 50
+                  )
+              ) {
+                this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 3000);
+
+              } else if (
+                  !this.utilsService.checkEmailFormGroup(this.contractorForm.controls.CONTACT, validatedEmail)
+              ) {
+                this.utilsService.openSnackBarWithTranslate('general.missing.email.invalid', null, 3000);
+
+              } else if (
+                  !this.utilsService.checkPhoneNumberFields(this.contractorForm.controls.CONTACT, validatedPhone)
+              ) {
+                this.utilsService.openSnackBarWithTranslate('general.missing.phone.invalid', null, 3000);
+
+              } else if (
+                  !this.utilsService.checkPatternFormGroup(this.contractorForm.controls.CONTACT, validatedPattern, /[a-zA-Z ]*/)
+              ) {
+                this.utilsService.openSnackBarWithTranslate('general.missing.pattern.invalid', null, 3000);
+
+              } else {
+                this.contractorContactInfo[index].first_name = this.contractorForm.controls.CONTACT['controls'].first_name.value;
+                this.contractorContactInfo[index].last_name = this.contractorForm.controls.CONTACT['controls'].last_name.value;
+                this.contractorContactInfo[index].main_contact = this.contractorForm.controls.CONTACT['controls'].main_contact.value;
+                this.contractorContactInfo[index].contact_email = this.contractorForm.controls.CONTACT['controls'].contact_email.value;
+                this.contractorContactInfo[index].gender_cd = this.contractorForm.controls.CONTACT['controls'].gender_cd.value;
+                this.contractorContactInfo[index].title_cd = this.refDataService.refData['PROF_TITLES'].find((type) =>
+                    type.value === this.contractorForm.controls.CONTACT['controls'].title_cd.value)?.viewValue;
+                this.contractorContactInfo[index].phone_nbr = this.contractorForm.controls.CONTACT['controls'].phone_nbr.value;
+                this.contractorContactInfo[index].cell_phone_nbr = this.contractorForm.controls.CONTACT['controls'].cell_phone_nbr.value;
+                this.contractorContactInfo[index].language_cd = this.contractorForm.controls.CONTACT['controls'].language_cd.value;
+                this.contractorContactInfo[index].can_sign_contract = this.contractorForm.controls.CONTACT['controls'].can_sign_contract.value;
+                this.contractorContactInfo[index].updated = true;
+                this.contractorForm.controls.CONTACT.reset();
+                this.canUpdateAction.next(false);
+                this.canAddAction.next(true);
+                this.contractorForm.controls.CONTACT['controls'].contact_email.enable();
+              }
+
             }
           }
         );
-        this.contractorForm.controls.CONTACT.reset();
-        this.canUpdateAction.next(false);
-        this.canAddAction.next(true);
-        this.contractorForm.controls.CONTACT['controls'].contact_email.enable();
+
       }
         break;
       case 'addMore': {
         if (!this.utilsService.checkFormGroup(this.contractorForm.controls.CONTACT, validatedField)
 
         ) {
-          this.utilsService.openSnackBarWithTranslate('general.missing.field', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 3000);
         } else if (
             !this.utilsService.checkFormGroupLength(
                 this.contractorForm.controls.CONTACT, validatedFieldLength, 2, 50
             )
         ) {
-          this.utilsService.openSnackBar('general.missing.length.invalid', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 3000);
 
         } else if (
             !this.utilsService.checkEmailFormGroup(this.contractorForm.controls.CONTACT, validatedEmail)
         ) {
-          this.utilsService.openSnackBar('general.missing.email.invalid', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.email.invalid', null, 3000);
 
         } else if (
             !this.utilsService.checkPhoneNumberFields(this.contractorForm.controls.CONTACT, validatedPhone)
         ) {
-          this.utilsService.openSnackBar('general.missing.phone.invalid', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.phone.invalid', null, 3000);
 
         } else if (
             !this.utilsService.checkPatternFormGroup(this.contractorForm.controls.CONTACT, validatedPattern, /[a-zA-Z ]*/)
         ) {
-          this.utilsService.openSnackBar('general.missing.pattern.invalid', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.missing.pattern.invalid', null, 3000);
 
         } else {
           this.contactList.next([]);
@@ -1185,7 +1187,7 @@ private subscriptions: Subscription;
           );
           this.contactList.next(this.contractorContactInfo.slice());
           this.contractorForm.controls.CONTACT.reset();
-          this.utilsService.openSnackBarWithTranslate('general.add', 'close');
+          this.utilsService.openSnackBarWithTranslate('general.add', null, 3000);
         }
       }
       break;

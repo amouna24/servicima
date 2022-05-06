@@ -67,8 +67,6 @@ export class InvitationListComponent implements OnInit {
          this.totalItems = data['total'] ? data['total'] : null;
          this.countedItems = data['count'] ? data['total'] : null;
          this.currentPage = this.offset === 1 ? 1 : this.currentPage;
-         console.log('my offset ', this.offset);
-         this.currentPage = this.offset === 1 ? 1 : this.currentPage;
          this.limit = data['limit'] ? Number(data['limit']) : null;
          this.nbrPages = data['total'] ? Array(Math.ceil(Number(data['total']) / this.nbtItems.getValue()))  .fill(null)
              .map((x, i) => i + 1) : null;

@@ -22,4 +22,5 @@ export interface IContract {
   sunday_rate: string;
   payment_terms: string;
   attachments?: string;
+  status?: string;
 }

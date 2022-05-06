@@ -41,7 +41,8 @@ export class InvitationComponent implements OnInit {
   showDetails() {
       this.modalService.displayModal('detailsInviteCollaborator', {
           training: this.data,
-          sessions: this.sessionList
+          sessions: this.sessionList,
+          apply: false
           },
           '520px', '600px')
           .pipe(takeUntil(this.destroyed$))

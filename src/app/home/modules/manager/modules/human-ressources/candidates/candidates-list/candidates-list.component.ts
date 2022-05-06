@@ -41,6 +41,7 @@ export class CandidatesListComponent implements OnInit {
   uploadURL = environment.uploadFileApiUrl + '/image/';
   sortedby: string;
   avatar: any;
+  column: string;
 
     constructor(
       private location: Location,
