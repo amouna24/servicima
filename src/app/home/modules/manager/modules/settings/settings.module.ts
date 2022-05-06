@@ -18,6 +18,7 @@ import { RoleManagementComponent } from './role-management/role-management/role-
 import { TimesheetSettingsComponent } from './timesheet settings/timesheet-settings.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CompanyBankingInfoComponent } from './company-banking-info/edit-company-banking-info/company-banking-info.component';
+import { ConnectionComponent } from './connection/connection.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { CompanyBankingInfoComponent } from './company-banking-info/edit-company
     TimesheetSettingsComponent,
     DashboardComponent,
     CompanyBankingInfoComponent,
+    ConnectionComponent,
   ],
   imports: [
     CommonModule,

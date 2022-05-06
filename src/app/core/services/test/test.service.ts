@@ -423,4 +423,12 @@ export class TestService {
   getTestCandidateResultDataTable(filter: string): Observable<ITestSessionModel[]> {
     return this.httpClient.get<any[]>(`${environment.testSessionCandidateResultApiUrl}/datatable/${filter}`);
   }
+
+  /**************************************************************************
+   * @description addTestCandidateResults
+   * @param candidateResult: Added candidate result Object
+   *************************************************************************/
+ /* addTestCandidateResults(candidateResult): Observable<any> {
+    return this.httpClient.post<any>(`${environment.testCandidateResultApiUrl}`, candidateResult);
+  }*/
 }
