@@ -13,7 +13,115 @@
         <div fxFlex="2" fxLayout="row">
             <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
         </div>
+        <div fxLayout="row" fxFlex="100" fxFlexOffset="8px" fxLayoutAlign="space-between center">
+            <div fxLayout="row" fxFlex="40" fxLayoutGap="8px">
+                <mat-form-field class="data-table-search-bar" [style]="{'width': '60%', 'height': '80%', 'fontSize': '5px'}" appearance="outline">
+                    <input  matInput type="search" placeholder="Search ..." class="font-extra-light font-size-14">
+                    <mat-icon class="font-size-14 cool-grey"  matPrefix>search</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline"
+                                [style]="{'width': '40%', 'height': '80%', 'fontSize': '7px'}"
+                >
+                    <mat-select disableOptionCentering panelClass="panelColor"
+                                placeholder="Domaine"
+                                (selectionChange)="sortedBy($event)"
+                                [formControl]="sortedby"
+                                class="font-size-12"
+                    >
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxFlex="10">
+                <div fxLayout="row" fxFlex="20" fxFlexAlign="start end" >
+                    <button (click)="sort(column)" fxLayout="row"  class="sort-invite-candidate"  fxLayoutAlign="center center">
+                        <img  [src]="displayIcon ? 'assets/icons/sort-ascending.svg' :'assets/icons/sort-descending.svg'" alt="list icon" width="24px" height="24px">
+                    </button>
+                </div>
+            </div>
+
+        </div>
         <wid-scrollbar class="scrollbar-content-list" style="width: 100%" @dataAppearance>
+            <div fxLayout="column" fxFlex="74" fxLayoutAlign="space-between" *ngIf="this.availableTrainingList.length===0">
+                <div  style=" min-height: 287px;" >
+                    <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
+                        <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >
+                            <div  fxFlex="15" fxLayout="row">
+                                <span class="cool-grey font-size-18">No Data Found</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  fxLayoutAlign="start start"  fxFlex="100" fxLayoutGap="8px"  style=" min-height: 600px;" fxLayoutGap.lg="8px" *ngIf="availableTrainingList.length!==0"  @dataAppearance>
+                <div fxLayout="row wrap " fxFlex="100" fxLayoutGap="16px">
+                    <div *ngFor="let training of ELEMENT_DATA.getValue()"   fxFlex="31%">
+                        <wid-training-available [training]="training" ></wid-training-available>
+                    </div>
+                </div>
+            </div>
+
         </wid-scrollbar>
+        <div  >
+            <div class="data-table-pagination" fxLayout="row"  style="padding: 10px !important;" fxLayoutAlign="space-between flex-end">
+                <div fxLayout="column" fxFlex="25" fxLayoutAlign="center">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <span fxLayoutAlign="center center" class="black-three font-size-12">
+          {{ offset }} - {{ totalCountedItems || countedItems }} of {{ totalItems }}
+        </span>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('first-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">first_page</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "offset <= this.nbtItems.getValue()"
+                                (click)="getItemsPerPage('previous-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">navigate_before</span>
+                        </button>
+
+                        <ng-container *ngFor="let pageNumber of nbrPages">
+                            <button
+                                    mat-stroked-button
+                                    fxLayoutAlign="center center" class="next-previous-page font-size-12"
+                                    [ngClass] = "pageNumber === currentPage ? 'bg-topaz white'
+                                                  : 'bg-white-two black-three'"
+                                    (click)="getItemsPerPage('specific-page', pageNumber)"
+                            >
+                                <span>{{ pageNumber }}</span>
+                            </button>
+                        </ng-container>
+
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('next-page')"
+                        >
+
+                            <span class="material-icons-outlined font-size-16">navigate_next</span>
+                        </button>
+                        <button
+                                mat-stroked-button
+                                fxLayoutAlign="center center" class="next-previous-page bg-white-two black-three font-size-12"
+                                [disabled] = "(totalCountedItems || countedItems) >= totalItems"
+                                (click)="getItemsPerPage('last-page')"
+                        >
+                            <span class="material-icons-outlined font-size-16">last_page</span>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 </div>

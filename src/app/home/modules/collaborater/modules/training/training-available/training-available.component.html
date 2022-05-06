@@ -1,1 +1,51 @@
-<p>training-available works!</p>
+<mat-card class="card-available-training" fxLayout="column"  fxLayoutAlign="center" fxLayoutGap="8px" >
+    <mat-card-content fxLayout="column" fxLayoutGap="4px">
+        <div fxLayout="row" fxLayoutGap="4px">
+            <div>
+                <img src="assets/img/google.png" class="img-organisation">
+            </div>
+            <div fxLayout="column" fxLayoutGap="2px">
+                <span class="font-size-12 font-medium">{{  training.title }}</span>
+                <span class="font-size-9 font-light">{{  training.organisation_code }}</span>
+            </div>
+            
+        </div>
+        <div fxFlex="2" fxLayout="row">
+            <div fxFlex="90">
+                <mat-divider fxFlex="100" fxFlexOffset="5" [ngStyle]="{ 'width': '90%'}"></mat-divider>
+            </div>
+        </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="4px"  >
+            <div fxLayout="row" fxFlex="50">
+                <span class="black font-normal font-size-8 m-r-5">{{ 'Start on:' | translate | capitalizeFirstLetter }}</span>
+                <span class="steel font-normal font-size-8">{{ training.start_date | date: 'dd-MM-yyyy' }}</span>
+            </div>
+            <div fxLayout="row" fxFlex="50">
+                <span class="black font-normal font-size-8 m-r-5">{{ 'End on:' | translate | capitalizeFirstLetter }}</span>
+                <span class="steel font-normal font-size-8">{{ training.end_date | date: 'dd-MM-yyyy' }}</span>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="4px" >
+            <div fxLayout="row" fxFlex="50">
+                <span class="black font-normal font-size-8 m-r-5">{{ 'Domain:' | translate | capitalizeFirstLetter }}</span>
+                <span class="steel font-normal font-size-8">{{ training.domain  }}</span>
+            </div>
+            <div fxLayout="row" fxFlex="50">
+                <span class="black font-normal font-size-8 m-r-5">{{ 'Number of Hours:' | translate | capitalizeFirstLetter }}</span>
+                <span class="steel font-normal font-size-8">{{ training.warned_hours  }} {{ 'Hours' | translate | capitalizeFirstLetter }}</span>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="2px">
+            <span class="black font-normal font-size-12 m-r-5">{{ 'Description:' | translate | capitalizeFirstLetter }}</span>
+            <span class="steel font-normal font-size-12">{{ training.description  }}  </span>
+        </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutAlign="end center">
+            <button type="submit" mat-raised-button   class="black btn-small bg-white" (click)="showDetails()"  >
+                <span  class="font-size-8" >{{ 'More' | translate | capitalizeFirstLetter }}</span>
+            </button>
+        </div>
+
+    </mat-card-content>
+</mat-card>

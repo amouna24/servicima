@@ -1,5 +1,5 @@
-<div class="border-radius-20 dynamic-component-container m-l-5">
-    <div fxLayout="column" fxFlexOffset="50px" class="m-t-20" fxFlex="100">
+<wid-scrollbar class="scrollbar p-30" style="min-width: 100%;">
+    <div fxFlex="100" fxLayout="column">
         <div fxFlex="7"  fxLayout="row" class="line-height-2">
             <div fxLayout="column" fxFlex="85" fxLayoutAlign="center"  class="steel font-size-24 font-medium"  >{{ title | translate | capitalizeFirstLetter}} </div>
             <div fxLayout="column" fxFlex="15" fxLayoutAlign="center" class="font-size-25 steel">
@@ -11,7 +11,6 @@
         <div fxFlex="2" fxLayout="row">
             <mat-divider [ngStyle]="{ borderTopWidth: '2px' ,'width': '98%'}"></mat-divider>
         </div>
-        <wid-scrollbar class="scrollbar" style="min-width: 100%;">
             <div fxLayout="column" fxFlex="83" class="font-size-12 black container-details-invite" *ngIf="trainingInformation" >
                 <div fxLayout="row" fxFlex="100" fxLayoutGap="8px" class="details-training" fxLayoutAlign="start center">
                         <div class="img-details-organisation" fxLayout="row" fxLayoutAlign="center center">
@@ -77,10 +76,17 @@
                         </div>
                     </div>
                 </div>
+                <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" class="m-t-20" *ngIf="apply">
+                    <div  fxLayout="row"  fxFlex="100"  fxLayoutGap="8px"  fxLayoutAlign="center center"   >
+                        <button type="submit" mat-raised-button   class="white btn-large-width text-center bg-cerulean-blue " (click)="applyTraining()"  >
+                            <span  class="font-size-11" >{{ 'Apply' | translate | capitalizeFirstLetter }}</span>
+                        </button>
+                    </div>
+                </div>
                 <div fxLayout="column" fxFlex="100" fxLayoutGap="8px" class="m-t-20">
                     <ng-container [ngSwitch]="trainingInformation.status_invite" >
                         <div  fxLayout="row"  fxFlex="100"  fxLayoutGap="8px" *ngSwitchCase="'PENDING'" fxLayoutAlign="center center"  >
-                            <button type="submit" mat-raised-button   class="black btn-small bg-pale-grey-two" (click)="ignore()"  >
+                            <button type="submit" mat-raised-button   class="black btn-medium bg-pale-grey-two" (click)="ignore()"  >
                                 <span  class="font-size-11" >{{ 'Ignore' | translate | capitalizeFirstLetter }}</span>
                             </button>
                             <button type="submit" mat-raised-button   class="bg-cerulean-blue btn-small" (click)="accept()" >
@@ -97,7 +103,8 @@
                 </div>
 
 
-            </div>
-        </wid-scrollbar>
+
+
+                </div>
     </div>
-</div>
+</wid-scrollbar>

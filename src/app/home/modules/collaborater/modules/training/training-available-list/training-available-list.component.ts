@@ -9,6 +9,8 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '@core/services/user/user.service';
 import { IUserInfo } from '@shared/models/userInfo.model';
+import { FormControl } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'wid-training-available-list',
@@ -27,6 +29,19 @@ export class TrainingAvailableListComponent implements OnInit {
   userInfo: IUserInfo;
   companyEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  nbtItems = new BehaviorSubject<number>(6);
+  itemsPerPage = [5, 10, 25, 100];
+  currentPage = 1;
+  itemsPerPageControl = new FormControl(5);
+  totalItems: number;
+  countedItems = 0;
+  nbrPages: number[];
+  totalCountedItems = null;
+  offset: number;
+  limit: number;
+  sortedby: string;
+  displayIcon: boolean;
+  column: string;
 
   /**************************************************************************
    * @description back click
@@ -44,10 +59,12 @@ export class TrainingAvailableListComponent implements OnInit {
 
   ) {
     this.getDataFromLocalStorage();
+    this.displayIcon = true;
   }
 
   async ngOnInit(): Promise<void> {
     await this.getConnectedUser();
+    await this.getAvailableTraining(this.nbtItems.getValue(), 0);
   }
 
   /**
@@ -56,7 +73,16 @@ export class TrainingAvailableListComponent implements OnInit {
   async getAvailableTraining(limit?, offset?) {
       await this.trainingService
           .getTraining
-          (`?beginning=${offset}&number=${limit}`);
+          (`?beginning=${offset}&number=${limit}&email_address=${this.companyEmail}`).subscribe(async (data) => {
+            this.totalItems = data['total'] ? data['total'] : null;
+            this.countedItems = data['count'] ? data['total'] : null;
+            this.currentPage = this.offset === 1 ? 1 : this.currentPage;
+            this.limit = data['limit'] ? Number(data['limit']) : null;
+            this.nbrPages = data['total'] ? Array(Math.ceil(Number(data['total']) / this.nbtItems.getValue()))  .fill(null)
+                .map((x, i) => i + 1) : null;
+            this.availableTrainingList = data['results'];
+            this.ELEMENT_DATA.next(this.availableTrainingList);
+          });
   }
   /**
    * @description Get connected user
@@ -72,12 +98,75 @@ export class TrainingAvailableListComponent implements OnInit {
             });
   }
   /**
+   * @description sort
+   * @param column: column to sort
+   */
+  sort(column) {
+    this.displayIcon = !this.displayIcon;
+  }
+  /**
    * @description get connected user from local storage
    */
   getDataFromLocalStorage() {
     const cred = this.localStorageService.getItem('userCredentials');
     this.emailAddress = cred['email_address'];
     this.applicationId = cred['application_id'];
+  }
+  /**
+   * @params event
+   * @description table sorted by field
+   */
+  sortedBy(event: MatSelectChange) {
+
+  }
+  /**
+   * @description load more data
+   */
+  async loadData(value: number) {
+    await this.getAvailableTraining(this.nbtItems.getValue(), (value - 1) * this.nbtItems.getValue());
+  }
+  /**************************************************************************
+   * @description Get next, previous or specific page
+   * @params type : next / previous / specific
+   * @params pageNumber : number of specific page
+   *************************************************************************/
+  async getItemsPerPage(type: string, pageNumber?: number) {
+    switch (type) {
+      case 'first-page' : {
+        this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'previous-page' : {
+
+        this.currentPage -= 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'specific-page' : {
+        this.currentPage = pageNumber;
+        console.log('current page', this.currentPage);
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'next-page' : {
+
+        this.currentPage += 1;
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+      case 'last-page' : {
+
+        this.currentPage = this.nbrPages[this.nbrPages.length - 1];
+        await this.loadData(this.currentPage);
+
+      }
+        break;
+    }
   }
 
 }
