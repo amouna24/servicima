@@ -26,8 +26,10 @@ export class AppComponent implements OnInit {
   ) {
     this.authService.languageSubject.subscribe(
       (language) => {
-        this.translationCustomLoaderService.getLocalTranslation(`${language['langId']}-${language['langCode']}`);
-        this.translateService.use(`${language['langId']}-${language['langCode']}`);
+        if (language) {
+          this.translationCustomLoaderService.getLocalTranslation(`${language['langId']}-${language['langCode']}`);
+          this.translateService.use(`${language['langId']}-${language['langCode']}`);
+        }
       }
     );
   }

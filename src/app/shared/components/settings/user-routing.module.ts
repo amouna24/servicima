@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { UserComponent } from '@shared/components/settings/user/user.component';
 import { EditUserComponent } from '@shared/components/settings/edit-user/edit-user.component';
+import { ConnectionComponent } from '@shared/components/settings/connection/connection.component';
 
 const routes: Routes = [
 
@@ -18,6 +19,13 @@ const routes: Routes = [
         component: EditUserComponent,
         data: {
           breadcrumb: 'edit-profile'
+        },
+      },
+      {
+        path: 'connection',
+        component: ConnectionComponent,
+        data: {
+          breadcrumb: 'connection'
         },
       },
 ];

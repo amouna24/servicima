@@ -232,6 +232,10 @@ export class UserService {
     return this.httpClient.post(`${environment.mailingApiUrl}`, mailing);
 }
 
+ getCredentials(filter) {
+   return this.httpClient.get(`${environment.credentialsApiUrl}/${filter}`);
+ }
+
   updateUser(User: IUserModel): Observable<any> {
     return this.httpClient.put<IUserModel>(`${environment.userApiUrl}`, User);
   }}

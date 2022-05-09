@@ -1,0 +1,32 @@
+
+<h1>Your connections</h1>
+<table style="width: 100%">
+<div *ngFor="let connect of connection; let index= index" style="display: flex;align-items: center;">
+  <td style="width: 100%;">
+    <div style="align-items: center;" >
+      <div fxFlex="10">  {{ connect.browser.os }}  </div>
+      <div fxFlex="80">{{ connect.localisation }} </div>
+      <div fxFlex="10" *ngIf="currentDevise !== index ">
+        <button mat-icon-button [matMenuTriggerFor]="actions" >
+          <mat-icon class="mat-18">more_vertical</mat-icon>
+        </button>
+        <mat-menu #actions="matMenu">
+          <button
+            mat-menu-item
+            (click)="logout(connect.finger_print)">
+            Logout
+          </button>
+
+        </mat-menu>
+
+      </div>
+    </div>
+    <div >
+      <div fxFlex="10">  {{ connect.browser.browser }}  </div>
+      <div fxFlex="80" *ngIf=" current.finger_print == connect.finger_print; else showIf" style="color: #00a400;
+    font-weight: bold;"> If </div>
+      <div fxFlex="80" #showIf> {{connect.last_connection}} </div>
+    </div>
+  </td>
+</div>
+</table>
