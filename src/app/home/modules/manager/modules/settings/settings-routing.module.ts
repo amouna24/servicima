@@ -86,14 +86,6 @@ const routes: Routes = [
   },
 
   {
-    path: 'connection',
-    loadChildren: () => import('./connection/connection.module').then(m => m.ConnectionModule),
-    data: {
-      breadcrumb: 'connection'
-    },
-  },
-
-  {
     path: 'calendars',
     loadChildren: () => import('./calendars/calendars.module').then(m => m.CalendarsModule),
     data: {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
-
-import { FingerPrintService, AuthService } from '../../../../../../../../projects/auth-front-lib/src/public-api';
+import { FingerPrintService, AuthService } from '@widigital-group/auth-npm-front';
+// import { AuthService, FingerPrintService } from 'projects/auth-front-lib/src/public-api';
 
 @Component({
   selector: 'wid-connection',
@@ -15,15 +15,18 @@ export class ConnectionComponent implements OnInit {
   currentDevise: string;
   emailAddress: string;
   applicationId: string;
+  current: { finger_print: string};
   constructor(private userService: UserService,
               private fingerPrintService: FingerPrintService,
               private localStorageService: LocalStorageService,
-              private authService: AuthService, ) { }
+              private authService: AuthService, ) {
+  }
 
   /**
    * @description Get connected user
    */
   getConnectedUser() {
+
     this.userService.connectedUser$
       .subscribe(
         (userInfo) => {
@@ -85,7 +88,6 @@ export class ConnectionComponent implements OnInit {
       }
     };
     const d1 = new Date(lastConnection);
-    console.log(d1, 'ddd');
     const d2 = new Date();
 
     let timeLaps = DateDiff.inSeconds(d1, d2);
@@ -140,7 +142,14 @@ export class ConnectionComponent implements OnInit {
             data[0].details.map((detail) => {
               detail.last_connection =  this.getCurrentDate(detail.last_connection);
             });
-            const currentDevise =  this.connection.findIndex((el => el.finger_print === result.murmur));
+            const currentDevise =  this.connection.findIndex((el => {
+              if (el.finger_print === result.murmur) {
+                this.current = el;
+             return  el.finger_print === result.murmur;
+              }
+            } ));
+            this.connection .splice(currentDevise, 1);
+            this.connection.unshift(this.current);
             this.currentDevise = currentDevise;
           });
       });

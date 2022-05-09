@@ -17,6 +17,14 @@ export const sidenavRightMenu = [
     feature:  'SOURCING_CAND_FILE_ACCESS'  || 'SOURCING_ACCESS'  // change feature with correct name
   },
   {
+    state: '/user/connection',
+    name: 'right-sidenav-menu.static.connection',
+    type: 'link',
+    icon: 'wi_logout',
+    feature: 'SOURCING_ACCESS', // à changer
+
+  },
+  {
     state: '/settings',
     name: 'right-sidenav-menu.static.settings',
     type: 'link',
@@ -41,6 +49,7 @@ export const sidenavRightMenu = [
       },
      ]
   },
+
   {
     state: 'logout',
     name: 'right-sidenav-menu.static.logout',

@@ -18,7 +18,7 @@
 "login.signin":"Sign In",
 "login.invalidpwd":"Invalid Password",
 "login.clickhere": "Click here",
-
+"login.localisation": "you must approve localisation",
 "forgotpwd.recovery":"Password Recovery",
 "forgotpwd.email":"Email adress",
 "forgotpwd.notexists":"Email does not exists, verify your email please",

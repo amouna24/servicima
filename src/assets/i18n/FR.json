@@ -16,6 +16,7 @@
   "login.signin":"Se connecter",
   "login.invalidpwd":"Mot de passe invalide",
   "login.clickhere": "Cliquez ici",
+  "login.localisation": "vous devez approuver la localisation",
 
   "forgotpwd.recovery":"Récuperation de mot de passe",
   "forgotpwd.email":"Adresse mail",
