@@ -174,7 +174,7 @@ export class UtilsService {
    * *
    */
   openSnackBarWithTranslate(message: string, action?: string, duration?: number) {
-    this.translateService.get([message]).subscribe( (res) => {
+    this.translateService.get([message]).subscribe( async (res) => {
       this.matSnackBar.open(res[message], action, {
         duration,
         horizontalPosition: 'center',
@@ -331,6 +331,15 @@ export class UtilsService {
    */
   checkDate(dateStart: Date, dateEnd: Date): boolean {
     if (dateStart.getTime() < dateEnd.getTime()) {
+      return true;
+    }
+    return false;
+  }
+  /**
+   * @description check date between two date
+   */
+  checkDateBetweenTwoDate(date: Date, dateStart: Date, dateEnd: Date) {
+    if ((date.getTime() <= dateEnd.getTime()) && (dateStart.getTime() <= date.getTime())) {
       return true;
     }
     return false;

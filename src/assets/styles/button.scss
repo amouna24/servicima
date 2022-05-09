@@ -15,11 +15,17 @@
     @include button(42px,$width-lg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center);
   }
 
-  /* X Large */
+  /* Large Width */
 
-  .btn-xlarge {
-    @include button(42px,$width-xlg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
+  .btn-large-width {
+    @include button(25px,$width-xlg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
   }
+
+/* X Large */
+
+.btn-xlarge {
+  @include button(42px,$width-xlg,$border-radius-15,$cerulean-blue,$pale-grey,$font-size-14,1.5,center)
+}
 
   .isClicked{
     background-color: $ocean-blue;
