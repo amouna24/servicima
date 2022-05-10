@@ -100,6 +100,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -208,6 +212,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
@@ -315,6 +323,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -424,6 +436,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -532,6 +548,10 @@
                                     {{'register.invalidminlength' | translate}} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                     {{'register.invalidmaxlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                    {{'register.invalidmin' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                    {{'register.invalidmax' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -657,6 +677,10 @@
                                     {{'register.invalidminlength' | translate}} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                     {{'register.invalidmaxlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                    {{'register.invalidmin' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                    {{'register.invalidmax' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -746,6 +770,8 @@
                                 <wid-profile-image [haveImage]="sf.imageInputs.haveImage.getValue()" [avatar]="sf.imageInputs.avatar.getValue()"
                                                    [modelObject]="sf.imageInputs.modelObject"
                                                    [singleUpload]="sf.imageInputs.singleUpload"
+                                                   [diameter]="130"
+                                                   height="114" width="114"
                                                    [userType]="sf.imageInputs.userType"  (newFile)="getFile($event)"></wid-profile-image>
                               </div>
                             </ng-container>
@@ -768,6 +794,8 @@
                                                    [modelObject]="sf.imageInputs.modelObject"
                                                    [singleUpload]="sf.imageInputs.singleUpload"
                                                    [userType]="sf.imageInputs.userType"
+                                                   height="114" width="114"
+                                                   [diameter]="130"
                                                    (newFile)="getFile($event)"></wid-profile-image>
                               </div>
                             </ng-container>
@@ -791,6 +819,10 @@
                                     {{'register.invalidminlength' | translate}} </mat-error>
                                   <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                     {{'register.invalidmaxlength' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'min')">
+                                    {{'register.invalidmin' | translate}} </mat-error>
+                                  <mat-error class="red" *ngIf="isControlHasError(formData.controls[chMI.titleKey]['controls'],sf.formControlName, 'max')">
+                                    {{'register.invalidmax' | translate}} </mat-error>
                                 </mat-form-field>
                               </div>
                               <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -925,6 +957,10 @@
                                 {{'register.invalidminlength' | translate}} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                 {{'register.invalidmaxlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                {{'register.invalidmin' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                {{'register.invalidmax' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1052,6 +1088,10 @@
                                 {{'register.invalidminlength' | translate}} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                 {{'register.invalidmaxlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                {{'register.invalidmin' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                {{'register.invalidmax' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40" fxFlexOffset="7">
@@ -1174,6 +1214,10 @@
                                 {{'register.invalidminlength' | translate}} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                 {{'register.invalidmaxlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                {{'register.invalidmin' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                {{'register.invalidmax' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1281,6 +1325,10 @@
                                 {{'register.invalidminlength' | translate}} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                 {{'register.invalidmaxlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                {{'register.invalidmin' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                {{'register.invalidmax' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="87">
@@ -1464,6 +1512,10 @@
                                 {{'register.invalidminlength' | translate}} </mat-error>
                               <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                 {{'register.invalidmaxlength' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                {{'register.invalidmin' | translate}} </mat-error>
+                              <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                {{'register.invalidmax' | translate}} </mat-error>
                             </mat-form-field>
                           </div>
                           <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1572,6 +1624,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">
@@ -1697,6 +1753,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
 
                               </mat-form-field>
                             </div>
@@ -1789,6 +1849,8 @@
                                                    [modelObject]="sf.imageInputs.modelObject"
                                                    [singleUpload]="sf.imageInputs.singleUpload"
                                                    [userType]="sf.imageInputs.userType"
+                                                   [diameter]="130"
+                                                   height="114" width="114"
                                                    (newFile)="getFile($event)"></wid-profile-image>
                               </ng-template>
 
@@ -1820,6 +1882,8 @@
                                                  [modelObject]="sf.imageInputs.modelObject"
                                                  [singleUpload]="sf.imageInputs.singleUpload"
                                                  [userType]="sf.imageInputs.userType"
+                                                 [diameter]="130"
+                                                 height="114" width="114"
                                                  (newFile)="getFile($event)"></wid-profile-image>
                             </div>
                           </ng-container>
@@ -1843,7 +1907,10 @@
                                   {{'register.invalidminlength' | translate}} </mat-error>
                                 <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'maxLength')">
                                   {{'register.invalidmaxlength' | translate}} </mat-error>
-
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'min')">
+                                  {{'register.invalidmin' | translate}} </mat-error>
+                                <mat-error class="red" *ngIf="isControlHasError(formData.controls[mi.titleKey]['controls'],sf.formControlName, 'max')">
+                                  {{'register.invalidmax' | translate}} </mat-error>
                               </mat-form-field>
                             </div>
                             <div *ngIf="sf.type === 'datePicker'" fxLayout="column" fxFlex="40">

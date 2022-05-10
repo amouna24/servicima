@@ -64,6 +64,8 @@ private subscriptions: Subscription;
   companyEmail: string;
   urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
   patternPhone = /^(0|[1-9][0-9]*)$/;
+  NUMERIC_PATTREN = /^-?[0-9]\\d*(\\.\\d{1,4})?$/;
+
   /**************************************************************************
    * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
    *************************************************************************/
@@ -618,14 +620,14 @@ private subscriptions: Subscription;
     this.contractorForm = this.formBuilder.group({
       PERSONAL_INFORMATION: this.formBuilder.group({
         contractor_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-        registry_code: ['', [Validators.required, , Validators.pattern(this.patternPhone)]],
+        registry_code: ['', [Validators.required, Validators.min(0) , Validators.pattern(this.patternPhone)]],
         language: ['', [Validators.required]],
       }),
       ADDRESS: this.formBuilder.group({
         address: ['', [Validators.required]],
         country_cd: ['', [Validators.required]],
         registryCountryFilterCtrl: [''],
-        zip_code: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        zip_code: ['', [Validators.required, Validators.pattern(this.patternPhone), Validators.min(10)]],
         city: ['', [Validators.required]],
       }),
       GENERAL_CONTACT: this.formBuilder.group({
@@ -643,7 +645,7 @@ private subscriptions: Subscription;
         filteredPayementOrganisation: [''],
         filteredLegalOrganisation: [''],
         filteredCurrencyOrganisation: [''],
-        vat_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        vat_nbr: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
         legal_form: ['', [Validators.required]],
         tax_cd: ['', [Validators.required]],
       }),
@@ -1067,7 +1069,7 @@ private subscriptions: Subscription;
       }
       this.photo = null;
     } else {
-      this.utilsService.openSnackBar('missing required field', '', 3000);
+      this.utilsService.openSnackBar('general.contract.contractor.missing.field', '', 3000);
     }
 
   }
@@ -1210,8 +1212,8 @@ private subscriptions: Subscription;
   onStatusChange(row) {
     const confirmation = {
       code: 'delete',
-      title: 'delete Info',
-      description: `Are you sure you want to delete ?`,
+      title: 'contracts.supp.extprojetcontrat.deleteinfo',
+      description: `contracts.supp.extprojetcontrat.deleteinfo.msg`,
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .pipe(

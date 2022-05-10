@@ -97,11 +97,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
   canAddProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   companyTimesheet: ICompanyTimesheetSettingModel;
   paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
-
   /**************************************************************************
    * @description Declaring Form Group
    *************************************************************************/
   contractForm: FormGroup;
+  digitalPattern = /^(0|[1-9][0-9]*)$/;
 
   /**************************************************************************
    * @description Declare the new ContractId to be used on update
@@ -249,7 +249,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fields: [
         {
           label: 'contracts.addcontrat.signer.company.signer',
-          placeholder: 'exp@email.com',
+          placeholder: 'contracts.addcontrat.signer.company.signer',
           type: FieldsType.SELECT,
           selectFieldList: this.staffList,
           formControlName: 'signer_company_email',
@@ -257,7 +257,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
         {
           label: 'contracts.addcontrat.signer.contractor.signer',
-          placeholder: 'exp@email.com',
+          placeholder: 'contracts.addcontrat.signer.contractor.signer',
           type: FieldsType.SELECT,
           selectFieldList: this.contractorContactList,
           formControlName: 'signer_contractor_email',
@@ -693,6 +693,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         if (this.canUpdate(params.id)) {
           this.contractId = params.id;
+          this.getContractor();
           this.getContractByID(params);
         }
       });
@@ -722,7 +723,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
         if (!!data) {
           this.userInfo = data;
           this.companyEmail = data.user[0]['company_email'];
-        // this.getPaymentTerms();
           this.getTimeSheetSettings();
         }
       }),
@@ -799,27 +799,35 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.CONTRACT_PROJECT['controls'].filterStatusControl,
       this.filteredStatus
     );
+    this.getContractor();
 
+  }
+
+  /**
+   * @description
+   */
+  getContractor() {
     this.contractorService
-      .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}`)
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe(
-        (res) => {
-          this.contractors = res['results'];
-          this.contractorsList.next(
-            res['results'].map(
-              (obj) => {
-                return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
-              }
-            )
-          );
-        },
-        (error) => {
-          console.log('error', error);
-        },
-      );
+        .getContractors(`?contractor_type=${this.type}&email_address=${this.companyEmail}${!this.contractId ? '&status=ACTIVE' : '' }`)
+        .pipe(
+            takeUntil(this.destroy$)
+        )
+        .subscribe(
+            (res) => {
+              this.contractors = res['results'];
+              this.contractorsList.next(
+                  res['results'].map(
+                      (obj) => {
+                        return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
+                      }
+                  )
+              );
+              console.log('contractor code ', this.contractorsList.value);
+            },
+            (error) => {
+              console.log('error', error);
+            },
+        );
   }
   /**************************************************************************
    * @description Get Signer for specific contractor
@@ -904,7 +912,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       INFORMATION: this.formBuilder.group({
         contractor_code:
             [contract !== null
-                ?   contract.contractor_code : ''],
+                ?   contract.contractor_code : '', Validators.required],
         contract_date: [contract === null ? '' : contract.contract_date],
         contract_start_date: [contract === null ? '' : contract.contract_start_date, [Validators.required]],
         contract_end_date: [contract === null ? '' : contract.contract_end_date, [Validators.required]],
@@ -926,7 +934,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           )]],
       }),
       RATE: this.formBuilder.group({
-        contract_rate: [contract === null ? '' : contract.contract_rate, [Validators.required]],
+        contract_rate: [contract === null ? '' : contract.contract_rate, [Validators.required, Validators.min(0)]],
         currency_cd: [contract === null ? '' : contract.currency_cd, [Validators.required]],
         payment_terms: [contract === null ? '' : contract.payment_terms, [Validators.required] ],
         filterCurrencyControl: [''],
@@ -934,10 +942,11 @@ export class AddContractComponent implements OnInit, OnDestroy {
         paymentTermsControl: [''],
       }),
       TIMESHEET: this.formBuilder.group({
-        working_hour_day: [contract === null ? '' : contract.working_hour_day, [Validators.required]],
-        holiday_rate: [contract === null ? '' : contract.holiday_rate, [Validators.required]],
-        saturday_rate: [contract === null ? '' : contract.saturday_rate, [Validators.required]],
-        sunday_rate: [contract === null ? '' : contract.sunday_rate, [Validators.required]],
+        working_hour_day: [contract === null ? '' : contract.working_hour_day,
+          [Validators.required, Validators.min(0), Validators.pattern(this.digitalPattern)]],
+        holiday_rate: [contract === null ? '' : contract.holiday_rate, [Validators.required, Validators.min(0)]],
+        saturday_rate: [contract === null ? '' : contract.saturday_rate, [Validators.required, Validators.min(0)]],
+        sunday_rate: [contract === null ? '' : contract.sunday_rate, [Validators.required, Validators.min(0)]],
       }),
       CONTRACT_EXTENSION: this.formBuilder.group({
         extension_code: [''],
@@ -984,7 +993,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     forkJoin([
       this.contractsService.getContracts(`?_id=${atob(params.id)}`),
       this.contractsService.getContractExtension(`?contract_code=${atob(params.cc)}&email_address=${atob(params.ea)}`),
-      this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}&project_status=ACTIVE`),
+      this.contractsService.getContractProject(`?contract_code=${atob(params.cc)}`),
       this.contractsService.getCollaboratorProject(`?contract_code=${atob(params.cc)}&status=ACTIVE`),
     ])
       .pipe(
@@ -1139,7 +1148,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       ...this.contractForm.controls.TIMESHEET.value,
     };
    Contract.contractor_code = this.canUpdate(this.contractId) ?
-       this.contractInfo.contractor_code : '';
+       this.contractInfo.contractor_code : Contract.contractor_code;
     Contract.application_id = this.canUpdate(this.contractId) ?
       this.contractInfo.contractKey.application_id : this.userInfo.company[0].companyKey.application_id;
     Contract.contract_code = this.canUpdate(this.contractId) ?
@@ -1148,14 +1157,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractInfo.contractKey.email_address : this.userInfo.company[0].companyKey.email_address;
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
-    console.log('Contract ', Contract);
     if (this.contractForm.valid) {
       if (this.verifyDatesContractExtension(Contract.contract_end_date) && this.verifyDatesProjectContract(Contract.contract_end_date)) {
         if (Contract.contract_status === 'RUN' || Contract.contract_status === 'EX_AW') {
           if (!this.utilsService.checkDate(new Date(Contract.signature_company_date), new Date(Contract.contract_start_date))) {
-            this.utilsService.openSnackBarWithTranslate('check date signature company');
+            this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.company');
           } else if (!this.utilsService.checkDate(new Date(Contract.signature_contractor_date), new Date(Contract.contract_start_date))) {
-            this.utilsService.openSnackBarWithTranslate('check date signature contractor');
+            this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.contractor');
           } else {
 
             if (this.canUpdate(this.contractId)) {
@@ -1170,7 +1178,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                   )
                   .subscribe(
                       (res) => {
-                        this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                        this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                       },
                       (error) => {
                         console.log(error);
@@ -1196,7 +1204,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       )
                       .subscribe(
                           (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                           },
                           (error) => {
                             console.log('error', error);
@@ -1214,7 +1222,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       )
                       .subscribe(
                           (resp) => {
-                            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
                           },
                           error => {
                             console.log('error', error);
@@ -1245,7 +1253,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       )
                       .subscribe(
                           (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                           },
                           (error) => {
                             console.log('error', error);
@@ -1263,7 +1271,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       )
                       .subscribe(
                           (resp) => {
-                            this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
                           },
                           error => {
                             console.log('error', error);
@@ -1286,7 +1294,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       )
                       .subscribe(
                           (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                           },
                           (error) => {
                             console.log('error', error);
@@ -1305,10 +1313,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       .subscribe(
                           (resp) => {
                             if (resp['msg_code'] === '0001') {
-                              this.utilsService.openSnackBarWithTranslate('Collaborator already affected to this project', '', 2000);
+                              this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
 
                             } else {
-                              this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                              this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
 
                             }
                           },
@@ -1333,7 +1341,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 Contract.attachments = '';
               }
               if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
-                this.utilsService.openSnackBarWithTranslate('check date');
+                this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
               } else {
                 this.contractsService.addContract(Contract)
                     .pipe(
@@ -1386,7 +1394,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                                 )
                                 .subscribe(
                                     async (resp) => {
-                                      this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                      this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
 
                                     },
                                     error => {
@@ -1409,10 +1417,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                                     (resp1) => {
                                       if (resp1['msg_code'] === '0001') {
                                         this.utilsService
-                                            .openSnackBarWithTranslate('Collaborator already affected to this project', '', 2000);
+                                            .openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
 
                                       } else {
-                                        this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                        this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
 
                                       }
                                     },
@@ -1424,7 +1432,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                                 );
 
                           }
-                          this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
 
                         },
                         (error) => {
@@ -1453,7 +1461,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 )
                 .subscribe(
                     (res) => {
-                      this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                      this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                     },
                     (error) => {
                       console.log(error);
@@ -1479,7 +1487,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     )
                     .subscribe(
                         (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                         },
                         (error) => {
                           console.log('error', error);
@@ -1497,7 +1505,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     )
                     .subscribe(
                         (resp) => {
-                          this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
                         },
                         error => {
                           console.log('error', error);
@@ -1528,7 +1536,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     )
                     .subscribe(
                         (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                         },
                         (error) => {
                           console.log('error', error);
@@ -1546,7 +1554,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     )
                     .subscribe(
                         (resp) => {
-                          this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
                         },
                         error => {
                           console.log('error', error);
@@ -1569,7 +1577,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     )
                     .subscribe(
                         (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
                         },
                         (error) => {
                           console.log('error', error);
@@ -1588,10 +1596,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     .subscribe(
                         (resp) => {
                           if (resp['msg_code'] === '0001') {
-                            this.utilsService.openSnackBarWithTranslate('Collaborator already affected to this project', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
 
                           } else {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', '', 2000);
+                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
 
                           }
                         },
@@ -1615,7 +1623,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               Contract.attachments = '';
             }
             if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
-              this.utilsService.openSnackBarWithTranslate('check date');
+              this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
             } else {
               this.contractsService.addContract(Contract)
                   .pipe(
@@ -1668,7 +1676,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                               )
                               .subscribe(
                                   async (resp) => {
-                                    this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                    this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
 
                                   },
                                   error => {
@@ -1685,9 +1693,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
                               .pipe(takeUntil(this.destroy$))
                               .subscribe((resp1) => {
                                 if (resp1['msg_code'] === '0001') {
-                                  this.utilsService.openSnackBarWithTranslate('Collaborator already affected to this project', '', 2000);
+                                  this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
                                 } else {
-                                  this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                                  this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
                                 }
                               }, error => {
                                 console.log('error', error);
@@ -1695,7 +1703,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                               });
 
                         }
-                        this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+                        this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
 
                       },
                       (error) => {
@@ -1716,7 +1724,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       }
 
     } else {
-      this.utilsService.openSnackBar('missing required field', null, 3000);
+      this.utilsService.openSnackBar('general.contracts.missing.field', null, 3000);
     }
 
   }
@@ -1742,7 +1750,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
             }  else {
               this.contractExtensionInfo.forEach(
                   (element, index) => {
@@ -1788,7 +1796,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
             }  else {
               this.extensionsList.next([]);
               this.contractExtensionInfo.push(
@@ -1810,7 +1818,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               );
               this.extensionsList.next(this.contractExtensionInfo.slice());
               this.contractForm.controls.CONTRACT_EXTENSION.reset();
-              this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+              this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
             }
 
           }
@@ -1841,19 +1849,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
             } else if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
               this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
             } else if (
-                !this.utilsService.checkDateBetweenTwoDate(new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value),
+                !this.utilsService.checkDateBetweenTwoDate(new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
             } else {
               this.contractProjectInfo.forEach(
                   (element, index) => {
@@ -1872,9 +1880,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
                       this.contractProjectInfo[index].vat_nbr =
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.value;
+                      this.contractProjectInfo[index].category_code =
+                          this.contractForm.controls.CONTRACT_PROJECT['controls'].category_code.value;
                       this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
-                      this.contractProjectInfo[index].project_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                          type.value === this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value)?.viewValue;
+                      this.contractProjectInfo[index].project_status = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value;
                       this.contractProjectInfo[index].rate_currency = this.appInitializerService.currenciesList.find((type) =>
                           type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC;
 
@@ -1913,14 +1922,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
             } else {
               this.contractProjectList.next([]);
               this.contractProjectInfo.push(
@@ -1986,14 +1995,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 project.end_date
 
                 )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
             } else {
               this.projectCollaboratorInfo.forEach(
                   (element, index) => {
@@ -2037,21 +2046,21 @@ export class AddContractComponent implements OnInit, OnDestroy {
             } else if (this.checkProjectByCollaborator(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value,
                 this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value
                 )) {
-              this.utilsService.openSnackBarWithTranslate('general.project.no.add', '', 2000);
+              this.utilsService.openSnackBarWithTranslate('general.project.no.add', null, 2000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('check data', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
             } else {
               this.projectCollaboratorList.next([]);
               this.projectCollaboratorInfo.push(
@@ -2066,7 +2075,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               );
               this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
               this.contractForm.controls.PROJECT_COLLABORATOR.reset();
-              this.utilsService.openSnackBarWithTranslate('general.add', '', 2000);
+              this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
             }
 
           }
@@ -2118,23 +2127,23 @@ export class AddContractComponent implements OnInit, OnDestroy {
           type.viewValue === row.data.extension_status)?.value);
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.setValue(row.data.attachments);
     } else if ( row.formGroupName === 'CONTRACT_PROJECT' ) {
+      console.log('my contractract project ', row.data);
       this.canAddContractProjectAction.next(false);
       this.canUpdateContractProjectAction.next(true);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.setValue(
         row.data.ContractProjectKey?.project_code ? row.data.ContractProjectKey?.project_code : row.data.project_code);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.setValue(row.data.start_date);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].category_code.setValue(row.data.category_code);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.setValue(row.data.end_date);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.setValue(row.data.project_rate);
-     this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.setValue(row.vat_nbr);
+     this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.setValue(row.data.vat_nbr);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.setValue(row.data.comment);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.setValue(row.data.project_desc);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.setValue(
-        this.appInitializerService.currenciesList.find((type) =>
-          type.CURRENCY_DESC === row.data.rate_currency)?.CURRENCY_CODE
+        row.data.rate_currency
       );
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.setValue(
-        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-          type.viewValue === row.data.project_status)?.value);
+          row.data.project_status);
     } else if ( row.formGroupName === 'PROJECT_COLLABORATOR' ) {
       this.canAddProjectCollaboratorAction.next(false);
       this.canUpdateProjectCollaboratorAction.next(true);
@@ -2302,14 +2311,14 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     this.contractsService.disableContractProject(row.data._id).subscribe((res1) => {
                       this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
 
-                    }, (err) => { this.utilsService.openSnackBarWithTranslate('something wrong', null, 3000); });
+                    }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.error', null, 3000); });
 
                   } else {
                     this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
 
                   }
                 } else {
-                  this.utilsService.openSnackBarWithTranslate('this project already affected to collaborator', null, 3000);
+                  this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 3000);
 
                 }
 
@@ -2329,7 +2338,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                   this.contractsService.disableProjectCollaborator(row.data._id).subscribe((res1) => {
                     this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
 
-                  }, (err) => { this.utilsService.openSnackBarWithTranslate('something wrong', null, 3000); });
+                  }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.error', null, 3000); });
 
                 } else {
                   this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
