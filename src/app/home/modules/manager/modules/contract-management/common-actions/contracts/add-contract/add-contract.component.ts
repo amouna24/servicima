@@ -315,10 +315,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
         {
           label: 'contracts.addcontrat.rate.payment.method',
           placeholder: 'contracts.addcontrat.rate.payment.method',
-          type: FieldsType.SELECT_WITH_SEARCH,
-          filteredList: this.filteredPayment,
+          type: FieldsType.SELECT,
+          selectFieldList: this.paymentTermsList,
           formControlName: 'payment_terms',
-          searchControlName: 'contractPaymentFilter',
           required: true
         },
       ],
@@ -724,6 +723,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           this.userInfo = data;
           this.companyEmail = data.user[0]['company_email'];
           this.getTimeSheetSettings();
+          this.getPaymentTerms();
         }
       }),
 
@@ -770,7 +770,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
-      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'PAYMENT_MODE' , 'GENDER', 'PROF_TITLES']
+      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
    this.vatList.next(this.refDataService.refData['VAT']);
    this.filteredVat.next(this.vatList.value);
@@ -778,12 +778,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.CONTRACT_PROJECT['controls'].filterVatControl,
       this.filteredVat
     );
-    this.paymentModeList.next(this.refDataService.refData['PAYMENT_MODE']);
-    this.filteredPayment.next(this.paymentModeList.value);
-    this.utilsService.changeValueField(this.paymentModeList.value,
-      this.contractForm.controls.RATE['controls'].contractPaymentFilter,
-      this.filteredPayment
-    );
+
     this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
     this.filteredStatus.next(this.statusList.value);
     this.utilsService.changeValueField(this.statusList.value,
@@ -822,7 +817,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       }
                   )
               );
-              console.log('contractor code ', this.contractorsList.value);
             },
             (error) => {
               console.log('error', error);
@@ -1131,6 +1125,32 @@ export class AddContractComponent implements OnInit, OnDestroy {
         }
       );
   }
+  /**************************************************************************
+   * @description get Tax for specific company
+   *************************************************************************/
+  /**************************************************************************
+   * @description get Tax for specific company
+   *************************************************************************/
+  getPaymentTerms() {
+    this.companyPaymentTermsService.getCompanyPaymentTerms(this.companyEmail)
+        .pipe(
+            takeUntil(this.destroy$)
+        )
+        .subscribe(
+            (companyPaymentTerms) => {
+              this.paymentTermsList.next(
+                  companyPaymentTerms['results'].map(
+                      (obj) => {
+                        return { value: obj.companyPaymentTermsKey.payment_terms_code, viewValue: obj.payment_terms_desc};
+                      }
+                  )
+              );
+            },
+            (error) => {
+              console.log(error);
+            }
+        );
+  }
 
   /**************************************************************************
    * @description Create/Update Contract/ContractExtension
@@ -1233,7 +1253,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 project.contract_code = Contract.contract_code;
                 if (project._id && project?.updated) {
                   project.project_code = project.ContractProjectKey?.project_code;
-                  console.log('my project want to update ', project);
                   this.contractsService.updateContractProject(project)
                       .pipe(
                           takeUntil(this.destroy$)
@@ -1842,7 +1861,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       this.contractProjectInfo[index].project_status = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value;
                       this.contractProjectInfo[index].rate_currency = this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value;
                       this.contractProjectInfo[index].updated = true;
-                      console.log('my contrat project ', this.contractProjectInfo[index]);
                     }
                   }
               );
@@ -2346,7 +2364,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
    * @description verify dates of contract extension
    */
   verifyDatesProjectContract(dateContract: Date): boolean {
-    console.log('verify project ', this.contractProjectInfo.every(x => new Date(x.end_date).getTime() < new Date(dateContract).getTime()));
     return this.contractProjectInfo.every(x => new Date(x.end_date).getTime() < new Date(dateContract).getTime());
   }
 

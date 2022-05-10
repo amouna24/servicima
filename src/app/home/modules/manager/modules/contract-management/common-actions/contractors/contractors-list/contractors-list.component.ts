@@ -152,7 +152,7 @@ export class ContractorsListComponent implements OnInit, OnChanges, OnDestroy {
         .subscribe(
             (response) => {
               this.blocData = response['results'];
-              this.ELEMENT_DATA.next(this.blocData);
+              this.ELEMENT_DATA.next(response);
 
               response['results'].length >= 0 ? this.isLoading.next(false) : this.isLoading.next(true);
             },
