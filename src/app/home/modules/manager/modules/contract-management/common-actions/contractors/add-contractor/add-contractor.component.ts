@@ -1070,7 +1070,7 @@ private subscriptions: Subscription;
       }
       this.photo = null;
     } else {
-      this.utilsService.openSnackBar('general.contract.contractor.missing.field', '', 3000);
+      this.utilsService.openSnackBarWithTranslate('general.contract.contractor.missing.field', '', 3000);
     }
 
   }

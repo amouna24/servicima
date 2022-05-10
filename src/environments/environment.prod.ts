@@ -62,7 +62,7 @@ export const environment = {
   workCertificateUrl: 'http://213.136.74.202/hrworkcertificate',
   hrTrainingApiUrl: 'http://213.136.74.202/hrtraining',
   hrTrainingRequestApiUrl: 'http://213.136.74.202/hrtrainingrequest',
-  hrTrainingSessionWeekApiUrl: 'http://213.136.74.202/trainingsessionweek',
+  hrTrainingSessionWeekApiUrl: 'http://213.136.74.202/hrtrainingsessionweek',
   hrTrainingInviteCollaboratorApiUrl: 'http://213.136.74.202/hrtraininginvitecollaborator',
   invoiceGenerateApiUrl: 'http://213.136.74.202/generateinv',
   invoiceLineApiUrl: 'http://213.136.74.202/invoiceline',
@@ -95,6 +95,7 @@ export const environment = {
   companyApiUrl: 'http://213.136.74.202/companies',
   userApiUrl: 'http://213.136.74.202/users',
   userGatewayApiUrl: 'http://213.136.74.202/usergatway',
+  smsApiUrl: 'http://213.136.74.202/sms',
   redirectionHomeUrl: '/',
 
   /************************* UPLOAD FILE ******************************/
