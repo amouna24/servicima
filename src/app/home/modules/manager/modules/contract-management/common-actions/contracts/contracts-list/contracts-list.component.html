@@ -2,7 +2,6 @@
         [tableData]="ELEMENT_DATA"
         [tableCode]="'CONTRACT'"
         [isLoading]="isLoading"
-        [singleAction]="{name:'contracts.import', feature: 'CONTRACT_IMPORT'}"
         [header]="{ title: title, addActionURL: redirectUrl, feature: 'CONTRACT_ADD',addActionText: addButtonLabel}"
         (rowActionData)="switchAction($event)"
         [allowedActions]="tabFeatureAccess"

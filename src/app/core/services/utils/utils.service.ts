@@ -314,7 +314,7 @@ export class UtilsService {
    */
   checkPhoneNumberFields(form: AbstractControl, columnFields: string[]): boolean {
 
-    const pattern = /^(0|[1-9][0-9]*)$/;
+    const pattern = /^[- +()0-9]+$/;
     const isValueValid = (field) =>  pattern.test(form['controls'][field].value);
     return columnFields.every(isValueValid);
   }

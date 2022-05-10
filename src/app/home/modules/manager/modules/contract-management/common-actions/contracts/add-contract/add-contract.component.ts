@@ -1012,10 +1012,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
             this.contractExtensionInfo = res[1]['results'];
             this.contractExtensionInfo.map(
               async (extension) => {
-                extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_CODE === extension.extension_currency_cd)?.CURRENCY_DESC;
-                extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                  type.value === extension.extension_status)?.viewValue;
                 if (extension.attachments && extension.attachments !== '') {
                   extension.attachments = await this.getFileNameAsString(extension.attachments);
                 }
@@ -1158,7 +1154,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
     if (this.contractForm.valid) {
-      if (this.verifyDatesContractExtension(Contract.contract_end_date) && this.verifyDatesProjectContract(Contract.contract_end_date)) {
+      if (this.verifyDatesContractExtension(Contract.contract_start_date) && this.verifyDatesProjectContract(Contract.contract_end_date)) {
         if (Contract.contract_status === 'RUN' || Contract.contract_status === 'EX_AW') {
           if (!this.utilsService.checkDate(new Date(Contract.signature_company_date), new Date(Contract.contract_start_date))) {
             this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.company');
@@ -1188,11 +1184,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 extension.application_id = Contract.application_id;
                 extension.email_address = Contract.email_address;
                 extension.contract_code = Contract.contract_code;
-                extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                    type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-                extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                    type.viewValue === extension.extension_status)?.value;
-
                 if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
                   extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
                 }
@@ -1240,13 +1231,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 project.application_id = Contract.application_id;
                 project.company_email = Contract.email_address;
                 project.contract_code = Contract.contract_code;
-                project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                    type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-                project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                    type.viewValue === project.extension_status)?.value;
-
                 if (project._id && project?.updated) {
                   project.project_code = project.ContractProjectKey?.project_code;
+                  console.log('my project want to update ', project);
                   this.contractsService.updateContractProject(project)
                       .pipe(
                           takeUntil(this.destroy$)
@@ -1353,11 +1340,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                             extension.application_id = Contract.application_id;
                             extension.email_address = Contract.email_address;
                             extension.contract_code = Contract.contract_code;
-                            extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                                type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-                            extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                                type.viewValue === extension.extension_status)?.value;
-                            if (extension.selectedExtensionFile.name !== '') {
+                            if (extension.selectedExtensionFile?.name !== '' && extension.attachments ) {
                               extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
                             }
                             await this.contractsService.addContractExtension(extension)
@@ -1382,10 +1365,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                             project.application_id = Contract.application_id;
                             project.company_email = Contract.email_address;
                             project.contract_code = Contract.contract_code;
-                            project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                                type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-                            project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                                type.viewValue === project.extension_status)?.value;
+
                             await this.contractsService.addContractProject(project)
                                 .pipe(
                                     takeUntil(
@@ -1471,11 +1451,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
               extension.application_id = Contract.application_id;
               extension.email_address = Contract.email_address;
               extension.contract_code = Contract.contract_code;
-              extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-              extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                  type.viewValue === extension.extension_status)?.value;
-
               if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
                 extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
               }
@@ -1523,11 +1498,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
               project.application_id = Contract.application_id;
               project.company_email = Contract.email_address;
               project.contract_code = Contract.contract_code;
-              project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                  type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-              project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                  type.viewValue === project.extension_status)?.value;
-
               if (project._id && project?.updated) {
                 project.project_code = project.ContractProjectKey?.project_code;
                 this.contractsService.updateContractProject(project)
@@ -1635,12 +1605,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           extension.application_id = Contract.application_id;
                           extension.email_address = Contract.email_address;
                           extension.contract_code = Contract.contract_code;
-                          extension.extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                              type.CURRENCY_DESC === extension.extension_currency_cd)?.CURRENCY_CODE;
-                          extension.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                              type.viewValue === extension.extension_status)?.value;
-                          if (extension.selectedExtensionFile.name !== '') {
-                            extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                          if (extension.selectedExtensionFile?.name !== '' && extension.attachments ) {
+                            extension.attachments = await this.uploadFile(extension.selectedExtensionFile?.file);
                           }
                           await this.contractsService.addContractExtension(extension)
                               .pipe(
@@ -1664,10 +1630,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           project.application_id = Contract.application_id;
                           project.company_email = Contract.email_address;
                           project.contract_code = Contract.contract_code;
-                          project.rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                              type.CURRENCY_DESC === project.extension_currency_cd)?.CURRENCY_CODE;
-                          project.extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                              type.viewValue === project.extension_status)?.value;
                           await this.contractsService.addContractProject(project)
                               .pipe(
                                   takeUntil(
@@ -1747,7 +1709,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
 
             }  else if (!this.utilsService.checkDate(
-                new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value),
+                new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
               this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
@@ -1764,11 +1726,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value;
                       this.contractExtensionInfo[index].extension_rate
                           = this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value;
-                      this.contractExtensionInfo[index].extension_status = this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                          type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value)?.viewValue;
-                      this.contractExtensionInfo[index].extension_currency_cd = this.appInitializerService.currenciesList.find((type) =>
-                          type.CURRENCY_CODE
-                          === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC;
+                      this.contractExtensionInfo[index].extension_status =
+                          this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value;
+                      this.contractExtensionInfo[index].extension_currency_cd =
+                          this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value;
                       this.contractExtensionInfo[index].attachments = this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value;
                       this.contractExtensionInfo[index].selectedExtensionFile = this.selectedExtensionFile.pop();
                       this.contractExtensionInfo[index].updated = true;
@@ -1793,7 +1754,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
 
             }  else if (!this.utilsService.checkDate(
-                new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value),
+                new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
               this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
@@ -1805,13 +1766,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     extension_start_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value,
                     extension_end_date: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value,
                     extension_rate: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.value,
-                    extension_currency_cd: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd?.value ?
-                        this.appInitializerService.currenciesList.find((type) =>
-                            type.CURRENCY_CODE ===
-                            this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value)?.CURRENCY_DESC : '',
-                    extension_status: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value ?
-                        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                            type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status?.value)?.viewValue : '',
+                    extension_currency_cd: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.value,
+                    extension_status: this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.value,
                     attachments: this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.value,
                     selectedExtensionFile: this.selectedExtensionFile.pop(),
                   }
@@ -1884,10 +1840,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].category_code.value;
                       this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
                       this.contractProjectInfo[index].project_status = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value;
-                      this.contractProjectInfo[index].rate_currency = this.appInitializerService.currenciesList.find((type) =>
-                          type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC;
-
+                      this.contractProjectInfo[index].rate_currency = this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value;
                       this.contractProjectInfo[index].updated = true;
+                      console.log('my contrat project ', this.contractProjectInfo[index]);
                     }
                   }
               );
@@ -1942,12 +1897,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     project_desc: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value,
                     vat_nbr: this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.value,
                     comment: this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value,
-                    extension_currency_cd: this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency?.value ?
-                        this.appInitializerService.currenciesList.find((type) =>
-                            type.CURRENCY_CODE === this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value)?.CURRENCY_DESC : '',
-                    project_status: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status?.value ?
-                        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-                            type.value === this.contractForm.controls.CONTRACT_EXTENSION['controls'].project_status?.value)?.viewValue : '',
+                    rate_currency: this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value ,
+                    project_status: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value,
                   }
               );
               this.contractProjectList.next(this.contractProjectInfo.slice());
@@ -2119,15 +2070,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.setValue(row.data.extension_end_date);
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_rate.setValue(row.data.extension_rate);
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_currency_cd.setValue(
-        this.appInitializerService.currenciesList.find((type) =>
-          type.CURRENCY_DESC === row.data.extension_currency_cd)?.CURRENCY_CODE
+        row.data.extension_currency_cd
       );
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_status.setValue(
-        this.refDataService.refData['CONTRACT_STATUS'].find((type) =>
-          type.viewValue === row.data.extension_status)?.value);
+          row.data.extension_status);
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.setValue(row.data.attachments);
     } else if ( row.formGroupName === 'CONTRACT_PROJECT' ) {
-      console.log('my contractract project ', row.data);
       this.canAddContractProjectAction.next(false);
       this.canUpdateContractProjectAction.next(true);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.setValue(

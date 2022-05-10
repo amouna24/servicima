@@ -157,7 +157,7 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
-                name: 'Contrat en attente',
+                name: 'manager.menu.static.contract.management.suppliers.management.pending',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
@@ -205,7 +205,7 @@ export const managerMenu: IMenu[] = [
               },
               {
                 state: 'contracts-list',
-                name: 'Contrat en attente',
+                name: 'manager.menu.static.contract.management.clients.management.pending',
                 icon: 'wi-credit-card',
                 feature: 'CONTRACT_ACCESS',
                 type: 'link',
