@@ -4,7 +4,6 @@
         [tableCode]="'CONTRACTOR_S'"
         [isLoading]="isLoading"
         [header]="{ title: title, addActionURL: redirectUrl, addActionText: addButtonLabel,feature: 'CONTRACT_ADD_CLIENT'}"
-        [singleAction]="{name:'certification.import', feature: this.featureImport}"
         [allowedActions]="tabFeatureAccess"
         (rowActionData)="switchAction($event)"
         (pagination)="loadMoreItems($event)"

@@ -64,6 +64,8 @@ private subscriptions: Subscription;
   companyEmail: string;
   urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
   patternPhone = /^(0|[1-9][0-9]*)$/;
+  NUMERIC_PATTREN = /^-?[0-9]\\d*(\\.\\d{1,4})?$/;
+
   /**************************************************************************
    * @description new Data Declarations 'LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES'
    *************************************************************************/
@@ -113,49 +115,49 @@ private subscriptions: Subscription;
   resumeModels: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([
     {
     icon: 'assets/img/peter-river-icon.jpg',
-    viewValue: 'Default',
+    viewValue: 'contracts.contractor.modelcv.default',
     value: 'DEFAULT',
   },
     {
       icon: 'assets/img/Emerald-icon.jpg',
-      viewValue: 'Emerald',
+      viewValue: 'contracts.contractor.modelcv.emerald',
       value: 'EMERALD',
 
     },
     {
       icon: 'assets/img/amethyst-icon.jpg',
-      viewValue: 'Amethyst',
+      viewValue: 'contracts.contractor.modelcv.amethyst',
       value: 'AMETHYST',
 
     },
     {
       icon: 'assets/img/orange-icon.jpg',
-      viewValue: 'Orange',
+      viewValue: 'contracts.contractor.modelcv.orange',
       value: 'ORANGE',
     },
     {
       icon: 'assets/img/sun-flower-icon.jpg',
-      viewValue: 'Sun Flower',
+      viewValue: 'contracts.contractor.modelcv.sunflower',
       value: 'SUN_FLOWER',
     },
     {
       icon: 'assets/img/silver-icon.jpg',
-      viewValue: 'Silver',
+      viewValue: 'contracts.contractor.modelcv.silver',
       value: 'SILVER',
     },
     {
       icon: 'assets/img/midnight-blue-icon.jpg',
-      viewValue: 'Midnight Blue',
+      viewValue: 'contracts.contractor.modelcv.midnightblue',
       value: 'MIDNIGHT_BLUE',
     },
     {
       icon: 'assets/img/Green-icon.jpg',
-      viewValue: 'Green',
+      viewValue: 'contracts.contractor.modelcv.green',
       value: 'GREEN',
     },
     {
       icon: 'assets/img/Alizarin-icon.jpg',
-      viewValue: 'Alizarin',
+      viewValue: 'contracts.contractor.modelcv.alizarin',
       value: 'ALIZARIN',
     },
   ]);
@@ -618,22 +620,22 @@ private subscriptions: Subscription;
     this.contractorForm = this.formBuilder.group({
       PERSONAL_INFORMATION: this.formBuilder.group({
         contractor_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-        registry_code: ['', [Validators.required, , Validators.pattern(this.patternPhone)]],
+        registry_code: ['', [Validators.required, Validators.min(0)]],
         language: ['', [Validators.required]],
       }),
       ADDRESS: this.formBuilder.group({
         address: ['', [Validators.required]],
         country_cd: ['', [Validators.required]],
         registryCountryFilterCtrl: [''],
-        zip_code: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        zip_code: ['', [Validators.required, Validators.pattern(this.patternPhone), Validators.min(10)]],
         city: ['', [Validators.required]],
       }),
       GENERAL_CONTACT: this.formBuilder.group({
         web_site: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
         contact_email: ['', [Validators.required, Validators.email]],
-        phone_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
-        phone2_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
-        fax_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        phone_nbr: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+        phone2_nbr: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+        fax_nbr: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       }),
       ORGANISATION: this.formBuilder.group({
         activity_sector: ['' , [Validators.required]],
@@ -643,7 +645,7 @@ private subscriptions: Subscription;
         filteredPayementOrganisation: [''],
         filteredLegalOrganisation: [''],
         filteredCurrencyOrganisation: [''],
-        vat_nbr: ['', [Validators.required, Validators.pattern(this.patternPhone)]],
+        vat_nbr: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
         legal_form: ['', [Validators.required]],
         tax_cd: ['', [Validators.required]],
       }),
@@ -834,6 +836,7 @@ private subscriptions: Subscription;
             }
           );
           this.updateForms(this.contractorInfo);
+          this.contractorForm.controls.PERSONAL_INFORMATION['controls'].contractor_name.disable();
           this.contactList.next(this.contractorContactInfo.slice());
 
           this.isLoading.next(false);
@@ -1067,7 +1070,7 @@ private subscriptions: Subscription;
       }
       this.photo = null;
     } else {
-      this.utilsService.openSnackBar('missing required field', '', 3000);
+      this.utilsService.openSnackBarWithTranslate('general.contract.contractor.missing.field', '', 3000);
     }
 
   }
@@ -1210,8 +1213,8 @@ private subscriptions: Subscription;
   onStatusChange(row) {
     const confirmation = {
       code: 'delete',
-      title: 'delete Info',
-      description: `Are you sure you want to delete ?`,
+      title: 'contracts.supp.extprojetcontrat.deleteinfo',
+      description: `contracts.supp.extprojetcontrat.deleteinfo.msg`,
     };
     this.subscriptionModal = this.modalServices.displayConfirmationModal(confirmation, '560px', '300px')
       .pipe(
