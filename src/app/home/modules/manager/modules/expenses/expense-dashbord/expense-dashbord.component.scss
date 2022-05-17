@@ -1,0 +1,19 @@
+@import "src/assets/styles/variables";
+.green-bloc {
+  background-color: rgba(27, 197, 189, 0.3);
+  border-radius: 10px;
+}
+.yellow-bloc {
+  background-color: rgba(241, 196, 15, 0.3);
+  border-radius: 10px;
+}
+.blue-bloc {
+  background-color: rgba(0, 103, 224, 0.3);
+  border-radius: 10px;
+}
+.m-b-16 {
+  margin-bottom: 16px;
+}
+.gray-line {
+  border-bottom: solid 1px #d6d9dc;
+}

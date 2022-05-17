@@ -203,6 +203,9 @@ Paddings
 .p-l-20 {
     padding-left: 20px !important;
 }
+.p-l-25 {
+  padding-left: 25px !important;
+}
 .p-l-30 {
   padding-left: 30px;
 }
@@ -546,6 +549,9 @@ html body {
 .font-size-20 {
     font-size: 20px;
 }
+.font-size-22 {
+    font-size: 22px
+}
 .font-size-24 {
     font-size: 24px;
 }
@@ -625,6 +631,12 @@ html body {
 }
 .primaryColor {
   color: $primaryColor !important;
+}
+.secondaryColor {
+  color: $secondaryColor !important;
+}
+.thirdColor {
+  color: $thirdColor !important;
 }
 .steel{
   color: $steel;

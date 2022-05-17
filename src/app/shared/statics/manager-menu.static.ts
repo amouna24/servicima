@@ -296,5 +296,67 @@ export const managerMenu: IMenu[] = [
     icon: 'wi_dashboard',
     feature: 'EXPENSES_ACCESS',
     type: 'link',
+  },
+  {
+    state: 'expenses',
+    name: 'Expenses management',
+    type: 'sub',
+    icon: 'wi-billings',
+    feature: 'EXPENSES_ACCESS',
+    children: [
+      {
+        state: '',
+        name: 'Dashboard',
+        type: 'link',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+      },
+      {
+        state: 'expenses-normal',
+        name: 'Expenses',
+        type: 'sub',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+        child: [
+          {
+            state: 'expense-list',
+            name: 'Expense list',
+            type: 'link',
+            icon: 'wi-billings',
+            feature: 'EXPENSES_ACCESS',
+          },
+          {
+            state: 'expense-add',
+            name: 'Expense add',
+            type: 'link',
+            icon: 'wi-billings',
+            feature: 'EXPENSES_ACCESS',
+          },
+        ]
+      },
+      {
+        state: 'expenses-recurring',
+        name: 'Expense recurring',
+        type: 'sub',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+        child: [
+          {
+            state: 'expense-add-recurring',
+            name: 'Recurring Expense',
+            type: 'link',
+            icon: 'wi-billings',
+            feature: 'EXPENSES_ACCESS',
+          },
+          {
+            state: 'expense-list-recurring',
+            name: 'Recurring Expenses list',
+            type: 'link',
+            icon: 'wi-billings',
+            feature: 'EXPENSES_ACCESS',
+          },
+        ]
+      },
+    ]
   }
 ];

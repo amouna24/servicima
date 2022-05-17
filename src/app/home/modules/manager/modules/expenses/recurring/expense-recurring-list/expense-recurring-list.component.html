@@ -1,0 +1,10 @@
+<wid-dynamic-data-table
+  [tableData]="this.tableData"
+  [tableCode]="'EXPENSES-RECURRING-LIST'"
+  [isLoading]="isLoading"
+  [buttonAdd]="false"
+  [header]="{ title: 'Expenses recurring management' | translate}"
+  (rowActionData)="switchAction($event)"
+  (pagination)="loadMoreItems($event)"
+  [allowedActions]="[{ name: 'Archive expense', feature: 'EXPENSES_ACCESS'}]">
+</wid-dynamic-data-table>
