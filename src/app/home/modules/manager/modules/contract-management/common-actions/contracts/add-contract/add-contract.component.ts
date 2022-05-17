@@ -96,7 +96,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
   canUpdateProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   canAddProjectCollaboratorAction: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   companyTimesheet: ICompanyTimesheetSettingModel;
-  paymentModeList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
+  categoriesList: BehaviorSubject<IViewParam[]> = new BehaviorSubject<IViewParam[]>([]);
   /**************************************************************************
    * @description Declaring Form Group
    *************************************************************************/
@@ -136,8 +136,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
    *************************************************************************/
   filteredCurrencies: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredStatus: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
-  filteredPayment: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
   filteredVat: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
+  filteredCategories: ReplaySubject<IViewParam[]> = new ReplaySubject<IViewParam[]>(1);
 
   avatar: any;
   selectedContractFile = { file: FormData, name: ''};
@@ -150,22 +150,27 @@ export class AddContractComponent implements OnInit, OnDestroy {
     {
       title: 'contracts.menu.name',
       titleKey: 'CONTRACT',
+      required: true,
       child: [
         {
           title: 'Information',
           titleKey: 'INFORMATION',
+          required: true
         },
         {
           title: 'contracts.menu.signer',
           titleKey: 'SIGNER',
+          required: true
         },
         {
           title: 'contracts.menu.rate',
           titleKey: 'RATE',
+          required: true
         },
         {
           title: 'contracts.menu.time',
           titleKey: 'TIMESHEET',
+          required: true
         }
       ]
     },
@@ -177,11 +182,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
     {
       title: 'contracts.menu.pro',
       titleKey: 'CONTRACT_PROJECT',
+      required: true,
       child: []
     },
     {
       title: 'project_collaborator_all',
       titleKey: 'PROJECT_COLLABORATOR',
+      required: true,
       child: []
     },
   ];
@@ -257,7 +264,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
         },
         {
           label: 'contracts.addcontrat.signer.contractor.signer',
-          placeholder: 'contracts.addcontrat.signer.contractor.signer',
+          placeholder: 'contracts.addContract.add.contractor.contact',
           type: FieldsType.SELECT,
           selectFieldList: this.contractorContactList,
           formControlName: 'signer_contractor_email',
@@ -495,19 +502,20 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items,
       fields: [
         {
-          label: 'contracts.addcontrat.contractProject.category',
-          placeholder: 'contracts.addcontrat.contractProject.category',
+          label: 'contracts.addcontrat.contractProject.projectname',
+          placeholder: 'contracts.addcontrat.contractProject.projectname',
           type: FieldsType.INPUT,
           inputType: InputType.TEXT,
-          formControlName: 'category_code',
+          formControlName: 'project_name',
           required: true
         },
         {
-          label: 'rh_comment_certif',
-          placeholder: 'rh_comment_certif',
-          type: FieldsType.INPUT,
-          inputType: InputType.TEXT,
-          formControlName: 'comment',
+          label: 'contracts.addcontrat.contractProject.category',
+          placeholder: 'contracts.addcontrat.contractProject.category',
+          type: FieldsType.SELECT_WITH_SEARCH,
+          filteredList: this.filteredCategories,
+          formControlName: 'category_code',
+          searchControlName: 'filterCategorieControl',
           required: true
         },
       ],
@@ -560,8 +568,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
       fieldsLayout: FieldsAlignment.tow_items_with_textarea,
       fields: [
         {
-          label: 'clients.organisation.vat',
-          placeholder: 'clients.organisation.vat',
+          label: 'contracts.addsupplier.organisation.vat',
+          placeholder: 'contracts.addsupplier.organisation.vat',
           type: FieldsType.SELECT_WITH_SEARCH,
           filteredList: this.filteredVat,
           formControlName: 'vat_nbr',
@@ -584,6 +592,19 @@ export class AddContractComponent implements OnInit, OnDestroy {
           formControlName: 'project_desc',
           required: true
         }
+      ],
+    },
+    {
+      titleRef: 'CONTRACT_PROJECT',
+      fieldsLayout: FieldsAlignment.one_item_at_left,
+      fields: [
+        {
+          label: 'contracts.addcontrat.contractProject.comment',
+          placeholder: 'contracts.addcontrat.contractProject.comment',
+          type: FieldsType.INPUT,
+          inputType: InputType.TEXT,
+          formControlName: 'comment',
+        },
       ],
     },
     {
@@ -749,28 +770,55 @@ export class AddContractComponent implements OnInit, OnDestroy {
     );
     await this.profileService.getAllUser(this.companyEmail, 'STAFF')
       .subscribe((res) => {
-        this.staffList.next(res['results'].map(
-            (obj) => {
-              return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
-            }
-          )
-        );
+        if (res['results'].length !== 0) {
+          this.staffList.next(res['results'].map(
+                  (obj) => {
+                    return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
+                  }
+              )
+          );
+        } else {
+          this.dynamicForm.getValue()[3].fields[0] = {
+            label: 'contracts.addcontrat.signer.company.signer',
+            placeholder: 'contracts.addContract.add.staff',
+            type: FieldsType.INPUT,
+            formControlName: 'signer_company_email',
+            required: true
+          };
+          this.contractForm.controls.SIGNER['controls'].signer_company_email.disable();
+
+        }
+
       });
     await this.profileService.getAllUser(this.companyEmail, 'COLLABORATOR')
       .subscribe((res) => {
-         this.collaboratorList.next(
-           res['results'].map(
-             (obj) => {
-               return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
-             }
-           )
-         );
+        if (res['results'].length !== 0) {
+          this.collaboratorList.next(
+              res['results'].map(
+                  (obj) => {
+                    return { value: obj.userKey.email_address, viewValue: obj.first_name + ' ' + obj.last_name };
+                  }
+              )
+          );
+        } else {
+          this.dynamicForm.getValue()[16].fields[1] = {
+            label: 'contracts.addcontrat.projectCollab.emailCollab',
+            placeholder: 'contracts.addContract.add.collaborator',
+            type: FieldsType.INPUT,
+            formControlName: 'email_address',
+            required: true
+          };
+          this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.disable();
+
+        }
+
       });
+
     /*---------------------------------------------------------------*/
    await this.refDataService.getRefData(
       this.utilsService.getCompanyId(this.companyEmail, this.applicationId),
       this.applicationId,
-      ['LEGAL_FORM', 'VAT', 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
+      ['LEGAL_FORM', 'VAT', 'PROJECT_CATEGORIES' , 'CONTRACT_STATUS', 'GENDER', 'PROF_TITLES']
     );
    this.vatList.next(this.refDataService.refData['VAT']);
    this.filteredVat.next(this.vatList.value);
@@ -778,7 +826,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.CONTRACT_PROJECT['controls'].filterVatControl,
       this.filteredVat
     );
-
+    this.categoriesList.next(this.refDataService.refData['PROJECT_CATEGORIES']);
+    this.filteredCategories.next(this.categoriesList.value);
+    this.utilsService.changeValueField(this.categoriesList.value,
+        this.contractForm.controls.CONTRACT_PROJECT['controls'].filterCategorieControl,
+        this.filteredCategories
+    );
     this.statusList.next(this.refDataService.refData['CONTRACT_STATUS']);
     this.filteredStatus.next(this.statusList.value);
     this.utilsService.changeValueField(this.statusList.value,
@@ -810,13 +863,26 @@ export class AddContractComponent implements OnInit, OnDestroy {
         .subscribe(
             (res) => {
               this.contractors = res['results'];
-              this.contractorsList.next(
-                  res['results'].map(
-                      (obj) => {
-                        return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
-                      }
-                  )
-              );
+              if (res['results'].length !== 0) {
+                this.contractorsList.next(
+                    res['results'].map(
+                        (obj) => {
+                          return { value: obj.contractorKey.contractor_code, viewValue: obj.contractor_name };
+                        }
+                    )
+                );
+              } else {
+                this.dynamicForm.getValue()[0].fields[0] = {
+                  label: 'contracts.addcontrat.contractor.name',
+                  placeholder: 'contracts.addContract.add.contractor',
+                  type: FieldsType.INPUT,
+                  formControlName: 'contractor_code',
+                  required: true
+                };
+                this.contractForm.controls.INFORMATION['controls'].contractor_code.disable();
+
+              }
+
             },
             (error) => {
               console.log('error', error);
@@ -835,7 +901,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                this.contractorContacts.next(data);
                this.dynamicForm.getValue()[3].fields[1] = {
                  label: 'contracts.addcontrat.signer.contractor.signer',
-                 placeholder: 'exp@email.com',
+                 placeholder: 'contracts.addContract.add.contractor.contact',
                  type: FieldsType.SELECT,
                  selectFieldList: this.contractorContacts,
                  formControlName: 'signer_contractor_email',
@@ -850,7 +916,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
            this.contractorContacts.next(data);
            this.dynamicForm.getValue()[3].fields[1] = {
              label: 'contracts.addcontrat.signer.contractor.signer',
-             placeholder: 'exp@email.com',
+             placeholder: 'contracts.addContract.add.contractor.contact',
              type: FieldsType.SELECT,
              selectFieldList: this.contractorContacts,
              formControlName: 'signer_contractor_email',
@@ -965,7 +1031,9 @@ export class AddContractComponent implements OnInit, OnDestroy {
         filterCurrencyControl: [''],
         filterStatusControl: [''],
         filterVatControl: [''],
+        filterCategorieControl: [''],
         project_status: [''],
+        project_name: [''],
         comment: [''],
       }),
       PROJECT_COLLABORATOR: this.formBuilder.group({
@@ -1019,7 +1087,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
            this.projectList.next(
              this.contractProjectInfo.map(
                (obj) => {
-                 return { value: obj.ContractProjectKey.project_code, viewValue: obj.ContractProjectKey.project_code };
+                 return { value: obj.ContractProjectKey.project_code, viewValue: obj.project_name };
                }
              )
            );
@@ -1037,7 +1105,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
             project.email_address = project.ProjectCollaboratorKey.email_address;
 
           });
-
+          this.contractForm.controls.INFORMATION['controls'].contractor_code.disable();
           await this.initContractForm(this.contractInfo);
            if (this.contractInfo.contract_status === 'RUN' || this.contractInfo.contract_status === 'EX_AW' ) {
              this.disableContractExtension();
@@ -1045,14 +1113,6 @@ export class AddContractComponent implements OnInit, OnDestroy {
            this.extensionsList.next(this.contractExtensionInfo.slice());
           this.contractProjectList.next(this.contractProjectInfo.slice());
           this.projectCollaboratorList.next(this.projectCollaboratorInfo);
-          this.dynamicForm.getValue()[0].fields[0] = {
-            label: 'contracts.addcontrat.contractor.name',
-            placeholder: 'exp@email.com',
-            type: FieldsType.INPUT,
-            inputType: InputType.TEXT,
-            formControlName: 'contractor_code',
-          };
-          this.contractForm.controls.INFORMATION['controls'].contractor_code.disable();
           this.isLoading.next(false);
         },
         (error) => {
@@ -1174,538 +1234,551 @@ export class AddContractComponent implements OnInit, OnDestroy {
     Contract.contract_type = this.type;
     Contract.contract_date = Date.now();
     if (this.contractForm.valid) {
-      if (this.verifyDatesContractExtension(Contract.contract_start_date) && this.verifyDatesProjectContract(Contract.contract_end_date)) {
-        if (Contract.contract_status === 'RUN' || Contract.contract_status === 'EX_AW') {
-          if (!this.utilsService.checkDate(new Date(Contract.signature_company_date), new Date(Contract.contract_start_date))) {
-            this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.company');
-          } else if (!this.utilsService.checkDate(new Date(Contract.signature_contractor_date), new Date(Contract.contract_start_date))) {
-            this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.contractor');
-          } else {
+        if (this.contractProjectInfo.length > 0 && this.projectCollaboratorInfo.length > 0) {
+            if (this.verifyDatesContractExtension(Contract.contract_start_date) && this.verifyDatesProjectContract(Contract.contract_end_date)) {
+                if (Contract.contract_status === 'RUN' || Contract.contract_status === 'EX_AW') {
+                    if (!this.utilsService.checkDate(new Date(Contract.signature_company_date), new Date(Contract.contract_start_date))) {
+                        this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.company');
+                    } else if (!this.utilsService.checkDate(new Date(Contract.signature_contractor_date), new Date(Contract.contract_start_date))) {
+                        this.utilsService.openSnackBarWithTranslate('general.contracts.check.signature.contractor');
+                    } else {
 
-            if (this.canUpdate(this.contractId)) {
-              if (this.selectedContractFile.name !== '') {
-                Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
-              } else {
-                Contract.attachments = this.contractInfo.attachments;
-              }
-              this.contractsService.updateContract(Contract)
-                  .pipe(
-                      takeUntil(this.destroy$)
-                  )
-                  .subscribe(
-                      (res) => {
-                        this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                  );
-              for (const extension of this.contractExtensionInfo) {
-                extension.application_id = Contract.application_id;
-                extension.email_address = Contract.email_address;
-                extension.contract_code = Contract.contract_code;
-                if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
-                  extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
-                }
-                if (extension._id && extension?.updated) {
-                  extension.extension_code = extension.contractExtensionKey.extension_code;
-                  this.contractsService.updateContractExtension(extension)
-                      .pipe(
-                          takeUntil(this.destroy$)
-                      )
-                      .subscribe(
-                          (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                          },
-                          (error) => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                          }
-                      );
-                } else if (!extension?._id) {
-                  this.contractsService.addContractExtension(extension)
-                      .pipe(
-                          takeUntil(
-                              this.destroy$
-                          )
-                      )
-                      .subscribe(
-                          (resp) => {
-                            this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-                          },
-                          error => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                            if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-
-                            }
-                          }
-                      );
-                }
-              }
-              for (const project of this.contractProjectInfo) {
-                project.application_id = Contract.application_id;
-                project.company_email = Contract.email_address;
-                project.contract_code = Contract.contract_code;
-                if (project._id && project?.updated) {
-                  project.project_code = project.ContractProjectKey?.project_code;
-                  this.contractsService.updateContractProject(project)
-                      .pipe(
-                          takeUntil(this.destroy$)
-                      )
-                      .subscribe(
-                          (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                          },
-                          (error) => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                          }
-                      );
-                } else if (!project?._id) {
-                  this.contractsService.addContractProject(project)
-                      .pipe(
-                          takeUntil(
-                              this.destroy$
-                          )
-                      )
-                      .subscribe(
-                          (resp) => {
-                            this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-                          },
-                          error => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                            if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-
-                            }
-                          }
-                      );
-                }
-              }
-              for (const projectCollaborator of this.projectCollaboratorInfo ) {
-                projectCollaborator.contract_code = Contract.contract_code;
-                if (projectCollaborator._id && projectCollaborator?.updated) {
-                  this.contractsService.updateProjectCollaborator(projectCollaborator)
-                      .pipe(
-                          takeUntil(this.destroy$)
-                      )
-                      .subscribe(
-                          (response) => {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                          },
-                          (error) => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                          }
-                      );
-                } else if (!projectCollaborator?._id) {
-                  this.contractsService.addProjectCollaborator(projectCollaborator)
-                      .pipe(
-                          takeUntil(
-                              this.destroy$
-                          )
-                      )
-                      .subscribe(
-                          (resp) => {
-                            if (resp['msg_code'] === '0001') {
-                              this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
-
+                        if (this.canUpdate(this.contractId)) {
+                            if (this.selectedContractFile.name !== '') {
+                                Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
                             } else {
-                              this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-
+                                Contract.attachments = this.contractInfo.attachments;
                             }
-                          },
-                          error => {
-                            console.log('error', error);
-                          },
-                          () => {
-                            itemsFetched += 1;
-                            if (itemsFetched === this.projectCollaboratorInfo
-                                .filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
+                            this.contractsService.updateContract(Contract)
+                                .pipe(
+                                    takeUntil(this.destroy$)
+                                )
+                                .subscribe(
+                                    () => {
+                                        this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                    },
+                                    (error) => {
+                                        console.log(error);
+                                    }
+                                );
+                            for (const extension of this.contractExtensionInfo) {
+                                extension.application_id = Contract.application_id;
+                                extension.email_address = Contract.email_address;
+                                extension.contract_code = Contract.contract_code;
+                                if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
+                                    extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                                }
+                                if (extension._id && extension?.updated) {
+                                    extension.extension_code = extension.contractExtensionKey.extension_code;
+                                    this.contractsService.updateContractExtension(extension)
+                                        .pipe(
+                                            takeUntil(this.destroy$)
+                                        )
+                                        .subscribe(
+                                            () => {
+                                                this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                            },
+                                            (error) => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                            }
+                                        );
+                                } else if (!extension?._id) {
+                                    this.contractsService.addContractExtension(extension)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            () => {
+                                                this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                                if (itemsFetched ===
+                                                    this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated)).length) {
 
+                                                }
+                                            }
+                                        );
+                                }
                             }
-                          }
-                      );
-                }
-              }
+                            for (const project of this.contractProjectInfo) {
+                                project.application_id = Contract.application_id;
+                                project.company_email = Contract.email_address;
+                                project.contract_code = Contract.contract_code;
+                                if (project._id && project?.updated) {
+                                    project.project_code = project.ContractProjectKey?.project_code;
+                                    console.log('project ', project);
+                                    this.contractsService.updateContractProject(project)
+                                        .pipe(
+                                            takeUntil(this.destroy$)
+                                        )
+                                        .subscribe(
+                                            () => {
+                                                this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                            },
+                                            (error) => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                            }
+                                        );
+                                } else if (!project?._id) {
+                                  console.log('project ', project);
+                                    this.contractsService.addContractProject(project)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            (res) => {
+                                                this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+                                                console.log('resss ', res);
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                                if (itemsFetched ===
+                                                    this.contractProjectInfo
+                                                        .filter(ext => !ext._id || (ext._id && ext.updated)).length) {
 
-            } else {
-              if (this.selectedContractFile.name !== '') {
-                Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
-              } else {
-                Contract.attachments = '';
-              }
-              if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
-                this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
-              } else {
-                this.contractsService.addContract(Contract)
-                    .pipe(
-                        takeUntil(this.destroy$)
-                    )
-                    .subscribe(
-                        async (response) => {
-                          for (const extension of this.contractExtensionInfo) {
+                                                }
+                                            }
+                                        );
+                                }
+                            }
+                            for (const projectCollaborator of this.projectCollaboratorInfo) {
+                                projectCollaborator.contract_code = Contract.contract_code;
+                                if (projectCollaborator._id && projectCollaborator?.updated) {
+                                    this.contractsService.updateProjectCollaborator(projectCollaborator)
+                                        .pipe(
+                                            takeUntil(this.destroy$)
+                                        )
+                                        .subscribe(
+                                            () => {
+                                                this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                            },
+                                            (error) => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                            }
+                                        );
+                                } else if (!projectCollaborator?._id) {
+                                    this.contractsService.addProjectCollaborator(projectCollaborator)
+                                        .pipe(
+                                            takeUntil(
+                                                this.destroy$
+                                            )
+                                        )
+                                        .subscribe(
+                                            (resp) => {
+                                                if (resp['msg_code'] === '0001') {
+                                                    this.utilsService
+                                                        .openSnackBarWithTranslate
+                                                        ('general.contracts.check.collaborator.affected', null, 5000);
+
+                                                } else {
+                                                    this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+
+                                                }
+                                            },
+                                            error => {
+                                                console.log('error', error);
+                                            },
+                                            () => {
+                                                itemsFetched += 1;
+                                                if (itemsFetched === this.projectCollaboratorInfo
+                                                    .filter(ext => !ext._id || (ext._id && ext.updated)).length) {
+
+                                                }
+                                            }
+                                        );
+                                }
+                            }
+
+                        } else {
+                            if (this.selectedContractFile.name !== '') {
+                                Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                            } else {
+                                Contract.attachments = '';
+                            }
+                            if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
+                                this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
+                            } else {
+                                this.contractsService.addContract(Contract)
+                                    .pipe(
+                                        takeUntil(this.destroy$)
+                                    )
+                                    .subscribe(
+                                        async () => {
+                                            for (const extension of this.contractExtensionInfo) {
+                                                extension.application_id = Contract.application_id;
+                                                extension.email_address = Contract.email_address;
+                                                extension.contract_code = Contract.contract_code;
+                                                if (extension.selectedExtensionFile?.name !== '' && extension.attachments) {
+                                                    extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                                                }
+                                                await this.contractsService.addContractExtension(extension)
+                                                    .pipe(
+                                                        takeUntil(
+                                                            this.destroy$
+                                                        )
+                                                    )
+                                                    .subscribe(
+                                                        async () => {
+
+                                                        },
+                                                        error => {
+                                                            console.log('error', error);
+                                                        },
+                                                        () => {
+
+                                                        }
+                                                    );
+                                            }
+                                            for (const project of this.contractProjectInfo) {
+                                                project.application_id = Contract.application_id;
+                                                project.company_email = Contract.email_address;
+                                                project.contract_code = Contract.contract_code;
+
+                                                await this.contractsService.addContractProject(project)
+                                                    .pipe(
+                                                        takeUntil(
+                                                            this.destroy$
+                                                        )
+                                                    )
+                                                    .subscribe(
+                                                        async (resp) => {
+                                                            this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+
+                                                        },
+                                                        error => {
+                                                            console.log('error', error);
+                                                        },
+                                                        () => {
+
+                                                        }
+                                                    );
+                                            }
+                                            for (const projectCollaborator of this.projectCollaboratorInfo) {
+                                                projectCollaborator.contract_code = Contract.contract_code;
+                                                await this.contractsService.addProjectCollaborator(projectCollaborator)
+                                                    .pipe(
+                                                        takeUntil(
+                                                            this.destroy$
+                                                        )
+                                                    )
+                                                    .subscribe(
+                                                        (resp1) => {
+                                                            if (resp1['msg_code'] === '0001') {
+                                                                this.utilsService
+                                                                    .openSnackBarWithTranslate
+                                                                    ('general.contracts.check.collaborator.affected', null, 5000);
+
+                                                            } else {
+                                                                this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+
+                                                            }
+                                                        },
+                                                        error => {
+                                                            console.log('error', error);
+                                                        },
+                                                        () => {
+                                                        }
+                                                    );
+
+                                            }
+                                            this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+
+                                        },
+                                        (error) => {
+                                            console.log(error);
+
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
+                                        }
+                                    );
+                            }
+
+                        }
+                    }
+                } else {
+
+                    if (this.canUpdate(this.contractId)) {
+                        if (this.selectedContractFile.name !== '') {
+                            Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                        } else {
+                            Contract.attachments = this.contractInfo.attachments;
+                        }
+                        this.contractsService.updateContract(Contract)
+                            .pipe(
+                                takeUntil(this.destroy$)
+                            )
+                            .subscribe(
+                                (res) => {
+                                    this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                },
+                                (error) => {
+                                    console.log(error);
+                                }
+                            );
+                        for (const extension of this.contractExtensionInfo) {
                             extension.application_id = Contract.application_id;
                             extension.email_address = Contract.email_address;
                             extension.contract_code = Contract.contract_code;
-                            if (extension.selectedExtensionFile?.name !== '' && extension.attachments ) {
-                              extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
+                            if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
+                                extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
                             }
-                            await this.contractsService.addContractExtension(extension)
-                                .pipe(
-                                    takeUntil(
-                                        this.destroy$
+                            if (extension._id && extension?.updated) {
+                                extension.extension_code = extension.contractExtensionKey.extension_code;
+                                this.contractsService.updateContractExtension(extension)
+                                    .pipe(
+                                        takeUntil(this.destroy$)
                                     )
-                                )
-                                .subscribe(
-                                    async (res) => {
+                                    .subscribe(
+                                        (response) => {
+                                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                        },
+                                        (error) => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
+                                        }
+                                    );
+                            } else if (!extension?._id) {
+                                this.contractsService.addContractExtension(extension)
+                                    .pipe(
+                                        takeUntil(
+                                            this.destroy$
+                                        )
+                                    )
+                                    .subscribe(
+                                        (resp) => {
+                                            this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+                                        },
+                                        error => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
 
-                                    },
-                                    error => {
-                                      console.log('error', error);
-                                    },
-                                    () => {
-
-                                    }
-                                );
-                          }
-                          for (const project of this.contractProjectInfo) {
+                                        }
+                                    );
+                            }
+                        }
+                        for (const project of this.contractProjectInfo) {
                             project.application_id = Contract.application_id;
                             project.company_email = Contract.email_address;
                             project.contract_code = Contract.contract_code;
-
-                            await this.contractsService.addContractProject(project)
-                                .pipe(
-                                    takeUntil(
-                                        this.destroy$
+                            if (project._id && project?.updated) {
+                              console.log('project ', project);
+                                project.project_code = project.ContractProjectKey?.project_code;
+                                this.contractsService.updateContractProject(project)
+                                    .pipe(
+                                        takeUntil(this.destroy$)
                                     )
-                                )
-                                .subscribe(
-                                    async (resp) => {
-                                      this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
+                                    .subscribe(
+                                        (response) => {
+                                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                        },
+                                        (error) => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
+                                        }
+                                    );
+                            } else if (!project?._id) {
+                              console.log('project ', project);
+                                this.contractsService.addContractProject(project)
+                                    .pipe(
+                                        takeUntil(
+                                            this.destroy$
+                                        )
+                                    )
+                                    .subscribe(
+                                        (resp) => {
+                                            this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+                                        },
+                                        error => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
 
-                                    },
-                                    error => {
-                                      console.log('error', error);
-                                    },
-                                    () => {
-
-                                    }
-                                );
-                          }
-                          for (const projectCollaborator of this.projectCollaboratorInfo ) {
+                                        }
+                                    );
+                            }
+                        }
+                        for (const projectCollaborator of this.projectCollaboratorInfo) {
                             projectCollaborator.contract_code = Contract.contract_code;
-                            await this.contractsService.addProjectCollaborator(projectCollaborator)
-                                .pipe(
-                                    takeUntil(
-                                        this.destroy$
+                            if (projectCollaborator._id && projectCollaborator?.updated) {
+                                this.contractsService.updateProjectCollaborator(projectCollaborator)
+                                    .pipe(
+                                        takeUntil(this.destroy$)
                                     )
+                                    .subscribe(
+                                        (response) => {
+                                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+                                        },
+                                        (error) => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
+                                        }
+                                    );
+                            } else if (!projectCollaborator?._id) {
+                                this.contractsService.addProjectCollaborator(projectCollaborator)
+                                    .pipe(
+                                        takeUntil(
+                                            this.destroy$
+                                        )
+                                    )
+                                    .subscribe(
+                                        (resp) => {
+                                            if (resp['msg_code'] === '0001') {
+                                                this.utilsService
+                                                    .openSnackBarWithTranslate
+                                                    ('general.contracts.check.collaborator.affected', null, 5000);
+
+                                            } else {
+                                                this.utilsService.openSnackBarWithTranslate('general.updated', null, 5000);
+
+                                            }
+                                        },
+                                        error => {
+                                            console.log('error', error);
+                                        },
+                                        () => {
+                                            itemsFetched += 1;
+
+                                        }
+                                    );
+                            }
+                        }
+
+                    } else {
+                        if (this.selectedContractFile.name !== '') {
+                            Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                        } else {
+                            Contract.attachments = '';
+                        }
+                        if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
+                            this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
+                        } else {
+                            this.contractsService.addContract(Contract)
+                                .pipe(
+                                    takeUntil(this.destroy$)
                                 )
                                 .subscribe(
-                                    (resp1) => {
-                                      if (resp1['msg_code'] === '0001') {
-                                        this.utilsService
-                                            .openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
+                                    async (response) => {
+                                        for (const extension of this.contractExtensionInfo) {
+                                            extension.application_id = Contract.application_id;
+                                            extension.email_address = Contract.email_address;
+                                            extension.contract_code = Contract.contract_code;
+                                            if (extension.selectedExtensionFile?.name !== '' && extension.attachments) {
+                                                extension.attachments = await this.uploadFile(extension.selectedExtensionFile?.file);
+                                            }
+                                            await this.contractsService.addContractExtension(extension)
+                                                .pipe(
+                                                    takeUntil(
+                                                        this.destroy$
+                                                    )
+                                                )
+                                                .subscribe(
+                                                    async (res) => {
 
-                                      } else {
-                                        this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
+                                                    },
+                                                    error => {
+                                                        console.log('error', error);
+                                                    },
+                                                    () => {
 
-                                      }
+                                                    }
+                                                );
+                                        }
+                                        for (const project of this.contractProjectInfo) {
+                                            project.application_id = Contract.application_id;
+                                            project.company_email = Contract.email_address;
+                                            project.contract_code = Contract.contract_code;
+                                            await this.contractsService.addContractProject(project)
+                                                .pipe(
+                                                    takeUntil(
+                                                        this.destroy$
+                                                    )
+                                                )
+                                                .subscribe(
+                                                    async (resp) => {
+                                                        this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+
+                                                    },
+                                                    error => {
+                                                        console.log('error', error);
+                                                    },
+                                                    () => {
+
+                                                    }
+                                                );
+                                        }
+                                        for (const projectCollaborator of this.projectCollaboratorInfo) {
+                                            projectCollaborator.contract_code = Contract.contract_code;
+                                            this.contractsService.addProjectCollaborator(projectCollaborator)
+                                                .pipe(takeUntil(this.destroy$))
+                                                .subscribe((resp1) => {
+                                                    if (resp1['msg_code'] === '0001') {
+                                                        this
+                                                            .utilsService
+                                                            .openSnackBarWithTranslate
+                                                            ('general.contracts.check.collaborator.affected', null, 5000);
+                                                    } else {
+                                                        this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+                                                    }
+                                                }, error => {
+                                                    console.log('error', error);
+                                                }, () => {
+                                                });
+
+                                        }
+                                        this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
+
                                     },
-                                    error => {
-                                      console.log('error', error);
+                                    (error) => {
+                                        console.log(error);
+
                                     },
                                     () => {
+                                        itemsFetched += 1;
                                     }
                                 );
-
-                          }
-                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-
-                        },
-                        (error) => {
-                          console.log(error);
-
-                        },
-                        () => {
-                          itemsFetched += 1;
                         }
-                    );
-              }
 
-            }
-          }
-        } else {
-
-          if (this.canUpdate(this.contractId)) {
-            if (this.selectedContractFile.name !== '') {
-              Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
-            } else {
-              Contract.attachments = this.contractInfo.attachments;
-            }
-            this.contractsService.updateContract(Contract)
-                .pipe(
-                    takeUntil(this.destroy$)
-                )
-                .subscribe(
-                    (res) => {
-                      this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                    },
-                    (error) => {
-                      console.log(error);
                     }
-                );
-            for (const extension of this.contractExtensionInfo) {
-              extension.application_id = Contract.application_id;
-              extension.email_address = Contract.email_address;
-              extension.contract_code = Contract.contract_code;
-              if (extension.selectedExtensionFile && extension?.selectedExtensionFile?.name !== '') {
-                extension.attachments = await this.uploadFile(extension.selectedExtensionFile.file);
-              }
-              if (extension._id && extension?.updated) {
-                extension.extension_code = extension.contractExtensionKey.extension_code;
-                this.contractsService.updateContractExtension(extension)
-                    .pipe(
-                        takeUntil(this.destroy$)
-                    )
-                    .subscribe(
-                        (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                        },
-                        (error) => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                        }
-                    );
-              } else if (!extension?._id) {
-                this.contractsService.addContractExtension(extension)
-                    .pipe(
-                        takeUntil(
-                            this.destroy$
-                        )
-                    )
-                    .subscribe(
-                        (resp) => {
-                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-                        },
-                        error => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                          if (itemsFetched === this.contractExtensionInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-
-                          }
-                        }
-                    );
-              }
-            }
-            for (const project of this.contractProjectInfo) {
-              project.application_id = Contract.application_id;
-              project.company_email = Contract.email_address;
-              project.contract_code = Contract.contract_code;
-              if (project._id && project?.updated) {
-                project.project_code = project.ContractProjectKey?.project_code;
-                this.contractsService.updateContractProject(project)
-                    .pipe(
-                        takeUntil(this.destroy$)
-                    )
-                    .subscribe(
-                        (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                        },
-                        (error) => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                        }
-                    );
-              } else if (!project?._id) {
-                this.contractsService.addContractProject(project)
-                    .pipe(
-                        takeUntil(
-                            this.destroy$
-                        )
-                    )
-                    .subscribe(
-                        (resp) => {
-                          this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-                        },
-                        error => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                          if (itemsFetched === this.contractProjectInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-
-                          }
-                        }
-                    );
-              }
-            }
-            for (const projectCollaborator of this.projectCollaboratorInfo ) {
-              projectCollaborator.contract_code = Contract.contract_code;
-              if (projectCollaborator._id && projectCollaborator?.updated) {
-                this.contractsService.updateProjectCollaborator(projectCollaborator)
-                    .pipe(
-                        takeUntil(this.destroy$)
-                    )
-                    .subscribe(
-                        (response) => {
-                          this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-                        },
-                        (error) => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                        }
-                    );
-              } else if (!projectCollaborator?._id) {
-                this.contractsService.addProjectCollaborator(projectCollaborator)
-                    .pipe(
-                        takeUntil(
-                            this.destroy$
-                        )
-                    )
-                    .subscribe(
-                        (resp) => {
-                          if (resp['msg_code'] === '0001') {
-                            this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
-
-                          } else {
-                            this.utilsService.openSnackBarWithTranslate('general.updated', null, 2000);
-
-                          }
-                        },
-                        error => {
-                          console.log('error', error);
-                        },
-                        () => {
-                          itemsFetched += 1;
-                          if (itemsFetched === this.projectCollaboratorInfo.filter(ext => !ext._id || (ext._id && ext.updated) ).length) {
-
-                          }
-                        }
-                    );
-              }
-            }
-
-          } else {
-            if (this.selectedContractFile.name !== '') {
-              Contract.attachments = await this.uploadFile(this.selectedContractFile.file);
+                }
             } else {
-              Contract.attachments = '';
+                this.utilsService.openSnackBarWithTranslate('general.contract.error.end.date', null, 5000);
+
             }
-            if (!this.utilsService.checkDate(new Date(Contract.contract_start_date), new Date(Contract.contract_end_date))) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.check.date');
-            } else {
-              this.contractsService.addContract(Contract)
-                  .pipe(
-                      takeUntil(this.destroy$)
-                  )
-                  .subscribe(
-                      async (response) => {
-                        for (const extension of this.contractExtensionInfo) {
-                          extension.application_id = Contract.application_id;
-                          extension.email_address = Contract.email_address;
-                          extension.contract_code = Contract.contract_code;
-                          if (extension.selectedExtensionFile?.name !== '' && extension.attachments ) {
-                            extension.attachments = await this.uploadFile(extension.selectedExtensionFile?.file);
-                          }
-                          await this.contractsService.addContractExtension(extension)
-                              .pipe(
-                                  takeUntil(
-                                      this.destroy$
-                                  )
-                              )
-                              .subscribe(
-                                  async (res) => {
-
-                                  },
-                                  error => {
-                                    console.log('error', error);
-                                  },
-                                  () => {
-
-                                  }
-                              );
-                        }
-                        for (const project of this.contractProjectInfo) {
-                          project.application_id = Contract.application_id;
-                          project.company_email = Contract.email_address;
-                          project.contract_code = Contract.contract_code;
-                          await this.contractsService.addContractProject(project)
-                              .pipe(
-                                  takeUntil(
-                                      this.destroy$
-                                  )
-                              )
-                              .subscribe(
-                                  async (resp) => {
-                                    this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-
-                                  },
-                                  error => {
-                                    console.log('error', error);
-                                  },
-                                  () => {
-
-                                  }
-                              );
-                        }
-                        for (const projectCollaborator of this.projectCollaboratorInfo ) {
-                          projectCollaborator.contract_code = Contract.contract_code;
-                          this.contractsService.addProjectCollaborator(projectCollaborator)
-                              .pipe(takeUntil(this.destroy$))
-                              .subscribe((resp1) => {
-                                if (resp1['msg_code'] === '0001') {
-                                  this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 2000);
-                                } else {
-                                  this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-                                }
-                              }, error => {
-                                console.log('error', error);
-                              }, () => {
-                              });
-
-                        }
-                        this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
-
-                      },
-                      (error) => {
-                        console.log(error);
-
-                      },
-                      () => {
-                        itemsFetched += 1;
-                      }
-                  );
-            }
-
-          }
+        } else {
+            this.utilsService.openSnackBar('contract.error.exist.project.collaborator.project', null, 5000);
         }
-      } else {
-        this.utilsService.openSnackBarWithTranslate('general.contract.error.end.date', null, 3000);
-
-      }
-
     } else {
-      this.utilsService.openSnackBar('general.contracts.missing.field', null, 3000);
+      this.utilsService.openSnackBar('general.contracts.missing.field', null, 5000);
     }
 
   }
@@ -1721,17 +1794,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
       switch (result.action) {
         case 'update': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
           } else {
             if (!this.utilsService.checkDate(new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 5000);
 
             }  else if (!this.utilsService.checkDate(
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contracts.ext.date.invalid', null, 5000);
             }  else {
               this.contractExtensionInfo.forEach(
                   (element, index) => {
@@ -1766,17 +1839,17 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_EXTENSION, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
           } else {
             if (!this.utilsService.checkDate(new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 5000);
 
             }  else if (!this.utilsService.checkDate(
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_EXTENSION['controls'].extension_start_date.value)
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.ext.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contracts.ext.date.invalid', null, 5000);
             }  else {
               this.extensionsList.next([]);
               this.contractExtensionInfo.push(
@@ -1793,7 +1866,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               );
               this.extensionsList.next(this.contractExtensionInfo.slice());
               this.contractForm.controls.CONTRACT_EXTENSION.reset();
-              this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
             }
 
           }
@@ -1803,40 +1876,40 @@ export class AddContractComponent implements OnInit, OnDestroy {
     }
     if (result.formGroupName === 'CONTRACT_PROJECT' ) {
       const validatedField =
-        ['start_date', 'project_desc', 'end_date', 'comment', 'project_rate', 'project_status', 'rate_currency', 'vat_nbr'];
+        ['start_date', 'project_desc', 'end_date', 'project_name', 'project_rate', 'project_status', 'rate_currency', 'vat_nbr'];
       const validatedFieldLength =
-          ['project_desc', 'comment'];
+          ['project_desc'];
       switch (result.action) {
         case 'update': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
 
           } else if (
               !this.utilsService.checkFormGroupLength(this.contractForm.controls.CONTRACT_PROJECT, validatedFieldLength, 5, 100)
           ) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 3000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 5000);
 
           } else {
             if (!this.utilsService.checkDate(new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contracts.project.date.invalid', null, 5000);
 
             } else if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
-              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
             } else if (
                 !this.utilsService.checkDateBetweenTwoDate(new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contract.addcontract.check.date.contract.projet.start.date', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contract.addcontract.check.date.contract.projet.end.date', null, 5000);
             } else {
               this.contractProjectInfo.forEach(
                   (element, index) => {
@@ -1851,8 +1924,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value;
                       this.contractProjectInfo[index].end_date =
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value;
-                      this.contractProjectInfo[index].comment =
-                          this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
+                      this.contractProjectInfo[index].project_name =
+                          this.contractForm.controls.CONTRACT_PROJECT['controls'].project_name.value;
                       this.contractProjectInfo[index].vat_nbr =
                           this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.value;
                       this.contractProjectInfo[index].category_code =
@@ -1860,6 +1933,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       this.contractProjectInfo[index].project_rate = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value;
                       this.contractProjectInfo[index].project_status = this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value;
                       this.contractProjectInfo[index].rate_currency = this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value;
+                      this.contractProjectInfo[index].comment = this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value;
                       this.contractProjectInfo[index].updated = true;
                     }
                   }
@@ -1875,34 +1949,34 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
 
           } else if (
               !this.utilsService.checkFormGroupLength(this.contractForm.controls.CONTRACT_PROJECT, validatedFieldLength, 5, 100)
           ) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 3000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.length.invalid', null, 5000);
 
           } else {
             if (!this.utilsService.checkDate(new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value),
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 5000);
 
             } else if (!this.utilsService.checkFormGroup(this.contractForm.controls.CONTRACT_PROJECT, validatedField)) {
-              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contract.addcontract.check.date.contract.projet.start.date', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_start_date.value),
                 new Date(this.contractForm.controls.INFORMATION['controls'].contract_end_date.value)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('contract.addcontract.check.date.contract.projet.end.date', null, 5000);
             } else {
               this.contractProjectList.next([]);
               this.contractProjectInfo.push(
@@ -1914,9 +1988,10 @@ export class AddContractComponent implements OnInit, OnDestroy {
                     project_rate: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.value,
                     project_desc: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.value,
                     vat_nbr: this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.value,
-                    comment: this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value,
+                    project_name: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_name.value,
                     rate_currency: this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.value ,
                     project_status: this.contractForm.controls.CONTRACT_PROJECT['controls'].project_status.value,
+                    comment: this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.value,
                   }
               );
               this.contractProjectList.next(this.contractProjectInfo.slice());
@@ -1926,13 +2001,12 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       (obj) => {
                         return { value: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
                               obj.project_code
-                          , viewValue: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
-                              obj.project_code };
+                          , viewValue: obj.project_name  };
                       }
                   )
               );
               this.contractForm.controls.CONTRACT_PROJECT.reset();
-              this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
             }
 
           }
@@ -1951,27 +2025,27 @@ export class AddContractComponent implements OnInit, OnDestroy {
       switch (result.action) {
         case 'update': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
           } else {
             if (!this.utilsService.checkDate(new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value),
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 5000);
 
             } else if (!this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField)) {
-              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value,
                 project.start_date,
                 project.end_date
 
                 )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 5000);
             } else {
               this.projectCollaboratorInfo.forEach(
                   (element, index) => {
@@ -2005,31 +2079,31 @@ export class AddContractComponent implements OnInit, OnDestroy {
           break;
         case 'addMore': {
           if (!this.utilsService.checkFormGroup(this.contractForm.controls.PROJECT_COLLABORATOR, validatedField)) {
-            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 2000);
+            this.utilsService.openSnackBarWithTranslate('general.missing.field', null, 5000);
           } else {
             if (!this.utilsService.checkDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value),
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value))) {
-              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.date.invalid', null, 5000);
 
             } else if (this.checkProjectByCollaborator(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].project_code.value,
                 this.contractForm.controls.PROJECT_COLLABORATOR['controls'].email_address.value
                 )) {
-              this.utilsService.openSnackBarWithTranslate('general.project.no.add', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.project.no.add', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].start_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 5000);
             } else if (!this.utilsService.checkDateBetweenTwoDate(
                 new Date(this.contractForm.controls.PROJECT_COLLABORATOR['controls'].end_date.value),
                 new Date(project.start_date),
                 new Date(project.end_date)
 
             )) {
-              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.check.date', null, 5000);
             } else {
               this.projectCollaboratorList.next([]);
               this.projectCollaboratorInfo.push(
@@ -2044,7 +2118,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
               );
               this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
               this.contractForm.controls.PROJECT_COLLABORATOR.reset();
-              this.utilsService.openSnackBarWithTranslate('general.add', null, 2000);
+              this.utilsService.openSnackBarWithTranslate('general.add', null, 5000);
             }
 
           }
@@ -2094,6 +2168,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
           row.data.extension_status);
       this.contractForm.controls.CONTRACT_EXTENSION['controls'].attachments.setValue(row.data.attachments);
     } else if ( row.formGroupName === 'CONTRACT_PROJECT' ) {
+      console.log('my data ', row.data);
       this.canAddContractProjectAction.next(false);
       this.canUpdateContractProjectAction.next(true);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_code.setValue(
@@ -2103,6 +2178,7 @@ export class AddContractComponent implements OnInit, OnDestroy {
       this.contractForm.controls.CONTRACT_PROJECT['controls'].end_date.setValue(row.data.end_date);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_rate.setValue(row.data.project_rate);
      this.contractForm.controls.CONTRACT_PROJECT['controls'].vat_nbr.setValue(row.data.vat_nbr);
+      this.contractForm.controls.CONTRACT_PROJECT['controls'].project_name.setValue(row.data.project_name);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].comment.setValue(row.data.comment);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].project_desc.setValue(row.data.project_desc);
       this.contractForm.controls.CONTRACT_PROJECT['controls'].rate_currency.setValue(
@@ -2243,13 +2319,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 this.contractExtensionInfo.splice(index, 1);
                 this.extensionsList.next(this.contractExtensionInfo.slice());
                 if (row.data._id) {
-                  this.contractsService.disableContractExtension(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                  this.contractsService.deleteContractExtension(row.data._id).subscribe((res1) => {
+                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
-                  }, (err) => { this.utilsService.openSnackBarWithTranslate('something wrong', null, 3000); });
+                  }, (err) => { this.utilsService.openSnackBarWithTranslate('something wrong', null, 5000); });
 
                 } else {
-                  this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                  this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
                 }
               }
@@ -2268,23 +2344,22 @@ export class AddContractComponent implements OnInit, OnDestroy {
                       (obj) => {
                         return { value: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
                             obj.project_code
-                          , viewValue: obj.ContractProjectKey?.project_code ? obj.ContractProjectKey.project_code :
-                            obj.project_code };
+                          , viewValue: obj.project_name };
                       }
                     )
                   );
                   if ((row.data._id)) {
-                    this.contractsService.disableContractProject(row.data._id).subscribe((res1) => {
-                      this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                    this.contractsService.deleteContractProject(row.data._id).subscribe((res1) => {
+                      this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
-                    }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.error', null, 3000); });
+                    }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.error', null, 5000); });
 
                   } else {
-                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
                   }
                 } else {
-                  this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 3000);
+                  this.utilsService.openSnackBarWithTranslate('general.contracts.check.collaborator.affected', null, 5000);
 
                 }
 
@@ -2301,13 +2376,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
                 this.projectCollaboratorInfo.splice(index, 1);
                 this.projectCollaboratorList.next(this.projectCollaboratorInfo.slice());
                 if (row.data._id) {
-                  this.contractsService.disableProjectCollaborator(row.data._id).subscribe((res1) => {
-                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                  this.contractsService.deleteProjectCollaborator(row.data._id).subscribe((res1) => {
+                    this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
-                  }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.error', null, 3000); });
+                  }, (err) => { this.utilsService.openSnackBarWithTranslate('general.contracts.project.collaborator.error', null, 5000); });
 
                 } else {
-                  this.utilsService.openSnackBarWithTranslate('general.remove', null, 3000);
+                  this.utilsService.openSnackBarWithTranslate('general.remove', null, 5000);
 
                 }
               }
