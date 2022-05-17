@@ -12,7 +12,8 @@ export interface IContractProject {
   rate_currency?: string;
   vat_nbr?: string;
   project_status?: string;
-  comment: string;
+  project_name?: string;
+  comment?: string;
   application_id: string;
   company_email: string;
   contract_code: string;
