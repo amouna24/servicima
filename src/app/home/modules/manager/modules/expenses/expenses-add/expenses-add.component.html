@@ -1,0 +1,392 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100">
+  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">Add
+        expense</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button mat-raised-button class="btn-small bg-pale-grey" routerLink="/">
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{"back" | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="2" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <wid-scrollbar fxLayout="row" fxFlex="85" fxLayoutAlign="center">
+    <div fxLayout="column" fxFlex="94" fxLayoutGap="15px">
+      <ng-container *ngIf="addExpenseHeader;else showExpenseHeader"  >
+        <form fxLayout="row" [formGroup]="formHeader" class="p-t-20">
+          <div fxLayout="column" fxFlexFill  @dataAppearance>
+            <div fxLayout="row" fxFlex="20" fxLayoutAlign="space-evenly ">
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  Expense title:
+                </mat-label>
+                <mat-form-field appearance="outline" class="full-width">
+                  <input formControlName="expense_title" matInput placeholder="Expense title" required>
+                </mat-form-field>
+
+              </div>
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  Expense number:
+                </mat-label>
+                <mat-form-field appearance="outline" class="full-width">
+                  <input formControlName="expense_nbr" [(ngModel)]="expenseNbr" type="number" min="0" matInput placeholder="Expense number" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 20 : 25" fxLayoutAlign="space-evenly ">
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  Supplier name:
+                </mat-label>
+                <mat-form-field appearance="outline" class="full-width">
+                  <input formControlName="supplier_name" matInput placeholder="Supplier name" required>
+                </mat-form-field>
+
+              </div>
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  Date:
+                </mat-label>
+                <mat-form-field appearance="outline">
+                  <input  formControlName="expense_date" matInput [matDatepicker]="datepicker"
+                          placeholder="Date"   required>
+                  <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
+                  <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
+                  <mat-error class="red" >
+                    {{ 'general.required' | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <form fxLayout="row" *ngIf="headerType === 'recurring'" fxFlex="20" fxLayoutAlign="space-evenly " [formGroup]="formHeaderRecurring">
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  End date:
+                </mat-label>
+                <mat-form-field appearance="outline" class="full-width">
+                  <input  formControlName="expense_final_date" matInput [matDatepicker]="datepicker"
+                          placeholder="Date"   required>
+                  <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
+                  <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
+                  <mat-error class="red" >
+                    {{ 'general.required' | translate }}</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div fxLayout="column" fxFlex="45">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="10px">
+                  <div fxLayout="column" fxFlex="20">
+                    <mat-label class="black font-size-12 required">
+                      Chaque:
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                      <input  formControlName="frequency_nbr"  type="number" min="1" matInput placeholder="Chaque" required>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="column" fxFlex="20">
+                    <mat-label class="black font-size-12 required">
+                      Period:
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                      <mat-select  formControlName="frequency_period" disableOptionCentering panelClass="panelColor"
+                                   placeholder="period" value="tax_code" required #tax >
+                          <mat-option [value]="'month'">Month</mat-option>
+                          <mat-option [value]="'year'">Year</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 35 : 45" fxLayoutAlign="space-evenly ">
+              <div fxLayout="column" fxFlex="45">
+                <div fxLayout="row">
+                  <div fxLayout="column" fxFlexFill>
+
+                    <mat-label class="black font-size-12 required">
+                      Tax:
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                      <mat-select  formControlName="tax_code" disableOptionCentering panelClass="panelColor"
+                                   placeholder="Tax" value="tax_code" required #tax >
+                        <ng-container *ngFor="let tax of companyTaxesList">
+                          <mat-option [value]="tax">{{tax.tax_desc}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div fxLayout="column" fxFlexFill>
+                    <mat-label class="black font-size-12 required">
+                      Attachment:
+                    </mat-label>
+                    <mat-form-field appearance="outline"  >
+                      <div >
+                        <input matInput matSuffix formControlName="attachment" placeholder="Attachment" readonly [(ngModel)]="attachment">
+                        <button  class="buttonImage" type="button" (click)="importAttachment()">
+                          <label >{{'resume-upload' | translate}}</label></button>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="45">
+                <mat-label class="black font-size-12 required">
+                  Description:
+                </mat-label>
+                <mat-form-field appearance="outline">
+                    <textarea matInput formControlName="expense_description" placeholder="Description"
+                              rows="7" ></textarea>
+
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" [fxFlex]="10"   >
+              <div fxLayout="column" fxFlex="97">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="15px" fxLayoutAlign="end">
+                  <div fxLayout="column">
+                    <button  mat-raised-button class="btn-small bg-pale-grey">Cancel</button>
+                  </div>
+                  <div fxLayout="column" >
+                    <button mat-raised-button class="btn-small" *ngIf="headerType === 'normal'" color="primary" (click)="addNewExpenseHeader()" [disabled]="formHeader.invalid">
+                      <span class="white">Save</span></button>
+                    <button mat-raised-button class="btn-small" color="primary" *ngIf="headerType === 'recurring'" (click)="addNewExpenseHeader()" [disabled]="formHeader.invalid || formHeaderRecurring.invalid">
+                      <span class="white">Save</span></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </ng-container>
+      <ng-template #showExpenseHeader  @dataAppearance>
+        <div fxLayout="row"  class="p-t-20 ">
+          <div fxLayout="column" fxFlexFill fxLayoutGap="15px" @dataAppearance>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
+                  <span class="font-medium">Expense title: </span>  <span class="font-regular">{{expenseHeaderObject.expense_title}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="35">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
+                  <span class="font-medium">Expense number: </span>  <span class="font-regular">{{expenseHeaderObject.expense_nbr}}</span>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
+                  <span class="font-medium">Supplier name: </span>  <span class="font-regular">{{expenseHeaderObject.supplier_name}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="35">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
+                  <span class="font-medium">Date: </span>  <span class="font-regular">{{ expenseHeaderObject.expense_date | date:'shortDate'}}</span>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" *ngIf="headerType === 'recurring'" [fxFlex]="16" fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black text-left">
+                    <span class="font-regular"><span class="font-medium">Frequence: </span>
+                      Each {{expenseHeaderRecurringObject.frequency_nbr}} per {{expenseHeaderRecurringObject.frequency_period}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="35">
+                <div fxLayout="row" fxFlexFill class="font-size-12 black text-left">
+                  <span class="font-medium">Final date: </span>
+                  <span class="font-regular">{{ expenseHeaderRecurringObject.expense_final_date | date:'shortDate'}}</span>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
+                  <span class="font-medium">Tax: </span>  <span class="font-regular">{{this.formHeader.controls.tax_code.value.tax_desc}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="35">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black " *ngIf="expenseHeaderObject.attachment !== ''">
+                  <span class="font-medium">Attachment: </span>  <button class="font-regular button-link" (click)="openFile()">Open file</button>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="30">
+                <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black text-left" *ngIf="expenseHeaderObject.expense_description !== ''">
+                    <span class="font-regular"><span class="font-medium">Description: </span>
+                      {{expenseHeaderObject.expense_description}}</span>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="55">
+              </div>
+              </div>
+
+            <div fxLayout="row" fxFlex="20" >
+              <div fxLayout="column" fxFlex="90" fxLayoutAlign=" end">
+                <button mat-raised-button class="btn-small bg-pale-grey" (click)="editExpenseHeader()"><span class="black">Edit</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <div fxLayout="row" fxLayoutAlign="center" *ngIf="addLine">
+        <div fxLayout="column" fxFlex="90" class="grey-line">
+        </div>
+        </div>
+      <div fxLayout="row" fxLayoutAlign="center" *ngIf="showExpenseLine"  @dataAppearance>
+        <div fxLayout="column" fxFlex="90" class="line-container">
+          <form [formGroup]="formLine">
+            <div fxLayout="column" fxFlexFill fxLayoutGap="15px">
+              <table>
+                <tr class="font-regular">
+                  <th>
+                    Product
+                  </th>
+                  <th>
+                    Product description
+                  </th>
+                  <th>
+                    Price without vat
+                  </th>
+                  <th>
+                    Vat
+                  </th>
+                  <th>
+                    Quantity
+                  </th>
+                  <th>
+                    TTC
+                  </th>
+                  <th style="border-right-style: hidden; border-top-style: hidden; background-color: white"></th>
+
+                </tr>
+                <tr *ngIf="emptyLines" >
+                  <td colspan="6"  style="height: 130px; min-width: 95%;" >
+                    <div fxLayout="column" fxFlexFill fxLayoutGap="10px">
+                      <div fxLayout="row" fxFlex="50" fxLayoutAlign="center end">
+                        <span class="font-medium font-size-18 cool-grey">This Expense has no row</span>
+                      </div>
+                      <div fxLayout="row" fxFlex="50" fxLayoutAlign="center">
+                        <button mat-raised-button class="btn-medium" style="height: 25px !important;" color="primary" (click)="emptyLines = false">
+                          <span class="white font-regular font-size-11">Add new row</span>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="border-right-style: hidden; border-top-style: hidden;border-bottom-style: hidden; background-color: white;min-width: 95%"></td>
+                </tr>
+                <tr *ngFor="let row of expenseLinesList let pointIndex=index" style="height: 45px;"  class="black font-light font-size-12" >
+                    <td  style="width: 14%">
+                      <span>{{row.expense_product_title}}</span>
+                    </td>
+                    <td  style="width: 27.5%">
+                      <span>{{row.expense_line_description}}</span>
+                    </td>
+                    <td  style="width: 14%">
+                      <span>{{row.price_without_vat}}</span>
+                    </td>
+                    <td  style="width: 14%">
+                      <span>{{row.vat}}</span>
+                    </td>
+                    <td  style="width: 14%">
+                      <span>{{row.quantity}}</span>
+                    </td>
+                    <td  style="width: 14%">
+                      <span class="black font-semi-bold">{{calculateTTC(row.price_without_vat,row.vat, row.quantity)}}</span>
+                    </td>
+                    <td  class="delete-button-style">
+                      <button   fxFlexFill  mat-icon-button class="white font-semi-bold "  (click)="deleteLine(row, pointIndex)"> <mat-icon svgIcon="wi-trash"  class="icon cursor-pointer">
+                      </mat-icon></button>
+                    </td>
+
+                  </tr>
+                <tr *ngIf="!emptyLines" style="height: 45px;" >
+                  <td class="warm-grey font-light" style="min-width: 13.5%">
+                    <input style="border: 0; outline: 0;" formControlName="expense_product_title" matInput placeholder="Product" required>
+                  </td>
+                  <td class="warm-grey font-light" style="min-width: 27.5%">
+                    <input style="border: 0; outline: 0;" formControlName="expense_line_description" matInput placeholder="Product description" required>
+                  </td>
+                  <td class="warm-grey font-light" style="min-width: 13.5%">
+                    <input style="border: 0; outline: 0;" type="number" formControlName="price_without_vat" matInput placeholder="0.00" min="0" (change)="calculateTTC(formLine.controls.price_without_vat.value,this.formLine.controls.vat.value, formLine.controls.quantity.value)" required>
+                  </td>
+                  <td class="warm-grey font-light" style="min-width: 13.5%">
+                    <input style="border: 0; outline: 0;" type="number" formControlName="vat" matInput placeholder="0.00" min="0" max="100"(change)="calculateTTC(formLine.controls.price_without_vat.value,this.formLine.controls.vat.value, formLine.controls.quantity.value)" required>
+                  </td>
+                  <td class="warm-grey font-light" style="min-width: 13.5%">
+                    <input style="border: 0; outline: 0;" type="number" formControlName="quantity" matInput placeholder="00" min="0" required (change)="calculateTTC(formLine.controls.price_without_vat.value,this.formLine.controls.vat.value, formLine.controls.quantity.value)">
+                  </td>
+                  <td class="warm-grey font-light" style="min-width: 13.5%" >
+                    <span class="black font-semi-bold">
+                      {{calculateTTC(formLine.controls.price_without_vat.value,this.formLine.controls.vat.value, formLine.controls.quantity.value)}}
+                    </span>
+                  </td>
+                  <td class="hide-delete-button" >
+                  </td>
+                </tr>
+              </table>
+              <button mat-raised-button class="btn-large" style="height: 25px !important;" color="primary" *ngIf="!emptyLines" (click)="addNewRow()" [disabled]="formLine.invalid">
+                <span class="white font-size-11 font-regular">Add new Row</span>
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-evenly" class="p-t-5" *ngIf="showExpenseFooter"  @dataAppearance>
+        <form fxLayout="column" fxFlex="35" [formGroup]="formFooter">
+          <mat-label class="black font-size-12 required">
+            Description:
+          </mat-label>
+          <mat-form-field appearance="outline">
+                    <textarea matInput formControlName="expense_comment" placeholder="Description"
+                              rows="7" required></textarea>
+
+          </mat-form-field>
+        </form>
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign="end end" class="p-b-10">
+          <div fxLayout="row" fxLayoutGap="50px">
+            <div fxLayout="column" class="font-size-12 black">
+                <span class="font-regular">Sub-total:</span>
+                <span class="font-regular">TVA:</span>
+                <span class="font-semi-bold">Total:</span>
+            </div>
+            <div fxLayout="column" class="font-size-12 black">
+              <span class="font-regular">{{calculateExpenses('subTotal')}} $</span>
+              <span class="font-regular">{{calculateExpenses('vat')}} $</span>
+              <span class="font-semi-bold">{{calculateExpenses('total')}} $</span>
+            </div>
+
+          </div>
+        </div>
+       </div>
+      <div fxLayout="row"  class="p-t-5" *ngIf="showExpenseFooter"  @dataAppearance>
+        <div fxLayout="column" fxFlex="95">
+          <div fxLayout="row" fxFlexFill fxLayoutAlign="end" fxLayoutGap="15px">
+            <div fxLayout="column">
+              <button  mat-raised-button class="btn-small bg-pale-grey" (click)="cancelExpense()">Cancel</button>
+            </div>
+            <div fxLayout="column" >
+              <button mat-raised-button class="btn-small" color="primary" (click)="addOrUpdateExpense()" [disabled]="expenseLinesList.length === 0">
+                <span class="white">Submit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+
+    </wid-scrollbar>
+  </div>

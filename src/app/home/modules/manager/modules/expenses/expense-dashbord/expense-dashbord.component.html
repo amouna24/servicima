@@ -1,0 +1,133 @@
+<div class="border-radius-20" fxLayout="row" style="min-height: 97%" fxLayoutGap="20px">
+  <div fxLayout="column" fxFlex="50" fxLayoutGap="20px">
+    <div fxLayout="row" class="bg-white border-radius-20" fxFlex>
+      <div fxLayout="column" fxFlexFill >
+        <div fxLayout="row" fxFlex="20" class="p-l-20 p-r-20 p-t-20">
+          <span class="black font-size-23 font-regular">TVA:</span>
+        </div>
+        <div fxLayout="row" fxFlex="40"  class="p-l-20 p-r-20 p-t-20" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="30" >
+            <div fxLayout="row" fxFlexFill class="green-bloc">
+                <div fxLayout="column" fxFlexFill fxLayoutGap="5px" fxLayoutAlign="center center" class="font-size-15 font-regular">
+                  <div fxLayout="row">
+                    <span class="secondaryColor">Collected</span>
+                  </div>
+                  <div fxLayout="row">
+                    <span class="steel"> {{sumCollected}}</span>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="30">
+            <div fxLayout="row" fxFlexFill class="yellow-bloc">
+              <div fxLayout="column" fxFlexFill fxLayoutGap="5px" fxLayoutAlign="center center" class="font-size-15 font-regular">
+                <div fxLayout="row">
+                  <span class="thirdColor">Deductible</span>
+                </div>
+                <div fxLayout="row">
+                  <span class="steel"> {{sumTva}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="30">
+            <div fxLayout="row" fxFlexFill class="blue-bloc">
+              <div fxLayout="column" fxFlexFill fxLayoutGap="5px" fxLayoutAlign="center center" class="font-size-15 font-regular">
+                <div fxLayout="row">
+                  <span class="primaryColor">To Pay</span>
+                </div>
+                <div fxLayout="row">
+                  <span class="steel"> {{sumCollected -sumTva}}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="20" fxLayoutAlign="center" class="p-t-25" fxLayoutGap="34px">
+          <div fxLayout="column" fxFlex="20">
+              <mat-form-field appearance="outline" class="height-50">
+                <mat-select  disableOptionCentering panelClass="panelColor"
+                             placeholder="period"  required [(ngModel)]="period" (ngModelChange)="getYearsOrMonthsList(); getTVA()">
+                  <mat-option [value]="'month'">Month</mat-option>
+                  <mat-option [value]="'year'">Annual</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="20">
+            <mat-form-field appearance="outline">
+            <mat-select  disableOptionCentering panelClass="panelColor"
+                         placeholder="Year/month"  required  [(ngModel)]="selectedYearOrMonth" (ngModelChange)="getTVA()">
+              <ng-container *ngFor="let oneYearOrMonth of listOfMonthsOrYears">
+                <mat-option [value]="oneYearOrMonth">{{oneYearOrMonth}}</mat-option>
+              </ng-container>
+            </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" class="bg-white border-radius-20" fxFlex>
+      <div fxLayout="column" fxFlexFill class="p-l-25 p-r-25">
+      <div fxLayout="row" fxFlex="20" class="p-t-20">
+        <div fxLayout="column" fxFlex fxLayoutAlign="center">
+          <span class="black font-size-22 font-regular">Graph turnover</span>
+        </div>
+        <div fxLayout="column" fxFlex="20">
+          <mat-form-field appearance="outline" >
+            <mat-select  disableOptionCentering panelClass="panelColor"
+                         placeholder="Year"  required [(ngModel)]="yearGraph"  >
+              <mat-option [value]="2022">2022</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="10">
+        <div fxLayout="column" fxFlexFill>
+          <span class="font-size-16 font-extra-light" style="color: #7c828a">{{yearGraph}}</span>
+          <div class="gray-line"></div>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="60">
+        <ngx-charts-bar-vertical
+          [scheme]="colorScheme"
+          [results]="single"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          >
+        </ngx-charts-bar-vertical>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="column"  fxFlex="50">
+      <div fxLayout="row" class="bg-white border-radius-20" fxFlexFill>
+        <div fxLayout="column" fxFlexFill class="p-t-20 p-b-40 p-l-25 p-r-25">
+          <div fxLayout="row" fxFlex="7" fxLayoutAlign=" center">
+            <span class="black font-size-23 font-regular">Upcoming payment</span>
+          </div>
+          <div fxLayout="row" fxFlex="90">
+            <wid-scrollbar fxLayout="column" fxFlexFill *ngFor="let upcoming of upcomingPaymentList">
+              <div fxLayout="row" style="height: 57px; border-bottom: solid 1px #d6d9dc" class="m-b-16">
+                <div fxLayout="column" fxFlex>
+                  <div fxLayout="row">
+                    <span class="steel font-size-18 font-regular">{{ upcoming.date | date:'mediumDate'}}</span>
+                  </div>
+                  <div fxLayout="row">
+                    <span class="steel font-size-12 font-extra-light">{{upcoming.supplier_name}}</span>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex fxLayoutAlign="center end">
+                  <span class="red font-size-18 font-regular p-r-10">{{upcoming.price}} €</span>
+                </div>
+              </div>
+
+
+            </wid-scrollbar>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

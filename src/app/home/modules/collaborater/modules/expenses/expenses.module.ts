@@ -5,10 +5,13 @@ import { ExpensesRoutingModule } from './expenses-routing.module';
 import { ExpensesComponent } from './expenses.component';
 
 @NgModule({
-  declarations: [ExpensesComponent],
-  imports: [
-    CommonModule,
-    ExpensesRoutingModule
-  ]
+    declarations: [ExpensesComponent],
+    exports: [
+        ExpensesComponent
+    ],
+    imports: [
+        CommonModule,
+        ExpensesRoutingModule
+    ]
 })
 export class ExpensesModule { }
