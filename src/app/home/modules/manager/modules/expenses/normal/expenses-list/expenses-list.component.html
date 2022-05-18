@@ -3,7 +3,7 @@
   [tableCode]="'EXPENSE-LIST'"
   [isLoading]="isLoading"
   [buttonAdd]="false"
-  [header]="{ title: 'Expenses management' | translate}"
+  [header]="{ title: 'Expenses management', addActionURL: '/manager/expenses/expenses-normal/expense-add', feature:'EXPENSES_ACCESS', addActionText: 'Add new expense'}"
   (rowActionData)="switchAction($event)"
   (pagination)="loadMoreItems($event)"
   [allowedActions]="[{ name: 'Archive expense', feature: 'EXPENSES_ACCESS'}]">

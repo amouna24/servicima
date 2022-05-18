@@ -3,7 +3,7 @@
   [tableCode]="'EXPENSES-RECURRING-LIST'"
   [isLoading]="isLoading"
   [buttonAdd]="false"
-  [header]="{ title: 'Expenses recurring management' | translate}"
+  [header]="{ title: 'Expenses recurringmanagement', addActionURL: '/manager/expenses/expenses-recurring/expense-add-recurring', feature:'EXPENSES_ACCESS', addActionText: 'Add new expense'}"
   (rowActionData)="switchAction($event)"
   (pagination)="loadMoreItems($event)"
   [allowedActions]="[{ name: 'Archive expense', feature: 'EXPENSES_ACCESS'}]">
