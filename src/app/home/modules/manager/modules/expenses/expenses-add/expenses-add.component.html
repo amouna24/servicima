@@ -27,6 +27,8 @@
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input formControlName="expense_title" matInput placeholder="Expense title" required>
+                  <mat-error class="red" >
+                    {{ 'general.required' | translate }}</mat-error>
                 </mat-form-field>
 
               </div>
@@ -36,6 +38,8 @@
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input formControlName="expense_nbr" [(ngModel)]="expenseNbr" type="number" min="0" matInput placeholder="Expense number" required>
+                  <mat-error class="red" >
+                    {{ 'general.required' | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -46,6 +50,8 @@
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input formControlName="supplier_name" matInput placeholder="Supplier name" required>
+                  <mat-error class="red" >
+                    {{ 'general.required' | translate }}</mat-error>
                 </mat-form-field>
 
               </div>
@@ -86,6 +92,8 @@
                     </mat-label>
                     <mat-form-field appearance="outline">
                       <input  formControlName="frequency_nbr"  type="number" min="1" matInput placeholder="Chaque" required>
+                      <mat-error class="red" >
+                        {{ 'general.required' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
                   <div fxLayout="column" fxFlex="20">
@@ -98,6 +106,8 @@
                           <mat-option [value]="'month'">Month</mat-option>
                           <mat-option [value]="'year'">Year</mat-option>
                       </mat-select>
+                      <mat-error class="red" >
+                        {{ 'general.required' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -119,12 +129,14 @@
                           <mat-option [value]="tax">{{tax.tax_desc}}</mat-option>
                         </ng-container>
                       </mat-select>
+                      <mat-error class="red" >
+                        {{ 'general.required' | translate }}</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
                 <div fxLayout="row">
                   <div fxLayout="column" fxFlexFill>
-                    <mat-label class="black font-size-12 required">
+                    <mat-label class="black font-size-12">
                       Attachment:
                     </mat-label>
                     <mat-form-field appearance="outline"  >
@@ -138,7 +150,7 @@
                 </div>
               </div>
               <div fxLayout="column" fxFlex="45">
-                <mat-label class="black font-size-12 required">
+                <mat-label class="black font-size-12 ">
                   Description:
                 </mat-label>
                 <mat-form-field appearance="outline">
@@ -346,7 +358,7 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="space-evenly" class="p-t-5" *ngIf="showExpenseFooter"  @dataAppearance>
         <form fxLayout="column" fxFlex="35" [formGroup]="formFooter">
-          <mat-label class="black font-size-12 required">
+          <mat-label class="black font-size-12">
             Description:
           </mat-label>
           <mat-form-field appearance="outline">
