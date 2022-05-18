@@ -20,7 +20,7 @@
       <ng-container *ngIf="addExpenseHeader;else showExpenseHeader"  >
         <form fxLayout="row" [formGroup]="formHeader" class="p-t-20">
           <div fxLayout="column" fxFlexFill  @dataAppearance>
-            <div fxLayout="row" fxFlex="20" fxLayoutAlign="space-evenly ">
+            <div fxLayout="row" fxFlex="25" fxLayoutAlign="space-evenly ">
               <div fxLayout="column" fxFlex="45">
                 <mat-label class="black font-size-12 required">
                   Expense title:
@@ -37,9 +37,11 @@
                   Expense number:
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
-                  <input formControlName="expense_nbr" [(ngModel)]="expenseNbr" type="number" min="0" matInput placeholder="Expense number" required>
-                  <mat-error class="red" >
+                  <input formControlName="expense_nbr" [(ngModel)]="expenseNbr" type="number" min="1" matInput placeholder="Expense number" required>
+                  <mat-error class="red" *ngIf="formHeader.controls.expense_nbr.errors?.required">
                     {{ 'general.required' | translate }}</mat-error>
+                  <mat-error class="red" *ngIf="formHeader.controls.expense_nbr.errors?.min">
+                    You should set a positive number</mat-error>
                 </mat-form-field>
               </div>
             </div>

@@ -36,7 +36,7 @@ export class ExpensesAddComponent implements OnInit {
   formHeaderRecurring: FormGroup;
   expenseHeaderObject: IExpenseHeaderModel;
   companyEmailAddress: string;
-  expenseNbr = 0;
+  expenseNbr = 1;
   attachment = '';
   expenseLinesList = [];
   addExpenseHeader: boolean;
@@ -86,7 +86,7 @@ export class ExpensesAddComponent implements OnInit {
       supplier_name: [this.expenseHeaderObject ? this.expenseHeaderObject.supplier_name : '', [Validators.required]],
       expense_date: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_date : '', [Validators.required]],
       tax_code: [this.expenseHeaderObject ? this.expenseHeaderObject.tax_code : '', [Validators.required]],
-      expense_nbr: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_nbr : '', [Validators.required]],
+      expense_nbr: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_nbr : '', [Validators.required, Validators.min(1)]],
       attachment: this.expenseHeaderObject ? this.expenseHeaderObject.attachment : '',
       expense_description: this.expenseHeaderObject ? this.expenseHeaderObject.expense_description : '',
     });
