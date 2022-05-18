@@ -184,7 +184,7 @@
       <ng-template #showExpenseHeader  @dataAppearance>
         <div fxLayout="row"  class="p-t-20 ">
           <div fxLayout="column" fxFlexFill fxLayoutGap="15px" @dataAppearance>
-            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+            <div fxLayout="row"  fxLayoutAlign="space-evenly">
               <div fxLayout="column" fxFlex="50">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
                   <span class="font-medium">Expense title: </span>  <span class="font-regular">{{expenseHeaderObject.expense_title}}</span>
@@ -196,7 +196,7 @@
                 </div>
               </div>
             </div>
-            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+            <div fxLayout="row"  fxLayoutAlign="space-evenly">
               <div fxLayout="column" fxFlex="50">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
                   <span class="font-medium">Supplier name: </span>  <span class="font-regular">{{expenseHeaderObject.supplier_name}}</span>
@@ -208,7 +208,7 @@
                 </div>
               </div>
             </div>
-            <div fxLayout="row" *ngIf="headerType === 'recurring'" [fxFlex]="16" fxLayoutAlign="space-evenly">
+            <div fxLayout="row" *ngIf="headerType === 'recurring'"  fxLayoutAlign="space-evenly">
               <div fxLayout="column" fxFlex="50">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black text-left">
                     <span class="font-regular"><span class="font-medium">Frequence: </span>
@@ -222,7 +222,7 @@
                 </div>
               </div>
             </div>
-            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
+            <div fxLayout="row" fxLayoutAlign="space-evenly">
               <div fxLayout="column" fxFlex="50">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black ">
                   <span class="font-medium">Tax: </span>  <span class="font-regular">{{this.formHeader.controls.tax_code.value.tax_desc}}</span>
@@ -234,8 +234,8 @@
                 </div>
               </div>
             </div>
-            <div fxLayout="row" [fxFlex]="headerType === 'recurring' ? 16 : 20" fxLayoutAlign="space-evenly">
-              <div fxLayout="column" fxFlex="30">
+            <div fxLayout="row"  fxLayoutAlign="space-evenly">
+              <div fxLayout="column" fxFlex="30" style="display: inline-block; word-break: break-word">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="3px" class="font-size-12 black text-left" *ngIf="expenseHeaderObject.expense_description !== ''">
                     <span class="font-regular"><span class="font-medium">Description: </span>
                       {{expenseHeaderObject.expense_description}}</span>
@@ -244,7 +244,6 @@
               <div fxLayout="column" fxFlex="55">
               </div>
               </div>
-
             <div fxLayout="row" fxFlex="20" >
               <div fxLayout="column" fxFlex="90" fxLayoutAlign=" end">
                 <button mat-raised-button class="btn-small bg-pale-grey" (click)="editExpenseHeader()"><span class="black">Edit</span></button>
@@ -307,10 +306,10 @@
                       <span>{{row.expense_line_description}}</span>
                     </td>
                     <td  style="width: 14%">
-                      <span>{{row.price_without_vat}}</span>
+                      <span>{{row.price_without_vat}}$</span>
                     </td>
                     <td  style="width: 14%">
-                      <span>{{row.vat}}</span>
+                      <span>{{row.vat}}%</span>
                     </td>
                     <td  style="width: 14%">
                       <span>{{row.quantity}}</span>
