@@ -294,11 +294,12 @@ export class ExpensesAddComponent implements OnInit {
   calculateExpenses(params) {
     let subTotal = 0;
     let vat = 0;
+    let total = 0;
     this.expenseLinesList.map((expense) => {
       subTotal += expense.price_without_vat * expense.quantity;
       vat += ((expense.vat * expense.price_without_vat) / 100) * expense.quantity;
+      total += subTotal + vat;
     });
-    const total = this.expenseLinesList.length !== 0 ? subTotal + ((vat * 100) / subTotal) : 0;
     if (params === 'total') {
       return total.toFixed(2);
     } else if (params === 'vat') {
@@ -316,8 +317,7 @@ export class ExpensesAddComponent implements OnInit {
       withoutVat !== '' &&
       quantity !== '' &&
       vat !== '') {
-      return ((withoutVatNumber +
-        ((withoutVatNumber * vatNumber) / 100)) * quantityNumber).toFixed(2);
+      return ((withoutVatNumber + ((vatNumber * withoutVatNumber) / 100)) * quantityNumber).toFixed(2);
     } else {
       return '00.00';
     }
