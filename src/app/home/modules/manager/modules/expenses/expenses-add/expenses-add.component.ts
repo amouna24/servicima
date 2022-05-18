@@ -82,13 +82,13 @@ export class ExpensesAddComponent implements OnInit {
 
   createFormHeader() {
     this.formHeader = this.fb.group({
-      expense_title: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_title : '', [Validators.required]],
-      supplier_name: [this.expenseHeaderObject ? this.expenseHeaderObject.supplier_name : '', [Validators.required]],
-      expense_date: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_date : '', [Validators.required]],
-      tax_code: [this.expenseHeaderObject ? this.expenseHeaderObject.tax_code : '', [Validators.required]],
-      expense_nbr: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_nbr : '', [Validators.required, Validators.min(1)]],
-      attachment: this.expenseHeaderObject ? this.expenseHeaderObject.attachment : '',
-      expense_description: this.expenseHeaderObject ? this.expenseHeaderObject.expense_description : '',
+      expense_title: ['', [Validators.required]],
+      supplier_name: ['', [Validators.required]],
+      expense_date: ['', [Validators.required]],
+      tax_code: ['', [Validators.required]],
+      expense_nbr: ['', [Validators.required, Validators.min(1)]],
+      attachment: '',
+      expense_description: '',
     });
     if (this.headerType === 'recurring') {
       this.createFormHeaderRecurring();
@@ -376,13 +376,16 @@ export class ExpensesAddComponent implements OnInit {
     this.createFormHeaderRecurring();
     this.createFormLine();
     this.createFormHeader();
+    this.getOldForms();
     this.addExpenseHeader = true;
-    this.emptyLines = true;
     this.addLine = false;
     this.showExpenseLine = false;
     this.showExpenseFooter = false;
   }
-
+  cancelExpenseHeaderForm() {
+    this.createFormHeader();
+    this.getOldForms();
+  }
   getOldForms() {
     if (this.route.snapshot.queryParams['expense_nbr']) {
     this.utilsService.verifyCurrentRoute('/manager/expenses/expenses-normal/expense-list').subscribe( (data) => {

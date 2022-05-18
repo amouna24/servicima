@@ -166,7 +166,7 @@
               <div fxLayout="column" fxFlex="97">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="15px" fxLayoutAlign="end">
                   <div fxLayout="column">
-                    <button  mat-raised-button class="btn-small bg-pale-grey">Cancel</button>
+                    <button  mat-raised-button class="btn-small bg-pale-grey" (click)="cancelExpenseHeaderForm()">Cancel</button>
                   </div>
                   <div fxLayout="column" >
                     <button mat-raised-button class="btn-small" *ngIf="headerType === 'normal'" color="primary" (click)="addNewExpenseHeader()" [disabled]="formHeader.invalid">
