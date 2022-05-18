@@ -55,7 +55,7 @@
                 </mat-label>
                 <mat-form-field appearance="outline">
                   <input  formControlName="expense_date" matInput [matDatepicker]="datepicker"
-                          placeholder="Date"   required>
+                          placeholder="dd/mm/yyyy"   required>
                   <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
                   <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
                   <mat-error class="red" >
@@ -70,7 +70,7 @@
                 </mat-label>
                 <mat-form-field appearance="outline" class="full-width">
                   <input  formControlName="expense_final_date" matInput [matDatepicker]="datepicker"
-                          placeholder="Date"   required>
+                          placeholder="dd/mm/yyyy"   required>
                   <mat-datepicker-toggle matSuffix [for]="datepicker" ></mat-datepicker-toggle>
                   <mat-datepicker startView="year" #datepicker color="primary" ></mat-datepicker>
                   <mat-error class="red" >
