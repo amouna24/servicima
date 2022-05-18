@@ -57,7 +57,9 @@ th {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-
+.p-l-32 {
+  padding-left: 32px
+}
 .line-container {
   tr:not(:last-child):hover  {
     background-color: #e8f1f9 !important;

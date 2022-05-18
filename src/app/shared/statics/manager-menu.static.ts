@@ -314,48 +314,16 @@ export const managerMenu: IMenu[] = [
       {
         state: 'expenses-normal',
         name: 'Expenses',
-        type: 'sub',
+        type: 'link',
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
-        child: [
-          {
-            state: 'expense-list',
-            name: 'Expense list',
-            type: 'link',
-            icon: 'wi-billings',
-            feature: 'EXPENSES_ACCESS',
-          },
-          {
-            state: 'expense-add',
-            name: 'Expense add',
-            type: 'link',
-            icon: 'wi-billings',
-            feature: 'EXPENSES_ACCESS',
-          },
-        ]
       },
       {
         state: 'expenses-recurring',
         name: 'Expense recurring',
-        type: 'sub',
+        type: 'link',
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
-        child: [
-          {
-            state: 'expense-add-recurring',
-            name: 'Recurring Expense',
-            type: 'link',
-            icon: 'wi-billings',
-            feature: 'EXPENSES_ACCESS',
-          },
-          {
-            state: 'expense-list-recurring',
-            name: 'Recurring Expenses list',
-            type: 'link',
-            icon: 'wi-billings',
-            feature: 'EXPENSES_ACCESS',
-          },
-        ]
       },
     ]
   }

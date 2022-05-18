@@ -13,7 +13,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'expense-list',
+    path: '',
     component: ExpensesListComponent,
     data: {
       breadcrumb: 'expenses list',
