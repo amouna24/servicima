@@ -113,8 +113,8 @@
     font-weight: normal;
   }
   .large-col {
-    width:  30% !important;
-    min-width:  30% !important;
+    width:  25% !important;
+    min-width:  25% !important;
     font-weight: normal;
   }
   .medium-col {
@@ -264,4 +264,53 @@ button[disabled]{
 .clean-red{
   background: white !important;
   color: white !important;
+}
+.invoice {
+::ng-deep {
+.mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+}
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+  -moz-appearance:textfield; /* Firefox */
+}
+.statusInvoice {
+::ng-deep {
+  .mat-form-field-infix {
+   padding:0;
+    border-top: 0.64375em solid transparent;
+  }
+
+  ::ng-deep.mat-form-field-appearance-standard .mat-form-field-flex {
+      padding-top: 0;
+    }
+
+}
+::ng-deep .mat-select-value {
+  text-align: center !important;
+}
+  .not-empty-select.mat-selected {
+    color: #67809f !important;
+  }
+
+  ::ng-deep.mat-select-value-text {
+    color: #67809f !important;
+    font-weight: 500 !important;
+  }
+}
+.selectService{
+::ng-deep.mat-select-arrow {
+  border: none;
+}
+}
+::ng-deep input {
+overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }

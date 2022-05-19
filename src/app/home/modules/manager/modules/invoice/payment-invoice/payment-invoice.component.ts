@@ -84,7 +84,7 @@ export class PaymentInvoiceComponent implements OnInit {
    * @description : add payment mode
    */
   addPaymentMode() {
-    this.router.navigate(['/manager/settings/role']);
+    this.router.navigate(['/manager/settings/payment-methods']);
     this.dialogRef.close();
   }
 

@@ -58,7 +58,7 @@ export class DisabledFormDirective implements OnInit {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.form.enable();
-      if (this.disabledFields.length > 0) {
+      if (this.disabledFields?.length > 0) {
       this.disabledFields.map((field) => {
         this.form.controls[field].disable();
       });

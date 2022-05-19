@@ -138,7 +138,27 @@
             </div>
           </div>
         </div>
+      <div [ngSwitch]="selectedValue1?.name" @fade>
+        <div *ngSwitchCase="'invoice'" @fade >
+          <div *ngIf="selectedValue1.nbtItems >0 "  @fade style="display: flex;justify-content: center">
+          <div  style="display: flex;    margin: 10px; border-radius: 5px;    border: 1px solid #f3f6f9;  width: 93%;  padding: 7px;" class=" bg-pale-grey" s>
 
+     <div fxFlex="10" style="display: flex;justify-content: center">
+       {{selectedValue1.nbtItems}}
+     </div>
+            <div fxFlex="50">Factures selectionnées</div>
+       <div fxFlex="20" style="display: flex;gap: 5px;flex-wrap: wrap;" >
+         <div>Total</div>
+         <div>{{selectedValue1.total}}</div>
+       </div>
+            <div fxFlex="20"  style="display: flex;gap: 5px;flex-wrap: wrap" >
+              <div>Solde</div>
+              <div>{{selectedValue1.balance}}</div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
       <div *ngIf="dataSource?.length === 0 && isLoading.getValue() === false" style=" min-height: 287px;" >
         <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" class="container-no-data line-height-0" >
           <div fxFlex="90" fxLayout="column" fxLayoutAlign="center center" [style]="{border: 'solid 3px #e8f1f9', borderRadius: '15px', height: '50%'}" >

@@ -234,9 +234,46 @@ export const managerMenu: IMenu[] = [
     {
         state: 'invoices',
         name: 'manager.menu.static.billings',
-        type: 'link',
+        type: 'sub',
         icon: 'wi-billings',
         feature: 'INVOICING_ACCESS',
+        children: [
+        {
+          state: 'list',
+          name: 'manager.menu.static.invoices',
+          icon: '',
+          feature: 'INVOICING_ACCESS', // à changer
+          type: 'link',
+        },
+          {
+            state: 'pending',
+            name: 'manager.menu.static.invoice.pending',
+            icon: '',
+            feature: 'INVOICING_ACCESS', // à changer
+            type: 'link',
+          },
+        {
+          state: 'draft',
+          name: 'manager.menu.static.invoice.draft',
+          icon: '',
+          feature: 'INVOICING_ACCESS',
+          type: 'link',
+        },
+        {
+          state: 'paid',
+          name: 'manager.menu.static.invoice.paid',
+          icon: '',
+          feature: 'INVOICING_ACCESS',
+          type: 'link',
+        },
+        {
+          state: 'archived',
+          name: 'manager.menu.static.invoice.archived',
+          icon: '',
+          feature: 'INVOICING_ACCESS',
+          type: 'link',
+        },
+      ]
     },
     {
     state: 'test',

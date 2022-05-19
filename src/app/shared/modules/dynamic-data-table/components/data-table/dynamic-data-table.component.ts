@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { IConfig } from '@shared/models/configDataTable.model';
 import { IDataListModel } from '@shared/models/dataList.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { dataAppearance } from '@shared/animations/animations';
+import { dataAppearance, Fade } from '@shared/animations/animations';
 import { UserService } from '@core/services/user/user.service';
 
 import { environment } from '@environment/environment';
@@ -23,7 +23,8 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   templateUrl: './dynamic-data-table.component.html',
   styleUrls: ['./dynamic-data-table.component.scss'],
   animations: [
-    dataAppearance
+    dataAppearance,
+    Fade
   ]
 })
 export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDestroy {
@@ -44,6 +45,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() isLoading = new BehaviorSubject<boolean>(false);
   @Input() allowedActions: any;
   @Input() buttonAdd: boolean;
+  @Input() selectedValue1: any;
   @Input() setAvatar: { columnCode: string, imgSrc: string};
   @Output() rowActionData = new EventEmitter<{ actionType: string, data: any }>();
   @Output() pagination = new EventEmitter<{ limit: number, offset: number, search?: any, searchBoolean?: boolean }>();
@@ -128,6 +130,9 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         () => {
           this.pagination.emit({ limit: this.itemsPerPageControl.value, offset: 0,  search: this.searchT,   searchBoolean: this.searchBoolean});
           this.currentPage = this.nbrPages ? this.nbrPages[0] : 1;
+          this.listChecked = [];
+          this.changeColorAndCheckRow('white', false);
+          this.checked.emit(this.listChecked);
         },
       );
     this.showAllText = false;
@@ -206,6 +211,12 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    * @param index: index of column
    */
   selected(type: string, index: number): void {
+    if (this.defaultRes?.results?.length === 0 || (this.defaultRes
+      && Object.keys(this.defaultRes).length === 0
+      && Object.getPrototypeOf(this.defaultRes) === Object.prototype ) ) {
+      this.getDataSource();
+    }
+
     this.tableData.next(this.defaultRes);
     this.searchT = null;
     this.selections = [];
@@ -659,6 +670,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    *************************************************************************/
   actionRowData(action: any, rowData: object) {
     this.rowActionData.emit({ actionType: action, data: rowData });
+    this.checked.emit([]);
     this.closePanel.close();
     this.listChecked = [];
     this.tableData.getValue()?.length ? this.tableData.getValue() : this.tableData.getValue()['results'].map((data) => {
@@ -866,6 +878,9 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
       }
         break;
     }
+    this.listChecked = [];
+    this.changeColorAndCheckRow('white', false);
+    this.checked.emit(this.listChecked);
   }
 
   sendColors(columns, condValue): string {

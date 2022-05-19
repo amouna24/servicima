@@ -1,6 +1,6 @@
-<div class="licence-container"
+<div class="licence-container timesheetSettings"
      fxLayout="column" fxLayoutGap="20px" fxFlexOffset="3" fxFlex="94">
-  <div fxLayout="row" fxFlex="10" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
+  <div fxLayout="row" fxFlex="15" fxLayoutAlign="space-around center" class="bg-white border-radius-20">
     <div fxLayout="column" fxFlex="56">
       <h1 class="steel font-size-24 font-medium">{{'timesheet.settings.title' | translate}}</h1>
     </div>
@@ -19,7 +19,7 @@
            fxLayout="column" fxLayoutAlign="start start">
         <div fxLayout="column" fxFlex="90"   class="m-l-40 m-t-30 font-size-12 full-width" fxLayoutGap="10px" fxLayoutAlign="space-evenly" >
           <div fxLayout="row" >
-            <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
+            <div fxLayout="column" fxFlex="40" fxLayoutAlign="center start">
               <div>{{'timesheet.settings.working.hours.per.day' | translate}}</div>
             </div>
             <div fxLayout="column" fxFlex="5">
@@ -33,7 +33,7 @@
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center">
-            <div fxLayout="column" fxFlex="30">
+            <div fxLayout="column" fxFlex="40">
               {{'timesheet.settings.overtime.per.day' | translate}} </div>
             <div fxLayout="column" fxFlex="5">
               <mat-form-field appearance="outline" class="no-padding">
@@ -46,7 +46,7 @@
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center">
-            <div fxLayout="column" fxFlex="30">
+            <div fxLayout="column" fxFlex="40">
               {{'timesheet.settings.sunday.rate' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
@@ -60,7 +60,7 @@
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center">
-            <div fxLayout="column" fxFlex="30">
+            <div fxLayout="column" fxFlex="40">
               {{'timesheet.settings.saturday.rate' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
@@ -74,7 +74,7 @@
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center">
-            <div fxLayout="column" fxFlex="30">
+            <div fxLayout="column" fxFlex="40">
               {{'timesheet.settings.holiday.rate' | translate}}
             </div>
             <div fxLayout="column" fxFlex="5">
@@ -94,13 +94,13 @@
           <div fxLayout="row" fxLayoutGap="20px"  *canBeDisplayed="{'feature':'SETTINGS_UPDATE_TIMESHEET'}"  >
             <button  mat-button mat-raised-button color="primary"  class="btn-small white" >
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <span class="font-size-14" (click)="updateTimesheetSetting()">{{'timesheet.settings.save' | translate}}</span>
+                <span class="font-size-11 white" (click)="updateTimesheetSetting()">{{'timesheet.settings.save' | translate}}</span>
               </div>
             </button>
            <button  mat-button mat-raised-button (click)="cancel()"  class="btn-small bg-pale-grey black-three"
           >
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-              <span class="font-size-14">{{'timesheet.settings.cancel' | translate}}</span>
+              <span class="font-size-11">{{'timesheet.settings.cancel' | translate}}</span>
             </div>
           </button>
         </div>
