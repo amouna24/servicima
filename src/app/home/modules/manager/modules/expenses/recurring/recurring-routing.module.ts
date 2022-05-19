@@ -13,7 +13,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'expense-list-recurring',
+    path: '',
     component: ExpenseRecurringListComponent,
     data: {
       breadcrumb: 'recurring expenses list',

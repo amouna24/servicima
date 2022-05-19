@@ -52,6 +52,10 @@ export class ExpensesAddComponent implements OnInit {
   uploadedFileReader: string;
   expenseFooterObject: IExpenseFooterModel;
   oldExpenseLineList: IExpenseLineModel[];
+  maxEndDate: Date;
+  minEndDate: Date;
+  minStartDate: Date;
+  maxStartDate: Date;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -82,13 +86,13 @@ export class ExpensesAddComponent implements OnInit {
 
   createFormHeader() {
     this.formHeader = this.fb.group({
-      expense_title: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_title : '', [Validators.required]],
-      supplier_name: [this.expenseHeaderObject ? this.expenseHeaderObject.supplier_name : '', [Validators.required]],
-      expense_date: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_date : '', [Validators.required]],
-      tax_code: [this.expenseHeaderObject ? this.expenseHeaderObject.tax_code : '', [Validators.required]],
-      expense_nbr: [this.expenseHeaderObject ? this.expenseHeaderObject.expense_nbr : '', [Validators.required]],
-      attachment: this.expenseHeaderObject ? this.expenseHeaderObject.attachment : '',
-      expense_description: this.expenseHeaderObject ? this.expenseHeaderObject.expense_description : '',
+      expense_title: ['', [Validators.required, Validators.maxLength(40)]],
+      supplier_name: ['', [Validators.required, Validators.maxLength(40)]],
+      expense_date: ['', [Validators.required]],
+      tax_code: ['', [Validators.required]],
+      expense_nbr: ['', [Validators.required, Validators.min(1)]],
+      attachment: '',
+      expense_description: '',
     });
     if (this.headerType === 'recurring') {
       this.createFormHeaderRecurring();
@@ -125,7 +129,7 @@ export class ExpensesAddComponent implements OnInit {
     this.expenseHeaderObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
     this.expenseHeaderObject.expense_type = this.headerType;
     this.expenseHeaderObject.email_address = this.userService.connectedUser$.getValue().user[0].userKey.email_address;
-    this.expenseHeaderObject.tax_code = this.formHeader.controls.tax_code.value.companyTaxKey.tax_code;
+    this.expenseHeaderObject.tax_code = this.formHeader.controls.tax_code.value?.companyTaxKey?.tax_code;
     this.expenseHeaderObject.status = true;
     if (this.fileUpload) {
       this.uploadedFileReader = URL.createObjectURL(this.fileUpload['selectedFile']);
@@ -136,7 +140,19 @@ export class ExpensesAddComponent implements OnInit {
       this.expenseHeaderRecurringObject.application_id = this.utilsService.getApplicationID('SERVICIMA');
       this.expenseHeaderRecurringObject.expense_nbr = this.expenseNbr.toString();
     }
-    this.saveExpense();
+    if (this.formHeader.valid) {
+      if (this.headerType === 'recurring') {
+        if (this.formHeaderRecurring.valid) {
+          this.saveExpense();
+        } else {
+          this.formHeaderRecurring.markAllAsTouched();
+        }
+      } else {
+        this.saveExpense();
+      }
+    } else {
+      this.formHeaderRecurring.markAllAsTouched();
+    }
   }
 
   getConnectedUser() {
@@ -227,10 +243,9 @@ export class ExpensesAddComponent implements OnInit {
       this.expenseService.updateExpenseHeader(this.expenseHeaderObject)
         .subscribe((expense) => {
         console.log('expense updated');
-
       });
       if (this.headerType === 'recurring') {
-        if (!this.route.snapshot.queryParams['expense_nbr']) {
+        if (this.route.snapshot.queryParams['expense_nbr']) {
           this.expenseService.updateExpenseRecurring(this.expenseHeaderRecurringObject).subscribe((expenseRecurring) => {
             console.log('expense recurring updated');
           });
@@ -287,18 +302,19 @@ export class ExpensesAddComponent implements OnInit {
     });
 
     this.router.navigate([this.headerType === 'normal' ?
-      '/manager/expenses/expenses-normal/expense-list' :
-      '/manager/expenses/expenses-recurring/expense-list-recurring']);
+      '/manager/expenses/expenses-normal/' :
+      '/manager/expenses/expenses-recurring/']);
   }
 
   calculateExpenses(params) {
     let subTotal = 0;
     let vat = 0;
+    let total = 0;
     this.expenseLinesList.map((expense) => {
       subTotal += expense.price_without_vat * expense.quantity;
       vat += ((expense.vat * expense.price_without_vat) / 100) * expense.quantity;
+      total += subTotal + vat;
     });
-    const total = this.expenseLinesList.length !== 0 ? subTotal + ((vat * 100) / subTotal) : 0;
     if (params === 'total') {
       return total.toFixed(2);
     } else if (params === 'vat') {
@@ -316,8 +332,7 @@ export class ExpensesAddComponent implements OnInit {
       withoutVat !== '' &&
       quantity !== '' &&
       vat !== '') {
-      return ((withoutVatNumber +
-        ((withoutVatNumber * vatNumber) / 100)) * quantityNumber).toFixed(2);
+      return ((withoutVatNumber + ((vatNumber * withoutVatNumber) / 100)) * quantityNumber).toFixed(2);
     } else {
       return '00.00';
     }
@@ -376,13 +391,16 @@ export class ExpensesAddComponent implements OnInit {
     this.createFormHeaderRecurring();
     this.createFormLine();
     this.createFormHeader();
+    this.getOldForms();
     this.addExpenseHeader = true;
-    this.emptyLines = true;
     this.addLine = false;
     this.showExpenseLine = false;
     this.showExpenseFooter = false;
   }
-
+  cancelExpenseHeaderForm() {
+    this.createFormHeader();
+    this.getOldForms();
+  }
   getOldForms() {
     if (this.route.snapshot.queryParams['expense_nbr']) {
     this.utilsService.verifyCurrentRoute('/manager/expenses/expenses-normal/expense-list').subscribe( (data) => {
@@ -445,5 +463,20 @@ export class ExpensesAddComponent implements OnInit {
       this.showExpenseLine = false;
       this.showExpenseFooter = false;
     }
+  }
+  /*******************************************************************
+   * @description Change the minimum of the end date
+   * @param date the minimum of the end date
+   *******************************************************************/
+  onChangeStartDate(date: string) {
+    this.minEndDate = new Date(date);
+  }
+
+  /*******************************************************************
+   * @description Change the maximum of the start date
+   * @param date the maximum of the start date
+   *******************************************************************/
+  onChangeEndDate(date: string) {
+    this.maxStartDate = new Date(date);
   }
 }
