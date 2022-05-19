@@ -2,4 +2,28 @@
   padding-bottom: 0 !important;
   margin-bottom: -16px !important;
 }
+.timesheetSettings {
+::ng-deep.mat-form-field-appearance-outline .mat-form-field-infix {
+  height: 33px !important;
+  padding: 4px;
+  text-align: center;
+  margin-top: 0;
+}
+  .mat-form-field {
+    width: 60px !important;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
 
+  input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+  }
+  mat-error {
+    color: #d24d57 !important;
+  }
+
+}

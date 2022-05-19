@@ -98,6 +98,17 @@ export function nameAnimation(animationDuration: string = defaultDuration): Anim
     transition('open => close', animate(`${animationDuration} ease-in-out`)),
   ]);
 }
+export let Fade =
+  trigger('fade', [
+  transition('void => *', [
+    style({ opacity: 0 }),
+    animate(2000, style({ opacity: 1}))
+  ]),
+    transition('* => void', [
+      style({ opacity: 1 }),
+      animate(500, style({ opacity: 0}))
+    ])
+]);
 
 export function accordionAnimation(animationDuration: string = defaultDuration): AnimationTriggerMetadata {
   return trigger('accordionAnimation', [

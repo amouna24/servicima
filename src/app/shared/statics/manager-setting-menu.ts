@@ -70,29 +70,6 @@ export const ManagerSettingMenu: IMenu[] = [
     ]
   },
   {
-    state: 'test',
-    name: 'Test Management',
-    type: 'sub',
-    icon: 'wi-user',
-    feature: 'USERS',
-    children: [
-      {
-        state: 'skills',
-        name: 'Skills Management',
-        icon: 'assignment',
-        feature: 'SETTINGS_USERS_ACCESS',
-        type: 'link',
-      },
-      {
-        state: 'bloc-question',
-        name: 'Bloc Questions Management',
-        icon: 'assignment',
-        feature: 'SETTINGS_ROLES_ACCESS',
-        type: 'link',
-      }
-    ]
-  },
-  {
     state: 'other',
     name: 'manager-setting-menu.others',
     type: 'sub',

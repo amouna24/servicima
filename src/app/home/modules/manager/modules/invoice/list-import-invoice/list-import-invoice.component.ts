@@ -165,7 +165,8 @@ export class ListImportInvoiceComponent implements OnInit {
         const listContractor = this.data['listContractor'];
 
         const listInvoiceLine = [];
-        const contractorCode = listContractor.find(value => value.contractor_name === 'Adele Willis').contractorKey.contractor_code;
+        // const contractorCode = listContractor.find(value => value.contractor_name === 'Luke Harmon').contractorKey.contractor_code;
+        const contractorCode = listContractor[0].contractorKey.contractor_code;
         file.items.map((item) => {
           item.item.map((ip) => {
             const TotalTax = parseInt(ip.taxes[0].tax_1[0], 10) + parseInt(ip.taxes[0].tax_2[0], 10);

@@ -3,7 +3,7 @@ import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
 import { UserService } from '@core/services/user/user.service';
 import { ModalService } from '@core/services/modal/modal.service';
 import { InvoiceService } from '@core/services/invoice/invoice.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IContractor } from '@shared/models/contractor.model';
 import { ContractorsService } from '@core/services/contractors/contractors.service';
 import { LocalStorageService } from '@core/services/storage/local-storage.service';
@@ -15,6 +15,7 @@ import { UploadSheetComponent } from '@shared/components/upload-sheet/upload-she
 import { SheetService } from '@core/services/sheet/sheet.service';
 import { environment } from '@environment/environment';
 import { takeUntil } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 import { ListImportInvoiceComponent } from '../list-import-invoice/list-import-invoice.component';
@@ -31,10 +32,12 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   listContractor: IContractor[];
   companyEmail: string;
   finalMapping = new BehaviorSubject<any>([]);
+  listStatus = new BehaviorSubject<any>('');
   allowedActions = [];
   applicationId: string;
   languageId: string;
   userInfo: IUserInfo;
+  infoInvoiceLine: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   subscriptionModal: Subscription;
   searchParam: any;
@@ -49,13 +52,18 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
               private invoiceService: InvoiceService,
               private contractorsService: ContractorsService,
               private router: Router,
+              private route: ActivatedRoute,
               private sheetService: SheetService,
               private localStorageService: LocalStorageService,
-              ) { }
+              private snackBar: MatSnackBar
+              ) {
+  }
   /**
    * @description Loaded when component in init state
    */
   async ngOnInit(): Promise<void> {
+    this.route.params.subscribe(async params => {
+      this.listStatus.next(params['status']);
     this.isLoading.next(true);
 
     this.modalService.registerModals({ modalName: 'importInvoice', modalComponent: ListImportInvoiceComponent });
@@ -71,6 +79,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
       [
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
+    });
   }
 
   /**
@@ -147,13 +156,29 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param filter object
    *************************************************************************/
   search(filter) {
+    const filterColumnss = [{ 'company_email': this.companyEmail, 'invoice_status': this.listStatus.getValue() ?
+        this.listStatus.getValue().toUpperCase() : { $not: { $eq: 'ARCHIVED'  } }}];
     this.searchParam = filter;
     this.mapData();
-    this.invoiceService.filterAllInvoice(this.companyEmail, this.nbtItems.getValue(), 0, filter.columns, filter.filterValue, filter.operator)
+    // tslint:disable-next-line:max-line-length
+    this.invoiceService.filterAllInvoice(this.companyEmail, this.nbtItems.getValue(), 0, filter.columns, filter.filterValue, filter.operator, filterColumnss)
       .subscribe((res) => {
         this.mapResult(res);
         this.ELEMENT_DATA.next(res);
       });
+  }
+  checkData(event) {
+    let balance = 0;
+    let total = 0;
+    event.map((data) => {
+    balance = balance + data.invoice_total_amount;
+    total = total + data.invoice_total_amount;
+    });
+    this.infoInvoiceLine = {
+      nbr: event.length,
+      balance,
+      total
+    };
   }
 
   /**************************************************************************
@@ -175,7 +200,18 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param params params
    *************************************************************************/
   searchInvoice(params) {
+    const statusInvoice = ['PENDING', 'PAID', 'ARCHIVED'];
     this.searchInvoices = params;
+    const filterColumns = this.listStatus.getValue() ?  ['company_email', 'application_id', 'invoice_status'] : ['company_email', 'application_id'] ;
+    params.listColumns =  params.listColumns.filter((sa) => {
+      if ( !filterColumns.includes(sa)) {
+        return sa;
+      }
+    });
+
+    const filterColumnss = [{ 'company_email': this.companyEmail, 'invoice_status': this.listStatus.getValue() ?
+        this.listStatus.getValue().toUpperCase() : { $not: { $eq: 'ARCHIVED'  } }}];
+    params.filtredColumns = filterColumnss;
    const valueSearch =  this.listContractor
      .find((contractor) => contractor.contractor_name.trim().toLowerCase() ===   params.value.value1.trim().toLowerCase()) ?
       this.listContractor
@@ -183,7 +219,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         ===   params.value.value1.trim().toLowerCase()).contractorKey.contractor_code : '';
       valueSearch ?  params.value.value2 =   { 'column': 'contractor_code', value: valueSearch } :
         params.value.value2 =   { 'column': '', value: '' };
-    this.invoiceService.getSearchInvoice(this.companyEmail, params, this.nbtItems.getValue(), 0).subscribe((data) => {
+    if (statusInvoice.includes(params.value.value1.toUpperCase()) && this.listStatus.getValue()) {
+      params.value.value1 = '';
+    }
+    // tslint:disable-next-line:max-line-length
+    this.invoiceService.getSearchInvoice(`&company_email=${this.companyEmail}&invoice_status=${this.listStatus.getValue()?.toUpperCase()}`, params, this.nbtItems.getValue(), 0).subscribe((data) => {
       this.mapResult(data);
       this.ELEMENT_DATA.next(data);
     });
@@ -193,7 +233,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description get all invoices by company
    */
   getAllInvoices(limit: number, offset: number): void {
-    this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmail}&beginning=${offset}&number=${limit}`)
+
+      const filter = this.listStatus.getValue() ?
+        `?company_email=${this.companyEmail}&invoice_status=${this.listStatus.getValue()?.toUpperCase()}&beginning=${offset}&number=${limit}`
+        : `?company_email=${this.companyEmail}&beginning=${offset}&number=${limit}`;
+    this.invoiceService.getInvoiceHeader(filter)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (data.length === 0) {
@@ -228,11 +272,32 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         break;
       case('invoice.management.sendmail'): this.sendMailing(rowAction.data);
         break;
+      case('invoice.management.paid'): this.changeStatus(rowAction.data, 'PAID');
+        break;
+    case('invoice.management.transmit'): this.changeStatus(rowAction.data, 'TRANSMIT');
+        break;
       case('import'): this.loadXML();
         break;
     }
   }
 
+  changeStatus(row, status) {
+    row.map((el) => {
+      if (status !== el.invoice_status) {
+        const object = {
+          ...el, application_id: el.InvoiceHeaderKey.application_id,
+          invoice_nbr: el.InvoiceHeaderKey.invoice_nbr,
+          company_email: el.InvoiceHeaderKey.company_email,
+          invoice_status: status,
+          contractor_code: el.code,
+          contractor_name: el.contractor_code
+        };
+        this.invoiceService.updateInvoiceHeader(object).subscribe((data) => {
+          this.getAllInvoices(this.nbtItems.getValue(), 0);
+        });
+      }
+      });
+  }
   /**
    * @description : Import
    */
@@ -245,9 +310,15 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @param data: object to update
    */
   updateInvoice(data: IInvoiceHeaderModel): void {
+    if (data.invoice_status === 'DRAFT' || data.invoice_status === 'PENDING') {
       this.router.navigate(['/manager/invoices/add-invoice'],
         { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
         });
+    } else {
+      this.snackBar.open('You can \'t update invoice', 'Undo', {
+        duration: 3000
+      });
+    }
   }
 
   /**
@@ -256,10 +327,17 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    */
   showInvoice(data: IInvoiceHeaderModel[]): void {
     data.map((invoice) => {
-      const fileURL = `${environment.uploadFileApiUrl}/show/` + invoice['attachment'] ;
-   // const fileURL = `${environment.uploadFileApiLocalUrl}/show/` + invoice['attachment'] ;
+      if (invoice.invoice_status !== 'DRAFT') {
+        const fileURL = `${environment.uploadFileApiUrl}/show/` + invoice['attachment'];
+        // const fileURL = `${environment.uploadFileApiLocalUrl}/show/` + invoice['attachment'] ;
 
-      window.open(fileURL);
+        window.open(fileURL);
+        this.getAllInvoices(this.nbtItems.getValue(), 0);
+      } else {
+        this.snackBar.open('You can \'t show invoice', 'Undo', {
+          duration: 3000
+        });
+      }
     });
   }
 
@@ -299,7 +377,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         application_id: invoice.InvoiceHeaderKey.application_id,
         company_email: invoice.InvoiceHeaderKey.company_email,
         invoice_nbr: invoice.InvoiceHeaderKey.invoice_nbr ,
-        invoice_status: 'Rejected',
+        invoice_status: 'ARCHIVED',
         factor_involved: invoice.factor_involved,
         invoice_date: invoice.invoice_date,
         invoice_delay: invoice.invoice_delay,
@@ -314,11 +392,10 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         attachment: invoice.attachment,
       };
       this.invoiceService.updateInvoiceHeader(invoiceHeader).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        console.log(res);
+        this.getAllInvoices(this.nbtItems.getValue(), 0);
       });
-
     });
-    this.getAllInvoices(this.nbtItems.getValue(), 0);
+
   }
 
   /**

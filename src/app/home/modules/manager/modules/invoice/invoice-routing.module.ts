@@ -10,9 +10,14 @@ const routes: Routes = [
     component: InvoiceManagementComponent,
   },
   {
-    path: '',
+    path: 'list',
     component: ListInvoicesComponent,
   },
+  {
+    path: ':status',
+    component: ListInvoicesComponent,
+  },
+
 ];
 
 @NgModule({

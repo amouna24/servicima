@@ -210,20 +210,20 @@ export class InvoiceService {
    * @description: http request get to get all invoices registered in the same company
    * @params company_email, limit, offset
    */
-  getSearchInvoice(companyEmail: string, search: string, limit?, offset?): Observable<IInvoiceHeaderModel[]> {
+  getSearchInvoice(filter: string, search: string, limit?, offset?): Observable<IInvoiceHeaderModel[]> {
     return this.httpClient
       .put<IInvoiceHeaderModel[]>
-      (`${environment.invoiceHeaderApiUrl}/search?beginning=${offset}&number=${limit}&company_email=${companyEmail}`, search);
+      (`${environment.invoiceHeaderApiUrl}/search?beginning=${offset}&number=${limit}${filter}`, search);
   }
 
   /**
    * @description: http request get to get all invoice registered in the same company
    * @params company_email, limit, offset
    */
-  filterAllInvoice(companyEmail: string, limit?, offset?, columns?, filterValue?,  operator?): Observable<any> {
+  filterAllInvoice(companyEmail: string, limit?, offset?, columns?, filterValue?,  operator?, selected ?): Observable<any> {
     return this.httpClient
-      .get<IInvoiceHeaderModel[]>(
-        `${environment.invoiceHeaderApiUrl}/filter?beginning=${offset}&number=${limit}&company_email=${companyEmail}` +
-            `&${columns}=${filterValue}&operator=${operator}`);
+      .post<IInvoiceHeaderModel[]>(
+        `${environment.invoiceHeaderApiUrl}/filter?beginning=${offset}&number=${limit}&${selected}` +
+            `&${columns}=${filterValue}&operator=${operator}`, selected);
   }
 }

@@ -10,7 +10,7 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { AuthService, FingerPrintService } from '@widigital-group/auth-npm-front';
 import { UserService } from '@core/services/user/user.service';
 
-// import { AuthService } from '../../../../../../projects/auth-front-lib/src/public-api';
+// import { AuthService, FingerPrintService } from '../../../../../../projects/auth-front-lib/src/public-api';
 
 @Component({
   selector: 'wid-changepwd',
