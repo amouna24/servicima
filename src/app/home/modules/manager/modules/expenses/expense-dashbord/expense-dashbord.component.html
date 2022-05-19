@@ -25,7 +25,7 @@
                   <span class="thirdColor">Deductible</span>
                 </div>
                 <div fxLayout="row">
-                  <span class="steel"> {{sumTva}}</span>
+                  <span class="steel"> {{sumTva.toFixed(2)}}</span>
                 </div>
               </div>
             </div>
@@ -109,8 +109,8 @@
             <span class="black font-size-23 font-regular">Upcoming payment</span>
           </div>
           <div fxLayout="row" fxFlex="90">
-            <wid-scrollbar fxLayout="column" fxFlexFill *ngFor="let upcoming of upcomingPaymentList">
-              <div fxLayout="row" style="height: 57px; border-bottom: solid 1px #d6d9dc" class="m-b-16">
+            <wid-scrollbar fxLayout="column" fxFlexFill >
+              <div fxLayout="row" style="height: 57px; border-bottom: solid 1px #d6d9dc" *ngFor="let upcoming of upcomingPaymentList" class="m-b-16">
                 <div fxLayout="column" fxFlex>
                   <div fxLayout="row">
                     <span class="steel font-size-18 font-regular">{{ upcoming.date | date:'mediumDate'}}</span>
