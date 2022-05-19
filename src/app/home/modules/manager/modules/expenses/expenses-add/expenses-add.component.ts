@@ -50,13 +50,14 @@ export class ExpensesAddComponent implements OnInit {
   companyTaxesList = [];
   expenseHeaderRecurringObject: IExpenseRecurringModel;
   uploadedFileReader: string;
+  loadingSpinner: boolean;
   expenseFooterObject: IExpenseFooterModel;
   oldExpenseLineList: IExpenseLineModel[];
   maxEndDate: Date;
   minEndDate: Date;
   minStartDate: Date;
   maxStartDate: Date;
-  constructor(
+   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private utilsService: UtilsService,
@@ -69,7 +70,12 @@ export class ExpensesAddComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.getConnectedUser();
-    this.getOldForms();
+     if (!this.route.snapshot.queryParams['expense_nbr']) {
+       this.getTaxes();
+     } else {
+       this.getOldForms();
+     }
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -81,7 +87,6 @@ export class ExpensesAddComponent implements OnInit {
     if (this.expenseNbr === 0) {
       this.getLastExpenseNumber();
     }
-    this.getTaxes();
   }
 
   createFormHeader() {
@@ -151,7 +156,9 @@ export class ExpensesAddComponent implements OnInit {
         this.saveExpense();
       }
     } else {
-      this.formHeaderRecurring.markAllAsTouched();
+      if (this.headerType === 'recurring') {
+        this.formHeaderRecurring.markAllAsTouched();
+      }
     }
   }
 
@@ -226,6 +233,9 @@ export class ExpensesAddComponent implements OnInit {
   }
 
   async addOrUpdateExpense() {
+    if (this.addExpenseHeader) {
+      await this.addNewExpenseHeader();
+    }
       if (this.fileUpload) {
         this.expenseHeaderObject.attachment = await this.uploadFile(this.fileUpload['file']);
       }
@@ -309,14 +319,12 @@ export class ExpensesAddComponent implements OnInit {
   calculateExpenses(params) {
     let subTotal = 0;
     let vat = 0;
-    let total = 0;
     this.expenseLinesList.map((expense) => {
       subTotal += expense.price_without_vat * expense.quantity;
       vat += ((expense.vat * expense.price_without_vat) / 100) * expense.quantity;
-      total += subTotal + vat;
     });
     if (params === 'total') {
-      return total.toFixed(2);
+      return (vat + subTotal).toFixed(2);
     } else if (params === 'vat') {
       return vat.toFixed(2);
     } else {
@@ -341,7 +349,6 @@ export class ExpensesAddComponent implements OnInit {
   getTaxes() {
     this.taxesService.getCompanyTax(this.companyEmailAddress).subscribe((taxes) => {
       this.companyTaxesList = taxes['results'];
-      if (this.route.snapshot.queryParams['expense_nbr']) {
         this.companyTaxesList.map((oneTax) => {
           if (this.expenseHeaderObject.tax_code === oneTax.companyTaxKey.tax_code) {
             this.formHeader.patchValue({
@@ -349,7 +356,6 @@ export class ExpensesAddComponent implements OnInit {
             });
           }
         });
-      }
     });
   }
 
@@ -399,10 +405,12 @@ export class ExpensesAddComponent implements OnInit {
   }
   cancelExpenseHeaderForm() {
     this.createFormHeader();
+    this.getLastExpenseNumber();
     this.getOldForms();
   }
   getOldForms() {
     if (this.route.snapshot.queryParams['expense_nbr']) {
+      this.loadingSpinner = true;
     this.utilsService.verifyCurrentRoute('/manager/expenses/expenses-normal/expense-list').subscribe( (data) => {
       if (data.expense_nbr) {
         this.expenseNbr = data.expense_nbr;
@@ -417,6 +425,22 @@ export class ExpensesAddComponent implements OnInit {
               attachment: this.expenseHeaderObject.attachment,
               expense_description: this.expenseHeaderObject.expense_description,
             });
+            this.getTaxes();
+          if (this.headerType === 'recurring') {
+            this.expenseService.getExpenseRecurring(`?company_email=${
+              this.companyEmailAddress}&application_id=${
+              this.utilsService.getApplicationID('SERVICIMA')}&expense_nbr=${data.expense_nbr}`).subscribe((expenseRecurring) => {
+              this.expenseHeaderRecurringObject = expenseRecurring[0];
+              this.formHeaderRecurring.patchValue({
+                expense_final_date: this.expenseHeaderRecurringObject.expense_final_date,
+                frequency_nbr: this.expenseHeaderRecurringObject.frequency_nbr,
+                frequency_period: this.expenseHeaderRecurringObject.frequency_period,
+              });
+              this.loadingSpinner = false;
+            });
+          } else {
+            this.loadingSpinner = false;
+          }
           this.formHeader.controls.expense_nbr.disable();
           this.expenseService.getExpenseLine(`?company_email=${
               this.companyEmailAddress}&application_id=${
@@ -430,18 +454,7 @@ export class ExpensesAddComponent implements OnInit {
                     this.formFooter.patchValue({
                       expense_comment: this.expenseFooterObject.expense_comment
                     });
-                    if (this.headerType === 'recurring') {
-                      this.expenseService.getExpenseRecurring(`?company_email=${
-                        this.companyEmailAddress}&application_id=${
-                        this.utilsService.getApplicationID('SERVICIMA')}&expense_nbr=${data.expense_nbr}`).subscribe((expenseRecurring) => {
-                          this.expenseHeaderRecurringObject = expenseRecurring[0];
-                          this.formHeaderRecurring.patchValue({
-                            expense_final_date: this.expenseHeaderRecurringObject.expense_final_date,
-                            frequency_nbr: this.expenseHeaderRecurringObject.frequency_nbr,
-                            frequency_period: this.expenseHeaderRecurringObject.frequency_period,
-                          });
-                      });
-                    }
+
                 });
             });
         });

@@ -18,8 +18,11 @@
   <wid-scrollbar fxLayout="row" fxFlex="85" fxLayoutAlign="center">
     <div fxLayout="column" fxFlex="94" fxLayoutGap="15px">
       <ng-container *ngIf="addExpenseHeader;else showExpenseHeader"  >
-        <form fxLayout="row" fxLayoutAlign="center" [formGroup]="formHeader" class="p-t-20">
-          <div fxLayout="column" fxFlex="96"  @dataAppearance>
+        <form fxLayout="row" fxLayoutAlign="center" [formGroup]="formHeader" class="p-t-20" (keyup.enter)="addNewExpenseHeader()">
+          <div *ngIf="loadingSpinner" fxLayout="column" fxFlex="96" style="height: 350px" fxLayoutAlign="center center">
+            <mat-spinner color="primary"></mat-spinner>
+          </div>
+          <div *ngIf="!loadingSpinner" fxLayout="column" fxFlex="96"  @dataAppearance>
             <div fxLayout="row" fxFlex="25" fxLayoutAlign="space-evenly ">
               <div fxLayout="column" fxFlex="45">
                 <mat-label class="black font-size-12 required">
@@ -170,12 +173,12 @@
               <div fxLayout="column" fxFlex="97">
                 <div fxLayout="row" fxFlexFill fxLayoutGap="15px" fxLayoutAlign="end">
                   <div fxLayout="column">
-                    <button  mat-raised-button class="btn-small bg-pale-grey" (click)="cancelExpenseHeaderForm()">Cancel</button>
+                    <button  mat-raised-button type="button" class="btn-small bg-pale-grey" (click)="cancelExpenseHeaderForm()">Cancel</button>
                   </div>
                   <div fxLayout="column" >
-                    <button mat-raised-button class="btn-small" type="submit" *ngIf="headerType === 'normal'" color="primary" (keyup)="addNewExpenseHeader()" (click)="addNewExpenseHeader()" >
+                    <button mat-raised-button class="btn-small" type="submit" *ngIf="headerType === 'normal'" color="primary" (keyup.enter)="addNewExpenseHeader()" (click)="addNewExpenseHeader()" >
                       <span class="white">Save</span></button>
-                    <button mat-raised-button class="btn-small" type="submit" color="primary" (keyup)="addNewExpenseHeader()" *ngIf="headerType === 'recurring'" (click)="addNewExpenseHeader()" >
+                    <button mat-raised-button class="btn-small" type="submit" color="primary"  *ngIf="headerType === 'recurring'" (click)="addNewExpenseHeader()" >
                       <span class="white">Save</span></button>
                   </div>
                 </div>
