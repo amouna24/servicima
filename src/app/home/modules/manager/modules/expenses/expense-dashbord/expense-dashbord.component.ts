@@ -84,7 +84,9 @@ export class ExpenseDashbordComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getConnectedUser();
+
     this.getRecurringExpense();
+
     this.getYearsOrMonthsList();
     this.getTVA();
   }
@@ -129,9 +131,7 @@ export class ExpenseDashbordComponent implements OnInit {
                       });
                     }
                   });
-
               });
-
           });
         }
     });
@@ -145,10 +145,10 @@ export class ExpenseDashbordComponent implements OnInit {
     } else {
       period = 365;
     }
-    const numberOfDaysFixed = Number((period / frequencyNumber).toFixed());
+    const numberOfDaysFixed = Number((period / frequencyNumber));
     let numberOfDays = numberOfDaysFixed;
     const currentDate = new Date();
-    while (testDate.getTime() < finalDate.getTime()) {
+    while (new Date(testDate.setDate( testDate.getDate() + Number(numberOfDays))).getTime() < finalDate.getTime()) {
       const newDate = new Date(testDate.setDate( testDate.getDate() + Number(numberOfDays)));
       numberOfDays += numberOfDaysFixed;
       if (currentDate.getTime() < newDate.getTime() && resultDate.getTime() > newDate.getTime()) {
