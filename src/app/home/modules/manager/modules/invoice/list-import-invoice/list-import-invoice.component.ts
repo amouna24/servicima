@@ -76,7 +76,7 @@ export class ListImportInvoiceComponent implements OnInit {
           price: res['invoice.project.price'],
           quantity: res['invoice.project.quantity'],
           vat: res['invoice.project.vat'],
-          amount: res['invoice.amountLine'],
+          amount: res['invoice.project.amount'],
           ConditionAndModality: res['invoice.condition.and.modality'],
           address: res['invoice.address'],
           IBAN: res['invoice.iban'],
@@ -152,7 +152,7 @@ export class ListImportInvoiceComponent implements OnInit {
   }*/
 
   associate(file: any) {
-    this.invoiceService.getInvoiceHeader(`?email_address=${this.data.company_email}&invoice_nbr=${file.no}`).subscribe((response) => {
+    this.invoiceService.getInvoiceHeader(`?company_email=${this.data.company_email}&invoice_nbr=${file.no}`).subscribe((response) => {
       // @ts-ignore
       if (response?.results.length) {
         // alert(`Invoice N°${resp.no} already exist`);
@@ -202,7 +202,7 @@ export class ListImportInvoiceComponent implements OnInit {
           application_id: this.data.application_id,
           company_email: companyEmail,
           invoice_nbr: parseInt(file.no[0], 10),
-          invoice_status: file.status[0],
+          invoice_status: file.status[0].toUpperCase(),
           factor_involved: 'N',
           invoice_date: this.datePipe.transform(new Date()),
           invoice_delay: this.datePipe.transform(new Date()),

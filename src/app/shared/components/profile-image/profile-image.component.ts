@@ -43,8 +43,8 @@ export class ProfileImageComponent implements OnInit {
   }
 
   snackBarAction() {
-    this.utilsService.openSnackBar('the image must be less than 2mb  ', 'Undo',
-      300);
+    this.utilsService.openSnackBar('the image must be less than 1mb  ', 'Undo',
+      3000);
   }
 
   /**
@@ -53,6 +53,9 @@ export class ProfileImageComponent implements OnInit {
   previewFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
     // File Preview
+    if (file?.size > 100000) {
+      this.snackBarAction();
+    } else {
     const reader = new FileReader();
     reader.onload = () => {
       this.avatar = reader.result as string;
@@ -65,7 +68,7 @@ export class ProfileImageComponent implements OnInit {
     this.selectedFile.file = formData;
     this.selectedFile.name = file.name;
     this.newFile.emit(formData);
-
+    }
   }
 
   /**

@@ -306,11 +306,11 @@ input[type=number] {
     font-weight: 500 !important;
   }
 }
-.selectService{
+/*.selectService{
 ::ng-deep.mat-select-arrow {
   border: none;
 }
-}
+}*/
 ::ng-deep input {
 overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }

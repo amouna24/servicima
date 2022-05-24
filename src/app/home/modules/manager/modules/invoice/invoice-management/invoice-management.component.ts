@@ -38,6 +38,7 @@ import { IInvoiceAttachmentModel } from '@shared/models/invoiceAttachment.model'
 import { AssetsDataService } from '@core/services/assets-data/assets-data.service';
 import { ICurrency } from '@shared/models/currency.model';
 import { MailingModalComponent } from '@shared/components/mailing-modal/mailing-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 
@@ -70,6 +71,9 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
   listCurrency: ICurrency[];
   symbolCurrency: string;
   minDate =  new Date().toISOString().slice(0, -14);
+  errorAlreadyExist: string;
+  fillingError: string;
+  toRedirectToList = true;
   /**************************************************************************
    *  Initialise contractor, contract and project
    *************************************************************************/
@@ -103,7 +107,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
   maxInvoiceHeader: number;
   factorInvoice = false;
   updateOrAddInvoice: string;
-
+  dateUpdate: any;
   /**************************************************************************
    *  Payment invoice
    *************************************************************************/
@@ -158,6 +162,7 @@ export class InvoiceManagementComponent implements OnInit, OnDestroy {
     private paymentTermsService: CompanyPaymentTermsService,
     private contractorsService: ContractorsService,
     private assetsDataService: AssetsDataService,
+    private snackBar: MatSnackBar,
     private localStorageService: LocalStorageService) {
     this.invoiceNbr = this.router.getCurrentNavigation()?.extras?.state?.nbrInvoice;
     this.modalService.registerModals({ modalName: 'mailing', modalComponent: MailingModalComponent });
@@ -460,7 +465,7 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : '' }`);
    *************************************************************************/
   showInfoContractor(): void {
     this.router.navigate(
-      ['/manager/contract-management/suppliers-contracts/suppliers'],
+      ['/manager/contract-management/suppliers-contracts/clients-list'],
       {
         queryParams: {
           id: btoa(this.contractor['_id']),
@@ -477,6 +482,14 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : '' }`);
     this.assetsDataService.getAllCurrencies().subscribe((currency) => {
       this.listCurrency = currency;
     });
+  }
+
+  setInvoiceDelay() {
+    this.formHeader.controls['invoiceDelay'].reset();
+   this.formHeader.patchValue({
+     invoiceDelay: this.paymentTerms ? new Date( new Date(this.formHeader.value.invoiceDate)
+       .setDate(new Date(this.formHeader.value.invoiceDate).getDate() + this.paymentTerms)).toISOString().split('T')[0] : null
+   });
   }
 
   /**************************************************************************
@@ -512,7 +525,7 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : '' }`);
 
     this.form = this.formBuilder.group({
       input: this.formBuilder.array(this.invoiceLine ? Object.values(this.invoiceLine).map(data => this.formBuilder.group({
-        project_code: [data.project_code ? data.project_code : null],
+        project_code: [data.project_code ? data.project_code : 'null'],
         project_desc: [data.project_desc ? data.project_desc : null],
         days_nbr: [data.days_nbr ? data.days_nbr : null],
         vat_rate: [data.vat_rate ? data.vat_rate : null],
@@ -529,6 +542,7 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : '' }`);
     this.countLeftToPay();
     await this.getContract(this.invoiceHeader['contractor_code']);
     this.contract = this.listContract.find(value => value.contractKey.contract_code === this.contractCode);
+    this.dateUpdate = this.formHeader.value.invoiceDate;
   }
 
   /**************************************************************************
@@ -683,6 +697,10 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : '' }`);
       this.vatMount = this.getSum('vat_amount');
       this.totalTTC = this.getSum('vat_amount') + this.getSum('invoice_line_total_amount');
       this.countLeftToPay();
+    } else {
+      const formArr = this.form.controls['input'] as FormArray;
+      formArr.controls[i].patchValue({ invoice_line_total_amount: 0});
+      formArr.controls[i].patchValue({ vat_amount: 0});
     }
   }
 
@@ -805,7 +823,8 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
     const data = {
       application_id: this.applicationId,
       company_email: this.companyEmail,
-      invoice_nbr: this.invoiceNbr
+      invoice_nbr: this.invoiceNbr,
+      minDate: this.formHeader.value.invoiceDate
     };
     this.modalService.displayModal('PayInvoice', data,
       '500px', '580px')
@@ -911,7 +930,10 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
    *  @param type: type
    *  @param valueAttachment: value attachment
    *************************************************************************/
-  addInvoiceHeader(type: string, valueAttachment?: string): void {
+ async addInvoiceHeader(type: string, valueAttachment?: string) {
+   return new Promise((resolve, fail) => {
+    this.toRedirectToList = true;
+
     const invoiceHeader = {
       application_id: this.applicationId,
       company_email: this.companyEmail,
@@ -942,8 +964,15 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
           await this.addOrUpdateAttachment();
           this.addOrUpdatePayment();
           this.addOrUpdateInvoiceLine();
+          resolve(true);
         }, (error => {
-          console.error(error);
+          if (error.error.msg_code === '0001') {
+            this.toRedirectToList = false;
+            this.snackBar.open(this.errorAlreadyExist, 'Undo', {
+              duration: 3000
+            });
+            resolve(true);
+          }
         }));
     } else {
       invoiceHeader.invoice_status = this.formHeader.value.invoiceStatus === 'DRAFT' || type === 'DRAFT' ? type : this.formHeader.value.invoiceStatus;
@@ -953,10 +982,13 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
           await this.addOrUpdateAttachment();
           this.addOrUpdateInvoiceLine();
           this.addOrUpdatePayment();
+          resolve(true);
         }, (error => {
           console.error(error);
+          resolve(true);
         }));
     }
+   });
   }
 
   /**************************************************************************
@@ -1186,10 +1218,12 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
       'invoice.total', 'invoice.subtotal', 'invoice.bic.code', 'invoice.rib', 'invoice.iban', 'invoice.address',
       'invoice.condition.and.modality', 'invoice.project.amount', 'invoice.project.vat', 'invoice.project.quantity',
       'invoice.project.price', 'invoice.project.description', 'invoice.invoice.to', 'invoice.due.date',
-      'invoice.date', 'invoice.n°', 'invoice.sender', 'invoice.title'];
+      'invoice.date', 'invoice.n°', 'invoice.sender', 'invoice.title', 'invoice.invoicenumber.exists', 'invoice.add.message.filling.invoice'];
     this.translate.get(translateKey)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
+        this.errorAlreadyExist = res['invoice.invoicenumber.exists'];
+        this.fillingError = res['invoice.add.message.filling.invoice'];
         label = {
           title: res['invoice.title'],
           of: res['invoice.sender'],
@@ -1225,7 +1259,7 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
    * @param listParamToPassToPDF: list param to pass in pdf
    * @param type: status of invoice( pending, draft, approved ....)
    *************************************************************************/
-  generateInvoicePdf(listParamToPassToPDF, type): void {
+  async generateInvoicePdf(listParamToPassToPDF, type) {
     this.invoiceService.generateInvoice(listParamToPassToPDF)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(async (res) => {
@@ -1235,7 +1269,7 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
         formData.append('file', file);
         formData.append('caption', file.name);
         const fileName = await this.uploadFile(formData);
-        this.addInvoiceHeader(type, fileName);
+        await this.addInvoiceHeader(type, fileName);
         const path = { path: file.name };
         this.invoiceService.deleteInvoice(path)
           .subscribe(() => {
@@ -1252,9 +1286,17 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
               console.error(error);
             }));
         }
-        this.router.navigate(['/manager/invoices/list']);
+          if (this.toRedirectToList) {
+            this.router.navigate(['/manager/invoices/list']);
+          } else {
+            this.isLoad.next(false);
+          }
       }
       );
+  }
+
+  cancel() {
+    this.router.navigate(['/manager/invoices/list']);
   }
 
   /**************************************************************************
@@ -1263,7 +1305,9 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
    *************************************************************************/
   async generateInvoice(type: string): Promise<void> {
     if (this.buttonAddLine ? this.buttonAddLine['disabled'] : false) {
-      alert('error');
+       this.snackBar.open(this.fillingError, 'Undo', {
+        duration: 3000
+      });
     } else {
       this.isLoad.next(true);
       const label: object = this.getLabel();
@@ -1304,10 +1348,15 @@ RIB:${this.companyBankingInfos?.rib ? this.companyBankingInfos?.rib : ''}`;
       };
       const listParmaToPassToPDF = { company, listLineInvoice, contractor, total, label, upload: true };
       if (type === 'PENDING') {
-        this.generateInvoicePdf(listParmaToPassToPDF, type);
+       await this.generateInvoicePdf(listParmaToPassToPDF, type);
       } else if (type === 'DRAFT') {
-        this.addInvoiceHeader(type);
-        this.router.navigate(['/manager/invoices/list']);
+       await this.addInvoiceHeader(type);
+        if (this.toRedirectToList) {
+          this.router.navigate(['/manager/invoices/list']);
+
+        } else {
+          this.isLoad.next(false);
+        }
       }
     }
   }

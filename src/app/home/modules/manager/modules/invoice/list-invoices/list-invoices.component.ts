@@ -16,6 +16,7 @@ import { SheetService } from '@core/services/sheet/sheet.service';
 import { environment } from '@environment/environment';
 import { takeUntil } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 import { PaymentInvoiceComponent } from '../payment-invoice/payment-invoice.component';
 import { ListImportInvoiceComponent } from '../list-import-invoice/list-import-invoice.component';
@@ -42,6 +43,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
   subscriptionModal: Subscription;
   searchParam: any;
   searchInvoices: any;
+  translateObject: any;
   /**************************************************************************
    * @description DATA_TABLE paginations
    *************************************************************************/
@@ -55,7 +57,8 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private sheetService: SheetService,
               private localStorageService: LocalStorageService,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              private translate: TranslateService,
               ) {
   }
   /**
@@ -65,7 +68,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(async params => {
       this.listStatus.next(params['status']);
     this.isLoading.next(true);
-
+    this.getTranslate();
     this.modalService.registerModals({ modalName: 'importInvoice', modalComponent: ListImportInvoiceComponent });
     this.modalService.registerModals({ modalName: 'mailing', modalComponent: MailingModalComponent });
     this.applicationId = this.localStorageService.getItem('userCredentials').application_id;
@@ -80,6 +83,15 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         { sheetName: 'uploadSheetComponent', sheetComponent: UploadSheetComponent},
       ]);
     });
+  }
+
+  getTranslate() {
+    const translateKey = ['invoice.show.message', 'invoice.update.message'];
+    this.translate.get(translateKey)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(res => {
+        this.translateObject = res;
+      });
   }
 
   /**
@@ -171,7 +183,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
     let balance = 0;
     let total = 0;
     event.map((data) => {
-    balance = balance + data.invoice_total_amount;
+    balance = balance + data.invoice_amount;
     total = total + data.invoice_total_amount;
     });
     this.infoInvoiceLine = {
@@ -233,7 +245,11 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
    * @description get all invoices by company
    */
   getAllInvoices(limit: number, offset: number): void {
-
+    this.infoInvoiceLine = {
+      nbr: 0,
+      balance: 0,
+      total: 0
+    };
       const filter = this.listStatus.getValue() ?
         `?company_email=${this.companyEmail}&invoice_status=${this.listStatus.getValue()?.toUpperCase()}&beginning=${offset}&number=${limit}`
         : `?company_email=${this.companyEmail}&beginning=${offset}&number=${limit}`;
@@ -315,7 +331,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         { state: { nbrInvoice: data.InvoiceHeaderKey.invoice_nbr }
         });
     } else {
-      this.snackBar.open('You can \'t update invoice', 'Undo', {
+      this.snackBar.open(this.translateObject['invoice.update.message'], 'Undo', {
         duration: 3000
       });
     }
@@ -334,7 +350,7 @@ export class ListInvoicesComponent implements OnInit, OnDestroy {
         window.open(fileURL);
         this.getAllInvoices(this.nbtItems.getValue(), 0);
       } else {
-        this.snackBar.open('You can \'t show invoice', 'Undo', {
+        this.snackBar.open(this.translateObject['invoice.show.message'], 'Undo', {
           duration: 3000
         });
       }

@@ -340,6 +340,8 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
    */
   getDataSource(): void {
     this.tableData.subscribe((res) => {
+      this.listChecked = [];
+      this.checked.emit(this.listChecked);
       this.totalItems = res?.total ? res.total : null;
       this.countedItems = res?.count ? res.total : null;
       this.offset = res?.offset ? Number(res?.offset) + 1 : null;
