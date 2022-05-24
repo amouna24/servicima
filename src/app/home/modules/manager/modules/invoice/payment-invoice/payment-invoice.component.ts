@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ export class PaymentInvoiceComponent implements OnInit {
   applicationId: string;
   companyEmail: string;
   emailAddress: string;
+  minDateWithFormat: any;
   public filteredPaymentMethods = new ReplaySubject(1);
   constructor(
     private router: Router,
@@ -33,7 +34,9 @@ export class PaymentInvoiceComponent implements OnInit {
     private utilsService: UtilsService,
     private invoiceService: InvoiceService,
     public  dialogRef: MatDialogRef<PaymentInvoiceComponent>
-  ) { }
+  ) {
+    this.minDateWithFormat = new Date(this.data.minDate).toISOString().split('.')[0];
+  }
 
   async ngOnInit(): Promise<void> {
     this.getConnectedUser();

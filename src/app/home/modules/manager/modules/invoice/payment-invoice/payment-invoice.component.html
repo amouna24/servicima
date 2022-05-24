@@ -74,11 +74,11 @@ add
       <div fxLayout="row">
         <div fxLayout="column" fxFlex="98">
           <mat-label class="font-size-12 required">
-            {{'invoice.payment.date' | translate | capitalizeFirstLetter}}
+            {{'invoice.payment.date' | translate | capitalizeFirstLetter}} {{minDateWithFormat}}
           </mat-label>
           <div style="font-size: 10px" class="full-width">
             <mat-form-field appearance="outline" class="full-width">
-              <input type="datetime-local" formControlName="paymentDate" matInput [placeholder]=" 'invoice.payment.date' | translate">
+              <input type="datetime-local" [min]="minDateWithFormat" formControlName="paymentDate" matInput [placeholder]=" 'invoice.payment.date' | translate">
             </mat-form-field>
           </div>
         </div>
