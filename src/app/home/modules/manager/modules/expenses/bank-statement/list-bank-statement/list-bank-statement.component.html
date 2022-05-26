@@ -1,0 +1,13 @@
+
+<wid-dynamic-data-table
+  [tableData]="ELEMENT_DATA"
+  [tableCode]="'BANK-STATEMENT-LIST'"
+  [isLoading]="isLoading"
+  [header]="{ title: 'Bank statement management', addActionURL: '/manager/expenses/add-bank-statement', feature:'EXPENSES_ACCESS', addActionText: ' bank statement'}"
+
+  [title]="'Bank statement list'"
+  (rowActionData)="switchAction($event)"
+  (pagination)="loadMoreItems($event)"
+  [allowedActions]="[{name:'company.tax.management.delete',feature:'SETTINGS_DELETE_TAX'}]"
+>Z
+</wid-dynamic-data-table>

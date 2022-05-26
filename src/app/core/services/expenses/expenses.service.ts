@@ -141,4 +141,43 @@ export class ExpensesService {
   getExpenseHeaderDataTable(filter: string): Observable<IExpenseHeaderModel[]> {
     return this.httpClient.get<IExpenseHeaderModel[]>(`${environment.expensesHeaderApiUrl}/datatable/${filter}`);
   }
+
+  /**************************************************************************
+   * @description Get BankStatement List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All BankStatement Observable<BankStatement[]>
+   *************************************************************************/
+  getBankStatement(filter: string): Observable<any> {
+    return this.httpClient.get<IExpenseHeaderModel[]>(`${environment.bankStatementApiUrl}/${filter}`);
+  }
+  /**************************************************************************
+   * @description Add new BankStatement
+   * @param  BankStatement: BankStatement Model
+   *************************************************************************/
+  addBankStatement(BankStatement): Observable<any> {
+    return this.httpClient.post(`${environment.bankStatementApiUrl}`, BankStatement);
+  }
+  /**************************************
+   * @description Update BankStatement Status
+   * @param BankStatement: updated BankStatement Object
+   *************************************************************************/
+  updateBankStatement(BankStatement): Observable<any> {
+    return this.httpClient.put(`${environment.bankStatementApiUrl}`, BankStatement);
+  }
+  /**************************************************************************
+   * @description Delete BankStatement Status
+   * @param id: Delete BankStatement Object
+   *************************************************************************/
+  deleteBankStatement(id: string): Observable<any> {
+    return this.httpClient.delete(`${environment.bankStatementApiUrl}/?_id=${id}`);
+  }
+
+  /**************************************************************************
+   * @description Get BankStatement List
+   * @param filter search query like [ ?id=123 ]
+   * @returns All BankStatement Observableany>
+   *************************************************************************/
+  getBankStatementList(filter: string): Observable<IExpenseHeaderModel[]> {
+    return this.httpClient.get<IExpenseHeaderModel[]>(`${environment.bankStatementApiUrl}/datatable/${filter}`);
+  }
 }

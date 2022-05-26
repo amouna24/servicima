@@ -7,7 +7,7 @@
     [selectAllBtn]="true"
     [btnLabel]="'Associate'"
     [requiredFields]="['no', 'client', 'status', 'remark']"
-    [message]="{ field: 'no', message: '\'invoice.project.vat\' | translate | capitalizeFirstLetter [$VALUE] '}"
+    [message]="{ field: 'no', message: 'invoice.message.import' | translate | capitalizeFirstLetter }"
     (action)="associate($event)"
     (dialogAction)="modalActions($event)"
   ></wid-confirm-list>

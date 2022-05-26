@@ -362,6 +362,13 @@ export const managerMenu: IMenu[] = [
         icon: 'wi-billings',
         feature: 'EXPENSES_ACCESS',
       },
+      {
+        state: 'list-bank-statement',
+        name: 'Bank statement',
+        type: 'link',
+        icon: 'wi-billings',
+        feature: 'EXPENSES_ACCESS',
+      },
     ]
   }
 ];

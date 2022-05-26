@@ -1,0 +1,86 @@
+<div class="dynamic-component-container border-radius-20" fxLayout="column" fxFlex="100" >
+  <div fxLayout="row" fxFlex="14" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="56">
+      <h1 class="steel font-size-24 font-medium">{{'company.banking.info.title' | translate}}</h1>
+    </div>
+    <div fxLayout="column" fxFlex="15" fxLayoutAlign="center end" class="font-size-25 steel">
+      <button (click)="back()" mat-raised-button class="btn-small bg-pale-grey"  >
+        <mat-icon class="icon material-icons-outlined" svgIcon="wi_arrow_back">
+        </mat-icon>
+        <span class="cool-grey">{{'company.banking.info.back' | translate}}</span>
+      </button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="1" fxLayoutAlign="space-around center">
+    <mat-divider [ngStyle]="{ 'width': '90%', borderTopWidth: '2px' }"></mat-divider>
+  </div>
+  <div fxLayout="column"  class="m-l-60" fxFlexOffset="50px" fxFlex="50"  [formGroup]="form">
+    <wid-scrollbar >
+      <div fxLayout="column"  >
+
+
+        <div fxLayout="row" fxFlex="100" fxLayoutGap="10%">
+          <div fxLayout="column" fxFlex="40" >
+            <label class="font-size-12  required">Bank name : </label>
+            <mat-form-field appearance="outline">
+              <input  formControlName="bankName"  autocomplete="off" matInput required placeholder= 'bank Name'
+                      [ngStyle.xs]="{'font-size': '15px'}" />
+              <mat-error *ngIf="form.controls.bankName?.errors?.required">
+                {{'invoice.requiredfields' | translate | capitalizeFirstLetter}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="40" >
+            <label class="font-size-12  required">Date :</label>
+            <mat-form-field appearance="outline">
+              <input formControlName="bankStatementDate" type="date" autocomplete="off" matInput required placeholder=" Bank statement date"
+                     [ngStyle.xs]="{'font-size': '15px'}" />
+              <mat-error *ngIf="form.controls.bankStatementDate?.errors?.required">
+                {{'invoice.requiredfields' | translate | capitalizeFirstLetter}}
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <div fxLayout="row" fxFlex="80" fxLayoutGap="10%">
+            <div fxLayout="column"  style="min-width: 90%">
+              <mat-label class="black font-size-12">
+                Justification:
+              </mat-label>
+              <mat-form-field appearance="outline"  >
+                <div >
+                  <input matInput matSuffix formControlName="attachment" placeholder="File" readonly [(ngModel)]="attachment">
+                  <button  class="buttonImage" type="button" (click)="importAttachment()">
+                    <label >{{'resume-upload' | translate}}</label></button>
+                </div>
+              </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" fxFlex="80" fxLayoutGap="10%">
+
+          <div fxLayout="column" fxFlex="90">
+            <label class="font-size-12">Description : </label>
+            <mat-form-field appearance="outline">
+               <textarea formControlName="bankStatementDesc" placeholder="Description" rows="7"
+                         autocomplete="off" matInput
+                         cdkTextareaAutosize
+                         cdkAutosizeMinRows="1"
+                         style="overflow: hidden;"
+                         [ngStyle.xs]="{'font-size': '15px'}">
+                    </textarea>
+
+            </mat-form-field>
+          </div>
+
+
+        </div>
+      </div>
+    </wid-scrollbar>
+  </div>
+  <div class="modal-footer" fxFlex="22" fxLayoutAlign="flex-end center" fxLayout="row" fxLayoutGap="30px" class="m-r-20 m-b-20" >
+    <button mat-raised-button class="btn-small bg-pale-grey black-three" (click)="back()" >{{'company.banking.info.cancel'| translate }} : </button>
+    <button mat-raised-button  color="primary"  (click)="addOrEdit()" class="btn-small white" >{{'company.banking.info.confirm'| translate }}</button>
+  </div>
+
+</div>

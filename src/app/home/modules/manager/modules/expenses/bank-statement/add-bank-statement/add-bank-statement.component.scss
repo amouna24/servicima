@@ -1,0 +1,82 @@
+@import "src/assets/styles/variables";
+.buttonImage {
+  position: absolute;
+  top: -7px;
+  border-radius: 0 5px 5px 0;
+  right: 0;
+  border: none;
+  width: 120px;
+  height: 43px;
+  color: white;
+  background-color: $topaz;
+  transform: translateX(8px);
+}
+table, td, th {
+  border-collapse: collapse;
+  border: 1px solid $warm-grey;
+}
+table {
+  width: 100%;
+}
+td {
+  text-align: center;
+  font-size: 12px;
+}
+th {
+  height: 45px;
+  background-color: $steel;
+  color: white;
+  font-size: 12px;
+}
+.min-height-30 {
+  min-height: 30%;
+}
+.min-height-45 {
+  min-height: 45%;
+}
+.grey-line {
+  border: solid 5px $pale-grey-two;
+  border-radius: 2.5px;
+  background-color: $pale-grey-two;
+}
+.button-link {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.delete-button-style {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+  border-right-style: hidden;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.p-l-32 {
+  padding-left: 32px
+}
+.line-container {
+  tr:not(:last-child):hover  {
+    background-color: #e8f1f9 !important;
+    cursor: pointer;
+    td:last-child{
+      background-color: #fc0f3b;
+      transition-duration: 1s;
+      transition-timing-function: linear;
+
+    };
+  }
+}
+
+.hide-delete-button {
+  border-right-style: hidden;
+  border-bottom-style: hidden;
+  border-top-style: hidden;
+  background-color: white;
+  min-width: 5%;
+}

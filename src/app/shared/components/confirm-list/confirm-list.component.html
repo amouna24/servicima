@@ -28,7 +28,7 @@
           <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100" class="full-height">
             <button (click)="selectAll()" type="submit"
                     class="btn-small pale-grey-four cursor-pointer bg-cerulean-blue m-b-10">
-              <span>{{btnLabel | translate}} {{'confirm.list.all'}}</span>
+              <span>{{btnLabel | translate}}  {{'confirm.list.all' | translate | capitalizeFirstLetter}}</span>
             </button>
           </div>
         </div>
