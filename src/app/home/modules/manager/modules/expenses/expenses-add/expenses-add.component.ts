@@ -18,6 +18,7 @@ import { dataAppearance } from '@shared/animations/animations';
 import { CompanyTaxService } from '@core/services/companyTax/companyTax.service';
 import { IExpenseRecurringModel } from '@shared/models/expenserecurring.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'wid-expenses-add',
@@ -67,7 +68,8 @@ export class ExpensesAddComponent implements OnInit {
     private modalServices: ModalService,
     private uploadService: UploadService,
     private taxesService: CompanyTaxService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.getConnectedUser();
      if (!this.route.snapshot.queryParams['expense_nbr']) {
@@ -403,11 +405,15 @@ export class ExpensesAddComponent implements OnInit {
     this.showExpenseLine = false;
     this.showExpenseFooter = false;
   }
-  cancelExpenseHeaderForm() {
+ /* cancelExpenseHeaderForm() {
     this.createFormHeader();
     this.getLastExpenseNumber();
     this.getOldForms();
+  }*/
+  cancelExpenseHeaderForm() {
+    this.location.back();
   }
+
   getOldForms() {
     if (this.route.snapshot.queryParams['expense_nbr']) {
       this.loadingSpinner = true;

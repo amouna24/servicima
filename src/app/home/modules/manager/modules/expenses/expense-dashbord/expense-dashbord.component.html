@@ -1,5 +1,6 @@
 <div class="border-radius-20" fxLayout="row" style="min-height: 97%" fxLayoutGap="20px">
   <div fxLayout="column" fxFlex="50" fxLayoutGap="20px">
+      <div fxLayout="row" fxFlex="40" >
     <div fxLayout="row" class="bg-white border-radius-20" fxFlex>
       <div fxLayout="column" fxFlexFill >
         <div fxLayout="row" fxFlex="20" class="p-l-20 p-r-20 p-t-20">
@@ -13,7 +14,7 @@
                     <span class="secondaryColor">Collected</span>
                   </div>
                   <div fxLayout="row">
-                    <span class="steel"> {{sumCollected}}</span>
+                    <span class="steel"> {{totalVatInvoice}}</span>
                   </div>
                 </div>
             </div>
@@ -46,7 +47,7 @@
         </div>
         <div fxLayout="row" fxFlex="20" fxLayoutAlign="center" class="p-t-25" fxLayoutGap="34px">
           <div fxLayout="column" fxFlex="20">
-              <mat-form-field appearance="outline" class="height-50">
+              <mat-form-field appearance="outline" class="height-50" class="font-size-10">
                 <mat-select  disableOptionCentering panelClass="panelColor"
                              placeholder="period"  required [(ngModel)]="period" (ngModelChange)="getYearsOrMonthsList(); getTVA()">
                   <mat-option [value]="'month'">Month</mat-option>
@@ -55,7 +56,7 @@
               </mat-form-field>
           </div>
           <div fxLayout="column" fxFlex="20">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="font-size-10">
             <mat-select  disableOptionCentering panelClass="panelColor"
                          placeholder="Year/month"  required  [(ngModel)]="selectedYearOrMonth" (ngModelChange)="getTVA()">
               <ng-container *ngFor="let oneYearOrMonth of listOfMonthsOrYears">
@@ -67,30 +68,43 @@
         </div>
       </div>
     </div>
-    <div fxLayout="row" class="bg-white border-radius-20" fxFlex>
+      </div>
+    <div fxLayout="row" fxFlex="53" class="bg-white border-radius-20" >
       <div fxLayout="column" fxFlexFill class="p-l-25 p-r-25">
       <div fxLayout="row" fxFlex="20" class="p-t-20">
         <div fxLayout="column" fxFlex fxLayoutAlign="center">
           <span class="black font-size-22 font-regular">Graph turnover</span>
         </div>
         <div fxLayout="column" fxFlex="20">
-          <mat-form-field appearance="outline" >
+          <mat-form-field appearance="outline"  class="font-size-10">
             <mat-select  disableOptionCentering panelClass="panelColor"
-                         placeholder="Year"  required [(ngModel)]="yearGraph"  >
-              <mat-option [value]="2022">2022</mat-option>
+                         placeholder="Year"   required [(ngModel)]="years"  >
+              <ng-container *ngFor="let project of listYears?.listYears">
+              <mat-option (click)="getInvoiceByYear(project)" [value]="project">{{project}}</mat-option>
+                </ng-container>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
       <div fxLayout="row" fxFlex="10">
         <div fxLayout="column" fxFlexFill>
-          <span class="font-size-16 font-extra-light" style="color: #7c828a">{{yearGraph}}</span>
+          <span class="font-size-16 font-extra-light" style="color: #7c828a">{{years}}</span>
           <div class="gray-line"></div>
         </div>
       </div>
-      <div fxLayout="row" fxFlex="60">
-        <ngx-charts-bar-vertical
+      <div fxLayout="row" fxFlex="60" *ngIf="years">
+        <ng-container *ngIf="isLoading.getValue();">
+          <div class="min-full-width min-full-height" fxLayoutAlign="center center">
+            <mat-progress-spinner
+              color="primary"
+              mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isLoading.getValue();">
+        <ngx-charts-bar-vertical class="p-t-20"
           [scheme]="colorScheme"
+          [animations]="false"
           [results]="single"
           [xAxis]="showXAxis"
           [yAxis]="showYAxis"
@@ -98,6 +112,7 @@
           [showYAxisLabel]="showYAxisLabel"
           >
         </ngx-charts-bar-vertical>
+        </ng-container>
       </div>
       </div>
     </div>

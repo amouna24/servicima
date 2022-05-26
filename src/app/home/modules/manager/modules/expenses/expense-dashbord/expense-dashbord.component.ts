@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { UtilsService } from '@core/services/utils/utils.service';
 import { ExpensesService } from '@core/services/expenses/expenses.service';
+import { InvoiceService } from '@core/services/invoice/invoice.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'wid-expense-dashbord',
@@ -10,62 +12,18 @@ import { ExpensesService } from '@core/services/expenses/expenses.service';
 })
 export class ExpenseDashbordComponent implements OnInit {
   single: any[];
-  singleArray = [
-      {
-        'name': 'JAN',
-        'value': 50
-      },
-      {
-        'name': 'FEB',
-        'value': 20
-      },
-      {
-        'name': 'MA',
-        'value': 10
-      },
-      {
-        'name': 'APR',
-        'value': 30
-      },
-    {
-      'name': 'MAY',
-      'value': 35
-    },
-    {
-      'name': 'JUN',
-      'value': 40
-    },
-    {
-      'name': 'JUL',
-      'value': 22
-    },
-    {
-      'name': 'AUG',
-      'value': 56
-    },
-    {
-      'name': 'SEP',
-      'value': 22
-    },
-    {
-      'name': 'OCT',
-      'value': 41
-    },
-    {
-      'name': 'NOV',
-      'value': 45
-    },
-    {
-      'name': 'DEV',
-      'value': 41
-    },
-    ];
+  isLoading = new BehaviorSubject<boolean>(true);
+  resGraph = { };
+  years: number;
+  totalVatInvoice = 0;
+  monthNames = [ 'JAN', 'FEB', 'MA', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
   showXAxis = true;
   showYAxis = true;
   showXAxisLabel = true;
   showYAxisLabel = true;
   companyEmailAddress: string;
   upcomingPaymentList = [];
+  listYears: any;
   sumCollected = 12000;
   colorScheme = {
     domain: ['#147ad6']
@@ -79,16 +37,22 @@ export class ExpenseDashbordComponent implements OnInit {
     private userService: UserService,
     private utilsService: UtilsService,
     private expenseService: ExpensesService,
+    private invoiceService: InvoiceService
   ) {
-    Object.assign(this, { single: this.singleArray });
+
   }
   ngOnInit(): void {
+    this.isLoading.next(true);
     this.getConnectedUser();
 
     this.getRecurringExpense();
 
     this.getYearsOrMonthsList();
     this.getTVA();
+    this.getInvoiceByYear(new Date().getFullYear());
+    this.invoiceService.getInvoiceListYears('?company_email=dhia.othmen@widigital-group.com').subscribe((data) => {
+      this.listYears = data;
+    });
   }
   getConnectedUser() {
     this.userService.connectedUser$
@@ -99,6 +63,36 @@ export class ExpenseDashbordComponent implements OnInit {
           }
         });
   }
+  getInvoiceByYear(year) {
+    this.years = year;
+    const res = 0;
+
+    const ob = { 'JAN': 0, 'FEB': 0, 'MA': 0, 'APR': 0, 'MAY': 0, 'JUN': 0, 'JUL': 0,
+     'AUG': 0, 'SEP': 0, 'OCT': 0, 'NOV': 0, 'DEC': 0};
+
+    this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmailAddress}&year_date=${year}`).subscribe((data) => {
+
+      if (data['results'].length > 0) {
+        data['results'].map((invoice) => {
+          ob[this.monthNames[new Date(invoice.invoice_date).getMonth()]] =
+            invoice.invoice_total_amount + (ob[this.monthNames[new Date(invoice.invoice_date).getMonth()]] ) ;
+        });
+      }
+      const sp = [];
+      const entries = Object.entries(ob);
+      entries.map((invoice) => {
+        const listInvoice = { };
+        listInvoice['name'] = invoice[0];
+        listInvoice['value'] = Number(invoice[1]) ;
+        sp.push(listInvoice);
+      });
+      this.resGraph = sp;
+      Object.assign(this, { single: this.resGraph });
+      this.isLoading.next(false);
+    });
+
+  }
+
   getRecurringExpense() {
     this.expenseService.getExpenseHeader(`?company_email=${
       this.companyEmailAddress}&application_id=${
@@ -171,6 +165,40 @@ export class ExpenseDashbordComponent implements OnInit {
 
    }
   getTVA() {
+   let res = 0;
+   this.totalVatInvoice = 0;
+    let listInvoice = [];
+
+if (this.monthNames.includes(this.selectedYearOrMonth)) {
+  this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmailAddress}&year_date=${new Date().getFullYear()}`).subscribe((data) => {
+
+    if (data['results'].length > 0) {
+      listInvoice =  data['results'].filter((el) => {
+        if (new Date(el.invoice_date).getMonth() ===  this.listOfMonthsOrYears.findIndex(els => els === this.selectedYearOrMonth)) {
+          return el;
+        }
+      });
+    }
+    listInvoice.map((l) => {
+      res = l.vat_amount + res;
+    });
+    this.totalVatInvoice = res;
+  });
+
+} else {
+  this.invoiceService.getInvoiceHeader(`?company_email=${this.companyEmailAddress}&year_date=${this.selectedYearOrMonth}`).subscribe((data) => {
+
+    if (data['results'].length > 0) {
+      listInvoice = data['results'].filter((el) => {
+        res = res + el.vat_amount;
+      });
+      this.totalVatInvoice = res;
+    }
+  });
+}
+
+    /* invoice statement */
+
     this.sumTva = 0;
     this.expenseService.getExpenseHeader(`?company_email=${
       this.companyEmailAddress}&application_id=${

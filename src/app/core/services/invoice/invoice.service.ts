@@ -25,6 +25,15 @@ export class InvoiceService {
       .get<IInvoiceHeaderModel[]>(`${environment.invoiceHeaderApiUrl}/${filter}`);
   }
 
+  /**
+   * @description get invoice Header
+   * @param filter: filter
+   */
+  getInvoiceListYears(filter?): Observable<IInvoiceHeaderModel[]> {
+    return this.httpClient
+      .get<IInvoiceHeaderModel[]>(`${environment.invoiceHeaderApiUrl}/listyears/${filter}`);
+  }
+
   /**************************************************************************
    * @description Add invoice header
    * @param invoiceHeader: new invoice header
