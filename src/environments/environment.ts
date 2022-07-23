@@ -93,6 +93,7 @@ export const environment = {
   expensesHeaderApiUrl: 'http://213.136.74.202/expenseheader',
   expensesLineApiUrl: 'http://213.136.74.202/expenseline',
   expensesRecurringApiUrl: 'http://213.136.74.202/expenserecurring',
+  bankStatementApiUrl: 'http://213.136.74.202/bankstatement',
   projectCollaboratorApiUrl: 'http://213.136.74.202/projectcollaborator',
   linkedInOauthApiUrl: 'http://213.136.74.202/socialnetwork',
   servicimaUrl: 'http://localhost:4200',

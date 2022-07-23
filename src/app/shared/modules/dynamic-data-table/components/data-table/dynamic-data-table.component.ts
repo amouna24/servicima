@@ -33,7 +33,7 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
   @Input() colorObject: object[];
   @Input() tableCode: string;
   @Input() header: {
-    title: string, addActionURL?: string, addActionText?: string,
+    title: string, addActionURL?: string, queryParam?: { params: string, value: string } , addActionText?: string,
     type?: string,
     feature?: string,
     actionFunction?: () => void;
@@ -702,7 +702,14 @@ export class DynamicDataTableComponent implements OnInit, AfterViewChecked, OnDe
         }
       });
     } else {
-      this.router.navigate([this.header.addActionURL], { state: { action: 'add'}});
+      this.header.queryParam ?
+      this.router.navigate([this.header.addActionURL],
+        { queryParams: {
+          [this.header.queryParam.params]: this.header.queryParam.value
+          }
+          }) :
+        this.router.navigate([this.header.addActionURL], { state: { action: 'add'}})
+      ;
     }
 
   }
